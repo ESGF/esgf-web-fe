@@ -326,3 +326,8 @@ ul.menu div.panel a:hover {
 	color: #000000;
 }
 
+/* Facet Reset */
+#facet-reset {
+	font-size: 1.6em;
+	margin-top: 1em;
+}

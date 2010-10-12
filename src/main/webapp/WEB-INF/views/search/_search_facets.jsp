@@ -3,7 +3,8 @@
 
 <h2> Available Facets</h2>
 
-<ul class="menu accordion">
+
+<ul class="menu noaccordion">
 
 <c:if test="${search_output.facets != null}">
 
@@ -33,3 +34,7 @@
 </c:if>
 
 </ul>
+
+<div id="facet-reset">
+<a href="javascript:window.location='.' "> Reset Facets </a>
+</div>

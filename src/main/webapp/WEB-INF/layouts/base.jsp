@@ -67,6 +67,6 @@
         
 </div>
  
-<p id="copyright"> Copyright 2010, ESGF Infrastructure Team. </p>
+<p id="copyright">ESGF Infrastructure Team. </p>
 </body>
 </html>

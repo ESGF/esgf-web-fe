@@ -1,7 +1,8 @@
 /************************************************************
- * Base Layout
- * 
- * Author: fwang2@ornl.gov 
+ Author:    Feiyi Wang 
+ Email:     fwang2@ornl.gov
+ Created:   2010-10-10
+ Desc:      Base Layout
  ************************************************************/
 
 body {
@@ -144,7 +145,7 @@ table#nav a:hover {
 
 /* COPYRIGHT INFO */
 #copyright {
-    position:absolute;
+    position:fixed;
 	font-size: 1.2em;
     padding: 5px;
     background-color: #86B500;
@@ -331,3 +332,12 @@ ul.menu div.panel a:hover {
 	font-size: 1.6em;
 	margin-top: 1em;
 }
+
+/* May Style */
+
+#2dmap {
+	width: 100%;
+	height: 500px;
+	border: 1px solid #000;
+}
+

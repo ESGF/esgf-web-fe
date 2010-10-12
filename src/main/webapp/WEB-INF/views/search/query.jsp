@@ -82,17 +82,25 @@ $(function() {
     <div id="optionPane" style="display:none">
 
 		<div id="dataScope"><label for="dataScope"> Scope: </label>
-		<div><input type="radio" name="effect" value="model" /> Model <input
-			type="radio" name="effect" value="obs" /> Observational <input
-			type="radio" name="effect" value="all" /> All</div>
+		<div>
+		<input type="radio" name="modelGroup" value="model" /> Model 
+		<input type="radio" name="modelGroup" value="obs" /> Observational 
+		<input type="radio" name="modelGroup" value="all" /> All
+		</div>
 		</div>
 		
-		<div id="withMap"><label for="dataScope">Show Map: </label>
-		<div><input type="radio" name="effect" value="model" /> 2D 
-		    <input type="radio" name="effect" value="obs" /> 3D 
+		<div id="withMap"><label for="dataMap">Show Map: </label>
+		<div><input type="radio" name="mapGroup" value="2dMap" /> 2D 
+		    <input type="radio" name="mapGroup" value="3dMap" /> 3D 
 		</div></div>
 
     </div> <!--  end of optionPane -->
+
+
+    <div id="mapPane">
+    
+    </div>
+    
 
     <div id="submitBtn">
         <input type="submit" value="Search" />

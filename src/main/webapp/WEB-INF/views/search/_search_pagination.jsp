@@ -1,8 +1,6 @@
 <!-- Pagination -->
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
-<input type="hidden" name="offset" value="${search_input.offset}" />
-<input type="hidden" name="limit" value="${search_input.limit}" />
 
 <c:if test="${param['search_model'] != null}">
 	<div align="center">

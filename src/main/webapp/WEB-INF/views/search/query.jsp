@@ -1,3 +1,5 @@
+<%@ include file="/WEB-INF/views/common/include.jsp" %>
+
 <style>
 label {
 	font-weight: bold;
@@ -53,14 +55,29 @@ $(function() {
 <h2>Experimental GeoSpatial Search:</h2>
 
 <form method="post" id="search-form" class="form">
-<table>
+
+
+    <!-- create hidden facet fields, set value to search constraint if available -->                        
+    <c:forEach var="entry" items="${search_output.facets}">
+        <input type="hidden" name="${entry.key}" value="${search_input.constraints[entry.key][0]}"/>
+    </c:forEach>
+
+    <!--  More hidden values -->
+    <input type="hidden" name="offset" value="${search_input.offset}" />
+    <input type="hidden" name="limit" value="${search_input.limit}" />
+
+    
+    <!--  Search Box -->
+    <table>
 	<tr align="center">
-		<td><input id="searchbox" name="queryString" type="text"
+		<td><input id="searchbox" name="text" type="text"
 			size="50" value="${search_input.text}" /></td>
 		<td> <div id="showOptions"><a href="#">More Options</a></div>
 		</td>
 	</tr>
-</table>
+    </table>
+
+
 
     <div id="optionPane" style="display:none">
 
@@ -82,3 +99,18 @@ $(function() {
     </div>
 
 </form>
+
+<!-- Form errors -->
+<c:if test="${error_message!=null}">
+    <div class="error"><c:out value="${error_message}"/></div>
+</c:if>
+
+<!--  pagenation result -->
+
+<jsp:include page="_search_pagination.jsp" flush="true" />           
+
+<!-- search results -->
+ <jsp:include page="_search_results.jsp" flush="true" />
+                       
+                       
+  

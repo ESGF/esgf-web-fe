@@ -9,7 +9,7 @@
   		function setFacet(facetKey, facetValue) {
   			var searchForm = getSearchForm();
   			var input = searchForm[facetKey];
-		    input.value = facetValue;
+  			input.value = facetValue;
 			search(0);
   		}
 

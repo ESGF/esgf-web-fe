@@ -6,7 +6,8 @@
 <ul class="menu accordion">
 
 <c:if test="${search_output.facets != null}">
-	
+
+    	
 	<c:forEach var="entry" items="${search_output.facets}">
        
        <c:if test="${fn:length(entry.value.subFacets)>0}">

@@ -18,7 +18,7 @@
        <ul class="acitem">
    
          <c:forEach var="subFacet" items="${entry.value.subFacets}">
-             <li> <a href='javascript:setFacet("${entry.key}","${subFacet.label}", "${i}")'> 
+             <li> <a href='javascript:setFacet("${entry.key}","${subFacet.label}")'> 
              <c:out value="${subFacet.label}"/> 
                 (<c:out value="${subFacet.counts}"/>) </a>
              </li>

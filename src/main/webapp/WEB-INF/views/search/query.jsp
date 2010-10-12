@@ -56,7 +56,7 @@ $(function() {
 <table>
 	<tr align="center">
 		<td><input id="searchbox" name="queryString" type="text"
-			size="50" value="Search projects, datasets, and more" /></td>
+			size="50" value="${search_input.text}" /></td>
 		<td> <div id="showOptions"><a href="#">More Options</a></div>
 		</td>
 	</tr>

@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/views/jsp/common/include.jsp" %>
+<%@ include file="/WEB-INF/views/common/include.jsp" %>
 
 <!-- Search Text widget-->
 <div class="box-colored">

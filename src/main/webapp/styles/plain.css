@@ -1,0 +1,316 @@
+/************************************************************
+ * Base Layout
+ * 
+ * Author: fwang2@ornl.gov 
+ ************************************************************/
+
+body {
+	margin: 0;
+	padding: 0;
+    font-size: 65%;
+    font-family: "Lucida Grande", Times;
+}
+
+#content {
+	text-align: left;
+	margin-left: 15px;
+}
+
+
+/* both #facets and #main are within the #wrapper
+   and the absolute value is less than ideal, but 
+   it prevents shifting when window gets resized
+   there should be a better way of handing this
+ */
+ 
+#facets {
+    position: absolute;
+    top: 7.5em;
+    left: 1em;
+    width: 200px;
+    /* border-right: thick single #333; */
+}
+
+#main {
+    position: absolute;
+    top: 7.5em;
+    margin-left: 220px;
+    
+}
+#wrapper h1, #wrapper h2, #wrapper h3, #wrapper h4, #wrapper h5, #wrapper h6 {
+    color:#00607b;
+    font-weight:300;
+    
+}
+
+#wrapper p {
+    font-size: 1.1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+
+#wrapper h1 {
+	margin-top: 40px;
+    font-size: 200%;
+    color: #00607b;
+}
+#wrapper h2 {
+	margin-top: 1em;
+	margin-bottom:15px;
+    font-size: 170%;
+}
+#wrapper h3 {
+    font-size: 161.6%;
+}
+#wrapper h4 {
+    font-size: 153.9%;
+}
+
+#wrapper ul {
+    margin-top: 0;
+}
+
+
+table#nav {
+	font-size: 1.2em;
+    background: url(../images/bg_nav.png) repeat-x left top;
+    width: 100%;
+    color: #FFFFFF;
+    text-decoration: none;
+    /* border-right: 1px solid #000; */
+    /* display: block; */
+    margin: 0px;
+    padding: 0px; 
+    float: right;
+}
+
+table#nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    float: left;
+    border-bottom: 1px solid #000;
+    display: block;
+}
+
+table#nav ul li {
+	position: relative;
+    float: left;
+    padding: 0;
+    margin: 0;
+}
+
+
+
+table#nav a, table#nav li a:link {
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: .5em 1em;
+    font: bold 1em "Lucida Grande", Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+}
+
+
+table#nav li a, #nav li a:link {
+    border-right: 1px solid #000;
+    display: block;
+}
+
+table#nav a:hover {
+    background: url(../images/bg_nav_h.png);
+}
+
+
+/* Banner */
+.banner-left {
+    background-color: #000;
+}
+
+.banner-right {
+    background-color: #000;
+}
+
+.banner-center {
+    background-image: url(../images/esg_banner.jpg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 59px;
+    width: 1024px;
+    padding: 0px;
+    margin: 0px;
+}
+
+
+
+/* COPYRIGHT INFO */
+#copyright {
+	font-size: 1.2em;
+    padding: 5px;
+    background-color: #86B500;
+    font-weight: bold;
+    color: #000000;
+    position:absolute;
+    right: 0px;
+    bottom: 0px;
+}
+
+
+
+/* Flash messages */
+ul#success-flash-messages {
+    color: green;
+    background-color: #FFFFCC;
+    font-size: larger;
+    font-style: italic;
+    margin-left: 40px;
+    padding: 4px;
+    list-style: none;
+    border: 2px solid green;
+    }
+
+ul#failure-flash-messages {
+    color: red;
+    border: 2px solid red;
+    background-color: #FFFFCC;
+    font-size: larger;
+    font-style: italic;
+    margin-left: 40px;
+    padding: 4px;
+    list-style: none;
+    }
+ul#failure-flash-messages li, ul#success-flash-messages li {
+    list-style: none;
+}
+
+
+/* Search Form */
+
+
+.form table{  
+    margin-bottom: 1em;  
+}  
+
+.form input {
+	font-size: 1.2em;
+}
+
+.form table tr {
+	vertical-align: center;
+}
+
+.form table td{  
+    text-align: left;  
+    vertical-align: center;
+    padding-right: 5px;
+}  
+
+/* style the search button */
+
+
+.form input#searchbox{
+    font-weight: normal;  
+    color: #565656;
+    border: 1px solid #9c9c9c;  
+    width: 300px;  
+    padding: 2px;  
+    margin-bottom: 5px;  
+    text-align: left;  
+}
+
+.form input#searchbox.active{  
+    background: #ddeff6;  
+    border: 1px solid #0099d4;  
+}
+
+
+
+/* style facet panel */
+ul.menu, ul.menu ul {
+  list-style-type:none;
+  margin: 0;
+  padding: 0;
+  width: 15em;
+}
+
+ul.menu a {
+  display: block;
+  text-decoration: none;    
+}
+
+ul.menu {
+    font-size: 1.2em;
+}
+
+ul.menu li {
+  margin-top: 1px;
+}
+
+ul.menu li a, ul.menu ul.menu li a {
+  background: #333;
+  color: #fff;  
+  padding: 0.5em;
+}
+
+ul.menu li a:hover, ul.menu ul.menu li a:hover {
+  background: #000;
+}
+
+ul.menu li ul li a, ul.menu ul.menu li ul li a {
+  background: #ccc;
+  color: #000;
+  padding-left: 20px;
+}
+
+ul.menu li ul li a:hover, ul.menu ul.menu li ul li a:hover {
+  background: #aaa;
+  border-left: 5px #000 solid;
+  padding-left: 15px;
+}
+ul.menu ul.menu li a:hover {
+    border-left: 0;
+    padding-left: 0.5em;
+}
+ul.menu ul.menu {
+    border-left: 5px #f00 solid;
+}
+
+ul.menu a.active, ul.menu li a.active, ul.menu a.active:hover, ul.menu ul.menu li a.active:hover {
+    /* text-decoration: underline; */
+    background: #c00;
+}
+
+
+div.panel {
+    border: 1px #000 solid;
+    padding: 5px;
+    margin-top: 1px;
+}
+
+ul.menu div.panel a, ul.menu div.panel li a:hover  {
+    display :inline;
+    color: #666;
+    background: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-weight: bold;
+}
+ul.menu div.panel a:hover {
+    color: #000;
+    text-decoration: underline; 
+}
+
+
+.code { border: 1px solid #ccc; list-style-type: decimal-leading-zero; padding: 5px; margin: 0; }
+.code code { display: block; padding: 3px; margin-bottom: 0; }
+.code li { background: #ddd; border: 1px solid #ccc; margin: 0 0 2px 2.2em; }
+.indent1 { padding-left: 1em; }
+.indent2 { padding-left: 2em; }
+.indent3 { padding-left: 3em; }
+.indent4 { padding-left: 4em; }
+.indent5 { padding-left: 5em; }
+.indent6 { padding-left: 6em; }
+.indent7 { padding-left: 7em; }
+.indent8 { padding-left: 8em; }
+.indent9 { padding-left: 9em; }
+.indent10 { padding-left: 10em; }

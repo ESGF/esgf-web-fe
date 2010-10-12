@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+    
+<tiles-definitions>
+
+    <definition name="base" template="/WEB-INF/layouts/base.jsp">
+        <put-attribute name="facets"  value=""/>
+        <put-attribute name="search"  value=""/>
+        <put-attribute name="result"  value=""/>
+    </definition>
+    
+    <definition name="search" extends="base">
+        <put-attribute name="facets"  
+            value="/WEB-INF/views/search/_search_facets.jsp"/>    
+        <put-attribute name="search"  
+            value="/WEB-INF/views/search/query.jsp"/>
+        <put-attribute name="result"  
+            value="/WEB-INF/views/search/_search_results.jsp"/>
+         
+    </definition>
+    
+</tiles-definitions>
+            

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:p="http://www.springframework.org/schema/p"
+    
+    xsi:schemaLocation="
+     http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/mvc 
+     http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+   <!-- Facet profile -->
+    <bean name="facetProfile" class="esg.search.query.impl.solr.FacetProfileImpl">
+        <constructor-arg index="0">
+             <map>
+             
+                <!-- CMIP5 profile -->
+                <entry key="project"><value>Project</value></entry>
+                <entry key="model"><value>Model</value></entry>
+                <entry key="experiment"><value>Experiment</value></entry>
+                <entry key="time_frequency"><value>Frequency</value></entry>
+                <entry key="realm"><value>Realm</value></entry>
+                <entry key="cf_variable"><value>CF Variable</value></entry>
+                
+                <!-- Observation profile -->
+                <entry key="instrument_type"><value>Instrument Type</value></entry>
+                <entry key="instrument"><value>Instrument</value></entry>
+                <entry key="data_type"><value>Data Type</value></entry>
+                <entry key="platform_type"><value>Platform Type</value></entry>
+                <entry key="variable"><value>Variable</value></entry>
+                <entry key="gcmd_variable"><value>GCMD Variable</value></entry>
+              
+              </map>
+        </constructor-arg>
+    </bean>
+
+    <!-- Client to the Apache-Solr server -->
+    <bean name="searchService" class="esg.search.query.impl.solr.SearchServiceImpl">
+        <constructor-arg index="0" value="http://localhost:8983/solr"/>
+    </bean>
+
+    <!-- Search controller -->
+    <bean id="searchController" class="org.esgf.web.SearchController" >
+        <constructor-arg index="0" ref="searchService"/>
+        <constructor-arg index="1" ref="facetProfile"/>
+    </bean>
+     
+</beans>
+     

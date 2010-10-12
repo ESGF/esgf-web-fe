@@ -14,9 +14,12 @@
 	<mvc:annotation-driven />
 
 
-	<!-- Forwards requests to the "/" resource to the "welcome" view -->
-	<mvc:view-controller path="/" view-name="welcome" />
+	<!-- Forwards requests to the "/" resource to the "welcome" view
+	
+	<mvc:view-controller path="/" view-name="index" />
 
+    -->
+    
     <!--  views.properties MUST be deployed to WEB-INF/classes -->        
     <bean id="viewResolver" 
         class="org.springframework.web.servlet.view.ResourceBundleViewResolver" 

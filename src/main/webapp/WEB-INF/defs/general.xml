@@ -8,6 +8,7 @@
     <definition name="base" template="/WEB-INF/layouts/base.jsp">
         <put-attribute name="facets"  value=""/>
         <put-attribute name="search"  value=""/>
+        <put-attribute name="pagination" value="" />
         <put-attribute name="result"  value=""/>
     </definition>
     
@@ -16,6 +17,8 @@
             value="/WEB-INF/views/search/_search_facets.jsp"/>    
         <put-attribute name="search"  
             value="/WEB-INF/views/search/query.jsp"/>
+        <put-attribute name="pagination"
+            value="/WEB-INF/views/search/_search_pagination.jsp" />
         <put-attribute name="result"  
             value="/WEB-INF/views/search/_search_results.jsp"/>
          

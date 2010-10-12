@@ -105,12 +105,6 @@ $(function() {
     <div class="error"><c:out value="${error_message}"/></div>
 </c:if>
 
-<!--  pagenation result -->
-
-<jsp:include page="_search_pagination.jsp" flush="true" />           
-
-<!-- search results -->
- <jsp:include page="_search_results.jsp" flush="true" />
-                       
+                      
                        
   

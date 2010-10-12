@@ -144,13 +144,12 @@ table#nav a:hover {
 
 /* COPYRIGHT INFO */
 #copyright {
+    position:absolute;
 	font-size: 1.2em;
     padding: 5px;
     background-color: #86B500;
-    font-weight: bold;
+    font-weight: normal;
     color: #000000;
-    position:absolute;
-    right: 0px;
     bottom: 0px;
 }
 
@@ -301,16 +300,29 @@ ul.menu div.panel a:hover {
 }
 
 
-.code { border: 1px solid #ccc; list-style-type: decimal-leading-zero; padding: 5px; margin: 0; }
-.code code { display: block; padding: 3px; margin-bottom: 0; }
-.code li { background: #ddd; border: 1px solid #ccc; margin: 0 0 2px 2.2em; }
-.indent1 { padding-left: 1em; }
-.indent2 { padding-left: 2em; }
-.indent3 { padding-left: 3em; }
-.indent4 { padding-left: 4em; }
-.indent5 { padding-left: 5em; }
-.indent6 { padding-left: 6em; }
-.indent7 { padding-left: 7em; }
-.indent8 { padding-left: 8em; }
-.indent9 { padding-left: 9em; }
-.indent10 { padding-left: 10em; }
+/* Table format */
+
+.datatable {
+	border-collapse: collapse;
+}
+
+.datatable td {
+	/* border: 1px solid #D6DDE6; */
+	padding-right: 0.5em;
+	padding-bottom: 0.5em;
+	
+}
+
+.datatable th {
+	border: 1px solid #828282;
+	background-color: #BCBCBC;
+	font-weight: bold;
+	text-align: left;
+	padding-left: 0.3em;
+}
+
+.datatable tr.altrow {
+	background-color: #DFE7F2;
+	color: #000000;
+}
+

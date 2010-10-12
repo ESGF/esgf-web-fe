@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title><fmt:message key="welcome.title"/></title>
+    <title>ESG Geo-Spatial Search</title>
     <link rel="stylesheet" 
         href="<c:url value="/styles/yui/2.8.1/reset-fonts/reset-fonts.css" />" 
         type="text/css">

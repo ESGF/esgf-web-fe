@@ -98,7 +98,10 @@ $(function() {
 
 
     <div id="mapPane">
-    
+        <div id="2dmap">
+        </div>
+        <div id="mapInfo">
+        </div> 
     </div>
     
 

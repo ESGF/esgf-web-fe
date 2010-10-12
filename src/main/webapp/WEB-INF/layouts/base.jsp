@@ -18,8 +18,10 @@
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2.min.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/json.min.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/menu.js" /> "></script>            
-    <script type="text/javascript" src="<c:url value="/scripts/searchbox.js" /> "></script>            
-
+    <script type="text/javascript" src="<c:url value="/scripts/searchbox.js" /> "></script> 
+    <script type="text/javascript" src="<c:url value="/scripts/map.js" /> "></script>                   
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"> </script>
+    
     <jsp:include page="/WEB-INF/views/search/_search_js.jsp" flush="true" />
 
 </head>

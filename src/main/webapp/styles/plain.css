@@ -386,9 +386,7 @@ form {
     May Style
    --------------------------------
  */
-   
-#mapPane {
-}
+
 
 #map_canvas {
 	float: left;
@@ -401,5 +399,5 @@ form {
 	float: right;
 	width: 200px;
 	height: 400px;
-	margin-top: 10px;
+	margin-bottom: 10px;
 }

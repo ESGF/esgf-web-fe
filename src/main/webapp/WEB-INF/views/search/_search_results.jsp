@@ -1,18 +1,5 @@
 <!-- Search results -->
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
-<style>
-
-#search-results {
-    font-size: 1.2em;
-    margin-top: 12px;
-}
-
-#search-result table {
-    padding: 0.2em;
-    vertical-align: top;
-}
-    
-</style>
 
 
 <div id="search-results">

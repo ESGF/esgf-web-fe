@@ -1,13 +1,14 @@
 /************************************************************
- * Base Layout
- * 
- * Author: fwang2@ornl.gov 
+ Author:    Feiyi Wang 
+ Email:     fwang2@ornl.gov
+ Created:   2010-10-10
+ Desc:      Base Layout
  ************************************************************/
 
 body {
 	margin: 0;
 	padding: 0;
-    font-size: 65%;
+    font-size: 0.7em;
     font-family: "Lucida Grande", Times;
 }
 
@@ -73,7 +74,7 @@ body {
 
 
 table#nav {
-	font-size: 1.2em;
+	font-size: 1.1em;
     background: url(../images/bg_nav.png) repeat-x left top;
     width: 100%;
     color: #FFFFFF;
@@ -107,7 +108,6 @@ table#nav a, table#nav li a:link {
     color: #FFFFFF;
     text-decoration: none;
     padding: .5em 1em;
-    font: bold 1em "Lucida Grande", Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
 }
 
 
@@ -144,7 +144,7 @@ table#nav a:hover {
 
 /* COPYRIGHT INFO */
 #copyright {
-    position:absolute;
+    position:fixed;
 	font-size: 1.2em;
     padding: 5px;
     background-color: #86B500;
@@ -222,8 +222,13 @@ ul#failure-flash-messages li, ul#success-flash-messages li {
 }
 
 
+/* style pagination */
+#pagination {
+    font-size: 1.1em;
+    font-weight: bold;
+}
 
-/* style facet panel */
+ /* style facet panel */
 ul.menu, ul.menu ul {
   list-style-type:none;
   margin: 0;
@@ -331,3 +336,57 @@ ul.menu div.panel a:hover {
 	font-size: 1.6em;
 	margin-top: 1em;
 }
+
+
+/* Style Pane */
+
+label {
+    font-weight: bold;
+    float: left;
+    text-align: right;
+    width: 88px;
+    margin-right: 6px;
+}
+
+#optionContainer {
+    float: left;
+}
+
+#optionPane {
+    clear: both;
+    margin-bottom: 4px;
+    padding: 4px 0;
+    /* border: 1px dotted #9fca6a; */ 
+}
+
+#dataScope, #withMap {
+    padding: 4px 0;
+    margin-bottom: 4px;
+}
+    
+form {
+    font-size: 1.1em;
+}
+
+
+/* Style search result */
+
+#search-results {
+    font-size: 1.1em;
+    margin-top: 12px;
+}
+
+#search-result table {
+    padding: 0.2em;
+    vertical-align: top;
+}
+
+
+/* May Style */
+
+#2dmap {
+	width: 100%;
+	height: 500px;
+	border: 1px solid #000;
+}
+

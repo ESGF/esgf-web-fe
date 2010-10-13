@@ -1,9 +1,7 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="ti"%>
+<%@ include file="include.jsp" %>
 
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/loose.dtd">
 
 
 <html>
@@ -18,8 +16,7 @@
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2.min.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/json.min.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/menu.js" /> "></script>            
-    <script type="text/javascript" src="<c:url value="/scripts/searchbox.js" /> "></script>            
-
+    <script type="text/javascript" src="<c:url value="/scripts/searchbox.js" /> "></script> 
     <jsp:include page="/WEB-INF/views/search/_search_js.jsp" flush="true" />
 
 </head>
@@ -60,13 +57,12 @@
     </div>
 
     <div id="main">
-    <ti:insertAttribute name="search" />
-    
-    <ti:insertAttribute name="result" />    
+        <ti:insertAttribute name="search" />    
+        <ti:insertAttribute name="result" />    
     </div>
         
 </div>
  
-<p id="copyright"> Copyright 2010, ESGF Infrastructure Team. </p>
+<p id="copyright">ESGF Infrastructure Team. </p>
 </body>
 </html>

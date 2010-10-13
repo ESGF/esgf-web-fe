@@ -8,7 +8,7 @@
 body {
 	margin: 0;
 	padding: 0;
-    font-size: 65%;
+    font-size: 0.7em;
     font-family: "Lucida Grande", Times;
 }
 
@@ -74,7 +74,7 @@ body {
 
 
 table#nav {
-	font-size: 1.2em;
+	font-size: 1.1em;
     background: url(../images/bg_nav.png) repeat-x left top;
     width: 100%;
     color: #FFFFFF;
@@ -108,7 +108,6 @@ table#nav a, table#nav li a:link {
     color: #FFFFFF;
     text-decoration: none;
     padding: .5em 1em;
-    font: bold 1em "Lucida Grande", Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
 }
 
 

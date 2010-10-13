@@ -382,11 +382,24 @@ form {
 }
 
 
-/* May Style */
-
-#2dmap {
-	width: 100%;
-	height: 500px;
-	border: 1px solid #000;
+/* --------------------------------
+    May Style
+   --------------------------------
+ */
+   
+#mapPane {
 }
 
+#map_canvas {
+	float: left;
+	height: 400px;
+	width: 400px;
+	margin-bottom: 10px;
+}
+
+#map_info {
+	float: right;
+	width: 200px;
+	height: 400px;
+	margin-top: 10px;
+}

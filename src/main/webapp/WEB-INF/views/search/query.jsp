@@ -62,7 +62,13 @@ $(function() {
 
     </div> <!--  end of optionPane -->
 
-
+    
+    <!--  Show Map Canvas -->
+    <div id="mapPane">
+            <div id="map_canvas"> </div>
+            <div id="map_info"> </div> 
+    </div>
+    
 
     <div id="submitBtn">
         <input type="submit" value="Search" />

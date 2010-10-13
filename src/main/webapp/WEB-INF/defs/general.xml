@@ -5,7 +5,7 @@
     
 <tiles-definitions>
 
-    <definition name="base" template="/WEB-INF/layouts/base.jsp">
+    <definition name="base" template="/WEB-INF/views/common/base.jsp">
         <put-attribute name="facets"  value=""/>
         <put-attribute name="search"  value=""/>
         <put-attribute name="pagination" value="" />

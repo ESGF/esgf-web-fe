@@ -1,14 +1,6 @@
 <!-- Pagination -->
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
-<style>
-
-#pagination {
-    font-size: 1.2em;
-    font-weight: bold;
-}
-    
-</style>
 <div id="pagination">
 
 <c:if test="${param['search_model'] != null}">

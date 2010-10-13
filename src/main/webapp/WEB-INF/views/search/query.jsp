@@ -1,38 +1,5 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
-<style>
-label {
-	font-weight: bold;
-	float: left;
-	text-align: right;
-	width: 88px;
-	margin-right: 6px;
-}
-
-#optionContainer {
-	float: left;
-}
-
-#optionPane {
-	clear: both;
-	margin-bottom: 4px;
-	padding: 4px 0;
-	/* border: 1px dotted #9fca6a; */ 
-}
-
-#dataScope, #withMap {
-    padding: 4px 0;
-    margin-bottom: 4px;
-}
-    
-form {
-    font-size: 1.1em;
-}
-
-
-</style>
-
-
 <script>
 
 $(function() {
@@ -43,8 +10,6 @@ $(function() {
                      $('div#showOptions').html('<a href="#">More Options</a>')
                  else						
 			$('div#showOptions').html('<a href="#">Remove Options</a>')
-					
-					
 		})
 	})
 	
@@ -59,7 +24,8 @@ $(function() {
 
     <!-- create hidden facet fields, set value to search constraint if available -->                        
     <c:forEach var="entry" items="${search_output.facets}">
-        <input type="hidden" name="${entry.key}" value="${search_input.constraints[entry.key][0]}"/>
+        <input type="hidden" 
+            name="${entry.key}" value="${search_input.constraints[entry.key][0]}"/>
     </c:forEach>
 
     <!--  More hidden values -->
@@ -97,13 +63,6 @@ $(function() {
     </div> <!--  end of optionPane -->
 
 
-    <div id="mapPane">
-        <div id="2dmap">
-        </div>
-        <div id="mapInfo">
-        </div> 
-    </div>
-    
 
     <div id="submitBtn">
         <input type="submit" value="Search" />

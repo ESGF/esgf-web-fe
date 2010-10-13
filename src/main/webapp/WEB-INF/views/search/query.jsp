@@ -46,7 +46,6 @@
 		</div>
 		</div>
 
-    </div> <!--  end of optionPane -->
 
     
     <!--  Show Map Canvas -->
@@ -55,6 +54,8 @@
             <div id="map_info"> </div> 
     
     </div>
+    
+    </div> <!--  end of optionPane -->
     
     <div id="submitBtn">
         <input type="submit" value="Search" />

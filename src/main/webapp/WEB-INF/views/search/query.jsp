@@ -1,21 +1,5 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
-<script>
-
-$(function() {
-	$('div#showOptions').click(function() {
-		$('div#optionPane').toggle(
-				'fast',  function() {
-		    if ($(this).is(':hidden'))
-                     $('div#showOptions').html('<a href="#">More Options</a>')
-                 else						
-			$('div#showOptions').html('<a href="#">Remove Options</a>')
-		})
-	})
-	
-})
-
-</script>
 
 <h2>Experimental GeoSpatial Search:</h2>
 
@@ -51,19 +35,27 @@ $(function() {
 		<div>
 		<input type="radio" name="modelGroup" value="model" /> Model 
 		<input type="radio" name="modelGroup" value="obs" /> Observational 
-		<input type="radio" name="modelGroup" value="all" /> All
+		<input type="radio" name="modelGroup" value="all" Checked/> All
 		</div>
 		</div>
 		
 		<div id="withMap"><label for="dataMap">Show Map: </label>
-		<div><input type="radio" name="mapGroup" value="2dMap" /> 2D 
-		    <input type="radio" name="mapGroup" value="3dMap" /> 3D 
-		</div></div>
+		<div>
+		  <input type="radio" name="mapGroup" value="2dmap" /> 2D 
+		  <input type="radio" name="mapGroup" value="3dmap" /> 3D 
+		</div>
+		</div>
 
     </div> <!--  end of optionPane -->
 
-
-
+    
+    <!--  Show Map Canvas -->
+    <div id="mapPane" style="display:none">
+            <div id="map_canvas"> </div>
+            <div id="map_info"> </div> 
+    
+    </div>
+    
     <div id="submitBtn">
         <input type="submit" value="Search" />
     </div>

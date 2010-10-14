@@ -35,6 +35,8 @@
 
 </ul>
 
-<div id="facet-reset">
-<a href="javascript:window.location='.' "> Reset Facets </a>
+<a id="facet_reset" href="javascript:window.location='.' "> Reset Facets </a>
+<div class="tooltip">
+Reset current selection of facets, effectively refresh 
+and display all available categories 
 </div>

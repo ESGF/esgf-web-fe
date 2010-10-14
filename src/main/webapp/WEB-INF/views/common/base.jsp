@@ -14,7 +14,10 @@
         type="text/css">
     <link rel="stylesheet" href="<c:url value="/styles/plain.css" />" 
         type="text/css" media="screen, projection">
-    <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2.min.js" /> "></script>
+
+    <!--  include jquery 1.4.2, saved in local copy -->        
+    <script src="http://cdn.jquerytools.org/1.2.5/jquery.tools.min.js"></script>
+            
     <script type="text/javascript" src="<c:url value="/scripts/json.min.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/menu.js" /> "></script>            
     <script type="text/javascript" src="<c:url value="/scripts/searchbox.js" /> "></script> 

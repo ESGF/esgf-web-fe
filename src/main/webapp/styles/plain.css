@@ -332,8 +332,8 @@ ul.menu div.panel a:hover {
 }
 
 /* Facet Reset */
-#facet-reset {
-	font-size: 1.6em;
+#facet_reset {
+	font-size: 1.2em;
 	margin-top: 1em;
 }
 
@@ -400,4 +400,19 @@ form {
 	width: 200px;
 	height: 400px;
 	margin-bottom: 10px;
+}
+
+
+/* Tool tip styling */
+.tooltip {
+    display:none;
+    height:50px;
+    padding:10px 10px 10px 10px;
+    width:180px;
+    font-size:1.1em;
+    color:#000000;
+    background: #FFFF66;
+    border:1px solid #336600;
+    -moz-box-shadow:0 0 10px #000;
+    -webkit-box-shadow:0 0 10px #000;
 }

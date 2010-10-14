@@ -1,6 +1,6 @@
 /*
  * Author: 		Feiyi Wang
- * Created: 	Oct 12, 2010
+ * Created: 	October 12, 2010
  */
 
 $(document).ready(function(){
@@ -30,5 +30,9 @@ $(document).ready(function(){
 			$("div#mapPane").toggle('fast', display_map);
 		};
 	});
+
+	
+	/* handle tool tip */
+	$("#facet_reset").tooltip({position: "top right", opacity: 0.7});
 	
 });

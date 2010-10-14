@@ -9,14 +9,52 @@ body {
 	margin: 0;
 	padding: 0;
     font-size: 0.7em;
-    font-family: "Lucida Grande", Times;
+    font-family: "Lucida Grande", Arial;
 }
 
-#content {
-	text-align: left;
-	margin-left: 15px;
+#wrapper {
+	font-size: 1em;
+	padding-top: 20px;
 }
 
+
+/* header */
+
+#header{
+    position: relative;
+}	
+
+/* Banner */
+#header .banner-left {
+    background-color: #000;
+}
+
+#header .banner-right {
+    background-color: #000;
+}
+
+#header .banner-center {
+    background-image: url(../images/esg_banner.jpg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 59px;
+    width: 1024px;
+    padding: 0px;
+    margin: 0px;
+}
+
+
+/* Footer */
+
+#footer {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	font-size: 1em;
+    background-color: transparent;
+    font-weight: normal;
+    color: #000000;
+}
 
 /* both #facets and #main are within the #wrapper
    and the absolute value is less than ideal, but 
@@ -26,28 +64,18 @@ body {
  
 #facets {
     position: absolute;
-    top: 7.5em;
     left: 1em;
     width: 200px;
-    /* border-right: thick single #333; */
 }
 
 #main {
     position: absolute;
-    top: 7.5em;
-    margin-left: 220px;
-    
-}
-#wrapper h1, #wrapper h2, #wrapper h3, #wrapper h4, #wrapper h5, #wrapper h6 {
-    color:#00607b;
-    font-weight:300;
+    margin-left: 240px;
     
 }
 
-#wrapper p {
-    font-size: 1.1em;
-    margin-top: 1em;
-    margin-bottom: 1em;
+#wrapper h1, #wrapper h2, #wrapper h3, #wrapper h4, #wrapper h5, #wrapper h6 {
+    color:#00607b;
 }
 
 
@@ -118,39 +146,6 @@ table#nav li a, #nav li a:link {
 
 table#nav a:hover {
     background: url(../images/bg_nav_h.png);
-}
-
-
-/* Banner */
-.banner-left {
-    background-color: #000;
-}
-
-.banner-right {
-    background-color: #000;
-}
-
-.banner-center {
-    background-image: url(../images/esg_banner.jpg);
-    background-repeat: no-repeat;
-    background-position: center center;
-    height: 59px;
-    width: 1024px;
-    padding: 0px;
-    margin: 0px;
-}
-
-
-
-/* COPYRIGHT INFO */
-#copyright {
-    position:fixed;
-	font-size: 1.2em;
-    padding: 5px;
-    background-color: #86B500;
-    font-weight: normal;
-    color: #000000;
-    bottom: 0px;
 }
 
 
@@ -228,25 +223,22 @@ ul#failure-flash-messages li, ul#success-flash-messages li {
     font-weight: bold;
 }
 
- /* style facet panel */
+ /*----------------------------------- 
+    style facet panel 
+   -----------------------------------
+  */
+   
 ul.menu, ul.menu ul {
   list-style-type:none;
   margin: 0;
   padding: 0;
-  width: 15em;
+  width: 16em;
+  font-size: 1.1em;
 }
 
 ul.menu a {
   display: block;
   text-decoration: none;    
-}
-
-ul.menu {
-    font-size: 1.2em;
-}
-
-ul.menu li {
-  margin-top: 1px;
 }
 
 ul.menu li a, ul.menu ul.menu li a {
@@ -279,12 +271,10 @@ ul.menu ul.menu {
 }
 
 ul.menu a.active, ul.menu li a.active, ul.menu a.active:hover, ul.menu ul.menu li a.active:hover {
-    /* text-decoration: underline; */
     background: #c00;
 }
 
-
-div.panel {
+ul.menu div.panel {
     border: 1px #000 solid;
     padding: 5px;
     margin-top: 1px;
@@ -299,6 +289,7 @@ ul.menu div.panel a, ul.menu div.panel li a:hover  {
     border: none;
     font-weight: bold;
 }
+
 ul.menu div.panel a:hover {
     color: #000;
     text-decoration: underline; 
@@ -332,9 +323,12 @@ ul.menu div.panel a:hover {
 }
 
 /* Facet Reset */
-#facet_reset {
-	font-size: 1.2em;
+#reset_pane {
 	margin-top: 1em;
+}
+
+#reset {
+	font-size: 1.2em;
 }
 
 
@@ -408,10 +402,11 @@ form {
     display:none;
     height:50px;
     padding:10px 10px 10px 10px;
+    background:url(/tools/img/tooltip/black_arrow.png);
+    /* background: #FFFF66; */
     width:180px;
     font-size:1.1em;
     color:#000000;
-    background: #FFFF66;
     border:1px solid #336600;
     -moz-box-shadow:0 0 10px #000;
     -webkit-box-shadow:0 0 10px #000;

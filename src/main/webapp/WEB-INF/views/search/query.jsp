@@ -21,13 +21,22 @@
     <table>
 	<tr align="center">
 		<td><input id="searchbox" name="text" type="text"
-			size="50" value="${search_input.text}" /></td>
-		<td> <div id="showOptions"><a href="#">More Options</a></div>
-		</td>
+			size="70" value="${search_input.text}" /></td>
+
+    <td>    
+        <input type="submit" value="Search" />
+    </td>
+
 	</tr>
+
+	
     </table>
 
+</form>
 
+<form>
+
+ <div id="showOptions"><a href="#">More Options</a></div>
 
     <div id="optionPane" style="display:none">
 
@@ -57,9 +66,6 @@
     
     </div> <!--  end of optionPane -->
     
-    <div id="submitBtn">
-        <input type="submit" value="Search" />
-    </div>
 
 </form>
 

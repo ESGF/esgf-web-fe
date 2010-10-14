@@ -4,8 +4,10 @@ HTML structure to use:
 
 Notes: 
 
-Each menu MUST have a class 'menu' set. If the menu doesn't have this, the JS won't make it dynamic
-If you want a panel to be expanded at page load, give the containing LI element the classname 'expand'.
+Each menu MUST have a class 'menu' set. If the menu doesn't have this, 
+the JS won't make it dynamic
+If you want a panel to be expanded at page load, 
+give the containing LI element the classname 'expand'.
 Use this to set the right state in your page (generation) code.
 
 Optional extra classnames for the UL element that holds an accordion:
@@ -59,7 +61,7 @@ jQuery.fn.initMenu = function() {
                     if(theElement[0] === undefined) {
                         window.location.href = this.href;
                     }
-                    $(theElement).slideToggle('normal', function() {
+                    $(theElement).slideToggle('fast', function() {
                         if ($(this).is(':visible')) {
                             $(this).prev().addClass('active');
                         }

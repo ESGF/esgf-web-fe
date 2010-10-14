@@ -32,7 +32,8 @@ $(document).ready(function(){
 	});
 
 	
-	/* handle tool tip */
-	$("#facet_reset").tooltip({position: "top right", opacity: 0.7});
-	
+	/* handle tool tip
+	$("#reset").tooltip({position: "bottom right",
+		offset: [-60, 0]}); // -50 will move it up
+	*/
 });

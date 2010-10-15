@@ -228,7 +228,7 @@ ul#failure-flash-messages li, ul#success-flash-messages li {
    -----------------------------------
   */
    
-ul.menu, ul.menu ul {
+ul.menu {
   list-style-type:none;
   margin: 0;
   padding: 0;
@@ -239,6 +239,12 @@ ul.menu, ul.menu ul {
 ul.menu a {
   display: block;
   text-decoration: none;    
+}
+
+ul.menu li.disabled {
+	background: gray;
+	color: #fff;
+	padding: 0.5em;
 }
 
 ul.menu li a, ul.menu ul.menu li a {

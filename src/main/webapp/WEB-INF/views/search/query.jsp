@@ -18,6 +18,7 @@
 
     
     <!--  Search Box -->
+    
     <table>
 	<tr align="center">
 		<td><input id="searchbox" name="text" type="text"
@@ -26,7 +27,7 @@
 		</td>
 	</tr>
     </table>
-
+ 
 
 
     <div id="optionPane" style="display:none">
@@ -57,10 +58,23 @@
     
     </div> <!--  end of optionPane -->
     
+    
+     
     <div id="submitBtn">
         <input type="submit" value="Search" />
     </div>
 
+
+	
+
+</form>
+
+
+<form method="post" id="search-form2" class="form">
+    <input id="searchbox2" name="text2" type="text"
+			size="50" value='${search_input.offset}' />
+			
+			
 </form>
 
 <!-- Form errors -->

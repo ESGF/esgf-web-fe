@@ -52,58 +52,81 @@ jQuery.fn.initMenu = function() {
         $('.acitem', this).hide();
         $('li.expand > .acitem', this).show();
         $('li.expand > .acitem', this).prev().addClass('active');
+
+        function getSearchForm() {
+        	return $("#search-form");
+        }
+
+        function setFacet(facetKey, facetValue) {
+        	var searchForm = getSearchForm();
+        	var input = searchForm[facetKey];
+        	input.value = facetValue;
+        	search(0);
+        }
+
+        function resetFacet(facetKey) {
+        	var searchForm = getSearchForm();
+        	var input = searchForm[facetKey];
+        	input.value = "";
+        	search(0);
+        }
+
+        function search(offset) {
+        	var searchForm = getSearchForm();
+        	searchForm.offset.value = offset;
+        	searchForm.submit();
+        }
         
         $('ul.acitem > li > a').bind('click', function(e) {
-        	e.stopImmediatePropapation();
-        	alert('ok');
+        	// subfacet clicked
         });
         
         $('ul.menu > li > a').bind('click', function(e) {
-                e.stopImmediatePropagation();
-                var theElement = $(this).next();
-                var parent = this.parentNode.parentNode;
-                if ($(parent).hasClass('noaccordion')) 
-                {
-                    if (theElement[0] === undefined) {
-                        window.location.href = this.href;
+            e.stopImmediatePropagation();
+            var theElement = $(this).next();
+            var parent = this.parentNode.parentNode;
+            if ($(parent).hasClass('noaccordion')) 
+            {
+                if (theElement[0] === undefined) {
+                    window.location.href = this.href;
+                }
+                $(theElement).slideToggle('fast', function() {
+                    if ($(this).is(':visible')) {
+                        $(this).prev().addClass('active');
                     }
-                    $(theElement).slideToggle('fast', function() {
-                        if ($(this).is(':visible')) {
-                            $(this).prev().addClass('active');
-                        }
-                        else {
+                    else {
+                        $(this).prev().removeClass('active');
+                    }    
+                });
+                return false;
+            }
+            else 
+            { // with accordion
+                if (theElement.hasClass('acitem') && theElement.is(':visible')) 
+                {
+                    if($(parent).hasClass('collapsible')) {
+                        $('.acitem:visible', parent).first().slideUp('normal', 
+                        function() {
                             $(this).prev().removeClass('active');
-                        }    
+                        });
+                        return false;  
+                    }
+                    return false;
+                }
+                
+                if(theElement.hasClass('acitem') && !theElement.is(':visible')) 
+                {
+                    $('.acitem:visible', parent).first().slideUp('normal', function() {
+                         $(this).prev().removeClass('active');
+                    });
+                    
+                    theElement.slideDown('normal', function() {
+                         $(this).prev().addClass('active');
                     });
                     return false;
                 }
-                else 
-                { // with accordion
-                    if (theElement.hasClass('acitem') && theElement.is(':visible')) 
-                    {
-                        if($(parent).hasClass('collapsible')) {
-                            $('.acitem:visible', parent).first().slideUp('normal', 
-                            function() {
-                                $(this).prev().removeClass('active');
-                            });
-                            return false;  
-                        }
-                        return false;
-                    }
-                    
-                    if(theElement.hasClass('acitem') && !theElement.is(':visible')) 
-                    {
-                        $('.acitem:visible', parent).first().slideUp('normal', function() {
-                             $(this).prev().removeClass('active');
-                        });
-                        
-                        theElement.slideDown('normal', function() {
-                             $(this).prev().addClass('active');
-                        });
-                        return false;
-                    }
-                }
-        	}); 
+            }
+    	}); 
     });
 };
 $(document).ready(function() {$('.menu').initMenu();});

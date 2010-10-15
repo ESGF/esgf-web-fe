@@ -32,9 +32,9 @@
                <!-- facet not selected > include all options -->
                 <c:forEach var="subFacet" items="${entry.value.subFacets}">
 <%--                  <li><a href='javascript:setFacet("${entry.key}","${subFacet.label}")'> --%>
-                   <li> <div id="subfacet"><a href='#'>
+                   <li><a href='#'>
                        <c:out value="${subFacet.label}"/>
-                      (<c:out value="${subFacet.counts}"/>)</a> </div></li>
+                      (<c:out value="${subFacet.counts}"/>)</a></li>
                 </c:forEach>
              </c:otherwise>
              </c:choose>

@@ -19,10 +19,8 @@
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2.min.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/json.min.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/menu.js" /> "></script>            
-    <script type="text/javascript" src="<c:url value="/scripts/searchbox.js" /> "></script> 
-    <script type="text/javascript" src="<c:url value="/scripts/map.js" /> "></script> 
-    <jsp:include page="/WEB-INF/views/search/_search_js.jsp" flush="true" />
-
+    <script type="text/javascript" src="<c:url value="/scripts/search.js" /> "></script> 
+    <script type="text/javascript" src="<c:url value="/scripts/submit.js" /> "></script> 
 
     <script type="text/javascript"
         src="http://maps.google.com/maps/api/js?sensor=false">
@@ -70,8 +68,15 @@
 
 
     <div id="main">
+        
+        <div id="search_box">
         <ti:insertAttribute name="search" />    
+        </div>
+       
+        <div id="search_results">
         <ti:insertAttribute name="result" />    
+        </div>
+        
     </div>
 
 </div> <!-- end of wrapper -->

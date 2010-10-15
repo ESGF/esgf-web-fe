@@ -4,6 +4,29 @@
  */
 
 $(document).ready(function(){
+
+	//global vars
+	
+	var searchBox = $("#searchbox");
+	var data = $("#searchbox").val();
+	var searchBoxDefault = "Search projects, datasets, and more";
+	
+	//Effects for both searchbox
+	searchBox.focus(function(e){
+		$(this).addClass("active");
+	});
+	searchBox.blur(function(e){
+		$(this).removeClass("active");
+	});
+	
+	searchBox.focus(function(){
+		if($(this).attr("value") == searchBoxDefault) $(this).attr("value", "");
+	});
+	searchBox.blur(function(){
+		if($(this).attr("value") == "") $(this).attr("value", searchBoxDefault);
+	});	
+	
+	
 	$('div#showOptions').click(function() {
 		$('div#optionPane').slideToggle(
 				'fast',  function() {
@@ -31,9 +54,4 @@ $(document).ready(function(){
 		};
 	});
 
-	
-	/* handle tool tip
-	$("#reset").tooltip({position: "bottom right",
-		offset: [-60, 0]}); // -50 will move it up
-	*/
 });

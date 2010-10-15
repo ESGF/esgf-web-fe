@@ -24,7 +24,7 @@
                  <li><a href='javascript:resetFacet("${entry.key}")'>
                             Any <c:out value="${entry.value.label}"/></a></li>
                    <c:forEach var="subFacet" items="${entry.value.subFacets}">
-                   <li> <c:out value="${subFacet.label}"/> 
+                   <li class="selected"> <c:out value="${subFacet.label}"/> 
                     (<c:out value="${subFacet.counts}"/>)</li>
                    </c:forEach>
              </c:when>                               

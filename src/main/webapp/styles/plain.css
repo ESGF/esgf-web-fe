@@ -268,6 +268,12 @@ ul.menu li ul li a:hover, ul.menu ul.menu li ul li a:hover {
   border-left: 5px #000 solid;
   padding-left: 15px;
 }
+
+ul.menu li.selected {
+	background: #aaa;
+	padding-left: 20px;
+}
+
 ul.menu ul.menu li a:hover {
     border-left: 0;
     padding-left: 0.5em;

@@ -83,7 +83,7 @@ jQuery.fn.initMenu = function() {
                     }
                     return false;
                 }
-                if(theElement.hasClass('acitem') && !theElement.is(':visible')) {         
+                if(theElement.hasClass('acitem') && !theElement.is(':visible')) {
                     $('.acitem:visible', parent).first().slideUp('normal', function() {
                         $(this).prev().removeClass('active');
                     });

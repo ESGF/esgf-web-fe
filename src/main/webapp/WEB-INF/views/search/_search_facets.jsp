@@ -3,14 +3,19 @@
 
 <h2>Categories</h2>
 
+<c:if test="${search_output.facets != null}">
 <ul class="menu noaccordion">
 
-<c:if test="${search_output.facets != null}">
 <c:forEach var="entry" items="${search_output.facets}">
+    <c:set var="selected" value="" />
+    <c:if test="${not empty search_input.constraints[entry.key]}">
+        <c:set var="selected" value="selected"/></c:if>
+    
     <c:choose>
     <c:when test="${fn:length(entry.value.subFacets)>0}">
-	   <li><a href="#"><c:out value="${facet_profile.topLevelFacets[entry.key].label}"/></a>
+       <li><a href="#"><c:out value="${facet_profile.topLevelFacets[entry.key].label}"/></a>
     </c:when>
+    
     <c:otherwise>
        <li class="disabled"><c:out value="${facet_profile.topLevelFacets[entry.key].label}"/>
     </c:otherwise>
@@ -41,6 +46,6 @@
        </c:choose>
        </ul> 
 </c:forEach>
-</c:if>
 
 </ul>
+</c:if>

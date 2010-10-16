@@ -25,10 +25,10 @@ Extended - by fwang2
 jQuery.fn.initMenu = function() {  
     return this.each(function(){
         var theMenu = $(this).get(0);
-        $('.acitem', this).hide();
-        $('li.expand > .acitem', this).show();
-        $('li.expand > .acitem', this).prev().addClass('active');
-
+        $('.acitem:not(:has(li.selected))').hide();
+        $('li:has(li.selected)', this).addClass("expand");
+        $('li.expand').show();
+        
         function getSearchForm() {
         	return $("#search-form");
         }
@@ -53,7 +53,6 @@ jQuery.fn.initMenu = function() {
         	searchForm.submit();
         }
         
-        /* 
         $('ul.acitem > li > a').bind('click', function(e) {
         	var facetkey = $("#entry_key", this).html().trim();
         	var facetvalue = $("#subfacet_label", this).html().trim();
@@ -63,13 +62,12 @@ jQuery.fn.initMenu = function() {
         		type: "POST",
         		url: '/esg-web/search.htm',
         		data: queryString,
-        		success: function() {
-        			$("#search_results").html("well, display search results");
+        		success: function(data) {
+        			$("#search_results").html(data);
         		}
         	});
         	return true;
         });
-        */
         
         $('ul.menu > li > a').bind('click', function(e) {
             e.stopImmediatePropagation();

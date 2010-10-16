@@ -146,8 +146,10 @@ public class SearchController {
 	 */
 	@RequestMapping(method=RequestMethod.POST)
 	@SuppressWarnings("unchecked")
-	protected ModelAndView doPost(final HttpServletRequest request, final @ModelAttribute(SEARCH_INPUT) SearchInputImpl input, final BindingResult result) throws Exception {
-		
+	protected ModelAndView doPost(final HttpServletRequest request, 
+			final @ModelAttribute(SEARCH_INPUT) SearchInputImpl input, 
+			final BindingResult result) throws Exception {
+
 		// invalid user input
 		if (isNotValid(input.getText())) {					
 			
@@ -160,7 +162,6 @@ public class SearchController {
 						
 		// valid user input
 		} else {
-				
 			// set retrieval of all facets in profile
 			input.setFacets(new ArrayList<String>(facetProfile.getTopLevelFacets().keySet()));
 	
@@ -180,7 +181,6 @@ public class SearchController {
 		// use POST-REDIRECT-GET pattern with additional parameter "?search_model"
 		final String url = request.getRequestURL().toString();
 		return new ModelAndView(new RedirectView(url)).addObject(SEARCH_MODEL,"true");
-		
 	}
 
 	

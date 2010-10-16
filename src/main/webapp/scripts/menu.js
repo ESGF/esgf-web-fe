@@ -1,48 +1,24 @@
 /* 
-Simple JQuery menu.
 HTML structure to use:
 
-Notes: 
-
-Each menu MUST have a class 'menu' set. If the menu doesn't have this, 
-the JS won't make it dynamic
-If you want a panel to be expanded at page load, 
-give the containing LI element the classname 'expand'.
-Use this to set the right state in your page (generation) code.
-
-Optional extra classnames for the UL element that holds an accordion:
-
-noaccordion : no accordion functionality
-collapsible : menu works like an accordion but can be fully collapsed
-
-<ul class="menu [optional class] [optional class]">
-<li><a href="#">Sub menu heading</a>
-<ul>
-<li><a href="http://site.com/">Link</a></li>
-<li><a href="http://site.com/">Link</a></li>
-<li><a href="http://site.com/">Link</a></li>
-...
-...
-</ul>
-// This item is open at page load time
-<li class="expand"><a href="#">Sub menu heading</a>
-<ul>
-<li><a href="http://site.com/">Link</a></li>
-<li><a href="http://site.com/">Link</a></li>
-<li><a href="http://site.com/">Link</a></li>
-...
-...
-</ul>
-...
-...
-</ul>
+	<ul class="menu optional">
+	<li> 
+		<a href="#"> sub menu </a>
+		<ul>
+			<li><a href="..."> link </a></li>
+		</ul>
+	</li>
+	...
+	</ul>
+	
 
 Copyright 2007-2010 by Marco van Hylckama Vlieg
 
-web: http://www.i-marco.nl/weblog/
-email: marco@i-marco.nl
+Extended - by fwang2
 
-Free to use any way you like.
+	- disabled class for sub-menu
+	- onclick event for subfacet
+
 */
 
 
@@ -77,9 +53,23 @@ jQuery.fn.initMenu = function() {
         	searchForm.submit();
         }
         
+        /* 
         $('ul.acitem > li > a').bind('click', function(e) {
-        	// subfacet clicked
+        	var facetkey = $("#entry_key", this).html().trim();
+        	var facetvalue = $("#subfacet_label", this).html().trim();
+        	var queryString= facetkey + '=' + facetvalue + '&offset=0' + 
+        			'&text='+ '&limit=10';
+        	$.ajax({
+        		type: "POST",
+        		url: '/esg-web/search.htm',
+        		data: queryString,
+        		success: function() {
+        			$("#search_results").html("well, display search results");
+        		}
+        	});
+        	return true;
         });
+        */
         
         $('ul.menu > li > a').bind('click', function(e) {
             e.stopImmediatePropagation();

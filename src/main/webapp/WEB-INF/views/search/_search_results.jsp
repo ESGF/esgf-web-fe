@@ -2,11 +2,9 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
 
-<div id="search-results">
 
 <c:if test="${param['search_model'] != null}">
 		
-<!-- Table of search results -->
 <table class="datatable">
 	<c:set var="j" value="0" />
 	<c:forEach var="record" items="${search_output.results}">
@@ -33,4 +31,3 @@
 
 </c:if>
 
-</div>	

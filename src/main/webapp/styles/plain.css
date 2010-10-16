@@ -241,6 +241,11 @@ ul.menu a {
   text-decoration: none;    
 }
 
+ul.menu li {
+	border-style: none;
+	/* border-bottom: thin solid white; */
+}
+
 ul.menu li.disabled {
 	background: gray;
 	color: #fff;
@@ -258,20 +263,20 @@ ul.menu li a:hover, ul.menu ul.menu li a:hover {
 }
 
 ul.menu li ul li a, ul.menu ul.menu li ul li a {
-  background: #ccc;
-  color: #000;
-  padding-left: 20px;
+	background: #ccc;
+    color: #000;
+    padding-left: 20px;
 }
 
 ul.menu li ul li a:hover, ul.menu ul.menu li ul li a:hover {
-  background: #aaa;
-  border-left: 5px #000 solid;
+    background: #aaa;
+    border-left: 5px #000 solid;
   padding-left: 15px;
 }
 
 ul.menu li.selected {
-	background: #aaa;
-	padding-left: 20px;
+    background: #aaa;
+    padding-left: 20px;
 }
 
 ul.menu ul.menu li a:hover {
@@ -384,7 +389,6 @@ form {
 
 #search-result table {
     padding: 0.2em;
-    vertical-align: top;
 }
 
 

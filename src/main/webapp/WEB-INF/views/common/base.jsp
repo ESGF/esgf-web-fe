@@ -32,37 +32,41 @@
 
     
 <div id="header"> 
-<table width="100%" cellpadding="0" cellspacing="0" align="center" border="0" > 
-<tr> 
-<td align="left" class="banner-left" >&nbsp;</td> 
-<td align="center" class="banner-center">&nbsp;</td> 
-<td align="right" class="banner-right">&nbsp;</td> 
-</tr> 
-</table> 
 
-<table id="nav">
-<tr> 
-    <td align="left">
-    <ul> 
-        <li><a href="#">Home</a></li> 
-        <li><a href="#">Browse</a></li> 
-        <li><a href="#">Account</a></li> 
-        <li><a href="#">Contact Us</a></li> 
-    </ul>
-    </td>
+	<table width="100%" cellpadding="0" cellspacing="0" align="center" border="0" > 
+	<tr> 
+	<td align="left" class="banner-left" >&nbsp;</td> 
+	<td align="center" class="banner-center">&nbsp;</td> 
+	<td align="right" class="banner-right">&nbsp;</td> 
+	</tr> 
+	</table> 
 
-    <td align="right">
-     <!-- Handle Login -->                            
-    </td>
-</tr>
-</table>
- 
+    <div id="tab">
+
+		<table id="nav">
+		<tr> 
+		    <td align="left">
+		    <ul> 
+		        <li><a href="#">Home</a></li> 
+		        <li><a href="#">Browse</a></li> 
+		        <li><a href="#">Account</a></li> 
+		        <li><a href="#">Contact Us</a></li> 
+		    </ul>
+		    </td>
+		
+		    <td align="right">
+		     <!-- Handle Login -->                            
+		    </td>
+		</tr>
+		</table>
+	</div>
+
 </div> <!--  header -->         
 
                             
 <div id="wrapper">
 
-    <div id="sidebar">
+    <div id="facets">
         <ti:insertAttribute name="facets" />
     </div>
 
@@ -80,9 +84,12 @@
     </div>
 
 </div> <!-- end of wrapper -->
- 
+
+<!--  
 <div id="footer">
     <p>Copyright(c) 2010, ESGF Infrastructure Team. </p>
 </div>
+-->
+
  </body>
 </html>

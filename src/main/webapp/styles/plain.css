@@ -5,72 +5,24 @@
  Desc:      Base Layout
  ************************************************************/
 
-/* 
-    <body> 
-          <div header> 
-          <div wrapper> 
-            <div sidebar> 
-            <div main> (search box and search result)
-          </div wrapper>
-          <div footer>
-    </body>
- */
-          
 body {
 	margin: 0;
 	padding: 0;
     font-size: 0.7em;
-    font-family: "Lucida Grande", Arial, sans-serif;
+    font-family: "Lucida Grande", Arial;
 }
 
-/* header */
-
-
 #wrapper {
-	width:960px;
 	font-size: 1em;
 	padding-top: 20px;
 }
 
-/* both #sidebars and #main are within the #wrapper
-   and the absolute value is less than ideal, but 
-   it prevents shifting when window gets resized
-   there should be a better way of handing this
- */
 
-#main {
-	width: 740px;
-    float: right;
-}
+/* header */
 
-#sidebar {
-    float: left;
-    width: 200px;
-    padding-right: 2px;
-    padding-left: 3px;
-    border-right: 1px solid black;
-}
-
-
-
-#search_box {
-}
-
-#search_results {
-}
-
-
-
-
-/* Footer */
-
-#footer {
-	clear: both;
-    background-color: transparent;
-    font-weight: normal;
-    color: #000000;
-}
-
+#header{
+    position: relative;
+}	
 
 /* Banner */
 #header .banner-left {
@@ -91,7 +43,48 @@ body {
     margin: 0px;
 }
 
-#wrapper h1, #wrapper h2, #wrapper h3, #wrapper h4, #wrapper h5, #wrapper h6 {
+/* this container for tab is just to save space on the top */
+
+#tab {
+	margin-top:-20px;
+}
+
+/* Footer */
+
+#footer {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	font-size: 1em;
+    background-color: transparent;
+    font-weight: normal;
+    color: #000000;
+}
+
+/* both #facets and #main are within the #wrapper
+   and the absolute value is less than ideal, but 
+   it prevents shifting when window gets resized
+   there should be a better way of handing this
+ */
+ 
+#facets {
+    position: absolute;
+    left: 1em;
+    width: 200px;
+}
+
+#main {
+    position: absolute;
+    margin-left: 230px;
+    
+}
+
+#wrapper h1, 
+    #wrapper h2, 
+        #wrapper h3, 
+            #wrapper h4, 
+                #wrapper h5, 
+                    #wrapper h6 {
     color:#00607b;
 }
 
@@ -241,7 +234,7 @@ ul#failure-flash-messages li, ul#success-flash-messages li {
 }
 
  /*----------------------------------- 
-    style sidebar panel 
+    style facet panel 
    -----------------------------------
   */
    
@@ -254,8 +247,8 @@ ul.menu {
 }
 
 ul.menu a {
-    display: block;
-    text-decoration: none;    
+  display: block;
+  text-decoration: none;    
 }
 
 ul.menu li {
@@ -265,7 +258,7 @@ ul.menu li {
 
 ul.menu li.disabled {
 	background: gray;
-	color: #fffeff;
+	color: #fff;
 	padding: 0.5em;
 }
 
@@ -332,37 +325,13 @@ ul.menu div.panel a:hover {
 
 /* Table format */
 
-.datatable {
-	border-collapse: collapse;
-}
-
-.datatable td {
-	/* border: 1px solid #D6DDE6; */
-	padding-right: 0.5em;
-	padding-bottom: 0.5em;
+table.data {
 	
 }
-
-.datatable th {
-	border: 1px solid #828282;
-	background-color: #BCBCBC;
-	font-weight: bold;
-	text-align: left;
-	padding-left: 0.3em;
-}
-
-.datatable tr.altrow {
-	background-color: #DFE7F2;
-	color: #000000;
-}
-
-/* sidebar Reset */
-#reset_pane {
-	margin-top: 1em;
-}
-
-#reset {
-	font-size: 1.2em;
+	
+.data td, th {
+	padding: 10px;
+    vertical-align: top;
 }
 
 
@@ -399,13 +368,9 @@ form {
 
 /* Style search result */
 
-#search-results {
-    font-size: 1.1em;
-    margin-top: 12px;
-}
-
-#search-result table {
-    padding: 0.2em;
+#search_results {
+	margin-top: 12px;
+    font-size: 1.2em;
 }
 
 

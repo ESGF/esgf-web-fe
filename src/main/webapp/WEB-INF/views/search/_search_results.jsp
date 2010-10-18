@@ -5,7 +5,7 @@
 
 <c:if test="${param['search_model'] != null}">
 		
-<table class="datatable">
+<table class="data">
 	<c:set var="j" value="0" />
 	<c:forEach var="record" items="${search_output.results}">
 		<c:set var="j" value="${j+1}"/>

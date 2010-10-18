@@ -118,6 +118,8 @@ public class SearchController {
 			// set retrieval of all facets in profile
 			input.setFacets(new ArrayList<String>(facetProfile.getTopLevelFacets().keySet()));
 	
+			input.addConstraint("west_degrees","[ 0 TO 10 ]");
+			
 			// execute query for facets
 			final SearchOutput output = searchService.search(input, false, true);
 			if (LOG.isTraceEnabled())  

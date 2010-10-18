@@ -64,18 +64,20 @@
         <input type="submit" value="Search" />
     </div>
 
-
+    <c:out value="${search_input.text}"/>
+	<c:out value="${search_input.constraints}"/>
 	
 
 </form>
 
-
+<!-- 
 <form method="post" id="search-form2" class="form">
     <input id="searchbox2" name="text2" type="text"
 			size="50" value='${search_input.offset}' />
 			
 			
 </form>
+-->
 
 <!-- Form errors -->
 <c:if test="${error_message!=null}">

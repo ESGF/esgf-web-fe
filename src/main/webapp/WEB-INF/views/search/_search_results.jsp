@@ -6,6 +6,19 @@
 
 <c:if test="${param['search_model'] != null}">
 		
+	<c:out value="results"/>
+    <c:out value="${search_input.text}"/>
+	<c:out value="${search_input.constraints}"/>		
+	<c:forEach var="text2" items="${search_input.text}">
+    	<c:out value="javascript:set(text)"/>
+	</c:forEach>
+	 <!-- 
+	<a href='javascript:setFacet("${entry.key}","${subFacet.label}")'> 
+		 -->
+		 <script type="text/javascript">
+document.write("This message is written by JavaScript");
+</script>
+
 <!-- Table of search results -->
 <table class="datatable">
 	<c:set var="j" value="0" />

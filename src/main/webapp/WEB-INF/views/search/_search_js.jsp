@@ -25,5 +25,10 @@
   			searchForm.offset.value = offset;
   			searchForm.submit();
   		}
+  		
+  		function set(text) {
+  			text = text + "Str";
+  			return text;
+  		}
   	
  </script>

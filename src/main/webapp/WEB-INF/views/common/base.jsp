@@ -83,16 +83,16 @@
 
         <div id="pagination">
         <ti:insertAttribute name="pagination" />
-        </div>        
+        </div>            
+        <div id="footer">
+        <p>Copyright(c) 2010, ESGF Infrastructure Team. </p>
+        </div>
+
     </div>
 
-</div> <!-- end of wrapper -->
 
-<!--  
-<div id="footer">
-    <p>Copyright(c) 2010, ESGF Infrastructure Team. </p>
-</div>
--->
+
+</div> <!-- end of wrapper -->
 
  </body>
 </html>

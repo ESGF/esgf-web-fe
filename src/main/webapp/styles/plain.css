@@ -13,6 +13,7 @@ body {
 }
 
 #wrapper {
+	position: relative;	
 	font-size: 1em;
 	padding-top: 20px;
 }
@@ -63,9 +64,8 @@ body {
 /* Footer */
 
 #footer {
-	position: absolute;
-	bottom: 0px;
-	right: 0px;
+	margin-top: 20px;
+	float: right;
 	font-size: 1em;
     background-color: transparent;
     font-weight: normal;
@@ -336,10 +336,6 @@ ul.menu div.panel a:hover {
 
 /* Table format */
 
-table.data {
-	
-}
-	
 .dlink {
 	font-size: 1.2em;
 }
@@ -396,7 +392,7 @@ form {
 
 
 /* --------------------------------
-    May Style
+    Map Style
    --------------------------------
  */
 

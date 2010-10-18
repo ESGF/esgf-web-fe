@@ -29,7 +29,7 @@
 	</logger>
 
     <logger name="org.springframework.web.servlet.view">
-        <level value="debug" />
+        <level value="info" />
     </logger>
 	<!-- Root Logger -->
 	<root>

@@ -62,7 +62,7 @@
                             
 <div id="wrapper">
 
-    <div id="facets">
+    <div id="sidebar">
         <ti:insertAttribute name="facets" />
     </div>
 

@@ -5,24 +5,72 @@
  Desc:      Base Layout
  ************************************************************/
 
+/* 
+    <body> 
+          <div header> 
+          <div wrapper> 
+            <div sidebar> 
+            <div main> (search box and search result)
+          </div wrapper>
+          <div footer>
+    </body>
+ */
+          
 body {
 	margin: 0;
 	padding: 0;
     font-size: 0.7em;
-    font-family: "Lucida Grande", Arial;
+    font-family: "Lucida Grande", Arial, sans-serif;
 }
 
+/* header */
+
+
 #wrapper {
+	width:960px;
 	font-size: 1em;
 	padding-top: 20px;
 }
 
+/* both #sidebars and #main are within the #wrapper
+   and the absolute value is less than ideal, but 
+   it prevents shifting when window gets resized
+   there should be a better way of handing this
+ */
 
-/* header */
+#main {
+	width: 740px;
+    float: right;
+}
 
-#header{
-    position: relative;
-}	
+#sidebar {
+    float: left;
+    width: 200px;
+    padding-right: 2px;
+    padding-left: 3px;
+    border-right: 1px solid black;
+}
+
+
+
+#search_box {
+}
+
+#search_results {
+}
+
+
+
+
+/* Footer */
+
+#footer {
+	clear: both;
+    background-color: transparent;
+    font-weight: normal;
+    color: #000000;
+}
+
 
 /* Banner */
 #header .banner-left {
@@ -41,37 +89,6 @@ body {
     width: 1024px;
     padding: 0px;
     margin: 0px;
-}
-
-
-/* Footer */
-
-#footer {
-	position: absolute;
-	bottom: 0px;
-	right: 0px;
-	font-size: 1em;
-    background-color: transparent;
-    font-weight: normal;
-    color: #000000;
-}
-
-/* both #facets and #main are within the #wrapper
-   and the absolute value is less than ideal, but 
-   it prevents shifting when window gets resized
-   there should be a better way of handing this
- */
- 
-#facets {
-    position: absolute;
-    left: 1em;
-    width: 200px;
-}
-
-#main {
-    position: absolute;
-    margin-left: 240px;
-    
 }
 
 #wrapper h1, #wrapper h2, #wrapper h3, #wrapper h4, #wrapper h5, #wrapper h6 {
@@ -224,7 +241,7 @@ ul#failure-flash-messages li, ul#success-flash-messages li {
 }
 
  /*----------------------------------- 
-    style facet panel 
+    style sidebar panel 
    -----------------------------------
   */
    
@@ -237,8 +254,8 @@ ul.menu {
 }
 
 ul.menu a {
-  display: block;
-  text-decoration: none;    
+    display: block;
+    text-decoration: none;    
 }
 
 ul.menu li {
@@ -248,7 +265,7 @@ ul.menu li {
 
 ul.menu li.disabled {
 	background: gray;
-	color: #fff;
+	color: #fffeff;
 	padding: 0.5em;
 }
 
@@ -339,7 +356,7 @@ ul.menu div.panel a:hover {
 	color: #000000;
 }
 
-/* Facet Reset */
+/* sidebar Reset */
 #reset_pane {
 	margin-top: 1em;
 }

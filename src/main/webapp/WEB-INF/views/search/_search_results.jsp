@@ -10,9 +10,12 @@
 	<c:forEach var="record" items="${search_output.results}">
 		<c:set var="j" value="${j+1}"/>
 		<tr>
-			<td><c:out value="${j}"/>.</td>
+			<%-- <td><c:out value="${j}"/>.</td> --%>
 			<td>
+			 <div class="dlink">
 				<a href="${record.fields['url'][0]}"><c:out value="${record.fields['title'][0]}"/></a>
+			 </div>
+				
 				<c:if test="${record.fields['description'][0]}"><br/>
 				<c:out value="${record.fields['description'][0]}"/>
 				</c:if>

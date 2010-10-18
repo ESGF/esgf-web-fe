@@ -329,6 +329,10 @@ table.data {
 	
 }
 	
+.dlink {
+	font-size: 1.2em;
+}
+
 .data td, th {
 	padding: 10px;
     vertical-align: top;
@@ -370,7 +374,7 @@ form {
 
 #search_results {
 	margin-top: 12px;
-    font-size: 1.2em;
+    font-size: 1.1em;
 }
 
 

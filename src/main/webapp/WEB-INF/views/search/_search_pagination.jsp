@@ -4,7 +4,6 @@
 <div id="pagination">
 
 <c:if test="${param['search_model'] != null}">
-	<div align="center">
 		<c:set var="last" value="${search_input.offset+fn:length(search_output.results)}"/>
 		Total # of results: ${search_output.counts}
 		<c:if test="${search_input.offset>0}">
@@ -16,7 +15,6 @@
 		<c:if test="${last < search_output.counts}">
 			| <a href="javascript:search(<c:out value="${last}"/>)">Next &#187;</a>
 		</c:if>
-	</div>
 </c:if>
 
 </div>

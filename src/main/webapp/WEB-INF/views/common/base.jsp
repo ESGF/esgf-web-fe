@@ -80,7 +80,10 @@
         <div id="search_results">
         <ti:insertAttribute name="result" />    
         </div>
-        
+
+        <div id="pagination">
+        <ti:insertAttribute name="pagination" />
+        </div>        
     </div>
 
 </div> <!-- end of wrapper -->

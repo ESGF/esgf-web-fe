@@ -49,6 +49,17 @@ body {
 	margin-top:-20px;
 }
 
+#pagination {
+	margin-top: 2em;
+	margin-left: 0px;
+}
+
+#search_summary {
+	clear: both;
+    margin-left: 100px;
+}
+
+
 /* Footer */
 
 #footer {
@@ -338,6 +349,11 @@ table.data {
     vertical-align: top;
 }
 
+.data caption {
+	font-size: 1.2em;
+	text-decoration: underline;
+}
+	
 
 /* Style Pane */
 
@@ -375,6 +391,7 @@ form {
 #search_results {
 	margin-top: 12px;
     font-size: 1.1em;
+    border-left: 1px dashed gray;
 }
 
 

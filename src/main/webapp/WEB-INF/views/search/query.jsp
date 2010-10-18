@@ -27,6 +27,9 @@
         <input type="submit" value="Search" />
     </td>
 
+    <td>
+    <div id="showOptions"><a href="#">More Options</a></div>
+    </td>
 	</tr>
 
 	
@@ -35,8 +38,6 @@
 </form>
 
 <form>
-
- <div id="showOptions"><a href="#">More Options</a></div>
 
     <div id="optionPane" style="display:none">
 

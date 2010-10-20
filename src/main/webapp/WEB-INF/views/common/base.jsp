@@ -20,8 +20,10 @@
     <script type="text/javascript" src="<c:url value="/scripts/json.min.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/menu.js" /> "></script>            
     <script type="text/javascript" src="<c:url value="/scripts/search.js" /> "></script> 
+    <script type="text/javascript" src="<c:url value="/scripts/map.js" /> "></script> 
     <script type="text/javascript" src="<c:url value="/scripts/submit.js" /> "></script> 
 
+   
     <script type="text/javascript"
         src="http://maps.google.com/maps/api/js?sensor=false">
     </script>

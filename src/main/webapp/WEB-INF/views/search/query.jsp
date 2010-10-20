@@ -68,14 +68,17 @@
 
     <form method="post">
   
-    <fieldset id="marker">
-    <p class=legend> Enter address: </p>
-    <div id="geoloc">    
-    <input type="text" name="location" size="25"/><br />
-    </div>
+    <fieldset id="marker_fieldset">
     
-    <input type="button" value="Add Marker" />
-    <input type="button" value="Clear Markers" />
+	    <p class=legend> Enter address: </p>
+	    <div id="geoloc">    
+	    <input type="text" name="location" size="25"/><br />
+	    </div>
+	    
+	    <input type="button" name="clear_markers" value="Clear Markers" />
+	   
+	    <div id="markers" style="display:none">
+	    </div>
     
     </fieldset>
     
@@ -85,8 +88,16 @@
     
     <input type="radio" name="areaGroup" value="square" /> Square 
     <input type="radio" name="areaGroup" value="circle" /> Circle 
-
-    <div id="circle_selected" style="display:none"></div>
+    
+    <div id="circleInputs" style="display:none">
+        <label> Radius (km):</label><input type="text" name="radius" size="3" value="50" />
+        <label> Quality:</label><input type="text" size="3" name="quality" value="40" />
+     <br />  
+     <input type="button" value="Redraw" />
+     
+    </div>
+    
+    <div id="areaSelected" style="display:none"></div>
        
     </fieldset>
     

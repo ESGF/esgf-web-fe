@@ -1,5 +1,6 @@
 /*
- * Author: 		Feiyi Wang
+ * Author: 		Feiyi Wang <fwang2@ornl.gov>
+ * 
  * Created: 	October 12, 2010
  */
 
@@ -11,7 +12,7 @@ $(document).ready(function(){
 	var bounds = new google.maps.LatLngBounds();
 	var cbounds = new google.maps.LatLngBounds();
 	var markers = new Array(max_of_markers);
-	
+	var poly;
 	
 	
 	function clearMarkers() {
@@ -24,6 +25,8 @@ $(document).ready(function(){
 		// close info window
 		if (infowindow)
 			infowindow.close();
+		if (poly)
+			poly.setMap(null);
 		
 		// clear marker area content
 		$("#markers").html("");
@@ -92,6 +95,8 @@ $(document).ready(function(){
 		if (e.keyCode == 13) {
 			var address = $(this).val();
 			getCoordinates(address);
+			// clear the field
+			$(this).val('');
 			return false;
 		}
 	});
@@ -178,11 +183,12 @@ $(document).ready(function(){
 		
 	}
 	
+	
 	function drawCircle(marker, radius, nodes) {
 		var center = marker.getPosition();
 		
-		var latConv = dist(center, new google.maps.LatLng(center.lat() + 0.1), center.lng())/100;
-		var lngConv = dist(center, new google.maps.LatLng(center.lat(), center.lng() + 0.1))/100;
+		var latConv = dist(center, new google.maps.LatLng(center.lat() + 0.1, center.lng()));
+		var lngConv = dist(center, new google.maps.LatLng(center.lat(), center.lng() + 0.1));
 		
 		// loop
 		var points = [];
@@ -196,9 +202,8 @@ $(document).ready(function(){
 		
 		points.push(points[0]); // close circle
 		
-		var poly = new google.maps.Polygon({
+		poly = new google.maps.Polygon({
 			paths: points,
-			map: map,
 			fillColor: "#0055ff",
 			fillOpacity: 0.35,
 			strokeWeight: 2
@@ -208,7 +213,30 @@ $(document).ready(function(){
 			infowindow.close();
 		
 		poly.setMap(map);
+		map.fitBounds(cbounds);
 	}
+
+	function draw_rect() {
+		var ne = bounds.getNorthEast();
+		var sw = bounds.getSouthWest();
+		
+		// need to double check on this
+		var se = new google.maps.LatLng(sw.lat(), ne.lng());
+		var nw = new google.maps.LatLng(ne.lat(), sw.lng());
+		
+		var points = [ne, se, sw, nw];
+		poly = new google.maps.Polygon({
+			paths: points,
+			fillColor: "#0055ff",
+			fillOpacity: 0.35,
+			strokeWeight: 2
+		});
+		
+		
+		poly.setMap(map);
+		map.fitBounds(bounds);		
+	}
+	
 	
 	function getBoundingBox() {
 		for (var i=0; i < max_of_markers; i++) {
@@ -216,7 +244,11 @@ $(document).ready(function(){
 			if (marker)
 				bounds.extend(marker.getPosition());
 		}
-		map.fitBounds(bounds);
+		if (infowindow)
+			infowindow.close();
+		
+		// draw rectangle
+		draw_rect();
 		
 		// put out something
 		$("#areaSelected").html('<p class="legend"> Bounding Box </p> + ' 
@@ -224,6 +256,15 @@ $(document).ready(function(){
 		
 		if ($("#areaSelected").is(":hidden"))
 			$("#areaSelected").slideToggle('fast');
+	}
+
+	function redraw_circle() {
+		if (poly)
+			poly.setMap(null);
+		
+		radius = $("input[name='radius']").val();
+		quality = $("input[name='quality']").val();
+		drawCircle(markers[0], radius, quality);
 	}
 	
 	$("input[name='areaGroup']").change(function(e) {
@@ -253,10 +294,13 @@ $(document).ready(function(){
 			
 			if ($("#areaSelected").is(":hidden"))
 				$("#areaSelected").slideToggle('fast');
-			
-			radius = $("input[name='radius']").val();
-			quality = $("input[name='quality']").val();
-			drawCircle(markers[0], radius, quality);
+			redraw_circle();
 		}		
+	});
+
+	$('input[name="redraw_circle"]').click(function(e) {
+		
+		redraw_circle();
+		
 	});
 });

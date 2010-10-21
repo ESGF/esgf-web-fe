@@ -37,9 +37,8 @@
 
 </form>
 
-<form>
 
-    <div id="optionPane" style="display:none">
+ <div id="optionPane" style="display:none">
 
 		<div id="dataScope"><label for="dataScope"> Scope: </label>
 		<div>
@@ -57,18 +56,54 @@
 		</div>
 
 
+    <div id="3dmapPane" style="display:none">
+        <h1>Not implemented yet</h1>
+    </div>
     
     <!--  Show Map Canvas -->
     <div id="mapPane" style="display:none">
-            <div id="map_canvas"> </div>
-            <div id="map_info"> </div> 
     
+    <div id="map_canvas"> </div>
+    <div id="map_info"> 
+
+    <form method="post">
+  
+    <fieldset id="marker">
+    <p class=legend> Enter address: </p>
+    <div id="geoloc">    
+    <input type="text" name="location" size="25"/><br />
     </div>
     
-    </div> <!--  end of optionPane -->
+    <input type="button" value="Add Marker" />
+    <input type="button" value="Clear Markers" />
+    
+    </fieldset>
     
 
-</form>
+    <fieldset id="area">
+    <p class=legend> Define Area: </p>
+    
+    <input type="radio" name="areaGroup" value="square" /> Square 
+    <input type="radio" name="areaGroup" value="circle" /> Circle 
+
+    <div id="circle_selected" style="display:none"></div>
+       
+    </fieldset>
+    
+    <p class="help"> Help: first define center of interest, and put markers on
+    the map;
+    then define the area of area: if you select square option, then we will try
+    to fit a square with all markers in it; if you select circle option, then 
+    you will be asked for a radius.
+    </p>
+    </form>    
+                        
+    </div> 
+    
+    </div> <!--  #mapPane -->
+    
+</div> <!-- #optionPane -->
+    
 
 <!-- Form errors -->
 <c:if test="${error_message!=null}">
@@ -76,5 +111,4 @@
 </c:if>
 
                       
-                       
-  
+                     

@@ -29,30 +29,6 @@ jQuery.fn.initMenu = function() {
         $('li:has(li.selected)', this).addClass("expand");
         $('li.expand').show();
         
-        function getSearchForm() {
-        	return $("#search-form");
-        }
-
-        function setFacet(facetKey, facetValue) {
-        	var searchForm = getSearchForm();
-        	var input = searchForm[facetKey];
-        	input.value = facetValue;
-        	search(0);
-        }
-
-        function resetFacet(facetKey) {
-        	var searchForm = getSearchForm();
-        	var input = searchForm[facetKey];
-        	input.value = "";
-        	search(0);
-        }
-
-        function search(offset) {
-        	var searchForm = getSearchForm();
-        	searchForm.offset.value = offset;
-        	searchForm.submit();
-        }
-        
         $('ul.acitem > li > a').bind('click', function(e) {
         	var facetkey = $("#entry_key", this).html().trim();
         	var facetvalue = $("#subfacet_label", this).html().trim();

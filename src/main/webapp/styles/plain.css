@@ -446,7 +446,18 @@ p.help {
 	font-size: 1em;
 }
 
-	
+#markers {
+	padding-top: 10px;
+}
+
+#areaSelected {
+	padding-top: 10px;
+}
+
+#circleInputs {
+	padding-top: 10px;
+}
+
 #geoloc {
 	margin-bottom: 5px;
 }

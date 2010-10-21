@@ -49,15 +49,11 @@
 		</div>
 		
 		<div id="withMap"><label for="dataMap">Show Map: </label>
-		<div>
-		  <input type="radio" name="mapGroup" value="2dmap" /> 2D 
-		  <input type="radio" name="mapGroup" value="3dmap" /> 3D 
-		</div>
+		  <input type="checkbox" name="mapGroup" value="2dmap" /> 2D 
 		</div>
 
 
     <div id="3dmapPane" style="display:none">
-        <h1>Not implemented yet</h1>
     </div>
     
     <!--  Show Map Canvas -->
@@ -68,14 +64,17 @@
 
     <form method="post">
   
-    <fieldset id="marker">
-    <p class=legend> Enter address: </p>
-    <div id="geoloc">    
-    <input type="text" name="location" size="25"/><br />
-    </div>
+    <fieldset id="marker_fieldset">
     
-    <input type="button" value="Add Marker" />
-    <input type="button" value="Clear Markers" />
+	    <p class=legend> Enter address: </p>
+	    <div id="geoloc">    
+	    <input type="text" name="location" size="25"/><br />
+	    </div>
+	    
+	    <input type="button" name="clear_markers" value="Clear Markers" />
+	   
+	    <div id="markers" style="display:none">
+	    </div>
     
     </fieldset>
     
@@ -85,16 +84,23 @@
     
     <input type="radio" name="areaGroup" value="square" /> Square 
     <input type="radio" name="areaGroup" value="circle" /> Circle 
-
-    <div id="circle_selected" style="display:none"></div>
+    
+    <div id="circleInputs" style="display:none">
+        <label> Radius (km):</label><input type="text" name="radius" size="3" value="5" />
+        <label> Quality:</label><input type="text" size="3" name="quality" value="40" />
+     <br />  
+     <input type="button" name="redraw_circle" value="Redraw" />
+     
+    </div>
+    
+    <div id="areaSelected" style="display:none"></div>
        
     </fieldset>
     
-    <p class="help"> Help: first define center of interest, and put markers on
-    the map;
-    then define the area of area: if you select square option, then we will try
+    <p class="help"> Help: first define points of interest by putting markers on
+    the map; if you select square option, then we will try
     to fit a square with all markers in it; if you select circle option, then 
-    you will be asked for a radius.
+    you will be asked for a radius and quality.
     </p>
     </form>    
                         

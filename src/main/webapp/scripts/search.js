@@ -5,11 +5,13 @@
 
 $(document).ready(function(){
 
+	
 	//global vars
 	
 	var searchBox = $("#searchbox");
 	var data = $("#searchbox").val();
 	var searchBoxDefault = "Search projects, datasets, and more";
+	
 	
 	//Effects for both searchbox
 	searchBox.focus(function(e){

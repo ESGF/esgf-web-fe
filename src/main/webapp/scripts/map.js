@@ -116,6 +116,8 @@ $(document).ready(function(){
 				address: address
 		};
 		
+		
+		
 		// Making the Geocode request
 		geocoder.geocode(geocoderRequest, function(results, status) {
 			// check status
@@ -153,6 +155,7 @@ $(document).ready(function(){
 				// Open the infowindows
 				infowindow.open(map, marker);
 				
+
 				
 				// refresh info to panel
 				appendMarker('[' + num_of_markers + '] ' + 
@@ -162,6 +165,7 @@ $(document).ready(function(){
 				alert("Marker limit reached, please clear markers first!");
 			}
 		});
+
 	}
 
 	rad = function(x) { return x*Math.PI/180;}
@@ -250,6 +254,9 @@ $(document).ready(function(){
 		// draw rectangle
 		draw_rect();
 		
+		
+		
+		
 		// put out something
 		$("#areaSelected").html('<p class="legend"> Bounding Box </p> + ' 
 				+ bounds.toString());
@@ -277,6 +284,9 @@ $(document).ready(function(){
 				return false;
 			}
 			getBoundingBox();
+			setGeographicConstraint();
+			//do the submit here?
+			
 		} else {
 			
 			if (num_of_markers != 1) {
@@ -303,4 +313,46 @@ $(document).ready(function(){
 		redraw_circle();
 		
 	});
+	
+	function setGeographicConstraint() {
+		var sw = bounds.getSouthWest();
+		var ne = bounds.getNorthEast();
+		
+		//this is the min long
+		var swLng = sw.lng();
+		
+		//this is the min lat
+		var swLat = sw.lat();
+		
+		//this is the max long
+		var neLng = ne.lng();
+		
+		//this is the max lat
+		var neLat = ne.lat();
+		
+		
+		alert("minLng: " + swLng + " minLat: " + swLat + " maxLng: " + neLng + " maxLat: " + neLat);
+		
+		var searchForm = document.getElementById("geo-form");
+		var wdinput = searchForm["west_degrees"];
+		wdinput.value = swLng;
+		var edinput = searchForm["east_degrees"];
+		edinput.value = neLng;
+		var sdinput = searchForm["south_degrees"];
+		sdinput.value = swLat;
+		var ndinput = searchForm["north_degrees"];
+		ndinput.value = neLat;
+		//var southWest:LatLng = bounds.getSouthWest();
+		//setTimeout("geosearch(0)",10000);
+		//alert("Submitted");
+		geosearch();
+		//setTimeout("geosearch()",2000);
+	}
+	
+	function geosearch() {
+		var searchForm = document.getElementById("geo-form");
+		
+		searchForm.submit();
+	}
+	
 });

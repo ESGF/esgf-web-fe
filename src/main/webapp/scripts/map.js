@@ -106,6 +106,13 @@ $(document).ready(function(){
 		clearMarkers();
 	});
 
+	function updateInfo(pos) {
+		var content = "Lat: " + pos.lat() + "<br />";
+		content += "Lng" + pos.lng();
+		infowindow.setContent(content);
+		
+	}
+	
 	function getCoordinates(address) {
 		if (!geocoder) {
 			geocoder = new google.maps.Geocoder();
@@ -128,7 +135,8 @@ $(document).ready(function(){
 			if (moreMarkers()) {
 				// create a new marker
 				marker = new google.maps.Marker({
-					map: map
+					map: map,
+					draggable: true
 				});
 				setMarker(marker);
 			
@@ -157,12 +165,28 @@ $(document).ready(function(){
 				// refresh info to panel
 				appendMarker('[' + num_of_markers + '] ' + 
 						results[0].formatted_address + "<br />");
+
+				
+				google.maps.event.addListener(marker, "dragstart", function() {
+					infowindow.close();
+				});
+				
+				google.maps.event.addListener(marker, 'dragend', function() {
+					var pos = marker.getPosition();
+					updateInfo(pos);
+					infowindow.open(map, marker);
+				});
 				
 			} else {
 				alert("Marker limit reached, please clear markers first!");
 			}
 		});
 	}
+	
+	
+
+	
+	
 
 	rad = function(x) { return x*Math.PI/180;}
 	

@@ -9,11 +9,18 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <title>ESG Geo-Spatial Search</title>
+    
     <link rel="stylesheet" 
         href="<c:url value="/styles/yui/2.8.1/reset-fonts/reset-fonts.css" />" 
         type="text/css">
+
+    <!--  Google fonts -->        
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans&subset=latin' 
+        rel='stylesheet' type='text/css'>
+        
     <link rel="stylesheet" href="<c:url value="/styles/plain.css" />" 
         type="text/css" media="screen, projection">
+
 
            
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2.min.js" /> "></script>

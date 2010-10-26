@@ -51,7 +51,15 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
     <url-pattern>*.htm</url-pattern>
   </servlet-mapping>
   
- 
+  <error-page>
+    <exception-type>
+        java.net.ConnectException    
+    </exception-type>
+    <location>
+        /error/Connection
+    </location>
+  </error-page>
+  
   <welcome-file-list>
         <welcome-file>welcome.jsp</welcome-file>
   </welcome-file-list>

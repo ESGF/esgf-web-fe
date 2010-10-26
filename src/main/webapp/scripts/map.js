@@ -418,9 +418,6 @@ $(document).ready(function(){
 		//this is the max lat
 		var neLat = ne.lat();
 		
-		
-		alert("minLng: " + swLng + " minLat: " + swLat + " maxLng: " + neLng + " maxLat: " + neLat);
-		
 		var searchForm = document.getElementById("geo-form");
 		var wdinput = searchForm["west_degrees"];
 		wdinput.value = swLng;
@@ -430,11 +427,7 @@ $(document).ready(function(){
 		sdinput.value = swLat;
 		var ndinput = searchForm["north_degrees"];
 		ndinput.value = neLat;
-		//var southWest:LatLng = bounds.getSouthWest();
-		//setTimeout("geosearch(0)",10000);
-		//alert("Submitted");
 		geosearch();
-		//setTimeout("geosearch()",2000);
 	}
 	
 	function geosearch() {

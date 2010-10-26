@@ -9,7 +9,7 @@ body {
 	margin: 0;
 	padding: 0;
     font-size: 0.7em;
-    font-family: "Lucida Grande", Arial;
+    font-family: "Lucida Grande", "Droid Sans";
 }
 
 #wrapper {
@@ -401,14 +401,65 @@ form {
 	float: left;
 	height: 400px;
 	width: 400px;
-	margin-bottom: 10px;
+	padding: 10px;
+	border-left: 2px solid #666;
+	border-top: 2px solid #666;
+	border-bottom: 2px solid #666;
+	
 }
 
 #map_info {
+	position: absolute;
+	margin-left: 420px;
+	padding: 10px;
 	float: right;
 	width: 200px;
 	height: 400px;
-	margin-bottom: 10px;
+	border-top: 2px solid #666;
+    border-bottom: 2px solid #666;    	
+	border-right: 2px solid #666;
+}
+
+fieldset{
+    border: 1px solid #CCA383; 
+    background: #FFE8EF;
+    width: 190px;
+    padding: 3px;
+    margin-bottom: 20px;
+}
+
+fieldset legend {
+	background: #CCA383;
+	padding: 3px;
+}
+
+label {
+	margin-left: 0px;
+}
+
+p.legend {
+	font-weight: bold;
+	margin-bottom: 6px;
+}
+
+p.help {
+	font-size: 1em;
+}
+
+#markers {
+	padding-top: 10px;
+}
+
+#areaSelected {
+	padding-top: 10px;
+}
+
+#circleInputs {
+	padding-top: 10px;
+}
+
+#geoloc {
+	margin-bottom: 5px;
 }
 
 

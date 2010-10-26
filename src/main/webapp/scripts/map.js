@@ -362,40 +362,8 @@ $(document).ready(function(){
 		
 	});
 	
-	function setGeographicConstraint() {
-		var sw = bounds.getSouthWest();
-		var ne = bounds.getNorthEast();
-		
-		//this is the min long
-		var swLng = sw.lng();
-		
-		//this is the min lat
-		var swLat = sw.lat();
-		
-		//this is the max long
-		var neLng = ne.lng();
-		
-		//this is the max lat
-		var neLat = ne.lat();
-		
-		
-		
-		var searchForm = document.getElementById("geo-form");
-		var wdinput = searchForm["west_degrees"];
-		wdinput.value = swLng;
-		var edinput = searchForm["east_degrees"];
-		edinput.value = neLng;
-		var sdinput = searchForm["south_degrees"];
-		sdinput.value = swLat;
-		var ndinput = searchForm["north_degrees"];
-		ndinput.value = neLat;
-		//var southWest:LatLng = bounds.getSouthWest();
-		//setTimeout("geosearch(0)",10000);
-		//alert("Submitted");
-		geosearch();
-		//setTimeout("geosearch()",2000);
-	}
 	
+	//not used...for now
 	function geosearch() {
 		var searchForm = document.getElementById("geo-form");
 		
@@ -418,7 +386,8 @@ $(document).ready(function(){
 		//this is the max lat
 		var neLat = ne.lat();
 		
-		var searchForm = document.getElementById("geo-form");
+		//var searchForm = document.getElementById("geo-form");
+		var searchForm = document.getElementById("search-form");
 		var wdinput = searchForm["west_degrees"];
 		wdinput.value = swLng;
 		var edinput = searchForm["east_degrees"];
@@ -427,13 +396,10 @@ $(document).ready(function(){
 		sdinput.value = swLat;
 		var ndinput = searchForm["north_degrees"];
 		ndinput.value = neLat;
-		geosearch();
+		
+		//geosearch();
 	}
 	
-	function geosearch() {
-		var searchForm = document.getElementById("geo-form");
-		
-		searchForm.submit();
-	}
+	
 	
 });

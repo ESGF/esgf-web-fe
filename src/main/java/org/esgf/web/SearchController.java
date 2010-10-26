@@ -218,7 +218,7 @@ public class SearchController {
 			final BindingResult result) throws Exception {
 
 		
-		input.setText("air");
+		//input.setText("air");
 		
 		// invalid user input
 		if (isNotValid(input.getText())) {					

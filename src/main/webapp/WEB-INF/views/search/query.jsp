@@ -13,7 +13,6 @@
  		<c:out value="${search_input.constraints[entry.key][0]}"/>
     </c:forEach>
 
-	<input type="hidden" name="west_degrees" value="-98.67"></input>
 
     <!--  More hidden values -->
     <input type="hidden" name="offset" value="${search_input.offset}" />

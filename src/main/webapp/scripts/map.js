@@ -106,6 +106,7 @@ $(document).ready(function(){
 		clearMarkers();
 	});
 
+<<<<<<< HEAD
 	function updateInfo(pos) {
 		var content = "Lat: " + pos.lat() + "<br />";
 		content += "Lng" + pos.lng();
@@ -113,6 +114,8 @@ $(document).ready(function(){
 		
 	}
 	
+=======
+>>>>>>> harney-devel
 	function getCoordinates(address) {
 		if (!geocoder) {
 			geocoder = new google.maps.Geocoder();
@@ -137,8 +140,12 @@ $(document).ready(function(){
 			if (moreMarkers()) {
 				// create a new marker
 				marker = new google.maps.Marker({
+<<<<<<< HEAD
 					map: map,
 					draggable: true
+=======
+					map: map
+>>>>>>> harney-devel
 				});
 				setMarker(marker);
 			
@@ -168,6 +175,7 @@ $(document).ready(function(){
 				// refresh info to panel
 				appendMarker('[' + num_of_markers + '] ' + 
 						results[0].formatted_address + "<br />");
+<<<<<<< HEAD
 
 				
 				google.maps.event.addListener(marker, "dragstart", function() {
@@ -180,6 +188,8 @@ $(document).ready(function(){
 					infowindow.open(map, marker);
 					disp_markers();
 				});
+=======
+>>>>>>> harney-devel
 				
 			} else {
 				alert("Marker limit reached, please clear markers first!");
@@ -187,6 +197,7 @@ $(document).ready(function(){
 		});
 
 	}
+<<<<<<< HEAD
 	
 	
 
@@ -208,6 +219,8 @@ $(document).ready(function(){
 			}
 		}
 	}
+=======
+>>>>>>> harney-devel
 
 	rad = function(x) { return x*Math.PI/180;}
 	
@@ -347,6 +360,15 @@ $(document).ready(function(){
 				$("#areaSelected").slideToggle('fast');
 			redraw_circle();
 		}		
+<<<<<<< HEAD
+	});
+
+	$('input[name="redraw_circle"]').click(function(e) {
+		
+		redraw_circle();
+		
+=======
+>>>>>>> harney-devel
 	});
 
 	$('input[name="redraw_circle"]').click(function(e) {
@@ -396,4 +418,48 @@ $(document).ready(function(){
 		searchForm.submit();
 	}
 	
+<<<<<<< HEAD
+	function setGeographicConstraint() {
+		var sw = bounds.getSouthWest();
+		var ne = bounds.getNorthEast();
+		
+		//this is the min long
+		var swLng = sw.lng();
+		
+		//this is the min lat
+		var swLat = sw.lat();
+		
+		//this is the max long
+		var neLng = ne.lng();
+		
+		//this is the max lat
+		var neLat = ne.lat();
+		
+		
+		alert("minLng: " + swLng + " minLat: " + swLat + " maxLng: " + neLng + " maxLat: " + neLat);
+		
+		var searchForm = document.getElementById("geo-form");
+		var wdinput = searchForm["west_degrees"];
+		wdinput.value = swLng;
+		var edinput = searchForm["east_degrees"];
+		edinput.value = neLng;
+		var sdinput = searchForm["south_degrees"];
+		sdinput.value = swLat;
+		var ndinput = searchForm["north_degrees"];
+		ndinput.value = neLat;
+		//var southWest:LatLng = bounds.getSouthWest();
+		//setTimeout("geosearch(0)",10000);
+		//alert("Submitted");
+		geosearch();
+		//setTimeout("geosearch()",2000);
+	}
+	
+	function geosearch() {
+		var searchForm = document.getElementById("geo-form");
+		
+		searchForm.submit();
+	}
+	
+=======
+>>>>>>> harney-devel
 });

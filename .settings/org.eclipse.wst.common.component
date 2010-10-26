@@ -2,11 +2,7 @@
 <project-modules id="moduleCoreId" project-version="1.5.0">
 	<wb-module deploy-name="esg-web">
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-<<<<<<< HEAD
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-=======
         <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
->>>>>>> 02fa68f4fc11fbcc20659753ddecf6197d861378
 		<property name="java-output-path" value="target/classes"/>
         <property name="context-root" value="esg-web"/>
 	</wb-module>

@@ -10,7 +10,6 @@
     <c:set var="selected" value="" />
     <c:if test="${not empty search_input.constraints[entry.key]}">
         <c:set var="selected" value="selected"/></c:if>
-    
     <c:choose>
     <c:when test="${fn:length(entry.value.subFacets)>0}">
        <li><a href="#"><c:out value="${facet_profile.topLevelFacets[entry.key].label}"/></a>

@@ -10,7 +10,9 @@
     <c:forEach var="entry" items="${search_output.facets}">
         <input type="hidden" 
             name="${entry.key}" value="${search_input.constraints[entry.key][0]}"/>
+ 		<c:out value="${search_input.constraints[entry.key][0]}"/>
     </c:forEach>
+
 
     <!--  More hidden values -->
     <input type="hidden" name="offset" value="${search_input.offset}" />
@@ -62,7 +64,7 @@
     <div id="map_canvas"> </div>
     <div id="map_info"> 
 
-    <form method="post">
+    <form method="post" id="geo-form">
   
     <fieldset id="marker_fieldset">
     
@@ -97,11 +99,24 @@
        
     </fieldset>
     
-    <p class="help"> Help: first define points of interest by putting markers on
+    <p class="help"> Help: first define the points of interest by putting markers on
     the map; if you select square option, then we will try
     to fit a square with all markers in it; if you select circle option, then 
     you will be asked for a radius and quality.
     </p>
+    
+     <input type="hidden" 
+            name="west_degrees" value="0"/>
+ 		
+     <input type="hidden" 
+            name="east_degrees" value="0"/>
+            
+ 	 <input type="hidden" 
+            name="south_degrees" value="0"/>
+ 		
+     <input type="hidden" 
+            name="north_degrees" value="0"/>
+ 		
     </form>    
                         
     </div> 

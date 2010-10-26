@@ -21,38 +21,36 @@
     
     <!--  Search Box -->
     <table>
-	<tr align="center">
-		<td><input id="searchbox" name="text" type="text"
-			size="70" value="${search_input.text}" /></td>
-
-    <td>    
-        <input type="submit" value="Search" />
-    </td>
-
-    <td>
-    <div id="showOptions"><a href="#">More Options</a></div>
-    </td>
-	</tr>
-
+		<tr align="center">
+			<td><input id="searchbox" name="text" type="text"
+				size="70" value="${search_input.text}" /></td>
 	
+	    	<td>    
+	        	<input type="submit" value="Search" />
+	    	</td>
+	
+	    	<td>
+	    		<div id="showOptions"><a href="#">More Options</a></div>
+	    	</td>
+		</tr>
     </table>
 
-</form>
 
 
- <div id="optionPane" style="display:none">
+
+ 	<div id="optionPane" style="display:none">
 
 		<div id="dataScope"><label for="dataScope"> Scope: </label>
 		<div>
-		<input type="radio" name="modelGroup" value="model" /> Model 
-		<input type="radio" name="modelGroup" value="obs" /> Observational 
-		<input type="radio" name="modelGroup" value="all" Checked/> All
+			<input type="radio" name="modelGroup" value="model" /> Model 
+			<input type="radio" name="modelGroup" value="obs" /> Observational 
+			<input type="radio" name="modelGroup" value="all" Checked/> All
 		</div>
-		</div>
+	</div>
 		
-		<div id="withMap"><label for="dataMap">Show Map: </label>
-		  <input type="checkbox" name="mapGroup" value="2dmap" /> 2D 
-		</div>
+	<div id="withMap"><label for="dataMap">Show Map: </label>
+	  <input type="checkbox" name="mapGroup" value="2dmap" /> 2D 
+	</div>
 
 
     <div id="3dmapPane" style="display:none">
@@ -62,15 +60,17 @@
     <div id="mapPane" style="display:none">
     
     <div id="map_canvas"> </div>
+    
     <div id="map_info"> 
 
-    <form method="post" id="geo-form">
+    <!--<form method="post" id="geo-form">
   
+    -->
     <fieldset id="marker_fieldset">
     
 	    <p class=legend> Enter address: </p>
 	    <div id="geoloc">    
-	    <input type="text" name="location" size="25"/><br />
+	    	<input type="text" name="location" size="20"/><br />
 	    </div>
 	    
 	    <input type="button" name="clear_markers" value="Clear Markers" />
@@ -82,20 +82,20 @@
     
 
     <fieldset id="area">
-    <p class=legend> Define Area: </p>
+    	<p class=legend> Define Area: </p>
     
-    <input type="radio" name="areaGroup" value="square" /> Square 
-    <input type="radio" name="areaGroup" value="circle" /> Circle 
-    
-    <div id="circleInputs" style="display:none">
-        <label> Radius (km):</label><input type="text" name="radius" size="3" value="5" />
-        <label> Quality:</label><input type="text" size="3" name="quality" value="40" />
-     <br />  
-     <input type="button" name="redraw_circle" value="Redraw" />
+	    <input type="radio" name="areaGroup" value="square" /> Square 
+	    <input type="radio" name="areaGroup" value="circle" /> Circle 
+	    
+    	<div id="circleInputs" style="display:none">
+	        <label> Radius (km):</label><input type="text" name="radius" size="3" value="5" />
+	        <label> Quality:</label><input type="text" size="3" name="quality" value="40" />
+	     	<br />  
+     		<input type="button" name="redraw_circle" value="Redraw" />
      
-    </div>
+    	</div>
     
-    <div id="areaSelected" style="display:none"></div>
+    	<div id="areaSelected" style="display:none"></div>
        
     </fieldset>
     
@@ -106,25 +106,28 @@
     </p>
     
      <input type="hidden" 
-            name="west_degrees" value="0"/>
+            name="west_degrees" value="-180"/>
  		
      <input type="hidden" 
-            name="east_degrees" value="0"/>
+            name="east_degrees" value="180"/>
             
  	 <input type="hidden" 
-            name="south_degrees" value="0"/>
+            name="south_degrees" value="-90"/>
  		
      <input type="hidden" 
-            name="north_degrees" value="0"/>
- 		
+            name="north_degrees" value="90"/>
+            <!--
     </form>    
                         
-    </div> 
+    -->
+    </div> <!--  #mapinfo -->
     
     </div> <!--  #mapPane -->
     
 </div> <!-- #optionPane -->
     
+
+</form>
 
 <!-- Form errors -->
 <c:if test="${error_message!=null}">

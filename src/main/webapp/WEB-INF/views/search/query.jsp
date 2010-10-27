@@ -47,7 +47,7 @@
     </table>
 
 
-
+    <div id="search_constraints" style="display:none"> </div>
 
  	<div id="optionPane" style="display:none">
 

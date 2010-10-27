@@ -51,12 +51,18 @@ body {
 }
 
 
+/* styling constraints */
 
+#search_constraints {
+	background: #FFFFCC; 
+}
+	
 
 /* Footer */
 
 #footer {
 	margin-top: 20px;
+	margin-right: 40px;
 	float: right;
 	font-size: 1em;
     background-color: transparent;

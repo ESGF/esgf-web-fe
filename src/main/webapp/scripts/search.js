@@ -41,6 +41,6 @@ $(document).ready(function(){
 		if ($('div#search_wrapper').is(":visible"))
 			$('div#search_wrapper').hide();
 		
-		window.location='.'
+		window.location='.';
 	});
 });

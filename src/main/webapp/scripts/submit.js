@@ -9,7 +9,7 @@ function setFacet(facetKey, facetValue) {
 	var input = searchForm[facetKey];
 	//alert("input2 value: " + input2.value);
 	//alert("facetKey: " + facetKey + " facetValue: " + facetValue);
-	facetValue = "ESIP";
+	//facetValue = "ESIP";
 	//alert("facetKey: " + facetKey + " facetValue: " + facetValue);
 	input.value = facetValue;
 	search(0);

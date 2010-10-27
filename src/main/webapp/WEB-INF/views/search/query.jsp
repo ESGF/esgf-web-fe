@@ -10,7 +10,6 @@
     <c:forEach var="entry" items="${search_output.facets}">
         <input type="hidden" 
             name="${entry.key}" value="${search_input.constraints[entry.key][0]}"/>
- 		<c:out value="${search_input.constraints[entry.key][0]}"/>
     </c:forEach>
 
 

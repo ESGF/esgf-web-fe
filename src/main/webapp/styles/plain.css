@@ -51,10 +51,6 @@ body {
 }
 
 
-#search_summary {
-	clear: both;
-    margin-left: 100px;
-}
 
 
 /* Footer */
@@ -234,7 +230,8 @@ input.searchbox:active {
 
 div.inline {
 	float: left;
-	margin-right: 20px;
+	margin-right: 10px;
+	margin-left: 10px;
 
 }
 .clearBoth {clear:both;}
@@ -359,6 +356,10 @@ ul.menu div.panel a:hover {
     vertical-align: top;
 }
 
+.data tr {
+	padding-left: 20px;
+}
+
 .data caption {
 	font-size: 1.2em;
 	text-decoration: underline;
@@ -399,12 +400,23 @@ form {
 
 /* Style search result */
 
-#search_results {
+#search_summary {
+    margin-top: 20px;
+    font-size: 1.3em;
+    background: #FFFFCC;
+    width: 400px;
+}
+
+.search_data {
 	margin-top: 12px;
     font-size: 1.1em;
     border-left: 1px dashed gray;
 }
 
+#search_results {
+    float: left;	
+}
+	
 
 /* --------------------------------
     Map Style

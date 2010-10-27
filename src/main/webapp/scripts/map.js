@@ -58,6 +58,7 @@ $(document).ready(function(){
 	}
 	
 	$('div#showOptions').click(function() {
+		$('div#search_wrapper').html("");
 		$('div#optionPane').slideToggle(
 				'fast',  function() {
 		    if ($(this).is(':hidden'))

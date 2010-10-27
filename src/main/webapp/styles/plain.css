@@ -414,7 +414,8 @@ form {
 }
 
 #search_results {
-    float: left;	
+	margin-top: 20px;
+	clear: both;
 }
 	
 

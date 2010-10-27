@@ -219,24 +219,36 @@ ul#failure-flash-messages li, ul#success-flash-messages li {
     padding-right: 5px;
 }  
 
-/* style the search button */
+/* style the search box */
 
-
-.form input#searchbox{
+input.searchbox {
     font-weight: normal;  
     color: #565656;
     border: 1px solid #9c9c9c;  
     width: 300px;  
-    padding: 2px;  
-    margin-bottom: 5px;  
-    text-align: left;  
+    padding-left: 30px;
+    padding-top: 10px;
+    padding-right: 10px;  
+    margin: 5px;  
+    text-align: left;
+    background: url(../images/mag.png) no-repeat;
+    background-position: 7px 7px;
 }
 
-.form input#searchbox.active{  
-    background: #ddeff6;  
+input.searchbox:active {  
     border: 1px solid #0099d4;  
+    
 }
 
+.button {
+	border: 1px solid #00FF00;
+	background: #00FF00;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	cursor: pointer;
+}
 
 /* style pagination */
 #pagination {

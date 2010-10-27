@@ -29,4 +29,16 @@ $(document).ready(function(){
 	});	
 	
 
+	/**
+	 * handle reset link
+	 */
+	$("div#showReset").click(function(){
+		if ($('div#optionPane').is(":visible")) {
+			$('div#optionPane').hide();
+			$('div#showOptions').html('<a href="#">More Options</a>');
+		}
+		
+		if ($('div#search_wrapper').is(":visible"))
+			$('div#search_wrapper').hide();
+	});
 });

@@ -40,6 +40,8 @@
 		     <td>
                 <div class="inline" id="showOptions"><a href="#">More Options</a></div>
                 <div class="inline" id="showConstraints"><a href="#">Show Constraints</a></div>             
+                <div class="inline" id="showReset"><a href="#">Reset</a></div>             
+
             </td>
         </tr>
 		
@@ -63,9 +65,6 @@
 	</div>
 
 
-    <div id="3dmapPane" style="display:none">
-    </div>
-    
     <!--  Show Map Canvas -->
     <div id="mapPane" style="display:none">
     

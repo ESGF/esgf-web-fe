@@ -381,6 +381,7 @@ label {
 
 #optionPane {
     clear: both;
+    margin-top: 20px;
     margin-bottom: 4px;
     padding: 4px 0;
     /* border: 1px dotted #9fca6a; */ 

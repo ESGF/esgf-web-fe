@@ -85,14 +85,17 @@
         <div id="search_box">
         <ti:insertAttribute name="search" />    
         </div>
-       
+
+        <div id="search_wrapper">       
         <div id="search_results">
         <ti:insertAttribute name="result" />    
         </div>
 
         <div id="pagination">
         <ti:insertAttribute name="pagination" />
-        </div>            
+        </div> 
+        
+        </div>           
         <div id="footer">
         <p>Copyright(c) 2010, ESGF Infrastructure Team. </p>
         </div>

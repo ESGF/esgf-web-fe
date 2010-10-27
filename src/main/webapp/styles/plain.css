@@ -241,14 +241,26 @@ input.searchbox:active {
 }
 
 .button {
-	border: 1px solid #00FF00;
-	background: #00FF00;
+	border: 1px solid #9c9c9c;
+	background: #CCFFFF;
 	padding-top: 5px;
 	padding-bottom: 5px;
 	padding-left: 15px;
 	padding-right: 15px;
 	cursor: pointer;
 }
+
+.button:hover {
+	background: #00FF00;
+}
+
+
+div.inline {
+	float: left;
+	margin-right: 20px;
+
+}
+.clearBoth {clear:both;}
 
 /* style pagination */
 #pagination {

@@ -25,20 +25,21 @@
 			<td>
 			<input class="searchbox" name="text" type="text"
 				size="70" value="${search_input.text}" /></td>	
-	    	<td valign="middle">    
+	        <!--  	
+	        <td valign="middle">    	        
 	        <input type="image" 
 	           src="<c:url value="/images/search.png" />" height="34px"/>
 	    	</td>
+	    	-->
+	    	
+	    	<td> <input class="button" type="submit" value="Search" />
 	
 		</tr>
 		
 		<tr>
 		     <td>
-                <div id="showOptions"><a href="#">More Options</a></div>
-            </td>
-            
-            <td>
-                <div id="showConstraints"><a href="#"> Show Constraints</a></div>
+                <div class="inline" id="showOptions"><a href="#">More Options</a></div>
+                <div class="inline" id="showConstraints"><a href="#">Show Constraints</a></div>             
             </td>
         </tr>
 		

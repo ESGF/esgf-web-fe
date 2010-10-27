@@ -7,10 +7,10 @@ function setFacet(facetKey, facetValue) {
 	//alert("setFacet");
 	var searchForm = getSearchForm();
 	var input = searchForm[facetKey];
-	alert("input2 value: " + input2.value);
-	alert("facetKey: " + facetKey + " facetValue: " + facetValue);
+	//alert("input2 value: " + input2.value);
+	//alert("facetKey: " + facetKey + " facetValue: " + facetValue);
 	facetValue = "ESIP";
-	alert("facetKey: " + facetKey + " facetValue: " + facetValue);
+	//alert("facetKey: " + facetKey + " facetValue: " + facetValue);
 	input.value = facetValue;
 	search(0);
 }
@@ -18,7 +18,7 @@ function setFacet(facetKey, facetValue) {
 
 
 function resetFacet(facetKey) {
-	alert("resetFacet");
+	//alert("resetFacet");
 	var searchForm = getSearchForm();
 	var input = searchForm[facetKey];
 	input.value = "";
@@ -28,12 +28,12 @@ function resetFacet(facetKey) {
 
 
 function search(offset) {
-	alert("search");
+	//alert("search");
 	var searchForm = getSearchForm();
 	searchForm.offset.value = offset;
-	alert("before submit");
-	alert("searchForm limit: " + searchForm.project.value);
+	//alert("before submit");
+	//alert("searchForm limit: " + searchForm.project.value);
 	searchForm.submit();
-	alert("after submit");
+	//alert("after submit");
 }
 

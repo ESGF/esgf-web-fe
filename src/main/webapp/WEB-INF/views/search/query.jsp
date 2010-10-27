@@ -80,13 +80,12 @@
     
 	    <p class=legend> Enter address: </p>
 	    <div id="geoloc">    
-	    	<input type="text" name="location" size="20"/><br />
+	    	<input type="text" name="location" size="20" /> <br />
 	    </div>
 	    
 	    <input type="button" name="clear_markers" value="Clear Markers" />
 	   
-	    <div id="markers" style="display:none">
-	    </div>
+	    <div id="markers" style="display:none"></div>
     
     </fieldset>
     

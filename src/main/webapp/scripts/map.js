@@ -107,8 +107,8 @@ $(document).ready(function(){
 	});
 
 	function updateInfo(pos) {
-		var content = "Lat: " + pos.lat() + "<br />";
-		content += "Lng" + pos.lng();
+		var content = '<div class="infowindow"> Lat: ' + pos.lat().toFixed(4) + "<br />";
+		content += "Lng:" + pos.lng().toFixed(4) + "</div>";
 		infowindow.setContent(content);
 		
 	}
@@ -154,9 +154,11 @@ $(document).ready(function(){
 				}
 				
 				// create contents
-				var content = '<p class="legend">' + results[0].formatted_address + '</p>'
+				var content = '<div class="infowindow"> <p class="legend">'  
+					+ results[0].formatted_address + '</p>'
 				content += "Lat: " + results[0].geometry.location.lat() + '<br />';
 				content += "Lng: " + results[0].geometry.location.lng();
+				content += "</div>"
 				
 				// Adding the content
 				infowindow.setContent(content);
@@ -356,11 +358,6 @@ $(document).ready(function(){
 		
 	});
 
-	$('input[name="redraw_circle"]').click(function(e) {
-		
-		redraw_circle();
-		
-	});
 	
 	
 	//not used...for now

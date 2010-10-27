@@ -50,10 +50,6 @@ body {
 	margin-top:-20px;
 }
 
-#pagination {
-	margin-top: 2em;
-	margin-left: 0px;
-}
 
 #search_summary {
 	clear: both;
@@ -197,32 +193,13 @@ ul#failure-flash-messages li, ul#success-flash-messages li {
     list-style: none;
 }
 
-
-/* Search Form */
-
-
-.form table{  
-    margin-bottom: 1em;  
-}  
-
-.form input {
-	font-size: 1.2em;
-}
-
-.form table tr {
-	vertical-align: center;
-}
-
-.form table td{  
-    text-align: left;  
-    vertical-align: center;
-    padding-right: 5px;
-}  
+ 
 
 /* style the search box */
 
 input.searchbox {
     font-weight: normal;  
+    font-size: 1.2em;
     color: #565656;
     border: 1px solid #9c9c9c;  
     width: 300px;  
@@ -262,8 +239,21 @@ div.inline {
 }
 .clearBoth {clear:both;}
 
+
+
+
+/* style infowindow */
+
+#infowindow {
+	width: 130px;
+	height: 70px;
+}
+
 /* style pagination */
+
 #pagination {
+    margin-top: 2em;
+    margin-left: 0px;	
     font-size: 1.1em;
     font-weight: bold;
 }

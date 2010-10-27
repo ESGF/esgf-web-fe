@@ -10,7 +10,6 @@
     <c:forEach var="entry" items="${search_output.facets}">
         <input type="hidden" 
             name="${entry.key}" value="${search_input.constraints[entry.key][0]}"/>
- 		<c:out value="${search_input.constraints[entry.key][0]}"/>
     </c:forEach>
 
 
@@ -48,7 +47,7 @@
     </table>
 
 
-
+    <div id="search_constraints" style="display:none"> </div>
 
  	<div id="optionPane" style="display:none">
 

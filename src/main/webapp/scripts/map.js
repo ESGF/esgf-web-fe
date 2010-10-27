@@ -109,8 +109,7 @@ $(document).ready(function(){
 	function updateInfo(pos) {
 		var content = '<div class="infowindow"> Lat: ' + pos.lat().toFixed(4) + "<br />";
 		content += "Lng:" + pos.lng().toFixed(4) + "</div>";
-		infowindow.setContent(content);
-		
+		infowindow.setContent(content);		
 	}
 	
 	function getCoordinates(address) {

@@ -7,10 +7,6 @@ function setFacet(facetKey, facetValue) {
 	//alert("setFacet");
 	var searchForm = getSearchForm();
 	var input = searchForm[facetKey];
-	//alert("input2 value: " + input2.value);
-	//alert("facetKey: " + facetKey + " facetValue: " + facetValue);
-	facetValue = "ESIP";
-	//alert("facetKey: " + facetKey + " facetValue: " + facetValue);
 	input.value = facetValue;
 	search(0);
 }

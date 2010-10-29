@@ -1,8 +1,19 @@
+/**
+ * On request mapping:
+ *  
+ * 	   url rewrite filter will take over first, then we do regular Spring mapping.
+ * 	   RedirectView is discouraged here as it will mess up the current rewrite  
+ *     rule, use "redirect:" prefix instead, and it is regarded as a better alternative
+ *     anyway.    
+ *     
+ * For any redirect trouble, please refers to ROOT/urlrewrite.xml
+ *
+ * --- notes by fwang2@ornl.gov
+ * 
+ */
 package org.esgf.web;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -13,15 +24,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
-
 import esg.search.query.api.FacetProfile;
 import esg.search.query.api.SearchOutput;
 import esg.search.query.api.SearchService;

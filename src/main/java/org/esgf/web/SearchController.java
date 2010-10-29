@@ -76,13 +76,8 @@ public class SearchController {
 	@ModelAttribute(SEARCH_INPUT)
 	public SearchInputImpl formBackingObject(final HttpServletRequest request) {
 		
-		
-		String thisLine = "";
-		
 		// instantiate command object
 		final SearchInputImpl input = new SearchInputImpl();
-		
-		
 		
 		if(request.getParameterValues("west_degrees")!=null)
 		{
@@ -94,8 +89,6 @@ public class SearchController {
 				}
 			}
 		}
-		
-		
 		
 		if(request.getParameterValues("east_degrees")!=null)
 		{
@@ -109,8 +102,6 @@ public class SearchController {
 				}
 			}
 		}
-		
-		
 		
 		if(request.getParameterValues("south_degrees")!=null)
 		{
@@ -137,10 +128,7 @@ public class SearchController {
 				}
 			}
 		}
-		
-		
-		
-		
+
 		// security note: loop ONLY over parameters in facet profile
 		for (final String parName : facetProfile.getTopLevelFacets().keySet()) {
 			final String[] parValues = request.getParameterValues(parName);
@@ -156,10 +144,7 @@ public class SearchController {
 			}
 			
 		}
-		
-
-		
-		
+				
 		return input;
 		
 	}

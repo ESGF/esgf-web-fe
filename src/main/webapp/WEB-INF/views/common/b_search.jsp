@@ -83,7 +83,7 @@
     <div id="main">
         
         <div id="search_box">
-        <ti:insertAttribute name="search" />    
+        <ti:insertAttribute name="searchform" />    
         </div>
 
         <div id="search_wrapper">

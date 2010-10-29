@@ -25,11 +25,16 @@
 	</logger>
 
 	<logger name="org.springframework.web">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
 
+
+    <logger name="org.springframework.web.servlet">
+        <level value="debug" />
+    </logger>
+    
     <logger name="org.springframework.web.servlet.view">
-        <level value="info" />
+        <level value="debug" />
     </logger>
 	<!-- Root Logger -->
 	<root>

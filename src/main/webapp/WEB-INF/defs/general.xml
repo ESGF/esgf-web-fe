@@ -5,7 +5,7 @@
     
 <tiles-definitions>
 
-    <definition name="base" template="/WEB-INF/views/common/base.jsp">
+    <definition name="base" template="/WEB-INF/views/common/b_search.jsp">
         <put-attribute name="facets"  value=""/>
         <put-attribute name="search"  value=""/>
         <put-attribute name="pagination" value="" />
@@ -15,14 +15,12 @@
     <definition name="search" extends="base">
         <put-attribute name="facets"  
             value="/WEB-INF/views/search/_search_facets.jsp"/>    
-        <put-attribute name="search"  
-            value="/WEB-INF/views/search/query.jsp"/>
+        <put-attribute name="searchform"  
+            value="/WEB-INF/views/search/_search_form.jsp"/>
         <put-attribute name="pagination"
             value="/WEB-INF/views/search/_search_pagination.jsp" />
         <put-attribute name="result"  
             value="/WEB-INF/views/search/_search_results.jsp"/>
-         
     </definition>
-    
 </tiles-definitions>
             

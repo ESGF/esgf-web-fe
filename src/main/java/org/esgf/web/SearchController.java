@@ -213,12 +213,10 @@ public class SearchController {
 	 */
 	@RequestMapping(method=RequestMethod.POST)
 	@SuppressWarnings("unchecked")
-	protected ModelAndView doPost(final HttpServletRequest request, 
+	protected String doPost(final HttpServletRequest request, 
 			final @ModelAttribute(SEARCH_INPUT) SearchInputImpl input, 
 			final BindingResult result) throws Exception {
-
 		
-		//input.setText("air");
 		
 		// invalid user input
 		if (isNotValid(input.getText())) {					
@@ -252,6 +250,7 @@ public class SearchController {
 			model.put(SEARCH_INPUT, input);
 			model.put(SEARCH_OUTPUT, output);
 			model.put(FACET_PROFILE, facetProfile);
+			
 			request.getSession().setAttribute(SEARCH_MODEL, model);
 		
 		}
@@ -259,8 +258,9 @@ public class SearchController {
 		
 		
 		// use POST-REDIRECT-GET pattern with additional parameter "?search_model"
-		final String url = request.getRequestURL().toString();
-		return new ModelAndView(new RedirectView(url)).addObject(SEARCH_MODEL,"true");
+		//final String url = request.getRequestURL().toString();
+		//return new ModelAndView(new RedirectView(url)).addObject(SEARCH_MODEL,"true");
+		return "redirect:/search?search_model=true";
 	}
 
 	

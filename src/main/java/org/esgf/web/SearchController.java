@@ -27,6 +27,10 @@ import esg.search.query.api.SearchOutput;
 import esg.search.query.api.SearchService;
 import esg.search.query.impl.solr.SearchInputImpl;
 
+
+import esg.search.core.Record;
+import java.util.List;
+
 @Controller
 @RequestMapping(value="/search")
 
@@ -73,6 +77,22 @@ public class SearchController {
 		
 		// instantiate command object
 		final SearchInputImpl input = new SearchInputImpl();
+		
+		if(request.getParameterValues("whichGeo")!=null)
+		{
+			String [] parValues = request.getParameterValues("whichGeo");
+			
+			for (final String parValue : parValues) {
+				System.out.println("PARVALUEHERE: " + parValue);
+				if(parValue.equals("BoundingBox"))
+				{
+					System.out.println("\nRun Bounding Box\n");
+				}
+				else{
+					System.out.println("\nRun Circle\n");
+				}
+			}
+		}
 		
 		
 		
@@ -143,13 +163,15 @@ public class SearchController {
 						if (LOG.isTraceEnabled()) 
 							LOG.trace("formBackingObject: set constraint name=" +
 									parName+" value="+parValue);
+
+						System.out.println("Adding parName: " + parName + " value: " + parValue);
 					}
 				}
 			}
 			
 		}
 		
-
+		System.out.println("\n\n\n" + input + "\n\n\n");
 		
 		
 		return input;
@@ -218,7 +240,6 @@ public class SearchController {
 			final BindingResult result) throws Exception {
 
 		
-		//input.setText("air");
 		
 		// invalid user input
 		if (isNotValid(input.getText())) {					
@@ -235,7 +256,6 @@ public class SearchController {
 			
 			
 			
-			
 			// set retrieval of all facets in profile
 			input.setFacets(new ArrayList<String>(facetProfile.getTopLevelFacets().keySet()));
 	
@@ -244,8 +264,18 @@ public class SearchController {
 			if (LOG.isTraceEnabled()) 
 			{
 				LOG.trace("doPost: results="+output);
-				LOG.trace("\nadding west_degrees Constraint\n");
 			}
+			
+			List<Record> outputRecords = output.getResults();
+			System.out.println("\nRECORD SIZE\n\n" + outputRecords.size() + "\n\n\n\n");
+			for(int i=0;i<outputRecords.size();i++)
+			{
+				Record record = outputRecords.get(i);
+				
+			}
+			//System.out.println("\nOUTPUT\n\n" + output + "\n\n\n\n");
+			
+			//System.out.println("\nSIZE\n\n" + ouput.getResults.size() + "\n\n\n");
 			
 			// store new model in session
 			final Map<String,Object> model = new HashMap<String,Object>();

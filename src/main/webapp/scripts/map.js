@@ -262,6 +262,9 @@ $(document).ready(function(){
 		
 		poly.setMap(map);
 		map.fitBounds(cbounds);
+		
+		//since the circle can be resized, Im placing the call to this method here
+		setGeographicRadiusConstraint();
 	}
 
 	function draw_rect() {
@@ -316,6 +319,8 @@ $(document).ready(function(){
 		radius = $("input[name='radius']").val();
 		quality = $("input[name='quality']").val();
 		drawCircle(markers[0], radius, quality);
+		
+		
 	}
 	
 	$("input[name='areaGroup']").change(function(e) {
@@ -332,12 +337,12 @@ $(document).ready(function(){
 			//do the submit here?
 			
 		} else {
-			
 			if (num_of_markers != 1) {
 				alert("Please define ONE marker, center of interest!")
 				$(this).attr('checked', false);
 				return false;
 			}
+
 			
 			if ($("#circleInputs").is(":hidden"))
 				$("#circleInputs").slideToggle('fast');
@@ -346,9 +351,13 @@ $(document).ready(function(){
 			$("#areaSelected").html('<p class="legend"> Center of Interest </p> + ' 
 					+ markers[0].getPosition().toString());
 			
+			
 			if ($("#areaSelected").is(":hidden"))
 				$("#areaSelected").slideToggle('fast');
+			
+
 			redraw_circle();
+			
 		}		
 	});
 
@@ -398,5 +407,37 @@ $(document).ready(function(){
 	}
 	
 	
+	/*
+	 * This function essentially does the same as addGeograpichConstraint, only
+	 * now the cbounds are used.
+	 */
+	function setGeographicRadiusConstraint() {
+		var sw = cbounds.getSouthWest();
+		var ne = cbounds.getNorthEast();
+		
+		//this is the min long
+		var swLng = sw.lng();
+		
+		//this is the min lat
+		var swLat = sw.lat();
+		
+		//this is the max long
+		var neLng = ne.lng();
+		
+		//this is the max lat
+		var neLat = ne.lat();
+		
+		//var searchForm = document.getElementById("geo-form");
+		var searchForm = document.getElementById("search-form");
+		var wdinput = searchForm["west_degrees"];
+		wdinput.value = swLng;
+		var edinput = searchForm["east_degrees"];
+		edinput.value = neLng;
+		var sdinput = searchForm["south_degrees"];
+		sdinput.value = swLat;
+		var ndinput = searchForm["north_degrees"];
+		ndinput.value = neLat;
+		
+	}
 	
 });

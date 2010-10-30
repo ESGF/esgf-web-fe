@@ -123,6 +123,9 @@
  		
      <input type="hidden" 
             name="north_degrees" value="90"/>
+            
+     <input type="hidden"
+     		Name="whichGeo" value="BoundingBox" /> 
             <!--
     </form>    
                         

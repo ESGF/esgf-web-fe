@@ -23,53 +23,42 @@ Extended - by fwang2
 
 
 jQuery.fn.initMenu = function() {  
+	//alert("initMenu");
     return this.each(function(){
         var theMenu = $(this).get(0);
         $('.acitem:not(:has(li.selected))').hide();
         $('li:has(li.selected)', this).addClass("expand");
         $('li.expand').show();
         
-        function getSearchForm() {
-        	return $("#search-form");
-        }
-
-        function setFacet(facetKey, facetValue) {
-        	var searchForm = getSearchForm();
-        	var input = searchForm[facetKey];
-        	input.value = facetValue;
-        	search(0);
-        }
-
-        function resetFacet(facetKey) {
-        	var searchForm = getSearchForm();
-        	var input = searchForm[facetKey];
-        	input.value = "";
-        	search(0);
-        }
-
-        function search(offset) {
-        	var searchForm = getSearchForm();
-        	searchForm.offset.value = offset;
-        	searchForm.submit();
-        }
         
         $('ul.acitem > li > a').bind('click', function(e) {
+        	
+        	/*
         	var facetkey = $("#entry_key", this).html().trim();
         	var facetvalue = $("#subfacet_label", this).html().trim();
-        	var queryString= facetkey + '=' + facetvalue + '&offset=0' + 
-        			'&text='+ '&limit=10';
-        	$.ajax({
+        	//var queryString= facetkey + '=' + facetvalue + '&offset=0' + 
+        	//		'&text='+ '&limit=10';
+        	//var queryString = 'project:EOSDIS';
+        	var queryString = 'west_degrees' + '=' + -111.0;
+        	alert("pre queryString: " + queryString);
+            $.ajax({
         		type: "POST",
-        		url: '/esg-web/search.htm',
+        		//url: '/esg-web/search.htm',
+        		url: 'http://localhost:8983/solr',
         		data: queryString,
         		success: function(data) {
+        			//alert("success");
+        			//alert("data\n   " + data);
         			$("#search_results").html(data);
         		}
         	});
+            alert("post queryString: " + queryString);
+            */
         	return true;
         });
         
         $('ul.menu > li > a').bind('click', function(e) {
+            
             e.stopImmediatePropagation();
             var theElement = $(this).next();
             var parent = this.parentNode.parentNode;

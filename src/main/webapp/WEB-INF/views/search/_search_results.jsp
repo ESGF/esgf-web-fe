@@ -6,8 +6,8 @@
 <c:if test="${param['search_model'] != null}">
 
 <div id="search_summary"> Search summary: ${search_output.counts} records returned.</div>
-		
-<table class="data">
+
+<table class="data search_data">
 
 	<c:set var="j" value="0" />
 	<c:forEach var="record" items="${search_output.results}">
@@ -35,5 +35,7 @@
 	</c:forEach>
 </table>
 
+
 </c:if>
+
 

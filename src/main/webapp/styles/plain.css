@@ -9,7 +9,7 @@ body {
 	margin: 0;
 	padding: 0;
     font-size: 0.7em;
-    font-family: "Lucida Grande", Arial;
+    font-family: "Lucida Grande", "Droid Sans";
 }
 
 #wrapper {
@@ -50,21 +50,19 @@ body {
 	margin-top:-20px;
 }
 
-#pagination {
-	margin-top: 2em;
-	margin-left: 0px;
-}
 
-#search_summary {
-	clear: both;
-    margin-left: 100px;
-}
+/* styling constraints */
 
+#search_constraints {
+	background: #FFFFCC; 
+}
+	
 
 /* Footer */
 
 #footer {
 	margin-top: 20px;
+	margin-right: 40px;
 	float: right;
 	font-size: 1em;
     background-color: transparent;
@@ -197,49 +195,68 @@ ul#failure-flash-messages li, ul#success-flash-messages li {
     list-style: none;
 }
 
+ 
 
-/* Search Form */
+/* style the search box */
 
-
-.form table{  
-    margin-bottom: 1em;  
-}  
-
-.form input {
-	font-size: 1.2em;
-}
-
-.form table tr {
-	vertical-align: center;
-}
-
-.form table td{  
-    text-align: left;  
-    vertical-align: center;
-    padding-right: 5px;
-}  
-
-/* style the search button */
-
-
-.form input#searchbox{
+input.searchbox {
     font-weight: normal;  
+    font-size: 1.2em;
     color: #565656;
     border: 1px solid #9c9c9c;  
     width: 300px;  
-    padding: 2px;  
-    margin-bottom: 5px;  
-    text-align: left;  
+    padding-left: 30px;
+    padding-top: 10px;
+    padding-right: 10px;  
+    margin: 5px;  
+    text-align: left;
+    background: url(../images/mag.png) no-repeat;
+    background-position: 7px 7px;
 }
 
-.form input#searchbox.active{  
-    background: #ddeff6;  
+input.searchbox:active {  
     border: 1px solid #0099d4;  
+    
 }
 
+.button {
+	border: 1px solid #9c9c9c;
+	background: #CCFFFF;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	cursor: pointer;
+}
+
+.button:hover {
+	background: #00FF00;
+}
+
+
+div.inline {
+	float: left;
+	margin-right: 10px;
+	margin-left: 10px;
+
+}
+.clearBoth {clear:both;}
+
+
+
+
+/* style infowindow */
+
+.infowindow {
+	width: 130px;
+	height: 70px;
+}
 
 /* style pagination */
+
 #pagination {
+    margin-top: 2em;
+    margin-left: 0px;	
     font-size: 1.1em;
     font-weight: bold;
 }
@@ -345,6 +362,10 @@ ul.menu div.panel a:hover {
     vertical-align: top;
 }
 
+.data tr {
+	padding-left: 20px;
+}
+
 .data caption {
 	font-size: 1.2em;
 	text-decoration: underline;
@@ -367,6 +388,7 @@ label {
 
 #optionPane {
     clear: both;
+    margin-top: 20px;
     margin-bottom: 4px;
     padding: 4px 0;
     /* border: 1px dotted #9fca6a; */ 
@@ -384,12 +406,24 @@ form {
 
 /* Style search result */
 
-#search_results {
+#search_summary {
+    margin-top: 20px;
+    font-size: 1.3em;
+    background: #FFFFCC;
+    width: 400px;
+}
+
+.search_data {
 	margin-top: 12px;
     font-size: 1.1em;
     border-left: 1px dashed gray;
 }
 
+#search_results {
+	margin-top: 20px;
+	clear: both;
+}
+	
 
 /* --------------------------------
     Map Style
@@ -401,14 +435,65 @@ form {
 	float: left;
 	height: 400px;
 	width: 400px;
-	margin-bottom: 10px;
+	padding: 10px;
+	border-left: 2px solid #666;
+	border-top: 2px solid #666;
+	border-bottom: 2px solid #666;
+	
 }
 
 #map_info {
+	position: absolute;
+	margin-left: 420px;
+	padding: 10px;
 	float: right;
 	width: 200px;
 	height: 400px;
-	margin-bottom: 10px;
+	border-top: 2px solid #666;
+    border-bottom: 2px solid #666;    	
+	border-right: 2px solid #666;
+}
+
+fieldset{
+    border: 1px solid #CCA383; 
+    background: #FFE8EF;
+    width: 190px;
+    padding: 3px;
+    margin-bottom: 20px;
+}
+
+fieldset legend {
+	background: #CCA383;
+	padding: 3px;
+}
+
+label {
+	margin-left: 0px;
+}
+
+p.legend {
+	font-weight: bold;
+	margin-bottom: 6px;
+}
+
+p.help {
+	font-size: 1em;
+}
+
+#markers {
+	padding-top: 10px;
+}
+
+#areaSelected {
+	padding-top: 10px;
+}
+
+#circleInputs {
+	padding-top: 10px;
+}
+
+#geoloc {
+	margin-bottom: 5px;
 }
 
 

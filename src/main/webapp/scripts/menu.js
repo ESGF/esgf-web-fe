@@ -23,39 +23,19 @@ Extended - by fwang2
 
 
 jQuery.fn.initMenu = function() {  
-	//alert("initMenu");
+
     return this.each(function(){
         var theMenu = $(this).get(0);
-        $('.acitem:not(:has(li.selected))').hide();
-        $('li:has(li.selected)', this).addClass("expand");
+        
+        $('.acitem:not(has(li.selected))').hide();
+        $('li:has(li.selected)', this).addClass("expand").show();
+        $('.acitem:has(.nonselected)').hide();
         $('li.expand').show();
         
         
-        $('ul.acitem > li > a').bind('click', function(e) {
-        	
-        	/*
-        	var facetkey = $("#entry_key", this).html().trim();
-        	var facetvalue = $("#subfacet_label", this).html().trim();
-        	//var queryString= facetkey + '=' + facetvalue + '&offset=0' + 
-        	//		'&text='+ '&limit=10';
-        	//var queryString = 'project:EOSDIS';
-        	var queryString = 'west_degrees' + '=' + -111.0;
-        	alert("pre queryString: " + queryString);
-            $.ajax({
-        		type: "POST",
-        		//url: '/esg-web/search.htm',
-        		url: 'http://localhost:8983/solr',
-        		data: queryString,
-        		success: function(data) {
-        			//alert("success");
-        			//alert("data\n   " + data);
-        			$("#search_results").html(data);
-        		}
-        	});
-            alert("post queryString: " + queryString);
-            */
-        	return true;
-        });
+        //$('ul.acitem > li > a').bind('click', function(e) {
+        //	return true;
+        //});
         
         $('ul.menu > li > a').bind('click', function(e) {
             

@@ -17,7 +17,7 @@
 
     <c:choose>
     <c:when test="${fn:length(entry.value.subFacets)>0}">
-       <li><a href="#"><c:out value="${facet_profile.topLevelFacets[entry.key].label}"/></a>
+       <li class="enabled"><a href="#"><c:out value="${facet_profile.topLevelFacets[entry.key].label}"/></a>
     </c:when>
     
     <c:otherwise>
@@ -39,7 +39,7 @@
          <c:otherwise>
          <!-- facet not selected > include all options -->
             <c:forEach var="subFacet" items="${entry.value.subFacets}">
-                   <li class="nonselected">
+                   <li class="none">
                    <a href='javascript:setFacet("${entry.key}", "${subFacet.label}")'>
                        <span id="entry_key" style="display:none">
                          <c:out value="${entry.key}"/></span>
@@ -50,6 +50,9 @@
          </c:otherwise>
        </c:choose>
        </ul> 
+       
+       </li>
+       
 </c:forEach>
 
 </ul>

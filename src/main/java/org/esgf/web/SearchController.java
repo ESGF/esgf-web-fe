@@ -179,12 +179,12 @@ public class SearchController {
 	@RequestMapping(value="/results", method=RequestMethod.GET)
 	public String doSearchResults(	
 			final HttpServletRequest request,
+			Model model,
 			final @ModelAttribute(SEARCH_INPUT) SearchInputImpl input, 
 			final BindingResult result) throws Exception {
 
 		LOG.debug("doSearchResults() called");
 		
-		Map<String,Object> model = new HashMap<String,Object>();
 		
 			
 		// set retrieval of all facets in profile
@@ -194,12 +194,10 @@ public class SearchController {
 		final SearchOutput output = searchService.search(input, true, true);
 			
 		// populate model
-		model.put(SEARCH_OUTPUT, output);
-
-		LOG.debug(output);
+		model.addAttribute(SEARCH_OUTPUT, output);
+		model.addAttribute(FACET_PROFILE, facetProfile);
+		model.addAttribute(SEARCH_INPUT, input);
 		
-		// save model in session
-		request.getSession().setAttribute(SEARCH_OUTPUT, output);		
 		
 		return "search_results";
 	}

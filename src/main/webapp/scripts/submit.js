@@ -23,18 +23,21 @@ $(document).ready(function(){
 			url: 'search/results'
 	}
 	
-	$('#search-form').submit(function() {
+	$('#search-form').bind('submit', function() {
 		// inside event callback, 'this' is the DOM element
 		// so we first warp it in a jQuery object and then
 		// invoke ajaxSubmit
 		
-		$(this).ajaxSubmit(opt_facets);		
-		$(this).ajaxSubmit(opt_results);
+		//$(this).ajaxSubmit(opt_results);
 		
 		// must return false to prevent standard browser submit
 		return false;
 	});
-	
+
+	$('#search-form').bind('submit', function() {
+		$(this).ajaxSubmit(opt_facets);
+		return false;
+	});
 });
 
 
@@ -45,9 +48,10 @@ function showRequest(formData, jqForm, options) {
 }
 
 function showResponse(responseText, statusText, xhr, $form) {
-    alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + 
-    '\n\nThe output div should have already been updated with the responseText.'); 
-
+//    alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + 
+//    '\n\nThe output div should have already been updated with the responseText.'); 
+	//$('ul.acitem > li:not(has(.selected))').hide();
+	//$('ul.acitem > li:has(.selected))').show();
 }
 
 function getSearchForm() {

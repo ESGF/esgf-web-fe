@@ -7,14 +7,19 @@
 
 	<ul class="menu">
 	<li> 
-		<a href="#"> sub menu </a>
-		<ul>
-			<li><a href="..."> link </a></li>
+		<a href="#"> Project</a>
+		<ul class="acitem">
+			<li>
+				<a href="..."> ipccc4 </a>
+			</li>
+			...
+			<li>
+				<a href="..."> test </a>
+			</li>
+			
 		</ul>
 	</li>
-	...
-	
-	
+	...	
 	
 	</ul>
 	
@@ -25,19 +30,32 @@
 $(function() {  
 	        
         $('.acitem:not(:has(li.selected))').hide();
-        $('li:has(li.selected)', this).addClass("expand");
-        $('li.expand').show();
         
-
-        
-        $('ul.menu > li > a').bind('click', function(e) {
+        // live event 
+        // handle clicks on "project", "model" etc.
+        $('ul.menu > li > a').live('click', function(e) {
         	e.stopImmediatePropagation();
-        	alert("got it");
-        	$(this).
-        		toggleClass('active');
-        	$(this).siblings().slideToggle('fast');
-        	
+        	$(this).toggleClass('active');
+    		
+        	$(this).siblings().find("li").toggle();
+    		
+        	if ($(this).siblings().is(':hidden')) {
+        		$(this).siblings().slideToggle('fast');
+        	}
+    		
+    		return false;
+        });
+        
+        // handle subfacets
+        $('.acitem > li').live('dbclick', function(e) {
+        	e.stopPropagation();
+        	var p1 = $(this).parent().parent()[0];
+        	if ($(this).hasClass('none')) {
+        		$(this).hide();
+        	} else {
+        		$(this).show();
+        	}
         	return false;
         });
-       
+        
 });

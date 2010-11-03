@@ -10,6 +10,7 @@ $(document).ready(function(){
 			type: 'GET',
 			//beforeSubmit: showRequest,
 			//success: showResponse,
+			complete: styleFacets,
 			target: '#facets',
 			url: 'search/facets'
 				
@@ -36,7 +37,12 @@ $(document).ready(function(){
 
 	$('#search-form').bind('submit', function() {
 		$(this).ajaxSubmit(opt_facets);
+
 		return false;
+	});
+	
+	$('#facets').change(function() {
+		alert("good");
 	});
 });
 
@@ -50,8 +56,19 @@ function showRequest(formData, jqForm, options) {
 function showResponse(responseText, statusText, xhr, $form) {
 //    alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + 
 //    '\n\nThe output div should have already been updated with the responseText.'); 
-	//$('ul.acitem > li:not(has(.selected))').hide();
-	//$('ul.acitem > li:has(.selected))').show();
+	
+	$('ul.acitem > li').trigger('click');
+
+}
+
+/**
+ * This is where we clean up the mess (facets data transferred back)
+ * 
+ * @param XMLHttpRequest
+ * @param textStatus
+ */
+function styleFacets(XMLHttpRequest, textStatus) {
+	$('.acitem > li > a').trigger('dbclick');
 }
 
 function getSearchForm() {

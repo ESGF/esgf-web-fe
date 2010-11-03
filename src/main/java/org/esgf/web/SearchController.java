@@ -1,17 +1,26 @@
+/**
+ * On request mapping:
+ *  
+ * 	   url rewrite filter will take over first, then we do regular Spring mapping.
+ * 	   RedirectView is discouraged here as it will mess up the current rewrite  
+ *     rule, use "redirect:" prefix instead, and it is regarded as a better alternative
+ *     anyway.    
+ *     
+ * For any redirect trouble, please refers to ROOT/urlrewrite.xml
+ *
+ * --- notes by fwang2@ornl.gov
+ * 
+ */
 package org.esgf.web;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -19,9 +28,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
-
 import esg.search.query.api.FacetProfile;
 import esg.search.query.api.SearchOutput;
 import esg.search.query.api.SearchService;
@@ -50,10 +58,9 @@ public class SearchController {
 	private final static String FACET_PROFILE = "facet_profile";
 	private final static String ERROR_MESSAGE = "error_message";
 	private final static String SEARCH_MODEL = "search_model";
-	
-	
-	private final static Log LOG = LogFactory.getLog(SearchController.class);
-	
+		
+    private final static Logger LOG = Logger.getLogger(SearchController.class);
+    
 	/**
 	 * List of invalid text characters - 
 	 * anything that is not within square brackets.
@@ -66,6 +73,34 @@ public class SearchController {
 		this.searchService = searchService;
 		this.facetProfile = facetProfile;
 	}
+	
+	/**
+	 * Refactored Geo Contraints
+	 * 
+	 */
+	
+	private void addGeoConstraints(final HttpServletRequest request,
+			final SearchInputImpl input) {
+		String [] geovars = {"west_degrees", "east_degrees",
+				"south_degrees", "north_degrees"};
+		for (final String geovar: geovars) {
+			if (request.getParameterValues(geovar) !=null ) {
+				String [] parValues = request.getParameterValues(geovar);
+				for (final String parValue: parValues) {
+					if (StringUtils.hasText(parValue)) {
+						String geoConstraint = "";
+						if(parValue.equals("south_degrees") || parValue.equals("west_degrees"))
+							   geoConstraint = "[ " + parValue + " TO * ]";
+							else
+							   geoConstraint =  "[ * TO " +  parValue + "]";
+						input.addGeospatialRangeConstraint(geovar, geoConstraint);
+					}
+				}
+			}
+		}
+	}
+	
+	
 	
 	/**
 	 * Method used to execute non-standard biding of search constraints.
@@ -81,8 +116,57 @@ public class SearchController {
 		// instantiate command object
 		final SearchInputImpl input = new SearchInputImpl();
 		
-		//process geospatial search 
-		processBoundingBoxSearch(request,input);
+
+		// addGeoConstraints(request, input);
+        if(request.getParameterValues("west_degrees")!=null)
+        {
+                String [] parValues = request.getParameterValues("west_degrees");
+                for (final String parValue : parValues) {
+                        if (StringUtils.hasText(parValue)) {
+                                String geoConstraint = "[ " + parValue + " TO * ]";
+                                input.addGeospatialRangeConstraint("west_degrees",geoConstraint);
+                        }
+                }
+        }
+        
+        if(request.getParameterValues("east_degrees")!=null)
+        {
+                //System.out.println(request.getParameterValues("west_degrees").toString() + "\n");
+                String [] parValues = request.getParameterValues("east_degrees");
+                for (final String parValue : parValues) {
+                        if (StringUtils.hasText(parValue)) {
+                                String geoConstraint = "[ * TO " + parValue + "]";
+                                input.addGeospatialRangeConstraint("east_degrees",geoConstraint);
+                                
+                        }
+                }
+        }
+        
+        if(request.getParameterValues("south_degrees")!=null)
+        {
+                //System.out.println(request.getParameterValues("west_degrees").toString() + "\n");
+                String [] parValues = request.getParameterValues("south_degrees");
+                for (final String parValue : parValues) {
+                        if (StringUtils.hasText(parValue)) {
+                                String geoConstraint = "[ " + parValue + " TO * ]";
+                                input.addGeospatialRangeConstraint("south_degrees",geoConstraint);
+                                
+                        }
+                }
+        }
+        
+        
+        if(request.getParameterValues("north_degrees")!=null)
+        {
+                //System.out.println(request.getParameterValues("west_degrees").toString() + "\n");
+                String [] parValues = request.getParameterValues("north_degrees");
+                for (final String parValue : parValues) {
+                        if (StringUtils.hasText(parValue)) {
+                                String geoConstraint = "[ * TO " + parValue + "]";
+                                input.addGeospatialRangeConstraint("north_degrees",geoConstraint);
+                        }
+                }
+        }
 		
 		// security note: loop ONLY over parameters in facet profile
 		for (final String parName : facetProfile.getTopLevelFacets().keySet()) {
@@ -94,7 +178,6 @@ public class SearchController {
 						if (LOG.isTraceEnabled()) 
 							LOG.trace("formBackingObject: set constraint name=" +
 									parName+" value="+parValue);
-
 					}
 				}
 			}
@@ -106,65 +189,83 @@ public class SearchController {
 		return input;
 		
 	}
+
+	/**
+	 * Return search results as partial view
+	 */
+	@RequestMapping(value="/results", method=RequestMethod.GET)
+	public String doSearchResults(	
+			final HttpServletRequest request,
+			Model model,
+			final @ModelAttribute(SEARCH_INPUT) SearchInputImpl input, 
+			final BindingResult result) throws Exception {
+
+		LOG.debug("doSearchResults() called");
+		
+		
+			
+		// set retrieval of all facets in profile
+		input.setFacets(new ArrayList<String>(facetProfile.getTopLevelFacets().keySet()));
 	
-	public void processBoundingBoxSearch(HttpServletRequest request,SearchInputImpl input)
-	{
-		
-		
-		//refactor this
-		if(request.getParameterValues("west_degrees")!=null)
+		// execute query for results and facets
+		SearchOutput output = searchService.search(input, true, true);
+			
+		String [] parValues = request.getParameterValues("whichGeo");
+		for (final String parValue : parValues) 
 		{
-			String [] parValues = request.getParameterValues("west_degrees");
-			for (final String parValue : parValues) {
-				if (StringUtils.hasText(parValue)) {
-					String geoConstraint = "[ " + parValue + " TO * ]";
-					input.addGeospatialRangeConstraint("west_degrees",geoConstraint);
-				}
+			//if radius is selected then further filtering is needed
+			if(parValue.equals("Radius"))
+			{
+				SearchOutput filteredRadiusRecords = filterByRadius(request,output);
+				output = filteredRadiusRecords;
+				System.out.println("\n\n\nRUNNING RADIUS\n\n\n");
+			}
+			else
+			{
+				System.out.println("\n\n\nRUNNING BOUNDING BOX\n\n\n");
 			}
 		}
 		
 		
 		
-		if(request.getParameterValues("east_degrees")!=null)
-		{
-			//System.out.println(request.getParameterValues("west_degrees").toString() + "\n");
-			String [] parValues = request.getParameterValues("east_degrees");
-			for (final String parValue : parValues) {
-				if (StringUtils.hasText(parValue)) {
-					String geoConstraint = "[ * TO " + parValue + "]";
-					input.addGeospatialRangeConstraint("east_degrees",geoConstraint);
-					
-				}
-			}
-		}
+		
+		// populate model
+		model.addAttribute(SEARCH_OUTPUT, output);
+		model.addAttribute(FACET_PROFILE, facetProfile);
+		model.addAttribute(SEARCH_INPUT, input);
+		
+		return "search_results";
+	}
+
+	/**
+	 * Return facets as partial view
+	 */
+	@RequestMapping(value="/facets", method=RequestMethod.GET)
+	public String doSearchFacets(	
+			final HttpServletRequest request,
+			Model model,
+			final @ModelAttribute(SEARCH_INPUT) SearchInputImpl input, 
+			final BindingResult result) throws Exception {
+
+		LOG.debug("doSearchFacets() called");
 		
 		
+			
+		// set retrieval of all facets in profile
+		input.setFacets(new ArrayList<String>(facetProfile.getTopLevelFacets().keySet()));
+	
+		// execute query for results and facets
+		final SearchOutput output = searchService.search(input, true, true);
+			
+		// populate model
 		
-		if(request.getParameterValues("south_degrees")!=null)
-		{
-			//System.out.println(request.getParameterValues("west_degrees").toString() + "\n");
-			String [] parValues = request.getParameterValues("south_degrees");
-			for (final String parValue : parValues) {
-				if (StringUtils.hasText(parValue)) {
-					String geoConstraint = "[ " + parValue + " TO * ]";
-					input.addGeospatialRangeConstraint("south_degrees",geoConstraint);
-					
-				}
-			}
-		}
+		model.addAttribute(SEARCH_OUTPUT, output);
+		model.addAttribute(FACET_PROFILE, facetProfile);
+		model.addAttribute(SEARCH_INPUT, input);
 		
+		// save model in session
 		
-		if(request.getParameterValues("north_degrees")!=null)
-		{
-			//System.out.println(request.getParameterValues("west_degrees").toString() + "\n");
-			String [] parValues = request.getParameterValues("north_degrees");
-			for (final String parValue : parValues) {
-				if (StringUtils.hasText(parValue)) {
-					String geoConstraint = "[ * TO " + parValue + "]";
-					input.addGeospatialRangeConstraint("north_degrees",geoConstraint);
-				}
-			}
-		}
+		return "search_facets";
 	}
 	
 	
@@ -185,7 +286,7 @@ public class SearchController {
 			final HttpServletRequest request,
 			final @ModelAttribute(SEARCH_INPUT) SearchInputImpl input, 
 			final BindingResult result) throws Exception {
-		
+
 		Map<String,Object> model = new HashMap<String,Object>();
 		
 		if (request.getParameter(SEARCH_MODEL)!=null) {
@@ -200,8 +301,6 @@ public class SearchController {
 	
 			// execute query for facets
 			final SearchOutput output = searchService.search(input, false, true);
-			if (LOG.isTraceEnabled())  
-				LOG.trace("doGetPost: facets="+output.getFacets());
 			
 			// populate model
 			model.put(SEARCH_INPUT, input);
@@ -209,15 +308,15 @@ public class SearchController {
 			model.put(FACET_PROFILE, facetProfile);
 			
 			// save model in session
-			request.getSession().setAttribute(SEARCH_MODEL, model);
-			
+			request.getSession().setAttribute(SEARCH_MODEL, model);			
 		}
-		
+
 		return new ModelAndView("search", model);
 	}
 	
 	/**
-	 * Method invoked in response to a POST request: both results and facets are retrieved.
+	 * Method invoked in response to a POST request: 
+	 * both results and facets are retrieved.
 	 * @param request
 	 * @param input
 	 * @param result
@@ -226,11 +325,9 @@ public class SearchController {
 	 */
 	@RequestMapping(method=RequestMethod.POST)
 	@SuppressWarnings("unchecked")
-	protected ModelAndView doPost(final HttpServletRequest request, 
+	protected String doPost(final HttpServletRequest request, 
 			final @ModelAttribute(SEARCH_INPUT) SearchInputImpl input, 
 			final BindingResult result) throws Exception {
-
-		
 		
 		// invalid user input
 		if (isNotValid(input.getText())) {					
@@ -246,7 +343,6 @@ public class SearchController {
 		} else {
 			
 			
-			
 			// set retrieval of all facets in profile
 			input.setFacets(new ArrayList<String>(facetProfile.getTopLevelFacets().keySet()));
 	
@@ -257,39 +353,20 @@ public class SearchController {
 				LOG.trace("doPost: results="+output);
 			}
 			
-			String [] parValues = request.getParameterValues("whichGeo");
-			for (final String parValue : parValues) 
-			{
-				//if radius is selected then further filtering is needed
-				if(parValue.equals("Radius"))
-				{
-					SearchOutput filteredRadiusRecords = filterByRadius(request,output);
-					output = filteredRadiusRecords;
-					System.out.println("\n\n\nRUNNING RADIUS\n\n\n");
-				}
-				else
-				{
-					System.out.println("\n\n\nRUNNING BOUNDING BOX\n\n\n");
-				}
-			}
-			
-			
-			
 			
 			// store new model in session
 			final Map<String,Object> model = new HashMap<String,Object>();
 			model.put(SEARCH_INPUT, input);
 			model.put(SEARCH_OUTPUT, output);
 			model.put(FACET_PROFILE, facetProfile);
+			
 			request.getSession().setAttribute(SEARCH_MODEL, model);
 		
 		}
-		
-		
-		
 		// use POST-REDIRECT-GET pattern with additional parameter "?search_model"
-		final String url = request.getRequestURL().toString();
-		return new ModelAndView(new RedirectView(url)).addObject(SEARCH_MODEL,"true");
+		//final String url = request.getRequestURL().toString();
+		//return new ModelAndView(new RedirectView(url)).addObject(SEARCH_MODEL,"true");
+		return "redirect:/search?search_model=true";
 	}
 
 	
@@ -402,10 +479,53 @@ public class SearchController {
 		}
 		
 		
-		
-		
-		
 		return output;
+	}
+	
+	private boolean isInRange(Record record,double centerLat,double centerLong,double radius)
+	{
+		boolean isInRange = true;
+		
+		Map<String, List<String>> fields = record.getFields();
+		double record_wd = Double.parseDouble(fields.get("west_degrees").get(0));
+		double record_ed = Double.parseDouble(fields.get("east_degrees").get(0));
+		double record_nd = Double.parseDouble(fields.get("north_degrees").get(0));
+		double record_sd = Double.parseDouble(fields.get("south_degrees").get(0));
+		
+		//use lucene methods here to determine if it is within range
+		//note: this is an ALL INCLUSIVE search so all degrees must be within the range
+		System.out.println("\nwd: " + record_wd + " sd: " + record_sd + " nd: " + record_nd + " ed: " + record_ed);
+		System.out.println("centerLong: " + centerLong + " centerLat: " + centerLat);
+		
+		//find the distances between center and the record's extreme geospatial info
+		LatLng center = new FloatLatLng(centerLat,centerLong);
+		
+		LatLng pointSW = new FloatLatLng(record_sd,record_wd);
+		double pointSWDist = center.arcDistance(pointSW, DistanceUnits.KILOMETERS);
+		LatLng pointNE = new FloatLatLng(record_nd,record_ed);
+		double pointNEDist = center.arcDistance(pointNE, DistanceUnits.KILOMETERS);
+		LatLng pointNW = new FloatLatLng(record_nd,record_wd);
+		double pointNWDist = center.arcDistance(pointNW, DistanceUnits.KILOMETERS);
+		LatLng pointSE = new FloatLatLng(record_sd,record_ed);
+		double pointSEDist = center.arcDistance(pointSE, DistanceUnits.KILOMETERS);
+		
+		System.out.println("SWDIST: " + pointSWDist);
+		System.out.println("SEDIST: " + pointSEDist);
+		System.out.println("NWDIST: " + pointNWDist);
+		System.out.println("NEDIST: " + pointNEDist);
+		System.out.println("RAD: " + radius + "\n");
+		
+		//Note: Test for all extreme points (may be superfluous...revisit)
+		if(pointSWDist > radius || 
+		   pointSEDist > radius ||
+		   pointNWDist > radius ||
+		   pointNEDist > radius)
+		{
+			isInRange = false;
+		}
+		
+		
+		return isInRange; 
 	}
 	
 	

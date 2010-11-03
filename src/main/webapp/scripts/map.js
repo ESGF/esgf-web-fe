@@ -449,6 +449,7 @@ $(document).ready(function(){
 	
 	function swapGeoSearchType(type)
 	{
+		alert("swapping");
 		var searchForm = document.getElementById("search-form");
 		var whichGeo = searchForm["whichGeo"];
 		whichGeo.value = type;

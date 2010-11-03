@@ -56,7 +56,7 @@ body {
 #search_constraints {
 	background: #FFFFCC; 
 }
-	
+
 
 /* Footer */
 
@@ -206,7 +206,8 @@ input.searchbox {
     border: 1px solid #9c9c9c;  
     width: 300px;  
     padding-left: 30px;
-    padding-top: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     padding-right: 10px;  
     margin: 5px;  
     text-align: left;

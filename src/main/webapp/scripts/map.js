@@ -6,20 +6,28 @@
 
 $(document).ready(function(){
 
-	var map, geocoder, marker, infowindow;
+	var map, geocoder, infowindow;
 	var num_of_markers = 0;
 	var max_of_markers = 3;
-	var bounds = new google.maps.LatLngBounds();
+	var bounds;
 	var cbounds = new google.maps.LatLngBounds();
-	var markers = new Array(max_of_markers);
+	var markerGroup = new Array(max_of_markers);
 	var poly;
 	
+
+	function clearAreaChoice() {
+		
+		$("input:radio").attr('checked', false);
+
+	}
 	
 	function clearMarkers() {
-		for (var i=0; i < markers.length; i++) {
-			if (markers[i]) 
-				markers[i].setMap(null);
+		for (var i=0; i < max_of_markers; i++) {
+			if (markerGroup[i]) 
+				markerGroup[i].setMap(null);
+				markerGroup[i] = null;
 		}
+		
 		num_of_markers = 0;
 		
 		// close info window
@@ -31,26 +39,56 @@ $(document).ready(function(){
 		// clear marker area content
 		$("#markers").html("");
 		$("#areaSelected").html("");
-	}
-	
-	function moreMarkers() {
-		if (num_of_markers < max_of_markers)
-			return true;
-		else
-			return false;		
+		
+		clearAreaChoice();
 	}
 	
 	
-	function setMarker(marker) {
+	
+	function addMarker(location) {
 		if (num_of_markers < max_of_markers) {
-			markers[num_of_markers] = marker;
+			
+			// create a new marker
+			var marker = new google.maps.Marker({
+				draggable: true,
+				position: location,
+				map: map
+			});
+			
+			markerGroup[num_of_markers] = marker;
 			num_of_markers += 1;
+			
+
+			google.maps.event.addListener(marker, "dragstart", function() {
+				if (infowindow)
+					infowindow.close();
+				
+			});
+			
+			google.maps.event.addListener(marker, 'dragend', function() {
+				//alert("number of marker:" + num_of_markers);
+				if (poly)
+					poly.setMap(null);
+
+				clearAreaChoice();
+				refreshMarkers();
+			});			
+			
+			return marker;
+			
 		} else {
 			alert("Max markers reached, please clear markers first!")
+			return null;
 		}
+		
 	}
 	
-	function appendMarker(content) {
+	function appendMarker(marker, i) {
+		var content = '[' + i + '] ' + 'lat ' + 
+				marker.getPosition().lat().toFixed(2) + ' , ' +
+				'lon ' + 
+				marker.getPosition().lng().toFixed(2) + "<br />";
+		
 		$("#markers").append(content);
 		
 		if ($("#markers").is(":hidden")) 
@@ -62,12 +100,22 @@ $(document).ready(function(){
 		$('div#optionPane').slideToggle(
 				'fast',  function() {
 		    if ($(this).is(':hidden'))
-                     $('div#showOptions').html('<a href="#">More Options</a>')
+                     $('div#showOptions').html('<a href="#">More Options</a>');
                  else						
-			$('div#showOptions').html('<a href="#">Remove Options</a>')
+			$('div#showOptions').html('<a href="#">Remove Options</a>');
 		});
 	});
+	
+	function placeMarker(location) {
+		var marker = addMarker(location);
+		if (marker != null ) {
+			appendMarker(marker,  num_of_markers);
+		}
+	}
 
+	/**
+	 * initialize maps
+	 */
 	function display_map () {
 		var mapDiv = document.getElementById('map_canvas');
 		var latlng = new google.maps.LatLng(37.09, -95.71);
@@ -80,7 +128,15 @@ $(document).ready(function(){
 		if (!map) {
 			map = new google.maps.Map(mapDiv, options);
 		}
+		
+		google.maps.event.addListener(map, 'click', function(e) {
+			if (poly)
+				poly.setMap(null);
+			clearAreaChoice();
+			placeMarker(e.latLng);
+		});
 	};
+	
 	
 	$("input[name='mapGroup']").change(function() {
 		if ($("input[name='mapGroup']:checked").val() == '2dmap') {
@@ -105,12 +161,26 @@ $(document).ready(function(){
 	$('#marker_fieldset input[name="clear_markers"]').click(function(e) {
 		
 		clearMarkers();
+		clearAreaChoice();
 	});
 
 	function updateInfo(pos) {
 		var content = '<div class="infowindow"> Lat: ' + pos.lat().toFixed(4) + "<br />";
 		content += "Lng:" + pos.lng().toFixed(4) + "</div>";
 		infowindow.setContent(content);		
+	}
+	
+	function dispInfo(marker) {
+		var pos = marker.getPosition();
+		var content = '<div class="infowindow"> ';  
+		content += "Lat: " + pos.lat().toFixed(4) + "<br />";
+		content += "Lng:" + pos.lng().toFixed(4) + "</div>";
+		if (!infowindow) {
+			infowindow = new google.maps.InfoWindow();
+		
+		}		
+		infowindow.setContent(content);		
+		infowindow.open(map, marker);
 	}
 	
 	function getCoordinates(address) {
@@ -133,19 +203,9 @@ $(document).ready(function(){
 				map.setCenter(results[0].geometry.location);
 			}
 			
-			// check and see if we have a marker
-			if (moreMarkers()) {
-				// create a new marker
-				marker = new google.maps.Marker({
-					map: map,
-					draggable: true,
-					map: map
-				});
-				setMarker(marker);
+			var marker = addMarker(results[0].geometry.location);
 			
-			
-				// set the position of the marker
-				marker.setPosition(results[0].geometry.location);
+			if (marker != null) {
 			
 				// check if we have a info window
 				if (!infowindow) {
@@ -165,27 +225,12 @@ $(document).ready(function(){
 				
 				// Open the infowindows
 				infowindow.open(map, marker);
-				
-
-				
+								
 				// refresh info to panel
-				appendMarker('[' + num_of_markers + '] ' + 
-						results[0].formatted_address + "<br />");
+				appendMarker(marker,  num_of_markers);
+				
 
 				
-				google.maps.event.addListener(marker, "dragstart", function() {
-					infowindow.close();
-				});
-				
-				google.maps.event.addListener(marker, 'dragend', function() {
-					var pos = marker.getPosition();
-					updateInfo(pos);
-					infowindow.open(map, marker);
-					disp_markers();
-				});
-				
-			} else {
-				alert("Marker limit reached, please clear markers first!");
 			}
 		});
 
@@ -198,19 +243,15 @@ $(document).ready(function(){
 	 * 
 	 */
 	
-	function disp_markers(len) {
+	function refreshMarkers() {
 		
 		$("#markers").html("");
 		for (var i=0; i < num_of_markers; i++) {
-			if (markers[i]) {
-				appendMarker('[' + (i+1) + '] ' +
-						'lat ' + 
-						markers[i].getPosition().lat().toFixed(2) + ' , ' +
-						'lon ' + 
-						markers[i].getPosition().lng().toFixed(2) + "<br />");
-			}
+			appendMarker(markerGroup[i], i+1);
 		}
+		
 	}
+
 
 	rad = function(x) { return x*Math.PI/180;}
 	
@@ -282,13 +323,14 @@ $(document).ready(function(){
 		
 		
 		poly.setMap(map);
-		map.fitBounds(bounds);		
+		map.fitBounds(bounds);	
 	}
 	
 	
 	function getBoundingBox() {
-		for (var i=0; i < max_of_markers; i++) {
-			marker = markers[i];
+		bounds = new google.maps.LatLngBounds()
+		for (var i=0; i < num_of_markers; i++) {
+			var marker = markerGroup[i];
 			if (marker)
 				bounds.extend(marker.getPosition());
 		}
@@ -315,14 +357,14 @@ $(document).ready(function(){
 		
 		radius = $("input[name='radius']").val();
 		quality = $("input[name='quality']").val();
-		drawCircle(markers[0], radius, quality);
+		drawCircle(markerGroup[0], radius, quality);
 	}
 	
 	$("input[name='areaGroup']").change(function(e) {
 
 		if ($("input[name='areaGroup']:checked").val() == 'square') {
 			
-			if (num_of_markers != 2) {
+			if (num_of_markers < 2) {
 				alert("Please define at least two markers!");
 				$(this).attr('checked', false);
 				return false;
@@ -344,7 +386,7 @@ $(document).ready(function(){
 				
 			// put out something
 			$("#areaSelected").html('<p class="legend"> Center of Interest </p> + ' 
-					+ markers[0].getPosition().toString());
+					+ markerGroup[0].getPosition().toString());
 			
 			if ($("#areaSelected").is(":hidden"))
 				$("#areaSelected").slideToggle('fast');

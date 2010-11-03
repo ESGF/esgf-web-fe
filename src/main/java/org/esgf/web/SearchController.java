@@ -31,6 +31,12 @@ import esg.search.query.impl.solr.SearchInputImpl;
 import esg.search.core.Record;
 import java.util.List;
 
+import org.apache.lucene.spatial.geometry.DistanceUnits;
+import org.apache.lucene.spatial.geometry.LatLng;
+import org.apache.lucene.spatial.geometry.FloatLatLng;
+import org.apache.lucene.spatial.geometry.shape.LLRect;
+import org.apache.lucene.spatial.tier.DistanceUtils;
+
 @Controller
 @RequestMapping(value="/search")
 
@@ -72,30 +78,40 @@ public class SearchController {
 	@ModelAttribute(SEARCH_INPUT)
 	public SearchInputImpl formBackingObject(final HttpServletRequest request) {
 		
-		
-		String thisLine = "";
-		
 		// instantiate command object
 		final SearchInputImpl input = new SearchInputImpl();
 		
-		if(request.getParameterValues("whichGeo")!=null)
-		{
-			String [] parValues = request.getParameterValues("whichGeo");
-			
-			for (final String parValue : parValues) {
-				System.out.println("PARVALUEHERE: " + parValue);
-				if(parValue.equals("BoundingBox"))
-				{
-					System.out.println("\nRun Bounding Box\n");
-				}
-				else{
-					System.out.println("\nRun Circle\n");
+		//process geospatial search 
+		processBoundingBoxSearch(request,input);
+		
+		// security note: loop ONLY over parameters in facet profile
+		for (final String parName : facetProfile.getTopLevelFacets().keySet()) {
+			final String[] parValues = request.getParameterValues(parName);
+			if (parValues!=null) {
+				for (final String parValue : parValues) {
+					if (StringUtils.hasText(parValue)) {
+						input.addConstraint(parName, parValue);
+						if (LOG.isTraceEnabled()) 
+							LOG.trace("formBackingObject: set constraint name=" +
+									parName+" value="+parValue);
+
+					}
 				}
 			}
+			
 		}
 		
 		
 		
+		return input;
+		
+	}
+	
+	public void processBoundingBoxSearch(HttpServletRequest request,SearchInputImpl input)
+	{
+		
+		
+		//refactor this
 		if(request.getParameterValues("west_degrees")!=null)
 		{
 			String [] parValues = request.getParameterValues("west_degrees");
@@ -149,34 +165,9 @@ public class SearchController {
 				}
 			}
 		}
-		
-		
-		
-		
-		// security note: loop ONLY over parameters in facet profile
-		for (final String parName : facetProfile.getTopLevelFacets().keySet()) {
-			final String[] parValues = request.getParameterValues(parName);
-			if (parValues!=null) {
-				for (final String parValue : parValues) {
-					if (StringUtils.hasText(parValue)) {
-						input.addConstraint(parName, parValue);
-						if (LOG.isTraceEnabled()) 
-							LOG.trace("formBackingObject: set constraint name=" +
-									parName+" value="+parValue);
-
-						System.out.println("Adding parName: " + parName + " value: " + parValue);
-					}
-				}
-			}
-			
-		}
-		
-		System.out.println("\n\n\n" + input + "\n\n\n");
-		
-		
-		return input;
-		
 	}
+	
+	
 	
 	/**
 	 * Method invoked in response to a GET request:
@@ -266,16 +257,24 @@ public class SearchController {
 				LOG.trace("doPost: results="+output);
 			}
 			
-			List<Record> outputRecords = output.getResults();
-			System.out.println("\nRECORD SIZE\n\n" + outputRecords.size() + "\n\n\n\n");
-			for(int i=0;i<outputRecords.size();i++)
+			String [] parValues = request.getParameterValues("whichGeo");
+			for (final String parValue : parValues) 
 			{
-				Record record = outputRecords.get(i);
-				
+				//if radius is selected then further filtering is needed
+				if(parValue.equals("Radius"))
+				{
+					SearchOutput filteredRadiusRecords = filterByRadius(request,output);
+					output = filteredRadiusRecords;
+					System.out.println("\n\n\nRUNNING RADIUS\n\n\n");
+				}
+				else
+				{
+					System.out.println("\n\n\nRUNNING BOUNDING BOX\n\n\n");
+				}
 			}
-			//System.out.println("\nOUTPUT\n\n" + output + "\n\n\n\n");
 			
-			//System.out.println("\nSIZE\n\n" + ouput.getResults.size() + "\n\n\n");
+			
+			
 			
 			// store new model in session
 			final Map<String,Object> model = new HashMap<String,Object>();
@@ -293,6 +292,124 @@ public class SearchController {
 		return new ModelAndView(new RedirectView(url)).addObject(SEARCH_MODEL,"true");
 	}
 
+	
+	public SearchOutput filterByRadius(final HttpServletRequest request,SearchOutput output)
+	{
+		//find the center of the search using the lucene - right now manually find
+		double centerLat = 0;
+		double centerLong = 0;
+		
+		double eastDegreeValue = 0;
+		double westDegreeValue = 0; 
+		double southDegreeValue = 0; 
+		double northDegreeValue = 0; 
+			
+		
+		
+		if(request.getParameterValues("east_degrees")!=null &&
+		   request.getParameterValues("west_degrees")!=null &&
+		   request.getParameterValues("north_degrees")!=null &&
+		   request.getParameterValues("south_degrees")!=null)
+		{
+			String [] parValues = request.getParameterValues("east_degrees");
+			
+			for (final String parValue : parValues) {
+				if (StringUtils.hasText(parValue)) {
+					eastDegreeValue = Double.parseDouble(parValue);
+				}
+			}
+			
+			parValues = request.getParameterValues("west_degrees");
+			
+			for (final String parValue : parValues) {
+				if (StringUtils.hasText(parValue)) {
+					westDegreeValue = Double.parseDouble(parValue);
+				}
+			}	
+			
+			parValues = request.getParameterValues("north_degrees");
+			
+			for (final String parValue : parValues) {
+				if (StringUtils.hasText(parValue)) {
+					northDegreeValue = Double.parseDouble(parValue);
+				}
+			}
+			
+			parValues = request.getParameterValues("south_degrees");
+			
+			for (final String parValue : parValues) {
+				if (StringUtils.hasText(parValue)) {
+					southDegreeValue = Double.parseDouble(parValue);
+				}
+			}
+			
+			System.out.println("SD: " + southDegreeValue);
+			System.out.println("ND: " + northDegreeValue);
+			System.out.println("ED: " + eastDegreeValue);
+			System.out.println("WD: " + westDegreeValue);
+			
+		}
+		
+		
+		LatLng nePoint = new FloatLatLng(northDegreeValue,eastDegreeValue);
+		LatLng swPoint = new FloatLatLng(southDegreeValue,westDegreeValue);
+		
+		//LatLng center = nePoint.calculateMidpoint(swPoint);
+		
+		LLRect boundedRect = new LLRect(swPoint,nePoint);
+		
+		LatLng center = boundedRect.getMidpoint();
+		
+		centerLat = center.getLat();
+		centerLong = center.getLng();
+		
+		
+		//find the radius
+		//double radius =Math.abs(centerLat - eastDegreeValue);
+		
+		LatLng sePoint = new FloatLatLng(southDegreeValue,eastDegreeValue);
+		LatLng midSPoint = sePoint.calculateMidpoint(swPoint);
+		
+		double radius = midSPoint.arcDistance(center, DistanceUnits.KILOMETERS);
+		
+		
+		
+		
+		//SearchOutput filteredOutput = output;
+		
+		List<Record> deletedRecords = new ArrayList<Record>();
+		
+		
+		for(int i=0;i<output.getResults().size();i++)
+		{
+			Record record = output.getResults().get(i);
+			
+			System.out.println("\nRecord: " + i);
+			
+			//check if it is within radius
+			if(!isInRange(record,centerLat,centerLong,radius))
+			//if(i % 2 == 1)
+			{
+				System.out.println("REMOVING RECORD: " + record.getId());
+				deletedRecords.add(record);
+			}
+		}
+		
+		for(int i=0;i<deletedRecords.size();i++)
+		{
+			Record record = deletedRecords.get(i);
+			output.removeResult(record);
+		}
+		
+		
+		
+		
+		
+		return output;
+	}
+	
+	
+	
 	
 	public static boolean isNotValid(final String text) {
 		final Matcher matcher = pattern.matcher(text);

@@ -377,6 +377,10 @@ $(document).ready(function(){
 	}
 	
 	function setGeographicConstraint() {
+		
+		swapGeoSearchType("BoundingBox");
+		
+		
 		var sw = bounds.getSouthWest();
 		var ne = bounds.getNorthEast();
 		
@@ -412,6 +416,9 @@ $(document).ready(function(){
 	 * now the cbounds are used.
 	 */
 	function setGeographicRadiusConstraint() {
+		
+		swapGeoSearchType("Radius");
+		
 		var sw = cbounds.getSouthWest();
 		var ne = cbounds.getNorthEast();
 		
@@ -438,6 +445,13 @@ $(document).ready(function(){
 		var ndinput = searchForm["north_degrees"];
 		ndinput.value = neLat;
 		
+	}
+	
+	function swapGeoSearchType(type)
+	{
+		var searchForm = document.getElementById("search-form");
+		var whichGeo = searchForm["whichGeo"];
+		whichGeo.value = type;
 	}
 	
 });

@@ -19,7 +19,7 @@ $(document).ready(function(){
 	var opt_results = {
 			type: 'GET',
 			//beforeSubmit: showRequest,
-			//success: showResponse,
+			success: restoreOpacity,
 			target: '#search_results',
 			url: 'search/results'
 	}
@@ -28,22 +28,19 @@ $(document).ready(function(){
 		// inside event callback, 'this' is the DOM element
 		// so we first warp it in a jQuery object and then
 		// invoke ajaxSubmit
-		
-		//$(this).ajaxSubmit(opt_results);
+		$("#search_results").css('opacity', 0.4);
+		$(this).ajaxSubmit(opt_results);
 		
 		// must return false to prevent standard browser submit
 		return false;
 	});
 
 	$('#search-form').bind('submit', function() {
-		$(this).ajaxSubmit(opt_facets);
+		//$(this).ajaxSubmit(opt_facets);
 
 		return false;
 	});
 	
-	$('#facets').change(function() {
-		alert("good");
-	});
 });
 
 
@@ -71,6 +68,9 @@ function styleFacets(XMLHttpRequest, textStatus) {
 	$('.acitem > li > a').trigger('dbclick');
 }
 
+function restoreOpacity() {
+	$('#search_results').css("opacity", 1);
+}
 function getSearchForm() {
 	return $("#search-form")[0];
 }

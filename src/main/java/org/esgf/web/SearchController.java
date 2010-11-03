@@ -198,7 +198,6 @@ public class SearchController {
 		model.addAttribute(FACET_PROFILE, facetProfile);
 		model.addAttribute(SEARCH_INPUT, input);
 		
-		
 		return "search_results";
 	}
 

@@ -22,5 +22,14 @@
         <put-attribute name="result"  
             value="/WEB-INF/views/search/_search_results.jsp"/>
     </definition>
+    
+    <definition name="search_results" 
+        template="/WEB-INF/views/search/_search_results.jsp">
+    </definition>
+
+    <definition name="search_facets" 
+        template="/WEB-INF/views/search/_search_facets.jsp">
+    </definition>
+
 </tiles-definitions>
             

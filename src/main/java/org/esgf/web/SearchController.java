@@ -113,6 +113,9 @@ public class SearchController {
 	@ModelAttribute(SEARCH_INPUT)
 	public SearchInputImpl formBackingObject(final HttpServletRequest request) {
 		
+		LOG.debug("formBackingObject() called");
+		
+		
 		// instantiate command object
 		final SearchInputImpl input = new SearchInputImpl();
 		
@@ -218,15 +221,19 @@ public class SearchController {
 			{
 				SearchOutput filteredRadiusRecords = filterByRadius(request,output);
 				output = filteredRadiusRecords;
-				System.out.println("\n\n\nRUNNING RADIUS\n\n\n");
+				LOG.debug("RADIUS");
 			}
 			else
 			{
-				System.out.println("\n\n\nRUNNING BOUNDING BOX\n\n\n");
+
+				LOG.debug("BOUNDINGBOX");
 			}
 		}
 		
-		
+
+		LOG.debug("OUTPUT RECORDS SIZE: " + output.getResults().size());
+
+		LOG.debug("END doSearchResults()");
 		
 		
 		// populate model
@@ -257,14 +264,20 @@ public class SearchController {
 		// execute query for results and facets
 		final SearchOutput output = searchService.search(input, true, true);
 			
-		// populate model
 		
+		
+		// populate model
 		model.addAttribute(SEARCH_OUTPUT, output);
 		model.addAttribute(FACET_PROFILE, facetProfile);
 		model.addAttribute(SEARCH_INPUT, input);
 		
-		// save model in session
 		
+
+		
+		
+		
+		
+		// save model in session
 		return "search_facets";
 	}
 	
@@ -328,6 +341,7 @@ public class SearchController {
 	protected String doPost(final HttpServletRequest request, 
 			final @ModelAttribute(SEARCH_INPUT) SearchInputImpl input, 
 			final BindingResult result) throws Exception {
+		LOG.debug("doPost() called");
 		
 		// invalid user input
 		if (isNotValid(input.getText())) {					
@@ -346,6 +360,9 @@ public class SearchController {
 			// set retrieval of all facets in profile
 			input.setFacets(new ArrayList<String>(facetProfile.getTopLevelFacets().keySet()));
 	
+			
+			
+			
 			// execute query for results, facets
 			final SearchOutput output = searchService.search(input, true, true);
 			if (LOG.isTraceEnabled()) 
@@ -370,7 +387,7 @@ public class SearchController {
 	}
 
 	
-	public SearchOutput filterByRadius(final HttpServletRequest request,SearchOutput output)
+	private SearchOutput filterByRadius(final HttpServletRequest request,SearchOutput output)
 	{
 		//find the center of the search using the lucene - right now manually find
 		double centerLat = 0;
@@ -420,18 +437,12 @@ public class SearchController {
 				}
 			}
 			
-			System.out.println("SD: " + southDegreeValue);
-			System.out.println("ND: " + northDegreeValue);
-			System.out.println("ED: " + eastDegreeValue);
-			System.out.println("WD: " + westDegreeValue);
 			
 		}
 		
 		
 		LatLng nePoint = new FloatLatLng(northDegreeValue,eastDegreeValue);
 		LatLng swPoint = new FloatLatLng(southDegreeValue,westDegreeValue);
-		
-		//LatLng center = nePoint.calculateMidpoint(swPoint);
 		
 		LLRect boundedRect = new LLRect(swPoint,nePoint);
 		
@@ -440,19 +451,10 @@ public class SearchController {
 		centerLat = center.getLat();
 		centerLong = center.getLng();
 		
-		
-		//find the radius
-		//double radius =Math.abs(centerLat - eastDegreeValue);
-		
 		LatLng sePoint = new FloatLatLng(southDegreeValue,eastDegreeValue);
 		LatLng midSPoint = sePoint.calculateMidpoint(swPoint);
 		
 		double radius = midSPoint.arcDistance(center, DistanceUnits.KILOMETERS);
-		
-		
-		
-		
-		//SearchOutput filteredOutput = output;
 		
 		List<Record> deletedRecords = new ArrayList<Record>();
 		
@@ -461,13 +463,10 @@ public class SearchController {
 		{
 			Record record = output.getResults().get(i);
 			
-			System.out.println("\nRecord: " + i);
 			
 			//check if it is within radius
 			if(!isInRange(record,centerLat,centerLong,radius))
-			//if(i % 2 == 1)
 			{
-				System.out.println("REMOVING RECORD: " + record.getId());
 				deletedRecords.add(record);
 			}
 		}
@@ -494,9 +493,6 @@ public class SearchController {
 		
 		//use lucene methods here to determine if it is within range
 		//note: this is an ALL INCLUSIVE search so all degrees must be within the range
-		System.out.println("\nwd: " + record_wd + " sd: " + record_sd + " nd: " + record_nd + " ed: " + record_ed);
-		System.out.println("centerLong: " + centerLong + " centerLat: " + centerLat);
-		
 		//find the distances between center and the record's extreme geospatial info
 		LatLng center = new FloatLatLng(centerLat,centerLong);
 		
@@ -509,11 +505,6 @@ public class SearchController {
 		LatLng pointSE = new FloatLatLng(record_sd,record_ed);
 		double pointSEDist = center.arcDistance(pointSE, DistanceUnits.KILOMETERS);
 		
-		System.out.println("SWDIST: " + pointSWDist);
-		System.out.println("SEDIST: " + pointSEDist);
-		System.out.println("NWDIST: " + pointNWDist);
-		System.out.println("NEDIST: " + pointNEDist);
-		System.out.println("RAD: " + radius + "\n");
 		
 		//Note: Test for all extreme points (may be superfluous...revisit)
 		if(pointSWDist > radius || 

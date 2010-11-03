@@ -84,11 +84,11 @@ $(document).ready(function(){
 	
 	$("input[name='mapGroup']").change(function() {
 		if ($("input[name='mapGroup']:checked").val() == '2dmap') {
-			$("div#3dmapPane").hide();
+			//$("div#3dmapPane").hide();
 			$("div#mapPane").toggle('fast', display_map);
 		} else {
 			$("div#mapPane").hide();
-			$("div#3dmapPane").toggle('fast');
+			//$("div#3dmapPane").toggle('fast');
 		}
 	});
 	
@@ -449,7 +449,6 @@ $(document).ready(function(){
 	
 	function swapGeoSearchType(type)
 	{
-		alert("swapping");
 		var searchForm = document.getElementById("search-form");
 		var whichGeo = searchForm["whichGeo"];
 		whichGeo.value = type;

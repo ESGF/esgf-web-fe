@@ -127,6 +127,13 @@
         <version> 1.0 </version>
         </dependency> 
         
+        <!-- Lucene spatial package -->
+        <dependency>
+        <groupId> lucene-spatial</groupId>
+        <artifactId> lucene-spatial </artifactId>
+        <version> 3.0.1 </version>
+        </dependency> 
+        
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>

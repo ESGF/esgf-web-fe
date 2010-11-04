@@ -234,10 +234,8 @@ $(document).ready(function(){
 	
 	function drawCircle(marker, radius, nodes) {
 		var center = marker.getPosition();
-		
-		var latConv = dist(center, new google.maps.LatLng(center.lat() + 0.1, center.lng()));
-		var lngConv = dist(center, new google.maps.LatLng(center.lat(), center.lng() + 0.1));
-		
+		var latConv = dist(center, new google.maps.LatLng(center.lat() + 0.1, center.lng()))*10;
+		var lngConv = dist(center, new google.maps.LatLng(center.lat(), center.lng() + 0.1))*10;
 		// loop
 		var points = [];
 		var step = parseInt(360/nodes) || 40;

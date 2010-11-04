@@ -213,6 +213,9 @@ public class SearchController {
 		// execute query for results and facets
 		SearchOutput output = searchService.search(input, true, true);
 			
+		LOG.debug("OUTPUT RECORDS SIZE (PRIOR TO RADIUS FILTERING: " + output.getResults().size());
+
+		
 		String [] parValues = request.getParameterValues("whichGeo");
 		for (final String parValue : parValues) 
 		{
@@ -225,7 +228,6 @@ public class SearchController {
 			}
 			else
 			{
-
 				LOG.debug("BOUNDINGBOX");
 			}
 		}
@@ -233,7 +235,6 @@ public class SearchController {
 
 		LOG.debug("OUTPUT RECORDS SIZE: " + output.getResults().size());
 
-		LOG.debug("END doSearchResults()");
 		
 		
 		// populate model

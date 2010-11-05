@@ -213,7 +213,7 @@ public class SearchController {
 		// execute query for results and facets
 		SearchOutput output = searchService.search(input, true, true);
 			
-		LOG.debug("OUTPUT RECORDS SIZE (PRIOR TO RADIUS FILTERING: " + output.getResults().size());
+		LOG.debug("\tOUTPUT RECORDS SIZE (PRIOR TO RADIUS FILTERING: " + output.getResults().size());
 
 		
 		String [] parValues = request.getParameterValues("whichGeo");
@@ -233,7 +233,7 @@ public class SearchController {
 		}
 		
 
-		LOG.debug("OUTPUT RECORDS SIZE: " + output.getResults().size());
+		LOG.debug("\tOUTPUT RECORDS SIZE: " + output.getResults().size());
 
 		
 		
@@ -366,10 +366,10 @@ public class SearchController {
 			
 			// execute query for results, facets
 			final SearchOutput output = searchService.search(input, true, true);
-			if (LOG.isTraceEnabled()) 
-			{
-				LOG.trace("doPost: results="+output);
-			}
+			//if (LOG.isTraceEnabled()) 
+			//{
+				LOG.debug("\tdoPost: results="+output);
+			//}
 			
 			
 			// store new model in session

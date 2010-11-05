@@ -37,7 +37,7 @@
 		
 		<tr>
 		     <td>
-                <div class="inline" id="showOptions"><a href="#">More Options</a></div>
+                <div class="inline" id="showOptions"><a href="#">Show Options</a></div>
                 <div class="inline" id="showConstraints"><a href="#">Show Constraints</a></div>             
                 <div class="inline" id="showReset"><a href="#">Reset</a></div>             
 
@@ -71,9 +71,6 @@
     
     <div id="map_info"> 
 
-    <!--<form method="post" id="geo-form">
-  
-    -->
     <fieldset id="marker_fieldset">
     
 	    <p class=legend> Enter address: </p>

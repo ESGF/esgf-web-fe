@@ -87,14 +87,8 @@
         <ti:insertAttribute name="searchform" />    
         </div>
 
-        <div id="search_wrapper">
-	        <div id="search_results">
+	    <div id="search_results">
 	        <ti:insertAttribute name="result" />    
-	        </div>
-	        
-	        <div id="pagination">
-	        <ti:insertAttribute name="pagination" />
-	        </div> 
 	    </div>
 	                
         <div id="footer">

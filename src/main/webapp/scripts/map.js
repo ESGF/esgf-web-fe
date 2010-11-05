@@ -100,9 +100,9 @@ $(document).ready(function(){
 		$('div#optionPane').slideToggle(
 				'fast',  function() {
 		    if ($(this).is(':hidden'))
-                     $('div#showOptions').html('<a href="#">More Options</a>');
+                     $('div#showOptions').html('<a href="#">Show Options</a>');
                  else						
-			$('div#showOptions').html('<a href="#">Remove Options</a>');
+			$('div#showOptions').html('<a href="#">Hide Options</a>');
 		});
 	});
 	

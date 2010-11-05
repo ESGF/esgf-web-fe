@@ -213,7 +213,7 @@ public class SearchController {
 		// execute query for results and facets
 		SearchOutput output = searchService.search(input, true, true);
 			
-		LOG.debug("\tOUTPUT RECORDS SIZE (PRIOR TO RADIUS FILTERING: " + output.getResults().size());
+		LOG.debug("\tOUTPUT RECORDS SIZE (PRIOR TO RADIUS FILTERING): " + output.getResults().size());
 
 		
 		String [] parValues = request.getParameterValues("whichGeo");
@@ -224,18 +224,18 @@ public class SearchController {
 			{
 				SearchOutput filteredRadiusRecords = filterByRadius(request,output);
 				output = filteredRadiusRecords;
-				LOG.debug("RADIUS");
+				LOG.debug("RADIUS search");
 			}
 			else
 			{
-				LOG.debug("BOUNDINGBOX");
+				LOG.debug("BOUNDINGBOX search");
 			}
 		}
 		
 
 		LOG.debug("\tOUTPUT RECORDS SIZE: " + output.getResults().size());
 
-		
+		//output.setCounts(output.getResults().size());
 		
 		// populate model
 		model.addAttribute(SEARCH_OUTPUT, output);

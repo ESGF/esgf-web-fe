@@ -36,7 +36,7 @@ $(document).ready(function(){
 	});
 
 	$('#search-form').bind('submit', function() {
-		//$(this).ajaxSubmit(opt_facets);
+		$(this).ajaxSubmit(opt_facets);
 
 		return false;
 	});

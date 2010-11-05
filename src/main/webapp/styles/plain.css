@@ -501,14 +501,17 @@ p.help {
 /* Tool tip styling */
 .tooltip {
     display:none;
-    height:50px;
-    padding:10px 10px 10px 10px;
-    background:url(/tools/img/tooltip/black_arrow.png);
+    padding:20px 20px 20px 20px;
+    height: 109px;
+    width: 209px;
+    background:url(../images/white.png) no-repeat;
     /* background: #FFFF66; */
-    width:180px;
-    font-size:1.1em;
-    color:#000000;
-    border:1px solid #336600;
-    -moz-box-shadow:0 0 10px #000;
-    -webkit-box-shadow:0 0 10px #000;
+    /* width:180px; */
+    /* font-size:1.1em; */
+    color:#000;
+    /* border:1px solid #336600; */
+    /* -moz-box-shadow:0 0 10px #000; */
+    /* -webkit-box-shadow:0 0 10px #000; */
+    z-index: 1;
+    
 }

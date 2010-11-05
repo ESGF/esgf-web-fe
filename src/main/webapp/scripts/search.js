@@ -43,4 +43,13 @@ $(document).ready(function(){
 		
 		window.location='./search';
 	});
+	
+	/** 
+	 * Set up tool tip
+	 */
+	
+	$("#showOptions").tooltip({effect: 'fade'});
+	$("#showConstraints").tooltip({effect: 'fade'});
+	$("#showReset").tooltip({effect: 'fade'});
+	$("#map_canvas").tooltip({effect: 'fade'});
 });

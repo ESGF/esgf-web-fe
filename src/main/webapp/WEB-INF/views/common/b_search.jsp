@@ -24,6 +24,7 @@
 
            
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2.min.js" /> "></script>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery.tools.min.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/json.min.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery.form.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/menu.js" /> "></script>            

@@ -48,8 +48,8 @@ $(document).ready(function(){
 	 * Set up tool tip
 	 */
 	
-	$("#showOptions").tooltip({effect: 'fade'});
-	$("#showConstraints").tooltip({effect: 'fade'});
-	$("#showReset").tooltip({effect: 'fade'});
-	$("#map_canvas").tooltip({effect: 'fade'});
+	$("#showOptions").tooltip({effect: 'fade', delay: 0});
+	$("#showReset").tooltip({effect: 'fade', delay: 0});
+	
+	$("#map_canvas").tooltip({effect: 'fade', delay: 0});
 });

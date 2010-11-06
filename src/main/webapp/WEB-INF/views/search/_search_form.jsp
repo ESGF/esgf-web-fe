@@ -48,7 +48,7 @@
                  - Temporal properties <br/>
                  
                  </div>
-                 
+                <!--  
                 <div class="inline" id="showConstraints"><a href="#">Show Constraints</a></div>             
                 
                 <div class="tooltip">
@@ -58,11 +58,11 @@
                  - Geo-spatial constraints <br/>
                  - Temporal constraints <br/>
                  </div>
+                -->
                 
                 <div class="inline" id="showReset"><a href="#">Reset</a></div>             
                 <div class="tooltip">
-                <b> Reset </b><br/>
-                Clear all current search <br/>
+                Clear all current search
                 constraints. 
                 </div>
             </td>
@@ -93,10 +93,10 @@
     
     <div id="map_canvas"> </div>
     <div class="tooltip">
-    <b>You can:</b> <br/>
-    - Mouse click to pin marker <br/>
-    - Enter address to pin marker <br/>
-    - Drag marker around </br>
+    <b>Tips:</b> <br/>
+    - Mouse click to pin a marker. <br/>
+    - Enter address to pin a marker <br/>
+    - Drag marker on the map. </br>
     </div>
     
     <div id="map_info"> 

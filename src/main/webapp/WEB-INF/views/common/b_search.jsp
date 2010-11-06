@@ -17,6 +17,9 @@
     <!--  Google fonts -->        
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans&subset=latin' 
         rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="<c:url value="/styles/jquery.jgrowl.css" />" 
+        type="text/css" media="screen, projection">
         
     <link rel="stylesheet" href="<c:url value="/styles/plain.css" />" 
         type="text/css" media="screen, projection">
@@ -24,6 +27,10 @@
 
            
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2.min.js" /> "></script>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery-ui-1.8.5.min.js" /> "></script>    
+    <script type="text/javascript" src="<c:url value="/scripts/jquery.tools.min.js" /> "></script>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery.jgrowl.min.js" /> "></script>
+   
     <script type="text/javascript" src="<c:url value="/scripts/json.min.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery.form.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/menu.js" /> "></script>            

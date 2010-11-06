@@ -37,10 +37,34 @@
 		
 		<tr>
 		     <td>
-                <div class="inline" id="showOptions"><a href="#">Show Options</a></div>
+                <div class="inline" id="showOptions">
+                 <a href="#">Show Options</a></div>
+                 
+                 <div class="tooltip">
+                 <b>Define:</b><br/> 
+                 
+                 - Search scope <br/>
+                 - Geo-spatial constraints <br/>
+                 - Temporal properties <br/>
+                 
+                 </div>
+                <!--  
                 <div class="inline" id="showConstraints"><a href="#">Show Constraints</a></div>             
+                
+                <div class="tooltip">
+                 <b>Not implemented yet</b><br/>
+                 This is to show: <br/> 
+                 - facets contraints <br/>
+                 - Geo-spatial constraints <br/>
+                 - Temporal constraints <br/>
+                 </div>
+                -->
+                
                 <div class="inline" id="showReset"><a href="#">Reset</a></div>             
-
+                <div class="tooltip">
+                Clear all current search
+                constraints. 
+                </div>
             </td>
         </tr>
 		
@@ -68,6 +92,12 @@
     <div id="mapPane" style="display:none">
     
     <div id="map_canvas"> </div>
+    <div class="tooltip">
+    <b>Tips:</b> <br/>
+    - Mouse click to pin a marker. <br/>
+    - Enter address to pin a marker <br/>
+    - Drag marker on the map. <br/>
+    </div>
     
     <div id="map_info"> 
 

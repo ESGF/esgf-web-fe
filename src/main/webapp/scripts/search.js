@@ -49,7 +49,24 @@ $(document).ready(function(){
 	 */
 	
 	$("#showOptions").tooltip({effect: 'fade', delay: 0});
-	$("#showReset").tooltip({effect: 'fade', delay: 0});
-	
+	$("#showReset").tooltip({effect: 'fade', delay: 0});	
 	$("#map_canvas").tooltip({effect: 'fade', delay: 0});
+	
+	/**
+	 * Set up growl 
+	 */
+	$.jGrowl.defaults.position = 'bottom-right';
+	$.jGrowl("Note: This is a demo version of Geo-spatial search." +
+			"You can define three different search constraints: " +
+			"(1) Facets/categories; (2) Geo-spatial information " +
+			"(3) Free text.", 
+			{
+				life: 15000,
+	    		animateOpen: {
+	    			height: 'show'
+	    		}
+	
+	});
+	
+	
 });

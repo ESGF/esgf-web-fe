@@ -96,7 +96,7 @@
     <b>Tips:</b> <br/>
     - Mouse click to pin a marker. <br/>
     - Enter address to pin a marker <br/>
-    - Drag marker on the map. </br>
+    - Drag marker on the map. <br/>
     </div>
     
     <div id="map_info"> 

@@ -20,6 +20,9 @@
 
     <link rel="stylesheet" href="<c:url value="/styles/jquery.jgrowl.css" />" 
         type="text/css" media="screen, projection">
+
+    <link rel="stylesheet" href="<c:url value="/styles/jgrowl-theme.css" />" 
+        type="text/css" media="screen, projection">
         
     <link rel="stylesheet" href="<c:url value="/styles/plain.css" />" 
         type="text/css" media="screen, projection">

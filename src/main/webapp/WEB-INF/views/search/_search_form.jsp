@@ -41,7 +41,7 @@
                  <a href="#">Show Options</a></div>
                  
                  <div class="tooltip">
-                 <b>Define:</b><br/> 
+                 <b>Define:</b><p class="legend" />
                  
                  - Search scope <br/>
                  - Geo-spatial constraints <br/>
@@ -93,8 +93,8 @@
     
     <div id="map_canvas"> </div>
     <div class="tooltip">
-    <b>Tips:</b> <br/>
-    - Mouse click to pin a marker. <br/>
+    <p class="legend"> Tips </p>
+    - Click mouse to pin a marker. <br/>
     - Enter address to pin a marker <br/>
     - Drag marker on the map. <br/>
     </div>

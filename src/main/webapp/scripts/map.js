@@ -77,7 +77,7 @@ $(document).ready(function(){
 			return marker;
 			
 		} else {
-			alert("Max markers reached, please clear markers first!")
+			jMsg("warn", "Max markers reached, please clear markers first!", 5000);
 			return null;
 		}
 		
@@ -366,7 +366,7 @@ $(document).ready(function(){
 		if ($("input[name='areaGroup']:checked").val() == 'square') {
 			
 			if (num_of_markers < 2) {
-				alert("Please define at least two markers!");
+				jMsg("warn", "Please define at least two markers!", 5000);
 				$(this).attr('checked', false);
 				return false;
 			}

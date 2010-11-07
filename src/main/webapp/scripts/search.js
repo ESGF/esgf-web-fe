@@ -48,7 +48,7 @@ $(document).ready(function(){
 	 * Set up tool tip
 	 */
 	
-	$("#showOptions").tooltip({effect: 'fade', delay: 0});
+	//$("#showOptions").tooltip({effect: 'fade', delay: 0});
 	$("#showReset").tooltip({effect: 'fade', delay: 0});	
 	$("#map_canvas").tooltip({effect: 'fade', delay: 0});
 	
@@ -56,17 +56,61 @@ $(document).ready(function(){
 	 * Set up growl 
 	 */
 	$.jGrowl.defaults.position = 'bottom-right';
-	$.jGrowl("Note: This is a demo version of Geo-spatial search." +
-			"You can define three different search constraints: " +
-			"(1) Facets/categories; (2) Geo-spatial information " +
-			"(3) Free text.", 
-			{
-				life: 15000,
-	    		animateOpen: {
-	    			height: 'show'
-	    		}
+	jMsg("info", "This is a demo version of Geo-spatial search." +
+	"You can define three different search constraints: " +
+	"(1) Facets/categories; (2) Geo-spatial information " +
+	"(3) Free text.", 15000);
+
 	
-	});
+//	$.jGrowl("Note: This is a demo version of Geo-spatial search." +
+//			"You can define three different search constraints: " +
+//			"(1) Facets/categories; (2) Geo-spatial information " +
+//			"(3) Free text.", 
+//			{
+//				life: 15000,
+//	    		animateOpen: {
+//	    			height: 'show'
+//	    		}
+//	
+//	});
 	
 	
 });
+
+function jMsg(msgtype, message, duration) {
+	switch(msgtype) {
+	case 'info':
+		var theText = '<img src="images/info32.png" class="img-thumb"/>' +
+			'<span class="separator">&nbsp;</span>' +
+			message;
+		
+		// this can be merged, necessary only if we want to 
+		// have different styles based on message type.
+		$.jGrowl(theText, {
+			theme: 'themed',
+			life: duration,
+			animateOpen: {
+				height: 'show'
+			}
+		});
+		
+		break;
+	case 'warn':
+		var theText = '<img src="images/warning32.png" class="img-thumb"/>' +
+		'<span class="separator">&nbsp;</span>' +
+		message;
+	
+		// this can be merged, necessary only if we want to 
+		// have different styles based on message type.
+		$.jGrowl(theText, {
+			theme: 'themed',
+		life: duration,
+		animateOpen: {
+			height: 'show'
+			}
+		});
+		
+		
+	}
+	
+}

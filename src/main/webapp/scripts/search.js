@@ -59,7 +59,7 @@ $(document).ready(function(){
 	jMsg("info", "This is a demo version of Geo-spatial search." +
 	"You can define three different search constraints: " +
 	"(1) Facets/categories; (2) Geo-spatial information " +
-	"(3) Free text.", 15000);
+	"(3) Free text.", 5000);
 
 	
 //	$.jGrowl("Note: This is a demo version of Geo-spatial search." +

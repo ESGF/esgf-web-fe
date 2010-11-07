@@ -33,11 +33,12 @@ $(function() {
         
         // live event 
         // handle clicks on "project", "model" etc.
+        
         $('ul.menu > li > a').live('click', function(e) {
         	e.stopImmediatePropagation();
         	$(this).toggleClass('active');
     		
-        	$(this).siblings().find("li").toggle();
+        	$(this).siblings().find("li").slideToggle('fast');
     		
         	if ($(this).siblings().is(':hidden')) {
         		$(this).siblings().slideToggle('fast');

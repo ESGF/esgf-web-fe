@@ -106,7 +106,7 @@ Builds the project via ant (obviously).
     <echo message="Initializing build environment..."/>
         
     <!-- defaults to use if local .${module}.ant.properties file does not exist --> 
-    <property name="src_dir"   	          value="${basedir}/src/java/main"/>
+    <property name="src_dir"   	          value="${basedir}/src/main/java"/>
     <property name="lib_dir"   	          value="${basedir}/lib"/>
     <property name="lib_fetched_dir"      value="${basedir}/lib/fetched"/>
     <property name="build_dir"   	  value="${basedir}/build"/>

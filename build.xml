@@ -109,14 +109,14 @@ Builds the project via ant (obviously).
     <property name="src_dir"   	          value="${basedir}/src/main/java"/>
     <property name="lib_dir"   	          value="${basedir}/lib"/>
     <property name="lib_fetched_dir"      value="${basedir}/lib/fetched"/>
-    <property name="build_dir"   	  value="${basedir}/build"/>
-    <property name="dist_dir"   	  value="${basedir}/dist"/>
-    <property name="test_src_dir"  	  value="${basedir}/src/java/test"/>
+    <property name="build_dir"   	        value="${basedir}/build"/>
+    <property name="dist_dir"   	        value="${basedir}/dist"/>
+    <property name="test_src_dir"  	      value="${basedir}/src/java/test"/>
     <property name="test_build_dir"       value="${basedir}/build/test"/>
     <property name="test_build_dir_inst"  value="${basedir}/build/test-instrumented" />
     <property name="etc_dir"   	          value="${basedir}/etc"/>
-    <property name="conf_dir"   	  value="${etc_dir}/conf"/>
-    <property name="web_dir"   	          value="${basedir}/web"/>
+    <property name="conf_dir"   	        value="${etc_dir}/conf"/>
+    <property name="web_dir"   	          value="${basedir}/src/main/webapp"/>
     <property name="doc_dir"   	          value="${basedir}/docs"/>
     <property name="depcache_dir"     	  value="${java.io.tmpdir}/${module}/depcache"/>
     <property name="log_config"       	  value="${conf_dir}/log4j.properties"/>
@@ -125,7 +125,7 @@ Builds the project via ant (obviously).
     <property name="main_class"           value="esgf.xxx.core.Main"/>
 
     <property name="doc_dir_generated"    value="${basedir}/docs-generated"/>
-    <property name="jdoc_dir"   	  value="${doc_dir_generated}/javadocs"/>
+    <property name="jdoc_dir"   	        value="${doc_dir_generated}/javadocs"/>
     <property name="test_results_dir"     value="${doc_dir_generated}/test-results"/>
     <property name="test_reports_dir"     value="${doc_dir_generated}/test-reports"/>
     <property name="test_coverage_dir"    value="${doc_dir_generated}/coverage-reports" />
@@ -385,12 +385,14 @@ Builds the project via ant (obviously).
     <mkdir dir="${dist_dir}/tmplib"/>
     
     <copy todir="${dist_dir}/tmplib" overwrite="true" flatten="yes">
-      <fileset dir="${lib_dir}" includes="**/*.jar" excludes="servlet-api*.jar,**/junit*.jar,**/*sources.jar,**/*javadoc.jar"/>
+      <fileset dir="${lib_dir}" includes="**/*.jar" 
+          excludes="servlet-api*.jar,**/junit*.jar,**/*sources.jar,**/*javadoc.jar"/>
     </copy>
     
     <delete file="${dist_dir}/${module}.war"/>
-    <war destfile="${dist_dir}/${module}.war" webxml="${conf_dir}/${module}-web.xml">
-      <fileset dir="${web_dir}" excludes="WEB-INF/**/web.xml/**,**semantic.cache**"/>
+      
+    <war destfile="${dist_dir}/${module}.war">
+      <fileset dir="${web_dir}" excludes="**semantic.cache**"/>
       <lib dir="${dist_dir}/tmplib">
 	<include name="**/*.jar"/>
 	<exclude name="**/*-test*.jar,**/*-common*.jar"/>

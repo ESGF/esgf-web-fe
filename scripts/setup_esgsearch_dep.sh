@@ -8,7 +8,7 @@ fi
 mvn install:install-file \
     -DgroupId=org.esgf.search \
     -DartifactId=org.esgf.search \
-    -Dversion=1.0 -Dpackaging=jar \
+    -Dversion=1.0.0.1 -Dpackaging=jar \
     -Dfile=$1
 
 echo "Search jar installed"

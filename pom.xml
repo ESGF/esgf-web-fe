@@ -123,7 +123,7 @@
         <dependency>
         <groupId> org.esgf.search</groupId>
         <artifactId> org.esgf.search </artifactId>
-        <version> 1.0 </version>
+        <version> 1.0.0.1 </version>
         </dependency> 
         
         <!-- Lucene spatial package -->

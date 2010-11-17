@@ -389,6 +389,15 @@ Builds the project via ant (obviously).
           excludes="servlet-api*.jar,**/junit*.jar,**/*sources.jar,**/*javadoc.jar"/>
     </copy>
     
+  	<!-- views.properties bug resolved here
+  	     Note: I'm not sure where this should go at the present time
+  	     Probably should make a cosmetic change later
+  	-->
+  	<copy todir="${build_dir}" overwrite="true" >
+  	  <fileset dir="${src_dir}/../resources" />	
+  	</copy>
+  	<!-- end views.properties bug-->
+  	
     <delete file="${dist_dir}/${module}.war"/>
       
     <war destfile="${dist_dir}/${module}.war">

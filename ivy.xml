@@ -171,6 +171,8 @@ Note: Check Maven for propery dependency parameter values @
     <dependency org="org.apache.velocity" name="velocity-tools" 
       rev="2.0" transitive="false"/>
     
+    <dependency org="javax.servlet" name="servlet-api" 
+      rev="2.5" transitive="false" />
     <!--
     
     --><!--

@@ -188,7 +188,6 @@ public class SearchController {
 		}
 		
 		
-		LOG.debug("End formBackingObject()\n");
 		
 		
 		return input;
@@ -212,34 +211,26 @@ public class SearchController {
 		// set retrieval of all facets in profile
 		input.setFacets(new ArrayList<String>(facetProfile.getTopLevelFacets().keySet()));
 	
-		/* STANDARD QUERY HERE*/
-		
-		
 		// execute query for results and facets
 		SearchOutput output = searchService.search(input, true, true);
 			
-		LOG.debug("\tOUTPUT RECORDS SIZE (PRIOR TO RADIUS FILTERING): " + output.getResults().size());
-
-		LOG.debug("\nCalling the post query processor\n");
-		
 		//create a post query processor object
-		PostQueryProcessor pqp = new PostQueryProcessor(searchService,
+		PostQueryManager pqManager = new PostQueryManager(searchService,
 				  										facetProfile,
 				  										request,
 				  										input,
 				  										output);
 		
-		//output = pqp.getOutput();
 		
-		//pqp.processCentroidFilter();
 		
+		//if the whichGeo flag is switched to Radius, we must perform post-query processing 
+		//here the centroid filter is called
 		String [] parValues = request.getParameterValues("whichGeo");
 		if(parValues[0].equals("Radius"))
 		{
-			pqp.processCentroidFilter();
+			pqManager.processCentroidFilter();
 		}
 		
-		LOG.debug("\nEnd Calling the post query processor\n");
 		
 		
 		// populate model
@@ -247,7 +238,6 @@ public class SearchController {
 		model.addAttribute(FACET_PROFILE, facetProfile);
 		model.addAttribute(SEARCH_INPUT, input);
 		
-		LOG.debug("End doSearchResults()\n");
 		
 		return "search_results";
 	}
@@ -282,7 +272,6 @@ public class SearchController {
 		
 
 		
-		LOG.debug("End doSearchFacets()\n");
 		
 		
 		
@@ -336,7 +325,6 @@ public class SearchController {
 			request.getSession().setAttribute(SEARCH_MODEL, model);			
 		}
 
-		LOG.debug("End doGET()\n");
 		
 		return new ModelAndView("search", model);
 	}

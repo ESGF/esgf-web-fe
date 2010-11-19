@@ -23,7 +23,7 @@ import esg.search.query.impl.solr.SearchInputImpl;
 
 import org.apache.log4j.*;
 
-public class PostQueryProcessor {
+public class PostQueryManager{
 
 	private SearchOutput newOutput;
 	
@@ -35,9 +35,9 @@ public class PostQueryProcessor {
 	private SearchOutput output;
 	
 
-    private final static Logger LOG = Logger.getLogger(PostQueryProcessor.class);
+    private final static Logger LOG = Logger.getLogger(PostQueryManager.class);
 	
-	public PostQueryProcessor(SearchService searchService,
+	public PostQueryManager(SearchService searchService,
 							  FacetProfile facetProfile,
 							  HttpServletRequest request,
 							  SearchInputImpl input,

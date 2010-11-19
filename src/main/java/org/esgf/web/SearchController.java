@@ -188,6 +188,8 @@ public class SearchController {
 		}
 		
 		
+		LOG.debug("End formBackingObject()\n");
+		
 		
 		return input;
 		
@@ -210,37 +212,36 @@ public class SearchController {
 		// set retrieval of all facets in profile
 		input.setFacets(new ArrayList<String>(facetProfile.getTopLevelFacets().keySet()));
 	
+		/* STANDARD QUERY HERE*/
+		
+		
 		// execute query for results and facets
 		SearchOutput output = searchService.search(input, true, true);
 			
 		LOG.debug("\tOUTPUT RECORDS SIZE (PRIOR TO RADIUS FILTERING): " + output.getResults().size());
 
+		LOG.debug("\nCalling the post query processor\n");
 		
-		String [] parValues = request.getParameterValues("whichGeo");
-		for (final String parValue : parValues) 
-		{
-			//if radius is selected then further filtering is needed
-			if(parValue.equals("Radius"))
-			{
-				SearchOutput filteredRadiusRecords = filterByRadius(request,output);
-				output = filteredRadiusRecords;
-				LOG.debug("RADIUS search");
-			}
-			else
-			{
-				LOG.debug("BOUNDINGBOX search");
-			}
-		}
+		//create a post query processor object
+		PostQueryProcessor pqp = new PostQueryProcessor(searchService,
+				  										facetProfile,
+				  										request,
+				  										input,
+				  										output);
 		
-
-		LOG.debug("\tOUTPUT RECORDS SIZE: " + output.getResults().size());
-
-		//output.setCounts(output.getResults().size());
+		output = pqp.getOutput();
+		
+		pqp.processCentroidFilter();
+		
+		LOG.debug("\nEnd Calling the post query processor\n");
+		
 		
 		// populate model
 		model.addAttribute(SEARCH_OUTPUT, output);
 		model.addAttribute(FACET_PROFILE, facetProfile);
 		model.addAttribute(SEARCH_INPUT, input);
+		
+		LOG.debug("End doSearchResults()\n");
 		
 		return "search_results";
 	}
@@ -275,6 +276,7 @@ public class SearchController {
 		
 
 		
+		LOG.debug("End doSearchFacets()\n");
 		
 		
 		
@@ -301,6 +303,9 @@ public class SearchController {
 			final @ModelAttribute(SEARCH_INPUT) SearchInputImpl input, 
 			final BindingResult result) throws Exception {
 
+		LOG.debug("doGET() called");
+		
+		
 		Map<String,Object> model = new HashMap<String,Object>();
 		
 		if (request.getParameter(SEARCH_MODEL)!=null) {
@@ -325,6 +330,8 @@ public class SearchController {
 			request.getSession().setAttribute(SEARCH_MODEL, model);			
 		}
 
+		LOG.debug("End doGET()\n");
+		
 		return new ModelAndView("search", model);
 	}
 	
@@ -381,146 +388,16 @@ public class SearchController {
 			request.getSession().setAttribute(SEARCH_MODEL, model);
 		
 		}
+		
+		LOG.debug("End doGET()\n");
+		
+		
 		// use POST-REDIRECT-GET pattern with additional parameter "?search_model"
 		//final String url = request.getRequestURL().toString();
 		//return new ModelAndView(new RedirectView(url)).addObject(SEARCH_MODEL,"true");
 		return "redirect:/search?search_model=true";
 	}
 
-	
-	private SearchOutput filterByRadius(final HttpServletRequest request,SearchOutput output)
-	{
-		//find the center of the search using the lucene - right now manually find
-		double centerLat = 0;
-		double centerLong = 0;
-		
-		double eastDegreeValue = 0;
-		double westDegreeValue = 0; 
-		double southDegreeValue = 0; 
-		double northDegreeValue = 0; 
-			
-		
-		
-		if(request.getParameterValues("east_degrees")!=null &&
-		   request.getParameterValues("west_degrees")!=null &&
-		   request.getParameterValues("north_degrees")!=null &&
-		   request.getParameterValues("south_degrees")!=null)
-		{
-			String [] parValues = request.getParameterValues("east_degrees");
-			
-			for (final String parValue : parValues) {
-				if (StringUtils.hasText(parValue)) {
-					eastDegreeValue = Double.parseDouble(parValue);
-				}
-			}
-			
-			parValues = request.getParameterValues("west_degrees");
-			
-			for (final String parValue : parValues) {
-				if (StringUtils.hasText(parValue)) {
-					westDegreeValue = Double.parseDouble(parValue);
-				}
-			}	
-			
-			parValues = request.getParameterValues("north_degrees");
-			
-			for (final String parValue : parValues) {
-				if (StringUtils.hasText(parValue)) {
-					northDegreeValue = Double.parseDouble(parValue);
-				}
-			}
-			
-			parValues = request.getParameterValues("south_degrees");
-			
-			for (final String parValue : parValues) {
-				if (StringUtils.hasText(parValue)) {
-					southDegreeValue = Double.parseDouble(parValue);
-				}
-			}
-			
-			
-		}
-		
-		
-		LatLng nePoint = new FloatLatLng(northDegreeValue,eastDegreeValue);
-		LatLng swPoint = new FloatLatLng(southDegreeValue,westDegreeValue);
-		
-		LLRect boundedRect = new LLRect(swPoint,nePoint);
-		
-		LatLng center = boundedRect.getMidpoint();
-		
-		centerLat = center.getLat();
-		centerLong = center.getLng();
-		
-		LatLng sePoint = new FloatLatLng(southDegreeValue,eastDegreeValue);
-		LatLng midSPoint = sePoint.calculateMidpoint(swPoint);
-		
-		double radius = midSPoint.arcDistance(center, DistanceUnits.KILOMETERS);
-		
-		List<Record> deletedRecords = new ArrayList<Record>();
-		
-		
-		for(int i=0;i<output.getResults().size();i++)
-		{
-			Record record = output.getResults().get(i);
-			
-			
-			//check if it is within radius
-			if(!isInRange(record,centerLat,centerLong,radius))
-			{
-				deletedRecords.add(record);
-			}
-		}
-		
-		for(int i=0;i<deletedRecords.size();i++)
-		{
-			Record record = deletedRecords.get(i);
-			output.removeResult(record);
-		}
-		
-		
-		return output;
-	}
-	
-	private boolean isInRange(Record record,double centerLat,double centerLong,double radius)
-	{
-		boolean isInRange = true;
-		
-		Map<String, List<String>> fields = record.getFields();
-		double record_wd = Double.parseDouble(fields.get("west_degrees").get(0));
-		double record_ed = Double.parseDouble(fields.get("east_degrees").get(0));
-		double record_nd = Double.parseDouble(fields.get("north_degrees").get(0));
-		double record_sd = Double.parseDouble(fields.get("south_degrees").get(0));
-		
-		//use lucene methods here to determine if it is within range
-		//note: this is an ALL INCLUSIVE search so all degrees must be within the range
-		//find the distances between center and the record's extreme geospatial info
-		LatLng center = new FloatLatLng(centerLat,centerLong);
-		
-		LatLng pointSW = new FloatLatLng(record_sd,record_wd);
-		double pointSWDist = center.arcDistance(pointSW, DistanceUnits.KILOMETERS);
-		LatLng pointNE = new FloatLatLng(record_nd,record_ed);
-		double pointNEDist = center.arcDistance(pointNE, DistanceUnits.KILOMETERS);
-		LatLng pointNW = new FloatLatLng(record_nd,record_wd);
-		double pointNWDist = center.arcDistance(pointNW, DistanceUnits.KILOMETERS);
-		LatLng pointSE = new FloatLatLng(record_sd,record_ed);
-		double pointSEDist = center.arcDistance(pointSE, DistanceUnits.KILOMETERS);
-		
-		
-		//Note: Test for all extreme points (may be superfluous...revisit)
-		if(pointSWDist > radius || 
-		   pointSEDist > radius ||
-		   pointNWDist > radius ||
-		   pointNEDist > radius)
-		{
-			isInRange = false;
-		}
-		
-		
-		return isInRange; 
-	}
-	
-	
 	
 	
 	public static boolean isNotValid(final String text) {

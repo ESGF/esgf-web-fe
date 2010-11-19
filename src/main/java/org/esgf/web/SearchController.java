@@ -229,9 +229,15 @@ public class SearchController {
 				  										input,
 				  										output);
 		
-		output = pqp.getOutput();
+		//output = pqp.getOutput();
 		
-		pqp.processCentroidFilter();
+		//pqp.processCentroidFilter();
+		
+		String [] parValues = request.getParameterValues("whichGeo");
+		if(parValues[0].equals("Radius"))
+		{
+			pqp.processCentroidFilter();
+		}
 		
 		LOG.debug("\nEnd Calling the post query processor\n");
 		

@@ -27,6 +27,7 @@ public class PostQueryProcessor {
 
 	private SearchOutput newOutput;
 	
+	//old parameters
 	private SearchService searchService;
 	private FacetProfile facetProfile;
 	private HttpServletRequest request;
@@ -48,126 +49,101 @@ public class PostQueryProcessor {
 		this.request = request;
 		this.input = input;
 		this.output = output;
-		
+		this.newOutput = output;
 		
 	}
 	
 	public void processCentroidFilter() throws Exception
 	{
 		
-		//first we must check if the whichGeoFlag is true
-		String [] parValues = request.getParameterValues("whichGeo");
-		for (final String parValue : parValues) 
+		LOG.debug("RADIUS search");
+		
+		int originalLimit = input.getLimit();
+		int originalOffset = input.getOffset();
+		
+		
+		//first expunge ALL old records in output
+		//to be replaced by new records retrieved
+		List<Record> removedRecords = new ArrayList<Record>();
+		LOG.debug("\t\tRECORDS SIZE " + output.getResults().size());
+		for(int i=0;i<output.getResults().size();i++)
 		{
-			//if radius is selected then further filtering is needed
-			if(parValue.equals("Radius"))
-			{
-				SearchOutput filteredRadiusRecords = PostQueryProcessor.filterByRadius(request,output);
-				newOutput = filteredRadiusRecords;
-				LOG.debug("RADIUS search");
-			}
-			else
-			{
-				LOG.debug("BOUNDINGBOX search");
-			}
+			Record oldRecord = output.getResults().get(i);
+			removedRecords.add(oldRecord);
 		}
 		
-		/*
-		 * BEGIN POSTQUERY PROCESSING 
-		 */
-		
-		// get the counts
-		int oldCounts = output.getCounts();
-		int oldOffset = output.getOffset();
-		
-		LOG.debug("\tOLDCOUNTS: " + oldCounts);
-		LOG.debug("\tOLDOFFSET: " + oldOffset);
-		
-
-		// POST QUERY PROCESSING 
+		for(int i=0;i<removedRecords.size();i++)
+		{
+			output.removeResult(removedRecords.get(i));
+		}
+		//end expunge
 		
 		
-		//Step 1 - get ALL records (for the counts)
-		
-		//set the limit to be the max
-		input.setLimit(oldCounts);
-		LOG.debug("\tSetting limit to " + oldCounts);
-		
-		
-		//set the offset to 0
+		//second get ALL possible results
+		input.setLimit(output.getCounts());
 		input.setOffset(0);
-		LOG.debug("\tSetting offset to " + 0);
+		
+		SearchOutput totalOutput = searchService.search(input, true, true);
+		
+		int offset = input.getOffset();
+		
+		int recordIndex = 0;
+		
+		List<Record> returnedRecords = new ArrayList<Record>();
+		
+		int addedRecords = 0;
 		
 		
+		LatLng center = getCenter();
+		double radius = getRadius();
 		
-		SearchOutput duplicateOutput = searchService.search(input, true, true);
-		
-		parValues = new String[parValues.length];
-		parValues = request.getParameterValues("whichGeo");
-		for (final String parValue : parValues) 
+		//while(!limitReached)
+		for(int i=0;i<totalOutput.getResults().size();i++)
 		{
-			//if radius is selected then further filtering is needed
-			if(parValue.equals("Radius"))
+			//extract next record
+			Record record = totalOutput.getResults().get(i);
+			
+			//do the check for here
+			//if()
+			if(isInRange(record,center.getLat(),center.getLng(),radius))
 			{
-				SearchOutput filteredRadiusRecords = PostQueryProcessor.filterByRadius(request,duplicateOutput);
-				duplicateOutput = filteredRadiusRecords;
-				LOG.debug("RADIUS search");
+				LOG.debug("\tRecord: " + i + " In geo range");
+				
+				LOG.debug("\tChecking if it is in range..." + offset + " TO " + (offset+originalLimit));
+				LOG.debug("\taddedRecords:  " + addedRecords);
+				
+				if(addedRecords >= originalOffset && addedRecords < (originalOffset+originalLimit))
+				{
+					LOG.debug("\tADDING");
+					returnedRecords.add(record);
+				}
+				addedRecords++;
 			}
-			else
-			{
-				LOG.debug("BOUNDINGBOX search");
-			}
+			
+		}
+		
+
+		LOG.debug("\tUPDATING COUNTS to " + addedRecords);
+		
+		output.setCounts(addedRecords);
+		
+		
+		//add new records
+		for(int i=0;i<returnedRecords.size();i++)
+		{
+			Record record = returnedRecords.get(i);
+			output.addResult(record);
 		}
 		
 		
-		int totalCounts = duplicateOutput.getResults().size();
-		LOG.debug("\tTOTAL COUNTS AFTER FILTER: " + totalCounts);
-		output.setCounts(totalCounts);
+		
+		//reset the limit
+		input.setLimit(originalLimit);
+		
+		//reste the offset
+		input.setOffset(originalOffset);
 		
 		
-		
-		//reset the limit here
-		input.setLimit(10);
-		LOG.debug("\tResetting limit to " + 10);
-		
-		//reset the offset to oldOffset
-		input.setOffset(oldOffset);
-		LOG.debug("\tResetting offset to " + oldOffset);
-		
-		
-		//end step 1
-		
-		
-		//step 2 - need to adjust for pagination
-		
-		/*
-		//get the remaining results if there are less than 10
-		int limitNum = input.getLimit();
-		LOG.debug("\tSTARTING the logic for the remaining results...");
-		LOG.debug("\tLimitnum: : " + limitNum);
-		int numRecordsRetrieved = output.getResults().size();
-		LOG.debug("\tNumber of records: " + numRecordsRetrieved);
-		
-		int diffNumRecordsLimit = limitNum - numRecordsRetrieved;
-		
-		LOG.debug("\t\tLooping until there is a valid record");
-		
-		LOG.debug("\t\tInitially Setting the offset to numRecordsRetrieved");
-		output.setOffset(numRecordsRetrieved);
-		
-		
-		//reset the offset to (oldOffset + numRecords in the loop) 
-		input.setOffset(oldOffset);
-		
-		
-		
-		// Get the real counts here
-		
-
-		//LOG.debug("\tOUTPUT RECORDS SIZE: " + output.getResults().size());
-
-		//output.setCounts(output.getResults().size());
-		*/
 		
 	}
 	
@@ -175,6 +151,156 @@ public class PostQueryProcessor {
 	{
 		return this.output;
 	}
+	
+	
+	
+	/* Helper methods for the centroid filter 
+	 * 
+	 * May refactor these by putting them into static methods in some common utils type class 
+	 * 
+	 */
+	
+	
+	
+	private double getRadius()
+	{
+		double radius = 0;
+		
+		//find the center of the search using the lucene - right now manually find
+		double centerLat = 0;
+		double centerLong = 0;
+		
+		double eastDegreeValue = 0;
+		double westDegreeValue = 0; 
+		double southDegreeValue = 0; 
+		double northDegreeValue = 0; 
+			
+		
+		
+		if(request.getParameterValues("east_degrees")!=null &&
+		   request.getParameterValues("west_degrees")!=null &&
+		   request.getParameterValues("north_degrees")!=null &&
+		   request.getParameterValues("south_degrees")!=null)
+		{
+			String [] parValues = request.getParameterValues("east_degrees");
+			
+			for (final String parValue : parValues) {
+				if (StringUtils.hasText(parValue)) {
+					eastDegreeValue = Double.parseDouble(parValue);
+				}
+			}
+			
+			parValues = request.getParameterValues("west_degrees");
+			
+			for (final String parValue : parValues) {
+				if (StringUtils.hasText(parValue)) {
+					westDegreeValue = Double.parseDouble(parValue);
+				}
+			}	
+			
+			parValues = request.getParameterValues("north_degrees");
+			
+			for (final String parValue : parValues) {
+				if (StringUtils.hasText(parValue)) {
+					northDegreeValue = Double.parseDouble(parValue);
+				}
+			}
+			
+			parValues = request.getParameterValues("south_degrees");
+			
+			for (final String parValue : parValues) {
+				if (StringUtils.hasText(parValue)) {
+					southDegreeValue = Double.parseDouble(parValue);
+				}
+			}
+			
+			
+		}
+		
+		
+		LatLng nePoint = new FloatLatLng(northDegreeValue,eastDegreeValue);
+		LatLng swPoint = new FloatLatLng(southDegreeValue,westDegreeValue);
+		
+		LLRect boundedRect = new LLRect(swPoint,nePoint);
+		
+		LatLng center = boundedRect.getMidpoint();
+		
+		centerLat = center.getLat();
+		centerLong = center.getLng();
+		
+		LatLng sePoint = new FloatLatLng(southDegreeValue,eastDegreeValue);
+		LatLng midSPoint = sePoint.calculateMidpoint(swPoint);
+		
+		radius = midSPoint.arcDistance(center, DistanceUnits.KILOMETERS);
+		
+		
+		return radius;
+	}
+	
+	private LatLng getCenter()
+	{
+		LatLng center = null;
+		
+		//find the center of the search using the lucene - right now manually find
+		double centerLat = 0;
+		double centerLong = 0;
+		
+		double eastDegreeValue = 0;
+		double westDegreeValue = 0; 
+		double southDegreeValue = 0; 
+		double northDegreeValue = 0; 
+			
+		if(request.getParameterValues("east_degrees")!=null &&
+		   request.getParameterValues("west_degrees")!=null &&
+		   request.getParameterValues("north_degrees")!=null &&
+		   request.getParameterValues("south_degrees")!=null)
+		{
+			String [] parValues = request.getParameterValues("east_degrees");
+			
+			for (final String parValue : parValues) {
+				if (StringUtils.hasText(parValue)) {
+					eastDegreeValue = Double.parseDouble(parValue);
+				}
+			}
+			
+			parValues = request.getParameterValues("west_degrees");
+			
+			for (final String parValue : parValues) {
+				if (StringUtils.hasText(parValue)) {
+					westDegreeValue = Double.parseDouble(parValue);
+				}
+			}	
+			
+			parValues = request.getParameterValues("north_degrees");
+			
+			for (final String parValue : parValues) {
+				if (StringUtils.hasText(parValue)) {
+					northDegreeValue = Double.parseDouble(parValue);
+				}
+			}
+			
+			parValues = request.getParameterValues("south_degrees");
+			
+			for (final String parValue : parValues) {
+				if (StringUtils.hasText(parValue)) {
+					southDegreeValue = Double.parseDouble(parValue);
+				}
+			}
+			
+			
+		}
+		
+		LatLng nePoint = new FloatLatLng(northDegreeValue,eastDegreeValue);
+		LatLng swPoint = new FloatLatLng(southDegreeValue,westDegreeValue);
+		
+		LLRect boundedRect = new LLRect(swPoint,nePoint);
+		
+		center = boundedRect.getMidpoint();
+		
+		return center;
+	}
+	
+	
 	
 	
 	private static SearchOutput filterByRadius(final HttpServletRequest request,SearchOutput output)

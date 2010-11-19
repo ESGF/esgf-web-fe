@@ -177,7 +177,7 @@ public class PostQueryProcessor {
 	}
 	
 	
-	public static SearchOutput filterByRadius(final HttpServletRequest request,SearchOutput output)
+	private static SearchOutput filterByRadius(final HttpServletRequest request,SearchOutput output)
 	{
 		//find the center of the search using the lucene - right now manually find
 		double centerLat = 0;
@@ -271,7 +271,7 @@ public class PostQueryProcessor {
 		return output;
 	}
 	
-	public static boolean isInRange(Record record,double centerLat,double centerLong,double radius)
+	private static boolean isInRange(Record record,double centerLat,double centerLong,double radius)
 	{
 		boolean isInRange = true;
 		

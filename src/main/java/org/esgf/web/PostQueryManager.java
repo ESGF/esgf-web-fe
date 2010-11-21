@@ -65,7 +65,7 @@ public class PostQueryManager{
 		//first expunge ALL old records in output
 		//to be replaced by new records retrieved
 		List<Record> removedRecords = new ArrayList<Record>();
-		LOG.debug("\t\tRECORDS SIZE " + output.getResults().size());
+		//LOG.debug("\t\tRECORDS SIZE " + output.getResults().size());
 		for(int i=0;i<output.getResults().size();i++)
 		{
 			Record oldRecord = output.getResults().get(i);
@@ -107,14 +107,13 @@ public class PostQueryManager{
 			//if()
 			if(isInRange(record,center.getLat(),center.getLng(),radius))
 			{
-				LOG.debug("\tRecord: " + i + " In geo range");
-				
-				LOG.debug("\tChecking if it is in range..." + offset + " TO " + (offset+originalLimit));
-				LOG.debug("\taddedRecords:  " + addedRecords);
+				//LOG.debug("\tRecord: " + i + " In geo range");
+				//LOG.debug("\tChecking if it is in range..." + offset + " TO " + (offset+originalLimit));
+				//LOG.debug("\taddedRecords:  " + addedRecords);
 				
 				if(addedRecords >= originalOffset && addedRecords < (originalOffset+originalLimit))
 				{
-					LOG.debug("\tADDING");
+					//LOG.debug("\tADDING");
 					returnedRecords.add(record);
 				}
 				addedRecords++;
@@ -123,7 +122,7 @@ public class PostQueryManager{
 		}
 		
 
-		LOG.debug("\tUPDATING COUNTS to " + addedRecords);
+		//LOG.debug("\tUPDATING COUNTS to " + addedRecords);
 		
 		output.setCounts(addedRecords);
 		
@@ -154,13 +153,16 @@ public class PostQueryManager{
 	
 	
 	
+	
+	
+	
+	
+	
 	/* Helper methods for the centroid filter 
 	 * 
 	 * May refactor these by putting them into static methods in some common utils type class 
 	 * 
 	 */
-	
-	
 	
 	private double getRadius()
 	{

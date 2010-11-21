@@ -140,16 +140,16 @@
     </p>
     
      <input type="hidden" 
-            name="west_degrees" value="-180"/>
+            name="west_degrees"/>
  		
      <input type="hidden" 
-            name="east_degrees" value="180"/>
+            name="east_degrees"/>
             
  	 <input type="hidden" 
-            name="south_degrees" value="-90"/>
+            name="south_degrees"/>
  		
      <input type="hidden" 
-            name="north_degrees" value="90"/>
+            name="north_degrees"/>
             
      <input type="hidden"
      		name="whichGeo" value="BoundingBox" /> 

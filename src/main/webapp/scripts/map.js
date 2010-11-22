@@ -361,6 +361,14 @@ $(document).ready(function(){
 		drawCircle(markerGroup[0], radius, quality);
 	}
 	
+	//this event will be taken out soon 
+	//right now it acts as a guard so that the user cannot perform and overlaps query with a radius search (unimplemented)
+	$("input[name='searchType']").change(function(e) {
+		var searchType = $("input[name='searchType']").val();
+		//alert("changing search type to " + searchType);
+		
+	});
+	
 	$("input[name='areaGroup']").change(function(e) {
 
 		if ($("input[name='areaGroup']:checked").val() == 'square') {

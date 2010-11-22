@@ -110,9 +110,10 @@ public class SearchController {
 	 * 
 	 * @param request
 	 * @return
+	 * @throws Exception 
 	 */
 	@ModelAttribute(SEARCH_INPUT)
-	public SearchInputImpl formBackingObject(final HttpServletRequest request) {
+	public SearchInputImpl formBackingObject(final HttpServletRequest request) throws Exception {
 		
 		LOG.debug("formBackingObject() called");
 		
@@ -121,6 +122,10 @@ public class SearchController {
 		final SearchInputImpl input = new SearchInputImpl();
 		
 
+		PreQueryManager pqm = new PreQueryManager(facetProfile,request,input);
+		
+		
+		
 		if(request.getParameterValues("searchType")!=null)
 		{
 			String [] parValues = request.getParameterValues("searchType");

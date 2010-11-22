@@ -10,9 +10,7 @@ import org.apache.lucene.spatial.geometry.DistanceUnits;
 import org.apache.lucene.spatial.geometry.FloatLatLng;
 import org.apache.lucene.spatial.geometry.LatLng;
 import org.apache.lucene.spatial.geometry.shape.LLRect;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 import esg.search.core.Record;
 import esg.search.query.api.FacetProfile;

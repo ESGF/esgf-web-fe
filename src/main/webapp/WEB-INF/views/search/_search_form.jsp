@@ -82,6 +82,9 @@
 			<input type="radio" name="modelGroup" value="all" Checked/> All
 		</div>
 	</div>
+	
+	
+	
 		
 	<div id="withMap"><label for="dataMap">Show Map: </label>
 	  <input type="checkbox" name="mapGroup" value="2dmap" /> 2D 
@@ -100,6 +103,15 @@
     </div>
     
     <div id="map_info"> 
+
+	<fieldset id="area1">
+    	<p class=legend> Search Type: </p>
+    
+	    <input type="radio" name="searchType" value="Encloses" checked /> Encloses 
+	    <input type="radio" name="searchType" value="Overlaps" /> Overlaps 
+       
+    </fieldset>
+
 
     <fieldset id="marker_fieldset">
     
@@ -139,6 +151,10 @@
     you will be asked for a radius and quality.
     </p>
     
+    
+    
+    
+    
      <input type="hidden" 
             name="west_degrees"/>
  		
@@ -153,11 +169,10 @@
             
      <input type="hidden"
      		name="whichGeo" value="BoundingBox" /> 
-            <!--
-    </form>    
-                        
-    -->
-    </div> <!--  #mapinfo -->
+           
+    </div> 
+    
+    <!--  #mapinfo -->
     
     </div> <!--  #mapPane -->
     

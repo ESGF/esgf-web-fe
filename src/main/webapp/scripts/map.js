@@ -407,12 +407,7 @@ $(document).ready(function(){
 
 	
 	
-	//not used...for now
-	function geosearch() {
-		var searchForm = document.getElementById("geo-form");
-		
-		searchForm.submit();
-	}
+	
 	
 	function setGeographicConstraint() {
 		

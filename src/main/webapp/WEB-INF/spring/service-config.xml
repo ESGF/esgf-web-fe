@@ -12,21 +12,7 @@
      http://www.springframework.org/schema/context/spring-context-3.0.xsd
      http://www.springframework.org/schema/mvc 
      http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
-     
-    <!-- Use Java Common Annotations: @Resource, @PostConstruct, @PreDestroy annotations -->
-    <bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor"/>
-    
-    <!-- Use Spring @Autowired, @Qualifier, @Value annotations -->
-    <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/> 
-    
-    <!-- Configurable properties -->
-	<bean id="searchPropertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="/WEB-INF/spring/application.properties" />
-	</bean>
-
-	<!-- search context -->
-	<context:component-scan base-package="esg.search.query"/>
-          
+              
      
 </beans>
      

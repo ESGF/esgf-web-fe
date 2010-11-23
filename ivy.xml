@@ -89,33 +89,33 @@ Note: Check Maven for propery dependency parameter values @
     <dependency org="org.mvel" name="mvel2" 
       rev="2.0.11" transitive="false" />
    
-    <dependency org="org.esgf" name="esg-search" rev="0.9.0" />
+    <dependency org="org.esgf" name="esg-search" rev="1.0.0.2" />
     
     <dependency org="org.slf4j" name="slf4j-api" rev="1.5.10"/>
     <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.10"/>
     
     <dependency org="org.springframework" name="spring-core" 
-      rev="3.0.3.RELEASE" transitive="false" />
+      rev="3.0.5.RELEASE" transitive="false" />
     <dependency org="org.springframework" name="spring-web" 
-      rev="3.0.3.RELEASE" transitive="false" />
+      rev="3.0.5.RELEASE" transitive="false" />
     <dependency org="org.springframework" name="spring-webmvc" 
-      rev="3.0.3.RELEASE" transitive="false" />
+      rev="3.0.5.RELEASE" transitive="false" />
     <dependency org="org.springframework" name="spring-beans" 
-      rev="3.0.3.RELEASE" transitive="false" />
+      rev="3.0.5.RELEASE" transitive="false" />
     <dependency org="org.springframework" name="spring-context" 
-      rev="3.0.3.RELEASE" transitive="false" />
+      rev="3.0.5.RELEASE" transitive="false" />
     <dependency org="org.springframework" name="spring-context-support" 
-      rev="3.0.3.RELEASE" transitive="false" />
+      rev="3.0.5.RELEASE" transitive="false" />
       <!--
     <dependency org="org.springframework" name="spring-tx" 
       rev="3.0.3.RELEASE" transitive="false" />
     -->
     <dependency org="org.springframework" name="spring-asm" 
-      rev="3.0.3.RELEASE" transitive="false" />
+      rev="3.0.5.RELEASE" transitive="false" />
     <dependency org="org.springframework" name="spring-aop" 
-      rev="3.0.3.RELEASE" transitive="false" />
+      rev="3.0.5.RELEASE" transitive="false" />
     <dependency org="org.springframework" name="spring-expression" 
-      rev="3.0.3.RELEASE" transitive="false" />
+      rev="3.0.5.RELEASE" transitive="false" />
     
     <dependency org="stax" name="stax-api" 
       rev="1.0.1" transitive="false" />

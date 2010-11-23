@@ -7,6 +7,7 @@
 
 
   <resolvers>
+  
     <url name="esgf" checksums="md5">
       <ivy pattern="${ivy.esgf.default.root.url}/[organisation]/[module]/[revision]/ivy-[revision].xml" />
       <artifact pattern="${ivy.esgf.default.root.url}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
@@ -14,13 +15,17 @@
       <artifact pattern="${ivy.esgf.default.root.url}/[organisation]/[module]/[revision]/[artifact].[ext]" />
     </url>
  
-    
+    <ibiblio name="artifactory" m2compatible="true" 
+    root="http://esg-gw.ornl.teragrid.org:8088/artifactory/libs-releases"/>
+  
     <ibiblio name="public" m2compatible="true"/>
-  </resolvers>
+   
+    </resolvers>
 
   <resolvers>
     <chain name="default" returnFirst="true">
       <resolver ref="esgf" />
+      <resolver ref="artifactory" />
       <resolver ref="public" />
     </chain>
   </resolvers>

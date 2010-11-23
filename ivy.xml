@@ -55,7 +55,7 @@
         rev="3.1.0" transitive="false" conf="base->default" />
         
     <dependency org="org.esgf" name="esg-search" 
-        rev="1.0.0.2" transitive="false" conf="base->default" />
+        rev="0.9.0" transitive="false" conf="base->default" />
         
   </dependencies>
 </ivy-module>

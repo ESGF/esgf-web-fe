@@ -1,256 +1,62 @@
-<!--
-
-Description:
-Ivy "settings" file for defining libraries needed for this project.
-
-Note: Check Maven for propery dependency parameter values @
-      http://mvnrepository.com/
--->
-
 <ivy-module version="2.0" 
 	    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:noNamespaceSchemaLocation=
                       "http://ant.apache.org/ivy/schemas/ivy.xsd">
                                          
   <info organisation="esgf" module="esgf-web-fe"/>
+
+  <configurations>
+    <conf name="base" description="required for both compile and runtime" />
+    <conf name="runtime" extends="base" />
+    <conf name="compile" extends="base" />
+    <conf name="test" extends="base" visibility="private" />
+  </configurations>
+  
+  <publications>
+    <artifact name="esgf-web-fe" type="war" conf="runtime" />
+  </publications>
+  
   <dependencies>
-    
-    
-    <dependency org="net.sourceforge.cobertura" name="cobertura" rev="1.9.4"/>
-    <dependency org="commons-logging" name="commons-logging" rev="1.1.1"/>
-    <dependency org="com.caucho" name="hessian" rev="3.0.20" />
-    <dependency org="com.sun.xml.bind" name="jaxb-xjc" rev="2.2"/>
-    <dependency org="junit" name="junit" rev="4.8.1"/>
-    <dependency org="log4j" name="log4j" rev="1.2.14">
+    <dependency org="com.sun.xml.bind" name="jaxb-xjc" rev="2.2"
+        conf="base->default" />
+
+    <dependency org="log4j" name="log4j" rev="1.2.14"
+        conf="base->default">
       <exclude org="com.sun.jdmk"/>
       <exclude org="com.sun.jmx"/>
       <exclude org="javax.jms"/>
     </dependency>
 
- 
-    
-    <dependency org="javax.activation" name="activation" 
-      rev="1.1" transitive="false"/>
-    
-    <dependency org="aopalliance" name="aopalliance" 
-      rev="1.0" transitive="false"/>
-    
-    <dependency org="commons-beanutils" name="commons-beanutils" 
-      rev="1.8.0" transitive="false"/>
-    
-    <dependency org="commons-collections" name="commons-collections" 
-      rev="3.2" transitive="false"/>
-    
-    <dependency org="commons-digester" name="commons-digester" 
-      rev="2.0" transitive="false"/>
-    
-    <dependency org="commons-lang" name="commons-lang" 
-      rev="2.4" transitive="false"/>
-    
-    <dependency org="commons-logging" name="commons-logging" 
-      rev="1.1.1" transitive="false"/>
-    
-    <dependency org="org.freemarker" name="freemarker" 
-      rev="2.3.15" transitive="false"/>
-    
-    <dependency org="org.hibernate" name="hibernate-validator" 
-      rev="4.0.2.GA" transitive="false"/>
-    
-	<dependency org="javassist" name="javassist" 
-      rev="3.7.1.GA" transitive="false"/>
-    
-    <dependency org="javax.xml" name="jaxb-api" 
-      rev="2.1" transitive="false"/>
-    
-    <dependency org="javax.xml" name="jaxb-impl" 
-      rev="2.0EA3" transitive="false"/>
-    
-    
-      
-    <dependency org="org.slf4j" name="jcl-over-slf4j" 
-      rev="1.5.10" transitive="false"/>
-    
-    <dependency org="org.jdom" name="jdom" 
-      rev="1.1" transitive="false"/>
-    
-    
-    <dependency org="joda-time" name="joda-time"
-	  rev="1.4" />
 
-	<dependency org="joda-time" name="joda-time-jsptags"
-	  rev="1.0.2" />
-    
-    <dependency org="javax.servlet" name="jstl" 
-      rev="1.2" transitive="false" />
-    
-    <dependency org="org.apache.lucene" name="lucene-spatial" 
-      rev="3.0.2" transitive="false" />
-   
-    <dependency org="org.mvel" name="mvel2" 
-      rev="2.0.11" transitive="false" />
-   
-    <dependency org="org.esgf" name="esg-search" rev="1.0.0.2" />
-    
-    <dependency org="org.slf4j" name="slf4j-api" rev="1.5.10"/>
-    <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.10"/>
-    
-    <dependency org="org.springframework" name="spring-core" 
-      rev="3.0.3.RELEASE" transitive="false" />
-    <dependency org="org.springframework" name="spring-web" 
-      rev="3.0.3.RELEASE" transitive="false" />
-    <dependency org="org.springframework" name="spring-webmvc" 
-      rev="3.0.3.RELEASE" transitive="false" />
-    <dependency org="org.springframework" name="spring-beans" 
-      rev="3.0.3.RELEASE" transitive="false" />
+
     <dependency org="org.springframework" name="spring-context" 
-      rev="3.0.3.RELEASE" transitive="false" />
-    <dependency org="org.springframework" name="spring-context-support" 
-      rev="3.0.3.RELEASE" transitive="false" />
-      <!--
-    <dependency org="org.springframework" name="spring-tx" 
-      rev="3.0.3.RELEASE" transitive="false" />
-    -->
-    <dependency org="org.springframework" name="spring-asm" 
-      rev="3.0.3.RELEASE" transitive="false" />
-    <dependency org="org.springframework" name="spring-aop" 
-      rev="3.0.3.RELEASE" transitive="false" />
-    <dependency org="org.springframework" name="spring-expression" 
-      rev="3.0.3.RELEASE" transitive="false" />
-    
-    <dependency org="stax" name="stax-api" 
-      rev="1.0.1" transitive="false" />
-   
-    <dependency org="org.apache.tiles" name="tiles-api" 
-      rev="2.2.2" transitive="false" />
-    
-    <dependency org="org.apache.tiles" name="tiles-compat" 
-      rev="2.2.2" transitive="false" />
-      
-    <dependency org="org.apache.tiles" name="tiles-core" 
-      rev="2.2.2" transitive="false" />    
-    
-    <dependency org="org.apache.tiles" name="tiles-el" 
-      rev="2.2.2" transitive="false" />
+        rev="${spring.version}" transitive="true" conf="base->default" />
 
-	<dependency org="org.apache.tiles" name="tiles-extras" 
-      rev="2.2.2" transitive="false" />
-    
-    <dependency org="org.apache.tiles" name="tiles-freemarker" 
-      rev="2.2.2" transitive="false" />
-    
-    <dependency org="org.apache.tiles" name="tiles-jsp" 
-      rev="2.2.2" transitive="false" />
-    
-	<dependency org="org.apache.tiles" name="tiles-mvel" 
-      rev="2.2.2" transitive="false" />    
-    
-    <dependency org="org.apache.tiles" name="tiles-ognl" 
-      rev="2.2.2" transitive="false" />
-    
-    <dependency org="org.apache.tiles" name="tiles-servlet" 
-      rev="2.2.2" transitive="false" />
-    
-    <dependency org="org.apache.tiles" name="tiles-servlet-wildcard" 
-      rev="2.2.2" transitive="false" />
-    
-    <dependency org="org.apache.tiles" name="tiles-template" 
-      rev="2.2.2" transitive="false" />
-      
-    <dependency org="org.apache.tiles" name="tiles-velocity" 
-      rev="2.2.2" transitive="false" />
-    
-    <dependency org="org.tuckey" name="urlrewritefilter" 
-      rev="3.1.0" transitive="false"/>
-    
-    <dependency org="javax.validation" name="validation-api" 
-      rev="1.0.0.GA" transitive="false"/>
-    
-    <dependency org="org.apache.velocity" name="velocity" 
-      rev="1.6.2" transitive="false"/>
-    
-    <dependency org="org.apache.velocity" name="velocity-tools" 
-      rev="2.0" transitive="false"/>
-    
+    <dependency org="org.springframework" name="spring-web" 
+        rev="${spring.version}" transitive="true" conf="base->default" />
+        
+
+    <dependency org="org.springframework" name="spring-webmvc" 
+        rev="${spring.version}" transitive="false" conf="base->default" />
+ 
     <dependency org="javax.servlet" name="servlet-api" 
-      rev="2.5" transitive="false" />
-    <!--
-    
-    --><!--
-    <dependency org="org.tuckey" name="urlrewritefilter" 
-      rev="3.1.0" transitive="false"/>
-    
-    <dependency org="javax.servlet" name="servlet-api" 
-      rev="2.5" transitive="false" />
-    <dependency org="javax.servlet.jsp" name="jsp-api" 
-      rev="2.1" transitive="false" />
-      
-    <dependency org="javax.servlet" name="jstl" 
-      rev="1.2" transitive="false" />
-    
-    <dependency org="org.apache.tiles" name="tiles-api" 
-      rev="2.2.2" transitive="false" />
-    
-    <dependency org="org.apache.tiles" name="tiles-compat" 
-      rev="2.2.2" transitive="false" />
-      
-    <dependency org="org.apache.tiles" name="tiles-core" 
-      rev="2.2.2" transitive="false" />    
-    
-    <dependency org="org.apache.tiles" name="tiles-el" 
-      rev="2.2.2" transitive="false" />
+        rev="2.5" transitive="false" conf="compile->default" />
 
-	<dependency org="org.apache.tiles" name="tiles-extras" 
-      rev="2.2.2" transitive="false" />
-    
-    <dependency org="org.apache.tiles" name="tiles-freemarker" 
-      rev="2.2.2" transitive="false" />
-    
-    <dependency org="org.apache.tiles" name="tiles-jsp" 
-      rev="2.2.2" transitive="false" />
-    
-	<dependency org="org.apache.tiles" name="tiles-mvel" 
-      rev="2.2.2" transitive="false" />    
-    
-    <dependency org="org.apache.tiles" name="tiles-ognl" 
-      rev="2.2.2" transitive="false" />
-    
-    <dependency org="org.apache.tiles" name="tiles-servlet" 
-      rev="2.2.2" transitive="false" />
-    
-    <dependency org="org.apache.tiles" name="tiles-servlet-wildcard" 
-      rev="2.2.2" transitive="false" />
-    
-    <dependency org="org.apache.tiles" name="tiles-template" 
-      rev="2.2.2" transitive="false" />
-      
-    <dependency org="org.apache.tiles" name="tiles-velocity" 
-      rev="2.2.2" transitive="false" />
-
-
-    
-    <dependency org="org.slf4j" name="slf4j-api" rev="1.6.1"/>
-    <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.1"/>
-    
-    
     <dependency org="org.apache.lucene" name="lucene-spatial" 
-      rev="3.0.2" transitive="false" />
-   
-   
-    <dependency org="commons-digester" name="commons-digester"
-	  rev="1.5" />
+        rev="3.0.2" transitive="false" conf="base->default" />
+        
+    <dependency org="org.apache.tiles" name="tiles-extras" 
+        rev="2.2.2" transitive="true" conf="base->default">
+        
+        <exclude name="tiles-velocity" />
+        
+     </dependency>
 
-	<dependency org="joda-time" name="joda-time"
-	  rev="1.4" />
-
-	<dependency org="joda-time" name="joda-time-jsptags"
-	  rev="1.0.2" />
-    
-      --> 
-      
-      
-    <!--
-    <dependency org="org.esgf" name="esg-search" rev="1.0.0.0" />
-    -->
-    
+    <dependency org="org.tuckey" name="urlrewritefilter" 
+        rev="3.1.0" transitive="false" conf="base->default" />
+        
+    <dependency org="org.esgf" name="esg-search" 
+        rev="1.0.0.2" transitive="false" conf="base->default" />
+        
   </dependencies>
 </ivy-module>

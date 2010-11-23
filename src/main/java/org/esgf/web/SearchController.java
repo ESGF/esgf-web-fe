@@ -119,25 +119,27 @@ public class SearchController {
 		
 		
 		// instantiate command object
-		final SearchInputImpl input = new SearchInputImpl();
+		SearchInputImpl input = new SearchInputImpl();
 		
 
 		PreQueryManager pqm = new PreQueryManager(facetProfile,request,input);
 		
+		//input geo constraints
+		pqm.inputGeospatialConstraints();
 		
+		//input temporal constrants
+		pqm.inputTemporalConstraints();
 		
-		if(request.getParameterValues("searchType")!=null)
-		{
-			String [] parValues = request.getParameterValues("searchType");
-			System.out.println("SEARCH TYPE: " + parValues[0]);
-		}
+		//input facet profile
 		
+		input = pqm.getInput();
 		
+		/*
 		if(request.getParameterValues("searchType")!=null)
 		{
 			if(request.getParameterValues("searchType")[0].equals("Encloses"))
 			{
-				LOG.debug("Encloses");
+				//LOG.debug("Encloses");
 				if(request.getParameterValues("west_degrees")!=null &&
 						   request.getParameterValues("east_degrees")!=null	&&
 						   request.getParameterValues("north_degrees")!=null &&
@@ -145,11 +147,26 @@ public class SearchController {
 				{
 					String geoString = "";
 					
-					geoString += "west_degrees:[" + request.getParameterValues("west_degrees")[0] + " TO *] AND ";
-					geoString += "east_degrees:[* TO " + request.getParameterValues("east_degrees")[0] + "] AND ";
-					geoString += "north_degrees:[* TO " + request.getParameterValues("north_degrees")[0] + "] AND ";
-					geoString += "south_degrees:[" + request.getParameterValues("south_degrees")[0] + " TO *]";
+					String boundingboxWD = "";
+					String boundingboxED = "";
+					String boundingboxSD = "";
+					String boundingboxND = "";
 					
+					boundingboxWD = request.getParameterValues("west_degrees")[0];
+					boundingboxED = request.getParameterValues("east_degrees")[0];
+					boundingboxSD = request.getParameterValues("south_degrees")[0];
+					boundingboxND = request.getParameterValues("north_degrees")[0];
+					
+					geoString += "west_degrees:[" + boundingboxWD + " TO *] AND ";
+					geoString += "east_degrees:[* TO " + boundingboxED + "] AND ";
+					geoString += "north_degrees:[* TO " + boundingboxND + "] AND ";
+					geoString += "south_degrees:[" + boundingboxSD + " TO *]";
+					
+					//only input if a geo spatial search was created...
+                    if(!boundingboxND.equals("") && 
+		                       !boundingboxSD.equals("") &&
+		                       !boundingboxED.equals("") && 
+		                       !boundingboxWD.equals(""))
 					input.addGeospatialRangeConstraint(geoString);
 					
 					LOG.debug("GeoStringEncloses: " + geoString);
@@ -163,15 +180,17 @@ public class SearchController {
 				LOG.debug("Overlaps");
 				//Logic: if ANY of the extreme points (ne, nw, se, sw) are within the boundaries
 				
-				String boundingboxWD = "";
-				String boundingboxED = "";
-				String boundingboxSD = "";
-				String boundingboxND = "";
+				
 				if(request.getParameterValues("west_degrees")!=null &&
 				   request.getParameterValues("east_degrees")!=null	&&
 				   request.getParameterValues("north_degrees")!=null &&
 				   request.getParameterValues("south_degrees")!=null)
 				{
+					String boundingboxWD = "";
+					String boundingboxED = "";
+					String boundingboxSD = "";
+					String boundingboxND = "";
+					
 					boundingboxWD = request.getParameterValues("west_degrees")[0];
 					boundingboxED = request.getParameterValues("east_degrees")[0];
 					boundingboxSD = request.getParameterValues("south_degrees")[0];
@@ -249,8 +268,13 @@ public class SearchController {
 								 "north_degrees:[" + boundingboxND + " TO " + "* ])";
 
 					LOG.debug("GeoStringOverlaps: " + geoString);
-
-					input.addGeospatialRangeConstraint(geoString);
+					
+					//only input if a geo spatial search was created...
+					if(!boundingboxND.equals("") && 
+					   !boundingboxSD.equals("") &&
+					   !boundingboxED.equals("") && 
+                       !boundingboxWD.equals(""))
+					    input.addGeospatialRangeConstraint(geoString);
 				}
 				
 				
@@ -258,7 +282,7 @@ public class SearchController {
 				
 			}
 		}
-		
+		*/
 		
         
 		// security note: loop ONLY over parameters in facet profile
@@ -319,7 +343,9 @@ public class SearchController {
 		if(parValues[0].equals("Radius"))
 		{
 			pqManager.processCentroidFilter();
+			output = pqManager.getOutput();
 		}
+		
 		
 		
 		

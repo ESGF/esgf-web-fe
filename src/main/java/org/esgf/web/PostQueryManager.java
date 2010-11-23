@@ -13,6 +13,7 @@ import org.apache.lucene.spatial.geometry.shape.LLRect;
 import org.springframework.util.StringUtils;
 
 import esg.search.core.Record;
+import esg.search.query.api.Facet;
 import esg.search.query.api.FacetProfile;
 import esg.search.query.api.SearchOutput;
 import esg.search.query.api.SearchService;
@@ -21,11 +22,19 @@ import esg.search.query.impl.solr.SearchInputImpl;
 
 import org.apache.log4j.*;
 
+/**
+ * Manages post query processing procedures.
+ * Includes: geospatial search (centroid filter)
+ * 
+ * Coming soon includes: temporal search (time slicing) 
+ *                       facet (currently hardcoded in SearchController)
+ * 
+ * @author john.harney
+ *
+ */
 public class PostQueryManager{
 
-	private SearchOutput newOutput;
 	
-	//old parameters
 	private SearchService searchService;
 	private FacetProfile facetProfile;
 	private HttpServletRequest request;
@@ -35,6 +44,17 @@ public class PostQueryManager{
 
     private final static Logger LOG = Logger.getLogger(PostQueryManager.class);
 	
+    
+    /**
+     * Manages how the query will be constructed AFTERcalling solr
+     * Includes: geospatial search (centroid filter)
+     * 
+     * Coming soon includes: temporal search
+     *                       facet (currently hardcoded in SearchController)
+     * 
+     * @author john.harney
+     *
+     */
 	public PostQueryManager(SearchService searchService,
 							  FacetProfile facetProfile,
 							  HttpServletRequest request,
@@ -47,23 +67,25 @@ public class PostQueryManager{
 		this.request = request;
 		this.input = input;
 		this.output = output;
-		this.newOutput = output;
 		
 	}
 	
+	/**
+     * Method to filter results based on proximity to a center point
+     * 
+     * throws Exception: if the operation did not complete successfully.
+     */
 	public void processCentroidFilter() throws Exception
 	{
 		
-		LOG.debug("RADIUS search");
+		LOG.debug("Centroid search filtering");
 		
 		int originalLimit = input.getLimit();
 		int originalOffset = input.getOffset();
 		
 		
-		//first expunge ALL old records in output
-		//to be replaced by new records retrieved
+		//1 - expunge ALL old records in output (to be replaced by new records retrieved)
 		List<Record> removedRecords = new ArrayList<Record>();
-		//LOG.debug("\t\tRECORDS SIZE " + output.getResults().size());
 		for(int i=0;i<output.getResults().size();i++)
 		{
 			Record oldRecord = output.getResults().get(i);
@@ -74,44 +96,33 @@ public class PostQueryManager{
 		{
 			output.removeResult(removedRecords.get(i));
 		}
-		//end expunge
 		
 		
-		//second get ALL possible results
+		//2 - get ALL possible results
 		input.setLimit(output.getCounts());
 		input.setOffset(0);
 		
 		SearchOutput totalOutput = searchService.search(input, true, true);
 		
-		int offset = input.getOffset();
-		
-		int recordIndex = 0;
 		
 		List<Record> returnedRecords = new ArrayList<Record>();
 		
 		int addedRecords = 0;
 		
-		
 		LatLng center = getCenter();
 		double radius = getRadius();
-		
-		//while(!limitReached)
+	
+		//3 - find all records that match the centroid criteria
 		for(int i=0;i<totalOutput.getResults().size();i++)
 		{
 			//extract next record
 			Record record = totalOutput.getResults().get(i);
 			
-			//do the check for here
-			//if()
+			//do the range check here
 			if(isInRange(record,center.getLat(),center.getLng(),radius))
 			{
-				//LOG.debug("\tRecord: " + i + " In geo range");
-				//LOG.debug("\tChecking if it is in range..." + offset + " TO " + (offset+originalLimit));
-				//LOG.debug("\taddedRecords:  " + addedRecords);
-				
 				if(addedRecords >= originalOffset && addedRecords < (originalOffset+originalLimit))
 				{
-					//LOG.debug("\tADDING");
 					returnedRecords.add(record);
 				}
 				addedRecords++;
@@ -119,19 +130,32 @@ public class PostQueryManager{
 			
 		}
 		
-
-		//LOG.debug("\tUPDATING COUNTS to " + addedRecords);
-		
 		output.setCounts(addedRecords);
 		
 		
-		//add new records
+		//4 - Add only these records to the output
 		for(int i=0;i<returnedRecords.size();i++)
 		{
 			Record record = returnedRecords.get(i);
 			output.addResult(record);
 		}
 		
+		//5 - Update the facet counts as well
+		/*  This code causes the site to crash -- NEEDS FIXING IMMEDIATELY
+		for (final String parName : facetProfile.getTopLevelFacets().keySet()) {
+		    LOG.debug("Top LEvel: " + parName);
+		    //loop over all subfacets in each facet
+		    for(int i=0;i<totalOutput.getFacets().get(parName).getSubFacets().size();i++)
+		    {
+		        Facet subFacet = totalOutput.getFacets().get(parName).getSubFacets().get(i);
+		        
+		        int newCount = totalOutput.getFacets().get(parName).getSubFacets().get(i).getCounts();
+		        LOG.debug("NewCount for " + parName + " " + newCount);
+		        
+		        //subFacet.setCounts(newCount);
+		    }
+        }
+		*/
 		
 		
 		//reset the limit
@@ -144,6 +168,21 @@ public class PostQueryManager{
 		
 	}
 	
+	/**
+     * Method to filter results based on slices of time over a specified rang
+     * 
+     * Note: Method still under development
+     */
+    public void processTimeSlicing() throws Exception
+    {
+        
+    }
+	
+	/**
+     * Method returns an output object after post querying processing is finished
+     * Note: this method is somewhat redundant as the object reference is in SearchController already
+     * May need to make a cloneable searchoutput object so that we are safe here
+     */
 	public SearchOutput getOutput()
 	{
 		return this.output;
@@ -151,24 +190,21 @@ public class PostQueryManager{
 	
 	
 	
-	
-	
-	
-	
-	
-	/* Helper methods for the centroid filter 
+	/* 
+	 * The following are helper methods for the centroid filter 
 	 * 
 	 * May refactor these by putting them into static methods in some common utils type class 
 	 * 
 	 */
 	
+	/**
+     * Method to find a radius of an circle given only its inscribed boundingbox coordinates
+     * 
+     * @return double
+     */
 	private double getRadius()
 	{
 		double radius = 0;
-		
-		//find the center of the search using the lucene - right now manually find
-		double centerLat = 0;
-		double centerLong = 0;
 		
 		double eastDegreeValue = 0;
 		double westDegreeValue = 0; 
@@ -176,7 +212,7 @@ public class PostQueryManager{
 		double northDegreeValue = 0; 
 			
 		
-		
+		//obtain the extreme points here
 		if(request.getParameterValues("east_degrees")!=null &&
 		   request.getParameterValues("west_degrees")!=null &&
 		   request.getParameterValues("north_degrees")!=null &&
@@ -217,16 +253,13 @@ public class PostQueryManager{
 			
 		}
 		
-		
+		//use lucene to find the radius in km
 		LatLng nePoint = new FloatLatLng(northDegreeValue,eastDegreeValue);
 		LatLng swPoint = new FloatLatLng(southDegreeValue,westDegreeValue);
 		
 		LLRect boundedRect = new LLRect(swPoint,nePoint);
 		
 		LatLng center = boundedRect.getMidpoint();
-		
-		centerLat = center.getLat();
-		centerLong = center.getLng();
 		
 		LatLng sePoint = new FloatLatLng(southDegreeValue,eastDegreeValue);
 		LatLng midSPoint = sePoint.calculateMidpoint(swPoint);
@@ -237,14 +270,16 @@ public class PostQueryManager{
 		return radius;
 	}
 	
+	/** 
+	 * Method to retrieve the center of the centroid based search
+	 * 
+	 * @return LatLng
+	 */
 	private LatLng getCenter()
 	{
 		LatLng center = null;
 		
-		//find the center of the search using the lucene - right now manually find
-		double centerLat = 0;
-		double centerLong = 0;
-		
+		//find the center of the search using the lucene
 		double eastDegreeValue = 0;
 		double westDegreeValue = 0; 
 		double southDegreeValue = 0; 
@@ -286,9 +321,8 @@ public class PostQueryManager{
 					southDegreeValue = Double.parseDouble(parValue);
 				}
 			}
-			
-			
 		}
+		
 		
 		LatLng nePoint = new FloatLatLng(northDegreeValue,eastDegreeValue);
 		LatLng swPoint = new FloatLatLng(southDegreeValue,westDegreeValue);
@@ -300,103 +334,16 @@ public class PostQueryManager{
 		return center;
 	}
 	
-	
-	
-	
-	private static SearchOutput filterByRadius(final HttpServletRequest request,SearchOutput output)
-	{
-		//find the center of the search using the lucene - right now manually find
-		double centerLat = 0;
-		double centerLong = 0;
-		
-		double eastDegreeValue = 0;
-		double westDegreeValue = 0; 
-		double southDegreeValue = 0; 
-		double northDegreeValue = 0; 
-			
-		
-		
-		if(request.getParameterValues("east_degrees")!=null &&
-		   request.getParameterValues("west_degrees")!=null &&
-		   request.getParameterValues("north_degrees")!=null &&
-		   request.getParameterValues("south_degrees")!=null)
-		{
-			String [] parValues = request.getParameterValues("east_degrees");
-			
-			for (final String parValue : parValues) {
-				if (StringUtils.hasText(parValue)) {
-					eastDegreeValue = Double.parseDouble(parValue);
-				}
-			}
-			
-			parValues = request.getParameterValues("west_degrees");
-			
-			for (final String parValue : parValues) {
-				if (StringUtils.hasText(parValue)) {
-					westDegreeValue = Double.parseDouble(parValue);
-				}
-			}	
-			
-			parValues = request.getParameterValues("north_degrees");
-			
-			for (final String parValue : parValues) {
-				if (StringUtils.hasText(parValue)) {
-					northDegreeValue = Double.parseDouble(parValue);
-				}
-			}
-			
-			parValues = request.getParameterValues("south_degrees");
-			
-			for (final String parValue : parValues) {
-				if (StringUtils.hasText(parValue)) {
-					southDegreeValue = Double.parseDouble(parValue);
-				}
-			}
-			
-			
-		}
-		
-		
-		LatLng nePoint = new FloatLatLng(northDegreeValue,eastDegreeValue);
-		LatLng swPoint = new FloatLatLng(southDegreeValue,westDegreeValue);
-		
-		LLRect boundedRect = new LLRect(swPoint,nePoint);
-		
-		LatLng center = boundedRect.getMidpoint();
-		
-		centerLat = center.getLat();
-		centerLong = center.getLng();
-		
-		LatLng sePoint = new FloatLatLng(southDegreeValue,eastDegreeValue);
-		LatLng midSPoint = sePoint.calculateMidpoint(swPoint);
-		
-		double radius = midSPoint.arcDistance(center, DistanceUnits.KILOMETERS);
-		
-		List<Record> deletedRecords = new ArrayList<Record>();
-		
-		
-		for(int i=0;i<output.getResults().size();i++)
-		{
-			Record record = output.getResults().get(i);
-			
-			
-			//check if it is within radius
-			if(!isInRange(record,centerLat,centerLong,radius))
-			{
-				deletedRecords.add(record);
-			}
-		}
-		
-		for(int i=0;i<deletedRecords.size();i++)
-		{
-			Record record = deletedRecords.get(i);
-			output.removeResult(record);
-		}
-		
-		
-		return output;
-	}
-	
+	/** Method to check if the lat and long point are within the specified radius
+	 * Note: this method may be moved to a Utils class
+	 * 
+	 * @param record Record to be checked
+	 * @param double Latitude of center
+	 * @param double Longitute of center
+	 * @param double Radius specified
+	 * 
+     * @return LatLng
+     */
 	private static boolean isInRange(Record record,double centerLat,double centerLong,double radius)
 	{
 		boolean isInRange = true;

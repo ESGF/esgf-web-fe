@@ -109,6 +109,9 @@ Builds the project via ant (obviously).
     <property name="src_dir"   	          value="${basedir}/src/main/java"/>
     <property name="lib_dir"   	          value="${basedir}/lib"/>
     <property name="lib_fetched_dir"      value="${basedir}/lib/fetched"/>
+    <property name="lib_compile_dir"      value="${lib_fetched_dir}/compile"/>
+    <property name="lib_runtime_dir"      value="${lib_fetched_dir}/runtime"/>
+    
     <property name="build_dir"   	        value="${basedir}/build"/>
     <property name="dist_dir"   	        value="${basedir}/dist"/>
     <property name="test_src_dir"  	      value="${basedir}/src/java/test"/>
@@ -137,8 +140,11 @@ Builds the project via ant (obviously).
 
     <property name="test_last_failed_file" location="${build_dir}/.lasttestsfailed"/>
     <property name="test_coverage_file"   value="${basedir}/.cobertura.ser"/>
+      
+    <!--
     <property name="ivy.lib.dir"          value="${lib_fetched_dir}"/>
-
+    -->
+      
     <echo message="--------------------------------"/> 
     <echo message="module            = ${module} "/> 
     <echo message="version_num       = ${version_num} "/> 
@@ -186,8 +192,16 @@ Builds the project via ant (obviously).
   </target>
   
   <target name="deps" depends="init-ivy" description="(Sets up library dependencies: Ivy)">
-    <mkdir dir="${lib_fetched_dir}"/>
-    <ivy:retrieve sync="true"/>
+    <mkdir dir="${lib_fetched_dir}" />
+    <mkdir dir="${lib_compile_dir}" />
+    <mkdir dir="${lib_runtime_dir}" />
+
+    <ivy:resolve />  
+    <ivy:retrieve pattern="${lib_fetched_dir}/[conf]/[artifact]-[revision].[ext]" />
+      
+    <ivy:cachepath pathid="compile.classpath" conf="compile" useOrigin="true" />
+    <ivy:cachepath pathid="runtime.classpath" conf="runtime" useOrigin="true" />
+      
     <path id="main_classpath">
       <fileset dir="${lib_dir}">
 	<include name="**/*.jar"/>
@@ -197,15 +211,28 @@ Builds the project via ant (obviously).
       </fileset>
       <pathelement path="${build_dir}"/>
     </path>
-    
+
+    <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+        <classpath refid="compile.classpath"/>
+    </taskdef>
+      
+    <!--
+
     <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
       <classpath refid="main_classpath"/>
     </taskdef>
-
+      
     <echo message="MAIN CLASSPATH:"/>
     <pathconvert property="_cp" refid="main_classpath" pathsep="${line.separator}"/>
     <echo>${_cp}</echo>
+
+    -->
+      
+    <echo message="Runtime Classpath:" />
+    <pathconvert property="_cp" refid="runtime.classpath" pathsep="${line.separator}"/>
+    <echo>${_cp}</echo>
     <echo message="--------------------------------"/> 
+      
   </target>
 
   <target name="dep_report" depends="deps" description="(Generates a report of library dependencies)">
@@ -385,8 +412,7 @@ Builds the project via ant (obviously).
     <mkdir dir="${dist_dir}/tmplib"/>
     
     <copy todir="${dist_dir}/tmplib" overwrite="true" flatten="yes">
-      <fileset dir="${lib_dir}" includes="**/*.jar" 
-          excludes="servlet-api*.jar,**/junit*.jar,**/*sources.jar,**/*javadoc.jar"/>
+      <fileset dir="${lib_runtime_dir}" includes="**/*.jar" />
     </copy>
     
   	<!-- views.properties bug resolved here

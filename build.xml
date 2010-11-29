@@ -106,19 +106,19 @@ Builds the project via ant (obviously).
     <echo message="Initializing build environment..."/>
         
     <!-- defaults to use if local .${module}.ant.properties file does not exist --> 
-    <property name="src_dir"   	          value="${basedir}/src/main/java"/>
+    <property name="src_dir"   	          value="${basedir}/src/java/main"/>
     <property name="lib_dir"   	          value="${basedir}/lib"/>
     <property name="lib_fetched_dir"      value="${basedir}/lib/fetched"/>
     <property name="lib_compile_dir"      value="${lib_fetched_dir}/compile"/>
     <property name="lib_runtime_dir"      value="${lib_fetched_dir}/runtime"/>
     
-    <property name="build_dir"   	        value="${basedir}/build"/>
-    <property name="dist_dir"   	        value="${basedir}/dist"/>
-    <property name="test_src_dir"  	      value="${basedir}/src/java/test"/>
+    <property name="build_dir"   	  value="${basedir}/build"/>
+    <property name="dist_dir"   	  value="${basedir}/dist"/>
+    <property name="test_src_dir"  	  value="${basedir}/src/java/test"/>
     <property name="test_build_dir"       value="${basedir}/build/test"/>
     <property name="test_build_dir_inst"  value="${basedir}/build/test-instrumented" />
     <property name="etc_dir"   	          value="${basedir}/etc"/>
-    <property name="conf_dir"   	        value="${etc_dir}/conf"/>
+    <property name="conf_dir"   	  value="${etc_dir}/conf"/>
     <property name="web_dir"   	          value="${basedir}/src/main/webapp"/>
     <property name="doc_dir"   	          value="${basedir}/docs"/>
     <property name="depcache_dir"     	  value="${java.io.tmpdir}/${module}/depcache"/>
@@ -128,15 +128,15 @@ Builds the project via ant (obviously).
     <property name="main_class"           value="esgf.xxx.core.Main"/>
 
     <property name="doc_dir_generated"    value="${basedir}/docs-generated"/>
-    <property name="jdoc_dir"   	        value="${doc_dir_generated}/javadocs"/>
+    <property name="jdoc_dir"   	  value="${doc_dir_generated}/javadocs"/>
     <property name="test_results_dir"     value="${doc_dir_generated}/test-results"/>
     <property name="test_reports_dir"     value="${doc_dir_generated}/test-reports"/>
     <property name="test_coverage_dir"    value="${doc_dir_generated}/coverage-reports" />
     <property name="lib_deps_reports_dir" value="${doc_dir_generated}/dep-reports"/>
 
     <property name="jaxb_xsd_dir"         value="${etc_dir}/xsd/"/>
-    <property name="jaxb_gen_src_dir" value="${src_dir}/esg/common/generated"/>
-    <property name="jaxb_gen_package" value="esgf.common.generated"/>
+    <property name="jaxb_gen_src_dir"     value="${src_dir}/esg/common/generated"/>
+    <property name="jaxb_gen_package"     value="esgf.common.generated"/>
 
     <property name="test_last_failed_file" location="${build_dir}/.lasttestsfailed"/>
     <property name="test_coverage_file"   value="${basedir}/.cobertura.ser"/>

@@ -1,0 +1,12 @@
+#****************************************************************************
+# Organization: Earth System Grid Federation 
+#****************************************************************************
+
+# This is a manifest, listing all the files to be posted to the
+# distribution server.
+
+[esgf-web-fe]
+
+../INSTALL
+../LICENSE
+../TODO

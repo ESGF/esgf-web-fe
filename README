@@ -1,8 +1,14 @@
-#*****************************************************************
-#
-#   Description: Basic description of the project(s) and layout of the
-#   		project.
-#
-#*****************************************************************
 
-README:
+
+
+GeoSpatial Demo
+----------------------------------------------
+
+Ingesting records
+
+    % java -Dlog4j.configuration=./log4j.xml -Djava.ext.dirs=../lib/:../lib/fetched \
+        esg.search.harvest.impl.HarvestingServiceMain
+        file:///Users/fwang2/esg-search/resources/ \ 
+            pcmdi.ipcc4.GFDL.gfdl_cm2_0.picntrl.mon.land.run1.v1.xml THREDDS
+
+

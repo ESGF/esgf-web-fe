@@ -1,4 +1,4 @@
-<!--
+!--
 /***************************************************************************
 *                                                                          *
 *  Organization: Lawrence Livermore National Lab (LLNL)                    *
@@ -59,10 +59,10 @@
 /**
    Description:
 
-   This is the ant build file for the esg-xxx project.  This file
+   This is the ant build file for the esgf-web-fe project.  This file
    should not be modified.  A user may set the values of the
    properties used in this file by defining the property file
-   $HOME/.esg-xxx.ant.properties which will override the values set
+   $HOME/.esgf-web-fe.ant.properties which will override the values set
    here.  An example of such a file is located in this etc directory.
 
    NOTE:
@@ -83,9 +83,9 @@ Description:
 Builds the project via ant (obviously).
 -->
 
-<project name="esg-xxx" default="make" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="esgf-web-fe" default="make" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
   
-  <property name="module" value="esg-xxx"/>
+  <property name="module" value="esgf-web-fe"/>
   <property name="organization" value="Earth Systems Grid Federation"/>
   
   <!--

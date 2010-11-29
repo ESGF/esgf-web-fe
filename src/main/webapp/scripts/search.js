@@ -5,11 +5,13 @@
 
 $(document).ready(function(){
 
+	
 	//global vars
 	
 	var searchBox = $("#searchbox");
 	var data = $("#searchbox").val();
 	var searchBoxDefault = "Search projects, datasets, and more";
+	
 	
 	//Effects for both searchbox
 	searchBox.focus(function(e){
@@ -27,4 +29,18 @@ $(document).ready(function(){
 	});	
 	
 
+	/**
+	 * handle reset link
+	 */
+	$("div#showReset").click(function(){
+		if ($('div#optionPane').is(":visible")) {
+			$('div#optionPane').hide();
+			$('div#showOptions').html('<a href="#">More Options</a>');
+		}
+		
+		if ($('div#search_wrapper').is(":visible"))
+			$('div#search_wrapper').hide();
+		
+		window.location='./search';
+	});
 });

@@ -25,6 +25,7 @@
            
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2.min.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/json.min.js" /> "></script>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery.form.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/menu.js" /> "></script>            
     <script type="text/javascript" src="<c:url value="/scripts/search.js" /> "></script> 
     <script type="text/javascript" src="<c:url value="/scripts/map.js" /> "></script> 
@@ -83,25 +84,26 @@
     <div id="main">
         
         <div id="search_box">
-        <ti:insertAttribute name="search" />    
-        </div>
-       
-        <div id="search_results">
-        <ti:insertAttribute name="result" />    
+        <ti:insertAttribute name="searchform" />    
         </div>
 
-        <div id="pagination">
-        <ti:insertAttribute name="pagination" />
-        </div>            
+        <div id="search_wrapper">
+	        <div id="search_results">
+	        <ti:insertAttribute name="result" />    
+	        </div>
+	        
+	        <div id="pagination">
+	        <ti:insertAttribute name="pagination" />
+	        </div> 
+	    </div>
+	                
         <div id="footer">
         <p>Copyright(c) 2010, ESGF Infrastructure Team. </p>
         </div>
 
-    </div>
 
-
-
+    </div> <!--  end of main -->
 </div> <!-- end of wrapper -->
 
- </body>
+</body>
 </html>

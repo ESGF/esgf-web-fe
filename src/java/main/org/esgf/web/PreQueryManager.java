@@ -13,46 +13,46 @@ import esg.search.query.impl.solr.SearchInputImpl;
 
 public class PreQueryManager {
 
-	private FacetProfile facetProfile;
-	private HttpServletRequest request;
-	private SearchInputImpl input;
-	
-	
-	 private final static Logger LOG = Logger.getLogger(PreQueryManager.class);
-	
-	 /**
-	  * Manages how the query will be constructed before calling solr
-	  * Includes: geospatial search (centroid filter)
-	  * 
-	  * Coming soon includes: temporal search
-	  *                       facet (currently hardcoded in SearchController)
-	  * 
-	  * @author john.harney
-	  *
-	  */
-	public PreQueryManager(FacetProfile facetProfile,
-								  HttpServletRequest request,
-								  SearchInputImpl input) throws Exception
-	{
-			
-		this.facetProfile = facetProfile;
-		this.request = request;
-		this.input = input;
-			
-	}
-	
-	//come back to this
-	/**
+    private FacetProfile facetProfile;
+    private HttpServletRequest request;
+    private SearchInputImpl input;
+    
+    
+     private final static Logger LOG = Logger.getLogger(PreQueryManager.class);
+    
+     /**
+      * Manages how the query will be constructed before calling solr
+      * Includes: geospatial search (centroid filter)
+      * 
+      * Coming soon includes: temporal search
+      *                       facet (currently hardcoded in SearchController)
+      * 
+      * @author john.harney
+      *
+      */
+    public PreQueryManager(FacetProfile facetProfile,
+                                  HttpServletRequest request,
+                                  SearchInputImpl input) throws Exception
+    {
+            
+        this.facetProfile = facetProfile;
+        this.request = request;
+        this.input = input;
+            
+    }
+    
+    //come back to this
+    /**
      * Method to input the facet profile
      * 
      * Note: currently under development
      */
-	public void inputFacetProfile()
-	{
-		
-	}
-	
-	/**
+    public void inputFacetProfile()
+    {
+        
+    }
+    
+    /**
      * Method to input the geospatial constraints
      * 
      * There are two different types of searches:
@@ -66,9 +66,9 @@ public class PreQueryManager {
      * in which an overlap may occur.
      * 
      */
-	public void inputGeospatialConstraints()
-	{
-		
+    public void inputGeospatialConstraints()
+    {
+        
 
         if(request.getParameterValues("searchType")!=null)
         {
@@ -218,19 +218,54 @@ public class PreQueryManager {
             }
         }
         
-		
-	}
-	
-	public void inputTemporalConstraints()
-	{
-		
-	}
-	
-	
-	public SearchInputImpl getInput()
-	{
-		return this.input;
-	}
-	
-	
+        
+    }
+    
+    public void inputTemporalConstraints()
+    {
+        String [] parValuesFrom = request.getParameterValues("from");
+        String [] parValuesTo = request.getParameterValues("to");
+        
+        if(parValuesFrom != null && parValuesTo != null & !parValuesFrom.equals("") && !parValuesTo.equals(""))
+        {
+            String temporalString = "";
+            temporalString += "datetime_start:[" + dateToISO8601(parValuesFrom[0]) + " TO *] AND ";
+            //LOG.debug("date from:\t\t" + dateToISO8601(parValuesFrom[0]));
+            //TO 
+            temporalString += "datetime_stop:[ * TO " + dateToISO8601(parValuesTo[0]) + "]";
+            //LOG.debug("date to:\t\t" + dateToISO8601(parValuesTo[0]));
+            
+            
+            input.addTemporalRangeConstraint(temporalString);
+            
+            //LOG.debug("TEMPORAL STRING: " + temporalString);
+        }
+    }
+    
+    
+    public SearchInputImpl getInput()
+    {
+        return this.input;
+    }
+    
+    
+    
+    //put together the date in ISO 8602
+    //the string given to us at this point is in the form yy-mm-dd
+    //need to convert this
+    private static String dateToISO8601(String parValue)
+    {
+        String theDate = "";
+        
+        String [] tokens = parValue.split("-");
+        
+        String year = tokens[0] + "-";
+        String month = tokens[1] + "-";
+        String day = tokens[2];
+        String time = "T12:00:00Z";
+        theDate = year + month + day + time;
+        
+        return theDate;
+    }
+    
 }

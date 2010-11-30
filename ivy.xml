@@ -20,6 +20,9 @@
     <dependency org="com.sun.xml.bind" name="jaxb-xjc" rev="2.2"
         conf="base->default" />
 
+
+
+ 
     <dependency org="log4j" name="log4j" rev="1.2.14"
         conf="base->default">
       <exclude org="com.sun.jdmk"/>
@@ -27,6 +30,10 @@
       <exclude org="javax.jms"/>
     </dependency>
 
+	<dependency org="org.jdom" name="jdom" rev="1.1" transitive="true" conf="base->default"/>
+	
+	<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.10"
+	conf="base->default" /> 	
 
     <dependency org="org.springframework" name="spring-context" 
         rev="${spring.version}" transitive="true" conf="base->default" />
@@ -41,9 +48,13 @@
     <dependency org="javax.servlet" name="servlet-api" 
         rev="2.5" transitive="false" conf="compile->default" />
 
+	<dependency org="javax.servlet" name="jstl" 
+      rev="1.2" conf="base->default" />
+    
+
     <dependency org="org.apache.lucene" name="lucene-spatial" 
         rev="3.0.2" transitive="false" conf="base->default" />
-        
+       
     <dependency org="org.apache.tiles" name="tiles-extras" 
         rev="2.2.2" transitive="true" conf="base->default">
         
@@ -53,9 +64,10 @@
 
     <dependency org="org.tuckey" name="urlrewritefilter" 
         rev="3.1.0" transitive="false" conf="base->default" />
-        
+      
     <dependency org="org.esgf" name="esg-search" 
-        rev="0.9.0" transitive="false" conf="base->default" />
-        
+        rev="0.9.0" transitive="true" conf="base->default" />
+ 
+ 
   </dependencies>
 </ivy-module>

@@ -5,8 +5,11 @@
   <property name="ivy.esgf.default.root.url" 
     value="http://esgf.org/ivy/esgf_repository" override="false"/>
 
-
-  <resolvers>
+  	<!--<property name="ivy.esgf.default.root.url" 
+    value="http://esg-gw.ornl.teragrid.org:8088/artifactory/libs-releases" override="false"/>
+  
+  	-->
+  	<resolvers>
   
     <url name="esgf" checksums="md5">
       <ivy pattern="${ivy.esgf.default.root.url}/[organisation]/[module]/[revision]/ivy-[revision].xml" />
@@ -15,11 +18,14 @@
       <artifact pattern="${ivy.esgf.default.root.url}/[organisation]/[module]/[revision]/[artifact].[ext]" />
     </url>
  
+ 	
+ 	
     <ibiblio name="artifactory" m2compatible="true" 
     root="http://esg-gw.ornl.teragrid.org:8088/artifactory/libs-releases"/>
   
-    <ibiblio name="public" m2compatible="true"/>
+  <ibiblio name="public" m2compatible="true"/>
    
+    
     </resolvers>
 
   <resolvers>

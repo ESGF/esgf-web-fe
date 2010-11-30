@@ -24,9 +24,9 @@
 
   <resolvers>
     <chain name="default" returnFirst="true">
-      <resolver ref="esgf" />
-      <resolver ref="artifactory" />
-      <resolver ref="public" />
+       <resolver ref="esgf" />
+       <resolver ref="public" />
+       <resolver ref="artifactory" />
     </chain>
   </resolvers>
         

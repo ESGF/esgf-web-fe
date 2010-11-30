@@ -119,7 +119,7 @@ Builds the project via ant (obviously).
     <property name="test_build_dir_inst"  value="${basedir}/build/test-instrumented" />
     <property name="etc_dir"   	          value="${basedir}/etc"/>
     <property name="conf_dir"   	  value="${etc_dir}/conf"/>
-    <property name="web_dir"   	          value="${basedir}/src/main/webapp"/>
+    <property name="web_dir"   	          value="${basedir}/web"/>
     <property name="doc_dir"   	          value="${basedir}/docs"/>
     <property name="depcache_dir"     	  value="${java.io.tmpdir}/${module}/depcache"/>
     <property name="log_config"       	  value="${conf_dir}/log4j.properties"/>
@@ -419,9 +419,11 @@ Builds the project via ant (obviously).
   	     Note: I'm not sure where this should go at the present time
   	     Probably should make a cosmetic change later
   	-->
+  	
   	<copy todir="${build_dir}" overwrite="true" >
-  	  <fileset dir="${src_dir}/../resources" />	
+  	  <fileset dir="${etc_dir}" />	
   	</copy>
+  	
   	<!-- end views.properties bug-->
   	
     <delete file="${dist_dir}/${module}.war"/>

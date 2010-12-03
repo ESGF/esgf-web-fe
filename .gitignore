@@ -34,14 +34,12 @@ generated/
 /build
 /dist
 /docs-generated
-/lib/fetched
+/lib/fetched/
 /.cobertura.ser
 /eclipse
 /backup
 
 target/
-.classpath
 .project
-.settings/
 .externalToolBuilders/
 .springBeans

@@ -428,7 +428,7 @@ Builds the project via ant (obviously).
   	
     <delete file="${dist_dir}/${module}.war"/>
       
-    <war destfile="${dist_dir}/${module}.war" webxml="${conf_dir}/${module}-web.xml">
+    <war destfile="${dist_dir}/${module}.war" webxml="${web_dir}/WEB-INF/web.xml">
       <fileset dir="${web_dir}" excludes="**semantic.cache**"/>
       <lib dir="${dist_dir}/tmplib">
 	<include name="**/*.jar"/>

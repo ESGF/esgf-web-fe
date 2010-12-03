@@ -405,7 +405,7 @@ Builds the project via ant (obviously).
   
   <!-- <target name="make_all_jars" depends="make_jar,make_test_jar,make_common_jar,make_filter_jar"/> -->
   <target name="make_all_jars" depends="make_jar,make_common_jar,make_filter_jar"/>
-
+  <target name="war" depends="make_war" />
   <target name="make_war" depends="make,init"
 	  description="(Creates war file of this project)">
     <mkdir dir="${dist_dir}" />

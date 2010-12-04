@@ -20,7 +20,6 @@ generated/
 /.cobertura.ser
 /eclipse
 /backup
-/bin
 target/
 .externalToolBuilders/
 .springBeans

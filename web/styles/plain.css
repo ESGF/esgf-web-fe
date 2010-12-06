@@ -1,0 +1,532 @@
+/************************************************************
+ Author:    Feiyi Wang 
+ Email:     fwang2@ornl.gov
+ Created:   2010-10-10
+ Desc:      Base Layout
+ ************************************************************/
+
+body {
+	margin: 0;
+	padding: 0;
+    font-size: 0.7em;
+    font-family: "Lucida Grande", "Droid Sans";
+}
+
+#wrapper {
+	position: relative;	
+	font-size: 1em;
+	padding-top: 20px;
+}
+
+
+/* header */
+
+#header{
+    position: relative;
+}	
+
+/* Banner */
+#header .banner-left {
+    background-color: #000;
+}
+
+#header .banner-right {
+    background-color: #000;
+}
+
+#header .banner-center {
+    background-image: url(../images/esg_banner.jpg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 59px;
+    width: 1024px;
+    padding: 0px;
+    margin: 0px;
+}
+
+/* this container for tab is just to save space on the top */
+
+#tab {
+	margin-top:-20px;
+}
+
+
+/* styling constraints */
+
+#search_constraints {
+	background: #FFFFCC; 
+}
+
+
+/* Footer */
+
+#footer {
+	margin-top: 20px;
+	margin-right: 40px;
+	float: right;
+	font-size: 1em;
+    background-color: transparent;
+    font-weight: normal;
+    color: #000000;
+}
+
+/* both #facets and #main are within the #wrapper
+   and the absolute value is less than ideal, but 
+   it prevents shifting when window gets resized
+   there should be a better way of handing this
+ */
+ 
+#facets {
+    position: absolute;
+    left: 1em;
+    width: 200px;
+}
+
+#main {
+    position: absolute;
+    margin-left: 230px;
+    
+}
+
+#wrapper h1, 
+    #wrapper h2, 
+        #wrapper h3, 
+            #wrapper h4, 
+                #wrapper h5, 
+                    #wrapper h6 {
+    color:#00607b;
+}
+
+
+#wrapper h1 {
+	margin-top: 40px;
+    font-size: 200%;
+    color: #00607b;
+}
+#wrapper h2 {
+	margin-top: 1em;
+	margin-bottom:15px;
+    font-size: 170%;
+}
+#wrapper h3 {
+    font-size: 161.6%;
+}
+#wrapper h4 {
+    font-size: 153.9%;
+}
+
+#wrapper ul {
+    margin-top: 0;
+}
+
+
+table#nav {
+	font-size: 1.1em;
+    background: url(../images/bg_nav.png) repeat-x left top;
+    width: 100%;
+    color: #FFFFFF;
+    text-decoration: none;
+    /* border-right: 1px solid #000; */
+    /* display: block; */
+    margin: 0px;
+    padding: 0px; 
+    float: right;
+}
+
+table#nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    float: left;
+    border-bottom: 1px solid #000;
+    display: block;
+}
+
+table#nav ul li {
+	position: relative;
+    float: left;
+    padding: 0;
+    margin: 0;
+}
+
+
+
+table#nav a, table#nav li a:link {
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: .5em 1em;
+}
+
+
+table#nav li a, #nav li a:link {
+    border-right: 1px solid #000;
+    display: block;
+}
+
+table#nav a:hover {
+    background: url(../images/bg_nav_h.png);
+}
+
+
+
+/* Flash messages */
+ul#success-flash-messages {
+    color: green;
+    background-color: #FFFFCC;
+    font-size: larger;
+    font-style: italic;
+    margin-left: 40px;
+    padding: 4px;
+    list-style: none;
+    border: 2px solid green;
+    }
+
+ul#failure-flash-messages {
+    color: red;
+    border: 2px solid red;
+    background-color: #FFFFCC;
+    font-size: larger;
+    font-style: italic;
+    margin-left: 40px;
+    padding: 4px;
+    list-style: none;
+    }
+ul#failure-flash-messages li, ul#success-flash-messages li {
+    list-style: none;
+}
+
+ 
+
+/* style the search box */
+
+input.searchbox {
+    font-weight: normal;  
+    font-size: 1.2em;
+    color: #565656;
+    border: 1px solid #9c9c9c;  
+    width: 300px;  
+    padding-left: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 10px;  
+    margin: 5px;  
+    text-align: left;
+    background: url(../images/mag.png) no-repeat;
+    background-position: 7px 7px;
+}
+
+input.searchbox:active {  
+    border: 1px solid #0099d4;  
+    
+}
+
+.button {
+	border: 1px solid #9c9c9c;
+	background: #CCFFFF;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	cursor: pointer;
+}
+
+.button:hover {
+	background: #00FF00;
+}
+
+
+div.inline {
+	float: left;
+	margin-right: 10px;
+	margin-left: 10px;
+
+}
+.clearBoth {clear:both;}
+
+
+
+
+/* style infowindow */
+
+.infowindow {
+	width: 130px;
+	height: 70px;
+}
+
+/* style pagination */
+
+#pagination {
+    margin-top: 2em;
+    margin-left: 0px;	
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+ /*----------------------------------- 
+    style facet panel 
+   -----------------------------------
+  */
+   
+ul.menu {
+  list-style-type:none;
+  margin: 0;
+  padding: 0;
+  width: 16em;
+  font-size: 1.1em;
+}
+
+ul.menu a {
+  display: block;
+  text-decoration: none;    
+}
+
+ul.menu li {
+	border-style: none;
+	/* border-bottom: thin solid white; */
+}
+
+ul.menu li.disabled {
+	background: gray;
+	color: #fff;
+	padding: 0.5em;
+}
+
+ul.menu li a, ul.menu ul.menu li a {
+  background: #333;
+  color: #fff;  
+  padding: 0.5em;
+}
+
+ul.menu li a:hover, ul.menu ul.menu li a:hover {
+  background: #000;
+}
+
+ul.menu li ul li a, ul.menu ul.menu li ul li a {
+	background: #ccc;
+    color: #000;
+    padding-left: 20px;
+}
+
+ul.menu li ul li a:hover, ul.menu ul.menu li ul li a:hover {
+    background: #aaa;
+    border-left: 5px #000 solid;
+  padding-left: 15px;
+}
+
+ul.menu li.selected {
+    background: #aaa;
+    padding-left: 20px;
+}
+
+ul.menu ul.menu li a:hover {
+    border-left: 0;
+    padding-left: 0.5em;
+}
+ul.menu ul.menu {
+    border-left: 5px #f00 solid;
+}
+
+ul.menu a.active, ul.menu li a.active, ul.menu a.active:hover, ul.menu ul.menu li a.active:hover {
+    background: #c00;
+}
+
+ul.menu div.panel {
+    border: 1px #000 solid;
+    padding: 5px;
+    margin-top: 1px;
+}
+
+ul.menu div.panel a, ul.menu div.panel li a:hover  {
+    display :inline;
+    color: #666;
+    background: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-weight: bold;
+}
+
+ul.menu div.panel a:hover {
+    color: #000;
+    text-decoration: underline; 
+}
+
+
+/* Table format */
+
+.dlink {
+	font-size: 1.2em;
+}
+
+.data td, th {
+	padding: 10px;
+    vertical-align: top;
+}
+
+.data tr {
+	padding-left: 20px;
+}
+
+.data caption {
+	font-size: 1.2em;
+	text-decoration: underline;
+}
+	
+
+/* Style Pane */
+
+label {
+    font-weight: bold;
+    float: left;
+    text-align: right;
+    width: 88px;
+    margin-right: 6px;
+}
+
+#optionContainer {
+    float: left;
+}
+
+#optionPane {
+    clear: both;
+    margin-top: 20px;
+    margin-bottom: 4px;
+    padding: 4px 0;
+    /* border: 1px dotted #9fca6a; */ 
+}
+
+#dataScope, #withMap {
+    padding: 4px 0;
+    margin-bottom: 4px;
+}
+    
+form {
+    font-size: 1.1em;
+}
+
+
+/* Style search result */
+
+#search_summary {
+    margin-top: 20px;
+    font-size: 1.3em;
+    background: #FFFFCC;
+    width: 400px;
+}
+
+.search_data {
+	margin-top: 12px;
+    font-size: 1.1em;
+    border-left: 1px dashed gray;
+}
+
+#search_results {
+	margin-top: 20px;
+	clear: both;
+}
+	
+
+/* --------------------------------
+    Map Style
+   --------------------------------
+ */
+
+
+#map_canvas {
+	float: left;
+	height: 400px;
+	width: 400px;
+	padding: 10px;
+	border-left: 2px solid #666;
+	border-top: 2px solid #666;
+	border-bottom: 2px solid #666;
+	
+}
+
+#map_info {
+	position: absolute;
+	margin-left: 420px;
+	padding: 10px;
+	float: right;
+	width: 200px;
+	height: 400px;
+	border-top: 2px solid #666;
+    border-bottom: 2px solid #666;    	
+	border-right: 2px solid #666;
+}
+
+fieldset{
+    border: 1px solid #CCA383; 
+    background: #FFE8EF;
+    width: 190px;
+    padding: 3px;
+    margin-bottom: 20px;
+}
+
+fieldset legend {
+	background: #CCA383;
+	padding: 3px;
+}
+
+label {
+	margin-left: 0px;
+}
+
+p.legend {
+	font-weight: bold;
+	margin-bottom: 6px;
+}
+
+p.help {
+	font-size: 9px;
+}
+
+#markers {
+	padding-top: 10px;
+}
+
+#areaSelected {
+	padding-top: 10px;
+}
+
+#circleInputs {
+	padding-top: 10px;
+}
+
+#geoloc {
+	margin-bottom: 5px;
+}
+
+
+/* Tool tip styling */
+.tooltip_img {
+    display:none;
+    padding:20px 20px 20px 20px;
+    height: 109px;
+    width: 209px;
+    background:url(../images/white.png) no-repeat;
+    /* background: #FFFF66; */
+    /* width:180px; */
+    /* font-size:1.1em; */
+    color:#000;
+    /* border:1px solid #336600; */
+    /* -moz-box-shadow:0 0 10px #000; */
+    /* -webkit-box-shadow:0 0 10px #000; */
+    z-index: 1;
+    
+}
+
+.tooltip {
+    background-color:#333;
+    border:1px solid #fff;
+    padding:10px 15px;
+    width:200px;
+    display:none;
+    color:#fff;
+    text-align:left;
+    font-size:11px;
+    z-index: 1;
+    /* outline radius for mozilla/firefox only */
+    -moz-box-shadow:0 0 10px #000;
+    -webkit-box-shadow:0 0 10px #000;
+}	

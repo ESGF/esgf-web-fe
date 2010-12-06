@@ -1,23 +1,40 @@
 <ivysettings>
-      <property name="ivy.default.root.url" value="http://esgf.org/ivy" override="false"/>
-      <settings defaultResolver="default-chain"/>
-      
-      <!-- ESGF repository -->
-      <include url="${ivy.default.root.url}/ivysettings-esgf.xml"/>
-      
-      <!-- Third party libraries stored on ESGF system -->
-      <include url="${ivy.default.root.url}/ivysettings-shared.xml"/>
-      
-      <!-- Java.net Public Maven 2 repository -->
-      <include url="${ivy.default.root.url}/ivysettings-javanet.xml"/>
+  <settings defaultResolver="default"/>
+  
+  <property name="spring.version" value="3.0.5.RELEASE" />
+  <property name="ivy.esgf.default.root.url" 
+    value="http://esgf.org/ivy/esgf_repository" override="false"/>
 
-      <!-- Public Maven 2 repository -->
-      <include url="${ivy.default.root.url}/ivysettings-public.xml"/>
-      
-      <!-- Shiboleth repository -->
-      <!-- <include url="${ivy.default.root.url}/ivysettings-shiboleth.xml"/> -->
-      
-      <include url="${ivy.default.root.url}/ivysettings-default-chain.xml"/>
-      
+  	<!--<property name="ivy.esgf.default.root.url" 
+    value="http://esg-gw.ornl.teragrid.org:8088/artifactory/libs-releases" override="false"/>
+  
+  	-->
+  	<resolvers>
+  
+    <url name="esgf" checksums="md5">
+      <ivy pattern="${ivy.esgf.default.root.url}/[organisation]/[module]/[revision]/ivy-[revision].xml" />
+      <artifact pattern="${ivy.esgf.default.root.url}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+      <artifact pattern="${ivy.esgf.default.root.url}/[organisation]/[module]/[revision]/[artifact].[revision].[ext]" />
+      <artifact pattern="${ivy.esgf.default.root.url}/[organisation]/[module]/[revision]/[artifact].[ext]" />
+    </url>
+ 
+ 	
+ 	
+    <ibiblio name="artifactory" m2compatible="true" 
+    root="http://esg-gw.ornl.teragrid.org:8088/artifactory/libs-releases"/>
+  
+  <ibiblio name="public" m2compatible="true"/>
+   
+    
+    </resolvers>
+
+  <resolvers>
+    <chain name="default" returnFirst="true">
+       <resolver ref="esgf" />
+       <resolver ref="public" />
+       <resolver ref="artifactory" />
+    </chain>
+  </resolvers>
+        
 </ivysettings>
 

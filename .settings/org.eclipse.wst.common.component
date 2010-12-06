@@ -2,7 +2,6 @@
 <project-modules id="moduleCoreId" project-version="1.5.0">
 	<wb-module deploy-name="esg-web">
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/java/main"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/etc/conf/main"/>
         <wb-resource deploy-path="/" source-path="/web"/>
         <wb-resource deploy-path="/WEB-INF/lib" source-path="/lib/fetched/runtime"/>
 		<property name="java-output-path" value="target/classes"/>

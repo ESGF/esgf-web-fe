@@ -7,6 +7,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
+	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/Core.js" />"> </script>
+	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/AbstractManager.js" />"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/managers/Manager.jquery.js" />"> </script>
+
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans&subset=latin' 
         rel='stylesheet' type='text/css'>
         
@@ -51,22 +55,11 @@
 
 <div class="span-17 colborder" id="content">
 
-<div class="span-17" id="search-box">
 
-    <!--  Search Box -->
-    <table>
-		<tr align="center">
-			<td>
-			<input class="searchbox" name="text" type="text" value="" /></td>	
-	    	
-	    	<td> <input class="button" type="submit" value="Search" />
-	
-		</tr>
-		
-    </table>
-
-
-</div>
+	<div class="span-17" id="search-box">
+			<input class="searchbox" name="text" type="text" value="" />
+			<input class="button" type="submit" value="Search" />	
+	</div>
 
 <div class="span-17" id="search-results">
 </div>

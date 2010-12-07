@@ -1,0 +1,48 @@
+/************************************************************
+ Author:    Feiyi Wang 
+ Email:     fwang2@ornl.gov
+ Created:   2010-12-07
+ Desc:      A simple, no-frill layout
+ ************************************************************/
+
+body {
+    font-family: "Lucida Grande", "Droid Sans";
+}
+
+/* style the search box */
+
+input.searchbox {
+    font-weight: normal;  
+    font-size: 1.2em;
+    color: #565656;
+    border: 1px solid #9c9c9c;  
+    width: 500px;  
+    padding-left: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 10px;  
+    margin: 0px;  
+    text-align: left;
+    background: url(../images/mag.png) no-repeat;
+    background-position: 7px 7px;
+}
+
+input.searchbox:active {  
+    border: 1px solid #0099d4;  
+    
+}
+
+
+.button {
+	border: 1px solid #9c9c9c;
+	background: #CCFFFF;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	cursor: pointer;
+}
+
+.button:hover {
+	background: #00FF00;
+}

@@ -6,7 +6,7 @@
  ************************************************************/
 
 body {
-    font-family: "Arial", "Lucida Grande", "Droid Sans";
+    font-family: arial, sans-serif;
 }
 
 /* style the search box */
@@ -50,4 +50,26 @@ input.searchbox:active {
 
 .tabitem {
 	margin-right: 10px;
+}
+
+/* reduce padding space */
+.box2 {
+	padding: 0.5em;
+	background: none;
+	border-bottom: 1px solid #ffccff;
+	margin-bottom:1.5em;
+}
+
+
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#search-results {
+	margin-left: 1px solid #ffccff;
 }

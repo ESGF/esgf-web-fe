@@ -79,9 +79,9 @@
 	    <div id="constraints"> 
 	        <h3 class="caps">Search Constraints</h3> 
 	        
-	        <div class="box"> 
-	          <div><a class="quiet" href="#"> Temporal</a> </div>
-	          <div><a class="quiet" href="#"> Geospatial</a> </div>
+	        <div class="box2"> 
+	          <div><a href="#"> Temporal</a> </div>
+	          <div><a href="#"> Geospatial</a> </div>
 	        </div> 
 	         
 	    </div> 
@@ -89,9 +89,9 @@
         <div id="tags"> 
             <h3 class="caps">Popular Tags</h3> 
         
-            <div class="box"> 
-            <div><a class="quiet" href="#"> Temporal</a> </div>
-            <div><a class="quiet" href="#"> Geospatial</a> </div>
+            <div class="box2"> 
+            <div><a href="#"> Temporal</a> </div>
+            <div><a href="#"> Geospatial</a> </div>
             </div> 
          
         </div> 
@@ -103,6 +103,7 @@
 
 </div>
 
+<!--  I am not sure if I like this
 
  <div id="footer">      
       <div class="prepend-top span-8 last"> 
@@ -110,6 +111,9 @@
         <a href="#" class="quiet">Disclaimer</a>       
         </div> 
  </div> 
+ 
+-->
+
 
 </div>
 

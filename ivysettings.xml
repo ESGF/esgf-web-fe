@@ -1,7 +1,7 @@
 <ivysettings>
   <settings defaultResolver="default"/>
   
-  <property name="spring.version" value="3.0.3.RELEASE" />
+  <property name="spring.version" value="3.0.5.RELEASE" />
   <property name="ivy.esgf.devel.root.url" value="http://esgf.org/artifactory/esgf-repo-devel" override="false"/>
   <property name="ivy.esgf.shared.root.url" value="http://esgf.org/artifactory/esgf-repo-shared" override="false"/>
 
@@ -32,11 +32,10 @@
         
         <resolvers>
           <chain name="default" returnFirst="true">
+            <resolver ref="esgf_repo_devel" />
             <resolver ref="public" />
             <resolver ref="artifactory" />
             <resolver ref="esgf_repo_shared" />
-            <resolver ref="esgf_repo_devel" />
-            
           </chain>
         </resolvers>
         

@@ -40,6 +40,8 @@ Builds the project via ant (obviously).
 
   <property file="${user.home}/.${module}.ant.properties"/>
   <echo message="user property file ${user.home}/.${module}.ant.properties"/>
+  <property file="${user.home}/.esgf.ant.properties"/>
+  <echo message="user property file ${user.home}/.esgf.ant.properties"/>
   <property file="${basedir}/etc/${module}.ant.properties"/> 
   <echo message="user property file ${basedir}/etc/${module}.ant.properties"/>
 
@@ -124,7 +126,7 @@ Builds the project via ant (obviously).
     <property name="depcache_dir"     	  value="${java.io.tmpdir}/${module}/depcache"/>
     <property name="log_config"       	  value="${conf_dir}/log4j.properties"/>
     <property name="log_file"         	  value="${log_dir}/${module}_v${version_num}.log"/>
-    <property name="javadoc_link_src" 	  value="true"/>
+    <property name="javadoc_link_src" 	  value="false"/>
     <property name="main_class"           value="esgf.xxx.core.Main"/>
 
     <property name="doc_dir_generated"    value="${basedir}/docs-generated"/>

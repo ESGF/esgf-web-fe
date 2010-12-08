@@ -2,8 +2,8 @@
   <settings defaultResolver="default"/>
   
   <property name="spring.version" value="3.0.5.RELEASE" />
-  <property name="ivy.esgf.devel.root.url" value="http://esgf.org/artifactory/esgf_repo_devel" override="false"/>
-  <property name="ivy.esgf.shared.root.url" value="http://esgf.org/artifactory/esgf_repo_shared" override="false"/>
+  <property name="ivy.esgf.devel.root.url" value="http://esgf.org/artifactory/esgf-repo-devel" override="false"/>
+  <property name="ivy.esgf.shared.root.url" value="http://esgf.org/artifactory/esgf-repo-shared" override="false"/>
 
   	<!--<property name="ivy.esgf.default.root.url" 
     value="http://esg-gw.ornl.teragrid.org:8088/artifactory/libs-releases" override="false"/>

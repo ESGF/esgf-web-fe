@@ -6,7 +6,7 @@
  ************************************************************/
 
 body {
-    font-family: "Lucida Grande", "Droid Sans";
+    font-family: "Arial", "Lucida Grande", "Droid Sans";
 }
 
 /* style the search box */
@@ -21,7 +21,7 @@ input.searchbox {
     padding-top: 5px;
     padding-bottom: 5px;
     padding-right: 10px;  
-    margin: 0px;  
+    margin-top: 10px;  
     text-align: left;
     background: url(../images/mag.png) no-repeat;
     background-position: 7px 7px;
@@ -46,4 +46,8 @@ input.searchbox:active {
 
 .button:hover {
 	background: #00FF00;
+}
+
+.tabitem {
+	margin-right: 10px;
 }

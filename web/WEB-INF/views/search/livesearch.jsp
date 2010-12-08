@@ -43,41 +43,64 @@
 
 
 <div id="header" class="span-24 last">
-	<h1 id="esg_search"></h1>
+<div class="span-16">
+<span class="tabitem"> <a href="#"> Home </a></span> 
+<span class="tabitem"> <a href="#"> Browse </a> </span>
+<span class="tabitem"> <a href="#"> Analysis</a></span>
 </div>
+<hr/>
+</div>
+
 
 <div id="subheader" class="span-24 last">
-	<h3 class="alt"> Still a very experimental search</h3>
-</div>
 
-<hr />
+	<div id="logo" class="span-4">
+    <img src="<c:url value="/images/esg100.png" />" >
+    
+	<h4 class="alt"> Experimental Search</h4>
+    
+    </div>
 
-
-<div class="span-17 colborder" id="content">
-
-
-	<div class="span-17" id="search-box">
+	<div class="push-1 span-19 last" id="search-box">
 			<input class="searchbox" name="text" type="text" value="" />
 			<input class="button" type="submit" value="Search" />	
 	</div>
-
-<div class="span-17" id="search-results">
+    
 </div>
 
-</div>
 
-<div class="span-6 last" id="sidebar">
+
+
+
+<div class="span-24 last" id="contents">
+
+    <div class="span-4" id="sidebar">
  
-      <div id="constraints"> 
-        <h3 class="caps">Search Constraints</h3> 
+	    <div id="constraints"> 
+	        <h3 class="caps">Search Constraints</h3> 
+	        
+	        <div class="box"> 
+	          <div><a class="quiet" href="#"> Temporal</a> </div>
+	          <div><a class="quiet" href="#"> Geospatial</a> </div>
+	        </div> 
+	         
+	    </div> 
+
+        <div id="tags"> 
+            <h3 class="caps">Popular Tags</h3> 
         
-        <div class="box"> 
-          <div><a class="quiet" href="#"> Temporal</a> </div>
-          <div><a class="quiet" href="#"> Geospatial</a> </div>
-        </div> 
+            <div class="box"> 
+            <div><a class="quiet" href="#"> Temporal</a> </div>
+            <div><a class="quiet" href="#"> Geospatial</a> </div>
+            </div> 
          
-      </div> 
+        </div> 
  
+    </div>
+
+    <div class="span-20 last" id="search-results">
+    </div>
+
 </div>
 
 

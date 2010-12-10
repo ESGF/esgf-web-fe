@@ -30,7 +30,7 @@ input.searchbox {
     padding-top: 5px;
     padding-bottom: 5px;
     padding-right: 10px;  
-    margin-top: 10px;  
+    margin-top: 15px;  
     text-align: left;
     background: url(../images/mag.png) no-repeat;
     background-position: 7px 7px;
@@ -39,6 +39,14 @@ input.searchbox {
 input.searchbox:active {  
     border: 1px solid #0099d4;  
     
+}
+
+.right {
+	float: right;
+}
+
+.left {
+	float: left;
 }
 
 
@@ -83,4 +91,8 @@ a:hover {
 
 #search-results {
 	margin-left: 1px solid #ffccff;
+}
+
+#constraints {
+	margin-top: 1.5em;
 }

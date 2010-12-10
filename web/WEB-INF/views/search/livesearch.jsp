@@ -57,36 +57,35 @@
 
 
 <div id="header" class="span-24 last">
-<div class="span-16">
-<span class="tabitem"> <a href="#"> Home </a></span> 
-<span class="tabitem"> <a href="#"> Browse </a> </span>
-<span class="tabitem"> <a href="#"> Analysis</a></span>
-</div>
+	<div class="span-16 left">
+	<span class="tabitem"> <a href="#"> Home </a></span> 
+	<span class="tabitem"> <a href="#"> Browse </a> </span>
+	<span class="tabitem"> <a href="#"> Analysis</a></span>
+	</div>
+
+    <div class="prepend-4 span-4 last">
+    <span class="tabitem"> <a href="#"> Search settings</a></span>
+    <span class="tabitem"> <a href="#"> Sign in </a></span>
+    </div>
 <hr/>
 </div>
 
 
 <div id="subheader" class="span-24 last">
-
-	<div id="logo" class="span-4">
-    <img src="<c:url value="/images/esg100.png" />" >
-    
-	<h4 class="alt"> Experimental Search</h4>
-    
+ 
+    <div class="span-4">
+        <img src="<c:url value="/images/esg_earth_96.png" />" >        
     </div>
-
-	<div class="push-1 span-19 last" id="search-box">
+    
+    <div class="span-20 last" id="search-box">
 			<input class="searchbox" name="text" type="text" value="" />
 			<input class="button" type="submit" value="Search" />	
-	</div>
-    
+    </div>
 </div>
 
 
-
-
-
 <div class="span-24 last" id="contents">
+
 
     <div class="span-4" id="sidebar">
  
@@ -99,19 +98,18 @@
 	<div class="box2"> 
 	          <div><a href="#"> Temporal</a> </div>
 	          <div><a href="#"> Geospatial</a> </div>
-	 </div> 	         
+	</div> 	         
  
 
-     <h5>Popular Tags</h5> 
+    <h5>Popular Tags</h5> 
         
-     <div class="box2" id="tags"> 
-     </div>          
+    <div class="box2" id="tags">  </div>          
  
     </div>
 
     <div class="span-20 last" id="search-results">
     </div>
-
+ 
 </div>
 
 <!--  I am not sure if I like this

@@ -9,6 +9,15 @@ body {
     font-family: arial, sans-serif;
 }
 
+
+
+/* fix the left margin */
+
+.container {
+	margin-left: 10px;
+}
+
+
 /* style the search box */
 
 input.searchbox {
@@ -57,10 +66,12 @@ input.searchbox:active {
 	padding: 0.5em;
 	background: none;
 	border-bottom: 1px solid #ffccff;
-	margin-bottom:1.5em;
+	margin-bottom:1.0em;
 }
 
-
+#sidebar h5 {
+	margin-bottom: 0.5em;
+}
 
 a {
     text-decoration: none;

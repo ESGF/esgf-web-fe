@@ -7,9 +7,23 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
+    <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery-1.4.2.min.js" /> "></script>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery-ui-1.8.5.min.js" /> "></script> 
+    <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.livequery.js" /> "></script> 
+    
 	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/Core.js" />"> </script>
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/Parameter.js" />"></script>	
+	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/ParameterStore.js" />"></script>
 	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/AbstractManager.js" />"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/AbstractWidget.js" />"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/helpers/ajaxsolr.theme.js" />"></script>
 	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/managers/Manager.jquery.js" />"> </script>
+
+
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Results.js" />"> </script>
+    
+    <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
+    <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.theme.js" />"> </script>
 
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans&subset=latin' 
         rel='stylesheet' type='text/css'>
@@ -76,25 +90,22 @@
 
     <div class="span-4" id="sidebar">
  
-	    <div id="constraints"> 
-	        <h3 class="caps">Search Constraints</h3> 
+    <h5> Current Selections </h5>
+ 
+    <div id="current-selections"> </div>
+ 
+	<h5> Search Constraints</h5> 
 	        
-	        <div class="box2"> 
+	<div class="box2"> 
 	          <div><a href="#"> Temporal</a> </div>
 	          <div><a href="#"> Geospatial</a> </div>
-	        </div> 
-	         
-	    </div> 
+	 </div> 	         
+ 
 
-        <div id="tags"> 
-            <h3 class="caps">Popular Tags</h3> 
+     <h5>Popular Tags</h5> 
         
-            <div class="box2"> 
-            <div><a href="#"> Temporal</a> </div>
-            <div><a href="#"> Geospatial</a> </div>
-            </div> 
-         
-        </div> 
+     <div class="box2" id="tags"> 
+     </div>          
  
     </div>
 

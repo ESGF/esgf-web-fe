@@ -81,6 +81,9 @@ input.searchbox:active {
 	margin-bottom: 0.5em;
 }
 
+a:link { color: #0000ff;}
+a:visited { color: #009;}
+
 a {
     text-decoration: none;
 }

@@ -30,11 +30,11 @@
 
 
     <logger name="org.springframework.web.servlet">
-        <level value="debug" />
+        <level value="info" />
     </logger>
     
     <logger name="org.springframework.web.servlet.view">
-        <level value="debug" />
+        <level value="info" />
     </logger>
     
     <logger name="org.esgf.web">

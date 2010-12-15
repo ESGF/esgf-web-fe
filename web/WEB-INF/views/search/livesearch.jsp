@@ -16,7 +16,7 @@
 	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/ParameterStore.js" />"></script>
 	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/AbstractManager.js" />"></script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/AbstractWidget.js" />"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/helpers/ajaxsolr.theme.js" />"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/helpers/jquery/ajaxsolr.theme.js" />"></script>
 	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/managers/Manager.jquery.js" />"> </script>
 
 
@@ -81,6 +81,9 @@
 			<input class="searchbox" name="text" type="text" value="" />
 			<input class="button" type="submit" value="Search" />	
     </div>
+    
+    <div class="span-20 last" id="search-summary">
+    </div>
 </div>
 
 
@@ -107,7 +110,7 @@
  
     </div>
 
-    <div class="span-20 last" id="search-results">
+    <div class="span-19 last" id="search-results">
     </div>
  
 </div>

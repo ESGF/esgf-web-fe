@@ -90,9 +90,19 @@ a:hover {
 }
 
 #search-results {
-	margin-left: 1px solid #ffccff;
+	padding-left: 10px;
+	border-left: 1px solid #ffccff;
 }
 
 #constraints {
 	margin-top: 1.5em;
+}
+
+/* add some space between each search entry */
+div.search-entry {
+	margin-bottom: 15px;
+}
+
+h4.desc {
+	text-decoration: underline;
 }

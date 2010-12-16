@@ -7,7 +7,7 @@
 (function ($) {
 	
 	Manager = new AjaxSolr.Manager({
-		proxyUrl: 'http://localhost:8080/esg-web/solrproxy'
+		proxyUrl: 'http://localhost:8080/esgf-web-fe/solrproxy'
 	});
 	
 	Manager.addWidget(new AjaxSolr.ResultWidget({
@@ -25,7 +25,7 @@
 		  renderHeader: function (perPage, offset, total) {
 		    $('#pager-header').html($('<span/>').text('displaying ' + 
 		    		Math.min(total, offset + 1) + ' to ' + Math.min(total, offset + perPage) + 
-		    		' of ' + total));
+		    		' of ' + total + " search results"));
 		  }
 		}));
 

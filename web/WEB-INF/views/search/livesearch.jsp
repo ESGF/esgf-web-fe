@@ -9,6 +9,7 @@
 
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery-1.4.2.min.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery-ui-1.8.5.min.js" /> "></script> 
+    <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.tools.min.js" /> "></script> 
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.livequery.js" /> "></script> 
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.autocomplete.js" /> "></script> 
     
@@ -130,8 +131,8 @@
 	<h5> Search Constraints</h5> 
 	        
 	<div class="box2"> 
-	          <div><a href="#"> Temporal</a> </div>
-	          <div><a href="#"> Geospatial</a> </div>
+	          <div id="temporal"><a href="#"> Temporal</a> </div>
+	          <div id="geo"><a href="#"> Geospatial</a> </div>
 	</div> 	         
  
 

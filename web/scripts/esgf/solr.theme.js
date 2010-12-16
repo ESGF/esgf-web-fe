@@ -25,14 +25,16 @@ AjaxSolr.theme.prototype.snippet = function (doc) {
  
 	if (doc.description != undefined)
 		doc.text = doc.description[0];
-	
-	if (doc.text.length > 500) {
-	    output += doc.text.substring(0, 500);
-	    output += '<span style="display:none;">' + doc.text.substring(500);
-	    output += '</span> <a href="#" class="more"> ... more</a>';
-	}
-	else {
-	    output += doc.text;
+	if (doc.text != undefined) {
+		if (doc.text.length > 500) {
+		    output += doc.text.substring(0, 500);
+		    output += '<span style="display:none;">' + doc.text.substring(500);
+		    output += '</span> <a href="#" class="more"> ... more</a>';
+		} else {
+			output += doc.text;
+		}
+	} else {
+	    output = "No description available.";
 	}
 	
 	return output;

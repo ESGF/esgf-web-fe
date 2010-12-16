@@ -47,11 +47,11 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
     $('a.more').livequery(function () {
       $(this).toggle(function () {
         $(this).parent().find('span').show();
-        $(this).text('less');
+        $(this).text('... less');
         return false;
       }, function () {
         $(this).parent().find('span').hide();
-        $(this).text('more');
+        $(this).text('... more');
         return false;
       });
     });

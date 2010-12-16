@@ -22,7 +22,7 @@ AjaxSolr.PagerWidget = AjaxSolr.AbstractWidget.extend(
    * @type Number
    * @default 4
    */
-  innerWindow: 4,
+  innerWindow: 5,
 
   /**
    * How many links are around the first and the last page.

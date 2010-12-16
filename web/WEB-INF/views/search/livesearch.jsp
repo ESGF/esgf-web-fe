@@ -16,12 +16,18 @@
 	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/ParameterStore.js" />"></script>
 	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/AbstractManager.js" />"></script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/AbstractWidget.js" />"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/AbstractFacetWidget.js" />"></script>
+    
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/helpers/jquery/ajaxsolr.theme.js" />"></script>
 	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/managers/Manager.jquery.js" />"> </script>
 
 
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Results.js" />"> </script>
-    
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Pager.js" />"> </script>
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/TagClouds.js" />"> </script>
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/CurrentSearch.js" />"> </script>
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Text.js" />"> </script>
+            
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.theme.js" />"> </script>
 
@@ -73,17 +79,33 @@
 
 <div id="subheader" class="span-24 last">
  
-    <div class="span-4">
-        <img src="<c:url value="/images/esg_earth_96.png" />" >        
+    <div class="push-1 span-3">
+        <img src="<c:url value="/images/search2.png" />" >        
     </div>
     
-    <div class="span-20 last" id="search-box">
-			<input class="searchbox" name="text" type="text" value="" />
-			<input class="button" type="submit" value="Search" />	
+    <div class="span-20 last"">
+    
+    
+		<input id="search-box" name="text" type="text" value="" />
+		
+		<input id="search-button" type="submit" value="Search" />	
+			
+        <div class="span-20 last" id="search-summary">
+        
+        <div class="span-5" id="search-speed">
+        <div id="search-help">(press ESC to close suggestions)</div>
+        </div>
+    
+        <div id="page-navigation" class="span-15 last">
+          <ul id="pager"></ul>
+          <div id="pager-header"></div>          
+        </div>
+        
+    </div>
+			
     </div>
     
-    <div class="span-20 last" id="search-summary">
-    </div>
+   
 </div>
 
 
@@ -92,9 +114,12 @@
 
     <div class="span-4" id="sidebar">
  
-    <h5> Current Selections </h5>
- 
-    <div id="current-selections"> </div>
+
+
+
+    <h5> Current Selections</h5>
+    <div id="current-selection" class="box2">
+    </div>
  
 	<h5> Search Constraints</h5> 
 	        
@@ -104,11 +129,13 @@
 	</div> 	         
  
 
-    <h5>Popular Tags</h5> 
-        
-    <div class="box2" id="tags">  </div>          
- 
+
+    <h5>Project Tags</h5> 
+    
+    <div class="box2" id="project">
     </div>
+    
+    </div> <!--  sidebar -->
 
     <div class="span-19 last" id="search-results">
     </div>

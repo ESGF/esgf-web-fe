@@ -6,14 +6,6 @@
  */
 (function ($) {
 	
-	$("div.search-entry").live('mouseover',  function() {
-		$(this).css('background-color', '#ccffff');
-	})
-	
-	$("div.search-entry").live('mouseout', function() {
-		$(this).css("background-color", '#ffffff');
-	})
-	
 	Manager = new AjaxSolr.Manager({
 		proxyUrl: 'http://localhost:8080/esg-web/solrproxy'
 	});
@@ -42,12 +34,20 @@
 		  target: '#current-selection',
 		}));
 
-	Manager.addWidget(new AjaxSolr.TextWidget({
+//	Manager.addWidget(new AjaxSolr.TextWidget({
+//		  id: 'text',
+//		  target: '#search-box',
+//		  field: 'allText'
+//		}));
+
+	Manager.addWidget(new AjaxSolr.AutocompleteWidget({
 		  id: 'text',
 		  target: '#search-box',
-		  field: 'allText'
+		  field: 'allText',
+		  fields: [ 'project' ]
 		}));
 
+	
 	
 	Manager.init();
 	
@@ -77,5 +77,14 @@
 
 	Manager.store.addByValue('q', '*:*');	
 	Manager.doRequest();
+
+	$("div.search-entry").live('mouseover',  function() {
+		$(this).css('background-color', '#ccffff');
+	})
 	
+	$("div.search-entry").live('mouseout', function() {
+		$(this).css("background-color", '#ffffff');
+	})
+	
+
 })(jQuery);

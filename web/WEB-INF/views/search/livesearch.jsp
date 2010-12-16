@@ -10,6 +10,7 @@
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery-1.4.2.min.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery-ui-1.8.5.min.js" /> "></script> 
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.livequery.js" /> "></script> 
+    <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.autocomplete.js" /> "></script> 
     
 	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/Core.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/Parameter.js" />"></script>	
@@ -27,7 +28,8 @@
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/TagClouds.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/CurrentSearch.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Text.js" />"> </script>
-            
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/AutoComplete.js" />"> </script>
+                
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.theme.js" />"> </script>
 
@@ -49,6 +51,9 @@
 		href="<c:url value="/styles/blueprint/plugins/fancy-type/screen.css" />" 
 		type="text/css" media="screen, projection">
 	
+    <link rel="stylesheet" 
+        href="<c:url value="/styles/jquery.autocomplete.css" />" 
+        type="text/css" media="screen, projection">
 	
 	<link rel="stylesheet" 
 		href="<c:url value="/styles/esg-simple.css" />" 
@@ -85,8 +90,9 @@
     
     <div class="span-20 last"">
     
-    
-		<input id="search-box" name="text" type="text" value="" />
+        <span id="search-box">
+		<input id="query" name="text" type="text" value="" />
+		</span>
 		
 		<input id="search-button" type="submit" value="Search" />	
 			

@@ -20,7 +20,7 @@ body {
 
 /* style the search box */
 
-#search-box {
+#query {
     font-weight: normal;  
     font-size: 1.2em;
     color: #565656;
@@ -36,7 +36,7 @@ body {
     background-position: 7px 7px;
 }
 
-#search-box:active {  
+#query:active {  
     border: 1px solid #0099d4;  
     
 }

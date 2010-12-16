@@ -44,7 +44,7 @@
 	Manager.addWidget(new AjaxSolr.AutocompleteWidget({
 		  id: 'text',
 		  target: '#search-box',
-		  field: 'allText',
+		  field: 'text',
 		  fields: [ 'project' ]
 		}));
 

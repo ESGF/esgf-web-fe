@@ -1,0 +1,186 @@
+/************************************************************
+ Author:    Feiyi Wang 
+ Email:     fwang2@ornl.gov
+ Created:   2010-12-07
+ Desc:      A simple, no-frill layout
+ ************************************************************/
+
+body {
+    font-family: arial, sans-serif;
+}
+
+
+
+/* fix the left margin */
+
+.container {
+	margin-left: 10px;
+}
+
+
+/* style the search box */
+
+#query {
+    font-weight: normal;  
+    font-size: 1.2em;
+    color: #565656;
+    border: 1px solid #9c9c9c;  
+    width: 500px;  
+    padding-left: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 10px;  
+    margin-top: 15px;  
+    text-align: left;
+    background: url(../images/mag.png) no-repeat;
+    background-position: 7px 7px;
+}
+
+#query:active {  
+    border: 1px solid #0099d4;  
+    
+}
+
+.right {
+	float: right;
+}
+
+.left {
+	float: left;
+}
+
+
+#search-button {
+	font-size: 1.2em;
+	border: 1px solid #9c9c9c;
+	background: #CCFFFF;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	cursor: pointer;
+}
+
+#search-button:hover {
+	background: #00FF00;
+}
+
+.tabitem {
+	margin-right: 10px;
+}
+
+/* reduce padding space */
+.box2 {
+	padding: 0.5em;
+	background: none;
+	border-top: 1px solid #ffccff;
+	margin-bottom:1.0em;
+}
+
+#current-selection li {
+  list-style-type: none;
+}
+
+#sidebar h5 {
+	margin-bottom: 0.5em;
+}
+
+a:link { color: #0000ff;}
+a:visited { color: #009;}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#search-results {
+	padding-left: 10px;
+	border-left: 1px solid #ffccff;
+}
+
+#constraints {
+	margin-top: 1.5em;
+}
+
+/* add some space between each search entry */
+div.search-entry {
+	margin-bottom: 15px;
+}
+
+h4.desc {
+	text-decoration: underline;
+}
+
+
+#search-summary {
+	margin: 0px;
+}
+
+
+/* pager */
+
+#page-navigation {
+  /* border-bottom: 1px solid #ffccff; */
+}
+
+#pager, #pager-header {
+  display: inline;
+}
+#pager li, .links li {
+  list-style-type: none;
+  display: inline;
+}
+
+
+/* tagcloud */
+
+
+.tagcloud {
+  padding: 10px 15px 0;
+}
+.tagcloud_item {
+  float: left;
+  display: block;
+  margin-right: 4px;
+  color: #6998f0;
+}
+.tagcloud_item:hover {
+  color: #f00;
+}
+
+a.tagcloud_size_0 {
+font-size: 80%;
+}
+a.tagcloud_size_1 {
+font-size: 90%;
+}
+a.tagcloud_size_2 {
+font-size: 100%;
+}Rst
+a.tagcloud_size_3 {
+font-size: 110%;
+}
+a.tagcloud_size_4 {
+font-size: 120%;
+}
+a.tagcloud_size_5 {
+font-size: 130%;
+}
+a.tagcloud_size_6 {
+font-size: 140%;
+}
+a.tagcloud_size_7 {
+font-size: 150%
+}
+a.tagcloud_size_8 {
+font-size: 160%;
+}
+a.tagcloud_size_9 {
+font-size: 170%;
+}
+a.tagcloud_size_10 {
+font-size: 180%;
+}

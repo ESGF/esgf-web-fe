@@ -1,4 +1,5 @@
 #popupTemporalSearch{
+	
 display:none;
 position:fixed;
 _position:absolute;  /* hack for internet explorer 6 */
@@ -27,8 +28,8 @@ margin-bottom:20px;
 }
 
 #temporal_helper {
-	padding-bottom: 20px;
-}
+	/*padding-bottom: 20px;
+*/}
 
 #popupTemporalSearch p{
 padding-bottom:0px;
@@ -140,7 +141,7 @@ z-index:1;
 	padding-top: 20px;
 	padding-left:20px;
 	padding:10px;
-	padding-bottom:110px;
+	padding-bottom:50px;
 }
 
 #temporal_content1 h1 {
@@ -211,25 +212,25 @@ z-index:1;
 
 #tlc1
 	{
-	background-image:url(../images/roundedGreyBox/tlc.gif);
+	background-image:url(../images/temporal_overlay/tlc.gif);
 	background-position: 0% 0%;
 	}
 
 #trc1
 	{
-	background-image:url(../images/roundedGreyBox/trc.gif);
+	background-image:url(../images/temporal_overlay/trc.gif);
 	background-position: 100% 0%;
 	}
 	
 #blc1
 	{
-	background-image:url(../images/roundedGreyBox/blc.gif);
+	background-image:url(../images/temporal_overlay/blc.gif);
 	background-position: 0% 100%;
 	}
 
 #brc1
 	{
-	background-image:url(../images/roundedGreyBox/brc.gif);
+	background-image:url(../images/temporal_overlay/brc.gif);
 	background-position: 100% 100%;
 	}
 
@@ -241,26 +242,26 @@ z-index:1;
 			
 #tb1
 	{
-	background-image:url(../images/roundedGreyBox/tb.gif);
+	background-image:url(../images/temporal_overlay/tb.gif);
 	background-position: 0% 0%;
 	}
 
 #bb1
 	{
-	background-image:url(../images/roundedGreyBox/bb.gif);
+	background-image:url(../images/temporal_overlay/bb.gif);
 	background-position: 50% 100%;
 	}
 	
 #rb1
 	{
-	background-image:url(../images/roundedGreyBox/r.gif);
+	background-image:url(../images/temporal_overlay/r.gif);
 	background-position: 100% 0%;
 	background-repeat: repeat-y;
 	}
 
 #lb1
 	{
-	background-image:url(../images/roundedGreyBox/l.gif);
+	background-image:url(../images/temporal_overlay/l.gif);
 	background-position: 0% 100%;
 	background-repeat: repeat-y;
 	}

@@ -11,6 +11,7 @@
 	<!-- Scans the classpath of this application for @Components to deploy as beans -->
 	<context:component-scan base-package="org.esgf.web" />
     <context:component-scan base-package="org.esgf.solr" />
+
     
 	<!-- Application Message Bundle -->
 	<bean id="messageSource" 
@@ -20,9 +21,9 @@
 	</bean>
 
     
-	<!-- Configures Spring MVC -->
-	<import resource="mvc-config.xml" />
-	<import resource="facet-config.xml" />
+	<!-- Configures Spring -->
+    <import resource="mvc-config.xml" />
+    <import resource="facet-config.xml" />
     <import resource="service-config.xml" />
     
 </beans>

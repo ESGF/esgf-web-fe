@@ -118,34 +118,38 @@
 
 <div class="span-24 last" id="contents">
 
-
-    <div class="span-4" id="sidebar">
+  <div class="span-4" id="sidebar">
  
-
-
-
-    <h5> Current Selections</h5>
-    <div id="current-selection" class="box2">
-    </div>
- 
-	<h5> Search Constraints</h5> 
+  <div class="round-box">
+  <div class="round-header round-top"> Current Selections</div>
+    
+    <div id="current-selection" class="round-content"></div>
+  
+  </div> <!--  current selection -->
+  
+  
+  <div class="round-box"> 
+  <div class="round-header round-top"> Search Constraints</div> 
 	        
-	<div class="box2"> 
+  <div class="round-content"> 
 	          <div id="temporal"><a href="#"> Temporal</a> </div>
 	          <div id="geo"><a href="#"> Geospatial</a> </div>
-	</div> 	         
- 
+  </div> 	         
+  </div> <!--  Search constraints -->
 
-
-    <h5>Project Tags</h5> 
+  <div class="round-box">
+  
+    <div class="round-header round-top">Project Tags</div> 
     
-    <div class="box2" id="project">
+    <div id="project" class="round-content">
     </div>
     
-    </div> <!--  sidebar -->
+  </div> <!--  Project tags -->
+  
+  
+  </div> <!--  sidebar -->
 
-    <div class="span-19 last" id="search-results">
-    </div>
+  <div class="span-19 last" id="search-results"> </div>
  
 </div>
 

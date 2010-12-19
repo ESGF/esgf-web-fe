@@ -28,6 +28,9 @@
     <dependency org="org.springframework" name="spring-context" rev="${spring.version}" transitive="true" conf="base->default" />
     <dependency org="org.springframework" name="spring-web" rev="${spring.version}" transitive="true" conf="base->default" />
     <dependency org="org.springframework" name="spring-webmvc" rev="${spring.version}" transitive="false" conf="base->default" />
+    <dependency org="org.springframework.security" name="spring-security-core" rev="${spring.version}" conf="base->default" />
+    <dependency org="org.springframework.security" name="spring-security-config" rev="${spring.version}" conf="base->default" />
+    <dependency org="org.springframework.security" name="spring-security-openid" rev="${spring.version}" conf="base->default" />
     <dependency org="javax.servlet" name="servlet-api" rev="2.5" transitive="false" conf="compile->default" />
     <dependency org="javax.servlet" name="jstl" rev="1.2" conf="base->default" />
     <dependency org="org.apache.lucene" name="lucene-spatial" rev="3.0.2" transitive="false" conf="base->default" />
@@ -38,8 +41,11 @@
     <dependency org="org.tuckey" name="urlrewritefilter" rev="3.1.0" transitive="false" conf="base->default" />
     <dependency org="org.esgf" name="esg-search" rev="1.0.0" transitive="false" conf="base->default" />
 
-    <dependency org="commons-httpclient" name="commons-httpclient" rev="3.1"
-        conf="base->default" />
+    <dependency org="commons-httpclient" name="commons-httpclient" rev="3.1" conf="base->default" />
+    <dependency org="org.openid4java" name="openid4java" rev="0.9.5" conf="base->default">
+        <exclude name="openid4java-consumer-SampleConsumer" />
+        <exclude name="openid4java-server-SampleServer" />
+    </dependency>
  
   </dependencies>
 </ivy-module>

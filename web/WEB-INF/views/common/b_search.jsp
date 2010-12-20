@@ -28,6 +28,9 @@
         type="text/css" media="screen, projection">
 
 
+	<link rel="stylesheet" 
+		href="<c:url value="/styles/metadata_overlay.css" />" 
+		type="text/css" media="screen, projection">
            
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery-1.4.2.min.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery-ui-1.8.5.min.js" /> "></script>    
@@ -41,16 +44,19 @@
     <script type="text/javascript" src="<c:url value="/scripts/esgf/map.js" /> "></script> 
     <script type="text/javascript" src="<c:url value="/scripts/esgf/submit.js" /> "></script> 
 
-   
+    
     <script type="text/javascript"
         src="http://maps.google.com/maps/api/js?sensor=false">
     </script>
 
+	<script type="text/javascript" src="<c:url value="/scripts/esgf/metadata_overlay.js" />"> </script>
+   
 </head>
 
 <body>
 
-    
+    <div id="metadata_overlay"></div>
+	
 <div id="header"> 
 
 	<table width="100%" cellpadding="0" cellspacing="0" align="center" border="0" > 

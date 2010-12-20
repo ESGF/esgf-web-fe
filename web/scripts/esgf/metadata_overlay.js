@@ -343,6 +343,7 @@ function metadata_link()
 	$('div#geospatial_metadata').after('<div class="added1"><p>south degrees: ' + south_degrees + '</p></div>');
 	$('div#temporal_metadata').after('<div class="added1"><p>end: ' + datetime_stop + '</p></div>');
 	$('div#temporal_metadata').after('<div class="added1"><p>begin: ' + datetime_start + '</p></div>');
+
 	display_meta_map ();
 }
 
@@ -354,13 +355,14 @@ function display_meta_map () {
 		zoom: 4,
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
+
 	// check to see if we already have a map object
 	//if (!map) {
 	var meta_map = new google.maps.Map(mapDiv, options);
 	//}
-	
+
 	var location = new google.maps.LatLng(30,40);
-	
+
 	// create a new marker
 	var marker = new google.maps.Marker({
 		draggable: true,

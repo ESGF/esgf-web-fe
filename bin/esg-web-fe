@@ -63,32 +63,29 @@ VERBOSE=${VERBOSE:-0}
 esg_dist_url=http://198.128.245.140/dist
 envfile="/etc/esg.env"
 
-web_fe_version=${node_manager_version:-"0.9.1"}
+web_fe_version=${web_fe_version:-"0.9.1"}
 
 #--------------
 #User Defined / Settable (public)
 #--------------
 install_prefix=${install_prefix:-"/usr/local"}
-esg_root_dir=${esg_root_dir:-"/esg"}
 workdir=${workdir:-~/workbench/esg}
 install_logfile=${install_logfile:-"/etc/esg.install_log"}
 #--------------
 
 date_format=${date_format:-"+%Y_%m_%d_%H%M%S"}
-compress_extensions=${compress_extensions:-".tar.gz|.tar.bz2|.tgz|.bz2"}
 force_install=${force_install:-0}
 
 tomcat_user=${tomcat_user:-tomcat}
 tomcat_group=${tomcat_group:-$tomcat_user}
 tomcat_install_dir=${CATALINA_HOME:-${install_prefix}/tomcat}
-web_fe_app_context_root=esgf-web-fe
 
 init() {
-    [ -n "${envfile}" ] && [ -e "${envfile}" ] && source ${envfile} && ((VERBOSE)) && printf "node manager: sourcing environment from: ${envfile} \n"
+    [ -n "${envfile}" ] && [ -e "${envfile}" ] && source ${envfile} && ((VERBOSE)) && printf "web front-end: sourcing environment from: ${envfile} \n"
 
     web_fe_dist_url=${esg_dist_url}/esgf-web-fe/esgf-web-fe.war
     web_fe_context_root=esgf-web-fe
-    web_fe_app_home=${tomcat_install_dir}/webapps/${web_fe_app_context_root}
+    web_fe_app_home=${tomcat_install_dir}/webapps/${web_fe_context_root}
     
 }
 

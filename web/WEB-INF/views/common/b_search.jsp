@@ -29,17 +29,17 @@
 
 
            
-    <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2.min.js" /> "></script>
-    <script type="text/javascript" src="<c:url value="/scripts/jquery-ui-1.8.5.min.js" /> "></script>    
-    <script type="text/javascript" src="<c:url value="/scripts/jquery.tools.min.js" /> "></script>
-    <script type="text/javascript" src="<c:url value="/scripts/jquery.jgrowl.min.js" /> "></script>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery-1.4.2.min.js" /> "></script>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery-ui-1.8.5.min.js" /> "></script>    
+    <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.tools.min.js" /> "></script>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.jgrowl.min.js" /> "></script>
    
-    <script type="text/javascript" src="<c:url value="/scripts/json.min.js" /> "></script>
-    <script type="text/javascript" src="<c:url value="/scripts/jquery.form.js" /> "></script>
-    <script type="text/javascript" src="<c:url value="/scripts/menu.js" /> "></script>            
-    <script type="text/javascript" src="<c:url value="/scripts/search.js" /> "></script> 
-    <script type="text/javascript" src="<c:url value="/scripts/map.js" /> "></script> 
-    <script type="text/javascript" src="<c:url value="/scripts/submit.js" /> "></script> 
+    <script type="text/javascript" src="<c:url value="/scripts/jquery/json.min.js" /> "></script>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.form.js" /> "></script>
+    <script type="text/javascript" src="<c:url value="/scripts/esgf/menu.js" /> "></script>            
+    <script type="text/javascript" src="<c:url value="/scripts/esgf/search.js" /> "></script> 
+    <script type="text/javascript" src="<c:url value="/scripts/esgf/map.js" /> "></script> 
+    <script type="text/javascript" src="<c:url value="/scripts/esgf/submit.js" /> "></script> 
 
    
     <script type="text/javascript"

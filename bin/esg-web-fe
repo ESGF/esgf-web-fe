@@ -145,7 +145,7 @@ setup_web_fe() {
     [ $? != 0 ] && return 1
     pushd ${workdir} >& /dev/null
 
-    local web_fe_dist_file=${web_fe_dist_url##*/}
+    local web_fe_dist_file=$(pwd)/${web_fe_dist_url##*/}
     checked_get ${web_fe_dist_file} ${web_fe_dist_url}
     (( $? > 1 )) && echo " ERROR: Could not download ${node_dist_url} :-(" && popd >& /dev/null && checked_done 1
     

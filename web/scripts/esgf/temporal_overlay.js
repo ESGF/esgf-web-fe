@@ -14,7 +14,7 @@ var temporalString = '<div id="popupTemporalSearch" > ' +
 
 					 '	<div id="lb1">' +
 					 '	<div id="rb1">' +
-'						<div id="bb1"><div id="blc1"><div id="brc1">' +
+					 '	<div id="bb1"><div id="blc1"><div id="brc1">' +
 '						<div id="tb1"><div id="tlc1"><div id="trc1">' +
 '							<div id="temporal_range_title">' +
 '							Date Range' +

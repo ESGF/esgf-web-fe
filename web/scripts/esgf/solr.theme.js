@@ -13,7 +13,7 @@ AjaxSolr.theme.prototype.result = function (doc, snippet) {
 		doc.title = doc.title.substring(0,100) + "...";
 	}
 	
-  	var output = '<div class="search-entry"><h4 class="desc"><a href="#">' + doc.title + '</a></h4>';
+  	var output = '<div class="search-entry"><h4 class="desc"><a href="javascript:metadata_link()">' + doc.title + '</a></h4>' ;
   	output += '<p id="links_' + doc.id + '" class="links"></p>';
   	output += '<p>' + snippet + '</p></div>';
   	return output;

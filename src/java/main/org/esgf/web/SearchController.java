@@ -175,14 +175,13 @@ public class SearchController {
 
         LOG.debug("doSearchFacets() called");
         
-        
             
         // set retrieval of all facets in profile
         input.setFacets(new ArrayList<String>(facetProfile.getTopLevelFacets().keySet()));
     
             
         //create a post query processor object
-        PostQueryManager pqManager = new PostQueryManager(searchService,
+        OutputManager outputManager = new OutputManagerImpl(searchService,
                                                         facetProfile,
                                                         request,
                                                         input);
@@ -192,23 +191,18 @@ public class SearchController {
         String [] parValues = request.getParameterValues("whichGeo");
         if(parValues[0].equals("Radius"))
         {
-            pqManager.facetRecount();
+            outputManager.facetRecount();
         }
         
 
         //get the output
-        SearchOutput output = pqManager.getOutput();
+        SearchOutput output = outputManager.getOutput();
         
         
         // populate model
         model.addAttribute(SEARCH_OUTPUT, output);
         model.addAttribute(FACET_PROFILE, facetProfile);
         model.addAttribute(SEARCH_INPUT, input);
-        
-        
-
-        
-        
         
         
         // save model in session

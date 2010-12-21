@@ -11,7 +11,7 @@
 	<!-- Scans the classpath of this application for @Components to deploy as beans -->
 	<context:component-scan base-package="org.esgf.web" />
     <context:component-scan base-package="org.esgf.solr" />
-
+    <context:component-scan base-package="org.esgf.security" />
     
 	<!-- Application Message Bundle -->
 	<bean id="messageSource" 

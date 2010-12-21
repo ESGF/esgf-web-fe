@@ -10,13 +10,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 
 @Controller
-@RequestMapping(value="/login")
 
 public class LoginController {
 
     private final static Logger LOG = Logger.getLogger(LoginController.class);
     
-    @RequestMapping(method=RequestMethod.GET)
+    @RequestMapping(method=RequestMethod.GET, value="/login")
     public String index(HttpServletRequest request, HttpServletResponse response) {
         LOG.debug("Enter index");
         return "login";

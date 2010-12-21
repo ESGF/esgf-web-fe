@@ -31,6 +31,8 @@
     <dependency org="org.springframework.security" name="spring-security-core" rev="${spring.version}" conf="base->default" />
     <dependency org="org.springframework.security" name="spring-security-config" rev="${spring.version}" conf="base->default" />
     <dependency org="org.springframework.security" name="spring-security-openid" rev="${spring.version}" conf="base->default" />
+    <dependency org="org.springframework.security" name="spring-security-taglibs" rev="${spring.version}" conf="base->default" />
+    
     <dependency org="javax.servlet" name="servlet-api" rev="2.5" transitive="false" conf="compile->default" />
     <dependency org="javax.servlet" name="jstl" rev="1.2" conf="base->default" />
     <dependency org="org.apache.lucene" name="lucene-spatial" rev="3.0.2" transitive="false" conf="base->default" />

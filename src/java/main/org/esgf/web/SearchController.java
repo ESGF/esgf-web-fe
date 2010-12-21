@@ -46,6 +46,10 @@ import org.apache.lucene.spatial.geometry.LatLng;
 import org.apache.lucene.spatial.geometry.FloatLatLng;
 import org.apache.lucene.spatial.geometry.shape.LLRect;
 import org.apache.lucene.spatial.tier.DistanceUtils;
+import org.esgf.manager.InputManager;
+import org.esgf.manager.InputManagerImpl;
+import org.esgf.manager.OutputManager;
+import org.esgf.manager.OutputManagerImpl;
 
 @Controller
 @RequestMapping(value="/search")
@@ -91,45 +95,19 @@ public class SearchController {
         
         LOG.debug("formBackingObject() called");
         
-        
-        // instantiate command object
-        SearchInputImpl input = new SearchInputImpl();
-        
-        
 
-        PreQueryManager pqm = new PreQueryManager(facetProfile,request,input);
+        InputManager inputManager = new InputManagerImpl(facetProfile,request);
         
         //input geo constraints
-        pqm.inputGeospatialConstraints();
+        inputManager.inputGeospatialConstraints();
         
         //input temporal constrants
-        //pqm.inputTemporalConstraints();
+        inputManager.inputTemporalConstraints();
         
         //input facet profile
-        //pqm.inputFacets();
+        inputManager.inputFacetProfile();
         
-        input = pqm.getInput();
-        
-        
-        
-        
-        // security note: loop ONLY over parameters in facet profile
-        for (final String parName : facetProfile.getTopLevelFacets().keySet()) {
-            final String[] parValues = request.getParameterValues(parName);
-            if (parValues!=null) {
-                for (final String parValue : parValues) {
-                    if (StringUtils.hasText(parValue)) {
-                        input.addConstraint(parName, parValue);
-                        if (LOG.isTraceEnabled()) 
-                            LOG.trace("formBackingObject: set constraint name=" +
-                                    parName+" value="+parValue);
-                    }
-                }
-            }
-            
-        }
-        
-        
+        SearchInputImpl input = (SearchInputImpl) inputManager.getInput();
         
         
         return input;
@@ -149,13 +127,13 @@ public class SearchController {
         LOG.debug("doSearchResults() called");
         
         
-            
+           
         // set retrieval of all facets in profile
         input.setFacets(new ArrayList<String>(facetProfile.getTopLevelFacets().keySet()));
     
             
         //create a post query processor object
-        PostQueryManager pqManager = new PostQueryManager(searchService,
+        OutputManager outputManager = new OutputManagerImpl(searchService,
                                                         facetProfile,
                                                         request,
                                                         input);
@@ -165,12 +143,15 @@ public class SearchController {
         //if the whichGeo flag is switched to Radius, we must perform post-query processing 
         //here the centroid filter is called
         String [] parValues = request.getParameterValues("whichGeo");
-        if(parValues[0].equals("Radius"))
-        {
-            pqManager.processCentroidFilter();
-        }
         
-        SearchOutput output = pqManager.getOutput();
+        if(parValues!=null)
+        {
+            if(parValues[0].equals("Radius"))
+            {
+                outputManager.processCentroidFilter();
+            }
+        }
+        SearchOutput output = outputManager.getOutput();
         
         
         // populate model
@@ -194,14 +175,13 @@ public class SearchController {
 
         LOG.debug("doSearchFacets() called");
         
-        
             
         // set retrieval of all facets in profile
         input.setFacets(new ArrayList<String>(facetProfile.getTopLevelFacets().keySet()));
     
             
         //create a post query processor object
-        PostQueryManager pqManager = new PostQueryManager(searchService,
+        OutputManager outputManager = new OutputManagerImpl(searchService,
                                                         facetProfile,
                                                         request,
                                                         input);
@@ -211,23 +191,18 @@ public class SearchController {
         String [] parValues = request.getParameterValues("whichGeo");
         if(parValues[0].equals("Radius"))
         {
-            pqManager.facetRecount();
+            outputManager.facetRecount();
         }
         
 
         //get the output
-        SearchOutput output = pqManager.getOutput();
+        SearchOutput output = outputManager.getOutput();
         
         
         // populate model
         model.addAttribute(SEARCH_OUTPUT, output);
         model.addAttribute(FACET_PROFILE, facetProfile);
         model.addAttribute(SEARCH_INPUT, input);
-        
-        
-
-        
-        
         
         
         // save model in session

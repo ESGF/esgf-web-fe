@@ -12,4 +12,5 @@
 ../TODO
 ../LICENSE
 
+./esg-web-fe
 ../dist/esgf-web-fe.war

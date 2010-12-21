@@ -1,0 +1,320 @@
+/* root element for scrollable */
+.verticalscroll {  
+	
+	/* required settings */
+	position:relative;
+	overflow:hidden;	
+
+	/* vertical scrollers have typically larger height than width */	
+	height: 500px;	 
+	width: 700px;
+	border-top:1px solid #ddd;	
+}
+
+.added1 p{
+	padding:0px;	
+}
+
+/* root element for scrollable items */
+.itemsscroll {	
+	position:absolute;
+	
+	/* this time we have very large space for height */	
+	height:20000em;	
+	margin: 0px;
+}
+
+/* single scrollable item */
+.itemscroll {
+	border-bottom:1px solid #ddd;
+	margin:10px 0;
+	padding:10px;
+	font-size:12px;
+	height:150px;
+}
+
+.abstract_item {
+	border-bottom:1px solid #ddd;
+	margin:10px 0;
+	padding:10px;
+	font-size:12px;
+	height:400px;
+}
+
+.geospatial_item {
+	border-bottom:1px solid #ddd;
+	margin:10px 0;
+	padding:10px;
+	font-size:12px;
+	height:150px;
+}
+
+.temporal_item {
+	border-bottom:1px solid #ddd;
+	margin:10px 0;
+	padding:10px;
+	font-size:12px;
+	height:100px;
+}
+
+#geo_map {
+	float:right;
+	border:1px solid #ddd;
+	font-size:12px;
+	height:150px;
+	width: 250px;
+}
+#geo_info {
+	float:left;
+	/*border:1px solid #ddd;
+	*/height:150px;
+	width: 200px;
+}
+
+#geospatial_metadata {
+	/*border:1px solid #ddd;
+*/}
+
+.shortitem {
+	background: white;
+	border-bottom:1px solid #ddd;
+	margin:10px 0;
+	padding:10px;
+	font-size:12px;
+	height:30px;
+}
+
+.leftsd {
+	float:left;	
+	padding-right: 20px;
+}
+
+.rightsd {
+	float:right;
+	width: 465px;
+	/*border:1px solid #ddd;
+*/}
+
+/* elements inside single item */
+.item img {
+	float:left;
+	margin-right:20px;
+	height:180px;
+	width:240px;
+}
+
+.item h3 {
+	margin:0 0 5px 0;
+	font-size:16px;
+	color:#456;
+	font-weight:normal;
+}
+
+.abstract_item h3 {
+	margin:0 0 5px 0;
+	font-size:12px;
+	color:#456;
+	font-weight:normal;
+}
+
+.geospatial_item h3 {
+	margin:0 0 5px 0;
+	font-size:12px;
+	color:#456;
+	font-weight:normal;
+}
+
+.shortitem h3 {
+	margin:0 0 5px 0;
+	font-size:12px;
+	color:#456;
+	font-weight:normal;
+}
+
+
+
+
+
+
+
+
+
+/* Overlay */
+
+
+#backgroundPopupMetadataReport{
+display:none;
+position:fixed;
+_position:absolute;  /* hack for internet explorer 6 */
+height:100%;
+width:100%;
+top:0;
+left:0;
+background:#000000;
+border:1px solid #cecece;
+z-index:1;
+}
+
+
+
+
+
+#popupMetadataReport{
+display:none;
+position:fixed;
+_position:absolute;  /* hack for internet explorer 6 */
+margin-left: 10%;
+margin-top: 30px;
+
+height: 600px;	 
+ 
+width: 700px;
+/*
+	width: 700px;
+	
+
+height: 85%;	
+
+height:85%;
+width:608px;
+
+width: 70%;
+*/background:#FFFFFF;
+border:2px solid #cecece;
+z-index:2;
+padding:12px;
+font-size:13px;
+}
+
+
+#popupMetadataReport h1{
+text-align:left;
+color:#6FA5FD;
+font-size:22px;
+font-weight:700;
+border-bottom:1px dotted #D3D3D3;
+padding-bottom:2px;
+margin-bottom:20px;
+}
+#popupMetadataReportClose{
+font-size:14px;
+line-height:14px;
+right:6px;
+top:4px;
+position:absolute;
+color:#6fa5fd;
+font-weight:700;
+display:block;
+}
+
+
+#button{
+text-align:center;
+margin:100px;
+}
+
+#metadata_report{
+	display:none;
+}
+
+#metadata_summary{
+
+	
+    position: absolute;
+    
+    margin-top: 5em;
+    float: left;
+	width: 750px;
+	background-color: #eeeeee;
+	border: 1px solid #000;
+    left: 5em;
+    padding-bottom: 20px;
+}
+
+#metadata_titleblock {
+	padding: 20px;
+	padding-left: 250px;
+	padding-bottom: 50px;
+	border: 3px solid black;
+	
+}
+
+#metadata_title {
+	position:relative;
+	float:left;
+	font-size: 175%;
+	padding: 0px;
+}
+
+
+
+#metadata_return {
+	position:relative;
+	float:right;
+	padding: 5px;
+	border: 1px solid #9c9c9c;
+	background: #6FA5FD;
+	cursor: pointer;
+	
+	font-size: 125%;
+}
+
+#metadata_return:hover {
+	background: #00FF00;
+}
+
+#metadata_title_gap {
+	position:relative;
+	float:right;
+	padding: 5px;	
+	padding-bottom: 50px;
+}
+
+#metadata_download {
+	position:relative;
+	float:right;
+	padding: 5px;
+	border: 1px solid #9c9c9c;
+	background: #CCFFFF;
+	
+	background: #6FA5FD;
+	cursor: pointer;
+	font-size: 125%;
+}
+
+#metadata_download:hover {
+	background: #00FF00;
+}
+
+
+#metadata_recordblock {
+	padding-top: 20px;	
+	padding-left: 20px;
+}
+
+.metadata_info {
+	padding: 10px;
+}
+
+.metadata_info tr {
+	border: 0px solid black;
+}
+
+.metadata_info td {
+	vertical-align: top;
+	padding: 10px;
+	border: 0px solid black;
+	width: 300px;
+}
+
+.metadata_field_name {
+	font-weight: bold;
+}
+
+
+
+
+
+
+
+

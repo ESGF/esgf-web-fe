@@ -1,4 +1,4 @@
-package org.esgf.web;
+package org.esgf.manager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ import org.apache.log4j.*;
  * @author john.harney
  *
  */
-public class PostQueryManager{
+public class OutputManagerImpl implements OutputManager{
 
     
     private SearchService searchService;
@@ -42,7 +42,7 @@ public class PostQueryManager{
     private SearchOutput output;
     
 
-    private final static Logger LOG = Logger.getLogger(PostQueryManager.class);
+    private final static Logger LOG = Logger.getLogger(OutputManagerImpl.class);
     
     
     /**
@@ -55,7 +55,7 @@ public class PostQueryManager{
      * @author john.harney
      *
      */
-    public PostQueryManager(SearchService searchService,
+    public OutputManagerImpl(SearchService searchService,
                               FacetProfile facetProfile,
                               HttpServletRequest request,
                               SearchInputImpl input) throws Exception

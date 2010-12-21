@@ -1,0 +1,268 @@
+#popupTemporalSearch{
+	
+display:none;
+position:fixed;
+_position:absolute;  /* hack for internet explorer 6 */
+margin-left: 10%;
+margin-top: 30px;
+
+height: 350px;	 
+ 
+width: 425px;
+background:#FFFFFF;
+border:2px solid #cecece;
+z-index:2;
+padding:12px;
+font-size:13px;
+}
+
+
+#popupTemporalSearch h1{
+text-align:left;
+color:#6FA5FD;
+font-size:22px;
+font-weight:700;
+border-bottom:1px dotted #D3D3D3;
+padding-bottom:2px;
+margin-bottom:20px;
+}
+
+#temporal_helper {
+	/*padding-bottom: 20px;
+*/}
+
+#popupTemporalSearch p{
+padding-bottom:0px;
+}
+
+#popupTemporalSearchClose{
+font-size:14px;
+line-height:14px;
+right:6px;
+top:4px;
+position:absolute;
+color:#6fa5fd;
+font-weight:700;
+display:block;
+}
+
+
+#backgroundPopupTemporalSearch{
+display:none;
+position:fixed;
+_position:absolute;  /* hack for internet explorer 6 */
+height:100%;
+width:100%;
+top:0;
+left:0;
+background:#000000;
+border:1px solid #cecece;
+z-index:1;
+}
+
+
+/* --------------------------------
+    Calendar Style
+   --------------------------------
+ */
+
+
+#calendar_canvas {
+	float: left;
+	height: 200px;
+	width: 400px;
+	padding: 10px;
+	border-left: 2px solid #666;
+	border-top: 2px solid #666;
+	border-bottom: 2px solid #666;
+	border-right: 2px solid #666;
+}
+
+#calendar_info {
+	position: absolute;
+	margin-left: 420px;
+	padding: 10px;
+	float: right;
+	width: 200px;
+	height: 400px;
+	border-top: 2px solid #666;
+    border-bottom: 2px solid #666;    	
+	border-right: 2px solid #666;
+}
+
+#c_fieldset {
+	background: #FFE8EF;
+	width: 350px;
+	margin-bottom: 10px;
+	margin-left:10px;
+	
+}
+
+#d_fieldset {
+	
+	background: #FFFFFF;
+	width: 250px;
+	border-color: white;
+	margin-left:20px;
+}
+
+#temporal_range_title {
+	
+	font-size: 10pt;
+	padding: 10px;	
+	width: 70px;
+	margin-left: 20px;
+	background:  #88ACE0;
+	color: black;
+	border: 1px solid #000;
+}
+
+
+/* \*/
+* html #tlc1, * html #trc1 {height: 1%;}
+/* */
+
+#tlc1, #trc1 { zoom: 1 }
+
+#time_range
+{
+	margin-top:10px;
+}
+
+#temporalbox1
+{
+	float: left;
+	width: 425px;
+	background-color: #eeeeee;
+}
+
+#temporal_content1
+{
+	padding-top: 20px;
+	padding-left:20px;
+	padding:10px;
+	padding-bottom:50px;
+}
+
+#temporal_content1 h1 {
+	color:#0354c2;
+	font-weight: bold;
+	font-size: 1.2em;
+	font-family: helvetica, geneva, arial, sans-serif;
+}
+	
+#temporal_content1 h2 {
+	color:black;
+	font-weight: bold;
+	font-size: 18px;
+	font-family: helvetica, geneva, arial, sans-serif;
+}
+		
+		
+#temporal_content1 p {
+	color:#3b3b3b;
+	font-size: 1em;
+	line-height: 1.3em;
+	font-family: arial, helvetica, sans-serif;
+}
+	
+#monthlist1 {
+	position:relative;
+	padding-top:5px;
+	padding-left:25px;
+	float:left;
+	width: 150px;
+	height:100px;
+}
+
+#timelist1 {
+	position:relative;
+	float:right;
+	padding-top:5px;
+	padding-right:25px;
+	width: 150px;
+	height:100px;
+}
+
+.temporallistmultiple1 {
+	width: 125px;
+	border-right: 2px solid #666;
+}
+
+
+
+
+/* ---=== border code follows ===--- */
+/*
+	tlc = top left corner
+	trc = top right corner
+	blc = bottom left corner
+	brc = bottom right corner
+	lb = left border
+	rb = right border
+	tb = top border
+	bb = bottom border 
+*/
+
+#tlc1, #trc1, #blc1, #brc1
+	{
+	background-color: transparent;
+	background-repeat: no-repeat;
+	}
+
+#tlc1
+	{
+	background-image:url(../images/temporal_overlay/tlc.gif);
+	background-position: 0% 0%;
+	}
+
+#trc1
+	{
+	background-image:url(../images/temporal_overlay/trc.gif);
+	background-position: 100% 0%;
+	}
+	
+#blc1
+	{
+	background-image:url(../images/temporal_overlay/blc.gif);
+	background-position: 0% 100%;
+	}
+
+#brc1
+	{
+	background-image:url(../images/temporal_overlay/brc.gif);
+	background-position: 100% 100%;
+	}
+
+#tb1, #bb1
+	{
+	background-color: transparent;
+	background-repeat: repeat-x;
+	}
+			
+#tb1
+	{
+	background-image:url(../images/temporal_overlay/tb.gif);
+	background-position: 0% 0%;
+	}
+
+#bb1
+	{
+	background-image:url(../images/temporal_overlay/bb.gif);
+	background-position: 50% 100%;
+	}
+	
+#rb1
+	{
+	background-image:url(../images/temporal_overlay/r.gif);
+	background-position: 100% 0%;
+	background-repeat: repeat-y;
+	}
+
+#lb1
+	{
+	background-image:url(../images/temporal_overlay/l.gif);
+	background-position: 0% 100%;
+	background-repeat: repeat-y;
+	}
+			

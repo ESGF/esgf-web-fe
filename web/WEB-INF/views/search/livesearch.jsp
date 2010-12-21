@@ -34,9 +34,19 @@
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.theme.js" />"> </script>
 
+	<!--  overlays -->
+	<script type="text/javascript"
+        src="http://maps.google.com/maps/api/js?sensor=false">
+    </script>
+	<script type="text/javascript" src="<c:url value="/scripts/esgf/temporal_overlay.js" />"> </script>
+	<script type="text/javascript" src="<c:url value="/scripts/esgf/geospatial_overlay.js" />"> </script>
+	<script type="text/javascript" src="<c:url value="/scripts/esgf/metadata_overlay.js" />"> </script>
+
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans&subset=latin' 
         rel='stylesheet' type='text/css'>
         
+   
+	
 	<link rel="stylesheet" 
 		href="<c:url value="/styles/blueprint/screen.css" />" 
 		type="text/css" media="screen, projection">
@@ -59,13 +69,38 @@
 	<link rel="stylesheet" 
 		href="<c:url value="/styles/esg-simple.css" />" 
 		type="text/css" media="screen, projection">
-
+	
+	<!-- style added for the datepicker widget -->	
+	<link rel="stylesheet" 
+		href="<c:url value="/styles/cupertino/jquery-ui-1.8.5.custom.css" />" 
+		type="text/css" media="screen, projection">
+	
+	<!-- style added for the temporal search overlay -->
+	<!-- style added for the geospatial search overlay -->
+	<!-- style added for the metadata report overlay -->
+	<link rel="stylesheet" 
+		href="<c:url value="/styles/temporal_overlay.css" />" 
+		type="text/css" media="screen, projection">
+	<link rel="stylesheet" 
+		href="<c:url value="/styles/geospatial_overlay.css" />" 
+		type="text/css" media="screen, projection">
+	<link rel="stylesheet" 
+		href="<c:url value="/styles/metadata_overlay.css" />" 
+		type="text/css" media="screen, projection">
+		
+		
 <title>ESG Search</title>
 </head>
 
 <body>
 
-<div class="container">
+	<!-- overlays -->
+	<div id="temporal_overlay"></div>
+	<div id="geospatial_overlay"></div>
+	<div id="metadata_overlay"></div>
+	
+	
+	<div class="container">
 
 
 <div id="header" class="span-24 last">

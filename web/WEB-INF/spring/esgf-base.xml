@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+    xmlns:security="http://www.springframework.org/schema/security"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+        http://www.springframework.org/schema/jdbc  http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/security  http://www.springframework.org/schema/security/spring-security-3.0.xsd
+        http://www.springframework.org/schema/util  http://www.springframework.org/schema/util/spring-util-3.0.xsd
+    ">
+
+    <bean class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" id="passwordEncoder"/>
+    
+    <bean class="org.springframework.security.authentication.dao.ReflectionSaltSource" id="saltSource">
+        <property name="userPropertyToUse" value="salt"/>
+    </bean>
+
+
+    <bean class="org.esgf.security.DatabasePasswordSecurerBean" init-method="secureDatabase" depends-on="dataSource">
+        <property name="dataSource" ref="dataSource"/>  
+    </bean>
+
+    
+    
+    <bean id="jdbcUserServiceCustom" class="org.esgf.security.CustomJdbcDaoImpl">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="enableGroups" value="true"/>
+        <property name="enableAuthorities" value="false"/>
+
+        <property name="usersByUsernameQuery">
+            <value>select username,password,enabled,salt from users where username = ?</value>
+        </property>
+    </bean>
+          
+
+     <bean id="requestHeaderFilter" class="org.esgf.security.RequestHeaderProcessingFilter">
+        <property name="authenticationManager" ref="authenticationManager"/>
+     </bean>
+    <bean id="signedRequestAuthenticationProvider" class="org.esgf.security.SignedUsernamePasswordAuthenticationProvider">
+        <property name="passwordEncoder" ref="passwordEncoder"/>
+        <property name="saltSource" ref="saltSource"/>
+        <property name="userDetailsService" ref="jdbcUserServiceCustom"/>
+    </bean>
+    
+
+    <bean id="successHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+        <property name="defaultTargetUrl" value="/live" />
+    </bean>
+
+
+
+    <!-- OpenID Registration -->
+    <bean id="openIdAuthFailureHandler" class="org.esgf.security.OpenIDAuthenticationFailureHandler">
+        <property name="defaultFailureUrl" value="/login"/>
+    </bean>
+   
+    <context:annotation-config />
+    <context:component-scan base-package="org.esgf.service" />    
+    <context:component-scan base-package="org.esgf.security" />
+        
+</beans>
+
+     

@@ -21,7 +21,6 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
         return false;
       }));
     }
-
     if (links.length) {
       AjaxSolr.theme('list_items', this.target, links);
     }

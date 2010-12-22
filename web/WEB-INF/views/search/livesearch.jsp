@@ -30,6 +30,11 @@
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/CurrentSearch.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Text.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/AutoComplete.js" />"> </script>
+    
+
+<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Calendar.js" />"></script>
+                
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Temporal.js" />"> </script>
                 
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.theme.js" />"> </script>
@@ -38,6 +43,7 @@
 	<script type="text/javascript"
         src="http://maps.google.com/maps/api/js?sensor=false">
     </script>
+	
 	<script type="text/javascript" src="<c:url value="/scripts/esgf/temporal_overlay.js" />"> </script>
 	<script type="text/javascript" src="<c:url value="/scripts/esgf/geospatial_overlay.js" />"> </script>
 	<script type="text/javascript" src="<c:url value="/scripts/esgf/metadata_overlay.js" />"> </script>
@@ -150,6 +156,12 @@
    
 </div>
 
+<div>
+	<span id="temp_box">
+	
+	</span>
+
+</div>
 
 <div class="span-24 last" id="contents">
 
@@ -176,6 +188,11 @@
     
     <div class="box2" id="project">
     </div>
+    
+    <!--<h5>By Date</h5> 
+      <div id="calendar"></div> 
+    
+    -->
     
     </div> <!--  sidebar -->
 

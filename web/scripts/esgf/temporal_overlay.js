@@ -38,6 +38,50 @@ var temporalString = '<div id="popupTemporalSearch" > ' +
 					 '<div id="backgroundPopupTemporalSearch"></div>    ';
 
 
+/*
+ * Function for creating the temporal filter query
+ * Utilizes both the datetime_start and datetime_stop fields from solr
+ * The default searches each from [* TO *]
+ */
+function executeDateQuery(dateFrom,dateTo)
+{
+
+	
+
+	var datetime_start, datetime_startFQ,
+		datetime_stop, datetime_stopFQ; 
+	
+	
+	//datetime_start
+	if(dateFrom.value)
+	{
+		datetime_start = dateFrom.value + 'T00:00:00Z';
+	}
+	else
+	{
+		datetime_start = '*';
+	}
+	
+	
+	//datetime_stop
+	if(dateTo.value)
+	{
+		datetime_stop = dateTo.value + 'T00:00:00Z';
+	}	
+	else
+	{
+		datetime_stop = '*';
+	}
+		
+	datetime_startFQ = 'datetime_start:[' + datetime_start + ' TO *]';
+	datetime_stopFQ = 'datetime_stop:[* TO ' + datetime_stop + ']';
+	
+	Manager.store.addByValue('fq', datetime_startFQ );	
+	Manager.store.addByValue('fq', datetime_stopFQ );	
+	
+	Manager.doRequest(0);
+	
+}
 
 //CONTROLLING EVENTS IN jQuery
 $(document).ready(function(){
@@ -64,10 +108,20 @@ $(document).ready(function(){
 				date = $.datepicker.parseDate(
 						instance.settings.dateFormat,
 						selectedDate, instance.settings );
-				//alert(date);
+
+				var dateFrom = document.getElementById('from');
+				var dateTo = document.getElementById('to');
+				
+				//delete the original fq (if it existed)
+				Manager.store.remove('fq');
+				
 				dates.not(this).datepicker("option",option,date);
+
+				//call the helper method to assemble the fq and execute it
+				executeDateQuery(dateFrom,dateTo);
 			}
 		});
+		
 	});			
 	
 	/*
@@ -90,6 +144,8 @@ $(document).ready(function(){
 			$("#popupTemporalSearch").fadeIn("slow");
 			popupStatusTemporalSearch = 1;
 		}
+		
+		
 	}
 
 
@@ -138,6 +194,8 @@ $(document).ready(function(){
 	
 	$('div#temporal').click(function(){
 		if(popupStatusTemporalSearch==0){
+
+			//alert(Manager.initialized);
 			$("#backgroundPopupTemporalSearch").css({
 				"opacity": "0.8"
 			});
@@ -145,9 +203,8 @@ $(document).ready(function(){
 			$("#popupTemporalSearch").fadeIn("slow");
 			popupStatusTemporalSearch = 1;
 		}
+
 	});
-	
-	
 	
 	
 	
@@ -159,7 +216,6 @@ $(document).ready(function(){
 
 function temporal_link()
 {
-	alert('temporal');
 	if(popupStatusTemporalSearch==0){
 		$("#backgroundPopupTemporalSearch").css({
 			"opacity": "0.8"

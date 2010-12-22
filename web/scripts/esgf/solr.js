@@ -32,7 +32,7 @@
 
 	Manager.addWidget(new AjaxSolr.CurrentSearchWidget({
 		  id: 'currentsearch',
-		  target: '#current-selection',
+		  target: '#current-selection'
 		}));
 
 //	Manager.addWidget(new AjaxSolr.TextWidget({
@@ -49,6 +49,11 @@
 		}));
 
 	
+	/*Manager.addWidget(new AjaxSolr.CalendarWidget({
+	      id: 'calendar',
+	      target: '#calendar',
+	      field: 'datetime_start'
+	    }));*/
 	
 	Manager.init();
 	
@@ -77,6 +82,8 @@
     
 
 	Manager.store.addByValue('q', '*:*');	
+	
+	
 	Manager.doRequest();
 
 	$("div.search-entry").live('mouseover',  function() {

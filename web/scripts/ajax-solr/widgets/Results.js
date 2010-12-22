@@ -32,17 +32,24 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
   afterRequest: function () {
     $(this.target).empty();
     for (var i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
+    if(i < 1)
+    	{
       var doc = this.manager.response.response.docs[i];
       $(this.target).append(AjaxSolr.theme('result', doc, AjaxSolr.theme('snippet', doc)));
-
+      this.metadataGenerator(doc);
       var items = [];
-      items = items.concat(this.facetLinks('topics', doc.topics));
+      /*items = items.concat(this.facetLinks('topics', doc.topics));
       items = items.concat(this.facetLinks('organisations', doc.organisations));
       items = items.concat(this.facetLinks('exchanges', doc.exchanges));
-      AjaxSolr.theme('list_items', '#links_' + doc.id, items);
+      AjaxSolr.theme('list_items', '#links_' + doc.id, items);*/
+    	}
     }
   },
 
+  metadataGenerator: function(doc) {
+	  
+  },
+  
   init: function () {
     $('a.more').livequery(function () {
       $(this).toggle(function () {

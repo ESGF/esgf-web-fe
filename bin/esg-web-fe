@@ -143,7 +143,7 @@ setup_web_fe() {
     pushd ${workdir} >& /dev/null
 
     local web_fe_dist_file=$(pwd)/${web_fe_dist_url##*/}
-    checked_get ${web_fe_dist_file} ${web_fe_dist_url}
+    checked_get ${web_fe_dist_file} ${web_fe_dist_url} $((force_install))
     (( $? > 1 )) && echo " ERROR: Could not download ${node_dist_url} :-(" && popd >& /dev/null && checked_done 1
     
     stop_tomcat

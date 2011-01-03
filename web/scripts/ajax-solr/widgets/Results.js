@@ -32,8 +32,8 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
   afterRequest: function () {
     $(this.target).empty();
     for (var i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
-    if(i < 1)
-    	{
+    //if(i < 1) //for debugging the metadata report (remove when done)
+    	//{
       var doc = this.manager.response.response.docs[i];
       $(this.target).append(AjaxSolr.theme('result', doc, AjaxSolr.theme('snippet', doc)));
       this.metadataGenerator(doc);
@@ -42,7 +42,7 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
       items = items.concat(this.facetLinks('organisations', doc.organisations));
       items = items.concat(this.facetLinks('exchanges', doc.exchanges));
       AjaxSolr.theme('list_items', '#links_' + doc.id, items);*/
-    	}
+    	//}
     }
   },
 

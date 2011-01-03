@@ -7,5 +7,13 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?ivyXmlPath=ivy.xml&amp;confs=*"/>
+	<classpathentry kind="lib" path="C:/Users/8xo/esgProjects/esgsearch12-17/esgf-web-fe/lib/fetched/runtime/spring-webmvc-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/8xo/esgProjects/esgsearch12-17/esgf-web-fe/lib/fetched/runtime/spring-web-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/8xo/esgProjects/esgsearch12-20/esgf-web-fe/lib/fetched/base/spring-security-acl-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/8xo/esgProjects/esgsearch12-20/esgf-web-fe/lib/fetched/base/spring-security-config-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/8xo/esgProjects/esgsearch12-20/esgf-web-fe/lib/fetched/base/spring-security-core-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/8xo/esgProjects/esgsearch12-20/esgf-web-fe/lib/fetched/base/spring-security-openid-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/8xo/esgProjects/esgsearch12-20/esgf-web-fe/lib/fetched/base/spring-security-taglibs-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/8xo/esgProjects/esgsearch12-20/esgf-web-fe/lib/fetched/base/spring-security-web-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

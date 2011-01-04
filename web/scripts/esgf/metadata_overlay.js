@@ -6,6 +6,9 @@
 
 //SETTING UP OUR POPUP
 //0 means disabled; 1 means enabled;
+
+
+
 var popupStatusMetadataReport = 0;
 
 var metadataString =
@@ -86,7 +89,7 @@ var metadataString =
 		
 '				-->'+
 '				<div class="leftsd">'+
-'					<h3>Contact Info:</h3> '+
+'					<h3>Contact Information:</h3> '+
 '				</div>'+
 				
 '				<div class="rightsd">'+
@@ -186,7 +189,6 @@ var metadataString =
 
 
 
-/* loaders */
 
 //loading metadata report popup!
 function loadPopupMetadataReport(){
@@ -204,8 +206,6 @@ function loadPopupMetadataReport(){
 
 
 
-/* disablers */
-
 //disabling metadata report popup!
 function disablePopupMetadataReport(){
 	//disables popup only if it is enabled
@@ -220,7 +220,6 @@ function disablePopupMetadataReport(){
 
 
 
-/* centerers */
 
 //centering popup
 function centerPopupMetadataReport(){
@@ -300,21 +299,9 @@ $(document).ready(function(){
 
 
 
-
-
-
-
-
-/*function metadata_link(title,
-						description,
-						west_degrees,
-						east_degrees,
-						north_degrees,
-						south_degrees,
-						datetime_start,
-						datetime_stop)*/
-function metadata_link()
+function metadata_link(id,title,url,description,west_degrees,east_degrees,north_degrees,south_degrees,datetime_start,datetime_stop)
 {
+	
 	if(popupStatusMetadataReport==0){
 		$("#backgroundPopupMetadataReport").css({
 			"opacity": "0.8"
@@ -324,19 +311,21 @@ function metadata_link()
 		popupStatusMetadataReport = 1;
 	}
 	
-	var title = 'unknown';
-	var description = 'unknown';
-	var west_degrees = '0';
-	var east_degrees = '0';
-	var north_degrees = '0';
-	var south_degrees = '0';
-	var datetime_start = 'unknown';
-	var datetime_stop = 'unknown';
+	var title = title;
+	var description = description;
+	var url = url;
+	var west_degrees = west_degrees;
+	var east_degrees = east_degrees;
+	var north_degrees = north_degrees;
+	var south_degrees = south_degrees;
+	var datetime_start = datetime_start;
+	var datetime_stop = datetime_stop;
 	
 	$('.added1').remove();
 	$('div#title').after('<div class="added1"><p>' + title + '</p></div>');
+	$('div#url').after('<div class="added1"><p>' + url + '</p></div>');
 	$('div#abstract').after('<div class="added1"><p>' + description + '</p></div>');
-	$('div#leader').after('<div class="added1"><p>' + 'John Harney' + '</p></div>');
+	$('div#leader').after('<div class="added1"><p>' + 'John Doe' + '</p></div>');
 	$('div#geospatial_metadata').after('<div class="added1"><p>west degrees: ' + west_degrees + '</p></div>');
 	$('div#geospatial_metadata').after('<div class="added1"><p>east degrees: ' + east_degrees + '</p></div>');
 	$('div#geospatial_metadata').after('<div class="added1"><p>north degrees: ' + north_degrees + '</p></div>');
@@ -344,32 +333,69 @@ function metadata_link()
 	$('div#temporal_metadata').after('<div class="added1"><p>end: ' + datetime_stop + '</p></div>');
 	$('div#temporal_metadata').after('<div class="added1"><p>begin: ' + datetime_start + '</p></div>');
 
-	display_meta_map ();
+	display_meta_map (west_degrees,east_degrees,north_degrees,south_degrees);
 }
 
-function display_meta_map () {
+function display_meta_map (west_degrees,east_degrees,north_degrees,south_degrees) {
+	
+	alert(' ed: ' + east_degrees  + ' wd: ' + west_degrees+ ' nd: ' + north_degrees+ ' sd: ' + south_degrees);
+	var ne = new google.maps.LatLng(parseFloat(north_degrees),parseFloat(east_degrees));
+	var nw = new google.maps.LatLng(parseFloat(north_degrees),parseFloat(west_degrees));
+	var se = new google.maps.LatLng(parseFloat(south_degrees),parseFloat(east_degrees));
+	var sw = new google.maps.LatLng(parseFloat(south_degrees),parseFloat(west_degrees));
+	
+	alert(ne);
+	
 	var mapDiv = document.getElementById('geo_map');
-	var latlng = new google.maps.LatLng(37.09, -95.71);
+	var latlng = new google.maps.LatLng(ne.lat(), ne.lng());
+	alert('nelng: ' + ne.lng() + 'nelat: ' + ne.lat());
 	var options = {
 		center: latlng,
 		zoom: 4,
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
 
-	// check to see if we already have a map object
-	//if (!map) {
 	var meta_map = new google.maps.Map(mapDiv, options);
-	//}
-
-	var location = new google.maps.LatLng(30,40);
-
-	// create a new marker
+	
+	
+	alert('lat: ' + latlng.lat() + ' lng: ' + latlng.lng());
+	//meta_map.bounds.extend(latlng);
+	
+	
+	
+	/*// create a new marker
 	var marker = new google.maps.Marker({
-		draggable: true,
-		position: location,
+		draggable: false,
+		position: latlng,
 		map: meta_map
 	});
-		
+	
+	marker = new google.maps.Marker({
+		draggable: false,
+		position: se,
+		map: meta_map
+	});*/
+	
+	/*
+	meta_map.addOverlay(marker);
+	
+	//var bounds = new google.maps.LatLngBounds(nw,se);
+*/	
+	
+	var points = [ne, se, sw, nw];
+	poly = new google.maps.Polygon({
+		paths: points,
+		fillColor: "#0055ff",
+		fillOpacity: 0.35,
+		strokeWeight: 2
+	});
+	
+	
+	//var meta_map = new google.maps.Map(mapDiv, options);
+	/*poly.setMap(meta_map);*/
+	/*
+	meta_map.fitBounds(bounds);	*/
+	
 	
 };
 

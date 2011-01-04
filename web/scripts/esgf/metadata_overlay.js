@@ -338,64 +338,51 @@ function metadata_link(id,title,url,description,west_degrees,east_degrees,north_
 
 function display_meta_map (west_degrees,east_degrees,north_degrees,south_degrees) {
 	
-	alert(' ed: ' + east_degrees  + ' wd: ' + west_degrees+ ' nd: ' + north_degrees+ ' sd: ' + south_degrees);
+var bounds = new google.maps.LatLngBounds();
+
+var paths = [
+              new google.maps.LatLng(38.872886, -77.054720),
+              new google.maps.LatLng(38.872602, -77.058046),
+              new google.maps.LatLng(38.870080, -77.058604),
+              new google.maps.LatLng(38.868894, -77.055664),
+              new google.maps.LatLng(38.870598, -77.053346)
+            ];
+
 	var ne = new google.maps.LatLng(parseFloat(north_degrees),parseFloat(east_degrees));
 	var nw = new google.maps.LatLng(parseFloat(north_degrees),parseFloat(west_degrees));
 	var se = new google.maps.LatLng(parseFloat(south_degrees),parseFloat(east_degrees));
 	var sw = new google.maps.LatLng(parseFloat(south_degrees),parseFloat(west_degrees));
 	
-	alert(ne);
-	
-	var mapDiv = document.getElementById('geo_map');
-	var latlng = new google.maps.LatLng(ne.lat(), ne.lng());
-	alert('nelng: ' + ne.lng() + 'nelat: ' + ne.lat());
-	var options = {
-		center: latlng,
-		zoom: 4,
-		mapTypeId: google.maps.MapTypeId.ROADMAP
-	};
-
-	var meta_map = new google.maps.Map(mapDiv, options);
-	
-	
-	alert('lat: ' + latlng.lat() + ' lng: ' + latlng.lng());
-	//meta_map.bounds.extend(latlng);
-	
-	
-	
-	/*// create a new marker
-	var marker = new google.maps.Marker({
-		draggable: false,
-		position: latlng,
-		map: meta_map
-	});
-	
-	marker = new google.maps.Marker({
-		draggable: false,
-		position: se,
-		map: meta_map
-	});*/
-	
-	/*
-	meta_map.addOverlay(marker);
-	
-	//var bounds = new google.maps.LatLngBounds(nw,se);
-*/	
+	var map = new google.maps.Map(document.getElementById("geo_map"), {
+	      zoom: 4,
+	      center: new google.maps.LatLng(ne.lat(), ne.lng()),
+	      mapTypeId: google.maps.MapTypeId.HYBRID
+	    });
 	
 	var points = [ne, se, sw, nw];
-	poly = new google.maps.Polygon({
+	 
+	for(var i in points)
+	{
+		 var marker = new google.maps.Marker({
+				draggable: false,
+				position: points[i],
+				map: map
+			});
+		 bounds.extend(points[i]);
+		 
+	}
+	 
+	var poly = new google.maps.Polygon({
 		paths: points,
-		fillColor: "#0055ff",
+		//fillColor: "#0055ff",
+		fillColor: "#FEE5AC",
 		fillOpacity: 0.35,
 		strokeWeight: 2
 	});
 	
-	
-	//var meta_map = new google.maps.Map(mapDiv, options);
-	/*poly.setMap(meta_map);*/
-	/*
-	meta_map.fitBounds(bounds);	*/
-	
+	poly.setMap(map);
+	 
+	map.fitBounds(bounds);
 	
 };
 

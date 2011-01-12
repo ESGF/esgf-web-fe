@@ -207,6 +207,9 @@ font-weight:700;
 display:block;
 }
 
+a:hover {
+	cursor:pointer;	
+}
 
 #button{
 text-align:center;

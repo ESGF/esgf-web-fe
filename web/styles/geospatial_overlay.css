@@ -45,7 +45,9 @@ font-weight:700;
 display:block;
 }
 
-
+#popupGeospatialSearchClose a:hover {
+	cursor:pointer;	
+}
 
 
 #backgroundPopupGeospatialSearch{

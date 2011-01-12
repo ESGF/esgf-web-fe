@@ -6,13 +6,10 @@ var map, geocoder, infowindow;
 	var markerGroup = new Array(max_of_markers);
 	var poly;
 var	popupStatusGeospatialSearch =0;
-
 var geospatialString = 
 '	<div id="popupGeospatialSearch" >'+
 '<a id="popupGeospatialSearchClose">x</a>'+
 '<h1>Geospatial Search</h1>'+
-'<!--<div id="metadata_return">Print</div>'+
-'-->'+
 '<div id="geo_helper">'+
 '<p>'+
 'Help: first define the points of interest by putting markers on'+

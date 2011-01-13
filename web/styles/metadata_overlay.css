@@ -7,13 +7,12 @@
 
 	/* vertical scrollers have typically larger height than width */	
 	height: 475px;	 
-	width: 700px;
+	width: 700px;/*
 	border-top:1px solid #ddd;	
-}
+*/}
 
 .addedMetadata {
-	padding:0px;
-	font-weight: bold;	
+	padding-top:0px;
 	font-size: 12px;
 	padding-bottom: 10px;
 }
@@ -36,15 +35,17 @@
 
 /* single scrollable item */
 .itemscroll {
-	border-bottom:1px solid #ddd;
+	/*border-bottom:1px solid #ddd;
+	*/
 	margin:10px 0;
 	padding:10px;
 	font-size:12px;
-	height:150px;
-}
+	/*height:150px;
+*/}
 
-.abstract_item {
+.abstract_item {/*
 	border-bottom:1px solid #ddd;
+	*/
 	margin:10px 0;
 	padding:10px;
 	font-size:12px;
@@ -52,17 +53,20 @@
 }
 
 .geospatial_item {
-	border-bottom:1px solid #ddd;
+	/*border:1px solid #ddd;
+	
+	*/
 	margin:10px 0;
-	padding:10px;
+	padding:0px;
 	font-size:12px;
 	height:150px;
 }
 
-.temporal_item {
+.temporal_item {/*
 	border-bottom:1px solid #ddd;
+	*/
 	margin:10px 0;
-	padding:10px;
+	padding:0px;
 	font-size:12px;
 	height:100px;
 }
@@ -77,8 +81,9 @@
 #geo_info {
 	float:left;
 	/*border:1px solid #ddd;
-	*/height:150px;
-	width: 200px;
+	
+	*/height:100px;
+	width: 150px;
 }
 
 #geospatial_metadata {
@@ -86,23 +91,44 @@
 */}
 
 .shortitem {
-	background: white;
+	background: white;/*
+	
 	border-bottom:1px solid #ddd;
-	margin:10px 0;
-	padding:10px;
+	
+	border:1px solid #ddd;
+	*/margin:10px 0;
+	padding:0px;
 	font-size:12px;
-	height:30px;
+	height:50px;
+}
+
+.mediumitem {
+	background: white;
+	/*
+	border-bottom:1px solid #ddd;
+	*/
+	/*border:1px solid #ddd;
+	*/
+	margin:10px 0;
+	padding:0px;
+	font-size:12px;
+	height:75px;
 }
 
 .leftsd {
 	float:left;	
-	padding-right: 20px;
+	padding-right: 20px;/*
+	border:1px solid #000;
+	*/font-weight: bold;	
+	
 }
 
 .rightsd {
 	float:right;
-	width: 465px;
-	/*border:1px solid #ddd;
+	width: 475px;/*
+	
+	border:1px solid #000;
+	
 */}
 
 /* elements inside single item */
@@ -120,6 +146,7 @@
 	font-weight:normal;
 }
 
+/*
 .abstract_item h3 {
 	margin:0 0 5px 0;
 	font-size:12px;
@@ -135,12 +162,12 @@
 }
 
 .shortitem h3 {
-	margin:0 0 5px 0;
+	margin:0 0 0px 0;
 	font-size:12px;
 	color:#456;
 	font-weight:normal;
 }
-
+*/
 
 
 

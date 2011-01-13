@@ -6,13 +6,23 @@
 	overflow:hidden;	
 
 	/* vertical scrollers have typically larger height than width */	
-	height: 500px;	 
+	height: 475px;	 
 	width: 700px;
 	border-top:1px solid #ddd;	
 }
 
-.added1 p{
-	padding:0px;	
+.addedMetadata {
+	padding:0px;
+	font-weight: bold;	
+	font-size: 12px;
+	padding-bottom: 10px;
+}
+
+.addedMetadataTitle {
+	padding:0px;
+	font-weight: bold;	
+	font-size: 15px;
+	padding-bottom: 10px;
 }
 
 /* root element for scrollable items */

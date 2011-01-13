@@ -87,24 +87,12 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 			var id = $(this).next().attr('id');
 			var title = $(this).next().attr('title');
 			//these still need to be added
-			var metadatafilename = 'metadatafilename';
-			var metadatafileformat = 'metadatafileformat';
+			var metadatafilename = 'ORNL-oai_dif.json';
+			var metadatafileformat = 'oai';
 				
-			
 			//send the info to the metadata_report
 			metadata_report(id,title,metadatafilename,metadatafileformat);
 			
-			
-			/*
-			var url = $(this).next().attr('url');
-			var description = $(this).next().attr('description');
-		  	var wd = $(this).next().attr('west_degrees');
-		  	var ed = $(this).next().attr('east_degrees');
-		  	var nd = $(this).next().attr('north_degrees');
-		  	var sd = $(this).next().attr('south_degrees');
-		  	var dStart = $(this).next().attr('datetime_start');
-		  	var dStop = $(this).next().attr('datetime_stop');
-		  	*/
 		  });
 		  });
 	  

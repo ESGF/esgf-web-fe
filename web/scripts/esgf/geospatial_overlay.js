@@ -161,6 +161,7 @@ function clearAreaChoice() {
 
 
 function placeMarker(location) {
+	alert('in place marker');
 	var marker = addMarker(location);
 	if (marker != null ) {
 		appendMarker(marker,  num_of_markers);
@@ -241,6 +242,7 @@ function getCoordinates(address) {
 
 
 function addMarker(location) {
+	alert('adding marker? num markers: ' + num_of_markers);
 	if (num_of_markers < max_of_markers) {
 		
 		// create a new marker
@@ -288,21 +290,20 @@ $(document).ready(function(){
 	$('div#geospatial_overlay').after(geospatialString);
 	
 	
-	
-	$('div#geo').click(function(){
-		if(popupStatusGeospatialSearch==0){
-			$("#backgroundPopupGeospatialSearch").css({
-				"opacity": "0.8"
-			});
-			$("#backgroundPopupGeospatialSearch").fadeIn("slow");
-			$("#popupGeospatialSearch").fadeIn("slow");
-			popupStatusGeospatialSearch = 1;
-		}
-		
+	 /*$('div#geo').click(function(){
+			if(popupStatusGeospatialSearch==0){
+				$("#backgroundPopupGeospatialSearch").css({
+					"opacity": "0.8"
+				});
+				$("#backgroundPopupGeospatialSearch").fadeIn("slow");
+				$("#popupGeospatialSearch").fadeIn("slow");
+				popupStatusGeospatialSearch = 1;
+			}
+			
 
-		display_geo_map();
-	});
-	
+			display_geo_map();
+		});*/
+		 
 	
 	$('#marker_fieldset1 input[name="clear_markers"]').click(function(e) {
 		
@@ -312,9 +313,13 @@ $(document).ready(function(){
 	
 	function clearMarkers() {
 		for (var i=0; i < max_of_markers; i++) {
+			alert('clearing marker: ' + i);
 			if (markerGroup[i]) 
+			{
 				markerGroup[i].setMap(null);
+				alert('confirm: ' + i);
 				markerGroup[i] = null;
+			}
 		}
 		
 		num_of_markers = 0;
@@ -480,7 +485,7 @@ $(document).ready(function(){
 
 function refreshMarkers() {
 	
-	$("#markers").html("");
+	$("#markers1").html("");
 	for (var i=0; i < num_of_markers; i++) {
 		appendMarker(markerGroup[i], i+1);
 	}
@@ -709,10 +714,7 @@ function encloses()
 	
 	//alert('encloses sq: ' + ($("input[name='areaGroup']:checked").val() == 'square'));
 	
-	
-	if(($("input[name='areaGroup']:checked").val() == 'square')) {
-		
-		//this is the min long 
+	//this is the min long 
 		//west_degrees limit
 		boundingboxWD = sw.lng();
 		
@@ -775,13 +777,8 @@ function encloses()
 		north_degreesFQ = 'north_degrees:[ * TO ' + north_degrees + ']';
 		east_degreesFQ = 'east_degrees:[ * TO ' + east_degrees + ']';
 		
-		geoQueryString += '(' + south_degreesFQ + ' AND ' + west_degreesFQ + ' AND ' + north_degreesFQ + ' AND ' + south_degreesFQ + ')';
+		geoQueryString += '(' + south_degreesFQ + ' AND ' + west_degreesFQ + ' AND ' + north_degreesFQ + ' AND ' + east_degreesFQ + ')';
 
-	
-	}
-	else {
-		//alert('Performing Radius search for encloses');
-	}
 	
 	
 	Manager.store.addByValue('fq',geoQueryString);
@@ -816,81 +813,76 @@ function overlaps()
 	//north_degrees limit
 	boundingboxND = ne.lat();
 	
-	if(($("input[name='areaGroup']:checked").val() == 'square')) {
+	
+	//case 1
+    //NE point in bounding box
+    geoQueryString += '(east_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
+                 'north_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
+    
+    geoQueryString += ' OR ';
+    
+    //case 2
+    //SE point in bounding box
+    geoQueryString += '(east_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
+                 'south_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
+    
+    geoQueryString += ' OR ';
+    
+    //case 3
+    //SW point in bounding box
+    geoQueryString += '(west_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
+                 'south_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
+    
+    
+    geoQueryString += ' OR ';
+    
+    //case 4
+    //NW point in bounding box
+    geoQueryString += '(west_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
+                 'north_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
+
+    geoQueryString += ' OR ';
+    
+    //case 5
+    //east degree in range and n & s are above and below respectively
+    geoQueryString += '(east_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
+                 'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
+                 'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
+
+    geoQueryString += ' OR ';
+    
+    //case 6
+    //west degree in range and n & s are above and below respectively
+    geoQueryString += '(west_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
+                 'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
+                 'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
+
+    geoQueryString += ' OR ';
+    
+    //case 7
+    //north degree in range and n & s are above and below respectively
+    geoQueryString += '(north_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '] AND ' +
+                 'west_degrees:[ * TO ' + boundingboxWD + '] AND ' +
+                 'east_degrees:[' + boundingboxED + ' TO ' + '* ])';
+
+    geoQueryString += ' OR ';
+    
+    //case 8
+    //south degree in range and n & s are above and below respectively
+    geoQueryString += '(south_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
+                 'west_degrees:[ * TO ' + boundingboxWD + '] AND ' +
+                 'east_degrees:[' + boundingboxED + ' TO ' + '* ])';
+
+    geoQueryString += ' OR ';
+    
+    //case 9
+    //data box > user defined bounding box              
+    geoQueryString += '(east_degrees:[' + boundingboxED + ' TO ' + ' *] AND ' +
+                 'west_degrees:[ * TO ' + boundingboxWD + '] AND ' +
+                 'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
+                 'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
 		
-		//case 1
-	    //NE point in bounding box
-	    geoQueryString += '(east_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-	                 'north_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
-	    
-	    geoQueryString += ' OR ';
-	    
-	    //case 2
-	    //SE point in bounding box
-	    geoQueryString += '(east_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-	                 'south_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
-	    
-	    geoQueryString += ' OR ';
-	    
-	    //case 3
-	    //SW point in bounding box
-	    geoQueryString += '(west_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-	                 'south_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
-	    
-	    
-	    geoQueryString += ' OR ';
-	    
-	    //case 4
-	    //NW point in bounding box
-	    geoQueryString += '(west_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-	                 'north_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
-
-	    geoQueryString += ' OR ';
-	    
-	    //case 5
-	    //east degree in range and n & s are above and below respectively
-	    geoQueryString += '(east_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-	                 'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
-	                 'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
-
-	    geoQueryString += ' OR ';
-	    
-	    //case 6
-	    //west degree in range and n & s are above and below respectively
-	    geoQueryString += '(west_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-	                 'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
-	                 'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
-
-	    geoQueryString += ' OR ';
-	    
-	    //case 7
-	    //north degree in range and n & s are above and below respectively
-	    geoQueryString += '(north_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '] AND ' +
-	                 'west_degrees:[ * TO ' + boundingboxWD + '] AND ' +
-	                 'east_degrees:[' + boundingboxED + ' TO ' + '* ])';
-
-	    geoQueryString += ' OR ';
-	    
-	    //case 8
-	    //south degree in range and n & s are above and below respectively
-	    geoQueryString += '(south_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-	                 'west_degrees:[ * TO ' + boundingboxWD + '] AND ' +
-	                 'east_degrees:[' + boundingboxED + ' TO ' + '* ])';
-
-	    geoQueryString += ' OR ';
-	    
-	    //case 9
-	    //data box > user defined bounding box              
-	    geoQueryString += '(east_degrees:[' + boundingboxED + ' TO ' + ' *] AND ' +
-	                 'west_degrees:[ * TO ' + boundingboxWD + '] AND ' +
-	                 'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
-	                 'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
 		
-		
-	}
-	else {
-		//alert('Performing Radius search for overlaps');
-	}
 	
     Manager.store.addByValue('fq', geoQueryString );	
 	

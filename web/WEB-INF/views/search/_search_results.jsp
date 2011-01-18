@@ -12,7 +12,11 @@
 			<td>
 			 <div class="dlink">
 				<a href="${record.fields['url'][0]}"><c:out value="${record.fields['title'][0]}"/></a>
-			 	<a href="javascript:metadata_link()">metadata</a>
+				
+				<!-- send the info to the metadata_report
+				metadata_report(id,title,metadatafilename,metadatafileformat); 
+			 	<a href="javascript:metadata_report(<c:out value="${record.fields['id'][0]}"/>,'ll','ll','lo')">metadata</a>
+			 	-->
 			 </div>
 				
 				<c:if test="${record.fields['description'][0]}"><br/>

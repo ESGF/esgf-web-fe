@@ -40,6 +40,12 @@
 		  id: 'geol_overlay',
 		  target: '#geol_overlay'
 		}));
+	
+	Manager.addWidget(new AjaxSolr.FacetBrowserWidget({
+		  id: 'facet-browse',
+		  target: '#facet-browse'
+		}));
+	
 //	Manager.addWidget(new AjaxSolr.TextWidget({
 //		  id: 'text',
 //		  target: '#search-box',

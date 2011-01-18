@@ -20,22 +20,29 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     		  ' e: ' + boundingboxED +
     		  ' w: ' + boundingboxWD);
     	*/
-    	if(fqString.search('OR') != -1)
+    	
+    	//check to see if this is a geospatial query (assuming 'east_degrees' is in every geo query)
+    	//if it is -> need to change the current selection string
+    	if(fqString.search('east_degrees'))
     	{
-    		//alert('pushing ' + fq[i] + ' on encloses current search');
-    		//alert('Center for ' + fq[i]);
-    		fqString = 'Center (Lat, Lon): (' + 
-    					(boundingboxND+boundingboxSD)/2 + ',' + (boundingboxED+boundingboxWD)/2 + ')' + 
-    					'\nRadius: '; 
+    		//if there is no OR, it is an enclosed search
+    		if(fqString.search('OR') == -1)
+        	{
+    			fqString = 'encloses bounding (N,W,S,E): (' + Math.round(parseFloat(boundingboxND).toFixed(2)) + ',' +
+    			Math.round(parseFloat(boundingboxWD).toFixed(2)) + ',' +
+    			Math.round(parseFloat(boundingboxSD).toFixed(2)) + ',' +
+    			Math.round(parseFloat(boundingboxED).toFixed(2)) + ')';
+        	}
+    		//otherwise it is an overlaps search
+    		else {
+    			fqString = 'overlaps bounding (N,W,S,E): (' + Math.round(parseFloat(boundingboxND).toFixed(2)) + ',' +
+			     Math.round(parseFloat(boundingboxWD).toFixed(2)) + ',' +
+			     Math.round(parseFloat(boundingboxSD).toFixed(2)) + ',' +
+			     Math.round(parseFloat(boundingboxED).toFixed(2)) + ')';
+    		}
     	}
-    	else if (fqString.search('east_degrees'))
-    	{
-    		//alert('Bounding box');
-    		fqString = 'Bounding: (N,W,S,E): (' + Math.round(parseFloat(boundingboxND).toFixed(2)) + ',' +
-    											     Math.round(parseFloat(boundingboxWD).toFixed(2)) + ',' +
-    											     Math.round(parseFloat(boundingboxSD).toFixed(2)) + ',' +
-    											     Math.round(parseFloat(boundingboxED).toFixed(2)) + ')';
-    	}
+    	
+    	
       links.push($('<a href="#"/>').text('(x) ' + fqString).click(self.removeFacet(fq[i])));
     }
 
@@ -63,6 +70,9 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
       return false;
     };
   }
+  
+  
+  
 });
 
 })(jQuery);

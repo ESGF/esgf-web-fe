@@ -29,14 +29,11 @@
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/TagClouds.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/CurrentSearch.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Text.js" />"> </script>
-    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/AutoComplete.js" />"> </script><!--
-    
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/AutoComplete.js" />"> </script>
+	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/FacetBrowser.js" />"> </script>
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Geospatial.js" />"> </script>
 
-<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Calendar.js" />"></script>
-                
-    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Temporal.js" />"> </script>
-                
-    --><script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
+	<script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.theme.js" />"> </script>
 
 	<!--  overlays -->
@@ -47,6 +44,7 @@
 	<script type="text/javascript" src="<c:url value="/scripts/esgf/temporal_overlay.js" />"> </script>
 	<script type="text/javascript" src="<c:url value="/scripts/esgf/geospatial_overlay.js" />"> </script>
 	<script type="text/javascript" src="<c:url value="/scripts/esgf/metadata_overlay.js" />"> </script>
+
 
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans&subset=latin' 
         rel='stylesheet' type='text/css'>
@@ -110,6 +108,7 @@
 		<div id="geospatial_overlay"></div>
 		<div id="metadata_overlay" class="span-24 last"></div>
 	
+		<div class="span-19 last" id="facet-browse"> </div>
 		
 		<div id="header" class="span-24 last">
 			<div class="span-16 left">

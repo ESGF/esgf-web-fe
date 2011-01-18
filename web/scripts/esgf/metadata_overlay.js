@@ -25,18 +25,7 @@ var metadataString =
 	'<div class="scrollable verticalscroll">'+ 
 	'	<!-- root element for the items --> '+
 	'	<div class="itemsscroll">'+
-	
-/*	'		<div>'+
-	'			<div class="shortitem">'+
-	'				<div class="leftsd">'+
-	'					<h3>Title:</h3> '+
-	'				</div>'+
-	'				<div class="rightsd">'+
-	'					<div id="title_metadata"></div>'+
-	'				</div>'+
-	'			</div> '+
-	'		</div>'+*/
-	
+
 
 	'		<div>'+
 	'			<div class="shortitem">'+
@@ -127,131 +116,7 @@ var metadataString =
 	'		</div>'+
 	
 	
-	/*
 	
-	*/
-	
-/*
-	'		<div>'+
-	'			<div class="shortitem">'+
-	'				<div class="leftsd">'+
-	'					<h3>Status</h3> '+
-	'				</div>'+
-	'				<div class="rightsd">'+
-	'					<div id="status_metadata"></div>'+
-	'				</div>'+
-	'			</div> '+
-	'		</div>'+
-
-	'		<div>'+
-	'			<div class="shortitem">'+
-	'				<div class="leftsd">'+
-	'					<h3>Access Restrictions</h3> '+
-	'				</div>'+
-	'				<div class="rightsd">'+
-	'					<div id="access_metadata"></div>'+
-	'				</div>'+
-	'			</div> '+
-	'		</div>'+
-
-
-	'		<div>'+
-	'			<div class="shortitem">'+
-	'				<div class="leftsd">'+
-	'					<h3>Data Set Location:</h3> '+
-	'				</div>'+
-	'				<div class="rightsd">'+
-	'					<div id="datasetLocation_metadata"></div>'+
-	'				</div>'+
-	'			</div> '+
-	'		</div>'+
-
-	'		<div>'+
-	'			<div class="shortitem">'+
-	'				<div class="leftsd">'+
-	'					<h3>Data Center Contact:</h3> '+
-	'				</div>'+
-	'				<div class="rightsd">'+
-	'					<div id="datacenterContact_metadata"></div>'+
-	'				</div>'+
-	'			</div> '+
-	'		</div>'+
-
-	'		<div>'+
-	'			<div class="shortitem">'+
-	'				<div class="leftsd">'+
-	'					<h3>Data Center URL:</h3> '+
-	'				</div>'+
-	'				<div class="rightsd">'+
-	'					<div id="datacenterURL_metadata"></div>'+
-	'				</div>'+
-	'			</div> '+
-	'		</div>'+
-
-	'		<div>'+
-	'			<div class="shortitem">'+
-	'				<div class="leftsd">'+
-	'					<h3>Data Set Citation:</h3> '+
-	'				</div>'+
-	'				<div class="rightsd">'+
-	'					<div id="datacenterCitation_metadata"></div>'+
-	'				</div>'+
-	'			</div> '+
-	'		</div>'+
-
-
-	'		<div>'+
-	'			<div class="shortitem">'+
-	'				<div class="leftsd">'+
-	'					<h3>Variable(s):</h3> '+
-	'				</div>'+
-	'				<div class="rightsd">'+
-	'					<div id="variables_metadata"></div>'+
-	'				</div>'+
-	'			</div> '+
-	'		</div>'+
-
-	'		<div>'+
-	'			<div class="shortitem">'+
-	'				<div class="leftsd">'+
-	'					<h3>Keyword(s):</h3> '+
-	'				</div>'+
-	'				<div class="rightsd">'+
-	'					<div id="datacenterContact_metadata"></div>'+
-	'				</div>'+
-	'			</div> '+
-	'		</div>'+
-
-	'		<div>'+
-	'			<div class="shortitem">'+
-	'				<div class="leftsd">'+
-	'					<h3>Data Center Contact:</h3> '+
-	'				</div>'+
-	'				<div class="rightsd">'+
-	'					<div id="datacenterContact_metadata"></div>'+
-	'				</div>'+
-	'			</div> '+
-	'		</div>'+
-			
-			
-	'		<div>'+
-			
-	'			<div class="geospatial_item"> '+
-	'				<div class="leftsd">'+
-	'					<h3>Temporal Information:</h3> '+
-	'				</div>'+
-					
-	'				<div class="rightsd">'+
-	'					<div id="temporal_metadata"></div>'+
-			
-	'				</div>'+
-					
-	'			</div> '+
-	'		</div>'+
-			
-	'		<div>'+
-			
-*/
 	
 	
 	'   </div>'+
@@ -402,15 +267,11 @@ function metadata_report(id,title,metadatafilename,metadatafileformat)
 function processMetadataRecord(record,id,metadatafileformat)
 {
 	
-	
+	//record = {"metadata":{"idinfo":{"citation":{"citeinfo":{"title":"Atmospheric Radiation Measurement (ARM) Climate Modeling Best Estimate Product","onlink":["http://iop.archive.arm.gov/arm-iop/0showcase-data/cmbe/","http://www.arm.gov/data/pi/36","http://www.arm.gov","http://www.arm.gov/instruments"],"pubdate":20090812,"origin":["Shaocheng Xie, xie2@llnl.gov","Renata McCoy"]}},"keywords":{"theme":[{"themekey":["Cloud properties","Atmospheric state","Radiometric"],"themekt":"Parameter"},{"themekey":["ARM Showcase Data","Value Added Product"],"themekt":"Product Type"},{"themekey":"Land","themekt":"Realm"},{"themekey":["Cloud properties","Atmospheric profiling","Radiometric"],"themekt":"Instrument Categories"},{"themekey":["Millimeter Wavelength Cloud Radar","Micropulse Lidar","Geostationary Operational Environmental Satellites","Total Sky Imager","Vaisala Ceilometer","Multifilter Rotating Shadowband Radiometer"],"themekt":"Instruments"},{"themekey":["Cloud properties","Atmospheric state","Radiometric"],"themekt":"Measurement Categories"},{"themekey":["Macrophysical","Longwave broadband","Shortwave broadband","Upper air state","Microphysical"],"themekt":"Measurement Sub-Categories"},{"themekey":["Cloud fraction","Shortwave broadband diffuse downwelling irradiance","Shortwave broadband total downwelling irradiance","Shortwave broadband direct downwelling irradiance","Shortwave broadband diffuse upwelling irradiance","Longwave broadband downwelling irradiance","Longwave broadband upwelling irradiance","Precipitable water","Liquid water path","Longwave broadband net flux at TOA","Shortwave broadband net flux at TOA","Shortwave broadband downwelling insolation at TOA","Cloud low-level fraction","Cloud middle-level fraction","Cloud high-level fraction","Cloud thickness","Cloud top height"],"themekt":"Primary Measurements"},{"themekey":["cld_frac","cld_frac_MMCR","cld_frac_MPL","tot_cld","swdn","swdif","swdir","swup","lwdn","lwup","pwv","lwp","tot_cld_tsi","lw_net_TOA","sw_net_TOA","sw_dn_TOA","cld_low","cld_mid","cld_high","cld_tot","cld_thick","cld_top"],"themekt":"Variable Names"},{"themekey":["Cloud fraction|cld_frac","Cloud fraction|cld_frac_MMCR","Cloud fraction|cld_frac_MMCR","Cloud fraction|tot_cld","Cloud fraction|tot_cld_tsi","Cloud fraction|cld_tot","Shortwave broadband diffuse downwelling irradiance|swdif","Shortwave broadband total downwelling irradiance|swdn","Shortwave broadband direct downwelling irradiance|swdir","Shortwave broadband diffuse upwelling irradiance|swup","Longwave broadband downwelling irradiance|lwdn","Longwave broadband upwelling irradiance|lwup","Precipitable water|pwv","Liquid water path|lwp","Longwave broadband net flux at TOA|lw_net_TOA","Shortwave broadband net flux at TOA|sw_net_TOA","Shortwave broadband downwelling insolation at TOA|sw_dn_TOA","Cloud low-level fraction|cld_low","Cloud middle-level fraction|cld_mid","Cloud high-level fraction|cld_high","Cloud thickness|cld_thick","Cloud top height|cld_top"],"themekt":"PrimaryMeasurements_VariableNames"},{"themekey":["Cloud properties|Macrophysical|Cloud fraction","Cloud properties|Macrophysical|Cloud low-level fraction","Cloud properties|Macrophysical|Cloud middle-level fraction","Cloud properties|Macrophysical|Cloud high-level fraction","Cloud properties|Macrophysical|Cloud thickness","Cloud properties|Macrophysical|Cloud top height","Cloud properties|Upper air state|Liquid water path","Cloud properties|Upper air state|Precipitable water","Cloud properties|Microphysical|Liquid water path","Radiometric|Longwave broadband|Longwave broadband downwelling irradiance","Radiometric|Longwave broadband|Longwave broadband upwelling irradiance","Radiometric|Longwave broadband|Longwave broadband net flux at TOA","Radiometric|Shortwave broadband|Shortwave broadband diffuse downwelling irradiance","Radiometric|Shortwave broadband|Shortwave broadband total downwelling irradiance","Radiometric|Shortwave broadband|Shortwave broadband direct downwelling irradiance","Radiometric|Shortwave broadband|Shortwave broadband diffuse upwelling irradiance","Radiometric|Shortwave broadband|Shortwave broadband net flux at TOA","Radiometric|Shortwave broadband|Shortwave broadband downwelling insolation at TOA"],"themekt":"MeasurementCategories_MeasSubCat_PrimaryMeasurements"},{"themekey":"","themekt":"Value-Added Products"},{"themekey":"sgpcmbe-cldrad-v2p1C1.c1 : Climate Modeling Best Estimate - CMBE-CLDRAD","themekt":"Output Datastreams"}],"place":{"placekt":"Place Keywords","placekey":["Southern Great Plains (sgp), C1, Central Facility, Lamont, OK, USA","North America"]}},"status":{"update":"Annual","progress":"Ongoing","Maintenance_and_Update_Frequency":"hourly"},"descript":{"abstract":"The ARM Climate Modeling Best Estimate (CMBE) product is a new ARM datastream specifically tailored to climate modelers for use in evaluation of global climate models. It contains a best estimate of several selected cloud, radiation and atmospheric quantities from the ACRF observations and Numerical Weather Prediction (NWP) analysis (for upper air data only).\nThe data are stored in two different data file streams: CMBE-CLDRAD (former CMBE datastream) for cloud and radiation relevant quantities and CMBE-ATM for atmospheric quantities. Data are averaged over one hour time intervals. Quick look plots and detailed information about the CMBE data can be found at Climate Modeling Working Group web page: http://science.arm.gov/wg/cpm/scm/best_estimate.html.\nThe CMBE-CLDRAD data are available for the 5 ARM Climate Research Facility sites: SGP.C1 (Lamont, OK), NSA.C1 (Barrow, AK), TWP.C1 (Manus Island, PNG), TWP.C2 (Nauru), and TWP.C3 (Darwin, AU) for the period when these data are available. This data file contains a best estimate of several selected cloud and radiation relevant quantities from ACRF observations:\n* Cloud fraction profiles\n* Total, high, middle, and low clouds\n* Liquid water path and precipitable water vapor\n* Surface radiative fluxes\n* TOA radiative fluxes\nThe CMBE-ATM data are currently only available for SGP.C1. This data file contains a best estimate of several selected atmospheric quantities from ACRF observations and NWP analysis data:\n* Soundings\n* NWP analysis data\n* Surface sensible and latent heat fluxes\n* Surface precipitation\n* Surface temperature, relative humidity, and horizontal winds","supplinf":"http://science.arm.gov/workinggroup/cpm/scm/best_estimate.html","purpose":"The CMBE product was developed to make ARM data better serve the needs of climmate studies and model development. It is intended for use by climate modelers in evaluating global climate models."},"ptcontac":{"cntinfo":{"cntemail":"xie2@llnl.gov","cntperp":{"cntper":"Shaocheng Xie"},"cntvoice":"+1-925-422-6023"}},"spdom":{"bounding":{"southbc":34.98,"northbc":38.3,"westbc":-99.31,"eastbc":-95.59}},"timeperd":{"timeinfo":{"rngdates":{"begdate":19960101,"enddate":"."}}}},"metainfo":{"metstdn":"FGDC Content Standard for Digital Geospatial Metadata","metc":{"cntinfo":{"cntaddr":{"addrtype":"Mailing and Physical Address","postal":37831,"address":"P.O. Box 2008, MS 6407","state":"Tennessee","country":"USA","city":"Oak Ridge"},"cntemail":"armarchive@ornl.gov","cntperp":{"cntper":"ARM Archive User Services"},"cntorgp":{"cntper":"ARM Archive User Services"},"cntvoice":"865-241-4851"}}},"distinfo":{"storder":{"digform":{"digtopt":{"onlinopt":{"computer":"http://www.arm.gov","accinstr":"Public"}}}},"resdesc":"Atmospheric Radiation Measurement (ARM) Program Data Sets. 1993-Ongoing. Available at http://www.archive.arm.gov from the ARM Archive, Oak Ridge National Laboratory (ORNL), Oak Ridge, Tennessee, USA","distrib":{"cntinfo":{"cntemail":"armarchive@ornl.gov","cntperp":{"cntorg":"Oak Ridge National Laboratory (ORNL), Oak Ridge, Tennessee, USA","cntper":"ARM Archive User Services"},"cntvoice":"+1-865-241-4851"}}}}};
 	
 	//remove any previous metadata report from the page - note that this class is used as a division in each of the metadata
 	$('.addedMetadata').remove();
 	$('.addedMetadataTitle').remove();
-	var title = record.record.metadata.DIF.Entry_Title;
-	
-	//add title and constraints to the page
-	$('div#metadata_summary_dataset').after('<div class="addedMetadataTitle">' + 'Dataset: ' + title); //+ '</div><p>&lt;insert constraints here&gt;</p>');
 	
 	
 	//branch logic depending on the metadata file format
@@ -429,8 +290,95 @@ function processMetadataRecord(record,id,metadatafileformat)
 	
 }
 
-function processOAI(record,id)
+function processFGDC(record){
+	
+	var title = record.metadata.idinfo.citation.citeinfo.title;
+	
+	//add title and constraints to the page
+	$('div#metadata_summary_dataset').after('<div class="addedMetadataTitle">' + 'Dataset: ' + title); //+ '</div><p>&lt;insert constraints here&gt;</p>');
+	
+	// Investigators 
+	var investigators = record.metadata.idinfo.citation.citeinfo.origin;
+	var investigatorsText = '';
+	for(var i = 0;i<investigators.length;i++) {
+		if(i == investigators.length-1) {
+			investigatorsText += investigators[i];
+		}
+		else {
+			investigatorsText += investigators[i] + ', ';
+		}
+	}	
+	
+	$('div#investigator_metadata').after('<div class="addedMetadata"><p>' + investigatorsText + '</p></div>');
+	
+	// Contact Info 
+	var org = record.metadata.distinfo.distrib.cntinfo.cntperp.cntorg;
+	var contactText = org;
+	$('div#contact_metadata').after('<div class="addedMetadata"><p>' + contactText + '</p></div>');
+	
+	// Temporal Info 
+	var startText = record.metadata.idinfo.timeperd.timeinfo.rngdates.begdate;
+	var stopText = record.metadata.idinfo.timeperd.timeinfo.rngdates.enddate;
+	if(stopText == '.')	{
+		var currentTime = new Date();
+		stopText = currentTime.getFullYear(); //+ currentTime.getMonth() + currentTime.getDay();
+	}
+	$('div#time_metadata').after('<div class="addedMetadata"><p>Begin: ' + startText + ' End: ' + stopText + '</p></div>');
+	
+	// Geo Info 
+	var east_degreesText = record.metadata.idinfo.spdom.bounding.eastbc;
+	var west_degreesText = record.metadata.idinfo.spdom.bounding.westbc;
+	var north_degreesText = record.metadata.idinfo.spdom.bounding.northbc;
+	var south_degreesText = record.metadata.idinfo.spdom.bounding.southbc;
+	$('div#geospatial_metadata').after('<div class="addedMetadata"><p>' + 'coordinates (N,W,S,E):<br />(' + north_degreesText + ',' + west_degreesText + ',' + south_degreesText + ',' + east_degreesText + ')</p></div>');
+	display_meta_map(west_degreesText,east_degreesText,north_degreesText,south_degreesText);
+	
+	// Abstract 
+	var abstractText = record.metadata.idinfo.descript.abstract;
+	$('div#abstract_metadata').after('<div class="addedMetadata"><p>' + abstractText + '</p></div>');
+	
+	
+	// Keywords  - neerds some work
+	var keywords = record.metadata.idinfo.keywords.theme[0];
+	var keywordsText = '';
+	for(var i = 0;i<keywords.themekey.length;i++) {
+		if(i == keywords.themekey.length-1) {
+			keywordsText += keywords.themekey[i];
+		}
+		else {
+			keywordsText += keywords.themekey[i] + ', ';
+		}
+	}
+	$('div#keywords_metadata').after('<div class="addedMetadata"><p>' + keywordsText + '</p></div>');
+	
+	/*
+	// Projects 
+	//note i need to change the "0" index and place the correct information 
+	//projects_metadata -> (record)/record[0]/metadata/DIF/Project[0]
+	//var projects = record.record[0].metadata.DIF.Project;
+	var projects = record.record.metadata.DIF.Project;
+	var projectsText = '';
+	for(var i = 0;i<projects.length;i++) {
+		if(i == projects.length-1) {
+			projectsText += projects[i].Long_Name + ' (' + projects[i].Short_Name + ')';
+		}
+		else {
+			projectsText += projects[i].Long_Name + ' (' + projects[i].Short_Name + '), ';
+		}
+	}
+	$('div#projects_metadata').after('<div class="addedMetadata">' + projectsText + '</div>');
+	
+	*/
+}
+
+function processOAI(record)
 {
+
+	var title = record.record.metadata.DIF.Entry_Title;
+	
+	//add title and constraints to the page
+	$('div#metadata_summary_dataset').after('<div class="addedMetadataTitle">' + 'Dataset: ' + title); //+ '</div><p>&lt;insert constraints here&gt;</p>');
+	
 
 	// Projects 
 	//note i need to change the "0" index and place the correct information 
@@ -494,15 +442,13 @@ function processOAI(record,id)
 
 }
 
-function processFGDC(record,id){
+
+
+function processCAS(record){
 	
 }
 
-function processCAS(record,id){
-	
-}
-
-function processTHREDDS(record,id) {
+function processTHREDDS(record) {
 	
 }
 
@@ -558,52 +504,128 @@ var paths = [
 	
 };
 
-
 /*
-function metadata_link(id,title,url,description,west_degrees,east_degrees,north_degrees,south_degrees,datetime_start,datetime_stop)
-{
-	
-	if(popupStatusMetadataReport==0){
-		$("#backgroundPopupMetadataReport").css({
-			"opacity": "0.8"
-		});
-		$("#backgroundPopupMetadataReport").fadeIn("slow");
-		$("#popupMetadataReport").fadeIn("slow");
-		popupStatusMetadataReport = 1;
-	}
-	
-	var title = title;
-	var description = description;
-	var url = url;
-	var west_degrees = west_degrees;
-	var east_degrees = east_degrees;
-	var north_degrees = north_degrees;
-	var south_degrees = south_degrees;
-	var datetime_start = datetime_start;
-	var datetime_stop = datetime_stop;
-	
-	$('.addedMetadata').remove();
-	$('div#title').after('<div class="addedMetadata"><p>' + title + '</p></div>');
-	$('div#url').after('<div class="addedMetadata"><p>' + url + '</p></div>');
-	$('div#abstract').after('<div class="addedMetadata"><p>' + description + '</p></div>');
-	$('div#leader').after('<div class="addedMetadata"><p>' + 'John Doe' + '</p></div>');
-	$('div#geospatial_metadata').after('<div class="addedMetadata"><p>west degrees: ' + west_degrees + '</p></div>');
-	$('div#geospatial_metadata').after('<div class="addedMetadata"><p>east degrees: ' + east_degrees + '</p></div>');
-	$('div#geospatial_metadata').after('<div class="addedMetadata"><p>north degrees: ' + north_degrees + '</p></div>');
-	$('div#geospatial_metadata').after('<div class="addedMetadata"><p>south degrees: ' + south_degrees + '</p></div>');
-	$('div#temporal_metadata').after('<div class="addedMetadata"><p>end: ' + datetime_stop + '</p></div>');
-	$('div#temporal_metadata').after('<div class="addedMetadata"><p>begin: ' + datetime_start + '</p></div>');
 
-	display_meta_map (west_degrees,east_degrees,north_degrees,south_degrees);
-}
 */
 
-//for prototype purposes, im just hard coding the result
-//need to fix how this is being fed
+/*
+'		<div>'+
+'			<div class="shortitem">'+
+'				<div class="leftsd">'+
+'					<h3>Status</h3> '+
+'				</div>'+
+'				<div class="rightsd">'+
+'					<div id="status_metadata"></div>'+
+'				</div>'+
+'			</div> '+
+'		</div>'+
 
-//var result = {"record":[{"header":{"datestamp":"2009-07-21T22:28:58Z","identifier":"oai:daac.ornl.gov:ornldaac_1"},"metadata":{"DIF":{"Access_Constraints":"","Parameters":[{"Variable_Level_1":"DISCHARGE/FLOW","Category":"EARTH SCIENCE","Topic":"HYDROSPHERE","Term":"SURFACE WATER"},{"Variable_Level_1":"STAGE HEIGHT","Category":"EARTH SCIENCE","Topic":"HYDROSPHERE","Term":"SURFACE WATER"}],"Originating_Metadata_Node":"GCMD","Entry_ID":"FIFE_STRM_15M","Keyword":["EOSDIS","HYDROLOGY","STREAM DYNAMICS","AQUATIC PROPERTIES"],"IDN_Node":{"Short_Name":"USA/NASA"},"Data_Set_Citation":{"Other_Citation_Details":"doi:10.3334/ORNLDAAC/1","Dataset_Publisher":"Oak Ridge National Laboratory Distributed Active Archive Center","Online_Resource":1,"Dataset_Creator":"WOOD, E.F.","Data_Presentation_Form":"Online Files","Dataset_Title":"15 MINUTE STREAM FLOW DATA: USGS (FIFE)","Version":"","Dataset_Release_Place":"Oak Ridge, Tennessee, U.S.A.","Dataset_Release_Date":2008},"Spatial_Coverage":{"Westernmost_Longitude":-96.6,"Easternmost_Longitude":-96.6,"Northernmost_Latitude":39.1,"Southernmost_Latitude":39.1},"Data_Center":{"Data_Set_ID":1,"Personnel":{"Contact_Address":{"Province_or_State":"Tennessee","Postal_Code":"37831-6407","Address":["ORNL DAAC USER SERVICES OFFICE","P.O. Box 2008, MS 6407","Oak Ridge National Laboratory"],"Country":"USA","City":"Oak Ridge"},"Phone":"+1(865)241-3952","Email":"ornldaac@ornl.gov","Fax":"+1(865)574-4665","Last_Name":"ORNL DAAC USER SERVICES","Role":"DATA CENTER CONTACT"},"Data_Center_URL":"http://daac.ornl.gov/","Data_Center_Name":{"Short_Name":"ORNL_DAAC","Long_Name":"THE OAK RIDGE NATIONAL LABORATORY (ORNL) DISTRIBUTED ACTIVE ARCHIVE CENTER (DAAC)"}},"Summary":"ABSTRACT: The Fifteen Minute Stream Flow Data from the USGS Data Set contains 15 minute stream flow data from the USGS station located 2.9 miles upstream from the mouth of Kings Creek. The record extends from April 1, 1979 through September 2, 1988. The purpose of this data set was to provide accurate measurements of the stream flow from Kings Creek so that a water budget analysis for the northwest quadrant of the FIFE study area could be performed. The stilling pipe installed at the USGS station operates on the principle that the water level in a standpipe at a specific location within a stream bed can be converted to a volume of water in the stream bed. The tracking of the change in stream height with time then enables the calculation of stream flow.","Metadata_Name":"CEOS IDN DIF","xmlns:fo":"http://www.w3.org/1999/XSL/Format","Temporal_Coverage":{"Start_Date":"1984-12-25","Stop_Date":"1988-03-04"},"Data_Set_Language":"ENGLISH","Data_Set_Progress":"COMPLETE","Metadata_Version":"VERSION 9.0","Source_Name":[{"Short_Name":"","Long_Name":"SURFACE WATER WEIR"},{"Short_Name":"","Long_Name":"SURFACE WATER WEIR"}],"Personnel":[{"Contact_Address":"ORNL DAAC USER SERVICES OFFICE\n        OAK RIDGE NATIONAL LABORATORY\n        OAK RIDGE, TENNESSEE 37831 USA","Last_Name":"WOOD, E.F.","First_Name":"","Role":"TECHNICAL CONTACT"},{"Contact_Address":{"Province_or_State":"Tennessee","Postal_Code":"37831-6407","Address":["ORNL DAAC User Services Office","P.O. Box 2008, MS 6407","Oak Ridge National Laboratory"],"Country":"USA","City":"Oak Ridge"},"Phone":"(865) 241-3952","Email":"ornldaac@ornl.gov","Fax":"(865) 574-4665","Last_Name":"ORNL DAAC User Services","Role":"DIF AUTHOR"}],"Project":[{"Short_Name":"ESIP","Long_Name":"Earth Science Information Partners Program"},{"Short_Name":"EOSDIS","Long_Name":"Earth Observing System Data Information System"}],"Sensor_Name":[{"Short_Name":"","Long_Name":"STILLING WELL"},{"Short_Name":"","Long_Name":"STILLING WELL"}],"Entry_Title":"15 MINUTE STREAM FLOW DATA: USGS (FIFE)","Use_Constraints":"","DIF_Creation_Date":"2008-12-02","Related_URL":[{"URL":"http://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=1","URL_Content_Type":{"Subtype":"","Type":"GET DATA"}},{"Description":"15 MINUTE STREAM FLOW DATA: USGS (FIFE)","URL":"http://daac.ornl.gov//FIFE/guides/15_min_strm_flow.html","URL_Content_Type":{"Type":"VIEW RELATED INFORMATION"}}]}}},{"header":{"datestamp":"2009-07-21T22:28:58Z","identifier":"oai:daac.ornl.gov:ornldaac_10"},"metadata":{"DIF":{"Access_Constraints":"","Parameters":[{"Variable_Level_1":"AIR TEMPERATURE","Category":"EARTH SCIENCE","Topic":"ATMOSPHERE","Term":"ATMOSPHERIC TEMPERATURE"},{"Variable_Level_1":"ATMOSPHERIC PRESSURE MEASUREMENTS","Category":"EARTH SCIENCE","Topic":"ATMOSPHERE","Term":"ATMOSPHERIC PRESSURE"},{"Variable_Level_1":"BAROMETRIC ALTITUDE","Category":"EARTH SCIENCE","Topic":"ATMOSPHERE","Term":"ALTITUDE"},{"Variable_Level_1":"CARBON DIOXIDE","Category":"EARTH SCIENCE","Topic":"ATMOSPHERE","Term":"ATMOSPHERIC CHEMISTRY"},{"Variable_Level_1":"CARBON DIOXIDE","Category":"EARTH SCIENCE","Topic":"ATMOSPHERE","Term":"ATMOSPHERIC CHEMISTRY"},{"Variable_Level_1":"GEOPOTENTIAL HEIGHT","Category":"EARTH SCIENCE","Topic":"ATMOSPHERE","Term":"ALTITUDE"},{"Variable_Level_1":"HEAT FLUX","Category":"EARTH SCIENCE","Topic":"ATMOSPHERE","Term":"ATMOSPHERIC RADIATION"},{"Variable_Level_1":"IRRADIANCE","Category":"EARTH SCIENCE","Topic":"ATMOSPHERE","Term":"ATMOSPHERIC RADIATION"},{"Variable_Level_1":"POTENTIAL TEMPERATURE","Category":"EARTH SCIENCE","Topic":"ATMOSPHERE","Term":"ATMOSPHERIC TEMPERATURE"},{"Variable_Level_1":"SURFACE AIR TEMPERATURE","Category":"EARTH SCIENCE","Topic":"ATMOSPHERE","Term":"ATMOSPHERIC TEMPERATURE"},{"Variable_Level_1":"SURFACE WINDS","Category":"EARTH SCIENCE","Topic":"ATMOSPHERE","Term":"ATMOSPHERIC WINDS"},{"Variable_Level_1":"UPPER LEVEL WINDS","Category":"EARTH SCIENCE","Topic":"ATMOSPHERE","Term":"ATMOSPHERIC WINDS"},{"Variable_Level_1":"VEGETATION COVER","Category":"EARTH SCIENCE","Topic":"BIOSPHERE","Term":"VEGETATION"},{"Variable_Level_1":"WATER VAPOR","Category":"EARTH SCIENCE","Topic":"ATMOSPHERE","Term":"ATMOSPHERIC WATER VAPOR"},{"Variable_Level_1":"WATER VAPOR","Category":"EARTH SCIENCE","Topic":"ATMOSPHERE","Term":"ATMOSPHERIC WATER VAPOR"}],"Originating_Metadata_Node":"GCMD","Entry_ID":"FIFE_AF_RAW_K","Keyword":["EOSDIS","ATMOSPHERIC PROPERTIES","ATMOSPHERIC BOUNDARY LAYER"],"IDN_Node":{"Short_Name":"USA/NASA"},"Data_Set_Citation":{"Other_Citation_Details":"doi:10.3334/ORNLDAAC/10","Dataset_Publisher":"Oak Ridge National Laboratory Distributed Active Archive Center","Online_Resource":10,"Dataset_Creator":"KELLY, R.D.","Data_Presentation_Form":"Online Files","Dataset_Title":"AIRCRAFT FLUX-RAW: U OF WY. (FIFE)","Version":"","Dataset_Release_Place":"Oak Ridge, Tennessee, U.S.A.","Dataset_Release_Date":1994},"Spatial_Coverage":{"Westernmost_Longitude":-102,"Easternmost_Longitude":-95,"Northernmost_Latitude":40,"Southernmost_Latitude":37},"Data_Center":{"Data_Set_ID":10,"Personnel":{"Contact_Address":{"Province_or_State":"Tennessee","Postal_Code":"37831-6407","Address":["ORNL DAAC USER SERVICES OFFICE","P.O. Box 2008, MS 6407","Oak Ridge National Laboratory"],"Country":"USA","City":"Oak Ridge"},"Phone":"+1(865)241-3952","Email":"ornldaac@ornl.gov","Fax":"+1(865)574-4665","Last_Name":"ORNL DAAC USER SERVICES","Role":"DATA CENTER CONTACT"},"Data_Center_URL":"http://daac.ornl.gov/","Data_Center_Name":{"Short_Name":"ORNL_DAAC","Long_Name":"THE OAK RIDGE NATIONAL LABORATORY (ORNL) DISTRIBUTED ACTIVE ARCHIVE CENTER (DAAC)"}},"Summary":"ABSTRACT: The University of Wyoming (UW) King Air atmospheric boundary layer measurement missions were flown in 1987 during IFCs 3 and 4. This Raw Boundary Layer Fluxes data set contains parameters that describe the environment in which the flux data were collected and the flux data itself. The fluctuations in all variables were calculated with three different methods (the arithmetic means removed, the linear trends removed, or filtered with a high-pass recursive filter) prior to the eddy correlation calculations. This data set contains the data with the arithmetic means removed (i.e., RAW). All the flux measurements were obtained with the eddy-correlation method, wherein the aircraft is equipped with an inertial platform, accelerometers, and a gust probe for measurement of earth-relative gusts in the x, y, and z directions. Gusts in these dimensions are then correlated with each other for momentum fluxes and with fluctuations in other variables to obtain the various scalar fluxes, such as temperature (for sensible heat flux) and water vapor mixing ratio (for latent heat flux). The summary of data calculated from each aircraft pass includes various statistics, correlations, and fluxes calculated after the time series for each variable with the arithmetic means removed.","Metadata_Name":"CEOS IDN DIF","xmlns:fo":"http://www.w3.org/1999/XSL/Format","Temporal_Coverage":{"Start_Date":"1987-08-11","Stop_Date":"1989-10-31"},"Data_Set_Language":"ENGLISH","Data_Set_Progress":"COMPLETE","Metadata_Version":"VERSION 9.0","Source_Name":[{"Short_Name":"","Long_Name":"KINGAIR"},{"Short_Name":"","Long_Name":"KINGAIR"},{"Short_Name":"","Long_Name":"KINGAIR"},{"Short_Name":"","Long_Name":"KINGAIR"},{"Short_Name":"","Long_Name":"KINGAIR"},{"Short_Name":"","Long_Name":"KINGAIR"},{"Short_Name":"","Long_Name":"KINGAIR"},{"Short_Name":"","Long_Name":"KINGAIR"},{"Short_Name":"","Long_Name":"KINGAIR"},{"Short_Name":"","Long_Name":"KINGAIR"},{"Short_Name":"","Long_Name":"KINGAIR"},{"Short_Name":"","Long_Name":"KINGAIR"},{"Short_Name":"","Long_Name":"KINGAIR"},{"Short_Name":"","Long_Name":"KINGAIR"},{"Short_Name":"","Long_Name":"KINGAIR"}],"Personnel":[{"Contact_Address":"ORNL DAAC USER SERVICES OFFICE\n        OAK RIDGE NATIONAL LABORATORY\n        OAK RIDGE, TENNESSEE 37831 USA","Last_Name":"KELLY, R.D.","First_Name":"","Role":"TECHNICAL CONTACT"},{"Contact_Address":{"Province_or_State":"Tennessee","Postal_Code":"37831-6407","Address":["ORNL DAAC User Services Office","P.O. Box 2008, MS 6407","Oak Ridge National Laboratory"],"Country":"USA","City":"Oak Ridge"},"Phone":"(865) 241-3952","Email":"ornldaac@ornl.gov","Fax":"(865) 574-4665","Last_Name":"ORNL DAAC User Services","Role":"DIF AUTHOR"}],"Project":[{"Short_Name":"ESIP","Long_Name":"Earth Science Information Partners Program"},{"Short_Name":"EOSDIS","Long_Name":"Earth Observing System Data Information System"}],"Sensor_Name":[{"Short_Name":"","Long_Name":"INFRARED RADIOMETER"},{"Short_Name":"","Long_Name":"PRESSURE TRANSDUCER"},{"Short_Name":"","Long_Name":"PRESSURE TRANSDUCER"},{"Short_Name":"","Long_Name":"EDDY CORRELATION APPARATUS"},{"Short_Name":"","Long_Name":"NDIR GAS ANALYZER"},{"Short_Name":"","Long_Name":"RADIO ALTIMETER"},{"Short_Name":"","Long_Name":"EDDY CORRELATION APPARATUS"},{"Short_Name":"","Long_Name":"PYRANOMETER"},{"Short_Name":"","Long_Name":"HYGROMETER"},{"Short_Name":"","Long_Name":"INFRARED RADIOMETER"},{"Short_Name":"","Long_Name":"WIND PROFILER"},{"Short_Name":"","Long_Name":"WIND PROFILER"},{"Short_Name":"","Long_Name":"ANALYSIS"},{"Short_Name":"","Long_Name":"HYGROMETER"},{"Short_Name":"","Long_Name":"NDIR GAS ANALYZER"}],"Entry_Title":"AIRCRAFT FLUX-RAW: U OF WY. (FIFE)","Use_Constraints":"","DIF_Creation_Date":"1994-07-24","Related_URL":[{"URL":"http://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=10","URL_Content_Type":{"Subtype":"","Type":"GET DATA"}},{"Description":"AIRCRAFT FLUX-RAW: U OF WY. (FIFE)","URL":"http://daac.ornl.gov//FIFE/guides/air_flux_raw_wy.html","URL_Content_Type":{"Type":"VIEW RELATED INFORMATION"}}]}}}]}
+'		<div>'+
+'			<div class="shortitem">'+
+'				<div class="leftsd">'+
+'					<h3>Access Restrictions</h3> '+
+'				</div>'+
+'				<div class="rightsd">'+
+'					<div id="access_metadata"></div>'+
+'				</div>'+
+'			</div> '+
+'		</div>'+
 
 
-//record = result;
+'		<div>'+
+'			<div class="shortitem">'+
+'				<div class="leftsd">'+
+'					<h3>Data Set Location:</h3> '+
+'				</div>'+
+'				<div class="rightsd">'+
+'					<div id="datasetLocation_metadata"></div>'+
+'				</div>'+
+'			</div> '+
+'		</div>'+
 
-//alert(record.record.length);
+'		<div>'+
+'			<div class="shortitem">'+
+'				<div class="leftsd">'+
+'					<h3>Data Center Contact:</h3> '+
+'				</div>'+
+'				<div class="rightsd">'+
+'					<div id="datacenterContact_metadata"></div>'+
+'				</div>'+
+'			</div> '+
+'		</div>'+
+
+'		<div>'+
+'			<div class="shortitem">'+
+'				<div class="leftsd">'+
+'					<h3>Data Center URL:</h3> '+
+'				</div>'+
+'				<div class="rightsd">'+
+'					<div id="datacenterURL_metadata"></div>'+
+'				</div>'+
+'			</div> '+
+'		</div>'+
+
+'		<div>'+
+'			<div class="shortitem">'+
+'				<div class="leftsd">'+
+'					<h3>Data Set Citation:</h3> '+
+'				</div>'+
+'				<div class="rightsd">'+
+'					<div id="datacenterCitation_metadata"></div>'+
+'				</div>'+
+'			</div> '+
+'		</div>'+
+
+
+'		<div>'+
+'			<div class="shortitem">'+
+'				<div class="leftsd">'+
+'					<h3>Variable(s):</h3> '+
+'				</div>'+
+'				<div class="rightsd">'+
+'					<div id="variables_metadata"></div>'+
+'				</div>'+
+'			</div> '+
+'		</div>'+
+
+'		<div>'+
+'			<div class="shortitem">'+
+'				<div class="leftsd">'+
+'					<h3>Keyword(s):</h3> '+
+'				</div>'+
+'				<div class="rightsd">'+
+'					<div id="datacenterContact_metadata"></div>'+
+'				</div>'+
+'			</div> '+
+'		</div>'+
+
+'		<div>'+
+'			<div class="shortitem">'+
+'				<div class="leftsd">'+
+'					<h3>Data Center Contact:</h3> '+
+'				</div>'+
+'				<div class="rightsd">'+
+'					<div id="datacenterContact_metadata"></div>'+
+'				</div>'+
+'			</div> '+
+'		</div>'+
+		
+		
+'		<div>'+
+		
+'			<div class="geospatial_item"> '+
+'				<div class="leftsd">'+
+'					<h3>Temporal Information:</h3> '+
+'				</div>'+
+				
+'				<div class="rightsd">'+
+'					<div id="temporal_metadata"></div>'+
+		
+'				</div>'+
+				
+'			</div> '+
+'		</div>'+
+		
+'		<div>'+
+		
+*/

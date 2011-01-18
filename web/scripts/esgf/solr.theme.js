@@ -27,8 +27,10 @@ AjaxSolr.theme.prototype.result = function (doc, snippet) {
 	
 	var allStr = idStr + titleStr + urlStr + descriptionStr + westDegreesStr + eastDegreesStr + northDegreesStr + southDegreesStr + datetime_startStr + datetime_stopStr;
 	
+  	//var output = '<div class="search-entry"><h4 class="desc"><a href="#" class="met">' + doc.title + '</a><div ' + allStr + '></div></h4>' ;
+	//var output = '<div class="search-entry"><h4 class="desc"><a href="#">' + doc.title + '</a></h4>' ;
+	
   	var output = '<div class="search-entry"><h4 class="desc"><a href="#" class="met">' + doc.title + '</a><div ' + allStr + '></div></h4>' ;
-  	//output += '<div class="search-entry"><h4 class="desc"><a href="#" class="met">' + doc.title + '</a><div ' + allStr + '></div></h4>' ;
   	output += '<p id="links_' + doc.id + '" class="links"></p>';
   	output += '<p>' + snippet + '</p></div>';
   	
@@ -58,40 +60,6 @@ AjaxSolr.theme.prototype.snippet = function (doc) {
 };
 
 
-AjaxSolr.theme.prototype.result2 = function (doc, snippet) {
-	
-	if (doc.title.length > 78) {
-		doc.title = doc.title.substring(0,100) + "...";
-	}
-	
-	var metadataInsert = '<a href="#"> hello </a>';
-  	var output = '<a href="#" class="met">' + 'metadata' + '</a></h4>' ;
-  	return output;
-};
-
-
-
-
-AjaxSolr.theme.prototype.snippet2 = function (doc) {
-	  
-	var output = '';
- 
-	/*if (doc.description != undefined)
-		doc.text = doc.description[0];
-	if (doc.text != undefined) {
-		if (doc.text.length > 500) {
-		    output += doc.text.substring(0, 500);
-		    output += '<span style="display:none;">' + doc.text.substring(500);
-		    output += '</span> <a href="#" class="more"> ... more</a>';
-		} else {
-			output += doc.text;
-		}
-	} else {
-	    output = "No description available.";
-	}*/
-	output += 'lll';
-	return output;
-};
 
 
 AjaxSolr.theme.prototype.tag = function (value, weight, handler) {

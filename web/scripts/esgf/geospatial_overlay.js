@@ -5,6 +5,7 @@ var map, geocoder, infowindow;
 	var cbounds = new google.maps.LatLngBounds();
 	var markerGroup = new Array(max_of_markers);
 	var poly;
+	var boundingboxWD, boundingboxED, boundingboxSD, boundingboxND;
 var	popupStatusGeospatialSearch =0;
 var geospatialString = 
 '	<div id="popupGeospatialSearch" >'+
@@ -12,7 +13,7 @@ var geospatialString =
 '<h1>Geospatial Search</h1>'+
 '<div id="geo_helper">'+
 '<p>'+
-'Help: first define the points of interest by putting markers on'+
+'First define the points of interest by putting markers on'+
 'the map; if you select square option, then we will try'+
 'to fit a square with all markers in it; if you select circle option, then '+
 'you will be asked for a radius and quality.'+
@@ -46,7 +47,7 @@ var geospatialString =
 '		<input type="radio" name="areaGroup" value="square" /> Square '+
 '		<input type="radio" name="areaGroup" value="circle" /> Circle '+
 
-'		<div id="circleInputs" style="display:none">'+
+'		<div id="circleInputs1" style="display:none">'+
 '    		<label> Radius (km):</label><input type="text" name="radius" size="3" value="5" />'+
 '    		<label> Quality:</label><input type="text" size="3" name="quality" value="40" />'+
 ' 			<br />  '+
@@ -54,19 +55,20 @@ var geospatialString =
 
 '		</div>'+
 
-'		<div id="areaSelected1" style="display:none"></div>'+
+'		<div id="areaSelected11" style="display:none"></div>'+
 
 '	</fieldset>'+
 	
 '</div>'+
 
+'<div id="gButton"><input id="geo-search-button" type="submit" value="Submit Geospatial Constraints" /></div>' + 
 
 '</div>  '+ 
-
 
 '<div id="backgroundPopupGeospatialSearch"></div>';
 
 
+var geoQueryString = '';
 
 
 
@@ -221,6 +223,7 @@ function getCoordinates(address) {
 			// Adding the content
 			infowindow.setContent(content);
 			
+			
 			// Open the infowindows
 			infowindow.open(map, marker);
 							
@@ -317,14 +320,15 @@ $(document).ready(function(){
 		num_of_markers = 0;
 		
 		// close info window
-		if (infowindow)
+		if (infowindow){
 			infowindow.close();
+		}
 		if (poly)
 			poly.setMap(null);
 		
 		// clear marker area content
-		$("#markers").html("");
-		$("#areaSelected").html("");
+		$("#markers1").html("");
+		$("#areaSelected11").html("");
 		
 		clearAreaChoice();
 	}
@@ -419,7 +423,7 @@ $(document).ready(function(){
 				return false;
 			}
 			getBoundingBox();
-			setGeographicConstraint();
+			//setGeographicConstraint();
 			//do the submit here?
 			
 		} else {
@@ -430,16 +434,16 @@ $(document).ready(function(){
 			}
 
 			
-			if ($("#circleInputs").is(":hidden"))
-				$("#circleInputs").slideToggle('fast');
+			if ($("#circleInputs1").is(":hidden"))
+				$("#circleInputs1").slideToggle('fast');
 				
 			// put out something
-			$("#areaSelected").html('<p class="legend"> Center of Interest </p> + ' 
+			$("#areaSelected11").html('<p class="legend"> Center of Interest </p> + ' 
 					+ markerGroup[0].getPosition().toString());
 			
 			
-			if ($("#areaSelected").is(":hidden"))
-				$("#areaSelected").slideToggle('fast');
+			if ($("#areaSelected1").is(":hidden"))
+				$("#areaSelected1").slideToggle('fast');
 			
 
 			redraw_circle();
@@ -453,7 +457,14 @@ $(document).ready(function(){
 		
 	});
 	
-	
+	$('div#gButton').click(function() {
+		//alert('execute Geospatial Query');
+		executeGeospatialQuery();
+		
+		Manager.doRequest(0);
+		//alert('submitted: ' + geoQueryString);
+		
+	});
 
 	
 });
@@ -527,7 +538,7 @@ function drawCircle(marker, radius, nodes) {
 	map.fitBounds(cbounds);
 	
 	//since the circle can be resized, Im placing the call to this method here
-	setGeographicRadiusConstraint();
+	//setGeographicRadiusConstraint();
 }
 
 function draw_rect() {
@@ -566,14 +577,14 @@ function getBoundingBox() {
 	// draw rectangle
 	draw_rect();
 	
-	executeGeospatialQuery();
+	
 	
 	// put out something
-	$("#areaSelected").html('<p class="legend"> Bounding Box </p> + ' 
+	$("#areaSelected1").html('<p class="legend"> Bounding Box </p> + ' 
 			+ bounds.toString());
 	
-	if ($("#areaSelected").is(":hidden"))
-		$("#areaSelected").slideToggle('fast');
+	if ($("#areaSelected1").is(":hidden"))
+		$("#areaSelected1").slideToggle('fast');
 }
 
 function redraw_circle() {
@@ -628,6 +639,7 @@ function setGeographicConstraint() {
  */
 function setGeographicRadiusConstraint() {
 	
+	alert('setting radius constraint?');
 	swapGeoSearchType("Radius");
 	
 	var sw = cbounds.getSouthWest();
@@ -658,20 +670,20 @@ function setGeographicRadiusConstraint() {
 	ndinput.value = neLat;
 	
 }
-
-/*function swapGeoSearchType(type)
+/*
+function swapGeoSearchType(type)
 {
 	var searchForm = document.getElementById("search-form");
 	var whichGeo = searchForm["whichGeo"];
 	whichGeo.value = type;
-}*/
-
+}
+*/
 
 function executeGeospatialQuery()
 {
 	
 	var geoSearchType = $("input[name='searchType']:checked").val();
-	
+	//alert('executing ' + geoSearchType);
 	if(geoSearchType == 'Encloses')
 	{
 		encloses();
@@ -686,293 +698,207 @@ function executeGeospatialQuery()
 
 function encloses()
 {
+	//reset the geoQueryString
+	geoQueryString = '';
+	
 	var west_degrees, east_degrees, north_degrees, south_degrees,
 	west_degreesFQ, east_degreesFQ, north_degreesFQ, south_degreesFQ; 
 
 	var sw = bounds.getSouthWest();
 	var ne = bounds.getNorthEast();
 	
-	
-	//this is the min long 
-	//west_degrees limit
-	var swLng = sw.lng();
-	
-	//this is the min lat
-	//south_degrees limit
-	var swLat = sw.lat();
-	
-	//this is the max long
-	//east_degrees limit
-	var neLng = ne.lng();
-	
-	//this is the max lat
-	//north_degrees limit
-	var neLat = ne.lat();
+	//alert('encloses sq: ' + ($("input[name='areaGroup']:checked").val() == 'square'));
 	
 	
-	//west_degrees
-	if(swLng)
-	{
-		west_degrees = swLng;
-	}
-	else
-	{
-		west_degrees = '*';
-	}
+	if(($("input[name='areaGroup']:checked").val() == 'square')) {
+		
+		//this is the min long 
+		//west_degrees limit
+		boundingboxWD = sw.lng();
+		
+		//this is the min lat
+		//south_degrees limit
+		boundingboxSD = sw.lat();
+		
+		//this is the max long
+		//east_degrees limit
+		boundingboxED = ne.lng();
+		
+		//this is the max lat
+		//north_degrees limit
+		boundingboxND = ne.lat();
+		
+		
+		//west_degrees
+		if(boundingboxWD)
+		{
+			west_degrees = boundingboxWD;
+		}
+		else
+		{
+			west_degrees = '*';
+		}
 
-	//west_degrees
-	if(neLng)
-	{
-		east_degrees = neLng;
-	}
-	else
-	{
-		east_degrees = '*';
-	}
+		//west_degrees
+		if(boundingboxED)
+		{
+			east_degrees = boundingboxED;
+		}
+		else
+		{
+			east_degrees = '*';
+		}
 
-	//south_degrees
-	if(swLat)
-	{
-		south_degrees = swLat;
-	}
-	else
-	{
-		south_degrees = '*';
-	}
+		//south_degrees
+		if(boundingboxSD)
+		{
+			south_degrees = boundingboxSD;
+		}
+		else
+		{
+			south_degrees = '*';
+		}
 
-	//north_degrees
-	if(neLat)
-	{
-		north_degrees = neLat;
+		//north_degrees
+		if(boundingboxND)
+		{
+			north_degrees = boundingboxND;
+		}
+		else
+		{
+			north_degrees = '*';
+		}
+		
+		
+		south_degreesFQ = 'south_degrees:[' + south_degrees + ' TO *]';
+		west_degreesFQ = 'west_degrees:[' + west_degrees + ' TO *]';
+		north_degreesFQ = 'north_degrees:[ * TO ' + north_degrees + ']';
+		east_degreesFQ = 'east_degrees:[ * TO ' + east_degrees + ']';
+		
+		geoQueryString += '(' + south_degreesFQ + ' AND ' + west_degreesFQ + ' AND ' + north_degreesFQ + ' AND ' + south_degreesFQ + ')';
+
+	
 	}
-	else
-	{
-		north_degrees = '*';
+	else {
+		//alert('Performing Radius search for encloses');
 	}
 	
 	
-	south_degreesFQ = 'south_degrees:[' + south_degrees + ' TO *]';
-	west_degreesFQ = 'west_degrees:[' + west_degrees + ' TO *]';
-	north_degreesFQ = 'north_degrees:[ * TO ' + north_degrees + ']';
-	east_degreesFQ = 'east_degrees:[ * TO ' + east_degrees + ']';
+	Manager.store.addByValue('fq',geoQueryString);
 	
-	Manager.store.addByValue('fq', south_degreesFQ );	
+	/*Manager.store.addByValue('fq', south_degreesFQ );	
 	Manager.store.addByValue('fq', west_degreesFQ );	
 	Manager.store.addByValue('fq', north_degreesFQ );	
-	Manager.store.addByValue('fq', east_degreesFQ );	
+	Manager.store.addByValue('fq', east_degreesFQ );	*/
 	
-	Manager.doRequest(0);
+	//Manager.doRequest(0);
 }
 
 function overlaps()
 {
-	var geoString = '';
+
+	geoQueryString = '';
+	
+	//alert('overlaps sq: ' + ($("input[name='areaGroup']:checked").val() == 'square'));
 	
 	var sw = bounds.getSouthWest();
 	var ne = bounds.getNorthEast();
 	//this is the min long 
 	//west_degrees limit
-	var boundingboxWD = sw.lng();
+	boundingboxWD = sw.lng();
 	//this is the min lat
 	//south_degrees limit
-	var boundingboxED = sw.lat();
+	boundingboxED = sw.lat();
 	//this is the max long
 	//east_degrees limit
-	var boundingboxSD = ne.lng();
+	boundingboxSD = ne.lng();
 	//this is the max lat
 	//north_degrees limit
-	var boundingboxND = ne.lat();
+	boundingboxND = ne.lat();
 	
-	//case 1
-    //NE point in bounding box
-    geoString += '(east_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                 'north_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
-    
-    geoString += ' OR ';
-    
-    //case 2
-    //SE point in bounding box
-    geoString += '(east_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                 'south_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
-    
-    geoString += ' OR ';
-    
-    //case 3
-    //SW point in bounding box
-    geoString += '(west_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                 'south_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
-    
-    
-    geoString += ' OR ';
-    
-    //case 4
-    //NW point in bounding box
-    geoString += '(west_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                 'north_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
+	if(($("input[name='areaGroup']:checked").val() == 'square')) {
+		
+		//case 1
+	    //NE point in bounding box
+	    geoQueryString += '(east_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
+	                 'north_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
+	    
+	    geoQueryString += ' OR ';
+	    
+	    //case 2
+	    //SE point in bounding box
+	    geoQueryString += '(east_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
+	                 'south_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
+	    
+	    geoQueryString += ' OR ';
+	    
+	    //case 3
+	    //SW point in bounding box
+	    geoQueryString += '(west_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
+	                 'south_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
+	    
+	    
+	    geoQueryString += ' OR ';
+	    
+	    //case 4
+	    //NW point in bounding box
+	    geoQueryString += '(west_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
+	                 'north_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
 
-    geoString += ' OR ';
-    
-    //case 5
-    //east degree in range and n & s are above and below respectively
-    geoString += '(east_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                 'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
-                 'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
+	    geoQueryString += ' OR ';
+	    
+	    //case 5
+	    //east degree in range and n & s are above and below respectively
+	    geoQueryString += '(east_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
+	                 'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
+	                 'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
 
-    geoString += ' OR ';
-    
-    //case 6
-    //west degree in range and n & s are above and below respectively
-    geoString += '(west_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                 'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
-                 'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
+	    geoQueryString += ' OR ';
+	    
+	    //case 6
+	    //west degree in range and n & s are above and below respectively
+	    geoQueryString += '(west_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
+	                 'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
+	                 'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
 
-    geoString += ' OR ';
-    
-    //case 7
-    //north degree in range and n & s are above and below respectively
-    geoString += '(north_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '] AND ' +
-                 'west_degrees:[ * TO ' + boundingboxWD + '] AND ' +
-                 'east_degrees:[' + boundingboxED + ' TO ' + '* ])';
+	    geoQueryString += ' OR ';
+	    
+	    //case 7
+	    //north degree in range and n & s are above and below respectively
+	    geoQueryString += '(north_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '] AND ' +
+	                 'west_degrees:[ * TO ' + boundingboxWD + '] AND ' +
+	                 'east_degrees:[' + boundingboxED + ' TO ' + '* ])';
 
-    geoString += ' OR ';
-    
-    //case 8
-    //south degree in range and n & s are above and below respectively
-    geoString += '(south_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                 'west_degrees:[ * TO ' + boundingboxWD + '] AND ' +
-                 'east_degrees:[' + boundingboxED + ' TO ' + '* ])';
+	    geoQueryString += ' OR ';
+	    
+	    //case 8
+	    //south degree in range and n & s are above and below respectively
+	    geoQueryString += '(south_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
+	                 'west_degrees:[ * TO ' + boundingboxWD + '] AND ' +
+	                 'east_degrees:[' + boundingboxED + ' TO ' + '* ])';
 
-    geoString += ' OR ';
-    
-    //case 9
-    //data box > user defined bounding box              
-    geoString += '(east_degrees:[' + boundingboxED + ' TO ' + ' *] AND ' +
-                 'west_degrees:[ * TO ' + boundingboxWD + '] AND ' +
-                 'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
-                 'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
+	    geoQueryString += ' OR ';
+	    
+	    //case 9
+	    //data box > user defined bounding box              
+	    geoQueryString += '(east_degrees:[' + boundingboxED + ' TO ' + ' *] AND ' +
+	                 'west_degrees:[ * TO ' + boundingboxWD + '] AND ' +
+	                 'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
+	                 'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
+		
+		
+	}
+	else {
+		//alert('Performing Radius search for overlaps');
+	}
 	
-	
-    Manager.store.addByValue('fq', geoString );	
+    Manager.store.addByValue('fq', geoQueryString );	
 	
 
-	Manager.doRequest(0);
+	//Manager.doRequest(0);
 	
 
          
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-if(request.getParameterValues("west_degrees")!=null &&
-        request.getParameterValues("east_degrees")!=null &&
-        request.getParameterValues("north_degrees")!=null &&
-        request.getParameterValues("south_degrees")!=null)
-     {
-         String boundingboxWD = "";
-         String boundingboxED = "";
-         String boundingboxSD = "";
-         String boundingboxND = "";
-         
-         boundingboxWD = request.getParameterValues("west_degrees")[0];
-         boundingboxED = request.getParameterValues("east_degrees")[0];
-         boundingboxSD = request.getParameterValues("south_degrees")[0];
-         boundingboxND = request.getParameterValues("north_degrees")[0];
-         
-         
-         String geoString = "";
-         
-         //case 1
-         //NE point in bounding box
-         geoString += "(east_degrees:[" + boundingboxWD + " TO " + boundingboxED + "] AND " +
-                      "north_degrees:[" + boundingboxSD + " TO " + boundingboxND + "])";
-         
-         geoString += " OR ";
-         
-         //case 2
-         //SE point in bounding box
-         geoString += "(east_degrees:[" + boundingboxWD + " TO " + boundingboxED + "] AND " +
-                      "south_degrees:[" + boundingboxSD + " TO " + boundingboxND + "])";
-         
-         geoString += " OR ";
-         
-         //case 3
-         //SW point in bounding box
-         geoString += "(west_degrees:[" + boundingboxWD + " TO " + boundingboxED + "] AND " +
-                      "south_degrees:[" + boundingboxSD + " TO " + boundingboxND + "])";
-         
-         
-         geoString += " OR ";
-         
-         //case 4
-         //NW point in bounding box
-         geoString += "(west_degrees:[" + boundingboxWD + " TO " + boundingboxED + "] AND " +
-                      "north_degrees:[" + boundingboxSD + " TO " + boundingboxND + "])";
-
-         geoString += " OR ";
-         
-         //case 5
-         //east degree in range and n & s are above and below respectively
-         geoString += "(east_degrees:[" + boundingboxWD + " TO " + boundingboxED + "] AND " +
-                      "south_degrees:[ * TO " + boundingboxSD + "] AND " +
-                      "north_degrees:[" + boundingboxND + " TO " + "* ])";
-
-         geoString += " OR ";
-         
-         //case 6
-         //west degree in range and n & s are above and below respectively
-         geoString += "(west_degrees:[" + boundingboxWD + " TO " + boundingboxED + "] AND " +
-                      "south_degrees:[ * TO " + boundingboxSD + "] AND " +
-                      "north_degrees:[" + boundingboxND + " TO " + "* ])";
-
-         geoString += " OR ";
-         
-         //case 7
-         //north degree in range and n & s are above and below respectively
-         geoString += "(north_degrees:[" + boundingboxSD + " TO " + boundingboxND + "] AND " +
-                      "west_degrees:[ * TO " + boundingboxWD + "] AND " +
-                      "east_degrees:[" + boundingboxED + " TO " + "* ])";
-
-         geoString += " OR ";
-         
-         //case 8
-         //south degree in range and n & s are above and below respectively
-         geoString += "(south_degrees:[" + boundingboxWD + " TO " + boundingboxED + "] AND " +
-                      "west_degrees:[ * TO " + boundingboxWD + "] AND " +
-                      "east_degrees:[" + boundingboxED + " TO " + "* ])";
-
-         geoString += " OR ";
-         
-         //case 9
-         //data box > user defined bounding box              
-         geoString += "(east_degrees:[" + boundingboxED + " TO " + " *] AND " +
-                      "west_degrees:[ * TO " + boundingboxWD + "] AND " +
-                      "south_degrees:[ * TO " + boundingboxSD + "] AND " +
-                      "north_degrees:[" + boundingboxND + " TO " + "* ])";
-
-         LOG.debug("GeoStringOverlaps: " + geoString);
-         
-         //only input if a geo spatial search was created...
-         if(!boundingboxND.equals("") && 
-            !boundingboxSD.equals("") &&
-            !boundingboxED.equals("") && 
-            !boundingboxWD.equals(""))
-             input.addGeospatialRangeConstraint(geoString);
-     }
-     
-     
-    */ 

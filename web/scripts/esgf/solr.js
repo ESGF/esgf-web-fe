@@ -36,6 +36,10 @@
 		  target: '#current-selection'
 		}));
 
+	Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
+		  id: 'geol_overlay',
+		  target: '#geol_overlay'
+		}));
 //	Manager.addWidget(new AjaxSolr.TextWidget({
 //		  id: 'text',
 //		  target: '#search-box',

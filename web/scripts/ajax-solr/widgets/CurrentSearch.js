@@ -10,8 +10,33 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     var links = [];
 
     var fq = this.manager.store.values('fq');
+    
+    
     for (var i = 0, l = fq.length; i < l; i++) {
-      links.push($('<a href="#"/>').text('(x) ' + fq[i]).click(self.removeFacet(fq[i])));
+    	var fqString = fq[i];
+    	/*
+    	alert('s: ' + boundingboxSD + 
+    		  ' n: ' + boundingboxND +
+    		  ' e: ' + boundingboxED +
+    		  ' w: ' + boundingboxWD);
+    	*/
+    	if(fqString.search('OR') != -1)
+    	{
+    		//alert('pushing ' + fq[i] + ' on encloses current search');
+    		//alert('Center for ' + fq[i]);
+    		fqString = 'Center (Lat, Lon): (' + 
+    					(boundingboxND+boundingboxSD)/2 + ',' + (boundingboxED+boundingboxWD)/2 + ')' + 
+    					'\nRadius: '; 
+    	}
+    	else if (fqString.search('east_degrees'))
+    	{
+    		//alert('Bounding box');
+    		fqString = 'Bounding: (N,W,S,E): (' + Math.round(parseFloat(boundingboxND).toFixed(2)) + ',' +
+    											     Math.round(parseFloat(boundingboxWD).toFixed(2)) + ',' +
+    											     Math.round(parseFloat(boundingboxSD).toFixed(2)) + ',' +
+    											     Math.round(parseFloat(boundingboxED).toFixed(2)) + ')';
+    	}
+      links.push($('<a href="#"/>').text('(x) ' + fqString).click(self.removeFacet(fq[i])));
     }
 
     if (links.length > 1) {

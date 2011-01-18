@@ -50,7 +50,7 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 	      //items = items.concat(this.facetLinks('topics', doc.topics));
 	      //items = items.concat(this.facetLinks('organisations', doc.organisations));
 	      //items = items.concat(this.facetLinks('exchanges', doc.exchanges));
-	      //AjaxSolr.theme('list_items', '#links_' + doc.id, items);
+	       //AjaxSolr.theme('list_items', '#links_' + doc.id, items);
 	    	//}
 	    }
 	    
@@ -73,6 +73,15 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 		  
 	  });
 	  
+	  $('a#FacetBrowse').livequery(function () {
+		  $(this).click(function () {
+
+			  alert('FacetBrowse');	  
+		  });
+		  
+	  });
+	  
+	 
 	  
 	  $('a.met').livequery(function () {
 
@@ -90,6 +99,7 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 			var metadatafilename = 'ORNL-oai_dif.json';
 			var metadatafileformat = 'oai';
 				
+			
 			//send the info to the metadata_report
 			metadata_report(id,title,metadatafilename,metadatafileformat);
 			

@@ -100,19 +100,21 @@
 
 <body>
 
-	<!-- overlays -->
-	<div id="temporal_overlay"></div>
-	<div id="geospatial_overlay"></div>
-	<div id="metadata_overlay"></div>
 	
 	
 	<div class="container">
 
 
+		<!-- overlays -->
+		<div id="temporal_overlay" class="span-24 last"></div>
+		<div id="geospatial_overlay"></div>
+		<div id="metadata_overlay" class="span-24 last"></div>
+	
+		
 		<div id="header" class="span-24 last">
 			<div class="span-16 left">
 			<span class="tabitem"> <a href="#"> Home </a></span> 
-			<span class="tabitem"> <a href="#"> Browse </a> </span>
+			<span class="tabitem"> <a href="#" id='FacetBrowse'> Browse </a> </span>
 			<span class="tabitem"> <a href="#"> Analysis</a></span>
 			</div>
 		
@@ -130,7 +132,7 @@
 		        <img src="<c:url value="/images/search2.png" />" >        
 		    </div>
 		    
-		    <div class="span-20 last"">
+		    <div class="span-20 last">
 		    
 		        <span id="search-box">
 				<input id="query" name="text" type="text" value="" />
@@ -156,12 +158,6 @@
 		   
 		</div>
 
-		<div>
-			<span id="temp_box">
-			
-			</span>
-		
-		</div>
 
 		<div class="span-24 last" id="contents">
 		

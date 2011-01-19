@@ -1,7 +1,7 @@
 #popupGeospatialSearch{
-display:none;
+/*display:none;
 position:fixed;
-_position:absolute;  /* hack for internet explorer 6 */
+_position:absolute;   hack for internet explorer 6 
 margin-left: 10%;
 margin-top: 30px;
 
@@ -13,6 +13,7 @@ border:2px solid #cecece;
 z-index:2;
 padding:12px;
 font-size:13px;
+*/
 }
 
 
@@ -26,9 +27,11 @@ padding-bottom:2px;
 margin-bottom:20px;
 }
 
+/*
 #geo_helper {
 	padding-bottom: 10px;
 }
+*/
 
 #popupGeospatialSearch p{
 padding-bottom:0px;
@@ -76,10 +79,9 @@ z-index:1;
    --------------------------------
  */
 
-
 #map_canvas1 {
 	float: left;
-	height: 400px;
+	height: 350px;
 	width: 400px;
 	padding: 10px;
 	border-left: 2px solid #666;
@@ -94,7 +96,7 @@ z-index:1;
 	padding: 10px;
 	float: right;
 	width: 200px;
-	height: 400px;
+	height: 350px;
 	border-top: 2px solid #666;
     border-bottom: 2px solid #666;    	
 	border-right: 2px solid #666;

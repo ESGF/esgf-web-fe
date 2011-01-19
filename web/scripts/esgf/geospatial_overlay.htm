@@ -1,0 +1,69 @@
+<html>
+<head>
+
+<link rel="stylesheet" 
+        href="/esgf-web-fe/styles/geospatial_overlay.css" 
+        type="text/css" media="screen, projection" />
+        
+       
+	<script type="text/javascript" src="/esgf-web-fe/scripts/esgf/Geospatial.js"> </script>
+
+</head>
+
+
+<body>
+<div id="popupGeospatialSearch" >  
+ 
+ 
+ <h1>Geospatial Search</h1>  
+  
+ <div id="map_canvas1"> </div>  
+ <div class="map_info1">   
+ 	<fieldset id="search_type_area">  
+ 		<p class=legend> Search Type: </p>  
+ 		<input type="radio" name="searchType" value="Encloses" checked /> Encloses   
+ 		<input type="radio" name="searchType" value="Overlaps" /> Overlaps   
+
+ 	</fieldset>  
+
+ 	<fieldset id="marker_fieldset1">  
+
+ 		<p class=legend> Enter address: </p>  
+ 		<div id="geoloc1">      
+ 			<input type="text" name="location" size="20" /> <br />  
+ 		</div>  
+
+ 		<input type="button" name="clear_markers" value="Clear Markers" />  
+
+ 		<div id="markers1" style="display:none"></div>  
+
+ 	</fieldset>  
+	
+ 	<fieldset id="area">  
+ 		<p class=legend> Define Area: </p>  
+
+ 		<input type="radio" name="areaGroup" value="square" /> Square   
+ 		<input type="radio" name="areaGroup" value="circle" /> Circle   
+
+ 		<div id="circleInputs1" style="display:none">  
+     		<label> Radius (km):</label><input type="text" name="radius" size="3" value="5" />  
+     		<label> Quality:</label><input type="text" size="3" name="quality" value="40" />  
+  			<br />    
+ 				<input type="button" name="redraw_circle" value="Redraw" />  
+
+ 		</div>  
+
+ 		<div id="areaSelected11" style="display:none"></div>  
+
+ 	</fieldset>  
+	
+ 
+ </div>  
+
+ <div id="gButton"><input id="geo-search-button" type="submit" value="Submit Geospatial Constraints" /></div>
+ 
+   
+
+ </div>     
+</body>
+</html> 

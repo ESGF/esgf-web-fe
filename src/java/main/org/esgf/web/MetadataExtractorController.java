@@ -52,7 +52,7 @@ public class MetadataExtractorController {
     private final static Logger LOG = Logger.getLogger(SolrProxyController.class);
     
     //hard coded for testing - remove when finished
-    private final static String METADATA_FILE_LOCATION = System.getenv("tmp")+"\\";//System.getProperty("java.io.tmpdir");
+    private static String METADATA_FILE_LOCATION = System.getProperty("java.io.tmpdir");//System.getProperty("java.io.tmpdir");
     //private final static String METADATA_FILE = "ORNL-oai_dif";
     private final static String METADATA_FILE = "ORNL-oai_dif";
     
@@ -80,11 +80,19 @@ public class MetadataExtractorController {
         
         String requestUri = request.getRequestURI();
         LOG.debug("requestUri=" + requestUri);
+
+        LOG.debug("curr: " + METADATA_FILE_LOCATION);
+        
+        if(METADATA_FILE_LOCATION.startsWith("/var/folders/"))
+        {
+            METADATA_FILE_LOCATION = "/tmp";
+        }
+        
         
         String id = request.getParameter("id");
         String format = request.getParameter("metadataformat");
         
-        LOG.debug("curr: " + METADATA_FILE_LOCATION);
+        
         File f = new File(METADATA_FILE_LOCATION + METADATA_FILE + ".xml");
        
         String jsonContent = "";

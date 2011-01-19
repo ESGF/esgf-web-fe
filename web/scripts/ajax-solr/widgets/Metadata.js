@@ -17,29 +17,7 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
   
   init: function () {
 	  
-	  $('div#geo').livequery(function () {
-
-		  $(this).click(function () {
-			
-			  if(popupStatusGeospatialSearch==0){
-					$("#backgroundPopupGeospatialSearch").css({
-						"opacity": "0.8"
-					});
-					$("#backgroundPopupGeospatialSearch").fadeIn("slow");
-					$("#popupGeospatialSearch").fadeIn("slow");
-					popupStatusGeospatialSearch = 1;
-			  }
-				
-			  loadScript();
-			  display_geo_map();
-			
-		  });
-		  });
-	  
-	  
-	  
-	
-	  
+	 
   }
   
    
@@ -65,7 +43,7 @@ $(function() {
 			wrap.load(this.getTrigger().attr("href"));
 			
 			//window.onload = loadScript;
-			metadata_report('FIFE_SOIL_CO2','ll','ORNL_oai-dif.xml','oai');
+			//metadata_report('FIFE_SOIL_CO2','ll','ORNL_oai-dif.xml','oai');
 		}
 
 	});

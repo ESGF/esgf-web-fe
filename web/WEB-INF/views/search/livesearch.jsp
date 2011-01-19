@@ -36,32 +36,24 @@
     
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Metadata.js" />"> </script>
                 
-    <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
+   	
+   	
+   	<script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.theme.js" />"> </script>
 
 	<!--  
 	<script type="text/javascript" src="<c:url value="/scripts/esgf/metadata_overlay.js" />"> </script>
 	-->
-	<script src="http://cdn.jquerytools.org/1.2.5/full/jquery.tools.min.js"></script> 
 	 
 
     
 	<!-- standalone page styling (can be removed) --> 
-	<!--<link rel="stylesheet" type="text/css" href="http://static.flowplayer.org/tools/css/standalone.css"/>	
- 
- 
-	<link rel="stylesheet" type="text/css" href="http://static.flowplayer.org/tools/css/overlay-apple.css"/> 
-	
-	
-	
-	
-	-->
-	
 	<link rel="stylesheet" type="text/css" href="http://static.flowplayer.org/tools/css/standalone.css"/>	
  
+ 
 	<link rel="stylesheet" type="text/css" href="http://static.flowplayer.org/tools/css/overlay-apple.css"/> 
 	
-	
+
 		
 	<!--<script type="text/javascript"
         src="http://maps.google.com/maps/api/js?sensor=false">
@@ -109,33 +101,13 @@
 	
 	<div class="container">
 
-
-		<!-- experimental overlay with full html page load (delete when finished including metadata_overlay1.htm) 
-			 Note: all javascript functionality is located in Metadata.js
-		-->
-		<a href="<c:url value="/scripts/esgf/metadata_overlay1.htm" />" rel="#overlay" id="eButton" style="text-decoration:none">
-	
-		<!-- remember that you can use any element inside the trigger -->
-			<!-- <button type="button"> -->
-			Show external page in overlay
-			<!-- </button> -->	
-		</a>
-	
-		<!-- overlayed element -->
-		<div class="apple_overlay" id="overlay">
-	
-			<!-- the external content is loaded inside this tag -->
-			<div class="contentWrap"></div>
-	
-		</div>
-		<!-- end experimental overlay with full html page load -->
 	
 
 
     <!-- overlays -->
     <div id="temporal_overlay"></div>
-    <div id="geospatial_overlay"></div>
-    <div id="metadata_overlay"></div>
+    <div class="apple_overlay" id="geospatial_overlay"><div class="contentWrap"></div></div>
+    <div class="apple_overlay" id="metadata_overlay"><div class="contentWrap"></div></div>
     
     
 
@@ -203,7 +175,7 @@
 			        
 		  <div class="round-content"> 
 			          <div id="temporal"><a href="#"> Temporal</a> </div>
-			          <div id="geo"><a href="#"> Geospatial</a> </div>
+			          <div id="geo"><a href="<c:url value="/scripts/esgf/geospatial_overlay.htm" />" rel="#geospatial_overlay" style="text-decoration:none"> Geospatial</a> </div>
 		  </div> 	         
 		  </div> <!--  Search constraints -->
 		

@@ -1,15 +1,38 @@
+
+  		/*html { height: 100% }
+  		body { height: 100%; margin: 0px; padding: 0px }
+  		*/
+  		#map_canvas1 { height: 200px;width: 200px }
+  		
+  		
+#popupMetadataReport22{
+	margin-top: 5px;
+}
+
+
+#popupMetadataReport22 h1 {
+	text-align:left;
+	color:#6FA5FD;
+	font-size:22px;
+	font-weight:700;
+	border-bottom:1px dotted #D3D3D3;
+	padding-bottom:2px;
+	margin-bottom:20px;
+}
+
 /* root element for scrollable */
 .verticalscroll {  
 	
-	/* required settings */
+	/* required settings */ 
 	position:relative;
 	overflow:hidden;	
 
 	/* vertical scrollers have typically larger height than width */	
-	height: 475px;	 
-	width: 700px;/*
-	border-top:1px solid #ddd;	
-*/}
+	height: 375px;	 
+	width: 700px;
+	/*border-top:1px solid #ddd;	
+*/
+}
 
 .addedMetadata {
 	padding-top:0px;
@@ -28,24 +51,24 @@
 .itemsscroll {	
 	position:absolute;
 	
-	/* this time we have very large space for height */	
+	/* this time we have very large space for height */
 	height:20000em;	
 	margin: 0px;
 }
 
-/* single scrollable item */
+/* single scrollable item  */
 .itemscroll {
-	/*border-bottom:1px solid #ddd;
-	*/
+	border-bottom:1px solid #ddd;
+	
 	margin:10px 0;
 	padding:10px;
 	font-size:12px;
-	/*height:150px;
-*/}
+	height:150px;
+}
 
-.abstract_item {/*
+.abstract_item {
 	border-bottom:1px solid #ddd;
-	*/
+	
 	margin:10px 0;
 	padding:10px;
 	font-size:12px;
@@ -55,17 +78,17 @@
 .geospatial_item {
 	/*border:1px solid #ddd;
 	
-	*/
-	margin:10px 0;
+	
+	*/margin:10px 0;
 	padding:0px;
 	font-size:12px;
 	height:150px;
 }
 
-.temporal_item {/*
-	border-bottom:1px solid #ddd;
-	*/
-	margin:10px 0;
+.temporal_item {
+	/*border-bottom:1px solid #ddd;
+	
+	*/margin:10px 0;
 	padding:0px;
 	font-size:12px;
 	height:100px;
@@ -73,8 +96,8 @@
 
 #geo_map {
 	float:right;
-	border:1px solid #ddd;
-	font-size:12px;
+	/*border:1px solid #ddd;
+	font-size:12px*/;
 	height:150px;
 	width: 250px;
 }
@@ -88,7 +111,8 @@
 
 #geospatial_metadata {
 	/*border:1px solid #ddd;
-*/}
+*/
+}
 
 .shortitem {
 	background: white;/*
@@ -96,7 +120,8 @@
 	border-bottom:1px solid #ddd;
 	
 	border:1px solid #ddd;
-	*/margin:10px 0;
+	*/
+	margin:10px 0;
 	padding:0px;
 	font-size:12px;
 	height:50px;
@@ -105,9 +130,11 @@
 .mediumitem {
 	background: white;
 	/*
+	
 	border-bottom:1px solid #ddd;
-	*/
-	/*border:1px solid #ddd;
+	
+	border:1px solid #ddd;
+	
 	*/
 	margin:10px 0;
 	padding:0px;
@@ -117,72 +144,32 @@
 
 .leftsd {
 	float:left;	
-	padding-right: 20px;/*
-	border:1px solid #000;
-	*/font-weight: bold;	
+	padding-right: 20px;
+	font-weight: bold;	
 	
 }
 
 .rightsd {
 	float:right;
-	width: 475px;/*
-	
-	border:1px solid #000;
-	
-*/}
-
-/* elements inside single item */
-.item img {
-	float:left;
-	margin-right:20px;
-	height:180px;
-	width:240px;
+	width: 475px;
 }
 
-.item h3 {
-	margin:0 0 5px 0;
-	font-size:16px;
-	color:#456;
-	font-weight:normal;
-}
+
+
+
+
 
 /*
-.abstract_item h3 {
-	margin:0 0 5px 0;
-	font-size:12px;
-	color:#456;
-	font-weight:normal;
-}
 
-.geospatial_item h3 {
-	margin:0 0 5px 0;
-	font-size:12px;
-	color:#456;
-	font-weight:normal;
-}
+ Overlay 
 
-.shortitem h3 {
-	margin:0 0 0px 0;
-	font-size:12px;
-	color:#456;
-	font-weight:normal;
-}
+
 */
 
-
-
-
-
-
-
-
-/* Overlay */
-
-
-#backgroundPopupMetadataReport{
+/*#backgroundPopupMetadataReport{
 display:none;
 position:fixed;
-_position:absolute;  /* hack for internet explorer 6 */
+_position:absolute;   hack for internet explorer 6 
 height:100%;
 width:100%;
 top:0;
@@ -196,27 +183,24 @@ z-index:1;
 
 
 
+
+#popupMetadataReport22 h1{
+	color:#6FA5FD;
+}
+
+
 #popupMetadataReport{
 display:none;
 position:fixed;
-_position:absolute;  /* hack for internet explorer 6 */
+_position:absolute;   hack for internet explorer 6 
 margin-left: 10%;
 margin-top: 30px;
 
 height: 600px;	 
  
 width: 700px;
-/*
-	width: 700px;
-	
 
-height: 85%;	
-
-height:85%;
-width:608px;
-
-width: 70%;
-*/background:#FFFFFF;
+background:#FFFFFF;
 border:2px solid #cecece;
 z-index:2;
 padding:12px;
@@ -233,6 +217,9 @@ border-bottom:1px dotted #D3D3D3;
 padding-bottom:2px;
 margin-bottom:20px;
 }
+
+*/
+
 #popupMetadataReportClose{
 font-size:14px;
 line-height:14px;
@@ -350,11 +337,5 @@ margin:100px;
 .metadata_field_name {
 	font-weight: bold;
 }
-
-
-
-
-
-
 
 

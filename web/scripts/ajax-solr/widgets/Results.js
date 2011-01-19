@@ -81,24 +81,41 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 
 		  $(this).click(function () {
 			
+			  
+			  	//need to gather the following here...
+			  	//metadatafilename
+			  	//metadataformat
+			  	//id
+			  	//title
+			  	var id = $(this).next().attr('id');
+			  	var title = $(this).next().attr('title');
+			  	//these still need to be added
+			  	var metadatafilename = 'ORNL-oai_dif.json';
+			  	var metadatafileformat = 'oai';
+			  	
+			  	//send the info to the metadata_report
+			  	metadata_report(id,title,metadatafilename,metadatafileformat);
 			
-			//need to gather the following here...
-			//metadatafilename
-			//metadataformat
-			//id
-			//title
-			var id = $(this).next().attr('id');
-			var title = $(this).next().attr('title');
-			//these still need to be added
-			var metadatafilename = 'ORNL-oai_dif.json';
-			var metadatafileformat = 'oai';
-				
-			
-			//send the info to the metadata_report
-			metadata_report(id,title,metadatafilename,metadatafileformat);
 			
 		  });
 		  });
+	  
+	  
+	  $("a[rel]").overlay({
+
+			mask: 'darkred',
+			effect: 'apple',
+
+			onBeforeLoad: function() {
+
+				// grab wrapper element inside content
+				var wrap = this.getOverlay().find(".contentWrap");
+
+				// load the page specified in the trigger
+				wrap.load(this.getTrigger().attr("href"));
+			}
+
+		});
 	  
   }
   
@@ -113,4 +130,6 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 
 
 })(jQuery);
+
+
 

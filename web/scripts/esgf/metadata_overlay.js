@@ -225,7 +225,20 @@ $(document).ready(function(){
 		}
 	});
 
-	
+	$("a[rel]").overlay({
+
+		mask: 'darkred',
+		effect: 'apple',
+
+		onBeforeLoad: function() {
+			// grab wrapper element inside content
+			var wrap = this.getOverlay().find(".contentWrap");
+
+			// load the page specified in the trigger
+			wrap.load(this.getTrigger().attr("href"));
+		}
+
+	});
 	
 	
 	$(function() {		
@@ -330,7 +343,7 @@ function processFGDC(record){
 	var north_degreesText = record.metadata.idinfo.spdom.bounding.northbc;
 	var south_degreesText = record.metadata.idinfo.spdom.bounding.southbc;
 	$('div#geospatial_metadata').after('<div class="addedMetadata"><p>' + 'coordinates (N,W,S,E):<br />(' + north_degreesText + ',' + west_degreesText + ',' + south_degreesText + ',' + east_degreesText + ')</p></div>');
-	display_meta_map(west_degreesText,east_degreesText,north_degreesText,south_degreesText);
+	//display_meta_map(west_degreesText,east_degreesText,north_degreesText,south_degreesText);
 	
 	// Abstract 
 	var abstractText = record.metadata.idinfo.descript.abstract;
@@ -415,7 +428,7 @@ function processOAI(record)
 	var north_degreesText = record.record.metadata.DIF.Spatial_Coverage.Northernmost_Latitude;
 	var south_degreesText = record.record.metadata.DIF.Spatial_Coverage.Southernmost_Latitude;
 	$('div#geospatial_metadata').after('<div class="addedMetadata"><p>' + 'coordinates (N,W,S,E):<br />(' + north_degreesText + ',' + west_degreesText + ',' + south_degreesText + ',' + east_degreesText + ')</p></div>');
-	display_meta_map(west_degreesText,east_degreesText,north_degreesText,south_degreesText);
+	//display_meta_map(west_degreesText,east_degreesText,north_degreesText,south_degreesText);
 	
 	
 	// Keywords 
@@ -503,4 +516,10 @@ var paths = [
 	
 };
 
-
+function loadScript() {
+	alert('locading script');
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "http://maps.google.com/maps/api/js?sensor=false&callback=bootstrap";
+    document.body.appendChild(script);
+  }

@@ -4,6 +4,7 @@ package org.esgf.web;
  * Author: fwang2@ornl.gov
  * 
  */
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,16 +14,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+
+
+
 @Controller
-@RequestMapping(value="/live")
+@RequestMapping(value="/browse")
 
-public class LiveSearchController {
+public class FacetNavController {
 
-    private final static Logger LOG = Logger.getLogger(LiveSearchController.class);
+    private final static Logger LOG = Logger.getLogger(FacetNavController.class);
     
     @RequestMapping(method=RequestMethod.GET)
     public String index(HttpServletRequest request, HttpServletResponse response) {
         LOG.debug("Enter index");
-        return "live-search";
+        return "browse";
     }
 }

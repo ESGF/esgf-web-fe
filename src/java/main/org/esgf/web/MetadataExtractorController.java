@@ -85,7 +85,7 @@ public class MetadataExtractorController {
         
         if(METADATA_FILE_LOCATION.startsWith("/var/folders/"))
         {
-            METADATA_FILE_LOCATION = "/tmp";
+            METADATA_FILE_LOCATION = "/tmp/";
         }
         
         

@@ -8,7 +8,8 @@
 
 
 (function ($) {
-
+	
+	
 AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 	
   beforeRequest: function () {
@@ -42,19 +43,44 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 		
 	    $(this.target).empty();
 	    for (var i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
-	    //if(i < 1) //for debugging the metadata report (remove when done)
-	    	//{
+	   
 	      var doc = this.manager.response.response.docs[i];
 	      $(this.target).append(AjaxSolr.theme('result', doc, AjaxSolr.theme('snippet', doc)));
 	      //$(this.target).append(AjaxSolr.theme('result2', doc, AjaxSolr.theme('snippet2', doc)));
 	      var items = [];
+	      
 	      //items = items.concat(this.facetLinks('topics', doc.topics));
 	      //items = items.concat(this.facetLinks('organisations', doc.organisations));
 	      //items = items.concat(this.facetLinks('exchanges', doc.exchanges));
 	       //AjaxSolr.theme('list_items', '#links_' + doc.id, items);
-	    	//}
+	    	
 	    }
 	    
+	    
+	    $("a.met").click(function () {
+	    	var idStr = $(this).parent().find("a").attr("id");
+		  	globalRecordId = idStr;
+		  	
+	    });
+	    
+	    $(".m a[rel]").overlay({
+	    	
+			mask: 'darkred',
+			effect: 'apple',
+
+			onBeforeLoad: function() {
+				// grab wrapper element inside content
+				var wrap = this.getOverlay().find(".contentWrap");
+				
+				// load the page specified in the trigger
+				wrap.load(this.getTrigger().attr("href"));
+				
+			}
+
+		});
+	    
+	    
+	      
   },
   
   
@@ -74,10 +100,21 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 		  
 	  });
 	  
-	 
-	 
 	  
+	  /*
 	  $('a.met').livequery(function () {
+
+		  $(this).click(function () {
+			  	alert('click');
+			  	
+			  	
+			  	var oElement = document.getElementById('temporal');
+			  	alert(oElement.childNodes.length);
+		  });
+	  });
+	  */
+	  
+	 /* $('a.met').livequery(function () {
 
 		  $(this).click(function () {
 			
@@ -99,9 +136,10 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 			
 		  });
 		  });
+	  */
 	  
 	  
-	  $("a[rel]").overlay({
+	  /*$("a[rel]").overlay({
 
 			mask: 'darkred',
 			effect: 'apple',
@@ -115,7 +153,9 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 				wrap.load(this.getTrigger().attr("href"));
 			}
 
-		});
+		});*/
+	  
+
 	  
   }
   
@@ -124,9 +164,6 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 });
 
 
-
-
-	
 
 
 })(jQuery);

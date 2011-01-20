@@ -105,7 +105,7 @@
 
 
     <!-- overlays -->
-    <div id="temporal_overlay"></div>
+    <div class="apple_overlay" id="temporal_overlay"><div class="contentWrap"></div></div>
     <div class="apple_overlay" id="geospatial_overlay"><div class="contentWrap"></div></div>
     <div class="apple_overlay" id="metadata_overlay"><div class="contentWrap"></div></div>
     
@@ -174,8 +174,9 @@
 		  <div class="round-header round-top"> Search Constraints</div> 
 			        
 		  <div class="round-content"> 
-			          <div id="temporal"><a href="#"> Temporal</a> </div>
+			          <div id="temporal" ><a href="#"> Temporal</a> </div>
 			          <div id="geo"><a href="<c:url value="/scripts/esgf/geospatial_overlay.htm" />" rel="#geospatial_overlay" style="text-decoration:none"> Geospatial</a> </div>
+		  				
 		  </div> 	         
 		  </div> <!--  Search constraints -->
 		

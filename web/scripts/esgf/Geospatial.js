@@ -102,16 +102,6 @@ $(document).ready(function(){
 	});
 	
 	
-	
-	
-	
-	
-	
-	/*$('div#ll').click(function() {
-		  alert('ll');
-		  display_geo_map();
-	});*/
-	
 	function loadGoogleMapsScript() {
 		  var script = document.createElement("script");
 		  script.type = "text/javascript";

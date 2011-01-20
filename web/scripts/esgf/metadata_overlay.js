@@ -516,6 +516,7 @@ var paths = [
 	
 };
 
+/*
 function loadScript() {
 	alert('locading script');
     var script = document.createElement("script");
@@ -523,3 +524,4 @@ function loadScript() {
     script.src = "http://maps.google.com/maps/api/js?sensor=false&callback=bootstrap";
     document.body.appendChild(script);
   }
+*/

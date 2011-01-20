@@ -7,6 +7,9 @@
 
 (function ($) {
 
+	
+	
+	
 AjaxSolr.theme.prototype.result = function (doc, snippet) {
 		
 	if (doc.title.length > 78) {
@@ -29,10 +32,9 @@ AjaxSolr.theme.prototype.result = function (doc, snippet) {
 	
   	//var output = '<div class="search-entry"><h4 class="desc"><a href="#" class="met">' + doc.title + '</a><div ' + allStr + '></div></h4>' ;
 	//var output = '<div class="search-entry"><h4 class="desc"><a href="#">' + doc.title + '</a></h4>' ;
-	//<a href="<c:url value="/scripts/esgf/geospatial_overlay.htm" />" rel="#geospatial_overlay" id="eButton" style="text-decoration:none"> 
 	  
-  	var output = '<div class="search-entry"><h4 class="desc"><a href="/esgf-web-fe/scripts/esgf/geospatial_overlay.htm" rel="#geospatial_overlay" style="text-decoration:none">' + doc.title + '</a><div ' + allStr + '></div></h4>' ;
-  	//output +=  '<a href="/esgf-web-fe/scripts/esgf/metadata_overlay.htm" rel="#geospatial_overlay" style="text-decoration:none">' + 'link' + '</a>';
+  	//var output = '<div class="search-entry"><h4 class="desc"><a href="#">' + doc.title + '</a><div ' + allStr + '></div></h4>' ;
+  	var output = '<div class="search-entry"><h4 class="desc"><div class="m"><a href="#"' + allStr + '></a><a href="/esgf-web-fe/scripts/esgf/met_overlay.htm" rel="#metadata_overlay" class="met" style="text-decoration:none">' + doc.title + '</a></div></div></h4>' ;
   	output += '<p id="links_' + doc.id + '" class="links"></p>';
   	output += '<p>' + snippet + '</p></div>';
   	

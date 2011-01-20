@@ -1,23 +1,9 @@
-#popupTemporalSearch{
+#popupTemporalSearch22 {
 	
-display:none;
-position:fixed;
-_position:absolute;  /* hack for internet explorer 6 */
-margin-left: 10%;
-margin-top: 30px;
-
-height: 350px;	 
- 
-width: 425px;
-background:#FFFFFF;
-border:2px solid #cecece;
-z-index:2;
-padding:12px;
-font-size:13px;
 }
 
 
-#popupTemporalSearch h1{
+h1 {
 text-align:left;
 color:#6FA5FD;
 font-size:22px;
@@ -28,12 +14,10 @@ margin-bottom:20px;
 }
 
 #temporal_helper {
-	/*padding-bottom: 20px;
-*/}
-
-#popupTemporalSearch p{
-padding-bottom:0px;
+	background: green
 }
+
+
 
 #popupTemporalSearchClose{
 font-size:14px;
@@ -142,6 +126,7 @@ z-index:1;
 	padding-left:20px;
 	padding:10px;
 	padding-bottom:50px;
+	font-weight:bold;
 }
 
 #temporal_content1 h1 {

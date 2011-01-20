@@ -12,18 +12,14 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     var fq = this.manager.store.values('fq');
     
     
+    
     for (var i = 0, l = fq.length; i < l; i++) {
-    	var fqString = fq[i];
-    	/*
-    	alert('s: ' + boundingboxSD + 
-    		  ' n: ' + boundingboxND +
-    		  ' e: ' + boundingboxED +
-    		  ' w: ' + boundingboxWD);
-    	*/
+    	var fqString = new String(fq[i]);
+    	
     	
     	//check to see if this is a geospatial query (assuming 'east_degrees' is in every geo query)
     	//if it is -> need to change the current selection string
-    	if(fqString.search('east_degrees'))
+    	if(fqString.search('east_degrees') != -1)
     	{
     		//if there is no OR, it is an enclosed search
     		if(fqString.search('OR') == -1)
@@ -42,7 +38,40 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     		}
     	}
     	
+    	//check to see if this is a temporal query (assuming 'datetime_start' is in every geo query)
+    	/*
+    	alert('the string: ' + fqString + ' ' + fqString.search('start') != -1);
+    	if(fqString.search('start') != -1) {
+    		var start = fqString.search('\:') + 2;
+    		var stop = fqString.search(' TO');
+    		var substr = fqString.substring(start,stop);
+    		//alert(substr + ' ' + substr.length);
+    		if(substr == '*') {
+    			fqString = 'From: ' + 'ALL';
+    		}
+    		else {
+    			fqString = 'From: ' + substr;
+    		}
+    		//get the time
+    		//fqString = 'From: ' + 
+    	}
+    	//fqString = fq[i];
     	
+    	if(fqString.search('stop') != -1) {
+    		var start = fqString.search('\:') + 2;
+    		var stop = fqString.search(' TO');
+    		var substr = fqString.substring(start,stop);
+    		alert(substr);
+    		if(substr == '*') {
+    			fqString = 'To: ' + 'ALL';
+    		}
+    		else {
+    			fqString = 'To: ' + substr;
+    		}
+    		//get the time
+    		//fqString = 'From: ' + 
+    	}
+    	*/
       links.push($('<a href="#"/>').text('(x) ' + fqString).click(self.removeFacet(fq[i])));
     }
 

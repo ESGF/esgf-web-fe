@@ -69,9 +69,12 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 			effect: 'apple',
 
 			onBeforeLoad: function() {
+				
+				$('.apple_overlay').css({'width' : '640px'});
+				
 				// grab wrapper element inside content
 				var wrap = this.getOverlay().find(".contentWrap");
-				
+
 				// load the page specified in the trigger
 				wrap.load(this.getTrigger().attr("href"));
 				

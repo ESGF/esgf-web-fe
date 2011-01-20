@@ -41,6 +41,10 @@ $(function() {
 		effect: 'apple',
 
 		onBeforeLoad: function() {
+			
+			$('.apple_overlay').css({'width' : '640px'});
+			
+			
 			// grab wrapper element inside content
 			var wrap = this.getOverlay().find(".contentWrap");
 
@@ -51,7 +55,24 @@ $(function() {
 
 	});
 
-	
+	$("div#temporal a[rel]").overlay({
+
+		mask: 'darkred',
+		effect: 'apple',
+
+		onBeforeLoad: function() {
+			
+			$('.apple_overlay').css({'width' : '420px'});
+			
+			// grab wrapper element inside content
+			var wrap = this.getOverlay().find(".contentWrap");
+
+			// load the page specified in the trigger
+			wrap.load(this.getTrigger().attr("href"));
+			
+		}
+
+	});
 
 	
 });

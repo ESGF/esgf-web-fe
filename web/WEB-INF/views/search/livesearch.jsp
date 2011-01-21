@@ -44,7 +44,6 @@
   	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/FacetBrowser.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Temporal.js" />"> </script>
     
-      
     <script type="text/javascript" src="<c:url value="/scripts/esgf/Geospatial.js" />"> </script>
     
    	<script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>

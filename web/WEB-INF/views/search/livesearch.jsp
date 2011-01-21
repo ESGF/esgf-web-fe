@@ -51,11 +51,12 @@
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.theme.js" />"> </script>
     
 	<!-- standalone page styling (can be removed) --> 
-	<link rel="stylesheet" type="text/css" href="http://static.flowplayer.org/tools/css/standalone.css"/>	
+	<!--<link rel="stylesheet" type="text/css" href="http://static.flowplayer.org/tools/css/standalone.css"/>	
  	<link rel="stylesheet" type="text/css" href="http://static.flowplayer.org/tools/css/overlay-apple.css"/> 
 	
 	
     
+    -->
     <!--
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans&subset=latin' 
         rel='stylesheet' type='text/css'>

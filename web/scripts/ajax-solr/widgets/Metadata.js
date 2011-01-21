@@ -44,7 +44,7 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
     		// initialize scrollable with mousewheel support
     		$(".scrollable").scrollable({ vertical: true, mousewheel: true });	
     		
-    		
+    		/*
     		loadGoogleMapsScript();
     		
     		
@@ -55,6 +55,8 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
     	  		script.src = "http://maps.google.com/maps/api/js?sensor=false&callback=metadata_report_func";
     	  		document.body.appendChild(script);
     		}
+    		*/
+    		metadata_report_func();
     	  	
     	}
 

@@ -35,37 +35,26 @@
     
     
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Metadata.js" />"> </script>
-                
-   	
-   	
+  	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/FacetBrowser.js" />"> </script>
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Temporal.js" />"> </script>
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Geospatial.js" />"> </script>
+    
    	<script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.theme.js" />"> </script>
-
-	<!--  
-	<script type="text/javascript" src="<c:url value="/scripts/esgf/metadata_overlay.js" />"> </script>
-	-->
-	 
-
     
 	<!-- standalone page styling (can be removed) --> 
 	<link rel="stylesheet" type="text/css" href="http://static.flowplayer.org/tools/css/standalone.css"/>	
- 
- 
-	<link rel="stylesheet" type="text/css" href="http://static.flowplayer.org/tools/css/overlay-apple.css"/> 
+ 	<link rel="stylesheet" type="text/css" href="http://static.flowplayer.org/tools/css/overlay-apple.css"/> 
 	
-
-		
 	<!--<script type="text/javascript"
         src="http://maps.google.com/maps/api/js?sensor=false">
     </script>
-    
-    --><!--
-	
-	
+    -->
+    <!--
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans&subset=latin' 
         rel='stylesheet' type='text/css'>
-        
-    --><link rel="stylesheet" 
+    -->
+    <link rel="stylesheet" 
         href="<c:url value="/styles/blueprint/screen.css" />" 
         type="text/css" media="screen, projection">
         
@@ -109,14 +98,17 @@
     <div class="apple_overlay" id="geospatial_overlay"><div class="contentWrap"></div></div>
     <div class="apple_overlay" id="metadata_overlay"><div class="contentWrap"></div></div>
     
-    
+    <!--<div id="facet-browse"></div>
+    <div id="temp-browse"></div>
+	<div id="metadata-browse"></div>
 
-		<div id="header" class="span-24 last">
-			<div class="span-16 left">
-			<span class="tabitem"> <a href="#"> Home </a></span> 
-			<span class="tabitem"> <a href="#" > Browse </a> </span>
+		-->
+	<div id="header" class="span-24 last">
+		<div class="span-16 left">
+			<span class="tabitem"> <a href="#"> Home </a></span>   
+			<span class="tabitem"> <a href="#"> Browse </a> </span>
 			<span class="tabitem"> <a href="#"> Analysis</a></span>
-			</div>
+		</div>
 		
 		    <div class="prepend-4 span-4 last">
 		    <span class="tabitem"> <a href="#"> Search settings</a></span>

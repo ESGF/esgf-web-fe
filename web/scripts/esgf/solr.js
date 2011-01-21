@@ -35,12 +35,26 @@
 		  id: 'currentsearch',
 		  target: '#current-selection'
 		}));
-
-	/*Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
-		  id: 'geol_overlay',
-		  target: '#geol_overlay'
+	
+	Manager.addWidget(new AjaxSolr.MetadataWidget({
+		  id: 'metadata-browse',
+		  target: '#metadata-browse'
 		}));
 	
+	Manager.addWidget(new AjaxSolr.FacetBrowserWidget({
+		  id: 'facet-browse',
+		  target: '#facet-browse'
+		}));
+	
+	Manager.addWidget(new AjaxSolr.TemporalWidget({
+		  id: 'temp-browse',
+		  target: '#temp-browse'
+		}));
+	Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
+		  id: 'geo_browse',
+		  target: '#geo_browse'
+		}));
+	/*
 	Manager.addWidget(new AjaxSolr.FacetBrowserWidget({
 		  id: 'facet-browse',
 		  target: '#facet-browse'

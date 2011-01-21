@@ -298,8 +298,3 @@ var paths = [
 	
 };
 
-
-function a()
-{
-	alert('function a');
-};

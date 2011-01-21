@@ -57,30 +57,9 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 	    }
 	    
 	    
-	    $("a.met").click(function () {
-	    	var idStr = $(this).parent().find("a").attr("id");
-		  	globalRecordId = idStr;
-		  	
-	    });
+	   
 	    
-	    $(".m a[rel]").overlay({
-	    	
-			mask: 'darkred',
-			effect: 'apple',
-
-			onBeforeLoad: function() {
-				
-				$('.apple_overlay').css({'width' : '640px'});
-				
-				// grab wrapper element inside content
-				var wrap = this.getOverlay().find(".contentWrap");
-
-				// load the page specified in the trigger
-				wrap.load(this.getTrigger().attr("href"));
-				
-			}
-
-		});
+	    
 	    
 	    
 	      

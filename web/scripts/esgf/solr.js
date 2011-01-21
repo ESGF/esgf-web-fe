@@ -50,10 +50,11 @@
 		  id: 'temp-browse',
 		  target: '#temp-browse'
 		}));
-	Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
+	/*Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
 		  id: 'geo_browse',
 		  target: '#geo_browse'
-		}));
+		}));*/
+	
 	/*
 	Manager.addWidget(new AjaxSolr.FacetBrowserWidget({
 		  id: 'facet-browse',

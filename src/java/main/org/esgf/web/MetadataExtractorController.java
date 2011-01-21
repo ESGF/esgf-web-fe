@@ -55,6 +55,7 @@ public class MetadataExtractorController {
     private static String METADATA_FILE_LOCATION = System.getProperty("java.io.tmpdir");//System.getProperty("java.io.tmpdir");
     //private final static String METADATA_FILE = "ORNL-oai_dif";
     private final static String METADATA_FILE = "ORNL-oai_dif";
+    //private final static String METADATA_FILE = "pcmdi.ipcc4.GFDL.gfdl_cm2_0.picntrl.mon.land.run1.v1";
     
     @RequestMapping(method=RequestMethod.GET)
     public @ResponseBody String doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException {
@@ -254,12 +255,18 @@ public class MetadataExtractorController {
     public String processCAS(File f,String id) throws JSONException
     {
         String jsonContent = "";
+        
+        LOG.debug("IN CAS");
+        
         return jsonContent;
     }
     
     public String processTHREDDS(File f,String id) throws JSONException
     {
         String jsonContent = "";
+        
+        LOG.debug("IN THREDDS");
+        
         return jsonContent;
     }
 

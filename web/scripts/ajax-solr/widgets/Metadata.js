@@ -4,6 +4,7 @@
 
 
 var globalRecordId = '';    		
+var metadatafileformat = 'OAI';
 
 (function ($) {
 
@@ -17,12 +18,13 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
     $("a.met").click(function () {
     	var idStr = $(this).parent().find("a").attr("id");
 	  	globalRecordId = idStr;
-	  	
+		//metadatafileformat = $(this).parent().find("a").attr("format");
     });
     
     $(".m a[rel]").overlay({
     	
-		mask: 'darkred',
+		//mask: 'darkred',
+		mask: {opacity: 0.5, color: '#000'},
 		effect: 'apple',
 
 		onBeforeLoad: function() {
@@ -86,13 +88,13 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
 		id = globalRecordId;
 		var title = 'title';
 		var metadatafilename = 'ORNL-oai_dif.json';
-		var metadatafileformat = 'oai';
 		metadata_report(id,title,metadatafilename,metadatafileformat);
 	}
 	
 	
 	function metadata_report(id,title,metadatafilename,metadatafileformat)
 	{
+		//alert('id: ' + id + ' title: ' + title + ' metadatafileformat: ' + metadatafileformat);
 		jQuery.ajax({
 			url: 'http://localhost:8080/esgf-web-fe/metadataproxy',
 			data: 'metadataformat=' + metadatafileformat + '&metadatafile=' + metadatafilename + '&id=' + id,
@@ -113,13 +115,13 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
 		
 		
 		//branch logic depending on the metadata file format
-		if(metadatafileformat == 'oai') {
+		if(metadatafileformat == 'OAI') {
 			processOAI(record,id);
 		}
-		else if(metadatafileformat == 'fgdc') {
+		else if(metadatafileformat == 'FGDC') {
 			processFGDC(record,id);
 		}
-		else if(metadatafileformat == 'cas') {
+		else if(metadatafileformat == 'CAS') {
 			processCAS(record,id);
 		}
 		else{ //thredds
@@ -211,7 +213,6 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
 
 	function processOAI(record)
 	{
-
 		var title = record.record.metadata.DIF.Entry_Title;
 		
 		//add title and constraints to the page
@@ -260,16 +261,18 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
 		// Keywords 
 		var keywords = record.record.metadata.DIF.Keyword;
 		var keywordsText = '';
-		for(var i = 0;i<keywords.length;i++) {
-			if(i == keywords.length-1) {
-				keywordsText += keywords[i] + ' (' + keywords[i] + ')';
+		if(keywords != null && keywords != '')
+		{
+			for(var i = 0;i<keywords.length;i++) {
+				if(i == keywords.length-1) {
+					keywordsText += keywords[i] + ' (' + keywords[i] + ')';
+				}
+				else {
+					keywordsText += keywords[i] + ' (' + keywords[i] + '), ';
+				}
 			}
-			else {
-				keywordsText += keywords[i] + ' (' + keywords[i] + '), ';
-			}
+			$('div#keywords_metadata').after('<div class="addedMetadata"><p>' + keywordsText + '</p></div>');
 		}
-		$('div#keywords_metadata').after('<div class="addedMetadata"><p>' + keywordsText + '</p></div>');
-		
 		
 		// Abstract 
 		var abstractText = record.record.metadata.DIF.Summary;

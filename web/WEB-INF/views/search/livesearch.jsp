@@ -13,6 +13,12 @@
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery-ui-1.8.5.min.js" /> "></script> 
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.tools.min.js" /> "></script> 
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.livequery.js" /> "></script> 
+    
+     
+    <script type="text/javascript"
+        src="http://maps.google.com/maps/api/js?sensor=false">
+    </script>
+    
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.autocomplete.js" /> "></script> 
     
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/Core.js" />"> </script>
@@ -37,7 +43,9 @@
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Metadata.js" />"> </script>
   	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/FacetBrowser.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Temporal.js" />"> </script>
-    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Geospatial.js" />"> </script>
+    
+      
+    <script type="text/javascript" src="<c:url value="/scripts/esgf/Geospatial.js" />"> </script>
     
    	<script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.theme.js" />"> </script>
@@ -46,10 +54,8 @@
 	<link rel="stylesheet" type="text/css" href="http://static.flowplayer.org/tools/css/standalone.css"/>	
  	<link rel="stylesheet" type="text/css" href="http://static.flowplayer.org/tools/css/overlay-apple.css"/> 
 	
-	<!--<script type="text/javascript"
-        src="http://maps.google.com/maps/api/js?sensor=false">
-    </script>
-    -->
+	
+    
     <!--
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans&subset=latin' 
         rel='stylesheet' type='text/css'>

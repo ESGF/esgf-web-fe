@@ -11,7 +11,8 @@ AjaxSolr.TemporalWidget = AjaxSolr.AbstractWidget.extend({
         
     $("div#temporal a[rel]").overlay({
 
-		mask: 'darkred',
+		//mask: 'darkred',
+    	mask: {opacity: 0.5, color: '#000'},
 		effect: 'apple',
 
 		onBeforeLoad: function() {

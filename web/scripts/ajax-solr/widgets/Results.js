@@ -43,7 +43,7 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 		
 	    $(this.target).empty();
 	    for (var i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
-	   
+	  
 	      var doc = this.manager.response.response.docs[i];
 	      $(this.target).append(AjaxSolr.theme('result', doc, AjaxSolr.theme('snippet', doc)));
 	      //$(this.target).append(AjaxSolr.theme('result2', doc, AjaxSolr.theme('snippet2', doc)));
@@ -53,7 +53,7 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 	      //items = items.concat(this.facetLinks('organisations', doc.organisations));
 	      //items = items.concat(this.facetLinks('exchanges', doc.exchanges));
 	       //AjaxSolr.theme('list_items', '#links_' + doc.id, items);
-	    	
+		   
 	    }
 	    
 	    
@@ -82,60 +82,6 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 		  
 	  });
 	  
-	  
-	  /*
-	  $('a.met').livequery(function () {
-
-		  $(this).click(function () {
-			  	alert('click');
-			  	
-			  	
-			  	var oElement = document.getElementById('temporal');
-			  	alert(oElement.childNodes.length);
-		  });
-	  });
-	  */
-	  
-	 /* $('a.met').livequery(function () {
-
-		  $(this).click(function () {
-			
-			  
-			  	//need to gather the following here...
-			  	//metadatafilename
-			  	//metadataformat
-			  	//id
-			  	//title
-			  	var id = $(this).next().attr('id');
-			  	var title = $(this).next().attr('title');
-			  	//these still need to be added
-			  	var metadatafilename = 'ORNL-oai_dif.json';
-			  	var metadatafileformat = 'oai';
-			  	
-			  	//send the info to the metadata_report
-			  	metadata_report(id,title,metadatafilename,metadatafileformat);
-			
-			
-		  });
-		  });
-	  */
-	  
-	  
-	  /*$("a[rel]").overlay({
-
-			mask: 'darkred',
-			effect: 'apple',
-
-			onBeforeLoad: function() {
-
-				// grab wrapper element inside content
-				var wrap = this.getOverlay().find(".contentWrap");
-
-				// load the page specified in the trigger
-				wrap.load(this.getTrigger().attr("href"));
-			}
-
-		});*/
 	  
 
 	  

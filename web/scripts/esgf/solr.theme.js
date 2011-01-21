@@ -20,6 +20,8 @@ AjaxSolr.theme.prototype.result = function (doc, snippet) {
 	var idStr = 'id="' + doc.id + '" ';
 	var titleStr = 'title="' + doc.title + '" ';
 	var urlStr = 'url="' + doc.url + '" ';
+	var formatStr = 'format="' + doc.metadata_format + '" ';
+	
 	var descriptionStr = 'description="' + doc.description + '" ';
 	var westDegreesStr = 'west_degrees="' + doc.west_degrees + '" ';
 	var eastDegreesStr = 'east_degrees="' + doc.east_degrees + '" ';
@@ -28,7 +30,7 @@ AjaxSolr.theme.prototype.result = function (doc, snippet) {
 	var datetime_startStr = 'datetime_start="' + doc.datetime_start + '" ';
 	var datetime_stopStr = 'datetime_stop="' + doc.datetime_stop + '" ';
 	
-	var allStr = idStr + titleStr + urlStr + descriptionStr + westDegreesStr + eastDegreesStr + northDegreesStr + southDegreesStr + datetime_startStr + datetime_stopStr;
+	var allStr = idStr + titleStr + urlStr + formatStr + descriptionStr + westDegreesStr + eastDegreesStr + northDegreesStr + southDegreesStr + datetime_startStr + datetime_stopStr;
 	
   	//var output = '<div class="search-entry"><h4 class="desc"><a href="#" class="met">' + doc.title + '</a><div ' + allStr + '></div></h4>' ;
 	//var output = '<div class="search-entry"><h4 class="desc"><a href="#">' + doc.title + '</a></h4>' ;

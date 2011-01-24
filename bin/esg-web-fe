@@ -100,13 +100,13 @@ init() {
 # In update mode it will always pull down latest after archiving old
 #
 setup_web_fe() {
+    init
+
     echo -n "Checking for web front-end  ${web_fe_version}"
     check_webapp_version "${web_fe_context_root}" "${web_fe_version}"
     local ret=$?
     ((ret == 0)) && (( ! force_install )) && echo " [OK]" && return 0
-    
-    init
-    
+        
     echo
     echo "*******************************"
     echo "Setting up The ESGF Web Front-End"
@@ -119,7 +119,7 @@ setup_web_fe() {
     ((force_install)) && default="N"
     local dosetup
     if [ -d ${web_fe_app_home} ]; then 
-        echo "Detected an existing node manager installation..."
+        echo "Detected an existing web front-end installation..."
         read -p "Do you want to continue with web front-end installation and setup? $([ "$default" = "N" ] && echo "[y/N]" || echo "[Y/n]") " dosetup
         [ -z "${dosetup}" ] && dosetup=${default}
         if [ "${dosetup}" != "Y" ] && [ "${dosetup}" != "y" ]; then

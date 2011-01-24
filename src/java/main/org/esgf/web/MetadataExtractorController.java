@@ -127,50 +127,84 @@ public class MetadataExtractorController {
         return jsonContent;
     }
     
-    public String processTHREDDS(URL f,String id) throws JSONException
+    public String processCAS(URL f,String id) throws JSONException
     {
         String jsonContent = "";
         
-        LOG.debug("IN THREDDS");
-        
+        LOG.debug("IN CAS id: " + id);
         SAXBuilder builder = new SAXBuilder();
-        
-        Element returnedEl = null;
         String xmlContent = "";
+        
         try{
             
             Document document = (Document) builder.build(f);
-
             Element rootNode = document.getRootElement();
+            Element returnedEl = null;
             Namespace ns = (Namespace)rootNode.getNamespace();
-            LOG.debug("Successful " + rootNode.getName());
-            returnedEl = rootNode;
-        }catch(IOException io){
-            System.out.println(io.getMessage());
-        }catch(JDOMException jdomex){
-           System.out.println(jdomex.getMessage());
-       }
-        if(returnedEl == null)
-        {
-            LOG.debug("Found no element match");
-        }
-        else
-        {
-            XMLOutputter outputter = new XMLOutputter();
-            xmlContent = outputter.outputString(returnedEl);
             
-            JSONObject jo = XML.toJSONObject(xmlContent);
-            LOG.debug("json: \n" + jo.toString());
-    
-            jsonContent = jo.toString();
-        }
+            LOG.debug("Successful " + rootNode.getName());
+            
+            List records = (List)rootNode.getChildren();
+            //LOG.debug("Size of Records: " + records.size());
+            for(int i=0;i<records.size();i++)
+            {
+                //if(i == 0)
+                //{
+                    Element recordEl = (Element) records.get(i);
+                    //Element idEl = (Element)recordEl.getChild("Filename",ns);
+                    //LOG.debug("RecordEl " + recordEl.getChildren().size());
+                    for(int j=0;j<recordEl.getChildren().size();j++)
+                    {
+                        Element metEl = ((Element)recordEl.getChildren().get(j));
+                        if(metEl.getName().equals("Filename"))
+                        {
+                            Element filenameEl = (Element)metEl;
+                            //LOG.debug("metEl " + ((Element)recordEl.getChildren().get(j)).getName());
+                            //LOG.debug(recordEl.getName());
+                            //LOG.debug(recordEl.getValue());
+                            if(filenameEl.getText().equals(id))
+                            {
+                                LOG.debug("FOUND RECORD for ID: " + id);
+                                returnedEl = recordEl;
+                            }
+                        }
+                    }
+                //}
+            }
+            if(returnedEl == null)
+            {
+                LOG.debug("Found no element match");
+            }
+            else
+            {
+                XMLOutputter outputter = new XMLOutputter();
+                xmlContent = outputter.outputString(returnedEl);
+            }
         
-        
-        
-        
+       
+          }catch(IOException io){
+             System.out.println(io.getMessage());
+          }catch(JDOMException jdomex){
+             System.out.println(jdomex.getMessage());
+     }
+          JSONObject jo = XML.toJSONObject(xmlContent);
+          
+          
+          
+          jsonContent = jo.toString();
+          
+          jsonContent = jsonContent.replaceAll("cas:", "");
+          jsonContent = jsonContent.replaceAll(":cas", "");
+          jsonContent = jsonContent.replaceAll("esg:", "");
+          jsonContent = jsonContent.replaceAll(":esg", "");
+          jsonContent = jsonContent.replaceAll("rdf:", "");
+          jsonContent = jsonContent.replaceAll(":rdf", "");
+          
+          LOG.debug("json: \n" + jsonContent);
+          
+          
         return jsonContent;
     }
-    
     
     public String processOAI(URL f,String id) throws JSONException
     {
@@ -240,6 +274,53 @@ public class MetadataExtractorController {
         return jsonContent;
     }
     
+    public String processTHREDDS(URL f,String id) throws JSONException
+    {
+        String jsonContent = "";
+        
+        LOG.debug("IN THREDDS");
+        
+        SAXBuilder builder = new SAXBuilder();
+        
+        Element returnedEl = null;
+        String xmlContent = "";
+        try{
+            
+            Document document = (Document) builder.build(f);
+
+            Element rootNode = document.getRootElement();
+            Namespace ns = (Namespace)rootNode.getNamespace();
+            LOG.debug("Successful " + rootNode.getName());
+            returnedEl = rootNode;
+        }catch(IOException io){
+            System.out.println(io.getMessage());
+        }catch(JDOMException jdomex){
+           System.out.println(jdomex.getMessage());
+       }
+        if(returnedEl == null)
+        {
+            LOG.debug("Found no element match");
+        }
+        else
+        {
+            XMLOutputter outputter = new XMLOutputter();
+            xmlContent = outputter.outputString(returnedEl);
+            
+            JSONObject jo = XML.toJSONObject(xmlContent);
+            LOG.debug("json: \n" + jo.toString());
+    
+            jsonContent = jo.toString();
+        }
+        
+        
+        
+        
+        return jsonContent;
+    }
+    
+    
+    
+    
     public String processFGDC(URL f,String id) throws JSONException
     {
         SAXBuilder builder = new SAXBuilder();
@@ -291,14 +372,6 @@ public class MetadataExtractorController {
         return jsonContent;
     }
     
-    public String processCAS(URL f,String id) throws JSONException
-    {
-        String jsonContent = "";
-        
-        LOG.debug("IN CAS");
-        
-        return jsonContent;
-    }
     
     
 

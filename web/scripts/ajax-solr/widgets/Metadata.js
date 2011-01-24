@@ -127,33 +127,47 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
 		}
 		
 	}	
-	
-/*
-	<catalog xmlns="http://www.unidata.ucar.edu/namespaces/thredds/InvCatalog/v1.0" xmlns:xlink="http://www.w3.org/1999/xlink" name="TDS configuration file" version="1.0.1">
-	  <service name="gridded" serviceType="OPENDAP" base="/thredds/dodsC/">
-	    <property name="requires_authorization" value="false" />
-	    <property name="application" value="Web Browser" />
-	  </service>
-	  <service name="fileservice" serviceType="Compound" base="">
-	    <service name="HTTPServer" serviceType="HTTPServer" base="/thredds/fileServer/">
-	      <property name="requires_authorization" value="true" />
-	      <property name="application" value="Web Browser" />
-	      <property name="application" value="Web Script" />
-	    </service>
-	    <service name="GRIDFTPatPCMDI" serviceType="GridFTP" base="gsiftp://pcmdi3.llnl.gov:2811/">
-	      <property name="requires_authorization" value="true" />
-	      <property name="application" value="DataMover-Lite" />
-	    </service>
-	  </service>
-	  <service name="HRMatPCMDI" serviceType="SRM" base="srm://datagrid2.lbl.gov:6288/srm/v2/server?SFN=/garchive.nersc.gov/">
-	    <property name="requires_authorization" value="false" />
-	  </service>
-	  <property name="catalog_version" value="2" />
-	   <dataset name="project=IPCC Fourth Assessment Report, model=NOAA Geophysical Fluid Dynamics Laboratory, CM2.0 Model, experiment=pre-industrial control, run=run1, time_frequency=mon, realm=land, version=1" ID="pcmdi.ipcc4.GFDL.gfdl_cm2_0.picntrl.mon.land.run1.v1" restrictAccess="esg-user">
 
-*
-*
-*/	    
+	function processCAS(record){
+		//need to come back to this
+		//the title is extracted from a hard coded place
+		var title = record.he5.Filename.content;
+		//add title and constraints to the page
+		$('div#metadata_summary_dataset').after('<div class="addedMetadataTitle">' + 'Dataset: ' + title); //+ '</div><p>&lt;insert constraints here&gt;</p>');
+		var projectsText = 'MLS';
+		$('div#projects_metadata').after('<div class="addedMetadata">' + projectsText + '</div>');
+		
+		// Contact Info 
+		var investigators = ' N/A ';
+		$('div#contact_metadata').after('<div class="addedMetadata"><p>' + investigators + '</p></div>');
+		
+		// Temporal Info 
+		var startText = (record.he5.RANGEBEGINNINGDATE) + (record.he5.RANGEBEGINNINGTIME);
+		var stopText = (record.he5.RANGEENDINGDATE) + (record.he5.RANGEENDINGTIME);
+		if(stopText == '.')	{
+			var currentTime = new Date();
+			stopText = currentTime.getFullYear(); //+ currentTime.getMonth() + currentTime.getDay();
+		}
+		$('div#time_metadata').after('<div class="addedMetadata"><p>Begin: ' + startText + ' End: ' + stopText + '</p></div>');
+		
+		// Geo Info 
+		var east_degreesText = record.he5.EASTBOUNDINGCOORDINATE - 0.001;
+		var west_degreesText = record.he5.WESTBOUNDINGCOORDINATE + 0.001;
+		var north_degreesText = record.he5.NORTHBOUNDINGCOORDINATE - 0.001;
+		var south_degreesText = record.he5.SOUTHBOUNDINGCOORDINATE + 0.001;
+		$('div#geospatial_metadata').after('<div class="addedMetadata"><p>' + 'coordinates (N,W,S,E):<br />(' + north_degreesText + ',' + west_degreesText + ',' + south_degreesText + ',' + east_degreesText + ')</p></div>');
+		display_meta_map(west_degreesText,east_degreesText,north_degreesText,south_degreesText);
+		
+		//Keywords
+		$('div#keywords_metadata').after('<div class="addedMetadata"><p>' + ' N/A ' + '</p></div>');
+		
+		// Abstract 
+		//var abstractText = record.catalog.dataset.name;
+		$('div#abstract_metadata').after('<div class="addedMetadata"><p>' + ' N/A ' + '</p></div>');
+		
+	}
+
+ 
 	function processTHREDDS(record) {
 		
 		//need to come back to this
@@ -374,11 +388,6 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
 
 	}
 
-
-
-	function processCAS(record){
-		
-	}
 
 	
 

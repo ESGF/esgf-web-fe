@@ -7,8 +7,9 @@
 (function ($) {
 	
 	Manager = new AjaxSolr.Manager({
-		proxyUrl: 'http://localhost:8080/esgf-web-fe/solrproxy'
+		proxyUrl: 'http://localhost:8080/esgf-web-fe/solrproxy',
 		//proxyUrl: 'http://esg-gw.ornl.teragrid.org:8080/esgf-web-fe/solrproxy'
+		metadataProxyUrl: 'http://localhost:8080/esgf-web-fe/metadataproxy'
 	});
 	
 	Manager.addWidget(new AjaxSolr.ResultWidget({
@@ -32,9 +33,34 @@
 
 	Manager.addWidget(new AjaxSolr.CurrentSearchWidget({
 		  id: 'currentsearch',
-		  target: '#current-selection',
+		  target: '#current-selection'
 		}));
-
+	
+	Manager.addWidget(new AjaxSolr.MetadataWidget({
+		  id: 'metadata-browse',
+		  target: '#metadata-browse'
+		}));
+	
+	Manager.addWidget(new AjaxSolr.FacetBrowserWidget({
+		  id: 'facet-browse',
+		  target: '#facet-browse'
+		}));
+	
+	Manager.addWidget(new AjaxSolr.TemporalWidget({
+		  id: 'temp-browse',
+		  target: '#temp-browse'
+		}));
+	/*Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
+		  id: 'geo_browse',
+		  target: '#geo_browse'
+		}));*/
+	
+	/*
+	Manager.addWidget(new AjaxSolr.FacetBrowserWidget({
+		  id: 'facet-browse',
+		  target: '#facet-browse'
+		}));
+	*/
 //	Manager.addWidget(new AjaxSolr.TextWidget({
 //		  id: 'text',
 //		  target: '#search-box',
@@ -49,6 +75,11 @@
 		}));
 
 	
+	/*Manager.addWidget(new AjaxSolr.CalendarWidget({
+	      id: 'calendar',
+	      target: '#calendar',
+	      field: 'datetime_start'
+	    }));*/
 	
 	Manager.init();
 	
@@ -77,6 +108,8 @@
     
 
 	Manager.store.addByValue('q', '*:*');	
+	
+	
 	Manager.doRequest();
 
 	$("div.search-entry").live('mouseover',  function() {

@@ -49,7 +49,6 @@
         src="http://maps.google.com/maps/api/js?sensor=false">
     </script>
 
-	<script type="text/javascript" src="<c:url value="/scripts/esgf/metadata_overlay.js" />"> </script>
    
 </head>
 

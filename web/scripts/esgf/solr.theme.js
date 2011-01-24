@@ -7,20 +7,45 @@
 
 (function ($) {
 
+	
+	
+	
 AjaxSolr.theme.prototype.result = function (doc, snippet) {
 		
 	if (doc.title.length > 78) {
 		doc.title = doc.title.substring(0,100) + "...";
 	}
 	
-  	var output = '<div class="search-entry"><h4 class="desc"><a href="javascript:metadata_link()">' + doc.title + '</a></h4>' ;
+	
+	var idStr = 'id="' + doc.id + '" ';
+	var titleStr = 'title="' + doc.title + '" ';
+	var urlStr = 'url="' + doc.url + '" ';
+	var formatStr = 'format="' + doc.metadata_format + '" ';
+	
+	var descriptionStr = 'description="' + doc.description + '" ';
+	var westDegreesStr = 'west_degrees="' + doc.west_degrees + '" ';
+	var eastDegreesStr = 'east_degrees="' + doc.east_degrees + '" ';
+	var northDegreesStr = 'north_degrees="' + doc.north_degrees + '" ';
+	var southDegreesStr = 'south_degrees="' + doc.south_degrees + '" ';
+	var datetime_startStr = 'datetime_start="' + doc.datetime_start + '" ';
+	var datetime_stopStr = 'datetime_stop="' + doc.datetime_stop + '" ';
+	
+	var allStr = idStr + titleStr + urlStr + formatStr + descriptionStr + westDegreesStr + eastDegreesStr + northDegreesStr + southDegreesStr + datetime_startStr + datetime_stopStr;
+	
+  	//var output = '<div class="search-entry"><h4 class="desc"><a href="#" class="met">' + doc.title + '</a><div ' + allStr + '></div></h4>' ;
+	//var output = '<div class="search-entry"><h4 class="desc"><a href="#">' + doc.title + '</a></h4>' ;
+	  
+  	//var output = '<div class="search-entry"><h4 class="desc"><a href="#">' + doc.title + '</a><div ' + allStr + '></div></h4>' ;
+  	var output = '<div class="search-entry"><h4 class="desc"><div class="m"><a href="#"' + allStr + '></a><a href="/esgf-web-fe/scripts/esgf/metadata_overlay.html" rel="#metadata_overlay" class="met" style="text-decoration:none">' + doc.title + '</a></div></div></h4>' ;
   	output += '<p id="links_' + doc.id + '" class="links"></p>';
   	output += '<p>' + snippet + '</p></div>';
+  	
   	return output;
 };
 
+
 AjaxSolr.theme.prototype.snippet = function (doc) {
-  
+	  
 	var output = '';
  
 	if (doc.description != undefined)
@@ -40,6 +65,9 @@ AjaxSolr.theme.prototype.snippet = function (doc) {
 	return output;
 };
 
+
+
+
 AjaxSolr.theme.prototype.tag = function (value, weight, handler) {
   return $('<a href="#" class="tagcloud_item"/>').text(value).addClass('tagcloud_size_' + weight).click(handler);
 };
@@ -53,3 +81,5 @@ AjaxSolr.theme.prototype.no_items_found = function () {
 };
 
 })(jQuery);
+
+

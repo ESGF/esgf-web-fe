@@ -1,7 +1,7 @@
 #popupGeospatialSearch{
-display:none;
+/*display:none;
 position:fixed;
-_position:absolute;  /* hack for internet explorer 6 */
+_position:absolute;   hack for internet explorer 6 
 margin-left: 10%;
 margin-top: 30px;
 
@@ -13,6 +13,7 @@ border:2px solid #cecece;
 z-index:2;
 padding:12px;
 font-size:13px;
+*/
 }
 
 
@@ -26,9 +27,11 @@ padding-bottom:2px;
 margin-bottom:20px;
 }
 
+/*
 #geo_helper {
-	padding-bottom: 20px;
+	padding-bottom: 10px;
 }
+*/
 
 #popupGeospatialSearch p{
 padding-bottom:0px;
@@ -45,7 +48,9 @@ font-weight:700;
 display:block;
 }
 
-
+#popupGeospatialSearchClose a:hover {
+	cursor:pointer;	
+}
 
 
 #backgroundPopupGeospatialSearch{
@@ -74,10 +79,9 @@ z-index:1;
    --------------------------------
  */
 
-
 #map_canvas1 {
 	float: left;
-	height: 400px;
+	height: 350px;
 	width: 400px;
 	padding: 10px;
 	border-left: 2px solid #666;
@@ -92,7 +96,7 @@ z-index:1;
 	padding: 10px;
 	float: right;
 	width: 200px;
-	height: 400px;
+	height: 350px;
 	border-top: 2px solid #666;
     border-bottom: 2px solid #666;    	
 	border-right: 2px solid #666;
@@ -138,4 +142,24 @@ z-index:1;
 
 #geoloc1 {
 	margin-bottom: 5px;
+}
+
+
+#geo-search-button {
+	font-size: 1.2em;
+	border: 1px solid #9c9c9c;
+	background: #CCFFFF;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	margin-right: 30px;
+	margin-top:20px;
+	cursor: pointer;
+	float:right
+	
+}
+
+#geo-search-button:hover {
+	background: #00FF00;
 }

@@ -32,6 +32,16 @@ AjaxSolr.AbstractManager = AjaxSolr.Class.extend(
   proxyUrl: null,
 
   /**
+   * If we want to proxy queries to the metadata files through a script.
+   *
+   * @field
+   * @public
+   * @type String
+   */
+  metadataproxyUrl: null,
+  
+  
+  /**
    * The default Solr servlet.
    *
    * @field

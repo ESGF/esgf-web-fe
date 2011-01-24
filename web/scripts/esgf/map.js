@@ -27,18 +27,22 @@ $(document).ready(function(){
 				markerGroup[i].setMap(null);
 				markerGroup[i] = null;
 		}
-		
+
 		num_of_markers = 0;
 		
 		// close info window
 		if (infowindow)
+		{
 			infowindow.close();
+	}
 		if (poly)
 			poly.setMap(null);
 		
+
 		// clear marker area content
 		$("#markers").html("");
 		$("#areaSelected").html("");
+		
 		
 		clearAreaChoice();
 	}

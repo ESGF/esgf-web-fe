@@ -16,10 +16,9 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     for (var i = 0, l = fq.length; i < l; i++) {
     	var fqString = new String(fq[i]);
     	
-    	
     	//check to see if this is a geospatial query (assuming 'east_degrees' is in every geo query)
     	//if it is -> need to change the current selection string
-    	/*
+    	
     	if(fqString.search('east_degrees') != -1)
     	{
     		//if there is no OR, it is an enclosed search
@@ -38,7 +37,7 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
 			     Math.round(parseFloat(boundingboxED).toFixed(2)) + ')';
     		}
     	}
-    	*/
+    	
     	//check to see if this is a temporal query (assuming 'datetime_start' is in every geo query)
     	/*
     	alert('the string: ' + fqString + ' ' + fqString.search('start') != -1);

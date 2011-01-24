@@ -47,18 +47,6 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
     		// initialize scrollable with mousewheel support
     		$(".scrollable").scrollable({ vertical: true, mousewheel: true });	
     		
-    		/*
-    		loadGoogleMapsScript();
-    		
-    		
-    	  	function loadGoogleMapsScript() {
-    	  		
-    	  		var script = document.createElement("script");
-    	  		script.type = "text/javascript";
-    	  		script.src = "http://maps.google.com/maps/api/js?sensor=false&callback=metadata_report_func";
-    	  		document.body.appendChild(script);
-    		}
-    		*/
     		id = globalRecordId;
     		var title = 'title';
     		metadata_report(id,title,metadatafilename,metadatafileformat);

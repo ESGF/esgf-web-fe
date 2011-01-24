@@ -23,7 +23,11 @@ AjaxSolr.GeospatialSearchWidget = AjaxSolr.AbstractWidget.extend({
 			// load the page specified in the trigger
 			wrap.load(this.getTrigger().attr("href"));
 			
-		}
+		},
+    
+    	onLoad: function() {
+    		alert(loaded);
+    	}
 
 	});
   },

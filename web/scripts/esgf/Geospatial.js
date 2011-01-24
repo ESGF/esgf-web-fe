@@ -1,4 +1,5 @@
 
+var boundingboxWD, boundingboxED, boundingboxSD, boundingboxND;
 
 $(document).ready(function(){
 
@@ -9,7 +10,6 @@ $(document).ready(function(){
 	//var cbounds = new google.maps.LatLngBounds();
 	var markerGroup = new Array(max_of_markers);
 	var poly;
-	var boundingboxWD, boundingboxED, boundingboxSD, boundingboxND;
 	
 	$("div#geo a[rel]").overlay({
 
@@ -29,7 +29,11 @@ $(document).ready(function(){
 		},
 
 		onLoad: function() {
+			
+			clearMarkers();
+			clearAreaChoice();
 			display_map();
+			
 		}
 
 
@@ -109,11 +113,24 @@ $(document).ready(function(){
 	});
 	
 	$('div#gButton').live('click',function() {
-		//alert('execute Geospatial Query');
+		
+		//erase any previous geospatial request
+		var fq = Manager.store.values('fq');
+	   
+	    for (var i = 0, l = fq.length; i < l; i++) {
+	    	//any previous filter query that contains 'east_degrees' can be assumed to be a geo search
+	    	if(fq[i].search('east_degrees') != -1) {
+	    		Manager.store.removeByValue('fq', fq[i]);
+	    	}
+	    }
+		
+		//execute the geospatial query
 		executeGeospatialQuery();
 		
 		Manager.doRequest(0);
 		//alert('submitted: ' + geoQueryString);
+		
+		
 		
 	});
 	

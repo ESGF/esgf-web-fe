@@ -6,6 +6,8 @@
 var globalRecordId = '';    		
 var metadatafileformat = 'OAI';
 
+var metadatafilename = 'ORNL-oai_dif.json';
+
 (function ($) {
 
 AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
@@ -18,7 +20,8 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
     $("a.met").click(function () {
     	var idStr = $(this).parent().find("a").attr("id");
 	  	globalRecordId = idStr;
-		//metadatafileformat = $(this).parent().find("a").attr("format");
+		metadatafileformat = $(this).parent().find("a").attr("format");
+		metadatafilename = $(this).parent().find("a").attr("metadata_url");
     });
     
     $(".m a[rel]").overlay({
@@ -56,7 +59,9 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
     	  		document.body.appendChild(script);
     		}
     		*/
-    		metadata_report_func();
+    		id = globalRecordId;
+    		var title = 'title';
+    		metadata_report(id,title,metadatafilename,metadatafileformat);
     	  	
     	}
 
@@ -83,20 +88,11 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
 })(jQuery);
 
 
-	//send the info to the metadata_report
-	//metadata_report(id,title,metadatafilename,metadatafileformat);
-	function metadata_report_func()
-	{
-		id = globalRecordId;
-		var title = 'title';
-		var metadatafilename = 'ORNL-oai_dif.json';
-		metadata_report(id,title,metadatafilename,metadatafileformat);
-	}
 	
 	
 	function metadata_report(id,title,metadatafilename,metadatafileformat)
 	{
-		//alert('id: ' + id + ' title: ' + title + ' metadatafileformat: ' + metadatafileformat);
+		//alert('id: ' + id + ' metadatafileformat: ' + metadatafileformat + ' metadatafilefname: ' + metadatafilename);
 		jQuery.ajax({
 			url: 'http://localhost:8080/esgf-web-fe/metadataproxy',
 			data: 'metadataformat=' + metadatafileformat + '&metadatafile=' + metadatafilename + '&id=' + id,

@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -75,14 +76,14 @@ public class MetadataExtractorController {
      * The metadata files should be accessed via some RESTful architecture
      */
     private String relay(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException {
-        LOG.debug("TEMP VAR: " + System.getenv("tmp"));
+        //LOG.debug("TEMP VAR: " + System.getenv("tmp"));
         String queryString = request.getQueryString();        
         LOG.debug("queryString=" + queryString);
         
         String requestUri = request.getRequestURI();
         LOG.debug("requestUri=" + requestUri);
 
-        LOG.debug("curr: " + METADATA_FILE_LOCATION);
+        //LOG.debug("curr: " + METADATA_FILE_LOCATION);
         
         if(METADATA_FILE_LOCATION.startsWith("/var/folders/"))
         {
@@ -92,10 +93,13 @@ public class MetadataExtractorController {
         
         String id = request.getParameter("id");
         String format = request.getParameter("metadataformat");
+        String filename = request.getParameter("metadatafile");
+        LOG.debug("URL: " + filename);
         
+        //URL metadataURL = new URL();
+        //File f = new File(METADATA_FILE_LOCATION + METADATA_FILE + ".xml");
+        URL f = new URL(filename);
         
-        File f = new File(METADATA_FILE_LOCATION + METADATA_FILE + ".xml");
-       
         String jsonContent = "";
         
         if(format.equalsIgnoreCase("oai"))
@@ -117,23 +121,13 @@ public class MetadataExtractorController {
         
         
         
-        /*LOG.debug("Solr URL = " + urlString);
-        LOG.debug("responseBody = " + responseBody); 
-        LOG.debug("queryString=" + queryString);
-        LOG.debug("Parameter names: " + request.getParameterNames().toString());
         
-        Enumeration paramNames = request.getParameterNames();
-        
-        while(paramNames.hasMoreElements()) {
-          String paramName = (String)paramNames.nextElement();
-          String paramValue = request.getParameter(paramName);
-          LOG.debug(paramName + " " + paramValue);
-        }*/
+        //jsonContent = "";
         
         return jsonContent;
     }
     
-    public String processOAI(File f,String id) throws JSONException
+    public String processOAI(URL f,String id) throws JSONException
     {
         
         SAXBuilder builder = new SAXBuilder();
@@ -201,7 +195,7 @@ public class MetadataExtractorController {
         return jsonContent;
     }
     
-    public String processFGDC(File f,String id) throws JSONException
+    public String processFGDC(URL f,String id) throws JSONException
     {
         SAXBuilder builder = new SAXBuilder();
         
@@ -252,7 +246,7 @@ public class MetadataExtractorController {
         return jsonContent;
     }
     
-    public String processCAS(File f,String id) throws JSONException
+    public String processCAS(URL f,String id) throws JSONException
     {
         String jsonContent = "";
         
@@ -261,7 +255,7 @@ public class MetadataExtractorController {
         return jsonContent;
     }
     
-    public String processTHREDDS(File f,String id) throws JSONException
+    public String processTHREDDS(URL f,String id) throws JSONException
     {
         String jsonContent = "";
         

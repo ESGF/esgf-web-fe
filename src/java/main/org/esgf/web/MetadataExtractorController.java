@@ -127,6 +127,51 @@ public class MetadataExtractorController {
         return jsonContent;
     }
     
+    public String processTHREDDS(URL f,String id) throws JSONException
+    {
+        String jsonContent = "";
+        
+        LOG.debug("IN THREDDS");
+        
+        SAXBuilder builder = new SAXBuilder();
+        
+        Element returnedEl = null;
+        String xmlContent = "";
+        try{
+            
+            Document document = (Document) builder.build(f);
+
+            Element rootNode = document.getRootElement();
+            Namespace ns = (Namespace)rootNode.getNamespace();
+            LOG.debug("Successful " + rootNode.getName());
+            returnedEl = rootNode;
+        }catch(IOException io){
+            System.out.println(io.getMessage());
+        }catch(JDOMException jdomex){
+           System.out.println(jdomex.getMessage());
+       }
+        if(returnedEl == null)
+        {
+            LOG.debug("Found no element match");
+        }
+        else
+        {
+            XMLOutputter outputter = new XMLOutputter();
+            xmlContent = outputter.outputString(returnedEl);
+            
+            JSONObject jo = XML.toJSONObject(xmlContent);
+            LOG.debug("json: \n" + jo.toString());
+    
+            jsonContent = jo.toString();
+        }
+        
+        
+        
+        
+        return jsonContent;
+    }
+    
+    
     public String processOAI(URL f,String id) throws JSONException
     {
         
@@ -255,14 +300,7 @@ public class MetadataExtractorController {
         return jsonContent;
     }
     
-    public String processTHREDDS(URL f,String id) throws JSONException
-    {
-        String jsonContent = "";
-        
-        LOG.debug("IN THREDDS");
-        
-        return jsonContent;
-    }
+    
 
 }
 

@@ -5,6 +5,21 @@
     
 <tiles-definitions>
 
+    <definition name="b_home" template="/WEB-INF/views/common/b_home.jsp">
+        <put-attribute name="subheader-24"  value=""/>
+        <put-attribute name="sidebar-4"  value=""/>
+        <put-attribute name="main-19"  value=""/>
+    </definition>
+
+    <definition name="b_live" extends="b_home">
+        <put-attribute name="subheader-24" 
+            value="/WEB-INF/views/search/_subheader24.jsp" />
+        <put-attribute name="sidebar-4"
+            value="/WEB-INF/views/search/_sidebar4.jsp" />
+        <put-attribute name="main-19"
+            value="/WEB-INF/views/search/_main19.jsp" />                    
+    </definition>
+
     <definition name="base" template="/WEB-INF/views/common/b_search.jsp">
         <put-attribute name="facets"  value=""/>
         <put-attribute name="search"  value=""/>

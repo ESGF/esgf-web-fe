@@ -21,21 +21,44 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     	
     	if(fqString.search('east_degrees') != -1)
     	{
-    		//if there is no OR, it is an enclosed search
-    		if(fqString.search('OR') == -1)
-        	{
-    			fqString = 'encloses bounding (N,W,S,E): (' + Math.round(parseFloat(boundingboxND).toFixed(2)) + ',' +
-    			Math.round(parseFloat(boundingboxWD).toFixed(2)) + ',' +
-    			Math.round(parseFloat(boundingboxSD).toFixed(2)) + ',' +
-    			Math.round(parseFloat(boundingboxED).toFixed(2)) + ')';
-        	}
-    		//otherwise it is an overlaps search
-    		else {
-    			fqString = 'overlaps bounding (N,W,S,E): (' + Math.round(parseFloat(boundingboxND).toFixed(2)) + ',' +
-			     Math.round(parseFloat(boundingboxWD).toFixed(2)) + ',' +
-			     Math.round(parseFloat(boundingboxSD).toFixed(2)) + ',' +
-			     Math.round(parseFloat(boundingboxED).toFixed(2)) + ')';
+    		if($("input[name='areaGroup']:checked").val() == 'circle') {
+    			//if there is no OR, it is an enclosed search
+        		if(fqString.search('OR') == -1)
+            	{
+        			fqString = 'encloses centroid (N,W,S,E): (' + Math.round(parseFloat(boundingboxND).toFixed(2)) + ',' +
+        			Math.round(parseFloat(boundingboxWD).toFixed(2)) + ',' +
+        			Math.round(parseFloat(boundingboxSD).toFixed(2)) + ',' +
+        			Math.round(parseFloat(boundingboxED).toFixed(2)) + ')';
+            	}
+        		//otherwise it is an overlaps search
+        		else {
+        			fqString = 'overlaps centroid (N,W,S,E): (' + Math.round(parseFloat(boundingboxND).toFixed(2)) + ',' +
+    			     Math.round(parseFloat(boundingboxWD).toFixed(2)) + ',' +
+    			     Math.round(parseFloat(boundingboxSD).toFixed(2)) + ',' +
+    			     Math.round(parseFloat(boundingboxED).toFixed(2)) + ')';
+        		}
+    			
+    			
     		}
+    		else {
+    			//if there is no OR, it is an enclosed search
+        		if(fqString.search('OR') == -1)
+            	{
+        			fqString = 'encloses bounding (N,W,S,E): (' + Math.round(parseFloat(boundingboxND).toFixed(2)) + ',' +
+        			Math.round(parseFloat(boundingboxWD).toFixed(2)) + ',' +
+        			Math.round(parseFloat(boundingboxSD).toFixed(2)) + ',' +
+        			Math.round(parseFloat(boundingboxED).toFixed(2)) + ')';
+            	}
+        		//otherwise it is an overlaps search
+        		else {
+        			fqString = 'overlaps bounding (N,W,S,E): (' + Math.round(parseFloat(boundingboxND).toFixed(2)) + ',' +
+    			     Math.round(parseFloat(boundingboxWD).toFixed(2)) + ',' +
+    			     Math.round(parseFloat(boundingboxSD).toFixed(2)) + ',' +
+    			     Math.round(parseFloat(boundingboxED).toFixed(2)) + ')';
+        		}
+    		}
+    			
+    		
     	}
     	
     	//check to see if this is a temporal query (assuming 'datetime_start' is in every geo query)

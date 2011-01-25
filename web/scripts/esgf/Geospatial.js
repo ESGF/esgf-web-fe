@@ -7,7 +7,7 @@ $(document).ready(function(){
 	var num_of_markers = 0;
 	var max_of_markers = 3;
 	var bounds;
-	//var cbounds = new google.maps.LatLngBounds();
+	var cbounds = new google.maps.LatLngBounds();
 	var markerGroup = new Array(max_of_markers);
 	var poly;
 	
@@ -412,6 +412,7 @@ $(document).ready(function(){
 			cbounds.extend(pint);
 		}
 		
+		
 		points.push(points[0]); // close circle
 		
 		poly = new google.maps.Polygon({
@@ -586,7 +587,16 @@ $(document).ready(function(){
 		
 		var west_degrees, east_degrees, north_degrees, south_degrees,
 		west_degreesFQ, east_degreesFQ, north_degreesFQ, south_degreesFQ; 
-
+		
+		if($("input[name='areaGroup']:checked").val() == 'circle') {
+			//alert('circle?');
+			//alert('cbounds: ' + cbounds);
+			//alert('center = ' + markerGroup[0].getPosition());
+			bounds = new google.maps.LatLngBounds();
+			radius = $("input[name='radius']").val();
+			//alert('radius: ' + radius);
+			
+		}
 		var sw = bounds.getSouthWest();
 		var ne = bounds.getNorthEast();
 		
@@ -668,10 +678,21 @@ $(document).ready(function(){
 	function overlaps()
 	{
 
+		//alert('in overlaps checking to see if it is circle input');
+		
+		if($("input[name='areaGroup']:checked").val() == 'circle') {
+			//alert('circle?');
+			//alert('cbounds: ' + cbounds);
+			//alert('center = ' + markerGroup[0].getPosition());
+			bounds = new google.maps.LatLngBounds();
+			radius = $("input[name='radius']").val();
+			//alert('radius: ' + radius);
+			
+		}
+		
 		geoQueryString = '';
 		
 		//alert('overlaps sq: ' + ($("input[name='areaGroup']:checked").val() == 'square'));
-		
 		var sw = bounds.getSouthWest();
 		var ne = bounds.getNorthEast();
 		//this is the min long 

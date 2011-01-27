@@ -7,9 +7,9 @@
 (function ($) {
 	
 	Manager = new AjaxSolr.Manager({
-		proxyUrl: 'http://localhost:8080/esgf-web-fe/solrproxy',
+		proxyUrl: '/esgf-web-fe/solrproxy',
 		//proxyUrl: 'http://esg-gw.ornl.teragrid.org:8080/esgf-web-fe/solrproxy'
-		metadataProxyUrl: 'http://localhost:8080/esgf-web-fe/metadataproxy'
+		metadataProxyUrl: '/esgf-web-fe/metadataproxy'
 	});
 	
 	Manager.addWidget(new AjaxSolr.ResultWidget({

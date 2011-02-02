@@ -50,17 +50,15 @@
    	<script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.theme.js" />"> </script>
     
-	<!-- standalone page styling (can be removed) --> 
-	<!--<link rel="stylesheet" type="text/css" href="http://static.flowplayer.org/tools/css/standalone.css"/>	
- 	<link rel="stylesheet" type="text/css" href="http://static.flowplayer.org/tools/css/overlay-apple.css"/> 
-	
-	
-    
-    -->
     <!--
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans&subset=latin' 
         rel='stylesheet' type='text/css'>
     -->
+    
+    <link rel="stylesheet"
+        href="<c:url value="/styles/cupertino/jquery-ui-1.8.5.custom.css" />"
+        type="text/css" media="screen">
+        
     <link rel="stylesheet" 
         href="<c:url value="/styles/blueprint/screen.css" />" 
         type="text/css" media="screen, projection">

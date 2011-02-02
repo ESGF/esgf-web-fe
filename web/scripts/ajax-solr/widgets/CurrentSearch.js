@@ -22,6 +22,7 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     	if(fqString.search('east_degrees') != -1)
     	{
     		if($("input[name='areaGroup']:checked").val() == 'circle') {
+    			
     			//if there is no OR, it is an enclosed search
         		if(fqString.search('OR') == -1)
             	{

@@ -15,9 +15,9 @@
 <div class="round-box"> 
 <div class="round-header round-top"> Search Constraints</div>           
 <div class="round-content"> 
-            <div id="temporal"><a href="#"> Temporal</a> </div>
-            <div id="geo"><a href="<c:url value="/scripts/esgf/geospatial_overlay.htm" />" 
-            rel="#geospatial_overlay" style="text-decoration:none"> Geospatial</a> </div>
+
+    <div id="temporal"><a href="<c:url value="/scripts/esgf/temporal_overlay.html" />" rel="#temporal_overlay" style="text-decoration:none"> Temporal</a> </div>
+    <div id="geo"><a href="<c:url value="/scripts/esgf/geospatial_overlay.htm" />" rel="#geospatial_overlay" style="text-decoration:none"> Geospatial</a> </div>
 </div>             
 </div> 
 

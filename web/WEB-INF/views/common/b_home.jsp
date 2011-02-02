@@ -13,6 +13,13 @@
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery-ui-1.8.5.min.js" /> "></script> 
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.tools.min.js" /> "></script> 
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.livequery.js" /> "></script> 
+    <script type="text/javascript" src="<c:url value="/scripts/esgf/logger_1.0.0.js" /> "></script> 
+    
+     
+    <script type="text/javascript"
+        src="http://maps.google.com/maps/api/js?sensor=false">
+    </script>
+    
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.autocomplete.js" /> "></script> 
     
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/Core.js" />"> </script>
@@ -35,17 +42,22 @@
     
     
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Metadata.js" />"> </script>
-                
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/FacetBrowser.js" />"> </script>
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Temporal.js" />"> </script>
     
+    <script type="text/javascript" src="<c:url value="/scripts/esgf/Geospatial.js" />"> </script>
     
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.theme.js" />"> </script>
-
- 
- 
-    <link rel="stylesheet" type="text/css" href="http://static.flowplayer.org/tools/css/overlay-apple.css"/> 
     
-
+    <!--
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans&subset=latin' 
+        rel='stylesheet' type='text/css'>
+    -->
+    
+    <link rel="stylesheet"
+        href="<c:url value="/styles/cupertino/jquery-ui-1.8.5.custom.css" />"
+        type="text/css" media="screen">
         
     <link rel="stylesheet" 
         href="<c:url value="/styles/blueprint/screen.css" />" 
@@ -68,10 +80,10 @@
     
     <link rel="stylesheet" 
         href="<c:url value="/styles/esg-simple.css" />" 
-        type="text/css" media="screen, projection">    
+        type="text/css" media="screen, projection">
         
-        
-    <title>ESGF Gateway Portal</title>
+    
+    <title> ESGF Portal</title>
     
 </head>
 
@@ -80,7 +92,14 @@
 
 <div class="container">
 
-   
+    <!-- overlays -->
+    <div class="apple_overlay" id="temporal_overlay"><div class="contentWrap"></div></div>
+    <div class="apple_overlay" id="geospatial_overlay"><div class="contentWrap"></div></div>
+    <div class="apple_overlay" id="metadata_overlay"><div class="contentWrap"></div></div>
+    
+    <div id="temp-browse"></div>
+    <div id="metadata-browse"></div>
+       
 <div id="header" class="span-24 last">
     <div class="span-16 left">
     <span class="tabitem"> <a href="#"> Home </a></span> 

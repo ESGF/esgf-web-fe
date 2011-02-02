@@ -31,11 +31,9 @@ $(document).ready(function(){
 		},
 
 		onLoad: function() {
-			
 			clearMarkers();
 			clearAreaChoice();
 			display_map();
-			
 		}
 
 
@@ -90,18 +88,17 @@ $(document).ready(function(){
 				return false;
 			}
 
-			
-			if ($("#circleInputs1").is(":hidden"))
+			if ($("#circleInputs1").is(":hidden")) {
 				$("#circleInputs1").slideToggle('fast');
+			}
 				
 			// put out something
 			$("#areaSelected11").html('<p class="legend"> Center of Interest </p> + ' 
 					+ markerGroup[0].getPosition().toString());
-			
-			
-			if ($("#areaSelected1").is(":hidden"))
+					
+			if ($("#areaSelected1").is(":hidden")) {
 				$("#areaSelected1").slideToggle('fast');
-			
+			}
 
 			redraw_circle();
 			
@@ -109,9 +106,7 @@ $(document).ready(function(){
 	});
 
 	$('input[name="redraw_circle"]').live('click',function(e) {
-		
 		redraw_circle();
-		
 	});
 	
 	$('div#gButton').live('click',function() {
@@ -195,13 +190,9 @@ $(document).ready(function(){
 	}
 
 	function clearMarkers() {
-		//alert('in clear markers');
 		for (var i=0; i < max_of_markers; i++) {
-			//alert('clearing marker: ' + i);
-			if (markerGroup[i]) 
-			{
+			if (markerGroup[i]) {
 				markerGroup[i].setMap(null);
-				//alert('confirm: ' + i);
 				markerGroup[i] = null;
 			}
 		}
@@ -212,9 +203,10 @@ $(document).ready(function(){
 		if (infowindow){
 			infowindow.close();
 		}
-		if (poly)
+		if (poly) {
 			poly.setMap(null);
-		
+		}
+			
 		// clear marker area content
 		$("#markers1").html("");
 		$("#areaSelected11").html("");
@@ -259,9 +251,10 @@ $(document).ready(function(){
 		
 		$("#markers1").append(content);
 		
-		if ($("#markers1").is(":hidden")) 
+		if ($("#markers1").is(":hidden")) {
 			$("#markers1").slideToggle('fast');
-		
+		}
+			
 	}
 
 
@@ -312,8 +305,6 @@ $(document).ready(function(){
 								
 				// refresh info to panel
 				appendMarker(marker,  num_of_markers);
-				
-
 				
 			}
 		});
@@ -526,7 +517,6 @@ $(document).ready(function(){
 		var ndinput = searchForm["north_degrees"];
 		ndinput.value = neLat;
 		
-		//geosearch();
 	}
 
 
@@ -586,8 +576,7 @@ $(document).ready(function(){
 		console.log('End execute geospatial query');
 	}
 
-	function encloses(geoSearchType)
-	{
+	function encloses(geoSearchType) {
 		console.log('In encloses ' + geoSearchType);
 
 		console.log('Bounds: ' + bounds);
@@ -682,23 +671,16 @@ $(document).ready(function(){
 			console.log(geoQueryString);
 		}
 		
-		
-		
 		Manager.store.addByValue('fq',geoQueryString);
 		
 		console.log('End encloses');
 		
-		//Manager.doRequest(0);
 	}
 
 	
 	
 	
-	function overlaps(geoSearchType)
-	{
-		console.log('In overlaps');
-		
-		console.log('Bounds: ' + bounds);
+	function overlaps(geoSearchType) {
 
 		geoQueryString = '';
 		
@@ -706,8 +688,6 @@ $(document).ready(function(){
 		if(geoSearchType == 'circle') { // geosearch type is a bounding box
 			var theCenter = markerGroup[0];
 			centroidCenter = markerGroup[0].getPosition();
-			console.log('Center  lat: ' + theCenter.getPosition().lat()) ;
-			console.log('Bounds: ' + bounds);
 			
 			var sw = cbounds.getSouthWest();
 			var ne = cbounds.getNorthEast();
@@ -794,9 +774,6 @@ $(document).ready(function(){
 		                 'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
 		                 'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
 				
-				
-			
-			console.log(geoQueryString);
 			
 		} else {
 			var sw = bounds.getSouthWest();
@@ -887,12 +864,11 @@ $(document).ready(function(){
 			
 			
 		}
+
+		//console.log(geoQueryString);
 		Manager.store.addByValue('fq',geoQueryString);
 		
-		console.log('End encloses');
-	    console.log('End overlaps');
 		
-	         
 	}
 
 	

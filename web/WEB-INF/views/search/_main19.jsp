@@ -1,3 +1,13 @@
+<script type="text/javascript">
+
+    
+    $(function(){
+        $('#myTabs').tabs();
+    });
+    
+    
+</script>
+
 
 
 <div class="span-19 last">

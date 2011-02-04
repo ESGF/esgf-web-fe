@@ -12,16 +12,8 @@
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery-1.4.2.min.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery-ui-1.8.5.min.js" /> "></script> 
 
-    <!--          
-    <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.tools.min.js" /> "></script> 
-     -->
-
-    <script type="text/javascript">
-        
-    $(function(){
-        $('#myTabs').tabs();
-    });
-    </script>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery/overlay.js" /> "></script> 
+    <script type="text/javascript" src="<c:url value="/scripts/jquery/overlay.apple.js" /> "></script> 
     
      
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.livequery.js" /> "></script> 

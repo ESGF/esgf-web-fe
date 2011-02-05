@@ -24,7 +24,7 @@
 
     
 	<!-- Configures Spring -->
-    <import resource="mvc-config.xml" />
+    <!-- <import resource="mvc-config.xml" /> -->
     <import resource="facet-config.xml" />
     <import resource="service-config.xml" />
     

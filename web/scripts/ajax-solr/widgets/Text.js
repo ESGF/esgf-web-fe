@@ -20,4 +20,6 @@ AjaxSolr.TextWidget = AjaxSolr.AbstractFacetWidget.extend({
   }
 });
 
+
+
 })(jQuery);

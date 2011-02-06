@@ -18,6 +18,9 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
    */
   field: null,
 
+  
+  
+  
   /**
    * @returns {Boolean} Whether any filter queries have been set using this
    *   widget's facet field.

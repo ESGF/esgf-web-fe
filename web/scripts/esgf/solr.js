@@ -4,6 +4,9 @@
  * fwang2@ornl.gov
  * 
  */
+
+
+
 (function ($) {
 	
 	Manager = new AjaxSolr.Manager({
@@ -36,30 +39,34 @@
 		  target: '#current-selection'
 		}));
 	
+	Manager.addWidget(new AjaxSolr.AutocompleteWidget({
+		  id: 'text',
+		  target: '#search-box',
+		  field: 'text',
+		  fields: [ 'project', 'model' , 'experiment', 'realm', 'instrument', 'cf_variable' , 'gcmd_variable']
+		}));
+
+	
 	Manager.addWidget(new AjaxSolr.MetadataWidget({
 		  id: 'metadata-browse',
 		  target: '#metadata-browse'
 		}));
 	
-	Manager.addWidget(new AjaxSolr.FacetBrowserWidget({
-		  id: 'facet-browse',
-		  target: '#facet-browse'
-		}));
+	
 	
 	Manager.addWidget(new AjaxSolr.TemporalWidget({
 		  id: 'temp-browse',
 		  target: '#temp-browse'
 		}));
+	
+	
 	/*Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
 		  id: 'geo_browse',
 		  target: '#geo_browse'
 		}));*/
 	
 	/*
-	Manager.addWidget(new AjaxSolr.FacetBrowserWidget({
-		  id: 'facet-browse',
-		  target: '#facet-browse'
-		}));
+	
 	*/
 //	Manager.addWidget(new AjaxSolr.TextWidget({
 //		  id: 'text',
@@ -67,12 +74,7 @@
 //		  field: 'allText'
 //		}));
 
-	Manager.addWidget(new AjaxSolr.AutocompleteWidget({
-		  id: 'text',
-		  target: '#search-box',
-		  field: 'text',
-		  fields: [ 'project' ]
-		}));
+	
 
 	
 	/*Manager.addWidget(new AjaxSolr.CalendarWidget({
@@ -83,8 +85,10 @@
 	
 	Manager.init();
 	
-    var fields = [ 'project'];
+    var fields = ['project' , 'model', 'experiment', 'frequency', 'realm', 'instrument', 'variable', 'cf_variable', 'gcmd_variable'];
  
+    
+    
     var params = {
     		  'facet': true,
     		  'facet.field': fields,
@@ -106,6 +110,14 @@
       }));
     }
     
+    
+    for (var i = 0, l = fields.length; i < l; i++) {
+    	  Manager.addWidget(new AjaxSolr.FacetBrowserWidget({
+    	    id: fields[i],
+    	    target: '#' + fields[i],
+    	    field: fields[i]
+    	  }));
+    	}
 
 	Manager.store.addByValue('q', '*:*');	
 	
@@ -122,3 +134,30 @@
 	
 
 })(jQuery);
+
+
+$(document).ready(function(){
+	
+	/* scroll wheel for metadata and facet overlays */
+	$(".scrollable").scrollable({ vertical: true, mousewheel: true });	
+	
+	/* radio buttons for sorting facets */
+	$("#facetSort").buttonset();
+	
+	/* event trigger for facet sorting buttons */
+    $("input[name='sorter']").change(function() {
+		if ($("input[name='sorter']:checked").val() == 'sortbyabc') {
+			Manager.sortType = 'sortbyabc';
+			Manager.doRequest(0);
+		} else {
+			Manager.sortType = 'sortbycount';
+			Manager.doRequest(0);
+		}
+	});
+  
+	
+	
+    //This is a widget that is not used as of yet...but may be added later
+	$("#s1").dropdownchecklist();
+	  
+});

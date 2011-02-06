@@ -18,6 +18,7 @@ AjaxSolr.TemporalWidget = AjaxSolr.AbstractWidget.extend({
 		onBeforeLoad: function() {
 			
 			$('.apple_overlay').css({'width' : '440px'});
+			//$('.apple_overlay').css({'background-image' : 'url(../images/metadata_overlay/white.png'});
 			
 			
 			// grab wrapper element inside content

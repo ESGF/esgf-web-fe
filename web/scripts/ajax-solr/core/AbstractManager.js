@@ -40,6 +40,14 @@ AjaxSolr.AbstractManager = AjaxSolr.Class.extend(
    */
   metadataproxyUrl: null,
   
+  /**
+   * The manner in which facet values are sorted
+   * @field
+   * @public
+   * @type String
+   */
+  sortType: 'sortbycount',
+  
   
   /**
    * The default Solr servlet.

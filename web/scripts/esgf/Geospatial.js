@@ -13,6 +13,8 @@ $(document).ready(function(){
 	var markerGroup = new Array(max_of_markers);
 	var poly;
 	
+
+	
 	$("div#geo a[rel]").overlay({
 
 		mask: {opacity: 0.5, color: '#000'},
@@ -21,7 +23,7 @@ $(document).ready(function(){
 		onBeforeLoad: function() {
 			
 			$('.apple_overlay').css({'width' : '640px'});
-			
+			$('.overlay_header_buttons').hide();
 			
 			// grab wrapper element inside content
 			var wrap = this.getOverlay().find(".contentWrap");

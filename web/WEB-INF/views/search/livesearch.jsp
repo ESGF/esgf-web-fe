@@ -21,6 +21,7 @@
     </script>
     
     <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.autocomplete.js" /> "></script> 
+    <script type="text/javascript" src="<c:url value="/scripts/jquery/ui.dropdownchecklist-1.2qa-min.js" /> "></script> 
     
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/Core.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/Parameter.js" />"></script>   
@@ -39,24 +40,20 @@
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/CurrentSearch.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Text.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/AutoComplete.js" />"> </script>
-    
-    
-    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Metadata.js" />"> </script>
   	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/FacetBrowser.js" />"> </script>
-    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Temporal.js" />"> </script>
-    
     <script type="text/javascript" src="<c:url value="/scripts/esgf/Geospatial.js" />"> </script>
+  	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Metadata.js" />"> </script>
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Temporal.js" />"> </script>
+   
+  	<!--
+  	<script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/TagClouds.js" />"> </script>
     
-   	<script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
+    
+    
+  	
+   	--><script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.theme.js" />"> </script>
     
-	<!-- standalone page styling (can be removed) --> 
-	<!--<link rel="stylesheet" type="text/css" href="http://static.flowplayer.org/tools/css/standalone.css"/>	
- 	<link rel="stylesheet" type="text/css" href="http://static.flowplayer.org/tools/css/overlay-apple.css"/> 
-	
-	
-    
-    -->
     <!--
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans&subset=latin' 
         rel='stylesheet' type='text/css'>
@@ -82,46 +79,105 @@
     
     <link rel="stylesheet" 
         href="<c:url value="/styles/esg-simple.css" />" 
-        type="text/css" media="screen, projection"><!--
-        
+        type="text/css" media="screen, projection">
     
-
-		
--->
-	<title>ESG Search</title>
+   
+    
+    <link rel="stylesheet" 
+        href="<c:url value="/styles/overlay.css" />" 
+        type="text/css" media="screen, projection">
+        
+    <link rel="stylesheet" 
+        href="<c:url value="/styles/facet_overlay.css" />" 
+        type="text/css" media="screen, projection">
+        
+    <!-- for the buttons -->
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+    
+    <link rel="stylesheet" 
+        href="/esgf-web-fe/styles/geospatial_overlay.css" 
+        type="text/css" media="screen, projection" />
+    
+    <link rel="stylesheet" 
+        href="/esgf-web-fe/styles/metadata_overlay.css" 
+        type="text/css" media="screen, projection" />
+       
+    <link rel="stylesheet" 
+        href="/esgf-web-fe/styles/temporal_overlay.css" 
+        type="text/css" media="screen, projection" />   
+     
+   
+    
+    <!--
+    <link rel="stylesheet" href="/esgf-web-fe/styles/cupertino/jquery-ui-1.8.5.custom.css" type="text/css" media="screen, projection" />
+  
+	--><title>ESG Search</title>
 </head>
 
 <body>
 
+   
 
+	
+					
 	
 	<div class="container">
 
 	
-
-
-    <!-- overlays -->
-    <div class="apple_overlay" id="temporal_overlay"><div class="contentWrap"></div></div>
-    <div class="apple_overlay" id="geospatial_overlay"><div class="contentWrap"></div></div>
-    <div class="apple_overlay" id="metadata_overlay"><div class="contentWrap"></div></div>
-    
-    <!--<div id="facet-browse"></div>
-    <div id="temp-browse"></div>
-	<div id="metadata-browse"></div>
-
-		-->
-	<div id="header" class="span-24 last">
-		<div class="span-16 left">
-			<span class="tabitem"> <a href="#"> Home </a></span>   
-			<span class="tabitem"> <a href="#"> Browse </a> </span>
-			<span class="tabitem"> <a href="#"> Analysis</a></span>
-		</div>
+ 		<!-- overlays -->
+		<div class="apple_overlay" id="facet_overlay">
+   			 <div class="overlay_header">
+    			<div class="overlay_header_title">
+    				Category Browser
+    			</div>
+    			<div class="overlay_header_buttons">
+					<div id="facetSort">
+						<input type="radio" id="sortbycount" name="sorter" checked="checked" value="sortbycount" /><label for="sortbycount">Sort By Count</label>
+						<input type="radio" id="sortbyabc" name="sorter" value="sortbyabc" /><label for="sortbyabc">Sort By ABC</label>
+					</div>
+    			</div>
+    		</div>
+    		<div class="scrollable facet_verticalscroll">   
+	 			<!-- root element for the scrollable elements -->
+  
+  				<!-- root element for the items --> 
+				<div class="facet_items"> 
+					<div id="project"></div>
+					<div id="model"></div>
+					<div id="experiment"></div>
+					<div id="frequency"></div>
+					<div id="realm"></div>
+					<div id="instrument"></div>
+					<div id="variable"></div>
+					<div id="cf_variable"></div>
+					<div id="gcmd_variable"></div>
+					
+				</div> 
+	 		</div>
+    		
+		</div> 
+	    
+	    <div class="apple_overlay" id="temporal_overlay"><div class="contentWrap"></div></div>
+	    <div class="apple_overlay" id="geospatial_overlay"><div class="contentWrap"></div></div>
+	    <div class="apple_overlay" id="metadata_overlay"><div class="contentWrap"></div></div>
+   
+		<div id="temp-browse"></div>
+		<div id="metadata-browse"></div>
+			
+	
+	
+		<div id="header" class="span-24 last">
+			<div class="span-16 left">
+				<span class="tabitem"> <a href="#"> Home </a></span>   
+				<span class="tabitem" id="facet"><a href="#" rel="#facet_overlay">Browse</a></span>
+				<span class="tabitem"> <a href="#"> Analysis</a></span>
+			</div>
 		
 		    <div class="prepend-4 span-4 last">
-		    <span class="tabitem"> <a href="#"> Search settings</a></span>
-		    <span class="tabitem"> <a href="#"> Sign in </a></span>
+			    <span class="tabitem"> <a href="#"> Search settings</a></span>
+			    <span class="tabitem"> <a href="#"> Sign in </a></span>
 		    </div>
-		<hr/>
+			<hr/>
 		</div>
 
 
@@ -183,9 +239,10 @@
 		  
 		    <div class="round-header round-top">Project Tags</div> 
 		    
+		    <!--  
 		    <div id="project" class="round-content">
 		    </div>
-		    
+		    -->
 		    
 		    </div> <!--  sidebar -->
 		  </div> <!--  Project tags -->

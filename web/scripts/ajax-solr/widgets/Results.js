@@ -27,7 +27,6 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
   },
 
   facetHandler: function (facet_field, facet_value) {
-	    alert('in facethandler...');
 	    var self = this;
 	    return function () {
 	      self.manager.store.remove('fq');

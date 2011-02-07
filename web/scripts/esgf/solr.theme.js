@@ -31,11 +31,8 @@ AjaxSolr.theme.prototype.result = function (doc, snippet) {
 	var datetime_stopStr = 'datetime_stop="' + doc.datetime_stop + '" ';
 	
 	var allStr = idStr + titleStr + urlStr + formatStr +  metadataURLStr + descriptionStr + westDegreesStr + eastDegreesStr + northDegreesStr + southDegreesStr + datetime_startStr + datetime_stopStr;
-	//var output = '<div class="search-entry"><h4 class="desc"><a href="#" class="met">' + doc.title + '</a><div ' + allStr + '></div></h4>' ;
-	//var output = '<div class="search-entry"><h4 class="desc"><a href="#">' + doc.title + '</a></h4>' ;
-	  
-  	//var output = '<div class="search-entry"><h4 class="desc"><a href="#">' + doc.title + '</a><div ' + allStr + '></div></h4>' ;
-  	var output = '<div class="search-entry"><h4 class="desc"><div class="m"><a href="#"' + allStr + '></a><a href="/esgf-web-fe/scripts/esgf/metadata_overlay.html" rel="#metadata_overlay" class="met" style="text-decoration:none">' + doc.title + '</a></div></div></h4>' ;
+	
+	var output = '<div class="search-entry"><h4 class="desc"><div class="m"><a href="#"' + allStr + '></a><a href="/esgf-web-fe/scripts/esgf/metadata_overlay.html" rel="#metadata_overlay" class="met" style="text-decoration:none">' + doc.title + '</a></div></div></h4>' ;
   	output += '<p id="links_' + doc.id + '" class="links"></p>';
   	output += '<p>' + snippet + '</p></div>';
   	
@@ -64,8 +61,13 @@ AjaxSolr.theme.prototype.snippet = function (doc) {
 	return output;
 };
 
+AjaxSolr.theme.prototype.facet_browser_title = function(value) {
+	return $('<h1>' + 'Facet Browser' + '<\h1>');
+};
 
-
+AjaxSolr.theme.prototype.facet_title = function(value) {
+	return $('<span class="facet_title"><h3>' + value + '</h3></span>');
+};
 
 AjaxSolr.theme.prototype.tag = function (value, weight, handler) {
   return $('<a href="#" class="tagcloud_item"/>').text(value).addClass('tagcloud_size_' + weight).click(handler);
@@ -74,6 +76,7 @@ AjaxSolr.theme.prototype.tag = function (value, weight, handler) {
 AjaxSolr.theme.prototype.facet_link = function (value, handler) {
   return $('<a href="#"/>').text(value).click(handler);
 };
+
 
 AjaxSolr.theme.prototype.no_items_found = function () {
   return 'no items found in current selection';

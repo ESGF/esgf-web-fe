@@ -26,5 +26,8 @@
 
 <div class="round-box">
 <div class="round-header round-top">Project Tags</div> 
+
+<!--  
 <div id="project" class="round-content"></div>
+-->
 </div> 

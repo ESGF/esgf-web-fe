@@ -9,10 +9,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
-    <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery-1.4.2.min.js" /> "></script>
-    <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery-ui-1.8.5.min.js" /> "></script> 
-    <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.tools.min.js" /> "></script> 
-    <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.livequery.js" /> "></script> 
+    <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/jquery-1.4.2.min.js" /> "></script>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/jquery-ui-1.8.5.min.js" /> "></script> 
+    <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/jquery.tools.min.js" /> "></script> 
+    <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/jquery.livequery.js" /> "></script> 
     <script type="text/javascript" src="<c:url value="/scripts/esgf/logger_1.0.0.js" /> "></script> 
     
      
@@ -20,7 +20,9 @@
         src="http://maps.google.com/maps/api/js?sensor=false">
     </script>
     
-    <script type="text/javascript" src="<c:url value="/scripts/jquery/jquery.autocomplete.js" /> "></script> 
+    
+    
+    <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/jquery.autocomplete.js" /> "></script> 
     
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/Core.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/core/Parameter.js" />"></script>   
@@ -39,10 +41,10 @@
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/CurrentSearch.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Text.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/AutoComplete.js" />"> </script>
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/FacetBrowser.js" />"> </script>
     
     
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Metadata.js" />"> </script>
-    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/FacetBrowser.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Temporal.js" />"> </script>
     
     <script type="text/javascript" src="<c:url value="/scripts/esgf/Geospatial.js" />"> </script>
@@ -83,6 +85,31 @@
         type="text/css" media="screen, projection">
         
     
+    <!-- for the sorting buttons -->
+    <!--  
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    -->
+    
+    <link rel="stylesheet" 
+        href="<c:url value="/styles/overlay.css" />" 
+        type="text/css" media="screen, projection">
+        
+    <link rel="stylesheet" 
+        href="<c:url value="/styles/facet_overlay.css" />" 
+        type="text/css" media="screen, projection">
+        
+    <link rel="stylesheet" 
+        href="<c:url value="/styles/geospatial_overlay.css" />" 
+        type="text/css" media="screen, projection">
+    
+    <link rel="stylesheet" 
+        href="<c:url value="/styles/metadata_overlay.css" />" 
+        type="text/css" media="screen, projection">
+        
+    <link rel="stylesheet" 
+        href="<c:url value="/styles/temporal_overlay.css" />" 
+        type="text/css" media="screen, projection">
+        
     <title> ESGF Portal</title>
     
 </head>
@@ -97,13 +124,50 @@
     <div class="apple_overlay" id="geospatial_overlay"><div class="contentWrap"></div></div>
     <div class="apple_overlay" id="metadata_overlay"><div class="contentWrap"></div></div>
     
+    <!-- facet overlay -->
+    <!-- need to replace the following with a separate html -->
+    <div class="apple_overlay" id="facet_overlay">
+    	<div class="overlay_header">
+    		<div class="overlay_header_title">
+    			Category Browser
+    		</div>
+    		<div class="overlay_header_buttons">
+    			<div id="facetSort">
+    				<input type="radio" id="sortbycount" name="sorter" checked="checked" value="sortbycount" /><label for="sortbycount">Sort By Count</label>
+    				<input type="radio" id="sortbyabc" name="sorter" value="sortbyabc" /><label for="sortbyabc">Sort By ABC</label>
+    			</div>
+    		</div>
+    	</div>
+    	<div class="scrolable facet_verticalscroll">
+    		<!--  root element for the scrollable elements -->
+    		
+    		<!--  root element for the items -->
+    		<div class="facet_items">
+    			<div id="project"></div>
+    			<div id="model"></div>
+    			<div id="experiment"></div>
+    			<div id="frequency"></div>
+    			<div id="realm"></div>
+    			<div id="instrument"></div>
+    			<div id="variable"></div>
+    			<div id="cf_variable"></div>
+    			<div id="gcmd_variable"></div>
+    		</div>
+    		
+    	</div>
+    </div>
+    
+    
+    
+    <!-- end facet overlay -->
+    
     <div id="temp-browse"></div>
     <div id="metadata-browse"></div>
        
 <div id="header" class="span-24 last">
     <div class="span-16 left">
     <span class="tabitem"> <a href="#"> Home </a></span> 
-    <span class="tabitem"> <a href="#"> Browse </a> </span>
+    <span class="tabitem" id="facet"> <a href="#" rel="#facet_overlay"> Browse </a> </span>
     <span class="tabitem"> <a href="#"> Analysis</a></span>
     </div>
 

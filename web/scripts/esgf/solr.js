@@ -158,6 +158,6 @@ $(document).ready(function(){
 	
 	
     //This is a widget that is not used as of yet...but may be added later
-	$("#s1").dropdownchecklist();
+	//$("#s1").dropdownchecklist();
 	  
 });

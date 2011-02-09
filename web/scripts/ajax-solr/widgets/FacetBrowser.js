@@ -16,7 +16,6 @@ AjaxSolr.FacetBrowserWidget = AjaxSolr.AbstractFacetWidget.extend({
 			
 	  			$('.apple_overlay').css({'width' : '640px'});
 			
-			
 				// grab wrapper element inside content
 				var wrap = this.getOverlay().find(".contentWrap");
 	
@@ -64,11 +63,12 @@ AjaxSolr.FacetBrowserWidget = AjaxSolr.AbstractFacetWidget.extend({
 			for (var i = 0, l = objectedItems.length; i < l; i++) {
 				  var facetTextValue = objectedItems[i].facet + ' (' + objectedItems[i].count + ') ';
 				  if(i != objectedItems.length-1)
-					  facetTextValue += '|'; 
+					  //facetTextValue += '| '; 
 			      var facet = objectedItems[i].facet;
-			      //console.log('i: ' + i + ' textLength: ' + textLength);
-			      //facet += " (" + objectedItems[i].count + ") |";
+			      //console.log('i: ' + i + ' textLengthu: ' + textLength);
+			      //facet += " (" + objectedItems[i].cont + ") |";
 			      $(this.target).append($('<a href="#" class="tag_item" />').text(facetTextValue).click(this.clickHandler(facet)));
+			      $(this.target).append(' | ');
 			    };
 			$(this.target).append('<\p>');
 	  }

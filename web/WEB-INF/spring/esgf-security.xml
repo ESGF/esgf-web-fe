@@ -61,7 +61,7 @@
 		     logout-success-url="/"
 		     invalidate-session="true"
 		-->		
-		<security:logout />
+		<security:logout></security:logout>
     	
 	</security:http>
 		

@@ -2,11 +2,6 @@
  * Results.js
  */
 
-
-
-
-
-
 (function ($) {
 	
 	
@@ -27,7 +22,7 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
   },
 
   facetHandler: function (facet_field, facet_value) {
-	    alert('in facethandler...');
+	    console.log('in facethandler...');
 	    var self = this;
 	    return function () {
 	      self.manager.store.remove('fq');
@@ -40,42 +35,27 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
   
   afterRequest: function () {
 	  
-
 	    $(this.target).empty();
 	    for (var i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
 	  
 	      var doc = this.manager.response.response.docs[i];
-	      //if( i < 2)
-		   // { 
+	      
 	      if(postSolrProcessing(doc)) {
-	    	  console.log('\t\t\t\tKeep this record');
-	    	  $(this.target).append(AjaxSolr.theme('result', doc, AjaxSolr.theme('snippet', doc)));
-		      //$(this.target).append(AjaxSolr.theme('result2', doc, AjaxSolr.theme('snippet2', doc)));
-		      var items = [];
+	    	  $(this.target).append(
+	    			  AjaxSolr.theme('result', doc, 
+	    			  AjaxSolr.theme('snippet', doc),
+	    			  AjaxSolr.theme('actions', doc)));
 	      } else {
-	    	  console.log('\t\t\t\tDo not keep this record ' + doc.title);
+	    	  console.log('Do not keep this record: ' + doc.title);
 	      }
 	      
-		   // }
-	      /*
-	      $(this.target).append(AjaxSolr.theme('result', doc, AjaxSolr.theme('snippet', doc)));
-	      //$(this.target).append(AjaxSolr.theme('result2', doc, AjaxSolr.theme('snippet2', doc)));
-	      var items = [];
-	      */
+	      //var items = [];
 	      //items = items.concat(this.facetLinks('topics', doc.topics));
 	      //items = items.concat(this.facetLinks('organisations', doc.organisations));
 	      //items = items.concat(this.facetLinks('exchanges', doc.exchanges));
-	       //AjaxSolr.theme('list_items', '#links_' + doc.id, items);
-		   
+	      //AjaxSolr.theme('list_items', '#links_' + doc.id, items);
+	      		   
 	    }
-	    
-	    
-	   
-	    
-	    
-	    
-	    
-	      
   },
   
   
@@ -92,11 +72,8 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 		  });
 		  
 		  
-		  
 	  });
 	  
-	  
-
 	  
   }
   

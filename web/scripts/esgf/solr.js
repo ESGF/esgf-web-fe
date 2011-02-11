@@ -112,13 +112,13 @@
 	
 	Manager.doRequest();
 
-	$("div.search-entry").live('mouseover',  function() {
-		$(this).css('background-color', '#ccffff');
-	})
-	
-	$("div.search-entry").live('mouseout', function() {
-		$(this).css("background-color", '#ffffff');
-	})
+//	$("div.search-entry").live('mouseover',  function() {
+//		$(this).css('background-color', '#ccffff');
+//	})
+//	
+//	$("div.search-entry").live('mouseout', function() {
+//		$(this).css("background-color", '#ffffff');
+//	})
 	
 
 })(jQuery);

@@ -6,12 +6,11 @@
  */
 
 (function ($) {
-
 	
 	
+AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
+	var output = '';
 	
-AjaxSolr.theme.prototype.result = function (doc, snippet) {
-		
 	if (doc.title.length > 78) {
 		doc.title = doc.title.substring(0,100) + "...";
 	}
@@ -31,17 +30,40 @@ AjaxSolr.theme.prototype.result = function (doc, snippet) {
 	var datetime_stopStr = 'datetime_stop="' + doc.datetime_stop + '" ';
 	
 	var allStr = idStr + titleStr + urlStr + formatStr +  metadataURLStr + descriptionStr + westDegreesStr + eastDegreesStr + northDegreesStr + southDegreesStr + datetime_startStr + datetime_stopStr;
-	//var output = '<div class="search-entry"><h4 class="desc"><a href="#" class="met">' + doc.title + '</a><div ' + allStr + '></div></h4>' ;
-	//var output = '<div class="search-entry"><h4 class="desc"><a href="#">' + doc.title + '</a></h4>' ;
-	  
-  	//var output = '<div class="search-entry"><h4 class="desc"><a href="#">' + doc.title + '</a><div ' + allStr + '></div></h4>' ;
-  	var output = '<div class="search-entry"><h4 class="desc"><div class="m"><a href="#"' + allStr + '></a><a href="/esgf-web-fe/scripts/esgf/metadata_overlay.html" rel="#metadata_overlay" class="met" style="text-decoration:none">' + doc.title + '</a></div></div></h4>' ;
+  	
+	output += '<div class="search-entry">';
+  	output += '<h4 class="desc"> <div class="m"><a href="#"' + allStr + '></a>';
+  	output += '<a href="/esgf-web-fe/scripts/esgf/metadata_overlay.html" rel="#metadata_overlay" class="met" style="text-decoration:none">';
+  	output += doc.title + '</a>';
+  	output += '</h4>' ;
   	output += '<p id="links_' + doc.id + '" class="links"></p>';
-  	output += '<p>' + snippet + '</p></div>';
+  	output += "<p/>" + snippet + actions + '</div>';
   	
   	return output;
 };
 
+
+AjaxSolr.theme.prototype.actions = function (doc) {
+	var output = '<div class="actions">',
+		selectID = '';
+	
+	output += "Further options: ";
+	output += '<span class="actionitem ai_meta"><a href="#"> Metadata Summary</a></span>';
+	
+	selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
+	output += '<span class="actionitem ' + selectID + ' "><a href="#"> Select </a></span>';
+	output += '<span class="actionitem ai_annotate"><a href="#"> Annotate</a></span>';
+	output += "</div>";
+	
+	$("." + selectID).live('click', {doc:doc}, function (evt) {	
+		console.log(evt.data.doc.id + " is selected");
+		return false;
+	});
+
+	
+	return output;
+
+};
 
 AjaxSolr.theme.prototype.snippet = function (doc) {
 	  

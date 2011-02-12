@@ -139,7 +139,7 @@
 $(document).ready(function(){
 
     /* scroll wheel for metadata and facet overlays */
-    //$(".scrollable").scrollable({ vertical: true, mousewheel: true });
+    $(".scrollable").scrollable({ vertical: true, mousewheel: true });
 
     /* radio buttons for sorting facets */
     $("#facetSort").buttonset();

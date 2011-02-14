@@ -135,7 +135,7 @@
                 </div>
             </div>
         </div>
-        <div class="scrolable facet_verticalscroll">
+        <div class="scrollable facet_verticalscroll">
             <!--  root element for the scrollable elements -->
 
             <!--  root element for the items -->

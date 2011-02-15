@@ -52,21 +52,35 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     output += '<span class="actionitem ai_meta"><a href="#"> Metadata Summary</a></span>';
 
     selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
-    output += '<span class="actionitem ' + selectID + ' "><a href="#"> Select </a></span>';
+    output += '<span class="actionitem"> <a href="#" id="' + selectID + '"> Select </a></span>';
     output += '<span class="actionitem ai_annotate"><a href="#"> Annotate</a></span>';
     output += "</div>";
 
-    $("." + selectID).live('click', {doc:doc}, function (evt) {
+    $("a[id=" + selectID + "]").live('click', {doc:doc}, function (evt) {
 
         selected[evt.data.doc.id] = doc;
-
-        var $dialog = $('<div></div>')
+        if ( jQuery.trim(this.innerHTML) == "Select") {
+            var $dialog = $('<div></div>')
                 .html('Dataset <b>' + evt.data.doc.id + "</b> has been added to the selection")
                 .dialog({
                     autoOpen: true,
                     show: 'blind',
                     hide: 'explode'
                 });
+            this.innerHTML="Remove";
+
+        } else {
+            var $dialog = $('<div></div>')
+            .html('Dataset <b>' + evt.data.doc.id + "</b> has been removed to the selection")
+            .dialog({
+                autoOpen: true,
+                show: 'blind',
+                hide: 'explode'
+            });
+            this.innerHTML ="Select";
+            selected[evt.data.doc.id] = null;
+
+        }
         return false;
     });
 

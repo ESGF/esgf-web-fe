@@ -1,78 +1,72 @@
 <html>
 <head>
-
- 
-       
+   
 
 </head>
 
 
 <body>
- <div id="popupGeospatialSearch">
- 			<!--<div class="overlay_header">
-    			<div class="overlay_header_title">
-    				Geospatial Search
-    			</div>
-    			<div class="overlay_header_buttons">
-					<div id="geoButton">
-						<input type="radio" id="geoButton" name="sorter" checked="checked" value="geoButton" /><label for="geoButton">geoButton</label>
-					</div>
-    			</div>
- 			</div>
- -->
- <h1>Geospatial Search</h1>  
-  
- 
- 
- 
- <div id="map_canvas1"> </div>  
- 
- <div class="map_info1">   
- 	<fieldset id="search_type_area">  
- 		<p class=legend> Search Type: </p>  
- 		<input type="radio" name="searchType" id="searchType" value="Encloses" checked /> Encloses   
- 		<input type="radio" name="searchType" id="searchType" value="Overlaps" /> Overlaps   
 
- 	</fieldset>  
+<div class="overlay_header" style="display:none">
+	<div class="overlay_header_title" >
+		Geospatial Search
+	</div>
+	<div class="overlay_header_buttons">
+		<button id="submitGeo">Submit Geospatial Constraints</button>
+	</div>
+</div>
+<div class="content" style="display:none">
+	<div id="geospatial_map_canvas"> </div>  
+    <div class="geospatial_map_info">  
+    	<fieldset id="search_type_area">  
+	 		<p class=legend> Search Type: </p>  
+	 		<input type="radio" name="searchType" id="searchType" value="Encloses" checked /> Encloses   
+	 		<input type="radio" name="searchType" id="searchType" value="Overlaps" /> Overlaps   
 
- 	<fieldset id="marker_fieldset1">  
+ 		</fieldset>  
+ 		
+ 		  
+ 		<fieldset id="geospatial_marker_fieldset">  
 
- 		<p class=legend> Enter address: </p>  
- 		<div id="geoloc1">      
- 			<input type="text" name="location" size="20" /> <br />  
- 		</div>  
+ 			<p class=legend> Enter address: </p>  
+ 				<div id="geospatial_location">      
+ 					<input type="text" name="location" size="20" /> <br />  
+ 				</div>  
 
- 		<input type="button" name="clear_markers" value="Clear Markers" />  
+ 				<input type="button" name="clear_markers" value="Clear Markers" />  
 
- 		<div id="markers1" style="display:none"></div>  
+ 				<div id="geospatial_markers" style="display:none"></div>  
 
- 	</fieldset>  
-	
- 	<fieldset id="area">  
- 		<p class=legend> Define Area: </p>  
+ 		</fieldset>  
+		
+ 		<fieldset id="geospatial_area">  
+ 			<p class=legend> Define Area: </p>  
 
- 		<input type="radio" name="areaGroup" value="square" /> Square   
- 		<input type="radio" name="areaGroup" value="circle" /> Circle   
+ 			<input type="radio" name="areaGroup" value="square" /> Square   
+ 			<input type="radio" name="areaGroup" value="circle" /> Circle   
 
- 		<div id="circleInputs1" style="display:none">  
-     		<label> Radius (km):</label><input type="text" name="radius" size="3" value="5" />  
-     		<label> Quality:</label><input type="text" size="3" name="quality" value="40" />  
-  			<br />    
+ 			<div id="geospatial_circleInputs" style="display:none">  
+     			<label> Radius (km):</label><input type="text" name="radius" size="3" value="5" />  
+     			<label> Quality:</label><input type="text" size="3" name="quality" value="40" />  
+  				<br />    
  				<input type="button" name="redraw_circle" value="Redraw" />  
+			</div>  
 
- 		</div>  
+ 			<div id="geospatial_areaSelected" style="display:none"></div>  
 
- 		<div id="areaSelected11" style="display:none"></div>  
+ 		</fieldset>  
+ 		
+    </div>    
+    
+     
+</div>
 
- 	</fieldset>  
 
- </div>	
  
-
+<!--
  <div id="gButton"><input id="geo-search-button" type="submit" value="Submit Geospatial Constraints" /></div>
- 
+ -->
    
-
- </div>     
+     
 </body>
 </html> 

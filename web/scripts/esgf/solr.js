@@ -47,6 +47,7 @@
         }));
 
 
+    /*
     Manager.addWidget(new AjaxSolr.MetadataWidget({
           id: 'metadata-browse',
           target: '#metadata-browse'
@@ -58,12 +59,12 @@
           id: 'temp-browse',
           target: '#temp-browse'
         }));
+	*/
 
-
-    /*Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
-          id: 'geo_browse',
-          target: '#geo_browse'
-        }));*/
+    Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
+          id: 'geo_browse'
+          /* target: '#geo_browse' */
+        }));
 
     /*
 
@@ -142,8 +143,12 @@ $(document).ready(function(){
     $(".scrollable").scrollable({ vertical: true, mousewheel: true });
 
     /* radio buttons for sorting facets */
-    $("#facetSort").buttonset();
-
+    
+    $("#facetSort").buttonset({
+    	
+    });
+	
+    
     /* event trigger for facet sorting buttons */
     $("input[name='sorter']").change(function() {
         if ($("input[name='sorter']:checked").val() == 'sortbyabc') {

@@ -13,8 +13,11 @@ $(document).ready(function(){
 	var markerGroup = new Array(max_of_markers);
 	var poly;
 	
-
 	
+	$("#geo a[rel]").overlay({effect: 'apple'});
+	
+	
+	/* for loading external html
 	$("div#geo a[rel]").overlay({
 
 		mask: {opacity: 0.5, color: '#000'},
@@ -23,24 +26,36 @@ $(document).ready(function(){
 		onBeforeLoad: function() {
 			
 			$('.apple_overlay').css({'width' : '640px'});
-			$('.overlay_header_buttons').hide();
+			//$('.overlay_header_buttons').hide();
 			
+
+		    
 			// grab wrapper element inside content
 			var wrap = this.getOverlay().find(".contentWrap");
 
+
+		    
 			// load the page specified in the trigger
 			wrap.load(this.getTrigger().attr("href"));
+			
+
+			// radio buttons for sorting facets 
+		    $("#button").button();
+		    
 		},
 
 		onLoad: function() {
+			
 			clearMarkers();
 			clearAreaChoice();
 			display_map();
+			
 		}
 
 
 	}); 
-	
+	*/
+
 	
 	//ensure that the radio buttons for encloses is checked by default	
 	$("input[name='searchType']:first").attr('checked', true);

@@ -7,6 +7,7 @@
 
 (function ($) {
 
+    var selected = {};
 
 AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
     var output = '';
@@ -56,7 +57,16 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     output += "</div>";
 
     $("." + selectID).live('click', {doc:doc}, function (evt) {
-        console.log(evt.data.doc.id + " is selected");
+
+        selected[evt.data.doc.id] = doc;
+
+        var $dialog = $('<div></div>')
+                .html('Dataset <b>' + evt.data.doc.id + "</b> has been added to the selection")
+                .dialog({
+                    autoOpen: true,
+                    show: 'blind',
+                    hide: 'explode'
+                });
         return false;
     });
 

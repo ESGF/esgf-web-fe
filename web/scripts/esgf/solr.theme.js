@@ -53,7 +53,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
 
     selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
     output += '<span class="actionitem"> <a href="#" id="' + selectID + '"> Select </a></span>';
-    output += '<span class="actionitem ai_annotate"><a href="#"> Annotate</a></span>';
+    output += '<span class="actionitem ai_annotate"><a class="annotate" href="/esgf-web-fe/scripts/esgf/annotation_overlay.html" rel="#annotator_overlay"> Annotate</a></span>';
     output += "</div>";
 
     $("a[id=" + selectID + "]").live('click', {doc:doc}, function (evt) {

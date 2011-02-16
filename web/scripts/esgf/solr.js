@@ -49,9 +49,13 @@
 
     
     Manager.addWidget(new AjaxSolr.MetadataWidget({
-          id: 'metadata-browse',
-          target: '#metadata-browse'
-        }));
+        id: 'metadata-browse',
+        target: '#metadata-browse'
+      }));
+    
+    Manager.addWidget(new AjaxSolr.AnnotatorWidget({
+        id: 'annotator-browse'
+      }));
 
 
     

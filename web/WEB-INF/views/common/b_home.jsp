@@ -51,6 +51,7 @@
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Geospatial.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Metadata.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Temporal.js" />"> </script>
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Annotator.js" />"> </script>
     
     <!--  
     <script type="text/javascript" src="<c:url value="/scripts/esgf/Geospatial.js" />"> </script>
@@ -117,6 +118,10 @@
         href="<c:url value="/styles/temporal_overlay.css" />"
         type="text/css" media="screen, projection">
         
+     <link rel="stylesheet"
+        href="<c:url value="/styles/annotator_overlay.css" />"
+        type="text/css" media="screen, projection">
+        
     <title> ESGF Portal</title>
 
 </head>
@@ -132,6 +137,8 @@
     <div class="apple_overlay" id="geospatial_overlay"><div class="contentWrap"></div></div>
     
     <div class="apple_overlay" id="metadata_overlay"><div class="contentWrap"></div></div>
+	
+	<div class="apple_overlay" id="annotator_overlay"><div class="contentWrap"></div></div>
 	
 	<!--  
 	<div class="apple_overlay" id="facet_overlay"><div class="contentWrap"></div></div>

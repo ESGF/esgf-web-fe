@@ -6,26 +6,6 @@
 
 AjaxSolr.FacetBrowserWidget = AjaxSolr.AbstractFacetWidget.extend({
   afterRequest: function () {
-	  $("span#facet a[rel]").overlay({
-			 
-	  		mask: {opacity: 0.5, color: '#000'},
-	  		effect: 'apple',
-	  		//left: "5%",
-			//top: "5%",
-	  		onBeforeLoad: function() {
-			
-	  			$('.apple_overlay').css({'width' : '640px'});
-			
-				// grab wrapper element inside content
-				var wrap = this.getOverlay().find(".contentWrap");
-	
-				// load the page specified in the trigger
-				wrap.load(this.getTrigger().attr("href"));
-	  		}
-
-	  		
-		
-	  });  
 	  
 
 	  

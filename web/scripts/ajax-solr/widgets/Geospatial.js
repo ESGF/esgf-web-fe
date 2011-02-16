@@ -36,14 +36,17 @@ AjaxSolr.GeospatialSearchWidget = AjaxSolr.AbstractWidget.extend({
     
     	onLoad: function() {
     		$("button#submitGeo").button({ });
-			$(".overlay_header").toggle();
-			$(".content").toggle();
+    		
+			$(".overlay_header").show();
+			$(".content").show();
+			clearMarkers();
+			clearAreaChoice();
 			display_map();
     	},
 		
 		onClose: function() {
-			$(".overlay_header").toggle();
-			$(".content").toggle();
+			$(".overlay_header").hide();
+			$(".content").hide();
 		}
 
 	});

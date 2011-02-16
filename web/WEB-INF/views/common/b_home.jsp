@@ -49,14 +49,14 @@
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/AutoComplete.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/FacetBrowser.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Geospatial.js" />"> </script>
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Metadata.js" />"> </script>
+    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Temporal.js" />"> </script>
     
     <!--  
     <script type="text/javascript" src="<c:url value="/scripts/esgf/Geospatial.js" />"> </script>
     -->
     
     <!--  
-    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Metadata.js" />"> </script>
-    <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Temporal.js" />"> </script>
 	-->
     
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
@@ -103,7 +103,7 @@
     <link rel="stylesheet"
         href="<c:url value="/styles/geospatial_overlay.css" />"
         type="text/css" media="screen, projection">
-<!--  
+  
     <link rel="stylesheet"
         href="<c:url value="/styles/facet_overlay.css" />"
         type="text/css" media="screen, projection">
@@ -116,7 +116,7 @@
     <link rel="stylesheet"
         href="<c:url value="/styles/temporal_overlay.css" />"
         type="text/css" media="screen, projection">
--->
+        
     <title> ESGF Portal</title>
 
 </head>
@@ -133,10 +133,15 @@
     
     <div class="apple_overlay" id="metadata_overlay"><div class="contentWrap"></div></div>
 	
+	<!--  
+	<div class="apple_overlay" id="facet_overlay"><div class="contentWrap"></div></div>
+	-->
+	
     <!-- facet overlay -->
     <!-- need to replace the following with a separate html -->
+      
     <div class="apple_overlay" id="facet_overlay">
-        <div class="overlay_header">
+        <div class="overlay_header" style="display:none">
             <div class="overlay_header_title">
                 Category Browser
             </div>
@@ -149,27 +154,29 @@
             </div>
             
         </div>
-        <div class="content">
-       
+         
+        <div class="content" style="display:none">
+         
+	       	<div class="scrollable facet_verticalscroll">
+	            <div class="facet_items">
+	                <div id="project"></div>
+	                <div id="model"></div>
+	                <div id="experiment"></div>
+	                  
+	                <div id="frequency"></div>
+	                <div id="realm"></div>
+	                <div id="instrument"></div>
+	                <div id="variable"></div>
+	                
+	                <div id="cf_variable"></div>
+	                <div id="gcmd_variable"></div>
+	                
+	            </div>
+	        </div>
         </div>
-        <!--  
-        <div class="scrollable facet_verticalscroll">
-            <div class="facet_items">
-                <div id="project"></div>
-                <div id="model"></div>
-                <div id="experiment"></div>
-                <div id="frequency"></div>
-                <div id="realm"></div>
-                <div id="instrument"></div>
-                <div id="variable"></div>
-                <div id="cf_variable"></div>
-                <div id="gcmd_variable"></div>
-            </div>
-
-        </div>
-        -->
+          
     </div>
-
+	
 
 
     <!-- end facet overlay -->
@@ -182,7 +189,11 @@
 <div id="header" class="span-24 last">
     <div class="span-16 left">
     <span class="tabitem"> <a href="#"> Home </a></span>
+     
     <span class="tabitem" id="facet"> <a href="#" rel="#facet_overlay"> Browse </a> </span>
+    <!--  
+    <span class="tabitem" id="facet"><a href="<c:url value="/scripts/esgf/facet_overlay.html" />" rel="#facet_overlay" > Browse</a> </span>
+    -->
     <span class="tabitem"> <a href="#"> Analysis</a></span>
     </div>
 

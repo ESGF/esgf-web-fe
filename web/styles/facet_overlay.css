@@ -8,7 +8,7 @@
 
 	/* vertical scrollers have typically larger height than width */
 	height: 425px; 
-	width: 560px;
+	width: 620px;
 	/*border-top:1px solid #ddd;	
 
 */
@@ -27,7 +27,7 @@
 /* single scrollable item */
 .facet_item {
 	
-    border:1px solid #ddd;
+    /*border:1px solid #ddd;*/
 	margin-left:10px;
 	margin-bottom:15px;
 	font-size:10px;

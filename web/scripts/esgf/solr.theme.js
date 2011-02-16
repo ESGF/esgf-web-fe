@@ -8,6 +8,7 @@
 (function ($) {
 
     var selected = {};
+    var carts = [];
 
 AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
     var output = '';
@@ -81,6 +82,15 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             delete selected[evt.data.doc.id];
 
         }
+
+        $("#carts").empty();
+        for (item in selected) {
+            carts.push({'Id':item});
+        }
+
+        carts = [ {Id: 20202}, {Id: 20302}];
+        $("#cartTemplate").tmpl(carts).appendTo("#datasetList");
+
         return false;
     });
 
@@ -130,6 +140,8 @@ AjaxSolr.theme.prototype.facet_link = function (value, handler) {
 AjaxSolr.theme.prototype.no_items_found = function () {
   return 'no items found in current selection';
 };
+
+
 
 })(jQuery);
 

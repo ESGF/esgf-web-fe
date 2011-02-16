@@ -26,5 +26,8 @@ ESGF.namespace = function (ns_string) {
 
 // predefine a few name spaces
 
-var core   = EGGF.namespace("ESGF.core");
-var search = ESGF.namespace("ESGF.search");
+var esgf_core   = ESGF.namespace("ESGF.core");
+var esgf_search = ESGF.namespace("ESGF.search");
+
+// predefine a few properties
+ESGF.search.selected = ESGF.search.selected || {};

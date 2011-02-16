@@ -7,8 +7,6 @@
 
 (function ($) {
 
-    var selected = {};
-    var carts = [];
 
 AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
     var output = '';
@@ -47,14 +45,17 @@ AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
 
 AjaxSolr.theme.prototype.actions = function (doc) {
     var output = '<div class="actions">',
-        selectID = '';
+        selectID = '',
+        selected = ESGF.search.selected,
+        carts = [];
 
     output += "Further options: ";
     output += '<span class="actionitem ai_meta"><a href="#"> Metadata Summary</a></span>';
 
     selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
-    output += '<span class="actionitem"> <a href="#" id="' + selectID + '"> Select </a></span>';
-    output += '<span class="actionitem ai_annotate"><a href="#"> Annotate</a></span>';
+    output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Select</a></span>';
+    output += '<span class="actionitem ai_annotate"><a href="#">Annotate</a></span>';
+    output += '<span class="actionitem ai_las"><a href="#">LAS</a></span>';
     output += "</div>";
 
     $("a[id=" + selectID + "]").live('click', {doc:doc}, function (evt) {

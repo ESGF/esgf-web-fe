@@ -78,7 +78,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                 hide: 'explode'
             });
             this.innerHTML ="Select";
-            selected[evt.data.doc.id] = null;
+            delete selected[evt.data.doc.id];
 
         }
         return false;

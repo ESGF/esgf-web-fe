@@ -1,11 +1,11 @@
 <script type="text/javascript">
 
-    
+
     $(function(){
         $('#myTabs').tabs();
     });
-    
-    
+
+
 </script>
 
 
@@ -15,11 +15,11 @@
 <div id="myTabs">
 
     <ul>
-    
+
     <li><a href="#search-results"> Results</a></li>
-    
-    <li><a href="#carts"> Carts </a></li>
-    
+
+    <li><a href="#carts"> Selections </a></li>
+
     </ul>
 
     <div id="search-results"> </div>

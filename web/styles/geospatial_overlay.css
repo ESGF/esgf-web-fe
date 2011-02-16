@@ -75,6 +75,11 @@
 	margin-bottom: 5px;
 }
 
+.geoButton {
+	float: right;
+	margin-top: 20px;
+	margin-right: 20px;
+}
 
 #geo-search-button {
 	font-size: 1.2em;

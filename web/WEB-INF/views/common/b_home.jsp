@@ -23,6 +23,7 @@
 
     <script type="text/javascript" src="<c:url value="/scripts/esgf/esgf-core.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/esgf/esgf-download.js" /> "></script>
+
     <script type="text/javascript" src="<c:url value="/scripts/esgf/logger_1.0.0.js" /> "></script>
 
 
@@ -155,17 +156,17 @@
             <div class="overlay_header_title">
                 Category Browser
             </div>
-
+            <!--
             <div class="overlay_header_buttons">
                 <div id="facetSort">
                     <input type="radio" id="sortbycount" name="sorter" checked="checked" value="sortbycount" /><label for="sortbycount">Sort By Count</label>
                     <input type="radio" id="sortbyabc" name="sorter" value="sortbyabc" /><label for="sortbyabc">Sort By ABC</label>
                 </div>
             </div>
-
+            -->
         </div>
-
-        <div class="content" style="display:none">
+        <div class="overlay_border" style="display:none"></div>
+        <div class="overlay_content" style="display:none">
 
                <div class="scrollable facet_verticalscroll">
                 <div class="facet_items">
@@ -184,7 +185,15 @@
                 </div>
             </div>
         </div>
-
+        <div class="overlay_border" style="display:none"></div>
+        <div class="overlay_footer" style="display:none">
+            <div class="overlay_header_buttons">
+                <div id="facetSort">
+                    <input type="radio" id="sortbycount" name="sorter" checked="checked" value="sortbycount" /><label for="sortbycount">Sort By Count</label>
+                    <input type="radio" id="sortbyabc" name="sorter" value="sortbyabc" /><label for="sortbyabc">Sort By ABC</label>
+                </div>
+            </div>
+        </div>
     </div>
 
 

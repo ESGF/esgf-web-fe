@@ -107,7 +107,7 @@
 	    </div>
 	                
         <div id="footer">
-        <p>Copyright(c) 2010, ESGF Infrastructure Team. </p>
+        <p>Copyright(c) 2010-2011, ESGF Infrastructure Team. </p>
         </div>
 
 

@@ -5,6 +5,40 @@
     
 <tiles-definitions>
 
+	<definition name="base-layout">
+	
+	    <!-- JS -->
+    	<put-attribute name="script" value="/WEB-INF/views/common/script.jsp" />
+    	<put-attribute name="extrascript" value="" />
+    	
+    	<!-- CSS -->
+    	<put-attribute name="style" value="/WEB-INF/views/common/style.jsp" />
+    	<put-attribute name="extrastyle" value="" />
+    	
+    	<!-- HTML -->
+    	<put-attribute name="banner"  value="/WEB-INF/views/common/banner.jsp"/>
+    	<put-attribute name="header"  value="/WEB-INF/views/common/header.jsp"/>
+    	<!-- body -->
+        <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+	
+	</definition>
+
+	<!-- single page layout -->
+    <definition name="main-layout" extends="base-layout" template="/WEB-INF/views/layouts/main-layout.jsp" />
+    
+    <!-- left-sidebar + main content layout -->
+    <definition name="left-main-layout" extends="base-layout" template="/WEB-INF/views/layouts/left-main-layout.jsp" />
+    
+    <!-- left-sidebar + main content + right sidebar layout -->
+    <definition name="left-main-right-layout" extends="base-layout" template="/WEB-INF/views/layouts/left-main-right-layout.jsp" />
+    
+    <!--
+    <definition name="left-center" template="/WEB-INF/views/common/layout-4-20.jsp">
+        <put-attribute name="left"  value=""/>
+        <put-attribute name="main"  value=""/>
+    </definition>
+    -->
+
     <definition name="b_home" template="/WEB-INF/views/common/b_home.jsp">
         <put-attribute name="subheader-24"  value=""/>
         <put-attribute name="sidebar-4"  value=""/>
@@ -44,4 +78,3 @@
     </definition>
 
 </tiles-definitions>
-            

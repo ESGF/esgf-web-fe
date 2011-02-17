@@ -1,0 +1,64 @@
+body { 
+	color: #333; 
+	background: #FFFFFF; 
+	font-size: 13px;
+    font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+}
+
+.banner {
+	float:center; text-align:center; background: #000000;
+}
+
+.footer {
+	color: #999; text-align: right;
+}
+
+.panel { 
+	background: #e5ecf9; border: 1px solid #417690; text-align: center; padding:6px;
+}
+
+.button { 
+	background: #417690; padding: 3px 5px; color: #FFFFFF; border: 1px solid #bbb; border-color: #ddd #aaa #aaa #ddd; 
+}
+
+.error { text-align: center; color: #FF0000; }
+
+.strong {
+	font-weight: bold;
+	color: #666;
+}
+
+h1 { text-align: center; font-size:15px; font-weight: bold; color:#212121; }
+h2 { text-align: left; font-size:14px; font-weight: bold; color:#212121; }
+h3 { text-align: left; font-size:13px; font-weight: bold; color:#212121; }
+
+table {
+    border-collapse: collapse;
+    border-color: #ccc;
+    margin-bottom: 0px;
+    padding: 0px;
+}
+
+td, th {
+    font-size: 12px;
+    padding: 5px;
+    font-family: "Lucida Grande", Verdana, Arial, sans-serif;
+}
+
+a { text-decoration: none; }
+
+a:hover { text-decoration: underline; }
+
+a:link { color: #0066CC; }
+
+a:visited { color: #0066CC;}
+
+.tabitem {
+	margin-right: 10px;
+	font-size: 14px;
+}
+
+.openidlink {
+    padding-left: 8px; padding-right: 8px; padding-bottom: 8px; padding-top: 2px;
+    background: url("../images/openid16.png") 0 .2em no-repeat;
+}

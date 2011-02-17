@@ -24,7 +24,16 @@
 
     <div id="search-results"> </div>
 
-    <div id="carts"> 0 items </div>
+    <div id="carts">
+    <table id="datasetList"></table>
+    </div>
+
+    <script id="cartTemplate" type="text/x-jquery-tmpl">
+        <tr>
+               <td> ${ID} </td>
+        </tr>
+    </script>
+
 
 </div>
 

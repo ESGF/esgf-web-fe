@@ -17,14 +17,18 @@
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/scrollable.navigator.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/scrollable.autoscroll.js" /> "></script>
 
+    <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/jquery.tmpl.min.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/jquery.livequery.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/jquery.autocomplete.js" /> "></script>
+
+    <script type="text/javascript" src="<c:url value="/scripts/esgf/esgf-core.js" /> "></script>
+    <script type="text/javascript" src="<c:url value="/scripts/esgf/esgf-download.js" /> "></script>
 
     <script type="text/javascript" src="<c:url value="/scripts/esgf/logger_1.0.0.js" /> "></script>
 
 
-   
-    
+
+
     <script type="text/javascript"
         src="http://maps.google.com/maps/api/js?sensor=false">
     </script>
@@ -52,14 +56,14 @@
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Metadata.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Temporal.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Annotator.js" />"> </script>
-    
-    <!--  
+
+    <!--
     <script type="text/javascript" src="<c:url value="/scripts/esgf/Geospatial.js" />"> </script>
     -->
-    
-    <!--  
-	-->
-    
+
+    <!--
+    -->
+
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.theme.js" />"> </script>
 
@@ -104,7 +108,7 @@
     <link rel="stylesheet"
         href="<c:url value="/styles/geospatial_overlay.css" />"
         type="text/css" media="screen, projection">
-  
+
     <link rel="stylesheet"
         href="<c:url value="/styles/facet_overlay.css" />"
         type="text/css" media="screen, projection">
@@ -117,11 +121,11 @@
     <link rel="stylesheet"
         href="<c:url value="/styles/temporal_overlay.css" />"
         type="text/css" media="screen, projection">
-        
+
      <link rel="stylesheet"
         href="<c:url value="/styles/annotator_overlay.css" />"
         type="text/css" media="screen, projection">
-        
+
     <title> ESGF Portal</title>
 
 </head>
@@ -133,57 +137,65 @@
 
     <!-- overlays -->
     <div class="apple_overlay" id="temporal_overlay"><div class="contentWrap"></div></div>
-    
+
     <div class="apple_overlay" id="geospatial_overlay"><div class="contentWrap"></div></div>
-    
+
     <div class="apple_overlay" id="metadata_overlay"><div class="contentWrap"></div></div>
-	
-	<div class="apple_overlay" id="annotator_overlay"><div class="contentWrap"></div></div>
-	
-	<!--  
-	<div class="apple_overlay" id="facet_overlay"><div class="contentWrap"></div></div>
-	-->
-	
+
+    <div class="apple_overlay" id="annotator_overlay"><div class="contentWrap"></div></div>
+
+    <!--
+    <div class="apple_overlay" id="facet_overlay"><div class="contentWrap"></div></div>
+    -->
+
     <!-- facet overlay -->
     <!-- need to replace the following with a separate html -->
-      
+
     <div class="apple_overlay" id="facet_overlay">
         <div class="overlay_header" style="display:none">
             <div class="overlay_header_title">
                 Category Browser
             </div>
-              
+            <!--
             <div class="overlay_header_buttons">
                 <div id="facetSort">
                     <input type="radio" id="sortbycount" name="sorter" checked="checked" value="sortbycount" /><label for="sortbycount">Sort By Count</label>
                     <input type="radio" id="sortbyabc" name="sorter" value="sortbyabc" /><label for="sortbyabc">Sort By ABC</label>
                 </div>
             </div>
-            
+            -->
         </div>
-         
-        <div class="content" style="display:none">
-         
-	       	<div class="scrollable facet_verticalscroll">
-	            <div class="facet_items">
-	                <div id="project"></div>
-	                <div id="model"></div>
-	                <div id="experiment"></div>
-	                  
-	                <div id="frequency"></div>
-	                <div id="realm"></div>
-	                <div id="instrument"></div>
-	                <div id="variable"></div>
-	                
-	                <div id="cf_variable"></div>
-	                <div id="gcmd_variable"></div>
-	                
-	            </div>
-	        </div>
+        <div class="overlay_border" style="display:none"></div>
+        <div class="overlay_content" style="display:none">
+
+               <div class="scrollable facet_verticalscroll">
+                <div class="facet_items">
+                    <div id="project"></div>
+                    <div id="model"></div>
+                    <div id="experiment"></div>
+
+                    <div id="frequency"></div>
+                    <div id="realm"></div>
+                    <div id="instrument"></div>
+                    <div id="variable"></div>
+
+                    <div id="cf_variable"></div>
+                    <div id="gcmd_variable"></div>
+
+                </div>
+            </div>
         </div>
-          
+        <div class="overlay_border" style="display:none"></div>
+        <div class="overlay_footer" style="display:none">
+            <div class="overlay_header_buttons">
+                <div id="facetSort">
+                    <input type="radio" id="sortbycount" name="sorter" checked="checked" value="sortbycount" /><label for="sortbycount">Sort By Count</label>
+                    <input type="radio" id="sortbyabc" name="sorter" value="sortbyabc" /><label for="sortbyabc">Sort By ABC</label>
+                </div>
+            </div>
+        </div>
     </div>
-	
+
 
 
     <!-- end facet overlay -->
@@ -196,9 +208,9 @@
 <div id="header" class="span-24 last">
     <div class="span-16 left">
     <span class="tabitem"> <a href="#"> Home </a></span>
-     
+
     <span class="tabitem" id="facet"> <a href="#" rel="#facet_overlay"> Browse </a> </span>
-    <!--  
+    <!--
     <span class="tabitem" id="facet"><a href="<c:url value="/scripts/esgf/facet_overlay.html" />" rel="#facet_overlay" > Browse</a> </span>
     -->
     <span class="tabitem"> <a href="#"> Analysis</a></span>

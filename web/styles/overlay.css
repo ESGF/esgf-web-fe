@@ -16,7 +16,8 @@
 	padding-top: 5px;
  	float:left;
  	
-	margin-bottom: 20px;
+	margin-bottom: 10px;
+	/* border-bottom: 1px dotted #000000; */
 	
 	/*float: left;
 	margin-top: 10px;
@@ -25,6 +26,14 @@
 	font-size:22px;
 	font-weight:700;
 	*/
+}
+
+.overlay_border {
+	width:95%;
+	border-bottom: 1px dotted #000000;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	clear:both;
 }
 
 .overlay_header_buttons {
@@ -43,9 +52,15 @@
 	*/
 }
 
-.content {
+.overlay_content {
 	clear:both;	
 	/* border: 1px dotted #D3D3D3; */
 }
 
+.overlay_footer {
+	clear:both;	
+	margin-top:15px;
+	margin-right: 30px;
+	/* border-top: 1px dotted #000000; */ 
+}
 

@@ -8,10 +8,10 @@
 
 	/* vertical scrollers have typically larger height than width */
 	height: 425px; 
-	width: 620px;
-	/*border-top:1px solid #ddd;	
+	width: 650px;
+	/* border-top:1px solid #ddd; */
 
-*/
+
 }
 
 /* root element for scrollable items */

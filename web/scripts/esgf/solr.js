@@ -146,16 +146,17 @@ $(document).ready(function(){
     /* scroll wheel for metadata and facet overlays */
     $(".scrollable").scrollable({ vertical: true, mousewheel: true });
 
+    /* For the facet overlay */
     $("span#facet a[rel]").overlay({
 		 
   		mask: {opacity: 0.5, color: '#000'},
   		effect: 'apple',
   		left: "5%",
-		top: "5%",
+		top: "2%",
   		
 		onBeforeLoad: function() {
 		
-			$('.apple_overlay').css({'width' : '650px'});
+			$('.apple_overlay').css({'width' : '700px'});
 			
 			/*
 			// grab wrapper element inside content
@@ -170,12 +171,16 @@ $(document).ready(function(){
   			/* radio buttons for sorting facets */
   		    $("#facetSort").buttonset();
 			$(".overlay_header").show();
-			$(".content").show();
+			$(".overlay_content").show();
+			$(".overlay_footer").show();
+			$(".overlay_border").show();
     	},
     	
     	onClose: function() {
 			$(".overlay_header").hide();
-			$(".content").hide();
+			$(".overlay_content").hide();
+			$(".overlay_footer").hide();
+			$(".overlay_border").hide();
 		}
 	
   });  

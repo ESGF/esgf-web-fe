@@ -45,13 +45,25 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
     
     	onLoad: function() {
 
+			$(".overlay_header").show();
+			$(".overlay_content").show();
+			$(".overlay_footer").show();
+			$(".overlay_border").show();
+			
     		id = globalRecordId;
     		var title = 'title';
     		
     		
     		metadata_report(id,title,metadatafilename,metadatafileformat);
     	  	
-    	}
+    	},
+		
+		onClose: function() {
+			$(".overlay_header").hide();
+			$(".overlay_content").hide();
+			$(".overlay_footer").hide();
+			$(".overlay_border").hide();
+		}
 
 	});
   },

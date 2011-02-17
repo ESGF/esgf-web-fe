@@ -28,27 +28,27 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
     	
 		//mask: 'darkred',
 		mask: {opacity: 0.5, color: '#000'},
+		
 		effect: 'apple',
 
 		onBeforeLoad: function() {
 			
 			$('.apple_overlay').css({'width' : '640px'});
+			//$('.apple_overlay').css({'background-image' : 'url(../images/metadata_overlay/white.png'});
 			
 			// grab wrapper element inside content
 			var wrap = this.getOverlay().find(".contentWrap");
-
 			// load the page specified in the trigger
 			wrap.load(this.getTrigger().attr("href"));
 			
 		},
     
     	onLoad: function() {
-    		
-    		// initialize scrollable with mousewheel support
-    		$(".scrollable").scrollable({ vertical: true, mousewheel: true });	
-    		
+
     		id = globalRecordId;
     		var title = 'title';
+    		
+    		
     		metadata_report(id,title,metadatafilename,metadatafileformat);
     	  	
     	}
@@ -71,6 +71,8 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
 	
 });
 
+//initialize scrollable with mousewheel support
+$(".scrollable").scrollable({ vertical: true, mousewheel: true });	
 
 
 })(jQuery);

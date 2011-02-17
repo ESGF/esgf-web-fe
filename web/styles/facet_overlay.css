@@ -1,0 +1,62 @@
+
+/* root element for scrollable */
+.facet_verticalscroll {  
+	
+	/* required settings */
+	position:relative;
+	overflow:hidden;	
+
+	/* vertical scrollers have typically larger height than width */
+	height: 425px; 
+	width: 620px;
+	/*border-top:1px solid #ddd;	
+
+*/
+}
+
+/* root element for scrollable items */
+.facet_items {	
+	position:absolute;
+	
+	/* this time we have very large space for height */
+	height:20000em;	
+	margin: 0px;
+	font-size:10px;
+}
+
+/* single scrollable item */
+.facet_item {
+	
+    /*border:1px solid #ddd;*/
+	margin-left:10px;
+	margin-bottom:15px;
+	font-size:10px;
+	
+	min-height:140px;
+
+}
+
+/* elements inside single item */
+.facet_item img {
+	float:left;
+	margin-right:20px;
+	min-height:180px;
+	
+	width:300px;
+}
+
+.facet_item h3 {
+	margin:0 0 5px 0;
+	font-size:12px;
+	color:#456;
+	font-weight:normal;
+}
+
+
+.facet_tag_item {
+	padding: 2px;
+}
+
+
+
+

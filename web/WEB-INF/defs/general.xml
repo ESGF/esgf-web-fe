@@ -5,7 +5,8 @@
     
 <tiles-definitions>
 
-	<definition name="base-layout">
+	<!-- base layout for this application -->
+	<definition name="base-layout" template="/WEB-INF/views/common/layout-template.jsp">
 	
 	    <!-- JS -->
     	<put-attribute name="script" value="/WEB-INF/views/common/script.jsp" />
@@ -18,19 +19,27 @@
     	<!-- HTML -->
     	<put-attribute name="banner"  value="/WEB-INF/views/common/banner.jsp"/>
     	<put-attribute name="header"  value="/WEB-INF/views/common/header.jsp"/>
-    	<!-- body -->
         <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+        
+        <!-- extensible layout type -->
+        <put-attribute name="layoutType" type="string" value=""/>
 	
 	</definition>
 
-	<!-- single page layout -->
-    <definition name="main-layout" extends="base-layout" template="/WEB-INF/views/layouts/main-layout.jsp" />
+	<!-- single main content layout -->
+    <definition name="main-layout" extends="base-layout">
+    	<put-attribute name="layoutType" type="string" value="main"/>
+    </definition>
     
     <!-- left-sidebar + main content layout -->
-    <definition name="left-main-layout" extends="base-layout" template="/WEB-INF/views/layouts/left-main-layout.jsp" />
+    <definition name="left-main-layout" extends="base-layout">
+    	<put-attribute name="layoutType" type="string" value="left-main"/>
+    </definition>
     
     <!-- left-sidebar + main content + right sidebar layout -->
-    <definition name="left-main-right-layout" extends="base-layout" template="/WEB-INF/views/layouts/left-main-right-layout.jsp" />
+    <definition name="left-main-right-layout" extends="base-layout">
+    	<put-attribute name="layoutType" type="string" value="left-main-right"/>
+    </definition>
     
     <!--
     <definition name="left-center" template="/WEB-INF/views/common/layout-4-20.jsp">

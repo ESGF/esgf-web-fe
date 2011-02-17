@@ -31,10 +31,35 @@
 			    <ti:insertAttribute name="header" />
 			</div>
 							
-			<!-- main content -->
-			<div class="span-24 last" id="main">
-				 <ti:insertAttribute name="main" />
-			</div>
+			<!-- main content organized according to different layout geometries -->
+			<c:set var="layoutType"><ti:insertAttribute name="layoutType"/></c:set>
+			<c:choose>
+				<c:when test="${layoutType=='main'}">				
+					<div class="span-24 last" id="main">
+						 <ti:insertAttribute name="main" />
+					</div>
+				</c:when>
+				<c:when test="${layoutType=='left-main'}">
+					<div class="span-5 last" id="left">
+				 		<ti:insertAttribute name="left" />
+					</div>
+					<div class="prepend-1 span-18 last" id="main">
+				 		<ti:insertAttribute name="main" />
+					</div>
+				</c:when>
+				<c:when test="${layoutType=='left-main-right'}">
+					<div class="span-5 last" id="left">
+				 		<ti:insertAttribute name="left" />
+					</div>
+					<div class="prepend-1 span-12" id="main">
+				 		<ti:insertAttribute name="main" />
+					</div>
+					<div class="prepend-1 span-5 last" id="right">
+				 		<ti:insertAttribute name="right" />
+					</div>
+				</c:when>
+				<c:otherwise>Unknown Layout</c:otherwise>
+			</c:choose>
 		
 			<!-- footer -->
 			<div class="span-24 last" id="footer">

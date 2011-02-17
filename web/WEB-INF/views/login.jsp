@@ -72,7 +72,7 @@
 							<td align="center" valign="top">
 								<div class="panel">
 									Thanks, you are now logged in.
-								    <p/><span class="openidlink">&nbsp;</span> Your OpenID : <b><c:out value="${principal.username}"/></b>
+								    <!-- <p/><span class="openidlink">&nbsp;</span> Your OpenID : <b><c:out value="${principal.username}"/></b> -->
 									<form name="logoutForm" action='<c:url value="/j_spring_security_logout"/>'>
 										<input type="submit" value="LOGOUT" class="button"/>
 									</form>

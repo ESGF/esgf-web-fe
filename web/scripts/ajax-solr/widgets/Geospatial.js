@@ -38,7 +38,9 @@ AjaxSolr.GeospatialSearchWidget = AjaxSolr.AbstractWidget.extend({
     		$("button#submitGeo").button({ });
     		
 			$(".overlay_header").show();
-			$(".content").show();
+			$(".overlay_content").show();
+			$(".overlay_footer").show();
+			$(".overlay_border").show();
 			clearMarkers();
 			clearAreaChoice();
 			display_map();
@@ -46,7 +48,9 @@ AjaxSolr.GeospatialSearchWidget = AjaxSolr.AbstractWidget.extend({
 		
 		onClose: function() {
 			$(".overlay_header").hide();
-			$(".content").hide();
+			$(".overlay_content").hide();
+			$(".overlay_footer").hide();
+			$(".overlay_border").hide();
 		}
 
 	});

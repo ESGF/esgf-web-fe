@@ -86,8 +86,10 @@ AjaxSolr.TemporalWidget = AjaxSolr.AbstractWidget.extend({
     		$("button#submitTemporal").button({ });
     		
 
-			$(".overlay_header").toggle();
-			$(".content").toggle();
+    		$(".overlay_header").show();
+			$(".overlay_content").show();
+			$(".overlay_footer").show();
+			$(".overlay_border").show();
     		
     		$('div#tButton').click(function() {
     	    	//call the helper method to assemble the fq and execute it
@@ -138,7 +140,14 @@ AjaxSolr.TemporalWidget = AjaxSolr.AbstractWidget.extend({
     			
     		}	
     		
-    	}
+    	},
+    	
+    	onClose: function() {
+			$(".overlay_header").hide();
+			$(".overlay_content").hide();
+			$(".overlay_footer").hide();
+			$(".overlay_border").hide();
+		}
 
 	});
     

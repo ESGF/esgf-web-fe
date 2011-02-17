@@ -1,113 +1,69 @@
 <html>
 <head>
 
-       
-<style>
-
-/*
-h1 {
-text-align:left;
-color:#6FA5FD;
-font-size:22px;
-font-weight:700;
-border-bottom:1px dotted #D3D3D3;
-padding-bottom:2px;
-margin-bottom:30px;
-}   
-
-.temporal-search-button {
-	font-size: 1.2em;
-	border: 1px solid #9c9c9c;
-	background: #CCFFFF;
-	padding-top: 5px;
-	padding-bottom: 5px;
-	padding-left: 15px;
-	padding-right: 15px;
-	margin-right: 30px;
-	margin-top:20px;
-	cursor: pointer;
-	float:right
-	
-}
-
-.temporal-search-button:hover {
-	background: #00FF00;
-}
-
-#temporal_range_title {
-	
-	font-size: 11pt;
-	padding: 10px;	
-	width: 80px;
-	margin-left: 10px;
-	background:  #88ACE0;
-	color: black;
-	border: 1px solid #000;
-}
-
-#temporal_content1
-{
-	padding-top: 20px;
-	padding-left:20px;
-	padding:10px;
-	padding-bottom:50px;
-	font-weight:bold;
-	font-size: 14px;
-}
-
-#from, #to
-{
-	margin-left: 10px;
-	margin-right: 5px;
-}
-*/
-</style>   	
 </head>
 
 
 <body>   
 
-
-
-<!--  
-  		<h1>Temporal Search</h1>  
-	  		<div id="temporal_helper">  
-  			
-  			</div>  
-					 				 
-  <div id="temporalbox1">				  
+<div class="overlay_header" style="display:none">
+	<div class="overlay_header_title">
+		Temporal Search
+	</div>
+	<div class="overlay_header_buttons">
+		
+	</div>
+</div>
+<div class="overlay_border" style="display:none"></div>
+<div class="overlay_content" style="display:none">
+<!--  this needs to be changed -->
+ 	<div id="temporalbox">				  
 	
-  	<div id="lb1">  
-  	<div id="rb1">  
-  	<div id="bb1"><div id="blc1"><div id="brc1">  
-		<div id="tb1"><div id="tlc1"><div id="trc1">  
-			<div id="temporal_range_title">  
-			Date Range  
-			</div>  
-			<div id="temporal_content1">  	
-				<div id="time_range">  
-				  
-						Search from: <input type="text" id="from" name="from" size="10" />  
-						
-						to: <input type="text" id="to" name="to" size="10" />   
-					 
-					</div> 
-					<br />  
-					<div id="adv_temp1">  
-						<p class="legend"></p>	   
-					</div> 
-			
-			</div>  
-		</div></div></div></div> 
-		</div></div></div></div>  
+  		<div id="lb">  
+	  		<div id="rb">  
+		  		<div id="bb">
+		  			<div id="blc">
+		  				<div id="brc">  
+							<div id="tb">
+								<div id="tlc">
+									<div id="trc">  
+										<div id="temporal_range_title">  
+											Date Range  
+										</div>  
+										<div id="temporal_content1">  	
+											<div id="time_range">  
+												Search from: <input type="text" id="from" name="from" size="10" />  
+												to: <input type="text" id="to" name="to" size="10" />   
+											</div> 
+											<br />  
+											<div id="adv_temp1">  
+												<p class="legend"></p>	   
+											</div> 
+					
+										</div>  
+									</div>
+								</div>
+							</div>
+						</div> 
+					</div>
+				</div>
+			</div>
+		</div>  
 	</div> 
-	  
+	<!--  
+	<div id="tButton">
+		<button id="submitTemporal">Submit Temporal Constraints</button> 
+	</div>
+	-->
+</div>
+<div class="overlay_footer" id="tButton" style="display:none">
+    <button id="submitTemporal">Submit Temporal Constraints</button> 
+</div> 
+
+<!-- 
 <div id="tButton"><input class="temporal-search-button" type="submit" value="Submit Temporal Constraints" /></div>
 <div class="gButton"><input class="temporal-search-button" type="submit" value="Advanced..." /></div>
-
-
--->	
-  
+-->	 
   
   </body>
   </html>  

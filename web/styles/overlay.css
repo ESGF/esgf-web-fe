@@ -1,31 +1,51 @@
 
 .overlay_title {
-	margin: 10px;
+	/* border: 1px dotted #D3D3D3; */
 }
 
 .overlay_header {
-	margin: 0 auto; /* This centers the container DIV on the page */
-	margin-bottom: 10px;
+	/* border: 1px dotted #D3D3D3; */
 }
 
 .overlay_header_title {
-	float: left;
-	margin-top: 10px;
+	
+	color: #539DC2;
+	font-size:24px;
+	font-weight:700;
+	/* border: 1px dotted #D3D3D3; */
+	padding-top: 5px;
+ 	float:left;
+ 	
 	margin-bottom: 20px;
+	
+	/*float: left;
+	margin-top: 10px;
 	width: 45%;
 	color:#6FA5FD;
 	font-size:22px;
 	font-weight:700;
+	*/
 }
 
 .overlay_header_buttons {
+	
+	/* border: 1px dotted #D3D3D3; */
+	padding-top: 10px;
+	padding-right: 10px;
+	float:right;
+	/*
 	float: right;
 	margin-top: 10px;
 	margin-bottom: 20px;
 	width: 50%;
 	display: inline;
+	border: 1px dotted #D3D3D3;
+	*/
 }
 
-
+.content {
+	clear:both;	
+	/* border: 1px dotted #D3D3D3; */
+}
 
 

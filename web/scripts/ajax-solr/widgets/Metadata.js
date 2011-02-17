@@ -38,19 +38,17 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
 			
 			// grab wrapper element inside content
 			var wrap = this.getOverlay().find(".contentWrap");
-
 			// load the page specified in the trigger
 			wrap.load(this.getTrigger().attr("href"));
 			
 		},
     
     	onLoad: function() {
-    		
-    		// initialize scrollable with mousewheel support
-    		$(".scrollable").scrollable({ vertical: true, mousewheel: true });	
-    		
+
     		id = globalRecordId;
     		var title = 'title';
+    		
+    		
     		metadata_report(id,title,metadatafilename,metadatafileformat);
     	  	
     	}
@@ -73,6 +71,8 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
 	
 });
 
+//initialize scrollable with mousewheel support
+$(".scrollable").scrollable({ vertical: true, mousewheel: true });	
 
 
 })(jQuery);

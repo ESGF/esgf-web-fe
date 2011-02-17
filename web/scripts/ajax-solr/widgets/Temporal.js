@@ -83,6 +83,11 @@ AjaxSolr.TemporalWidget = AjaxSolr.AbstractWidget.extend({
     		}); //end datepicker
     		
     		
+    		$("button#submitTemporal").button({ });
+    		
+
+			$(".overlay_header").toggle();
+			$(".content").toggle();
     		
     		$('div#tButton').click(function() {
     	    	//call the helper method to assemble the fq and execute it

@@ -1,0 +1,81 @@
+#keywordEntry{
+	color:red;
+	float:left;
+	width: 55%;
+	
+	padding: 5px;
+	border:2px dotted #D3D3D3;
+	height: 125px;
+}
+#keywordRecommendation{
+	color:blue;
+	float:right;
+	width: 40%;
+	padding: 5px;
+	border:0px dotted #D3D3D3;
+	/*height: 350px;*/
+}
+#keywordStatus{
+	margin-top: 20px;
+	color:black;
+	float:left;
+	width: 55%;
+	padding: 5px;
+	border:2px dotted #D3D3D3;
+	height: 150px;
+}
+#annotator_tabs {
+	padding-bottom: 20px;
+	height: 400px;
+	margin-right:20px;
+}
+#addKeyword{
+	margin-top: 10px;
+}
+#viewRecommendedKeyword{
+	margin-top: 10px;
+}
+#submitKeyword{
+	margin-top: 30px;
+}
+
+.recommend_item{
+	border-top: solid 1px #ccc;
+	color: #666;
+	margin: 5px;
+	padding-top:5px;
+	padding-bottom:10px;
+}
+
+#commentlist {
+	/*margin: 10px 0 40px;*/
+	padding: 0;
+}
+#commentlist li {
+	/* padding: 10px 0 20px; */
+	list-style: none;
+	border-top: solid 1px #ccc;
+	position: relative;
+	padding: 5px;
+}
+#commentlist cite {
+	font: bold 140%/110% Arial, Helvetica, sans-serif;
+	color: #666;
+	margin-right: 10px;
+	padding: 5px;
+}
+#commentlist .time {
+	color: #ccc;
+	font-size: 10px;
+	margin: 0 0 10px;
+	padding: 5px;
+}
+#commentlist .commentnumber {
+	position: absolute;
+	right: 0;
+	top: 8px;
+	font: normal 200%/100% Georgia, "Times New Roman", Times, serif;
+	color: #ccc;
+	padding: 5px;
+}
+

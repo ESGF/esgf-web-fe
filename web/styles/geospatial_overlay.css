@@ -1,24 +1,5 @@
 
 
-
-#popupGeospatialSearch h1{
-text-align:left;
-color:#6FA5FD;
-font-size:22px;
-font-weight:700;
-border-bottom:1px dotted #D3D3D3;
-padding-bottom:2px;
-margin-bottom:20px;
-}
-
-
-
-
-
-
-
-
-
 /*
  --------------------------------
     Map Style
@@ -26,9 +7,10 @@ margin-bottom:20px;
  
 
 */
-#map_canvas1 {
+
+#geospatial_map_canvas {
 	float: left;
-	height: 350px;
+	height: 375px;
 	width: 400px;
 	padding: 10px;
 	border-left: 2px solid #666;
@@ -38,19 +20,20 @@ margin-bottom:20px;
 
 
 
-.map_info1 {
+
+.geospatial_map_info {
 	position: absolute;
 	margin-left: 420px;
 	padding: 10px;
 	float: right;
 	width: 200px;
-	height: 350px;
+	height: 375px;
 	border-top: 2px solid #666;
     border-bottom: 2px solid #666;    	
 	border-right: 2px solid #666;
 }
 
-.map_info1 fieldset{
+.geospatial_map_info fieldset{
     border: 1px solid #CCA383; 
     background: #FFE8EF;
     width: 190px;
@@ -58,25 +41,25 @@ margin-bottom:20px;
     margin-bottom: 20px;
 }
 
-.map_info1 fieldset legend {
+.geospatial_map_info fieldset legend {
 	background: #CCA383;
 	padding: 3px;
 }
 
-.map_info1 label {
+.geospatial_map_info label {
 	margin-left: 0px;
 }
 
-.map_info1 p.legend {
+.geospatial_map_info p.legend {
 	font-weight: bold;
 	margin-bottom: 6px;
 }
 
-.map_info1 p.help {
+.geospatial_map_info p.help {
 	font-size: 9px;
 }
 
-#markers1 {
+#geospatial_markers {
 	padding-top: 10px;
 }
 
@@ -84,14 +67,19 @@ margin-bottom:20px;
 	padding-top: 10px;
 }
 
-#circleInputs1 {
+#geospatial_circleInputs {
 	padding-top: 10px;
 }
 
-#geoloc1 {
+#geospatial_location {
 	margin-bottom: 5px;
 }
 
+.geoButton {
+	float: right;
+	margin-top: 20px;
+	margin-right: 20px;
+}
 
 #geo-search-button {
 	font-size: 1.2em;

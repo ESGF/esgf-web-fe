@@ -47,23 +47,28 @@
         }));
 
 
+    
     Manager.addWidget(new AjaxSolr.MetadataWidget({
-          id: 'metadata-browse',
-          target: '#metadata-browse'
-        }));
+        id: 'metadata-browse',
+        target: '#metadata-browse'
+      }));
+    
+    Manager.addWidget(new AjaxSolr.AnnotatorWidget({
+        id: 'annotator-browse'
+      }));
 
 
-
+    
     Manager.addWidget(new AjaxSolr.TemporalWidget({
-          id: 'temp-browse',
-          target: '#temp-browse'
+          id: 'temp-browse'
+          /* target: '#temp-browse' */
         }));
+	
 
-
-    /*Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
-          id: 'geo_browse',
-          target: '#geo_browse'
-        }));*/
+    Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
+          id: 'geo_browse'
+          /* target: '#geo_browse' */
+        }));
 
     /*
 
@@ -141,9 +146,44 @@ $(document).ready(function(){
     /* scroll wheel for metadata and facet overlays */
     $(".scrollable").scrollable({ vertical: true, mousewheel: true });
 
-    /* radio buttons for sorting facets */
-    $("#facetSort").buttonset();
+    $("span#facet a[rel]").overlay({
+		 
+  		mask: {opacity: 0.5, color: '#000'},
+  		effect: 'apple',
+  		left: "5%",
+		top: "5%",
+  		
+		onBeforeLoad: function() {
+		
+			$('.apple_overlay').css({'width' : '650px'});
+			
+			/*
+			// grab wrapper element inside content
+			var wrap = this.getOverlay().find(".contentWrap");
 
+			// load the page specified in the trigger
+			wrap.load(this.getTrigger().attr("href"));
+			*/
+  		},
+
+  		onLoad: function() {
+  			/* radio buttons for sorting facets */
+  		    $("#facetSort").buttonset();
+			$(".overlay_header").show();
+			$(".content").show();
+    	},
+    	
+    	onClose: function() {
+			$(".overlay_header").hide();
+			$(".content").hide();
+		}
+	
+  });  
+  
+    
+    
+	
+    
     /* event trigger for facet sorting buttons */
     $("input[name='sorter']").change(function() {
         if ($("input[name='sorter']:checked").val() == 'sortbyabc') {

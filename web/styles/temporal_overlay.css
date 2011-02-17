@@ -1,17 +1,3 @@
-#popupTemporalSearch22 {
-	
-}
-
-
-h1 {
-text-align:left;
-color:#6FA5FD;
-font-size:22px;
-font-weight:700;
-border-bottom:1px dotted #D3D3D3;
-padding-bottom:2px;
-margin-bottom:30px;
-}   
 
 .temporal-search-button {
 	font-size: 1.2em;
@@ -30,6 +16,11 @@ margin-bottom:30px;
 
 .temporal-search-button:hover {
 	background: #00FF00;
+}
+
+#tButton {
+	float:right;
+	margin-right: 30px;	
 }
 
 #temporal_range_title {
@@ -65,31 +56,6 @@ margin-bottom:30px;
 }
 
 
-
-#popupTemporalSearchClose{
-font-size:14px;
-line-height:14px;
-right:6px;
-top:4px;
-position:absolute;
-color:#6fa5fd;
-font-weight:700;
-display:block;
-}
-
-
-#backgroundPopupTemporalSearch{
-display:none;
-position:fixed;
-_position:absolute;  /* hack for internet explorer 6 */
-height:100%;
-width:100%;
-top:0;
-left:0;
-background:#000000;
-border:1px solid #cecece;
-z-index:1;
-}
 
 
 /* --------------------------------
@@ -149,11 +115,12 @@ z-index:1;
 	margin-top:10px;
 }
 
-#temporalbox1
+#temporalbox
 {
 	float: left;
 	width: 425px;
 	background-color: #eeeeee;
+	margin-bottom: 30px;
 }
 
 #temporal_content1
@@ -225,62 +192,62 @@ z-index:1;
 	bb = bottom border 
 */
 
-#tlc1, #trc1, #blc1, #brc1
+#tlc, #trc, #blc, #brc
 	{
 	background-color: transparent;
 	background-repeat: no-repeat;
 	}
 
-#tlc1
+#tlc
 	{
 	background-image:url(../images/temporal_overlay/tlc.gif);
 	background-position: 0% 0%;
 	}
 
-#trc1
+#trc
 	{
 	background-image:url(../images/temporal_overlay/trc.gif);
 	background-position: 100% 0%;
 	}
 	
-#blc1
+#blc
 	{
 	background-image:url(../images/temporal_overlay/blc.gif);
 	background-position: 0% 100%;
 	}
 
-#brc1
+#brc
 	{
 	background-image:url(../images/temporal_overlay/brc.gif);
 	background-position: 100% 100%;
 	}
 
-#tb1, #bb1
+#tb, #bb
 	{
 	background-color: transparent;
 	background-repeat: repeat-x;
 	}
 			
-#tb1
+#tb
 	{
 	background-image:url(../images/temporal_overlay/tb.gif);
 	background-position: 0% 0%;
 	}
 
-#bb1
+#bb
 	{
 	background-image:url(../images/temporal_overlay/bb.gif);
 	background-position: 50% 100%;
 	}
 	
-#rb1
+#rb
 	{
 	background-image:url(../images/temporal_overlay/r.gif);
 	background-position: 100% 0%;
 	background-repeat: repeat-y;
 	}
 
-#lb1
+#lb
 	{
 	background-image:url(../images/temporal_overlay/l.gif);
 	background-position: 0% 100%;

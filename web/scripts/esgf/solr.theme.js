@@ -33,7 +33,7 @@ AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
 
     output += '<div class="search-entry">';
       output += '<h4 class="desc"> <div class="m"><a href="#"' + allStr + '></a>';
-      output += '<a href="/esgf-web-fe/scripts/esgf/metadata_overlay.html" rel="#metadata_overlay" class="met" style="text-decoration:none">';
+      output += '<a href="/esgf-web-fe/scripts/esgf/metadata_overlay.htm" rel="#metadata_overlay" class="met" style="text-decoration:none">';
       output += doc.title + '</a>';
       output += '</h4>' ;
       output += '<p id="links_' + doc.id + '" class="links"></p>';
@@ -54,8 +54,8 @@ AjaxSolr.theme.prototype.actions = function (doc) {
 
     selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
     output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Select</a></span>';
-    output += '<span class="actionitem ai_annotate"><a href="#">Annotate</a></span>';
     output += '<span class="actionitem ai_las"><a href="#">LAS</a></span>';
+    output += '<span class="actionitem"><a class="annotate" href="/esgf-web-fe/scripts/esgf/annotation_overlay.html" rel="#annotator_overlay"> Annotate</a></span>';
     output += "</div>";
 
     $("a[id=" + selectID + "]").live('click', {doc:doc}, function (evt) {

@@ -175,8 +175,8 @@
 	        </div>
         </div>
         <div class="overlay_border" style="display:none"></div>
-        <div class="overlay_footer" style="display:none"> </div>
-        
+        <div class="overlay_footer" style="display:none">
+        </div>
     </div>
 
 

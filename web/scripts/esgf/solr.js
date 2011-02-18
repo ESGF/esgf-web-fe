@@ -91,6 +91,7 @@
     Manager.init();
 
     var fields = ['project' , 'model', 'experiment', 'frequency', 'realm', 'instrument', 'variable', 'cf_variable', 'gcmd_variable'];
+    //var fields = ['instrument', 'project', 'gcmd_variable'];
 
 
 

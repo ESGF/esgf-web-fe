@@ -18,8 +18,23 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
    */
   field: null,
 
+  /**
+   * The starting offset value of the displayed facet values.
+   *
+   * @field
+   * @public
+   * @type Integer
+   */
+  startingValue: 0,
   
-  
+  /**
+   * The increment value of the pagination mechanism in the facet browser.
+   *
+   * @field
+   * @public
+   * @type Integer
+   */
+  incrementValue: 10,
   
   /**
    * @returns {Boolean} Whether any filter queries have been set using this
@@ -98,6 +113,83 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
     }
   },
 
+  /**
+   * @param {String} divFieldId The jquery variable representing the dom object for facet values and counts.
+   * @returns {Function} Retrieves the next set of facet values.  Increments by this.incrementValue.
+   */
+  nextClickHandler: function (divFieldId) {
+    var self = this;
+    return function () {
+    	$("div#"+divFieldId).remove();
+    	self.startingValue += self.incrementValue;
+    	self.displayFacetValues();
+      return false;
+    }
+  },
+  
+  /**
+   * @param {String} divFieldId The jquery variable representing the dom object for facet values and counts.
+   * @returns {Function} Retrieves the previous facet values.  Decrements by this.incrementValue.
+   */
+  prevClickHandler: function (divFieldId) {
+    var self = this;
+    return function () {
+    	$("div#"+divFieldId).remove();
+    	self.startingValue -= self.incrementValue;
+    	self.displayFacetValues();
+    	
+      return false;
+    }
+  },
+  
+  /**
+   * @returns {Function} Display the values (with counts) of the facets
+   */
+  displayFacetValues: function () {
+	var self = this;
+	var numFields = 0;
+	for (var facet in self.manager.response.facet_counts.facet_fields[self.field]) {
+		numFields += 1;
+	}
+	var maxCount = 0;
+	var objectedItems = [];
+	for (var facet in self.manager.response.facet_counts.facet_fields[self.field]) {
+		var count = parseInt(self.manager.response.facet_counts.facet_fields[self.field][facet]);
+		if (count > maxCount) {
+			maxCount = count;
+		}
+		objectedItems.push({ facet: facet, count: count });
+	}
+	
+	objectedItems.sort(function (a, b) {
+		if(Manager.sortType == 'sortbycount') {
+			return a.count > b.count ? -1 : 1;
+		} else {
+			return a.facet.value < b.facet.value ? -1 : 1;
+		}
+	});
+	
+	var divFieldID = 'facet_value_' + self.field;
+	var stopValue = objectedItems.length;
+	if(objectedItems.length > (self.startingValue + self.incrementValue)) {
+		stopValue = (self.startingValue + self.incrementValue);
+	}
+	$(self.target).append('<div id="' + divFieldID + '"></div>');
+	if(numFields > 0) {
+		$('div#'+divFieldID).append('<div>');
+		if(self.startingValue > 0){
+			$('div#'+divFieldID).append(AjaxSolr.theme('prevLink',stopValue,objectedItems,divFieldID,self));
+		}
+		if(stopValue == (this.startingValue + this.incrementValue)) {
+			$('div#'+divFieldID).append(AjaxSolr.theme('nextLink',divFieldID,self));
+		}
+		$('div#'+divFieldID).append('</div>');
+		$('div#'+divFieldID).append(AjaxSolr.theme('facet_content',stopValue,objectedItems,self));
+	}
+	
+  },
+  
+  
   /**
    * @param {String} value The value.
    * @returns {Function} Sends a request to Solr if it successfully removes a

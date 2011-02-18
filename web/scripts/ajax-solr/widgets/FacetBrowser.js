@@ -5,14 +5,24 @@
 (function ($) {
 
 AjaxSolr.FacetBrowserWidget = AjaxSolr.AbstractFacetWidget.extend({
-  afterRequest: function () {
+  
+
+
+	
+	
+	afterRequest: function () {
 	  
 
-	  
+	  var self = this;
 
 	  $(this.target).empty();
 
+	  $(self.target).append(AjaxSolr.theme('facet_title',capitalizeFirstLetter(self.field)));
+		
+	  this.displayFacetValues();
 	  
+	  
+	  /*
 	  //DONT KNOW HOW TO FIND THE LENGTH - TAKE THIS PART OUT WHEN THE LENGTH CAN BE DETERMINED IN AN EASIER MANNER
 	  var numFields = 0;
 	  for (var facet in this.manager.response.facet_counts.facet_fields[this.field]) {
@@ -36,23 +46,43 @@ AjaxSolr.FacetBrowserWidget = AjaxSolr.AbstractFacetWidget.extend({
 		  }
 	  });
 	  
-	  if(numFields > 0) {
-			$(this.target).append('<p>');
-			$(this.target).append(AjaxSolr.theme('facet_title',capitalizeFirstLetter(this.field)));
+	  	var divFieldID = 'facet_value_' + this.field;
+	  	var start = this.startingValue;
+	  	var increment = this.incrementValue;
+		
+		$(this.target).append(AjaxSolr.theme('facet_title',capitalizeFirstLetter(this.field)));
+		var stopValue = objectedItems.length;
+		
+		if(objectedItems.length > (this.startingValue + this.incrementValue)) {
+			stopValue = (this.startingValue + this.incrementValue);
+		}
+		
+		if(numFields > 0) {
+			//print the "prev..." if this is not the first value in the category
+			if(this.startingValue != 0){
+				$(this.target).append(AjaxSolr.theme('prevLink',stopValue,objectedItems,divFieldID,this));
+			}
 			
-			for (var i = 0, l = objectedItems.length; i < l; i++) {
-				  var facetTextValue = objectedItems[i].facet + ' (' + objectedItems[i].count + ') ';
-				  if(i != objectedItems.length-1)
-					  //facetTextValue += '| '; 
-			      var facet = objectedItems[i].facet;
-			      //console.log('i: ' + i + ' textLengthu: ' + textLength);
-			      //facet += " (" + objectedItems[i].cont + ") |";
-			      $(this.target).append($('<a href="#" class="tag_item" />').text(facetTextValue).click(this.clickHandler(facet)));
-			      $(this.target).append(' | ');
-			    };
-			$(this.target).append('<\p>');
+			$(this.target).append('<div id="' + divFieldID + '"></div>');
+			
+			
+
+			$('div#'+divFieldID).append(AjaxSolr.theme('facet_content',stopValue,objectedItems,divFieldID,self));
+				
+			
+			if(stopValue == (this.startingValue + this.incrementValue)) {
+				//$(this.target).append(AjaxSolr.theme('nextLink',stopValue,objectedItems,divFieldID,this));
+				$(this.target).append(AjaxSolr.theme('nextLink',divFieldID,this));
+			}
+			
 	  }
+		*/
 	  
+  },
+  
+  
+  setStartingValue: function (value) {
+	  alert('value: ' + value);
   },
 
   removeFacet: function (facet) {
@@ -84,6 +114,8 @@ AjaxSolr.FacetBrowserWidget = AjaxSolr.AbstractFacetWidget.extend({
   
 	
 });
+
+
 
 })(jQuery);
 

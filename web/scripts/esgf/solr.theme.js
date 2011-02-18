@@ -126,7 +126,8 @@ AjaxSolr.theme.prototype.facet_browser_title = function(value) {
 };
 
 AjaxSolr.theme.prototype.facet_title = function(value) {
-    return $('<span class="facet_title"><h3>' + value + '</h3></span>');
+	var title = $('<span class="facet_title"><h3>' + value + '</h3></span>');
+    return title;
 };
 
 AjaxSolr.theme.prototype.tag = function (value, weight, handler) {
@@ -142,6 +143,33 @@ AjaxSolr.theme.prototype.no_items_found = function () {
   return 'no items found in current selection';
 };
 
+
+AjaxSolr.theme.prototype.prevLink = function (stopValue,objectedItems,divFieldId,thisObject) {
+	var $facet_link = $('<a href="#" id="prev_' + divFieldId + '"> prev ' + thisObject.incrementValue + '...</a>').click(thisObject.prevClickHandler(divFieldId));
+	return $facet_link;
+};
+
+AjaxSolr.theme.prototype.nextLink = function (divFieldId,thisObject) {
+	var $facet_link = $('<a href="#" id="next_' + divFieldId + '"> next ' + thisObject.incrementValue + '...</a>').click(thisObject.nextClickHandler(divFieldId));
+	return $facet_link;
+};
+
+
+AjaxSolr.theme.prototype.facet_content = function(stopValue,objectedItems,thisObject) {
+	var $facet_content = $('<div></div>');
+	if(thisObject.startingValue < objectedItems.length) {
+		$facet_content.append('<p>');
+		for(var i = thisObject.startingValue, l = stopValue; i < l; i++) {
+			var facetTextValue = objectedItems[i].facet + ' (' + objectedItems[i].count + ') ';
+			var facet = objectedItems[i].facet;
+			$facet_content.append($('<a href="#" class="tag_item" />').text(facetTextValue).click(thisObject.clickHandler(facet)));
+				     
+		};
+		$facet_content.append('</p>');	 
+			 	 
+	}
+	return $facet_content;
+};
 
 
 })(jQuery);

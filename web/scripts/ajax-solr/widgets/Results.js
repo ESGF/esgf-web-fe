@@ -2,9 +2,7 @@
  * Results.js
  */
 
-(function ($) {
-
-
+(function($) {
 AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 
   beforeRequest: function () {
@@ -76,16 +74,9 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
 
   }
 
-
-
 });
 
-
-
-
 })(jQuery);
-
-
 
 
 function postSolrProcessing(doc)
@@ -104,7 +95,7 @@ function postSolrProcessing(doc)
         var sw = new google.maps.LatLng(doc.south_degrees, doc.west_degrees);
         var nw = new google.maps.LatLng(doc.north_degrees, doc.west_degrees);
 
-        var dist = new Array();
+        var dist = [];
         dist[0] = distanceInKm(se,center);
         dist[1] = distanceInKm(ne,center);
         dist[2] = distanceInKm(sw,center);
@@ -130,12 +121,12 @@ function distanceInKm(point1,point2) {
     var lngDiff = (point2.lng()-point1.lng())*Math.PI/180.0;
 
     //note this is in feet
-    var a = Math.acos(Math.sin(seLat1) * Math.sin(seLat2) + Math.cos(seLat1)
-            * Math.cos(seLat2) * Math.cos(lngDiff)) * 20902231.0029;
+    var a = Math.acos(Math.sin(seLat1) * Math.sin(seLat2) +
+            Math.cos(seLat1) * Math.cos(seLat2) * Math.cos(lngDiff)) * 20902231.0029;
 
     //convert feet to km
     var aKm = a/3280.84;
 
-
     return aKm;
 }
+

@@ -11,20 +11,15 @@ AjaxSolr.TemporalWidget = AjaxSolr.AbstractWidget.extend({
         
     $("div#temporal a[rel]").overlay({
 
-		//mask: 'darkred',
     	mask: {opacity: 0.5, color: '#000'},
 		effect: 'apple',
 
 		onBeforeLoad: function() {
 			
-			$('.apple_overlay').css({'width' : '440px'});
-			//$('.apple_overlay').css({'background-image' : 'url(../images/metadata_overlay/white.png'});
+			$('.apple_overlay').css({'width' : '440px'});			
 			
-			
-			// grab wrapper element inside content
 			var wrap = this.getOverlay().find(".contentWrap");
 
-			// load the page specified in the trigger
 			wrap.load(this.getTrigger().attr("href"));
 			
 		},
@@ -55,27 +50,7 @@ AjaxSolr.TemporalWidget = AjaxSolr.AbstractWidget.extend({
 
     					dateFrom = document.getElementById('from');
     					dateTo = document.getElementById('to');
-    					
-    					//delete the original fq (if it existed)
-    					//Manager.store.remove('fq');
-    					/*
-    					var fq = Manager.store.values('fq');
-    				   
-    				    for (var i = 0, l = fq.length; i < l; i++) {
-    				    	
-    				    	if(fqString.search('start') != -1) {
-    				    		alert('removing start');
-    				    		Manager.store.removeFacet(fq[i]);
-    				    	}
-    				    	if(fqString.search('stop') != -1) {
-    				    		alert('removing start');
-    				    		Manager.store.removeFacet(fq[i]);
-    				    	}
-    				    }
-    				    */
     					dates.not(this).datepicker("option",option,date);
-
-    					
     				}
     			});
     			
@@ -151,25 +126,7 @@ AjaxSolr.TemporalWidget = AjaxSolr.AbstractWidget.extend({
 
 	});
     
-    
-
-    
-  },
-  
-  
-  
-
-  removeFacet: function (facet) {
-    var self = this;
-    
-  },
-  
-  init: function () {
-	  
-	  
-	  
   }
-  
   
 	
 });

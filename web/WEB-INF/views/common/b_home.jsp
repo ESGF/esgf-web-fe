@@ -57,22 +57,8 @@
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Temporal.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Annotator.js" />"> </script>
 
-    <!--
-    <script type="text/javascript" src="<c:url value="/scripts/esgf/Geospatial.js" />"> </script>
-    -->
-
-    <!--
-    -->
-
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.theme.js" />"> </script>
-
-
-
-    <!--
-    <link href='http://fonts.googleapis.com/css?family=Droid+Sans&subset=latin'
-        rel='stylesheet' type='text/css'>
-    -->
 
     <link rel="stylesheet"
         href="<c:url value="/styles/cupertino/jquery-ui-1.8.5.custom.css" />"
@@ -143,11 +129,7 @@
     <div class="apple_overlay" id="metadata_overlay"><div class="contentWrap"></div></div>
 
     <div class="apple_overlay" id="annotator_overlay"><div class="contentWrap"></div></div>
-
-    <!--
-    <div class="apple_overlay" id="facet_overlay"><div class="contentWrap"></div></div>
-    -->
-
+    
     <!-- facet overlay -->
     <!-- need to replace the following with a separate html -->
 
@@ -178,15 +160,8 @@
         <div class="overlay_footer" style="display:none">
         </div>
     </div>
+    <!-- end overlay section-->
 
-
-
-    <!-- end facet overlay -->
-
-
-
-    <div id="temp-browse"></div>
-    <div id="metadata-browse"></div>
 
 <div id="header" class="span-24 last">
     <div class="span-16 left">

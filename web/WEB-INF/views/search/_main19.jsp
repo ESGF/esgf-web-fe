@@ -25,12 +25,12 @@
     <div id="search-results"> </div>
 
     <div id="carts">
-    <table><tbody id="datasetList"></tbody></table>
+    <table id="datasetList"></table>
     </div>
 
     <script id="cartTemplate" type="text/x-jquery-tmpl">
         <tr>
-               <td> ${Id} </td>
+               <td> ${ID} </td>
         </tr>
     </script>
 

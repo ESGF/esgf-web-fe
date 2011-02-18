@@ -28,6 +28,17 @@ ESGF.namespace = function (ns_string) {
 
 var esgf_core   = ESGF.namespace("ESGF.core");
 var esgf_search = ESGF.namespace("ESGF.search");
+var esgf_util   = ESGF.namespace("ESGF.util");
 
 // predefine a few properties
 ESGF.search.selected = ESGF.search.selected || {};
+
+
+// general util functions
+ESGF.util.toArray = function (obj) {
+    var arr = [],
+        i = 0;
+    arr.push({"ID": "001"});
+    arr.push({"ID": "002"});
+    return arr;
+};

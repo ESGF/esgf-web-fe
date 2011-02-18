@@ -17,7 +17,7 @@
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/scrollable.navigator.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/scrollable.autoscroll.js" /> "></script>
 
-    <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/jquery.tmpl.min.js" /> "></script>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/jquery.tmpl.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/jquery.livequery.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/jquery.autocomplete.js" /> "></script>
 
@@ -129,7 +129,7 @@
     <div class="apple_overlay" id="metadata_overlay"><div class="contentWrap"></div></div>
 
     <div class="apple_overlay" id="annotator_overlay"><div class="contentWrap"></div></div>
-    
+
     <!-- facet overlay -->
     <!-- need to replace the following with a separate html -->
 
@@ -141,20 +141,20 @@
         </div>
         <div class="overlay_border" style="display:none"></div>
         <div class="overlay_content" style="display:none">
-         
-	       	<div class="scrollable facet_verticalscroll">
-	            <div class="facet_items">
-	                <div id="project"></div>
-	                <div id="model"></div>
-	                <div id="experiment"></div>
-	                <div id="frequency"></div>
-	                <div id="realm"></div>
-	                <div id="instrument"></div>
-	                <div id="variable"></div>
-	                <div id="cf_variable"></div>
-	                <div id="gcmd_variable"></div>
-	            </div>
-	        </div>
+
+               <div class="scrollable facet_verticalscroll">
+                <div class="facet_items">
+                    <div id="project"></div>
+                    <div id="model"></div>
+                    <div id="experiment"></div>
+                    <div id="frequency"></div>
+                    <div id="realm"></div>
+                    <div id="instrument"></div>
+                    <div id="variable"></div>
+                    <div id="cf_variable"></div>
+                    <div id="gcmd_variable"></div>
+                </div>
+            </div>
         </div>
         <div class="overlay_border" style="display:none"></div>
         <div class="overlay_footer" style="display:none">

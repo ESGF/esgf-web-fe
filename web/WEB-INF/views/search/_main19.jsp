@@ -1,13 +1,3 @@
-<script type="text/javascript">
-
-
-    $(function(){
-        $('#myTabs').tabs();
-    });
-
-
-</script>
-
 
 
 <div class="span-19 last">
@@ -25,17 +15,15 @@
     <div id="search-results"> </div>
 
     <div id="carts">
-    <table id="datasetList"></table>
+        <ul id="datasetList"></ul>
     </div>
-
-    <script id="cartTemplate" type="text/x-jquery-tmpl">
-        <tr>
-               <td> ${ID} </td>
-        </tr>
-    </script>
-
-
+</div>
 </div>
 
-</div>
+<script type="text/javascript">
+  
+    $(function(){
+        $('#myTabs').tabs();
+    });
 
+</script>

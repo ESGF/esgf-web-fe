@@ -98,9 +98,6 @@
         type="text/css" media="screen, projection">
 
 
-    <link rel="stylesheet"
-        href="<c:url value="/styles/metadata_overlay.css" />"
-        type="text/css" media="screen, projection">
 
     <link rel="stylesheet"
         href="<c:url value="/styles/temporal_overlay.css" />"

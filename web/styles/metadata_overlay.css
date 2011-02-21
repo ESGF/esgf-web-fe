@@ -1,269 +1,104 @@
-
-
-/* root element for scrollable */
-.metadata_verticalscroll {  
+	/* root element for scrollable */
+.m_vertical {  
 	
-	/* required settings */ 
+	/* required settings */
 	position:relative;
 	overflow:hidden;	
 
 	/* vertical scrollers have typically larger height than width */	
-	height: 375px;	 
-	width: 600px;
-	border:1px dotted #ddd;	
-*/
+	height: 400px;	 
+	width: 630px;
+	/* border-top:1px solid #ddd; */	
 }
 
 /* root element for scrollable items */
-.metadata_items {	
+.m_items {	
 	position:absolute;
 	
-	/* this time we have very large space for height */
+	/* this time we have very large space for height */	
 	height:20000em;	
 	margin: 0px;
-	font-size:10px;
 }
 
 /* single scrollable item */
-.metadata_item {
-	
-    border:1px solid #ddd;
-	margin-left:10px;
-	margin-bottom:10px;
-	font-size:10px;
-	
-	min-height:140px;
-
-}	
-	
-
-/*
-
-
-
-.addedMetadata {
-	padding-top:0px;
-	font-size: 12px;
-	padding-bottom: 10px;
-}
-
-.addedMetadataTitle {
-	padding:0px;
-	font-weight: bold;	
-	font-size: 15px;
-	padding-bottom: 10px;
-}
-
-
-.itemscroll {
-	border-bottom:1px solid #ddd;
-	
+.m_item {
+	/* border-bottom:1px solid #ddd; */
 	margin:10px 0;
-	padding:10px;
+	padding:15px;
 	font-size:12px;
-	height:150px;
+	min-height:20px;
+	clear: both;
 }
 
-.abstract_item {
-	border-bottom:1px solid #ddd;
-	
-	margin:10px 0;
-	padding:10px;
-	font-size:12px;
-	height:400px;
-}
-
-.geospatial_item {
-	/margin:10px 0;
-	padding:0px;
-	font-size:12px;
-	height:150px;
-}
-
-.temporal_item {
-	margin:10px 0;
-	padding:0px;
-	font-size:12px;
-	height:100px;
-}
-
-#geo_map {
-	float:right;
-	height:150px;
-	width: 250px;
-}
-#geo_info {
+/* elements inside single item */
+.m_item img {
 	float:left;
-	height:100px;
-	width: 150px;
+	margin-right:20px;
+	height:180px;
+	width:240px;
 }
 
-#geospatial_metadata {
-}
-
-.shortitem {
-	background: white;
-	margin:10px 0;
-	padding:0px;
-	font-size:12px;
-	height:50px;
-}
-
-.mediumitem {
-	background: white;
-	margin:10px 0;
-	padding:0px;
-	font-size:12px;
-	height:75px;
+.m_item h3 {
+	margin:0 0 5px 0;
+	font-size:16px;
+	color:#456;
+	font-weight:normal;
 }
 
 .leftsd {
 	float:left;	
 	padding-right: 20px;
 	font-weight: bold;	
+	font-size: 14px;
 	
 }
 
 .rightsd {
 	float:right;
-	width: 475px;
+	width: 70%;
 }
 
-*/
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
- Overlay 
-
-
-*/
-
-
-/*
-a:hover {
-	cursor:pointer;	
+#geo_map {
+	float:right;
+	height:150px;
+	width: 45%;
 }
-
-#button{
-text-align:center;
-margin:100px;
-}
-
-#metadata_report{
-	display:none;
-}
-
-#metadata_summary{
-
-	
-    position: absolute;
-    
-    margin-top: 5em;
-    float: left;
-	width: 750px;
-	background-color: #eeeeee;
-	border: 1px solid #000;
-    left: 5em;
-    padding-bottom: 20px;
-}
-
-#metadata_titleblock {
-	padding: 20px;
-	padding-left: 250px;
-	padding-bottom: 50px;
-	border: 3px solid black;
-	
-}
-
-#metadata_title {
-	position:relative;
+#geo_info {
 	float:left;
-	font-size: 175%;
-	padding: 0px;
+	/* height:100px; */
+	width: 20%;
 }
 
-
-
-#metadata_return {
-	position:relative;
-	float:right;
-	padding: 5px;
-	border: 1px solid #9c9c9c;
-	background: #6FA5FD;
-	cursor: pointer;
+.addedMetadataTitle {
 	
-	font-size: 125%;
+	font-weight: bold;	
+	font-size: 16px;
 }
 
-#metadata_return:hover {
-	background: #00FF00;
+
+/* the action buttons above the scrollable */
+#actions {
+	width:630px;
+	margin:10px 0 10px 0;	
 }
 
-#metadata_title_gap {
-	position:relative;
+#actions a {
+	font-size:11px;		
+	cursor:pointer;
+	color:#666;
+}
+
+#actions a:hover {
+	text-decoration:underline;
+	color:#000;
+}
+
+.disabled {
+	visibility:hidden;		
+}
+
+.next {
 	float:right;
-	padding: 5px;	
-	padding-bottom: 50px;
-}
-
-#metadata_download {
-	position:relative;
-	float:right;
-	padding: 5px;
-	border: 1px solid #9c9c9c;
-	background: #CCFFFF;
-	
-	background: #6FA5FD;
-	cursor: pointer;
-	font-size: 125%;
-}
-
-#metadata_download:hover {
-	background: #00FF00;
-}
-
-
-#metadata_recordblock {
-	padding-top: 20px;	
-	padding-left: 20px;
-}
-
-.metadata_info {
-	padding: 10px;
-}
-
-.metadata_info tr {
-	border: 0px solid black;
-}
-
-.metadata_info td {
-	vertical-align: top;
-	padding: 10px;
-	border: 0px solid black;
-	width: 300px;
-}
-
-.metadata_field_name {
-	font-weight: bold;
-}
-*/
-
+}	

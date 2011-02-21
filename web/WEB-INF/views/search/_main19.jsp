@@ -1,12 +1,4 @@
-<script type="text/javascript">
 
-
-    $(function(){
-        $('#myTabs').tabs();
-    });
-
-
-</script>
 
 
 

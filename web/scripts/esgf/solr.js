@@ -78,7 +78,7 @@
 
     Manager.init();
 
-    var fields = ['project' , 'model', 'experiment', 'frequency', 'realm', 'instrument', 'variable', 'cf_variable', 'gcmd_variable'];
+    var fields = ['project', 'model', 'experiment', 'frequency', 'realm', 'instrument', 'variable', 'cf_variable', 'gcmd_variable']; //['project' , 'model', 'experiment', 'frequency', 'realm', 'instrument', 'variable', 'cf_variable', 'gcmd_variable'];
 
 
 
@@ -112,6 +112,7 @@
           }));
         }
 
+    
     Manager.store.addByValue('q', '*:*');
 
 
@@ -131,7 +132,7 @@
 
 $(document).ready(function(){
 
-    /* scroll wheel for metadata and facet overlays */
+    /* scroll wheel for facet overlay */
     $(".scrollable").scrollable({ vertical: true, mousewheel: true });
 
     /* For the facet overlay */

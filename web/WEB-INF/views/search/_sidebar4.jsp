@@ -20,6 +20,10 @@
       
     <div id="geo"><a href="<c:url value="/scripts/esgf/geospatial_overlay.html" />" rel="#geospatial_overlay" style="text-decoration:none"> Geospatial</a> </div>
     
+    <!--  
+    <div id="category"><a href="<c:url value="/scripts/esgf/facet_overlay.html" />" rel="#facet_overlay" style="text-decoration:none"> Categories</a> </div>
+    -->
+    
 </div>             
 </div> 
 

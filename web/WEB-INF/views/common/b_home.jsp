@@ -128,6 +128,7 @@
     <!-- facet overlay -->
     <!-- need to replace the following with a separate html -->
 
+	<!--  
     <div class="apple_overlay" id="facet_overlay">
         <div class="overlay_header" style="display:none">
             <div class="overlay_header_title">
@@ -136,7 +137,10 @@
         </div>
         <div class="overlay_border" style="display:none"></div>
         <div class="overlay_content" style="display:none">
-
+			<div id="actions1"> 
+					<a class="prev">&laquo; Back</a> 
+					<a class="next">More &raquo;</a> 
+			</div>
                <div class="scrollable facet_verticalscroll">
                 <div class="facet_items">
                     <div id="project"></div>
@@ -155,6 +159,7 @@
         <div class="overlay_footer" style="display:none">
         </div>
     </div>
+    -->
     <!-- end overlay section-->
 
 
@@ -162,7 +167,7 @@
     <div class="span-16 left">
     <span class="tabitem"> <a href="#"> Home </a></span>
 
-    <span class="tabitem" id="facet"> <a href="#" rel="#facet_overlay"> Browse </a> </span>
+    <span class="tabitem" id="facet"> <a href="#" rel="#facet_overlayhhh"> Browse </a> </span>
     <!--
     <span class="tabitem" id="facet"><a href="<c:url value="/scripts/esgf/facet_overlay.html" />" rel="#facet_overlay" > Browse</a> </span>
     -->

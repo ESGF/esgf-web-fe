@@ -34,7 +34,7 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
    * @public
    * @type Integer
    */
-  incrementValue: 10,
+  incrementValue: 20,
   
   /**
    * @returns {Boolean} Whether any filter queries have been set using this
@@ -139,7 +139,7 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
     	self.displayFacetValues();
     	
       return false;
-    }
+    };
   },
   
   /**

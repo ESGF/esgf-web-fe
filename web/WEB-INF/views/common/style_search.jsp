@@ -1,5 +1,10 @@
     <%@ include file="/WEB-INF/views/common/include.jsp" %>
-    
+
+    <link rel="stylesheet"
+        href='<c:url value="/styles/blueprint/plugins/fancy-type/screen.css" />'
+        type="text/css" media="screen, projection">
+
+
     <!--
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans&subset=latin'
         rel='stylesheet' type='text/css'>
@@ -13,16 +18,10 @@
         type="text/css" media="screen, projection"><![endif]-->
 
     <link rel="stylesheet"
-        href='<c:url value="/styles/blueprint/plugins/fancy-type/screen.css" />'
-        type="text/css" media="screen, projection">
-
-    <link rel="stylesheet"
         href='<c:url value="/styles/jquery.autocomplete.css" />'
         type="text/css" media="screen, projection">
 
-    <link rel="stylesheet"
-        href='<c:url value="/styles/esg-simple.css" />'
-        type="text/css" media="screen, projection">
+
 
     <link rel="stylesheet"
         href='<c:url value="/styles/overlay.css" />'
@@ -47,4 +46,9 @@
 
      <link rel="stylesheet"
         href='<c:url value="/styles/annotator_overlay.css" />'
+        type="text/css" media="screen, projection">
+
+
+    <link rel="stylesheet"
+        href='<c:url value="/styles/esg-simple.css" />'
         type="text/css" media="screen, projection">

@@ -46,10 +46,11 @@
                 </c:when>
 
                 <c:when test="${layoutType=='left-main-search'}">
-                    <div class="span-4 last" id="left">
+
+                    <div class="span-4" id="left"">
                         <ti:insertAttribute name="left" />
                     </div>
-                    <div class="prepend-1 span-19 last" id="main">
+                    <div class="span-20 last" id="main">
                         <ti:insertAttribute name="main" />
                     </div>
                 </c:when>

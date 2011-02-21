@@ -18,7 +18,7 @@
 </div>
 
 <script type="text/javascript">
-  
+
     $(function(){
         $('#myTabs').tabs();
     });

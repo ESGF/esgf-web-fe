@@ -1,77 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://www.springframework.org/schema/security"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:beans="http://www.springframework.org/schema/beans"
-    xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-    
-    xsi:schemaLocation="
-     http://www.springframework.org/schema/beans 
-     http://www.springframework.org/schema/beans/spring-beans.xsd
-     http://www.springframework.org/schema/jdbc
-     http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd 
-     http://www.springframework.org/schema/security
-     http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:security="http://www.springframework.org/schema/security"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	                       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+	   					   http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 
+	<!-- auto-detect security beans -->
+ 	<context:component-scan base-package="org.esgf.security"/>
+ 	
+ 	<!-- Login controller that renders login page -->
+ 	<mvc:view-controller path="/login" view-name="login" />
+ 	
+ 	<!-- temporary views to test access control -->
+ 	<mvc:view-controller path="/user" view-name="/tmp/user" />
+ 	<mvc:view-controller path="/admin" view-name="/tmp/admin" />
+	
+	<!-- The "http" namespace element automatically creates the following filters: 
+	     HttpSessionContextIntegrationFilter, ExceptionTranslationFilter and FilterSecurityInterceptor,
+	     in the proper order. 
+	     The attribute use-expressions="true" allows use of role-based security tags in the views.
+	     -->
+	<security:http use-expressions="true">
 
-    <http auto-config="true" use-expressions="true">
-    
-        <access-denied-handler error-page="/accessDenied" />
-    
-        <intercept-url pattern="/login" access="permitAll" />
-        <intercept-url pattern="/register" access="permitAll" />
-        <intercept-url pattern="/registerOpenId" access="permitAll" />
-        <!--  
-        <intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
-        -->
-        
-        <intercept-url pattern="/**" access="isAuthenticated()" />
-              
-        <logout invalidate-session="true" logout-success-url=""
-            logout-url="/logout" />
-            
-                
-        <openid-login
-            login-page="/live" 
-            authentication-failure-handler-ref="openIdAuthFailureHandler" 
-            user-service-ref="jdbcUserServiceCustom"
-            default-target-url="/live">
-            
-            <attribute-exchange>
-                <openid-attribute name="firstName" type="http://schema.openid.net/namePerson/first"/>
-                <openid-attribute name="lastName" type="http://schema.openid.net/namePerson/last"/>
-                <openid-attribute name="email" type="http://schema.openid.net/contact/email" required="true"/>
-                <openid-attribute name="country" type="http://schema.openid.net/contact/country/home"/>
-                <openid-attribute name="email2" type="http://axschema.org/contact/email" required="true"/>
-                <openid-attribute name="namePerson2" type="http://axschema.org/namePerson" required="true"/>
-            </attribute-exchange>
-        </openid-login>
+		<!-- Note: require HTTP for all URLs to avoid problems with secure cookies -->
+		<!-- <security:intercept-url pattern="/login" requires-channel="http" />
+		<security:intercept-url pattern="/j_spring_openid_security_check" requires-channel="http" /> -->
+		<security:intercept-url pattern="/**/user/**" requires-channel="http" access="hasRole('ROLE_USER')"/>
+		<security:intercept-url pattern="/**/admin/**" requires-channel="http" access="hasRole('ROLE_ADMIN')"/>
+		<security:intercept-url pattern="/**" requires-channel="http" />
+		
+		<!-- The "openid-login" tag creates an OpenID login entry point and an OpenIDAuthenticationProvider, 
+		     which requires an implementation of UsersDetailsService defined in the context.
+		     Also, it creates an OpenIDAuthenticationFilter that redirects the client to the OpenID
+		     Identity Provider before authentication, and process the HTTP redirect from
+		     the OpenID Identity Provider after the client has successfully authenticated -->
+    	<security:openid-login login-page="/login" user-service-ref="userDetailsService" 
+    	                       login-processing-url="/j_spring_openid_security_check"
+    	                       default-target-url="/login" authentication-failure-url="/login?failed=true">
+    	                
+	    	<!-- example attributes retrieved by openid exchange - names must match the server aliases... -->
+	    	<security:attribute-exchange>
+	    		<security:openid-attribute name="email" type="http://axschema.org/contact/email" required="true"/>
+	    		<security:openid-attribute name="firstname" type="http://axschema.org/namePerson/first"/>
+	    		<security:openid-attribute name="lastname" type="http://axschema.org/namePerson/last" />
+	  		</security:attribute-exchange>
+    	                       
+    	</security:openid-login>
+    	                       
+    	<!-- Custom filter to remember the openid in a cookie -->
+		<security:custom-filter position="FIRST" ref="openidCookieFilter"/>
 
-         <session-management>
-            <concurrency-control expired-url="/login?error=expired"/>
-         </session-management>
-                         
-    </http>     
-    
-   
-    <authentication-manager alias="authenticationManager">
-        <authentication-provider ref="signedRequestAuthenticationProvider"/>
-        <authentication-provider user-service-ref="jdbcUserServiceCustom">
-            <password-encoder ref="passwordEncoder">
-                <salt-source ref="saltSource"/>
-            </password-encoder>
-        </authentication-provider>
-    </authentication-manager>
-
-    <jdbc:embedded-database id="dataSource" type="HSQL">
-        <jdbc:script location="classpath:security-schema.sql"/>
-        <jdbc:script location="classpath:remember-me-schema.sql"/> 
-        <jdbc:script location="classpath:test-users-groups-data.sql"/>
-         <!--  Ch 7 ACL  -->
-         <jdbc:script location="classpath:acl-schema.sql"/>
-         <jdbc:script location="classpath:test-acl-data.sql"/>
-    </jdbc:embedded-database>
-     
-    
-</beans:beans>
+		<!-- default attribute values: 
+		     logout-url="/j_spring_security_logout"
+		     logout-success-url="/"
+		     invalidate-session="true"
+		-->		
+		<security:logout></security:logout>
+    	
+	</security:http>
+		
+	<!-- Provider implementation of AuthenticationManager -->
+	<security:authentication-manager alias="authenticationManager">
+    	<security:authentication-provider user-service-ref='userDetailsService'/>
+  	</security:authentication-manager>
+  	  	
+</beans>
      

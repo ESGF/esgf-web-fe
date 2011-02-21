@@ -14,11 +14,11 @@
         
     <div class="span-20 last" id="search-summary">
     
-    <div class="span-5" id="search-speed">
+    <div class="span-7" id="search-speed">
     <div id="search-help">(press ESC to close suggestions)</div>
     </div>
 
-    <div id="page-navigation" class="span-15 last">
+    <div id="page-navigation" class="span-13 last">
       <ul id="pager"></ul>
       <div id="pager-header"></div>          
     </div>
@@ -26,5 +26,4 @@
     </div> <!--  search summary -->
         
 </div> 
-
            

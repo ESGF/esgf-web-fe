@@ -1,5 +1,4 @@
-
-<div class="span-19 last">
+<%@ include file="/WEB-INF/views/search/_overlay.jsp" %>
 
 <div id="myTabs">
 
@@ -16,7 +15,6 @@
     <div id="carts">
         <ul id="datasetList"></ul>
     </div>
-</div>
 </div>
 
 <script type="text/javascript">

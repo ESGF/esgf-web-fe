@@ -15,24 +15,35 @@
 
 
 	<!-- Forwards requests to the "/" resource to the "welcome" view -->
-	
 	<mvc:view-controller path="/" view-name="welcome" />
      
-
-    <bean id="viewResolver" 
-        class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+    <bean id="viewResolver"  class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
         <property name="basename" value="views"/>
     </bean>
+    
+    <!-- Spring handler and controller to map an HTTP request URL directly to a view with a name equal to the URL path.
+	     This handler is ordered last to allow the Spring dispatcher to invoke more specific URL mappings first. 
+		 example: http://hostname/context/home.htm resolves to "home" logical view     
+	-->
+	<bean id="jspFilenameMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="order" value="1000" />
+		<property name="mappings">
+			<props>
+				<prop key="/*">urlFilenameViewController</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="urlFilenameViewController" class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />	
 
-    <!-- Resolves view names to protected .jsp resources within the /WEB-INF/views directory -->
-     
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <!-- Resolves view names to protected .jsp resources within the /WEB-INF/views directory 
+    	 For example, the "home" logical view is resolved to /WEB-INF/views/home.jsp
+    -->
+    <bean id="internalViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/views/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
          
-    <bean id="tilesConfigurer" 
-        class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+    <bean id="tilesConfigurer"  class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
         <property name="definitions">
         <list>
             <value>/WEB-INF/defs/general.xml</value>
@@ -40,8 +51,7 @@
         </property>     
     </bean>
 
-    <bean id="tilesViewResolver"
-        class="org.springframework.web.servlet.view.UrlBasedViewResolver"
-        p:viewClass="org.springframework.web.servlet.view.tiles2.TilesView" />
+    <bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver"
+          p:viewClass="org.springframework.web.servlet.view.tiles2.TilesView" />
 
 </beans>

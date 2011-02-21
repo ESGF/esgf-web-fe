@@ -5,6 +5,57 @@
     
 <tiles-definitions>
 
+	<!-- base layout for this application -->
+	<definition name="base-layout" template="/WEB-INF/views/common/layout-template.jsp">
+	
+	    <!-- JS -->
+    	<put-attribute name="script" value="/WEB-INF/views/common/script.jsp" />
+    	<put-attribute name="extrascript" value="" />
+    	
+    	<!-- CSS -->
+    	<put-attribute name="style" value="/WEB-INF/views/common/style.jsp" />
+    	<put-attribute name="extrastyle" value="" />
+    	
+    	<!-- HTML -->
+    	<put-attribute name="banner"  value=""/>
+    	<!-- <put-attribute name="banner"  value="/WEB-INF/views/common/banner.jsp"/> -->
+    	<put-attribute name="header"  value="/WEB-INF/views/common/header.jsp"/>
+    	<put-attribute name="subheader"  value=""/>
+        <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+        
+        <!-- extensible layout type -->
+        <put-attribute name="layoutType" type="string" value=""/>
+	
+	</definition>
+
+	<!-- single main content layout -->
+    <definition name="main-layout" extends="base-layout">
+    	<put-attribute name="layoutType" type="string" value="main"/>
+    </definition>
+    
+    <!-- left-sidebar + main content layout -->
+    <definition name="left-main-layout" extends="base-layout">
+    	<put-attribute name="layoutType" type="string" value="left-main"/>
+    </definition>
+    
+    <!-- left-sidebar + main content + right sidebar layout -->
+    <definition name="left-main-right-layout" extends="base-layout">
+    	<put-attribute name="layoutType" type="string" value="left-main-right"/>
+    </definition>
+    
+    <!-- search template -->
+    <definition name="b_live" extends="left-main-layout">
+    
+    	<put-attribute name="extrascript"  value="/WEB-INF/views/common/script_search.jsp" /> 
+    	<put-attribute name="extrastyle"  value="/WEB-INF/views/common/style_search.jsp" />
+    	    
+        <put-attribute name="subheader" value="/WEB-INF/views/search/_subheader24.jsp" />
+        <put-attribute name="left" value="/WEB-INF/views/search/_sidebar4.jsp" />
+        <put-attribute name="main" value="/WEB-INF/views/search/_main19.jsp" />   
+                         
+    </definition>
+    
+    <!--
     <definition name="b_home" template="/WEB-INF/views/common/b_home.jsp">
         <put-attribute name="subheader-24"  value=""/>
         <put-attribute name="sidebar-4"  value=""/>
@@ -19,6 +70,9 @@
         <put-attribute name="main-19"
             value="/WEB-INF/views/search/_main19.jsp" />                    
     </definition>
+    -->
+
+<!-- start obsolete ? -->
 
     <definition name="base" template="/WEB-INF/views/common/b_search.jsp">
         <put-attribute name="facets"  value=""/>
@@ -42,6 +96,7 @@
     <definition name="search_facets" 
         template="/WEB-INF/views/search/_search_facets.jsp">
     </definition>
+    
+<!-- end obsolete ? -->
 
 </tiles-definitions>
-            

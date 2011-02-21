@@ -25,10 +25,11 @@ h3 {
 }
 
 /* fix the left margin */
-
+/* commented out to allow the page to be centered 
 .container {
 	margin-left: 10px;
 }
+*/
 
 
 /* style the search box */

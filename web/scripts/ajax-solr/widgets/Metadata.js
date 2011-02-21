@@ -18,25 +18,29 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
 	
 	
     $("a.met").click(function () {
+    	
     	var idStr = $(this).parent().find("a").attr("id");
 	  	globalRecordId = idStr;
 		metadatafileformat = $(this).parent().find("a").attr("format");
 		metadatafilename = $(this).parent().find("a").attr("metadata_url");
     });
     
-    $(".m a[rel]").overlay({
+    
+    
+    $(".ai_meta a[rel]").overlay({
     	
 		//mask: 'darkred',
 		mask: {opacity: 0.5, color: '#000'},
 		
 		effect: 'apple',
+		top: '2%',
+		left: '2%',
 
 		onBeforeLoad: function() {
 			
-			$('.apple_overlay').css({'width' : '640px'});
+			$('.apple_overlay').css({'width' : '720px'});
 			var wrap = this.getOverlay().find(".contentWrap");
 			wrap.load(this.getTrigger().attr("href"));
-			
 		},
     
     	onLoad: function() {
@@ -45,6 +49,54 @@ AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
 			$(".overlay_content").show();
 			$(".overlay_footer").show();
 			$(".overlay_border").show();
+
+
+			$(".scrollable").scrollable({ vertical: true, mousewheel: true });	
+			
+    		id = globalRecordId;
+    		var title = 'title';
+    		
+    		
+    		metadata_report(id,title,metadatafilename,metadatafileformat);
+    	  	
+    	},
+		
+		onClose: function() {
+			$(".overlay_header").hide();
+			$(".overlay_content").hide();
+			$(".overlay_footer").hide();
+			$(".overlay_border").hide();
+		}
+
+	});
+    
+    $(".m a[rel]").overlay({
+    	
+		//mask: 'darkred',
+		mask: {opacity: 0.5, color: '#000'},
+		
+		effect: 'apple',
+		top: '2%',
+		left: '2%',
+
+		onBeforeLoad: function() {
+			
+			$('.apple_overlay').css({'width' : '720px'});
+			var wrap = this.getOverlay().find(".contentWrap");
+			wrap.load(this.getTrigger().attr("href"));
+			
+			alert('before loading met report');
+		},
+    
+    	onLoad: function() {
+
+			$(".overlay_header").show();
+			$(".overlay_content").show();
+			$(".overlay_footer").show();
+			$(".overlay_border").show();
+
+
+			$(".scrollable").scrollable({ vertical: true, mousewheel: true });	
 			
     		id = globalRecordId;
     		var title = 'title';

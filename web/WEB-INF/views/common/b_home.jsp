@@ -27,8 +27,6 @@
     <script type="text/javascript" src="<c:url value="/scripts/esgf/logger_1.0.0.js" /> "></script>
 
 
-
-
     <script type="text/javascript"
         src="http://maps.google.com/maps/api/js?sensor=false">
     </script>
@@ -100,9 +98,6 @@
         type="text/css" media="screen, projection">
 
 
-    <link rel="stylesheet"
-        href="<c:url value="/styles/metadata_overlay.css" />"
-        type="text/css" media="screen, projection">
 
     <link rel="stylesheet"
         href="<c:url value="/styles/temporal_overlay.css" />"

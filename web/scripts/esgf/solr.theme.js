@@ -21,19 +21,12 @@ AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
     var urlStr = 'url="' + doc.url + '" ';
     var formatStr = 'format="' + doc.metadata_format + '" ';
     var metadataURLStr = 'metadata_url="' + doc.metadata_url + '" ';
-    var descriptionStr = 'description="' + doc.description + '" ';
-    var westDegreesStr = 'west_degrees="' + doc.west_degrees + '" ';
-    var eastDegreesStr = 'east_degrees="' + doc.east_degrees + '" ';
-    var northDegreesStr = 'north_degrees="' + doc.north_degrees + '" ';
-    var southDegreesStr = 'south_degrees="' + doc.south_degrees + '" ';
-    var datetime_startStr = 'datetime_start="' + doc.datetime_start + '" ';
-    var datetime_stopStr = 'datetime_stop="' + doc.datetime_stop + '" ';
 
-    var allStr = idStr + titleStr + urlStr + formatStr +  metadataURLStr + descriptionStr + westDegreesStr + eastDegreesStr + northDegreesStr + southDegreesStr + datetime_startStr + datetime_stopStr;
+    var allStr = idStr + titleStr + urlStr + formatStr +  metadataURLStr; //+ descriptionStr + westDegreesStr + eastDegreesStr + northDegreesStr + southDegreesStr + datetime_startStr + datetime_stopStr;
 
     output += '<div class="search-entry">';
-      output += '<h4 class="desc"> <div class="m"><a href="#"' + allStr + '></a>';
-      output += '<a href="/esgf-web-fe/scripts/esgf/metadata_overlay.htm" rel="#metadata_overlay" class="met" style="text-decoration:none">';
+      output += '<h4 class="desc">';
+      output += '<a href="#" style="text-decoration:none">';
       output += doc.title + '</a>';
       output += '</h4>' ;
       output += '<p id="links_' + doc.id + '" class="links"></p>';
@@ -49,8 +42,16 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         selected = ESGF.search.selected,
         carts = [];
 
+    
+    var idStr = 'id="' + doc.id + '" ';
+    var titleStr = 'title="' + doc.title + '" ';
+    var urlStr = 'url="' + doc.url + '" ';
+    var formatStr = 'format="' + doc.metadata_format + '" ';
+    var metadataURLStr = 'metadata_url="' + doc.metadata_url + '" ';
+    var allStr = idStr + titleStr + urlStr + formatStr +  metadataURLStr; 
+    
     output += "Further options: ";
-    output += '<span class="actionitem ai_meta"><a href="#"> Metadata Summary</a></span>';
+    output += '<span class="actionitem ai_meta"><a href="/esgf-web-fe/scripts/esgf/metadata_overlay.html" class="met" rel="#metadata_overlay"' + allStr + '> Metadata Summary</a></span>';
 
     selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
     output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Select</a></span>';

@@ -33,7 +33,7 @@ AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
 
     output += '<div class="search-entry">';
       output += '<h4 class="desc"> <div class="m"><a href="#"' + allStr + '></a>';
-      output += '<a href="/esgf-web-fe/scripts/esgf/metadata_overlay.html" rel="#metadata_overlay" class="met" style="text-decoration:none">';
+      output += '<a href="/esgf-web-fe/scripts/esgf/example.html" rel="#metadata_overlay" class="met" style="text-decoration:none">';
       output += doc.title + '</a>';
       output += '</h4>' ;
       output += '<p id="links_' + doc.id + '" class="links"></p>';
@@ -50,7 +50,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         carts = [];
 
     output += "Further options: ";
-    output += '<span class="actionitem ai_meta"><a href="#"> Metadata Summary</a></span>';
+    output += '<span class="actionitem ai_meta"><a href="/esgf-web-fe/scripts/esgf/metadata_overlay.html"> Metadata Summary</a></span>';
 
     selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
     output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Select</a></span>';

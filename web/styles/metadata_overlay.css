@@ -9,19 +9,36 @@
 
 	/* vertical scrollers have typically larger height than width */	
 	height: 375px;	 
-	width: 700px;
-	/*border-top:1px solid #ddd;	
+	width: 600px;
+	border:1px dotted #ddd;	
 */
 }
 
-
-/*
-.itemsscroll {	
+/* root element for scrollable items */
+.metadata_items {	
 	position:absolute;
 	
+	/* this time we have very large space for height */
 	height:20000em;	
 	margin: 0px;
+	font-size:10px;
 }
+
+/* single scrollable item */
+.metadata_item {
+	
+    border:1px solid #ddd;
+	margin-left:10px;
+	margin-bottom:10px;
+	font-size:10px;
+	
+	min-height:140px;
+
+}	
+	
+
+/*
+
 
 
 .addedMetadata {

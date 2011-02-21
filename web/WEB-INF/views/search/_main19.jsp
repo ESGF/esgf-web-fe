@@ -1,15 +1,4 @@
-<script type="text/javascript">
-
-
-    $(function(){
-        $('#myTabs').tabs();
-    });
-
-
-</script>
-
 <%@ include file="/WEB-INF/views/search/_overlay.jsp" %>
-
 
 <div id="myTabs">
 
@@ -24,14 +13,14 @@
     <div id="search-results"> </div>
 
     <div id="carts">
-    <table id="datasetList"></table>
+        <ul id="datasetList"></ul>
     </div>
-
-    <script id="cartTemplate" type="text/x-jquery-tmpl">
-        <tr>
-               <td> ${ID} </td>
-        </tr>
-    </script>
-
-
 </div>
+
+<script type="text/javascript">
+  
+    $(function(){
+        $('#myTabs').tabs();
+    });
+
+</script>

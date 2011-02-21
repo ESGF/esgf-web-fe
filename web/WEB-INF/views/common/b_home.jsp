@@ -17,7 +17,7 @@
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/scrollable.navigator.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/scrollable.autoscroll.js" /> "></script>
 
-    <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/jquery.tmpl.min.js" /> "></script>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/jquery.tmpl.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/jquery.livequery.js" /> "></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.4.2/jquery.autocomplete.js" /> "></script>
 
@@ -57,22 +57,8 @@
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Temporal.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/ajax-solr/widgets/Annotator.js" />"> </script>
 
-    <!--
-    <script type="text/javascript" src="<c:url value="/scripts/esgf/Geospatial.js" />"> </script>
-    -->
-
-    <!--
-    -->
-
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.js" />"> </script>
     <script type="text/javascript" src="<c:url value="/scripts/esgf/solr.theme.js" />"> </script>
-
-
-
-    <!--
-    <link href='http://fonts.googleapis.com/css?family=Droid+Sans&subset=latin'
-        rel='stylesheet' type='text/css'>
-    -->
 
     <link rel="stylesheet"
         href="<c:url value="/styles/cupertino/jquery-ui-1.8.5.custom.css" />"
@@ -144,10 +130,6 @@
 
     <div class="apple_overlay" id="annotator_overlay"><div class="contentWrap"></div></div>
 
-    <!--
-    <div class="apple_overlay" id="facet_overlay"><div class="contentWrap"></div></div>
-    -->
-
     <!-- facet overlay -->
     <!-- need to replace the following with a separate html -->
 
@@ -156,14 +138,6 @@
             <div class="overlay_header_title">
                 Category Browser
             </div>
-            <!--
-            <div class="overlay_header_buttons">
-                <div id="facetSort">
-                    <input type="radio" id="sortbycount" name="sorter" checked="checked" value="sortbycount" /><label for="sortbycount">Sort By Count</label>
-                    <input type="radio" id="sortbyabc" name="sorter" value="sortbyabc" /><label for="sortbyabc">Sort By ABC</label>
-                </div>
-            </div>
-            -->
         </div>
         <div class="overlay_border" style="display:none"></div>
         <div class="overlay_content" style="display:none">
@@ -173,37 +147,21 @@
                     <div id="project"></div>
                     <div id="model"></div>
                     <div id="experiment"></div>
-
                     <div id="frequency"></div>
                     <div id="realm"></div>
                     <div id="instrument"></div>
                     <div id="variable"></div>
-
                     <div id="cf_variable"></div>
                     <div id="gcmd_variable"></div>
-
                 </div>
             </div>
         </div>
         <div class="overlay_border" style="display:none"></div>
         <div class="overlay_footer" style="display:none">
-            <div class="overlay_header_buttons">
-                <div id="facetSort">
-                    <input type="radio" id="sortbycount" name="sorter" checked="checked" value="sortbycount" /><label for="sortbycount">Sort By Count</label>
-                    <input type="radio" id="sortbyabc" name="sorter" value="sortbyabc" /><label for="sortbyabc">Sort By ABC</label>
-                </div>
-            </div>
         </div>
     </div>
+    <!-- end overlay section-->
 
-
-
-    <!-- end facet overlay -->
-
-
-
-    <div id="temp-browse"></div>
-    <div id="metadata-browse"></div>
 
 <div id="header" class="span-24 last">
     <div class="span-16 left">

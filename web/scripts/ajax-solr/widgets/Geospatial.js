@@ -22,21 +22,14 @@ AjaxSolr.GeospatialSearchWidget = AjaxSolr.AbstractWidget.extend({
 			
 			$('.apple_overlay').css({'width' : '660px'});
 			
-			//$('.apple_overlay').css({'background-image' : 'url(../images/metadata_overlay/white.png'});
-			// grab wrapper element inside content
 			var wrap = this.getOverlay().find(".contentWrap");
 
-			
-			
-			// load the page specified in the trigger
 			wrap.load(this.getTrigger().attr("href"));
     		
-			
 		},
     
     	onLoad: function() {
     		$("button#submitGeo").button({ });
-    		
 			$(".overlay_header").show();
 			$(".overlay_content").show();
 			$(".overlay_footer").show();
@@ -53,26 +46,8 @@ AjaxSolr.GeospatialSearchWidget = AjaxSolr.AbstractWidget.extend({
 			$(".overlay_border").hide();
 		}
 
-	});
-	
-    
-    
-  },
-
-  removeFacet: function (facet) {
-    var self = this;
-    
-  },
-  
-  init: function () {
-	  
-	 
-	
-	  
-  }
-  
-   
-	
+	}); 
+  }	
 });
 
 
@@ -103,7 +78,6 @@ function display_map () {
 		map = new google.maps.Map(mapDiv, options);
 	//}
 	
-	//alert('displaying map'); <-- if i keep this in the map displays ok?  MAKES NO SENSE!!!!
 	var location = new google.maps.LatLng(30,40);
 	
 	// create a new marker
@@ -126,14 +100,12 @@ function display_map () {
 
 
 function clearAreaChoice() {
-	//alert('in clear area choice');
 	$("input:radio").attr('checked', false);
 
 }
 
 
 function placeMarker(location) {
-	//alert('in place marker');
 	var marker = addMarker(location);
 	if (marker != null ) {
 		appendMarker(marker,  num_of_markers);
@@ -150,7 +122,6 @@ function clearMarkers() {
 	
 	num_of_markers = 0;
 	
-	// close info window
 	if (infowindow){
 		infowindow.close();
 	}
@@ -158,7 +129,6 @@ function clearMarkers() {
 		poly.setMap(null);
 	}
 		
-	// clear marker area content
 	$("#geospatial_markers").html("");
 	$("#geospatial_areaSelected").html("");
 	
@@ -266,7 +236,6 @@ function getCoordinates(address) {
 
 
 function addMarker(location) {
-	//alert('adding marker? num markers: ' + num_of_markers);
 	if (num_of_markers < max_of_markers) {
 		
 		// create a new marker
@@ -287,7 +256,6 @@ function addMarker(location) {
 		});
 		
 		google.maps.event.addListener(marker, 'dragend', function() {
-			//alert("number of marker:" + num_of_markers);
 			if (poly)
 				poly.setMap(null);
 
@@ -477,7 +445,6 @@ function setGeographicConstraint() {
 // /
 function setGeographicRadiusConstraint() {
 	
-	//alert('setting radius constraint?');
 	swapGeoSearchType("Radius");
 	
 	var sw = cbounds.getSouthWest();
@@ -516,7 +483,6 @@ function executeGeospatialQuery() {
 	
 	var geoSearchType = $("input[name='searchType']:checked").val();
 	var geoShape = $("input[name='areaGroup']:checked").val();
-	//alert('executing ' + geoSearchType);
 	if(geoSearchType == 'Encloses') {
 		encloses(geoShape);
 	}
@@ -535,7 +501,6 @@ function encloses(geoSearchType) {
 	//reset the geoQueryString
 	geoQueryString = '';
 	
-	//alert('encloses sq: ' + ($("input[name='areaGroup']:checked").val() == 'square'));
 	
 	if(geoSearchType == 'circle') { // geosearch type is a bounding box
 
@@ -635,7 +600,6 @@ function overlaps(geoSearchType) {
 
 	geoQueryString = '';
 	
-	//alert('in overlaps checking to see if it is circle input');
 	if(geoSearchType == 'circle') { // geosearch type is a bounding box
 		var theCenter = markerGroup[0];
 		centroidCenter = markerGroup[0].getPosition();
@@ -836,7 +800,6 @@ $('#geospatial_marker_fieldset input[name="clear_markers"]').live('click',functi
 //right now it acts as a guard so that the user cannot perform and overlaps query with a radius search (unimplemented)
 $("input[name='searchType']").live('change',function(e) {
 	var searchType = $("input[name='searchType']").val();
-	//alert("changing search type to " + searchType);
 	
 });
 
@@ -860,8 +823,6 @@ $("input[name='areaGroup']").live('change',function(e) {
 			return false;
 		}
 		getBoundingBox();
-		//setGeographicConstraint();
-		//do the submit here?
 		
 	} else {
 		if (num_of_markers != 1) {

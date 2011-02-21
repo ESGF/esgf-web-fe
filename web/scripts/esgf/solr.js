@@ -49,8 +49,7 @@
 
     
     Manager.addWidget(new AjaxSolr.MetadataWidget({
-        id: 'metadata-browse',
-        target: '#metadata-browse'
+        id: 'metadata-browse'
       }));
     
     Manager.addWidget(new AjaxSolr.AnnotatorWidget({
@@ -61,13 +60,11 @@
     
     Manager.addWidget(new AjaxSolr.TemporalWidget({
           id: 'temp-browse'
-          /* target: '#temp-browse' */
         }));
 	
 
     Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
           id: 'geo_browse'
-          /* target: '#geo_browse' */
         }));
 
     /*
@@ -78,15 +75,6 @@
 //		  target: '#search-box',
 //		  field: 'allText'
 //		}));
-
-
-
-
-    /*Manager.addWidget(new AjaxSolr.CalendarWidget({
-          id: 'calendar',
-          target: '#calendar',
-          field: 'datetime_start'
-        }));*/
 
     Manager.init();
 
@@ -158,13 +146,6 @@ $(document).ready(function(){
 		
 			$('.apple_overlay').css({'width' : '700px'});
 			
-			/*
-			// grab wrapper element inside content
-			var wrap = this.getOverlay().find(".contentWrap");
-
-			// load the page specified in the trigger
-			wrap.load(this.getTrigger().attr("href"));
-			*/
   		},
 
   		onLoad: function() {
@@ -183,11 +164,7 @@ $(document).ready(function(){
 			$(".overlay_border").hide();
 		}
 	
-  });  
-  
-    
-    
-	
+    });  
     
     /* event trigger for facet sorting buttons */
     $("input[name='sorter']").change(function() {
@@ -200,9 +177,5 @@ $(document).ready(function(){
         }
     });
 
-
-
-    //This is a widget that is not used as of yet...but may be added later
-    //$("#s1").dropdownchecklist();
 
 });

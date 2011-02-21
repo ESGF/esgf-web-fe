@@ -1,31 +1,31 @@
-body { 
-	color: #333; 
-	background: #FFFFFF; 
-	font-size: 13px;
-    font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+body {
+    color: #333;
+    background: #FFFFFF;
+    font-size: 13px;
+    font-family: arial,sans-serif;
 }
 
 .banner {
-	float:center; text-align:center; background: #000000;
+    float:center; text-align:center; background: #000000;
 }
 
 .footer {
-	color: #999;
+    color: #999;
 }
 
-.panel { 
-	background: #e5ecf9; border: 1px solid #417690; text-align: center; padding:6px;
+.panel {
+    background: #e5ecf9; border: 1px solid #417690; text-align: center; padding:6px;
 }
 
-.button { 
-	background: #417690; padding: 3px 5px; color: #FFFFFF; border: 1px solid #bbb; border-color: #ddd #aaa #aaa #ddd; 
+.button {
+    background: #417690; padding: 3px 5px; color: #FFFFFF; border: 1px solid #bbb; border-color: #ddd #aaa #aaa #ddd;
 }
 
 .error { text-align: center; color: #FF0000; }
 
 .strong {
-	font-weight: bold;
-	color: #666;
+    font-weight: bold;
+    color: #666;
 }
 
 h1 { text-align: center; font-size:15px; font-weight: bold; color:#212121; }
@@ -54,8 +54,8 @@ a:link { color: #0066CC; }
 a:visited { color: #0066CC;}
 
 .tabitem {
-	margin-right: 10px;
-	font-size: 14px;
+    margin-right: 10px;
+    font-size: 14px;
 }
 
 .openidlink {

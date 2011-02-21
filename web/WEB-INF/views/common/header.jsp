@@ -5,6 +5,7 @@
 <!-- left tabs -->	   
 <div class="span-14 left">
 	    <span class="tabitem"> <a href="<c:url value='/'/> ">Home</a></span>    
+	    <span class="tabitem" id="search"> <a href="<c:url value='/live'/> ">Search</a></span>
 	    <span class="tabitem" id="facet"> <a href="#" rel="#facet_overlay">Browse</a></span>
 	    <span class="tabitem"><a href="#">Analysis</a></span>
 	    

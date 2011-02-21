@@ -8,9 +8,8 @@
 
 </script>
 
+<%@ include file="/WEB-INF/views/search/_overlay.jsp" %>
 
-
-<div class="span-19 last">
 
 <div id="myTabs">
 
@@ -36,6 +35,3 @@
 
 
 </div>
-
-</div>
-

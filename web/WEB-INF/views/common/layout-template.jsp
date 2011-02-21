@@ -30,6 +30,11 @@
 			<div class="span-24 last" id="header" >
 			    <ti:insertAttribute name="header" />
 			</div>
+			
+			<!-- sub-header -->
+			<div class="span-24 last" id="subheader" >
+			    <ti:insertAttribute name="subheader" />
+			</div>
 							
 			<!-- main content organized according to different layout geometries -->
 			<c:set var="layoutType"><ti:insertAttribute name="layoutType"/></c:set>

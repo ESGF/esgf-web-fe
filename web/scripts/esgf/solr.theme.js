@@ -161,10 +161,12 @@ AjaxSolr.theme.prototype.facet_content = function(stopValue,objectedItems,thisOb
 	if(thisObject.startingValue < objectedItems.length) {
 		$facet_content.append('<p>');
 		for(var i = thisObject.startingValue, l = stopValue; i < l; i++) {
-			var facetTextValue = objectedItems[i].facet + ' (' + objectedItems[i].count + ') ';
+			var facetTextValue = objectedItems[i].facet + ' (' + objectedItems[i].count + ')';
 			var facet = objectedItems[i].facet;
 			$facet_content.append($('<a href="#" class="tag_item" />').text(facetTextValue).click(thisObject.clickHandler(facet)));
-				     
+			if(i != (stopValue - 1)) {
+				$facet_content.append(' | ');
+			}
 		};
 		$facet_content.append('</p>');	 
 			 	 

@@ -1,4 +1,5 @@
 <%@ include file="/WEB-INF/views/search/_overlay.jsp" %>
+<%@ include file="/WEB-INF/views/search/_select_tbl.jsp" %>
 
 <div id="myTabs">
 
@@ -12,9 +13,8 @@
 
     <div id="search-results"> </div>
 
-    <div id="carts">
-        <ul id="datasetList"></ul>
-    </div>
+    <div id="carts"> <ul id="datasetList"></ul> </div>
+
 </div>
 
 <script type="text/javascript">

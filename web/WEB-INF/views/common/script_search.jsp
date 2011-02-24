@@ -12,10 +12,8 @@
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.livequery.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.autocomplete.js" /> '></script>
 
-    <script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-core.js" /> '></script>
-    <script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-download.js" /> '></script>
 
-    <script type="text/javascript" src='<c:url value="/scripts/esgf/logger_1.0.0.js" /> '></script>
+    <script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-download.js" /> '></script>
 
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 

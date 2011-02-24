@@ -7,7 +7,7 @@ $(document).ready( function() {
         if (ui.index == 1) {
             $("#datasetList").empty();
             // selection tab
-            console.log("Selection tab");
+            LOG.debug("Selection tab");
             // convert object to array
             var arr = ESGF.util.toArray(ESGF.search.selected);
             $( "#cartTemplate").tmpl(arr).appendTo("#datasetList");

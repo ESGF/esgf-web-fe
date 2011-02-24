@@ -43,3 +43,14 @@ ESGF.util.toArray = function (obj) {
     }
     return arr;
 };
+
+// define common logging
+
+ESGF.core.LOG = log4javascript.getLogger("esgf");
+//ESGF.core.popUpAppender = new log4javascript.PopUpAppender();
+//ESGF.core.LOG.addAppender(popUpAppender);
+ESGF.core.bcAppender = new log4javascript.BrowserConsoleAppender();
+ESGF.core.LOG.addAppender(ESGF.core.bcAppender);
+
+var LOG = ESGF.core.LOG;
+LOG.debug("Logging defined");

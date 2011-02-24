@@ -37,8 +37,9 @@ ESGF.search.selected = ESGF.search.selected || {};
 // general util functions
 ESGF.util.toArray = function (obj) {
     var arr = [],
-        i = 0;
-    arr.push({"ID": "001"});
-    arr.push({"ID": "002"});
+        id = "";
+    for (id in obj) {
+        arr.push({doc: obj[id]});
+    }
     return arr;
 };

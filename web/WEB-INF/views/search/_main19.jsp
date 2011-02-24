@@ -13,8 +13,12 @@
 
     <div id="search-results"> </div>
 
-    <div id="carts"> <ul id="datasetList"></ul> </div>
+    <div id="carts"> <table>
+    <tbody id="datasetList">
 
+    </tbody>
+    </table>
+    </div>
 </div>
 
 <script type="text/javascript">

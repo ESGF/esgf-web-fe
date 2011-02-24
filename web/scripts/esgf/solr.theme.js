@@ -42,14 +42,14 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         selected = ESGF.search.selected,
         carts = [];
 
-    
+
     var idStr = 'id="' + doc.id + '" ';
     var titleStr = 'title="' + doc.title + '" ';
     var urlStr = 'url="' + doc.url + '" ';
     var formatStr = 'format="' + doc.metadata_format + '" ';
     var metadataURLStr = 'metadata_url="' + doc.metadata_url + '" ';
-    var allStr = idStr + titleStr + urlStr + formatStr +  metadataURLStr; 
-    
+    var allStr = idStr + titleStr + urlStr + formatStr +  metadataURLStr;
+
     output += "Further options: ";
     output += '<span class="actionitem ai_meta"><a href="/esgf-web-fe/scripts/esgf/metadata_overlay.html" class="met" rel="#metadata_overlay"' + allStr + '> Metadata Summary</a></span>';
 
@@ -85,13 +85,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
 
         }
 
-        $("#carts").empty();
-        for (item in selected) {
-            carts.push({'Id':item});
-        }
 
-        carts = [ {Id: 20202}, {Id: 20302}];
-        $("#cartTemplate").tmpl(carts).appendTo("#datasetList");
 
         return false;
     });
@@ -127,7 +121,7 @@ AjaxSolr.theme.prototype.facet_browser_title = function(value) {
 };
 
 AjaxSolr.theme.prototype.facet_title = function(value) {
-	var title = $('<span class="facet_title"><h3>' + value + '</h3></span>');
+    var title = $('<span class="facet_title"><h3>' + value + '</h3></span>');
     return title;
 };
 
@@ -146,32 +140,32 @@ AjaxSolr.theme.prototype.no_items_found = function () {
 
 
 AjaxSolr.theme.prototype.prevLink = function (stopValue,objectedItems,divFieldId,thisObject) {
-	var $facet_link = $('<a href="#" id="prev_' + divFieldId + '"> prev ' + thisObject.incrementValue + '...</a>').click(thisObject.prevClickHandler(divFieldId));
-	return $facet_link;
+    var $facet_link = $('<a href="#" id="prev_' + divFieldId + '"> prev ' + thisObject.incrementValue + '...</a>').click(thisObject.prevClickHandler(divFieldId));
+    return $facet_link;
 };
 
 AjaxSolr.theme.prototype.nextLink = function (divFieldId,thisObject) {
-	var $facet_link = $('<a href="#" id="next_' + divFieldId + '"> next ' + thisObject.incrementValue + '...</a>').click(thisObject.nextClickHandler(divFieldId));
-	return $facet_link;
+    var $facet_link = $('<a href="#" id="next_' + divFieldId + '"> next ' + thisObject.incrementValue + '...</a>').click(thisObject.nextClickHandler(divFieldId));
+    return $facet_link;
 };
 
 
 AjaxSolr.theme.prototype.facet_content = function(stopValue,objectedItems,thisObject) {
-	var $facet_content = $('<div></div>');
-	if(thisObject.startingValue < objectedItems.length) {
-		$facet_content.append('<p>');
-		for(var i = thisObject.startingValue, l = stopValue; i < l; i++) {
-			var facetTextValue = objectedItems[i].facet + ' (' + objectedItems[i].count + ')';
-			var facet = objectedItems[i].facet;
-			$facet_content.append($('<a href="#" class="tag_item" />').text(facetTextValue).click(thisObject.clickHandler(facet)));
-			if(i != (stopValue - 1)) {
-				$facet_content.append(' | ');
-			}
-		};
-		$facet_content.append('</p>');	 
-			 	 
-	}
-	return $facet_content;
+    var $facet_content = $('<div></div>');
+    if(thisObject.startingValue < objectedItems.length) {
+        $facet_content.append('<p>');
+        for(var i = thisObject.startingValue, l = stopValue; i < l; i++) {
+            var facetTextValue = objectedItems[i].facet + ' (' + objectedItems[i].count + ')';
+            var facet = objectedItems[i].facet;
+            $facet_content.append($('<a href="#" class="tag_item" />').text(facetTextValue).click(thisObject.clickHandler(facet)));
+            if(i != (stopValue - 1)) {
+                $facet_content.append(' | ');
+            }
+        };
+        $facet_content.append('</p>');
+
+    }
+    return $facet_content;
 };
 
 

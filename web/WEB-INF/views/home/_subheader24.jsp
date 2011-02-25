@@ -5,25 +5,6 @@
 </div>
 
 <div class="span-20 last"">
-
-    <span id="search-box">
-    <input id="query" name="text" type="text" value="" />
-    </span>
-
-    <input id="search-button" type="submit" value="Search" />
-
-    <div class="span-20 last" id="search-summary">
-
-    <div class="span-7" id="search-speed">
-    <div id="search-help">(press ESC to close suggestions)</div>
-    </div>
-
-    <div id="page-navigation" class="span-13 last">
-      <ul id="pager"></ul>
-      <div id="pager-header"></div>
-    </div>
-
-    </div> <!--  search summary -->
-
+    <h1 id="logo"> Welcome to the Earth System Grid Federation</h1>
 </div>
 

@@ -20,6 +20,11 @@ padding-bottom:2px;
 margin-bottom:25px;
 }   
 
+h1#logo {
+	margin-top: 20px;
+	border-bottom: none;
+}
+
 h3 {
 	border-bottom:1px solid #000000; 
 }

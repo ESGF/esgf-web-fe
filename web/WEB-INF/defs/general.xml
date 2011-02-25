@@ -40,8 +40,8 @@
     </definition>
 
     <!--  left-sidebar + main but more conpact layout for search page -->
-    <definition name="left-main-search" extends="base-layout">
-        <put-attribute name="layoutType" type="string" value="left-main-search"/>
+    <definition name="left4-main20" extends="base-layout">
+        <put-attribute name="layoutType" type="string" value="left4-main20"/>
     </definition>
 
     <!-- left-sidebar + main content + right sidebar layout -->
@@ -50,7 +50,7 @@
     </definition>
 
     <!-- search template -->
-    <definition name="live-search" extends="left-main-search">
+    <definition name="live-search" extends="left4-main20">
 
         <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
         <put-attribute name="extrastyle"  value="/WEB-INF/views/search/style_search.jsp" />
@@ -61,7 +61,7 @@
 
     </definition>
 
-    <definition name="home" extends="left-main-search">
+    <definition name="home" extends="left4-main20">
         <put-attribute name="extrascript" value="" />
         <put-attribute name="extrastyle"  value="" />
 

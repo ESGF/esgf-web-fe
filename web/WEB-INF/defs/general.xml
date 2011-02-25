@@ -62,8 +62,8 @@
     </definition>
 
     <definition name="home" extends="left4-main20">
-        <put-attribute name="extrascript" value="" />
-        <put-attribute name="extrastyle"  value="" />
+        <put-attribute name="extrascript" value="/WEB-INF/views/home/script_home.jsp" />
+        <put-attribute name="extrastyle"  value="/WEB-INF/views/home/style_home.jsp" />
 
         <put-attribute name="subheader" value="/WEB-INF/views/home/_subheader24.jsp" />
         <put-attribute name="left" value="/WEB-INF/views/home/_left4.jsp" />

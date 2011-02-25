@@ -45,7 +45,7 @@
                     </div>
                 </c:when>
 
-                <c:when test="${layoutType=='left-main-search'}">
+                <c:when test="${layoutType=='left4-main20'}">
 
                     <div class="span-4" id="left"">
                         <ti:insertAttribute name="left" />

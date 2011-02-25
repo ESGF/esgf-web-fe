@@ -50,10 +50,10 @@
     </definition>
 
     <!-- search template -->
-    <definition name="b_live" extends="left-main-search">
+    <definition name="live-search" extends="left-main-search">
 
-        <put-attribute name="extrascript"  value="/WEB-INF/views/common/script_search.jsp" />
-        <put-attribute name="extrastyle"  value="/WEB-INF/views/common/style_search.jsp" />
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+        <put-attribute name="extrastyle"  value="/WEB-INF/views/search/style_search.jsp" />
 
         <put-attribute name="subheader" value="/WEB-INF/views/search/_subheader24.jsp" />
         <put-attribute name="left" value="/WEB-INF/views/search/_sidebar4.jsp" />
@@ -61,13 +61,17 @@
 
     </definition>
 
-    <!--
-    <definition name="b_home" template="/WEB-INF/views/common/b_home.jsp">
-        <put-attribute name="subheader-24"  value=""/>
-        <put-attribute name="sidebar-4"  value=""/>
-        <put-attribute name="main-19"  value=""/>
+    <definition name="home" extends="left-main-search">
+        <put-attribute name="extrascript" value="" />
+        <put-attribute name="extrastyle"  value="" />
+
+        <put-attribute name="subheader" value="/WEB-INF/views/home/_subheader24.jsp" />
+        <put-attribute name="left" value="/WEB-INF/views/home/_left4.jsp" />
+        <put-attribute name="main" value="/WEB-INF/views/home/_main19.jsp" />
+
     </definition>
 
+    <!--
     <definition name="b_live" extends="b_home">
         <put-attribute name="subheader-24"
             value="/WEB-INF/views/search/_subheader24.jsp" />

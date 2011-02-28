@@ -1,7 +1,9 @@
 package org.esgf.dao;
 
 /**
- * Author: fwang2@ornl.gov
+ *
+ * author: fwang2@ornl.gov
+ *
  */
 
 import java.util.List;

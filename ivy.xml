@@ -77,6 +77,9 @@
     <dependency org="org.hibernate" name="hibernate-commons-annotations"
         rev="3.2.0.Final" transitive="false" conf="base->default"/>
 
+    <dependency org="org.hibernate" name="hibernate-search"
+        rev="3.3.0.Final" conf="base->default" />
+
     <dependency org="javax.validation" name="validation-api"
         rev="1.0.0.GA" transitive="false" conf="base->default" />
 

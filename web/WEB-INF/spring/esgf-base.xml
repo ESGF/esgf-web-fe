@@ -17,9 +17,7 @@
     <import resource="mvc-config.xml" />
     <import resource="esgf-security.xml" />
     <import resource="esgf-datasource.xml" />
-    <!--
     <import resource="esgf-jpa.xml"/>
-     -->
 
 </beans>
 

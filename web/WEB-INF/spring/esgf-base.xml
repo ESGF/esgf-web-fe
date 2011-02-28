@@ -14,55 +14,12 @@
         http://www.springframework.org/schema/util  http://www.springframework.org/schema/util/spring-util-3.0.xsd
     ">
 
-    <bean class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" id="passwordEncoder"/>
-    
-    <bean class="org.springframework.security.authentication.dao.ReflectionSaltSource" id="saltSource">
-        <property name="userPropertyToUse" value="salt"/>
-    </bean>
+    <context:property-placeholder location="classpath*:/WEB-INF/spring/*.properties"/>
+    <import resource="mvc-config.xml" />
+    <import resource="esgf-security.xml" />
+    <import resource="esgf-datasource.xml" />
+    <import resource="esgf-jpa.xml"/>
 
-
-    <bean class="org.esgf.security.DatabasePasswordSecurerBean" init-method="secureDatabase" depends-on="dataSource">
-        <property name="dataSource" ref="dataSource"/>  
-    </bean>
-
-    
-    
-    <bean id="jdbcUserServiceCustom" class="org.esgf.security.CustomJdbcDaoImpl">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="enableGroups" value="true"/>
-        <property name="enableAuthorities" value="false"/>
-
-        <property name="usersByUsernameQuery">
-            <value>select username,password,enabled,salt from users where username = ?</value>
-        </property>
-    </bean>
-          
-
-     <bean id="requestHeaderFilter" class="org.esgf.security.RequestHeaderProcessingFilter">
-        <property name="authenticationManager" ref="authenticationManager"/>
-     </bean>
-    <bean id="signedRequestAuthenticationProvider" class="org.esgf.security.SignedUsernamePasswordAuthenticationProvider">
-        <property name="passwordEncoder" ref="passwordEncoder"/>
-        <property name="saltSource" ref="saltSource"/>
-        <property name="userDetailsService" ref="jdbcUserServiceCustom"/>
-    </bean>
-    
-
-    <bean id="successHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
-        <property name="defaultTargetUrl" value="/live" />
-    </bean>
-
-
-
-    <!-- OpenID Registration -->
-    <bean id="openIdAuthFailureHandler" class="org.esgf.security.OpenIDAuthenticationFailureHandler">
-        <property name="defaultFailureUrl" value="/login"/>
-    </bean>
-   
-    <context:annotation-config />
-    <context:component-scan base-package="org.esgf.service" />    
-    <context:component-scan base-package="org.esgf.security" />
-        
 </beans>
 
      

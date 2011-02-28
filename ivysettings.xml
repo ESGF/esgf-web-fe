@@ -2,9 +2,11 @@
   <settings defaultResolver="default"/>
   
   <property name="spring.version" value="3.0.5.RELEASE" />
+  <property name="hibernate.version" value="3.6.1.Final" />
   <property name="ivy.esgf.devel.root.url" value="http://esgf.org/artifactory/esgf-repo-devel" override="false"/>
   <property name="ivy.esgf.shared.root.url" value="http://esgf.org/artifactory/esgf-repo-shared" override="false"/>
-
+  <property name="jboss.repo.url" value="https://repository.jboss.org/nexus/content/groups/public" override="false"/>
+   
   	<resolvers>
           
           <url name="esgf_repo_devel" checksums="md5">
@@ -23,12 +25,17 @@
           
           <ibiblio name="public" m2compatible="true"/>
           
+          <url name="jboss_repo" m2compatible="true">
+            <artifact pattern="${jboss.repo.url}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+          </url>
+          
         </resolvers>
         
         <resolvers>
           <chain name="default" returnFirst="true">
             <resolver ref="esgf_repo_devel" />
             <resolver ref="public" />
+            <resolver ref="jboss_repo" />
             <resolver ref="esgf_repo_shared" />
           </chain>
         </resolvers>

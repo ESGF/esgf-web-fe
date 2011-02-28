@@ -54,5 +54,26 @@
         conf="base->default">
     </dependency>
 
+    <dependency org="org.hibernate" name="hibernate-core" rev="${hibernate.version}" 
+        transitive="false" conf="base->default" />
+
+    <dependency org="org.hibernate" name="hibernate-entitymanager" rev="${hibernate.version}" 
+        transitive="false"  conf="base->default" />
+
+    <dependency org="org.hibernate.javax.persistence" name="hibernate-jpa-2.0-api"
+        rev="1.0.0.Final" transitive="false" conf="base->default" /> 
+    
+    <dependency org="org.hibernate" name="hibernate-validator"
+        rev="4.0.2.GA" transitive="false" conf="base->default" />
+    
+    <dependency org="org.springframework" name="spring-orm"
+        rev="${spring.version}" transitive="false" conf="base->default" />
+        
+    <dependency org="javax.validation" name="validation-api"
+        rev="1.0.0.GA" transitive="false" conf="base->default" />
+        
+    <dependency org="javax.transaction" name="jta"
+        rev="1.1" transitive="false" conf="base->default" />
+            
   </dependencies>
 </ivy-module>

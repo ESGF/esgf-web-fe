@@ -8,7 +8,7 @@
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
-            <!-- 
+            <!--
                 value='create' to build a new database on each run;
                 value='update' to modify an existing database;
                 value='create-drop' means the same as 'create' but also drops tables when Hibernate closes;

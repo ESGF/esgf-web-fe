@@ -10,11 +10,11 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository("newsEntityDao")
-public class NewsEntityDaoJpa extends GenericDaoJpa<NewsEntity> {
+public class NewsEntityDaoJPA extends GenericDaoJPA<NewsEntity> {
 
-    private final static Logger LOG = Logger.getLogger(NewsEntityDaoJpa.class);
+    private final static Logger LOG = Logger.getLogger(NewsEntityDaoJPA.class);
 
-    public NewsEntityDaoJpa() {
+    public NewsEntityDaoJPA() {
         super(NewsEntity.class);
     }
 

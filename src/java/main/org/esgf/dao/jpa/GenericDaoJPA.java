@@ -13,13 +13,13 @@ import org.hibernate.search.jpa.Search;
 import org.springframework.dao.DataAccessException;
 
 @SuppressWarnings("unchecked")
-public class GenericDaoJpa<T extends DomainObject> implements GenericDao<T> {
+public class GenericDaoJPA<T extends DomainObject> implements GenericDao<T> {
 
     private Class<T> type;
 
     protected EntityManager entityManager;
 
-    public GenericDaoJpa(Class<T> type) {
+    public GenericDaoJPA(Class<T> type) {
         super();
         this.type = type;
     }

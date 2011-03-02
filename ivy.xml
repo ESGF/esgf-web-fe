@@ -90,5 +90,7 @@
 
     <dependency org="net.sf.ehcache" name="ehcache-core" rev="2.3.1" conf="base->default" />
 
+    <dependency org="org.apache.lucene" name="lucene-core" rev="3.0.3" conf="base->default" />
+
   </dependencies>
 </ivy-module>

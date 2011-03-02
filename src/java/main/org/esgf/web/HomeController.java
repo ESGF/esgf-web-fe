@@ -1,13 +1,5 @@
 package org.esgf.web;
 
-/**
- * 
- * Homepage controller
- * 
- * Author: fwang2@ornl.gov
- *
- */
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 

@@ -21,10 +21,8 @@ public class NewsFacadeImpl implements NewsFacade {
     }
 
     @Transactional(rollbackFor = DataAccessException.class, readOnly = false, timeout = 30, propagation = Propagation.SUPPORTS, isolation = Isolation.DEFAULT)
-    public NewsEntity saveNewsEntity(NewsEntity news)
-            throws DataAccessException {
-        // newsEntityDao.save(news);
-        return null;
+    public void saveNewsEntity(NewsEntity news) throws DataAccessException {
+        newsEntityDao.save(news);
 
     }
 

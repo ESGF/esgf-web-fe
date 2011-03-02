@@ -6,6 +6,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
                            http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
 
+<!--
     <bean id="feDataSource"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource"
         p:driverClassName="${jdbc.driverClassName}"
@@ -13,5 +14,13 @@
         p:username="${jdbc.username}"
         p:password="${jdbc.password}" />
 
+ -->
+
+    <bean id="feDataSource"
+        class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+        p:driverClassName="org.h2.Driver"
+        p:url="jdbc:h2:file:data/fe;DB_CLOSE_DELAY=-1"
+        p:username="sa"
+        p:password="" />
 
 </beans>

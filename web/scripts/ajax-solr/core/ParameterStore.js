@@ -109,10 +109,12 @@ AjaxSolr.ParameterStore = AjaxSolr.Class.extend(
    * @returns {String[]|Number[]} The value(s) of the parameter.
    */
   values: function (name) {
+	  var i = null;
+	  
     if (this.params[name] !== undefined) {
       if (this.isMultiple(name)) {
         var values = [];
-        for (var i = 0, l = this.params[name].length; i < l; i++) {
+        for (i = 0, l = this.params[name].length; i < l; i++) {
           values.push(this.params[name][i].val());
         }
         return values;
@@ -142,7 +144,7 @@ AjaxSolr.ParameterStore = AjaxSolr.Class.extend(
         this.params[name] = [ param ];
       }
       else {
-        if (AjaxSolr.inArray(param.val(), this.values(name)) == -1) {
+        if (AjaxSolr.inArray(param.val(), this.values(name)) === -1) {
           this.params[name].push(param);
         }
         else {
@@ -168,7 +170,7 @@ AjaxSolr.ParameterStore = AjaxSolr.Class.extend(
     }
     else {
       this.params[name].splice(index, 1);
-      if (this.params[name].length == 0) {
+      if (this.params[name].length === 0) {
         delete this.params[name];
       }
     }
@@ -183,20 +185,21 @@ AjaxSolr.ParameterStore = AjaxSolr.Class.extend(
    */
   find: function (name, value) {
     if (this.params[name] !== undefined) {
-      if (this.isMultiple(name)) {
-        var indices = [];
-        for (var i = 0, l = this.params[name].length; i < l; i++) {
-          if (AjaxSolr.equals(this.params[name][i].val(), value)) {
-            indices.push(i);
-          }
-        }
-        return indices.length ? indices : false;
-      }
-      else {
-        if (AjaxSolr.equals(this.params[name].val(), value)) {
-          return name;
-        }
-      }
+        var i = null;
+        if (this.isMultiple(name)) {
+            var indices = [];
+            for (i = 0, l = this.params[name].length; i < l; i++) {
+                if (AjaxSolr.equals(this.params[name][i].val(), value)) {
+                    indices.push(i);
+                }
+            }
+            return indices.length ? indices : false;
+         }
+         else {
+             if (AjaxSolr.equals(this.params[name].val(), value)) {
+                 return name;
+             }
+         }
     }
     return false;
   },
@@ -212,15 +215,16 @@ AjaxSolr.ParameterStore = AjaxSolr.Class.extend(
    * @returns {AjaxSolr.Parameter|Boolean} The parameter, or false.
    */
   addByValue: function (name, value) {
-    if (this.isMultiple(name) && AjaxSolr.isArray(value)) {
+      var i = null;
+	  if (this.isMultiple(name) && AjaxSolr.isArray(value)) {
       var ret = [];
-      for (var i = 0, l = value.length; i < l; i++) {
+      for (i = 0, l = value.length; i < l; i++) {
         ret.push(this.add(name, new AjaxSolr.Parameter({ name: name, value: value[i] })));
       }
       return ret;
     }
     else {
-      return this.add(name, new AjaxSolr.Parameter({ name: name, value: value }))
+      return this.add(name, new AjaxSolr.Parameter({ name: name, value: value }));
     }
   },
 
@@ -232,10 +236,11 @@ AjaxSolr.ParameterStore = AjaxSolr.Class.extend(
    * @returns {String|Number[]} The indices deleted.
    */
   removeByValue: function (name, value) {
-    var indices = this.find(name, value);
+      var i = null;
+	  var indices = this.find(name, value);
     if (indices) {
       if (AjaxSolr.isArray(indices)) {
-        for (var i = indices.length - 1; i >= 0; i--) {
+        for (i = indices.length - 1; i >= 0; i--) {
           this.remove(name, indices[i]);
         }
       }
@@ -253,18 +258,21 @@ AjaxSolr.ParameterStore = AjaxSolr.Class.extend(
    * </tt>. So, we need to choose another name for toString().</p>
    */
   string: function () {
-    var params = [];
-    for (var name in this.params) {
-      if (this.isMultiple(name)) {
-        for (var i = 0, l = this.params[name].length; i < l; i++) {
-          params.push(this.params[name][i].string());
-        }
+      var name,i = null;
+	  var params = [];
+      for (name in this.params) {
+          if(this.params.hasOwnProperty(name)) {
+              if (this.isMultiple(name)) {
+                  for (i = 0, l = this.params[name].length; i < l; i++) {
+                      params.push(this.params[name][i].string());
+                  }
+              }
+              else {
+                  params.push(this.params[name].string());
+              }
+          } 
       }
-      else {
-        params.push(this.params[name].string());
-      }
-    }
-    return AjaxSolr.compact(params).join('&');
+      return AjaxSolr.compact(params).join('&');
   },
 
   /**
@@ -273,8 +281,9 @@ AjaxSolr.ParameterStore = AjaxSolr.Class.extend(
    * @param {String} str The string to parse.
    */
   parseString: function (str) {
-    var pairs = str.split('&');
-    for (var i = 0, l = pairs.length; i < l; i++) {
+    var i = null;
+	  var pairs = str.split('&');
+    for (i = 0, l = pairs.length; i < l; i++) {
       if (pairs[i]) { // ignore leading, trailing, and consecutive &'s
         var param = new AjaxSolr.Parameter();
         param.parseString(pairs[i]);
@@ -289,11 +298,12 @@ AjaxSolr.ParameterStore = AjaxSolr.Class.extend(
    * @returns {String} A string representation of the exposed parameters.
    */
   exposedString: function () {
-    var params = [];
-    for (var i = 0, l = this.exposed.length; i < l; i++) {
+    var i,j = null;
+	  var params = [];
+    for (i = 0, l = this.exposed.length; i < l; i++) {
       if (this.params[this.exposed[i]] !== undefined) {
         if (this.isMultiple(this.exposed[i])) {
-          for (var j = 0, m = this.params[this.exposed[i]].length; j < m; j++) {
+          for (j = 0, m = this.params[this.exposed[i]].length; j < m; j++) {
             params.push(this.params[this.exposed[i]][j].string());
           }
         }
@@ -309,7 +319,8 @@ AjaxSolr.ParameterStore = AjaxSolr.Class.extend(
    * Resets the values of the exposed parameters.
    */
   exposedReset: function () {
-    for (var i = 0, l = this.exposed.length; i < l; i++) {
+    var i = null;
+	  for (i = 0, l = this.exposed.length; i < l; i++) {
       this.remove(this.exposed[i]);
     }
   },

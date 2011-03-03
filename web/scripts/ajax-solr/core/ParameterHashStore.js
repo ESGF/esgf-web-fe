@@ -77,7 +77,7 @@ AjaxSolr.ParameterHashStore = AjaxSolr.ParameterStore.extend(
     // Some browsers automatically unescape characters in the hash, others
     // don't. Fortunately, all leave window.location.href alone. So, use that.
     var index = window.location.href.indexOf('#');
-    if (index == -1) {
+    if (index === -1) {
       return '';
     }
     else {
@@ -94,7 +94,7 @@ AjaxSolr.ParameterHashStore = AjaxSolr.ParameterStore.extend(
       // Support the back/forward buttons. If the hash changes, do a request.
       var hash = self.storedString();
       if (hash.length) {
-        if (self.hash != hash) {
+        if (self.hash !== hash) {
           self.load();
           self.manager.doRequest();
         }
@@ -103,6 +103,6 @@ AjaxSolr.ParameterHashStore = AjaxSolr.ParameterStore.extend(
         // AJAX Solr is loading for the first time, or the user deleted the hash.
         self.manager.doRequest();
       }
-    }
+    };
   }
 });

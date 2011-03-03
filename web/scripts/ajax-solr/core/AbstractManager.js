@@ -110,12 +110,15 @@ AjaxSolr.AbstractManager = AjaxSolr.Class.extend(
    */
   init: function () {
     this.initialized = true;
+    var widgetId = null;
     if (this.store === null) {
-      this.setStore(new AjaxSolr.ParameterStore());
+        this.setStore(new AjaxSolr.ParameterStore());
     }
     this.store.load(false);
-    for (var widgetId in this.widgets) {
-      this.widgets[widgetId].init();
+    for (widgetId in this.widgets) {
+        if(this.widgets.hasOwnProperty(widgetId)) {
+            this.widgets[widgetId].init();
+        }
     }
     this.store.init();
   },
@@ -147,6 +150,8 @@ AjaxSolr.AbstractManager = AjaxSolr.Class.extend(
    * @param {String} [servlet] The Solr servlet to send the request to.
    */
   doRequest: function (start, servlet) {
+	var widgetId = null;  
+	  
     if (this.initialized === false) {
       this.init();
     }
@@ -160,8 +165,10 @@ AjaxSolr.AbstractManager = AjaxSolr.Class.extend(
 
     this.store.save();
 
-    for (var widgetId in this.widgets) {
-      this.widgets[widgetId].beforeRequest();
+    for (widgetId in this.widgets) {
+        if(this.widgets.hasOwnProperty(widgetId)) {
+            this.widgets[widgetId].beforeRequest();
+        }
     }
 
     this.executeRequest(servlet);
@@ -191,10 +198,13 @@ AjaxSolr.AbstractManager = AjaxSolr.Class.extend(
    * @param {Object} data The Solr response.
    */
   handleResponse: function (data) {
+    var widgetId = null;
     this.response = data;
 
-    for (var widgetId in this.widgets) {
-      this.widgets[widgetId].afterRequest();
+    for (widgetId in this.widgets) {
+        if(this.widgets.hasOwnProperty(widgetId)) {
+            this.widgets[widgetId].afterRequest();
+        }
     }
   }
 });

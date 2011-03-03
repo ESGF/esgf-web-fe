@@ -71,6 +71,10 @@
 
     </definition>
 
+    <definition name="news" extends="main-layout">
+        <put-attribute name="main" value="/WEB-INF/views/admin/news.jsp" />
+    </definition>
+    
     <!--
     <definition name="b_live" extends="b_home">
         <put-attribute name="subheader-24"

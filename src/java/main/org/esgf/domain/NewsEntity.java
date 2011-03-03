@@ -6,18 +6,29 @@ package org.esgf.domain;
  *
  */
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class NewsEntity implements DomainObject {
 
     private Long id;
     private Integer version;
+
+    @NotNull
+    @Size(min = 1, max = 120)
     private String title;
+
     private byte[] picture;
+
+    @NotNull
+    @Size(min = 1, max = 500)
     private String body;
 
     @Id
@@ -62,5 +73,12 @@ public class NewsEntity implements DomainObject {
     public String getBody() {
         return body;
     }
+
+    public Long assignId() {
+        this.id = idSequence.incrementAndGet();
+        return id;
+    }
+
+    private static final AtomicLong idSequence = new AtomicLong();
 
 }

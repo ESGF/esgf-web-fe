@@ -9,14 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping(value = "/home")
-public class HomeController {
+@RequestMapping(value = "/admin/news")
+public class NewsController {
 
-    private final static Logger LOG = Logger.getLogger(HomeController.class);
+    private final static Logger LOG = Logger.getLogger(NewsController.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public String index(HttpServletRequest request, HttpServletResponse response) {
-        LOG.debug("Enter home");
-        return "home";
+        LOG.debug("Enter news");
+        return "news";
     }
+
 }

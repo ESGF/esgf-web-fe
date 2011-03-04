@@ -3,7 +3,6 @@
  */
 package org.esgf.web;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -56,14 +55,17 @@ public class NewsController {
         }
 
         this.newsMap.put(news.assignId(), news);
+        LOG.debug("About to presist:" + news.getTitle());
+        newsService.saveNewsEntity(news);
         return "redirect:/admin/news/list";
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "list")
     public String list(Model model) {
 
-        List<NewsEntity> newsList = new ArrayList<NewsEntity>(newsMap.values());
-
+        // List<NewsEntity> newsList = new
+        // ArrayList<NewsEntity>(newsMap.values());
+        List<NewsEntity> newsList = newsService.getNewsEntityAll();
         model.addAttribute("newsList", newsList);
         return "admin/news_view";
     }

@@ -27,7 +27,10 @@ public class NewsServiceImpl implements NewsService {
         return newsEntityDao.getAll();
     }
 
-    @Transactional(rollbackFor = DataAccessException.class, readOnly = false, timeout = 30, propagation = Propagation.SUPPORTS, isolation = Isolation.DEFAULT)
+    @Transactional(rollbackFor = DataAccessException.class,
+            readOnly = false, timeout = 30,
+            propagation = Propagation.SUPPORTS,
+            isolation = Isolation.DEFAULT)
     public void saveNewsEntity(NewsEntity news) throws DataAccessException {
         newsEntityDao.save(news);
 

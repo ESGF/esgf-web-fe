@@ -19,7 +19,7 @@
     <bean id="feDataSource"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource"
         p:driverClassName="org.h2.Driver"
-        p:url="jdbc:h2:file:data/fe;DB_CLOSE_DELAY=-1"
+        p:url="jdbc:h2:~/esgf-fe;FILE_LOCK=NO"
         p:username="sa"
         p:password="" />
 

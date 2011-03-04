@@ -1,4 +1,4 @@
-package org.esgf.dao.jpa;
+package org.esgf.dao;
 
 import java.util.Iterator;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.esgf.dao.GenericDao;
 import org.esgf.domain.DomainObject;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;

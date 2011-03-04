@@ -1,4 +1,4 @@
-package org.esgf.dao.jpa;
+package org.esgf.dao;
 
 import org.apache.log4j.Logger;
 import org.esgf.domain.NewsEntity;
@@ -10,7 +10,8 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository("newsEntityDao")
-public class NewsEntityDaoJPA extends GenericDaoJPA<NewsEntity> {
+public class NewsEntityDaoJPA extends GenericDaoJPA<NewsEntity> implements
+        NewsEntityDao {
 
     private final static Logger LOG = Logger.getLogger(NewsEntityDaoJPA.class);
 

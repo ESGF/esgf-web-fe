@@ -92,5 +92,7 @@
 
     <dependency org="org.apache.lucene" name="lucene-core" rev="3.0.3" conf="base->default" />
 
+    <dependency org="antlr" name="antlr" rev="2.7.7" conf="base->default" />
+
   </dependencies>
 </ivy-module>

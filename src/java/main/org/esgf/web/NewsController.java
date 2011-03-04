@@ -12,20 +12,31 @@ import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.esgf.domain.NewsEntity;
+import org.esgf.service.NewsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
 @RequestMapping(value = "/admin/news")
+@SessionAttributes("news")
 public class NewsController {
 
     private final static Logger LOG = Logger.getLogger(NewsController.class);
 
     private Map<Long, NewsEntity> newsMap = new ConcurrentHashMap<Long, NewsEntity>();
+
+    private NewsService newsService;
+
+    @Autowired
+    public NewsController(NewsService newsService) {
+        this.newsService = newsService;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public String index(Model model) {

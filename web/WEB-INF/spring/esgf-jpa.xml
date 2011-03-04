@@ -23,7 +23,8 @@
     <bean id="defaultLobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" />
 
     <!-- Read in DAOs from the JPA package -->
-    <context:component-scan base-package="org.esgf.dao.jpa" />
+    <context:component-scan base-package="org.esgf.dao" />
+    
 
     <!-- Transaction Config -->
     <bean id="transactionManager"

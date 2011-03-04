@@ -54,4 +54,8 @@
     <bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver"
           p:viewClass="org.springframework.web.servlet.view.tiles2.TilesView" />
 
+
+    <bean id="newsService" class="org.esgf.service.NewsServiceImpl">
+    </bean>
+
 </beans>

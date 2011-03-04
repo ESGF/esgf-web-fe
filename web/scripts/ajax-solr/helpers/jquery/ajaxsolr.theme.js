@@ -9,11 +9,12 @@
  * @param {String} [separator] A string to add between the items.
  */
 AjaxSolr.theme.prototype.list_items = function (list, items, separator) {
-  jQuery(list).empty();
-  for (var i = 0, l = items.length; i < l; i++) {
+    var i,j = null;
+	jQuery(list).empty();
+  for (i = 0, l = items.length; i < l; i++) {
     var li = jQuery('<li/>');
     if (AjaxSolr.isArray(items[i])) {
-      for (var j = 0, m = items[i].length; j < m; j++) {
+      for (j = 0, m = items[i].length; j < m; j++) {
         if (separator && j > 0) {
           li.append(separator);
         }

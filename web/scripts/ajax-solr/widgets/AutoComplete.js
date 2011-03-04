@@ -9,17 +9,19 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
     $(this.target).find('input').val('');
 
     var self = this;
-
+    var i,facet = null;
     var list = [];
-    for (var i = 0; i < this.fields.length; i++) {
-      var field = this.fields[i];
-      for (var facet in this.manager.response.facet_counts.facet_fields[field]) {
-        list.push({
-          field: field,
-          value: facet,
-          text: facet + ' (' + this.manager.response.facet_counts.facet_fields[field][facet] + ') - ' + field
-        });
-      }
+    for (i = 0; i < this.fields.length; i++) {
+        var field = this.fields[i];
+        for (facet in this.manager.response.facet_counts.facet_fields[field]) {
+            if(this.manager.response.facet_counts.facet_fields[field].hasOwnProperty(facet)) {
+                list.push({
+                    field: field,
+                    value: facet,
+                    text: facet + ' (' + this.manager.response.facet_counts.facet_fields[field][facet] + ') - ' + field
+                });
+            }
+        }
     }
 
     this.requestSent = false;
@@ -33,7 +35,7 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
         self.manager.doRequest(0);
       }
     }).bind('keydown', function(e) {
-      if (self.requestSent === false && e.which == 13) {
+      if (self.requestSent === false && e.which === 13) {
         var value = $(this).val();
         if (value && self.add(value)) {
           self.manager.doRequest(0);
@@ -43,4 +45,4 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
   }
 });
 
-})(jQuery);
+}(jQuery));

@@ -86,13 +86,16 @@ AjaxSolr.Parameter = AjaxSolr.Class.extend(
    */
   string: function () {
     var pairs = [];
-
-    for (var name in this.locals) {
-      if (this.locals[name]) {
-        pairs.push(name + '=' + encodeURIComponent(this.locals[name]));
-      }
+    var name = null;
+    
+    for (name in this.locals) {
+        if(this.locals.hasOwnProperty(name)) {
+            if (this.locals[name]) {
+                pairs.push(name + '=' + encodeURIComponent(this.locals[name]));
+            }
+        }
     }
-
+    
     var prefix = pairs.length ? '{!' + pairs.join('%20') + '}' : '';
 
     if (this.value) {
@@ -101,7 +104,7 @@ AjaxSolr.Parameter = AjaxSolr.Class.extend(
     // For dismax request handlers, if the q parameter has local params, the
     // q parameter must be set to a non-empty value. In case the q parameter
     // is empty, use the q.alt parameter, which accepts wildcards.
-    else if (this.name == 'q') {
+    else if (this.name === 'q') {
       return 'q.alt=' + prefix + encodeURIComponent('*:*');
     }
     else {
@@ -124,7 +127,7 @@ AjaxSolr.Parameter = AjaxSolr.Class.extend(
         param[2] = param[2].replace(matches[0], ''); // Safari's exec seems not to do this on its own
       }
 
-      if (param[1] == 'q.alt') {
+      if (param[1] === 'q.alt') {
         this.name = 'q';
         // if q.alt is present, assume it is because q was empty, as above
       }
@@ -156,6 +159,6 @@ AjaxSolr.Parameter = AjaxSolr.Class.extend(
    */
   parseValueString: function (str) {
     str = decodeURIComponent(str);
-    return str.indexOf(',') == -1 ? str : str.split(',');
+    return str.indexOf(',') === -1 ? str : str.split(',');
   }
 });

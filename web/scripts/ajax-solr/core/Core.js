@@ -18,17 +18,17 @@ AjaxSolr.Class = function () {};
  * @returns A function that represents the subclass.
  */
 AjaxSolr.Class.extend = function (properties) {
-  var klass = this; // Safari dislikes 'class'
-  // The subclass is just a function that when called, instantiates itself.
-  // Nothing is _actually_ shared between _instances_ of the same class.
-  var subClass = function (options) {
-    // 'this' refers to the subclass, which starts life as an empty object.
-    // Add its parent's properties, its own properties, and any passed options.
-    AjaxSolr.extend(this, new klass(options), properties, options);
-  }
-  // Allow the subclass to extend itself into further subclasses.
-  subClass.extend = this.extend;
-  return subClass;
+    var klass = this; // Safari dislikes 'class'
+    // The subclass is just a function that when called, instantiates itself.
+    // Nothing is _actually_ shared between _instances_ of the same class.
+    var subClass = function (options) {
+        // 'this' refers to the subclass, which starts life as an empty object.
+        // Add its parent's properties, its own properties, and any passed options.
+        AjaxSolr.extend(this, new klass(options), properties, options);
+    };
+    // Allow the subclass to extend itself into further subclasses.
+    subClass.extend = this.extend;
+    return subClass;
 };
 
 /**
@@ -38,13 +38,14 @@ AjaxSolr.Class.extend = function (properties) {
  * @see http://stackoverflow.com/questions/5223/length-of-javascript-associative-array
  */
 AjaxSolr.size = function (obj) {
-  var size = 0;
-  for (var key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      size++;
+    var size = 0;
+    var key = null;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            size++;
+        }
     }
-  }
-  return size;
+    return size;
 };
 
 /**
@@ -54,26 +55,28 @@ AjaxSolr.size = function (obj) {
  * @returns {Boolean} Whether the two given values are equal.
  */
 AjaxSolr.equals = function (foo, bar) {
-  if (AjaxSolr.isArray(foo) && AjaxSolr.isArray(bar)) {
-    if (foo.length !== bar.length) {
-      return false;
+	var i = null;
+	
+    if (AjaxSolr.isArray(foo) && AjaxSolr.isArray(bar)) {
+        if (foo.length !== bar.length) {
+            return false;
+        }
+        for (i = 0, l = foo.length; i < l; i++) {
+            if (foo[i] !== bar[i]) {
+                return false;
+            }
+        }
+        return true;
     }
-    for (var i = 0, l = foo.length; i < l; i++) {
-      if (foo[i] !== bar[i]) {
-        return false;
-      }
+    else if (AjaxSolr.isRegExp(foo) && AjaxSolr.isString(bar)) {
+        return bar.match(foo);
     }
-    return true;
-  }
-  else if (AjaxSolr.isRegExp(foo) && AjaxSolr.isString(bar)) {
-    return bar.match(foo);
-  }
-  else if (AjaxSolr.isRegExp(bar) && AjaxSolr.isString(foo)) {
-    return foo.match(bar);
-  }
-  else {
-    return foo === bar;
-  }
+    else if (AjaxSolr.isRegExp(bar) && AjaxSolr.isString(foo)) {
+        return foo.match(bar);
+    }
+    else {
+        return foo === bar;
+    }
 };
 
 /**
@@ -83,14 +86,15 @@ AjaxSolr.equals = function (foo, bar) {
  * @returns {Boolean} Whether value exists in the array.
  */
 AjaxSolr.inArray = function (value, array) {
-  if (array) {
-    for (var i = 0, l = array.length; i < l; i++) {
-      if (AjaxSolr.equals(array[i], value)) {
-        return i;
-      }
-    }
-  }
-  return -1;
+    var i = null;
+	if (array) {
+        for (i = 0, l = array.length; i < l; i++) {
+            if (AjaxSolr.equals(array[i], value)) {
+                return i;
+            }
+        }
+     }
+     return -1;
 };
 
 /**
@@ -100,11 +104,12 @@ AjaxSolr.inArray = function (value, array) {
  * @see http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools.js
  */
 AjaxSolr.flatten = function(array) {
-  var ret = [];
-  for (var i = 0, l = array.length; i < l; i++) {
-    ret = ret.concat(AjaxSolr.isArray(array[i]) ? AjaxSolr.flatten(array[i]) : array[i]);
-  }
-  return ret;
+    var i = null;
+    var ret = [];
+    for (i = 0, l = array.length; i < l; i++) {
+        ret = ret.concat(AjaxSolr.isArray(array[i]) ? AjaxSolr.flatten(array[i]) : array[i]);
+    }
+    return ret;
 };
 
 /**
@@ -114,23 +119,24 @@ AjaxSolr.flatten = function(array) {
  * @see http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.js
  */
 AjaxSolr.grep = function(array, callback) {
-  var ret = [];
-  for (var i = 0, l = array.length; i < l; i++) {
-    if (!callback(array[i], i) === false) {
-      ret.push(array[i]);
+    var i = null;
+    var ret = [];
+    for (i = 0, l = array.length; i < l; i++) {
+        if (!callback(array[i], i) === false) {
+            ret.push(array[i]);
+        }
     }
-  }
-  return ret;
-}
+    return ret;
+};
 
 /**
  * Equivalent to Ruby's Array#compact.
  */
 AjaxSolr.compact = function(array) {
-  return AjaxSolr.grep(array, function (item) {
-    return item.toString();
-  });
-}
+    return AjaxSolr.grep(array, function (item) {
+        return item.toString();
+    });
+};
 
 /**
  * Can't use toString.call(obj) === "[object Array]", as it may return
@@ -141,7 +147,7 @@ AjaxSolr.compact = function(array) {
  * @see http://ajax.googleapis.com/ajax/libs/prototype/1.6.0.3/prototype.js
  */
 AjaxSolr.isArray = function (obj) {
-  return obj != null && typeof obj == 'object' && 'splice' in obj && 'join' in obj;
+    return obj !== null && typeof obj === 'object' && 'splice' in obj && 'join' in obj;
 };
 
 /**
@@ -149,7 +155,7 @@ AjaxSolr.isArray = function (obj) {
  * @returns {Boolean} Whether the object is a RegExp object.
  */
 AjaxSolr.isRegExp = function (obj) {
-  return obj != null && (typeof obj == 'object' || typeof obj == 'function') && 'ignoreCase' in obj;
+    return obj !== null && (typeof obj === 'object' || typeof obj === 'function') && 'ignoreCase' in obj;
 };
 
 /**
@@ -157,7 +163,7 @@ AjaxSolr.isRegExp = function (obj) {
  * @returns {Boolean} Whether the object is a String object.
  */
 AjaxSolr.isString = function (obj) {
-  return obj != null && typeof obj == 'string';
+    return obj !== null && typeof obj === 'string';
 };
 
 /**
@@ -184,18 +190,19 @@ AjaxSolr.isString = function (obj) {
  * @see http://cvs.drupal.org/viewvc.py/drupal/drupal/misc/drupal.js?revision=1.58
  */
 AjaxSolr.theme = function (func) {
-  for (var i = 1, args = []; i < arguments.length; i++) {
-    args.push(arguments[i]);
-  }
-  try {
-    return (AjaxSolr.theme[func] || AjaxSolr.theme.prototype[func]).apply(this, args);
-  }
-  catch (e) {
-    if (console && console.log) {
-      console.log('Theme function "' + func + '" is not defined.');
+	var i = null;
+    for (i = 1, args = []; i < arguments.length; i++) {
+        args.push(arguments[i]);
     }
-    throw e;
-  }
+    try {
+        return (AjaxSolr.theme[func] || AjaxSolr.theme.prototype[func]).apply(this, args);
+    }
+    catch (e) {
+       if (console && console.log) {
+           console.log('Theme function "' + func + '" is not defined.');
+       }
+       throw e;
+    }
 };
 
 /**
@@ -205,21 +212,25 @@ AjaxSolr.theme = function (func) {
  * @see http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.js
  */
 AjaxSolr.extend = function () {
-  var target = arguments[0] || {}, i = 1, length = arguments.length, options;
-  for (; i < length; i++) {
-    if ((options = arguments[i]) != null) {
-      for (var name in options) {
-        var src = target[name], copy = options[name];
-        if (target === copy) {
-          continue;
-        }
-        if (copy && typeof copy == 'object' && !copy.nodeType) {
-          target[name] = AjaxSolr.extend(src || (copy.length != null ? [] : {}), copy);
-        }
-        else if (copy !== undefined) {
-          target[name] = copy;
-        }
-      }
+    var target = arguments[0] || {}, i = 1, length = arguments.length, options;
+    var name = null;
+    for (; i < length; i++) {
+        if ((options = arguments[i]) !== null) {
+            for (name in options) {
+            	if(options.hasOwnProperty(name)) {
+                    
+                    var src = target[name], copy = options[name];
+                    if (target === copy) {
+                        continue;
+                    }
+                    if (copy && typeof copy === 'object' && !copy.nodeType) {
+                        target[name] = AjaxSolr.extend(src || (copy.length !== null ? [] : {}), copy);
+                    }
+                    else if (copy !== undefined) {
+                        target[name] = copy;
+                    }
+                }
+            }
     }
   }
   return target;

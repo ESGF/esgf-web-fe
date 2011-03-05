@@ -21,6 +21,8 @@ public class NewsEntity implements DomainObject {
     private Long id;
     private Integer version;
 
+    public NewsEntity() {};
+
     @NotNull
     @Size(min = 1, max = 120)
     private String title;

@@ -14,7 +14,7 @@
                         http://www.springframework.org/schema/util  http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
     <context:property-placeholder location="/WEB-INF/spring/*.properties"/>
-
+    <context:annotation-config />
     <context:component-scan base-package="org.esgf">
         <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
         <context:exclude-filter expression="org.springframework.stereotype.Repository" type="annotation"/>

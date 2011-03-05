@@ -20,8 +20,8 @@ public interface GenericDao<T extends DomainObject> {
 
     public void delete(T object);
 
-    public void indexEntity(T object);
+    //public void indexEntity(T object);
 
-    public void indexAllItems();
+    //public void indexAllItems();
 
 }

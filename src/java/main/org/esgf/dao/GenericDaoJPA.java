@@ -1,14 +1,11 @@
 package org.esgf.dao;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.esgf.domain.DomainObject;
-import org.hibernate.search.jpa.FullTextEntityManager;
-import org.hibernate.search.jpa.Search;
 import org.springframework.dao.DataAccessException;
 
 @SuppressWarnings("unchecked")
@@ -16,7 +13,7 @@ public class GenericDaoJPA<T extends DomainObject> implements GenericDao<T> {
 
     private Class<T> type;
 
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
 
     public GenericDaoJPA(Class<T> type) {
         super();
@@ -28,6 +25,7 @@ public class GenericDaoJPA<T extends DomainObject> implements GenericDao<T> {
         this.entityManager = entityManager;
     }
 
+
     public T get(Long id) {
         return (T) entityManager.find(type, id);
     }
@@ -38,6 +36,7 @@ public class GenericDaoJPA<T extends DomainObject> implements GenericDao<T> {
     }
 
     public void save(T object) throws DataAccessException {
+
         entityManager.persist(object);
     }
 
@@ -45,6 +44,7 @@ public class GenericDaoJPA<T extends DomainObject> implements GenericDao<T> {
         entityManager.remove(object);
     }
 
+    /*
     public void indexEntity(T object) {
         FullTextEntityManager fullTextEntityManager = Search
                 .getFullTextEntityManager(entityManager);
@@ -66,5 +66,5 @@ public class GenericDaoJPA<T extends DomainObject> implements GenericDao<T> {
             }
         }
     }
-
+    */
 }

@@ -30,6 +30,7 @@
     <dependency org="org.springframework" name="spring-webmvc" rev="${spring.version}" transitive="true" conf="base->default" />
     <dependency org="org.springframework" name="spring-tx" rev="${spring.version}" transitive="true" conf="base->default" />
     <dependency org="org.springframework" name="spring-aspects" rev="${spring.version}" transitive="true" conf="base->default" />
+    <dependency org="org.springframework" name="spring-instrument" rev="${spring.version}" transitive="true" conf="runtime->default"/>
 
 
     <dependency org="org.springframework.security" name="spring-security-core" rev="${spring.version}" conf="base->default" />

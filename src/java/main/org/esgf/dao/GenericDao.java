@@ -1,10 +1,12 @@
-package org.esgf.dao;
-
 /**
- *
+ * Core Persistence Interface
+ * 
  * author: fwang2@ornl.gov
  *
  */
+
+package org.esgf.dao;
+
 
 import java.util.List;
 
@@ -19,9 +21,5 @@ public interface GenericDao<T extends DomainObject> {
     public void save(T object);
 
     public void delete(T object);
-
-    //public void indexEntity(T object);
-
-    //public void indexAllItems();
 
 }

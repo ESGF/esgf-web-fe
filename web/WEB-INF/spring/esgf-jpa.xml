@@ -37,13 +37,10 @@
         <property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
 
-    <bean name="newsEntityDao" class="org.esgf.dao.NewsEntityDaoJPA">
-        <property name="jpaTemplate" ref="jpaTemplate" />
-    </bean>
-
+    
     <tx:annotation-driven/>
 
-    <!--
+    <!-- AOP IS intrusive
     <tx:annotation-driven mode="aspectj" transaction-manager="transactionManager"/>
     <context:load-time-weaver/>
     -->

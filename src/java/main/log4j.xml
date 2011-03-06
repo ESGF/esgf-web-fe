@@ -46,10 +46,15 @@
     </logger>
 
     <logger name="org.springframework.transaction">
+        <level value="error" />
+    </logger>
+
+    <logger name="org.esgf.web">
         <level value="debug" />
     </logger>
 
-    <logger name="org.esgf.dao">
+
+    <logger name="org.esgf.util">
         <level value="debug" />
     </logger>
 

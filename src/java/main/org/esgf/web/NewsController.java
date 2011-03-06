@@ -3,9 +3,12 @@
  */
 package org.esgf.web;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.esgf.domain.NewsEntity;
@@ -16,12 +19,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 
@@ -43,7 +51,7 @@ public class NewsController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String index(Model model) {
-        return "redirect:/admin/news/list";
+        return "redirect:list";
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "create")
@@ -53,8 +61,9 @@ public class NewsController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String create(NewsEntity news,
-            BindingResult result) {
+    public String create(HttpServletRequest request, 
+            @ModelAttribute("news") NewsEntity news, BindingResult result)
+    {
         if (result.hasErrors()) {
             for (ObjectError error: result.getAllErrors()) {
                 LOG.error(error);
@@ -62,17 +71,26 @@ public class NewsController {
             return "redirect:create";
         }
 
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+        MultipartFile multipartFile = multipartRequest.getFile("imageFile");
+        try {
+            news.setImageFile(multipartFile.getBytes());
+        } catch (IOException e) {
+            LOG.error(e.getMessage());
+        }
         this.newsMap.put(news.assignId(), news);
-        LOG.debug("About to presist:" + news.getTitle());
         newsService.saveNewsEntity(news);
 
         return "redirect:list";
     }
 
     @InitBinder
-    protected void initBinder(final WebDataBinder binder) {
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
+        LOG.debug("Binding ...");
         binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
         binder.registerCustomEditor(NewsEntity.class, new ImageDataMultipartFileEditor());
+        binder.bind(request);
+
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "list")

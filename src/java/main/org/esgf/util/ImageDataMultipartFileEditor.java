@@ -8,9 +8,8 @@ import java.io.IOException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.esgf.domain.NewsEntity;
-
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.propertyeditors.ByteArrayPropertyEditor;
+import org.springframework.web.multipart.MultipartFile;
 
 
 public class ImageDataMultipartFileEditor extends ByteArrayPropertyEditor {

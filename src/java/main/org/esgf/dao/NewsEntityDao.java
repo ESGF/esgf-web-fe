@@ -2,7 +2,7 @@ package org.esgf.dao;
 
 /**
  *
- * author: fwang2@ornl.gov
+ * @author: fwang2@ornl.gov
  *
  */
 

@@ -95,5 +95,9 @@
 
     <dependency org="antlr" name="antlr" rev="2.7.7" conf="base->default" />
 
+    <dependency org="commons-fileupload" name="commons-fileupload" rev="1.2.1" conf="base->default"/>
+
+    <dependency org="commons-io" name="commons-io" rev="2.0.1" conf="base->default"/>
+
   </dependencies>
 </ivy-module>

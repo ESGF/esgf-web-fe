@@ -7,19 +7,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.esgf.domain.NewsEntity;
 import org.esgf.service.NewsService;
+import org.esgf.util.ImageDataMultipartFileEditor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
+
+import com.prospringhibernate.gallery.converter.ArtDataMultipartFileEditor;
+import com.prospringhibernate.gallery.domain.ArtData_Storage;
 
 @Controller
 @RequestMapping(value = "/admin/news")
@@ -43,23 +53,35 @@ public class NewsController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "create")
-    public String createForm(Model model) {
+    public String setupForm(Model model) {
         model.addAttribute("news", new NewsEntity());
         return "admin/news_createForm";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String create(@Valid NewsEntity news, BindingResult result) {
+    public String create(NewsEntity news,
+            BindingResult result) {
         if (result.hasErrors()) {
-            return "admin/news_createForm";
+            for (ObjectError error: result.getAllErrors()) {
+                LOG.error(error);
+            }
+            return "redirect:create";
         }
 
         this.newsMap.put(news.assignId(), news);
         LOG.debug("About to presist:" + news.getTitle());
         newsService.saveNewsEntity(news);
-        return "redirect:/admin/news/list";
+        
+        return "redirect:list";
     }
 
+    @Override
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+        super.initBinder(request, binder); 
+        binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
+        binder.registerCustomEditor(NewsEntity.class, new ImageDataMultipartFileEditor());
+    }
+    
     @RequestMapping(method = RequestMethod.GET, value = "list")
     public String list(Model model) {
 

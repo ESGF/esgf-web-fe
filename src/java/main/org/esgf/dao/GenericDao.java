@@ -1,7 +1,7 @@
 /**
  * Core Persistence Interface
  * 
- * author: fwang2@ornl.gov
+ * @author: fwang2@ornl.gov
  *
  */
 

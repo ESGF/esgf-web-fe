@@ -6,40 +6,53 @@ package org.esgf.domain;
  *
  */
 
+
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+@SuppressWarnings("serial")
 @Entity
 public class NewsEntity implements DomainObject {
 
+    @Id
+    @GeneratedValue    
     private Long id;
+    
+    @Version    
     private Integer version;
-
-    public NewsEntity() {};
+    
+    private String imageFileName;
+    
+    @Lob
+    private byte[] imageFile;
+    
 
     @NotNull
     @Size(min = 1, max = 120)
     private String title;
 
-    private byte[] picture;
-
     @NotNull
     @Size(min = 1, max = 500)
-    private String body;
 
-    @Id
-    @GeneratedValue
+    private String body;
+    private static final AtomicLong idSequence = new AtomicLong();
+    public static final String BASE_URL = "/images/thumbnail/";
+    
+    public NewsEntity() {};
+
+    
     public final Long getId() {
         return id;
     }
 
-    @Version
     public Integer getVersion() {
         return version;
     }
@@ -60,14 +73,18 @@ public class NewsEntity implements DomainObject {
         return title;
     }
 
-    public void setPicture(byte[] picture) {
-        this.picture = picture;
+
+    public byte[] getImageFile() {
+        return imageFile;
     }
 
-    public byte[] getPicture() {
-        return picture;
+    
+    public void setImageFile(byte[] imageFile) {
+        this.imageFile = imageFile;
     }
 
+
+    
     public void setBody(String body) {
         this.body = body;
     }
@@ -81,6 +98,19 @@ public class NewsEntity implements DomainObject {
         return id;
     }
 
-    private static final AtomicLong idSequence = new AtomicLong();
+
+    @Transient  
+    public String getUrl() {
+        return BASE_URL + this.getId();
+    }
+
+    public void setImageFileName(String imageFileName) {
+        this.imageFileName = imageFileName;
+    }
+
+    public String getImageFileName() {
+        return imageFileName;
+    }
+    
 
 }

@@ -32,12 +32,12 @@
 	</logger>
 
 	<logger name="org.springframework.web">
-		<level value="trace" />
+		<level value="info" />
 	</logger>
 
 
     <category name="org.springframework.security">
-       <priority value="debug"/>
+       <priority value="info"/>
     </category>
   
     <logger name="org.springframework.web.servlet">
@@ -53,6 +53,10 @@
     </logger>
 
     <logger name="org.esgf.solr">
+        <level value="debug" />
+    </logger>
+    
+    <logger name="esg">
         <level value="debug" />
     </logger>
         

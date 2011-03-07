@@ -21,7 +21,7 @@ body {
     background: #417690; padding: 3px 5px; color: #FFFFFF; border: 1px solid #bbb; border-color: #ddd #aaa #aaa #ddd;
 }
 
-.error { text-align: center; color: #FF0000; }
+.myerror { text-align: center; color: #FF0000; }
 
 .strong {
     font-weight: bold;
@@ -43,7 +43,14 @@ td, th {
     font-size: 12px;
     padding: 5px;
     font-family: "Lucida Grande", Verdana, Arial, sans-serif;
+    vertical-align:text-top;
 }
+
+.right { text-align: right; }
+	
+.left { text-align:left; }
+
+.center { text-align: center }
 
 a { text-decoration: none; }
 
@@ -59,6 +66,6 @@ a:visited { color: #0066CC;}
 }
 
 .openidlink {
-    padding-left: 8px; padding-right: 8px; padding-bottom: 8px; padding-top: 2px;
-    background: url("../images/openid16.png") 0 .2em no-repeat;
+    padding-left: 10px; padding-right: 10px; padding-bottom: 8px; padding-top: 2px;
+    background: url('../images/openid16.png') 0 .2em no-repeat;
 }

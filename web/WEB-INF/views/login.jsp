@@ -2,8 +2,12 @@
 
 <ti:insertDefinition name="main-layout" >
 
+	<ti:putAttribute name="extrastyle">
+		<link rel="stylesheet" href='<c:url value="/styles/base.css" />' type="text/css">
+	</ti:putAttribute>
+
 	<ti:putAttribute name="main">
-		<div style=" margin:0 auto; width:600px">
+		<div style="margin:0 auto; width:600px">
 		
 			<!-- retrieve current user status -->
 			<sec:authentication property="principal" var="principal"/>

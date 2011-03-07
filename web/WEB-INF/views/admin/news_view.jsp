@@ -7,22 +7,18 @@
 
     <div class="push-1 span-22 last">
 
-    <h2> Published News </h2>
+    <div class="newstitle"> </div>
 
-    <table>
+    <div class="thumbnail"> 
+    
+    <img src="view?ARTDATA_ID=${curEntity.thumbnailPicture.id}"></div>
+    
+    </div>
 
-    <c:forEach var="news" items="${newsList}" varStatus="newsLoopCount" >
 
-        <tr>
-            <td> ${news.title} </td>
-            <td> Edit </td>
-            <td> Remove </td>
-        </tr>
-
-    </c:forEach>
-
-    </table>
-   </div>
+    <div class="newsbody"> </div>
+    
+    
 
     </ti:putAttribute>
 

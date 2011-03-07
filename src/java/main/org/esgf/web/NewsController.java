@@ -20,13 +20,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -74,19 +72,19 @@ public class NewsController {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         MultipartFile multipartFile = multipartRequest.getFile("imageFile");
         try {
-            news.setImageFile(multipartFile.getBytes());
+            news.setImageFile(multipartFile.getBytes());            
         } catch (IOException e) {
             LOG.error(e.getMessage());
         }
-        this.newsMap.put(news.assignId(), news);
+        news.setImageFileName(multipartFile.getOriginalFilename());
+        //this.newsMap.put(news.assignId(), news);
         newsService.saveNewsEntity(news);
 
         return "redirect:list";
     }
 
     @InitBinder
-    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
-        LOG.debug("Binding ...");
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {        
         binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
         binder.registerCustomEditor(NewsEntity.class, new ImageDataMultipartFileEditor());
         binder.bind(request);
@@ -100,7 +98,7 @@ public class NewsController {
         // ArrayList<NewsEntity>(newsMap.values());
         List<NewsEntity> newsList = newsService.getNewsEntityAll();
         model.addAttribute("newsList", newsList);
-        return "admin/news_view";
+        return "admin/news_list";
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -110,6 +108,6 @@ public class NewsController {
             throw new ResourceNotFoundException(id);
         }
         model.addAttribute(news);
-        return "admin/news_view";
+        return "admin/news_list";
     }
 }

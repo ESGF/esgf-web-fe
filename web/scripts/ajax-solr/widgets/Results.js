@@ -32,8 +32,10 @@
             var i = null;
             if($("input[name='areaGroup']:checked").val() === 'circle') {
                 //get the radius
-                radius = $("input[name='radius']").val();
-                center = centroidCenter;
+                //radius = $("input[name='radius']").val();
+                radius = Manager.widgets['geo_browse'].centroidRadius;
+                
+                center = Manager.widgets['geo_browse'].centroidCenter;
                 //get extreme points - they must ALL be within range
                 se = new google.maps.LatLng(doc.south_degrees, doc.east_degrees);
                 ne = new google.maps.LatLng(doc.north_degrees, doc.east_degrees);

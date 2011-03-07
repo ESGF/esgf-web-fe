@@ -2,10 +2,6 @@
  * 
  */
 
-var boundingboxWD, boundingboxED, boundingboxSD, boundingboxND;
-var centroidCenter;
-var centroidRadius;
-
 (function ($) {
     AjaxSolr.GeospatialSearchWidget = AjaxSolr.AbstractWidget.extend({
         map: null,
@@ -17,6 +13,13 @@ var centroidRadius;
         max_of_markers: 3,
         markerGroup: new Array(this.max_of_markers),
         poly: null,
+        
+        boundingboxND: 0,
+        boundingboxSD: 0,
+        boudningboxED: 0,
+        boundingboxWD: 0,
+        centroidCenter: 0,
+        centroidRadius: 0,
         
 	    clearMarkers: function () {
 		    var i = null;
@@ -45,7 +48,7 @@ var centroidRadius;
             var self = this;
             var marker = self.addMarker(location);
             if (marker !== null ) {
-		        appendMarker(marker,  self.num_of_markers);
+		        self.appendMarker(marker,  self.num_of_markers);
 	        }
         },
         display_map: function() {
@@ -206,17 +209,17 @@ var centroidRadius;
             if (self.poly) {
                 self.poly.setMap(null);
             }
-            radius = $("input[name='radius']").val();
+            self.centroidRadius = $("input[name='radius']").val();
             quality = $("input[name='quality']").val();
-            self.drawCircle(self.markerGroup[0], radius, quality);
+            self.drawCircle(self.markerGroup[0], self.centroidRadius, quality);
         },
         drawCircle: function (marker, radius, nodes) {
             //alert('drawCircle');
             var self = this;
             var i = null;
-            var center = marker.getPosition();  
-            var latConv = self.dist(center, new google.maps.LatLng(center.lat() + 0.1, center.lng()))*10;
-            var lngConv = self.dist(center, new google.maps.LatLng(center.lat(), center.lng() + 0.1))*10;
+            self.centroidCenter = marker.getPosition();  
+            var latConv = self.dist(self.centroidCenter, new google.maps.LatLng(self.centroidCenter.lat() + 0.1, self.centroidCenter.lng()))*10;
+            var lngConv = self.dist(self.centroidCenter, new google.maps.LatLng(self.centroidCenter.lat(), self.centroidCenter.lng() + 0.1))*10;
             //alert('latConv: ' + latConv + ' lngConv: ' + lngConv + ' radius/latConv: ' + radius/latConv * Math.cos(i * Math.PI/180));
             // loop
             var points = [];
@@ -224,8 +227,8 @@ var centroidRadius;
             self.cbounds = new google.maps.LatLngBounds();
         
             for (i = 0; i <= 360; i+= step) {
-                var pint = new google.maps.LatLng( center.lat() + (radius/latConv * Math.cos(i * Math.PI/180)),
-                    center.lng() + (radius/lngConv * Math.sin(i * Math.PI/180)));
+                var pint = new google.maps.LatLng( self.centroidCenter.lat() + (radius/latConv * Math.cos(i * Math.PI/180)),
+                		self.centroidCenter.lng() + (radius/lngConv * Math.sin(i * Math.PI/180)));
                 points.push(pint);
                 self.cbounds.extend(pint);
             }
@@ -251,7 +254,7 @@ var centroidRadius;
             var dLat  = self.rad(p2.lat() - p1.lat());
             var dLong = self.rad(p2.lng() - p1.lng());
             var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(rad(p1.lat())) * Math.cos(rad(p2.lat())) * Math.sin(dLong/2) * Math.sin(dLong/2);
+                Math.cos(self.rad(p1.lat())) * Math.cos(self.rad(p2.lat())) * Math.sin(dLong/2) * Math.sin(dLong/2);
             var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
             var d = R * c;
             return d.toFixed(3);
@@ -262,6 +265,9 @@ var centroidRadius;
     rad: function(x) {
         return x*Math.PI/180;
     },
+    
+    
+    
     executeGeospatialQuery: function () {
         var self = this;
         //alert('executing geo spatial query');
@@ -275,6 +281,10 @@ var centroidRadius;
             self.overlaps(geoShape);
         }
     },
+    
+    
+    
+    
     encloses: function (geoSearchType) {
         var self = this;
         var geoQueryString = '';
@@ -283,53 +293,61 @@ var centroidRadius;
         var west_degrees, east_degrees, north_degrees, south_degrees,
         west_degreesFQ, east_degreesFQ, north_degreesFQ, south_degreesFQ; 
         
-        if(geoSearchType === 'circle') { // geosearch type is a bounding box
+        if(geoSearchType === 'circle') { // geosearch type is a circle
             var theCenter = self.markerGroup[0];
-            centroidCenter = self.markerGroup[0].getPosition();
+            self.centroidCenter = self.markerGroup[0].getPosition();
             sw = self.cbounds.getSouthWest();
             ne = self.cbounds.getNorthEast();
             //this is the min long 
             //west_degrees limit
-            boundingboxWD = sw.lng();	
+            self.boundingboxWD = sw.lng();	
             //this is the min lat
             //south_degrees limit
-            boundingboxSD = sw.lat();
+            self.boundingboxSD = sw.lat();
             //this is the max long
             //east_degrees limit
-            boundingboxED = ne.lng();
+            self.boundingboxED = ne.lng();
             //this is the max lat
             //north_degrees limit
-            boundingboxND = ne.lat();
-            west_degrees = boundingboxWD;
-            east_degrees = boundingboxED;
-            south_degrees = boundingboxSD;
-            north_degrees = boundingboxND;
+            self.boundingboxND = ne.lat();
+            west_degrees = self.boundingboxWD;
+            east_degrees = self.boundingboxED;
+            south_degrees = self.boundingboxSD;
+            north_degrees = self.boundingboxND;
             south_degreesFQ = 'south_degrees:[' + south_degrees + ' TO *]';
             west_degreesFQ = 'west_degrees:[' + west_degrees + ' TO *]';
             north_degreesFQ = 'north_degrees:[ * TO ' + north_degrees + ']';
             east_degreesFQ = 'east_degrees:[ * TO ' + east_degrees + ']';
             geoQueryString += '(' + south_degreesFQ + ' AND ' + west_degreesFQ + ' AND ' + north_degreesFQ + ' AND ' + east_degreesFQ + ')';
+            
+            
+            /*
+             * Note that the code for bounding box and centroid are the same here
+             * The reason is that centroid searches are trimmed after a solr query has been processed
+             * It is actually handled in Results
+             * This may be changed due to pagination issues
+             */
             //console.log(geoQueryString);
         }else { // geosearch type is a bounding box
             sw = self.bounds.getSouthWest();
             ne = self.bounds.getNorthEast();
             //this is the min long 
             //west_degrees limit
-            boundingboxWD = sw.lng();
+            self.boundingboxWD = sw.lng();
             //this is the min lat
             //south_degrees limit
-            boundingboxSD = sw.lat();
+            self.boundingboxSD = sw.lat();
             //this is the max long
             //east_degrees limit
-            boundingboxED = ne.lng();
+            self.boundingboxED = ne.lng();
             //this is the max lat
             //north_degrees limit
-            boundingboxND = ne.lat();
+            self.boundingboxND = ne.lat();
             //console.log('BoundingBoxND: ' + boundingboxND);
-            west_degrees = boundingboxWD;
-            east_degrees = boundingboxED;
-            south_degrees = boundingboxSD;
-            north_degrees = boundingboxND;
+            west_degrees = self.boundingboxWD;
+            east_degrees = self.boundingboxED;
+            south_degrees = self.boundingboxSD;
+            north_degrees = self.boundingboxND;
             south_degreesFQ = 'south_degrees:[' + south_degrees + ' TO *]';
             west_degreesFQ = 'west_degrees:[' + west_degrees + ' TO *]';
             north_degreesFQ = 'north_degrees:[ * TO ' + north_degrees + ']';
@@ -339,6 +357,9 @@ var centroidRadius;
         }
         Manager.store.addByValue('fq',geoQueryString);
     },
+    
+    
+    
 	overlaps: function(geoSearchType) {
         var self = this;
         geoQueryString = '';
@@ -346,136 +367,136 @@ var centroidRadius;
         var ne = null;
         if(geoSearchType === 'circle') { // geosearch type is a bounding box
             var theCenter = self.markerGroup[0];
-            centroidCenter = self.markerGroup[0].getPosition();
+            self.centroidCenter = self.markerGroup[0].getPosition();
             sw = self.cbounds.getSouthWest();
             ne = self.cbounds.getNorthEast();
             //this is the min long 
             //west_degrees limit
-            boundingboxWD = sw.lng();
+            self.boundingboxWD = sw.lng();
             //this is the min lat
             //south_degrees limit
-            boundingboxED = sw.lat();
+            self.boundingboxED = sw.lat();
             //this is the max long
             //east_degrees limit
-            boundingboxSD = ne.lng();
+            self.boundingboxSD = ne.lng();
 			//this is the max lat
 			//north_degrees limit
-			boundingboxND = ne.lat();
+			self.boundingboxND = ne.lat();
             //case 1
             //NE point in bounding box
-            geoQueryString += '(east_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-		                 'north_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
+            geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+		                 'north_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
             geoQueryString += ' OR ';
             //case 2
             //SE point in bounding box
-            geoQueryString += '(east_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                'south_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
+            geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+                'south_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
             geoQueryString += ' OR ';
             //case 3
             //SW point in bounding box
-            geoQueryString += '(west_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                'south_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
+            geoQueryString += '(west_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+                'south_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
 		    geoQueryString += ' OR ';		    
             //case 4
 		    //NW point in bounding box
-            geoQueryString += '(west_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                'north_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
+            geoQueryString += '(west_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+                'north_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
             geoQueryString += ' OR ';
             //case 5
             //east degree in range and n & s are above and below respectively
-            geoQueryString += '(east_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
-                'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
+            geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+                'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
+                'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
             geoQueryString += ' OR ';
             //case 6
             //west degree in range and n & s are above and below respectively
-            geoQueryString += '(west_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
-                'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
+            geoQueryString += '(west_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+                'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
+                'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
             geoQueryString += ' OR ';
             //case 7
             //north degree in range and n & s are above and below respectively
-            geoQueryString += '(north_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '] AND ' +
-                'west_degrees:[ * TO ' + boundingboxWD + '] AND ' +
-                'east_degrees:[' + boundingboxED + ' TO ' + '* ])';
+            geoQueryString += '(north_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '] AND ' +
+                'west_degrees:[ * TO ' + self.boundingboxWD + '] AND ' +
+                'east_degrees:[' + self.boundingboxED + ' TO ' + '* ])';
             geoQueryString += ' OR ';
             //case 8
             //south degree in range and n & s are above and below respectively
-            geoQueryString += '(south_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                'west_degrees:[ * TO ' + boundingboxWD + '] AND ' +
-                'east_degrees:[' + boundingboxED + ' TO ' + '* ])';
+            geoQueryString += '(south_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+                'west_degrees:[ * TO ' + self.boundingboxWD + '] AND ' +
+                'east_degrees:[' + self.boundingboxED + ' TO ' + '* ])';
             geoQueryString += ' OR ';
             //case 9
             //data box > user defined bounding box              
-            geoQueryString += '(east_degrees:[' + boundingboxED + ' TO ' + ' *] AND ' +
-                'west_degrees:[ * TO ' + boundingboxWD + '] AND ' +
-                'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
-                'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
+            geoQueryString += '(east_degrees:[' + self.boundingboxED + ' TO ' + ' *] AND ' +
+                'west_degrees:[ * TO ' + self.boundingboxWD + '] AND ' +
+                'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
+                'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
         } else {
             sw = self.bounds.getSouthWest();
             ne = self.bounds.getNorthEast();
             //this is the min long 
             //west_degrees limit
-            boundingboxWD = sw.lng();
+            self.boundingboxWD = sw.lng();
             //this is the min lat
             //south_degrees limit
-            boundingboxED = sw.lat();
+            self.boundingboxED = sw.lat();
             //this is the max long
             //east_degrees limit
-            boundingboxSD = ne.lng();
+            self.boundingboxSD = ne.lng();
             //this is the max lat
             //north_degrees limit
-            boundingboxND = ne.lat();
+            self.boundingboxND = ne.lat();
             //case 1
             //NE point in bounding box
-            geoQueryString += '(east_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                'north_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
+            geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+                'north_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
             geoQueryString += ' OR ';
             //case 2
             //SE point in bounding box
-            geoQueryString += '(east_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                'south_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
+            geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+                'south_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
             geoQueryString += ' OR ';
             //case 3
             //SW point in bounding box
-            geoQueryString += '(west_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                'south_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
+            geoQueryString += '(west_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+                'south_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
             geoQueryString += ' OR ';
             //case 4
             //NW point in bounding box
-            geoQueryString += '(west_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                'north_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '])';
+            geoQueryString += '(west_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+                'north_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
             geoQueryString += ' OR ';
             //case 5
             //east degree in range and n & s are above and below respectively
-            geoQueryString += '(east_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
-                'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
+            geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+                'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
+                'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
             geoQueryString += ' OR ';
             //case 6
             //west degree in range and n & s are above and below respectively
-            geoQueryString += '(west_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
-                'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
+            geoQueryString += '(west_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+                'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
+                'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
             geoQueryString += ' OR ';
             //case 7
             //north degree in range and n & s are above and below respectively
-            geoQueryString += '(north_degrees:[' + boundingboxSD + ' TO ' + boundingboxND + '] AND ' +
-                'west_degrees:[ * TO ' + boundingboxWD + '] AND ' +
-                'east_degrees:[' + boundingboxED + ' TO ' + '* ])';
+            geoQueryString += '(north_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '] AND ' +
+                'west_degrees:[ * TO ' + self.boundingboxWD + '] AND ' +
+                'east_degrees:[' + self.boundingboxED + ' TO ' + '* ])';
             geoQueryString += ' OR ';
             //case 8
             //south degree in range and n & s are above and below respectively
-            geoQueryString += '(south_degrees:[' + boundingboxWD + ' TO ' + boundingboxED + '] AND ' +
-                'west_degrees:[ * TO ' + boundingboxWD + '] AND ' +
-                'east_degrees:[' + boundingboxED + ' TO ' + '* ])';
+            geoQueryString += '(south_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+                'west_degrees:[ * TO ' + self.boundingboxWD + '] AND ' +
+                'east_degrees:[' + self.boundingboxED + ' TO ' + '* ])';
             geoQueryString += ' OR ';
             //case 9
             //data box > user defined bounding box              
-            geoQueryString += '(east_degrees:[' + boundingboxED + ' TO ' + ' *] AND ' +
-                'west_degrees:[ * TO ' + boundingboxWD + '] AND ' +
-                'south_degrees:[ * TO ' + boundingboxSD + '] AND ' +
-                'north_degrees:[' + boundingboxND + ' TO ' + '* ])';
+            geoQueryString += '(east_degrees:[' + self.boundingboxED + ' TO ' + ' *] AND ' +
+                'west_degrees:[ * TO ' + self.boundingboxWD + '] AND ' +
+                'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
+                'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
         }
         //console.log(geoQueryString);
         Manager.store.addByValue('fq',geoQueryString);
@@ -498,7 +519,7 @@ var centroidRadius;
                 $(".overlay_footer").show();
                 $(".overlay_border").show();
                 self.clearMarkers();
-                clearAreaChoice();
+                self.clearAreaChoice();
                 self.display_map();
                 /* All events are placed here */
                 $('button#submitGeo').live('click',function() {

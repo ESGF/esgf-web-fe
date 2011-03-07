@@ -19,38 +19,40 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
         //if it is -> need to change the current selection string
         if(fqString.search('east_degrees') !== -1)
         {
+        	alert('2: ' + Manager.widgets['geo_browse'].boundingboxND);
+        	
             if($("input[name='areaGroup']:checked").val() === 'circle') {
                 //if there is no OR, it is an enclosed search
                 if(fqString.search('OR') === -1)
                 {
-                    fqString = 'encloses centroid (N,W,S,E): (' + Math.round(parseFloat(boundingboxND).toFixed(2)) + ',' +
-                    Math.round(parseFloat(boundingboxWD).toFixed(2)) + ',' +
-                    Math.round(parseFloat(boundingboxSD).toFixed(2)) + ',' +
-                    Math.round(parseFloat(boundingboxED).toFixed(2)) + ')';
+                    fqString = 'encloses centroid (N,W,S,E): (' + Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxND).toFixed(2)) + ',' +
+                    Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxWD).toFixed(2)) + ',' +
+                    Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxSD).toFixed(2)) + ',' +
+                    Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxED).toFixed(2)) + ')';
                 }
                 //otherwise it is an overlaps search
                 else {
-                    fqString = 'overlaps centroid (N,W,S,E): (' + Math.round(parseFloat(boundingboxND).toFixed(2)) + ',' +
-                    Math.round(parseFloat(boundingboxWD).toFixed(2)) + ',' +
-                    Math.round(parseFloat(boundingboxSD).toFixed(2)) + ',' +
-                    Math.round(parseFloat(boundingboxED).toFixed(2)) + ')';
+                    fqString = 'overlaps centroid (N,W,S,E): (' + Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxND).toFixed(2)) + ',' +
+                    Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxWD).toFixed(2)) + ',' +
+                    Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxSD).toFixed(2)) + ',' +
+                    Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxED).toFixed(2)) + ')';
                 }
             }
             else {
                 //if there is no OR, it is an enclosed search
                 if(fqString.search('OR') === -1)
                 {
-                    fqString = 'encloses bounding (N,W,S,E): (' + Math.round(parseFloat(boundingboxND).toFixed(2)) + ',' +
-                    Math.round(parseFloat(boundingboxWD).toFixed(2)) + ',' +
-                    Math.round(parseFloat(boundingboxSD).toFixed(2)) + ',' +
-                    Math.round(parseFloat(boundingboxED).toFixed(2)) + ')';
+                    fqString = 'encloses bounding (N,W,S,E): (' + Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxND).toFixed(2)) + ',' +
+                    Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxWD).toFixed(2)) + ',' +
+                    Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxSD).toFixed(2)) + ',' +
+                    Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxED).toFixed(2)) + ')';
                 }
                 //otherwise it is an overlaps search
                 else {
-                    fqString = 'overlaps bounding (N,W,S,E): (' + Math.round(parseFloat(boundingboxND).toFixed(2)) + ',' +
-                    Math.round(parseFloat(boundingboxWD).toFixed(2)) + ',' +
-                    Math.round(parseFloat(boundingboxSD).toFixed(2)) + ',' +
-                    Math.round(parseFloat(boundingboxED).toFixed(2)) + ')';
+                    fqString = 'overlaps bounding (N,W,S,E): (' + Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxND).toFixed(2)) + ',' +
+                    Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxWD).toFixed(2)) + ',' +
+                    Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxSD).toFixed(2)) + ',' +
+                    Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxED).toFixed(2)) + ')';
                 }
             }
         }

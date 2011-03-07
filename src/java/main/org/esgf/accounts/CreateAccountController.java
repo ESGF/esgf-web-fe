@@ -50,12 +50,16 @@ public class CreateAccountController {
     private GroupRoleDAO groupRoleDAO = null;
     
     @Autowired
-    public CreateAccountController(final @Qualifier("dbProperties") Properties props) throws Exception {
-        this.userInfoDAO = new UserInfoCredentialedDAO("rootAdmin", "esgrocks", props);
-        this.groupRoleDAO = new GroupRoleDAO(props);
-        // FIXME
-        groupRoleDAO.addGroup(GROUP_NAME);
-        groupRoleDAO.addRole(ROLE_NAME);
+    public CreateAccountController(final @Qualifier("dbProperties") Properties props) {
+        try {
+            this.userInfoDAO = new UserInfoCredentialedDAO("rootAdmin", props.getProperty("security.admin.passwd"), props);
+            this.groupRoleDAO = new GroupRoleDAO(props);
+            // FIXME
+            groupRoleDAO.addGroup(GROUP_NAME);
+            groupRoleDAO.addRole(ROLE_NAME);
+        } catch(Exception e) {
+            LOG.warn(e.getMessage());
+        }
     }
     
     /**

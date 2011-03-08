@@ -9,16 +9,15 @@
 
     <div class="newstitle"> </div>
 
-    <div class="thumbnail"> 
-    
-    <img src="view?ARTDATA_ID=${curEntity.thumbnailPicture.id}"></div>
-    
+    <div class="thumbnail">
+
+
     </div>
 
 
     <div class="newsbody"> </div>
-    
-    
+
+
 
     </ti:putAttribute>
 

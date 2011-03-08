@@ -22,37 +22,27 @@ import javax.validation.constraints.Size;
 @Entity
 public class NewsEntity implements DomainObject {
 
-    @Id
-    @GeneratedValue    
     private Long id;
-    
-    @Version    
     private Integer version;
-    
     private String imageFileName;
-    
-    @Lob
     private byte[] imageFile;
-    
-
-    @NotNull
-    @Size(min = 1, max = 120)
     private String title;
-
-    @NotNull
-    @Size(min = 1, max = 500)
-
     private String body;
+
     private static final AtomicLong idSequence = new AtomicLong();
     public static final String BASE_URL = "/images/thumbnail/";
-    
+
     public NewsEntity() {};
 
-    
+
+    @Id
+    @GeneratedValue
     public final Long getId() {
         return id;
     }
 
+
+    @Version
     public Integer getVersion() {
         return version;
     }
@@ -65,33 +55,40 @@ public class NewsEntity implements DomainObject {
         this.id = id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
+    @NotNull
+    @Size(min = 1, max = 120)
     public String getTitle() {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
+
+    @Lob
     public byte[] getImageFile() {
         return imageFile;
     }
 
-    
+
     public void setImageFile(byte[] imageFile) {
         this.imageFile = imageFile;
     }
 
 
-    
+    @NotNull
+    @Size(min = 1, max = 500)
+    public String getBody() {
+        return body;
+    }
+
+
     public void setBody(String body) {
         this.body = body;
     }
 
-    public String getBody() {
-        return body;
-    }
 
     public Long assignId() {
         this.id = idSequence.incrementAndGet();
@@ -99,7 +96,7 @@ public class NewsEntity implements DomainObject {
     }
 
 
-    @Transient  
+    @Transient
     public String getUrl() {
         return BASE_URL + this.getId();
     }
@@ -111,6 +108,6 @@ public class NewsEntity implements DomainObject {
     public String getImageFileName() {
         return imageFileName;
     }
-    
+
 
 }

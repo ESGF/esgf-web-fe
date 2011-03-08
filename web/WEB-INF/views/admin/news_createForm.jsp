@@ -13,11 +13,11 @@
                     <form:label for="title" path="title" cssErrorClass="error">Title</form:label><br/>
                     <form:input path="title" size="75" /> <form:errors path="title" />
                 </p>
-                <p>
+                <p> 
                     <form:label for="imageFile" path="imageFile">Image to used inline: (<100K)</form:label><br/>
-                    <form:input path="imageFile" type="file"/>
+                    <form:input path="imageFile" type="file"/> 
                 </p>
-                
+
                 <p>
                     <form:label for="body" path="body" cssErrorClass="error"> Contents (500 limit) </form:label><br/>
                     <form:textarea path="body" rows="10" cols="50" />"

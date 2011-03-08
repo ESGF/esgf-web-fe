@@ -1,6 +1,5 @@
 package org.esgf.accounts;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import esg.node.security.ESGFDataAccessException;
 import esg.node.security.GroupRoleDAO;
 import esg.node.security.UserInfo;
 import esg.node.security.UserInfoCredentialedDAO;
@@ -37,6 +37,7 @@ public class CreateAccountController {
         
     private static final int PASSWORD_MIN_LENGHT = 6;
     public final static String PAR_URL = "url";
+    public final static String PAR_DATE = "date";
     
     private final static String GROUP_NAME = "CMIP5 Research";
     private final static String ROLE_NAME = "User";
@@ -81,7 +82,7 @@ public class CreateAccountController {
     @RequestMapping(method=RequestMethod.GET)
     protected ModelAndView doGet(final HttpServletRequest request, final @ModelAttribute(MODEL_NAME) CreateAccountBean user) throws Exception {
                 
-        // FIXME
+        /* FIXME
         user.setUserName("testman");
         user.setFirstName("Tester");
         user.setMiddleName("Middle");
@@ -91,6 +92,7 @@ public class CreateAccountController {
         user.setCountry("U.S.");
         user.setEmail("joe.tester@test.com");
         user.setState("California");
+        */
 
         final Map<String,Object> model = new HashMap<String,Object>();
         model.put(MODEL_NAME, user);
@@ -101,37 +103,44 @@ public class CreateAccountController {
     @RequestMapping(method=RequestMethod.POST)
     protected ModelAndView doPost(final HttpServletRequest request, final @ModelAttribute(MODEL_NAME) CreateAccountBean user, final BindingResult errors) throws Exception {
         
-        // validate user input
-        validate(user, errors);
-        
-        if (errors.hasErrors()) {
-            return new ModelAndView(FORM_VIEW).addObject(MODEL_NAME, user);
+        try {
             
-        } else {
+            // validate user input
+            validate(user, errors);
             
-            // persist user to the database
-            boolean success =  userInfoDAO.addUserInfo(user.getUser());
-            
-            if (!success) {
-                errors.reject("error.invalid", new Object[] {}, "Database ingestion error");
+            if (errors.hasErrors()) {
                 return new ModelAndView(FORM_VIEW).addObject(MODEL_NAME, user);
                 
             } else {
                 
-                // set password
-                userInfoDAO.setPassword(user.getUser(), user.getPassword1());
-                // set permissions - FIXME
-                userInfoDAO.addPermission(user.getUser(), GROUP_NAME, ROLE_NAME);
-                                
-                // use POST-REDIRECT-GET pattern with additional model "?openid_identifier=...&remember_openid=..." to set openid cookie
-                String confirmUrl = CONFIRM_VIEW + "?token="+user.getUserName(); // FIXME
-                return new ModelAndView(new RedirectView(SUCCESS_VIEW)).addObject(OpenidCookieFilter.PARAMETER_OPENID, user.getOpenid())
-                                                                       .addObject(OpenidCookieFilter.PARAMETER_REMEMBERME, "on")
-                                                                       .addObject(PAR_URL, confirmUrl );
+                // persist user to the database
+                boolean success =  userInfoDAO.addUserInfo(user.getUser());
+                
+                if (!success) {
+                    errors.reject("error.invalid", new Object[] {}, "Database ingestion error");
+                    return new ModelAndView(FORM_VIEW).addObject(MODEL_NAME, user);
+                    
+                } else {
+                    
+                    // set password
+                    userInfoDAO.setPassword(user.getUser(), user.getPassword1());
+                    // set permissions - FIXME
+                    userInfoDAO.addPermission(user.getUser(), GROUP_NAME, ROLE_NAME);
+                                    
+                    // use POST-REDIRECT-GET pattern with additional model "?openid_identifier=...&remember_openid=..." to set openid cookie
+                    String confirmUrl = CONFIRM_VIEW + "?token="+user.getUserName(); // FIXME
+                    return new ModelAndView(new RedirectView(SUCCESS_VIEW)).addObject(OpenidCookieFilter.PARAMETER_OPENID, user.getOpenid())
+                                                                           .addObject(OpenidCookieFilter.PARAMETER_REMEMBERME, "on")
+                                                                           .addObject(PAR_URL, confirmUrl );
+                }
+                
             }
-            
-        }
         
+        // capture database runtime exception and transform into servlet exceptions for proper handling
+        } catch(ESGFDataAccessException e) {
+            throw new ServletException(e);
+        }
+           
     }
     
     /**
@@ -139,7 +148,7 @@ public class CreateAccountController {
      * @param user
      * @param errors
      */
-    private final void validate(final CreateAccountBean user, final BindingResult errors) throws ServletException {
+    private final void validate(final CreateAccountBean user, final BindingResult errors) {
         
         // validate first name
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "error.required", "'First Name' is required");
@@ -160,12 +169,8 @@ public class CreateAccountController {
         // verify username
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userName", "error.required", "Username is required");
         if (StringValidationUtils.isNotAlphanumeric(user.getUserName())) errors.rejectValue("userName", "error.invalid", new Object[] {}, "'User Name' contains invalid characters");
-        try {
-            final UserInfo _user = userInfoDAO.getUserById(user.getUserName());
-            if (_user!=null && _user.isValid()) errors.rejectValue("userName", "error.notunique", new Object[] {}, "'User Name' already taken");
-        } catch(SQLException e) {
-            throw new ServletException(e.getMessage());
-        }
+        final UserInfo _user = userInfoDAO.getUserById(user.getUserName());
+        if (_user!=null && _user.isValid()) errors.rejectValue("userName", "error.notunique", new Object[] {}, "'User Name' already taken");
         
         // verify password
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password1", "error.required", "'Password' is required");

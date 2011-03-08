@@ -9,13 +9,13 @@
 
 	<ti:putAttribute name="main">
 		
-		<c:set var="openid_cookie" value="<%= org.esgf.security.OpenidCookieFilter.OPENID_COOKIE_NAME %>"/>
+		<c:set var="openid" value="<%= org.esgf.security.OpenidCookieFilter.PARAMETER_OPENID %>"/>
 
 		<div style="margin:0 auto; width:600px; text-align:center;" class="panel">
 		<b>SUCCESS.</b>
 		<br/>Congratulations, your account is active immediately.
 		<br/>You can now <a href='<c:url value="/login"/>'>log in</a> with your openid: 
-		<span class="openidlink"> &nbsp; <c:out value="${cookie[openid_cookie].value}"/></span>.
+		<span class="openidlink"> &nbsp; <c:out value="${param[openid]}"/></span>.
 		
 		</div>
 	</ti:putAttribute>

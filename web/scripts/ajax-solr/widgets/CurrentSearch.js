@@ -19,7 +19,6 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
         //if it is -> need to change the current selection string
         if(fqString.search('east_degrees') !== -1)
         {
-        	alert('2: ' + Manager.widgets['geo_browse'].boundingboxND);
         	
             if($("input[name='areaGroup']:checked").val() === 'circle') {
                 //if there is no OR, it is an enclosed search

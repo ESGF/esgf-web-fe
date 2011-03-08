@@ -30,7 +30,7 @@
     <bean id="feDataSource"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource"
         p:driverClassName="org.h2.Driver"
-        p:url="jdbc:h2:~/esgf-fe"
+        p:url="jdbc:h2:~/esgf-fe;AUTO_SERVER=TRUE"
         p:username="sa"
         p:password="" />
 

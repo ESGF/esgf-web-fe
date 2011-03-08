@@ -13,9 +13,9 @@
                     <form:label for="title" path="title" cssErrorClass="error">Title</form:label><br/>
                     <form:input path="title" size="75" /> <form:errors path="title" />
                 </p>
-                <p> 
+                <p>
                     <form:label for="imageFile" path="imageFile">Image to used inline: (<100K)</form:label><br/>
-                    <form:input path="imageFile" type="file"/> 
+                    <input name="file" type="file"/>
                 </p>
 
                 <p>

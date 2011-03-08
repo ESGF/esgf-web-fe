@@ -8,6 +8,7 @@
     <layout class="org.apache.log4j.PatternLayout">
         <param name="ConversionPattern" value="%-5p: %c{3} - %m%n" />
     </layout>
+    
   </appender>
 
     <!-- 3rdparty Loggers -->
@@ -57,11 +58,15 @@
     <logger name="org.esgf.util">
         <level value="debug" />
     </logger>
-
-    <!-- Root Logger -->
-    <root>
-        <priority value="warn" />
-        <appender-ref ref="console" />
-    </root>
-
+    
+    <logger name="esg">
+        <level value="debug" />
+    </logger>
+        
+	<!-- Root Logger -->
+	<root>
+		<priority value="warn" />
+		<appender-ref ref="console" />
+	</root>
+	
 </log4j:configuration>

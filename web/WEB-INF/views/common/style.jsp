@@ -8,4 +8,3 @@
     <link rel="stylesheet"
         href='<c:url value="/styles/esgf-base.css" />'
         type="text/css" media="screen, projection">
-        

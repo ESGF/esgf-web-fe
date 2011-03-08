@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/java/main"/>
+	<classpathentry kind="src" path="src/java/test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?ivyXmlPath=ivy.xml&amp;confs=*&amp;ivySettingsPath=%24%7Bworkspace_loc%3Aesgf-web-fe%2Fivysettings.xml%7D&amp;loadSettingsOnDemand=false&amp;propertyFiles=&amp;doRetrieve=true&amp;retrievePattern=lib%2Ffetched%2F%5Bconf%5D%2F%5Bartifact%5D.%5Bext%5D&amp;retrieveSync=false&amp;retrieveConfs=*&amp;retrieveTypes=*"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

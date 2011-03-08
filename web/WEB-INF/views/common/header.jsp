@@ -12,7 +12,7 @@
 </div>
 
 <!-- right tabs -->
-<div class="prepend-4 span-5 last">
+<div class="prepend-1 span-8 last">
         <span class="tabitem"> <a href="#">Search Settings</a></span>
         <c:choose>
             <c:when test="${principal=='anonymousUser'}">
@@ -22,6 +22,7 @@
                    <span class="tabitem"> <a href="<c:url value='/j_spring_security_logout'/>" >Logout</a></span>
                </c:otherwise>
            </c:choose>
+        <span class="tabitem"> <a href='<c:url value="/createAccount"/> '>Create Account</a></span>
 </div>
 
 <hr/>

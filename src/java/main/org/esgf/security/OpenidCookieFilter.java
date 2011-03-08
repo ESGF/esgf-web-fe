@@ -62,12 +62,13 @@ public class OpenidCookieFilter implements Filter {
 			LOG.debug("Parameter name="+PARAMETER_OPENID+" value="+openid);
 			LOG.debug("Parameter name="+PARAMETER_REMEMBERME+" value="+rememberme);
 		}
-		
+				
 		// remember openid identity
 		if (StringUtils.hasText(openid)) {
 			final Cookie cookie = new Cookie(OPENID_COOKIE_NAME, openid);
 			if (StringUtils.hasText(rememberme) && rememberme.equals("on")) {
 				cookie.setMaxAge(OPENID_COOKIE_LIFETIME);
+				cookie.setPath("/");
 				if (LOG.isDebugEnabled()) LOG.debug("Set cookie name="+cookie.getName()+" value="+cookie.getValue());
 			} else {
 				cookie.setMaxAge(0);

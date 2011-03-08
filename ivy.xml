@@ -31,6 +31,7 @@
     <dependency org="org.springframework" name="spring-webmvc" rev="${spring.version}" transitive="true" conf="base->default" />
     <dependency org="org.springframework" name="spring-tx" rev="${spring.version}" transitive="true" conf="base->default" />
     <dependency org="org.springframework" name="spring-aspects" rev="${spring.version}" transitive="true" conf="base->default" />
+    <dependency org="org.springframework" name="spring-instrument" rev="${spring.version}" transitive="true" conf="runtime->default"/>
 
 
     <dependency org="org.springframework.security" name="spring-security-core" rev="${spring.version}" conf="base->default" />
@@ -100,5 +101,9 @@
     <dependency org="org.esgf" name="esgf-node-manager" rev="0.4.2" transitive="false" conf="base->runtime" />
     <dependency org="org.esgf" name="esgf-security" rev="1.2.0" transitive="false" conf="base->default" />
         
+    <dependency org="antlr" name="antlr" rev="2.7.7" conf="base->default" />
+    <dependency org="commons-fileupload" name="commons-fileupload" rev="1.2.1" conf="base->default"/>
+    <dependency org="commons-io" name="commons-io" rev="2.0.1" conf="base->default"/>
+
   </dependencies>
 </ivy-module>

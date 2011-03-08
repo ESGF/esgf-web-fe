@@ -14,7 +14,16 @@
                         http://www.springframework.org/schema/util  http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
     <context:property-placeholder location="/WEB-INF/spring/*.properties"/>
-    <import resource="mvc-config.xml" />
+    <context:annotation-config />
+    <context:component-scan base-package="org.esgf">
+        <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+        <context:exclude-filter expression="org.springframework.stereotype.Repository" type="annotation"/>
+    </context:component-scan>
+
+    <!-- This will ensure that hibernate or jpa exceptions are automatically translated into
+         Spring's generic DataAccessException hierarchy -->
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
     <import resource="esgf-security.xml" />
     <import resource="esgf-datasource.xml" />
     <import resource="esgf-jpa.xml"/>

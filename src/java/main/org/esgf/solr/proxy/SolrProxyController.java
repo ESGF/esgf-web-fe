@@ -1,3 +1,7 @@
+/**
+ * @author - fwang2@ornl.gov
+ */
+
 package org.esgf.solr.proxy;
 
 import java.io.IOException;

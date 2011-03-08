@@ -4,6 +4,7 @@ TAGS
 *~
 *.cache
 *.DS_Store
+.settings/org.eclipse.jdt.ui.prefs
 *.a
 *.o
 *.class

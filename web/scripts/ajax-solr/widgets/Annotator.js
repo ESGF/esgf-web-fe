@@ -48,7 +48,6 @@ AjaxSolr.AnnotatorWidget = AjaxSolr.AbstractWidget.extend({
 			$("button").button();
 			
 			$("button#addKeyword").click(function(){
-				alert('adding keyword')
 				keywordArray[keywordCount] = $("input[name='quality']").val();
 				var outputText = '';
 				if(keywordCount != 0){
@@ -87,51 +86,8 @@ AjaxSolr.AnnotatorWidget = AjaxSolr.AbstractWidget.extend({
 
 	});
     
-    /*
-    $(".m a[rel]").overlay({
-    	
-		//mask: 'darkred',
-		mask: {opacity: 0.5, color: '#000'},
-		
-		effect: 'apple',
 
-		onBeforeLoad: function() {
-			
-			$('.apple_overlay').css({'width' : '640px'});
-			//$('.apple_overlay').css({'background-image' : 'url(../images/metadata_overlay/white.png'});
-			
-			// grab wrapper element inside content
-			var wrap = this.getOverlay().find(".contentWrap");
-			// load the page specified in the trigger
-			wrap.load(this.getTrigger().attr("href"));
-			
-		},
-    
-    	onLoad: function() {
-
-    		id = globalRecordId;
-    		var title = 'title';
-    		
-    		
-    		metadata_report(id,title,metadatafilename,metadatafileformat);
-    	  	
-    	}
-
-	});
-	*/
-  },
-
-  removeFacet: function (facet) {
-    var self = this;
-    
-  },
-
-  
-  init: function () {
-	  
-	 
   }
-  
    
 	
 });

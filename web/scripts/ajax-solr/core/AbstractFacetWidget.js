@@ -110,7 +110,7 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
         self.manager.doRequest(0);
       }
       return false;
-    }
+    };
   },
 
   /**
@@ -120,11 +120,11 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
   nextClickHandler: function (divFieldId) {
     var self = this;
     return function () {
-    	$("div#"+divFieldId).remove();
-    	self.startingValue += self.incrementValue;
-    	self.displayFacetValues();
-      return false;
-    }
+        $("div#"+divFieldId).remove();
+        self.startingValue += self.incrementValue;
+        self.displayFacetValues();
+        return false;
+    };
   },
   
   /**
@@ -134,11 +134,10 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
   prevClickHandler: function (divFieldId) {
     var self = this;
     return function () {
-    	$("div#"+divFieldId).remove();
-    	self.startingValue -= self.incrementValue;
-    	self.displayFacetValues();
-    	
-      return false;
+        $("div#"+divFieldId).remove();
+        self.startingValue -= self.incrementValue;
+        self.displayFacetValues();
+        return false;
     };
   },
   
@@ -148,21 +147,29 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
   displayFacetValues: function () {
 	var self = this;
 	var numFields = 0;
-	for (var facet in self.manager.response.facet_counts.facet_fields[self.field]) {
-		numFields += 1;
+	var facet = null;
+	
+	for (facet in self.manager.response.facet_counts.facet_fields[self.field]) {
+		if(self.manager.response.facet_counts.facet_fields[self.field].hasOwnProperty(facet)) {
+		    numFields += 1;
+		}
 	}
+
 	var maxCount = 0;
 	var objectedItems = [];
-	for (var facet in self.manager.response.facet_counts.facet_fields[self.field]) {
-		var count = parseInt(self.manager.response.facet_counts.facet_fields[self.field][facet]);
-		if (count > maxCount) {
-			maxCount = count;
+	for (facet in self.manager.response.facet_counts.facet_fields[self.field]) {
+		if(self.manager.response.facet_counts.facet_fields[self.field].hasOwnProperty(facet)) {
+		    var radix = 10;
+		    var count = parseInt(self.manager.response.facet_counts.facet_fields[self.field][facet],radix);
+		    if (count > maxCount) {
+			    maxCount = count;
+		    }
+			objectedItems.push({ facet: facet, count: count });
 		}
-		objectedItems.push({ facet: facet, count: count });
 	}
 	
 	objectedItems.sort(function (a, b) {
-		if(Manager.sortType == 'sortbycount') {
+		if(Manager.sortType === 'sortbycount') {
 			return a.count > b.count ? -1 : 1;
 		} else {
 			return a.facet.value < b.facet.value ? -1 : 1;
@@ -180,7 +187,7 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
 		if(self.startingValue > 0){
 			$('div#'+divFieldID).append(AjaxSolr.theme('prevLink',stopValue,objectedItems,divFieldID,self));
 		}
-		if(stopValue == (this.startingValue + this.incrementValue)) {
+		if(stopValue === (this.startingValue + this.incrementValue)) {
 			$('div#'+divFieldID).append(AjaxSolr.theme('nextLink',divFieldID,self));
 		}
 		$('div#'+divFieldID).append('</div>');
@@ -198,11 +205,11 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
   unclickHandler: function (value) {
     var self = this;
     return function () {
-      if (self.remove(value)) {
-        self.manager.doRequest(0);
-      }
-      return false;
-    }
+        if (self.remove(value)) {
+            self.manager.doRequest(0);
+        }
+        return false;
+    };
   },
 
   /**

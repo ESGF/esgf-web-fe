@@ -47,8 +47,3 @@
      <link rel="stylesheet"
         href='<c:url value="/styles/annotator_overlay.css" />'
         type="text/css" media="screen, projection">
-
-
-    <link rel="stylesheet"
-        href='<c:url value="/styles/esg-simple.css" />'
-        type="text/css" media="screen, projection">

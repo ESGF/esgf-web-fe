@@ -46,11 +46,11 @@ td, th {
     vertical-align:text-top;
 }
 
-.right { text-align: right; }
+.right_text { text-align: right; }
 	
-.left { text-align:left; }
+.left_text { text-align:left; }
 
-.center { text-align: center }
+.center_text { text-align: center }
 
 a { text-decoration: none; }
 

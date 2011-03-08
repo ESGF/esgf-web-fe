@@ -21,12 +21,13 @@
         <constructor-arg value="-tcp,-tcpAllowOthers,true,-tcpPort,8043" />
     </bean>
 
+-->
+
     <bean id="org.h2.tools.Server-WebServer" class="org.h2.tools.Server"
-        factory-method="createWebServer" init-method="start">
+        factory-method="createWebServer" init-method="start" destroy-method="stop">
         <constructor-arg value="-web,-webAllowOthers,true,-webPort,8082" />
     </bean>
-    
--->
+ 
 
 
     <bean id="feDataSource"

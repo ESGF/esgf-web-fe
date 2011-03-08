@@ -97,7 +97,7 @@ public class NewsController {
 
 
     @RequestMapping(method = RequestMethod.GET, value = "image/{id}")
-    public void displayImage(@PathVariable Long id, Model model, HttpServletResponse response) {
+    public void displayImage(@PathVariable Long id, HttpServletResponse response) {
         LOG.debug("image id " + id);
         NewsEntity news = newsService.getNewsEntity(id);
         if (news != null) {
@@ -110,6 +110,13 @@ public class NewsController {
         else {
             LOG.debug("News with id of [ " + id + " ] is missing");
         }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value="show")
+    public String slideShow(Model model) {
+        List<NewsEntity> newsList = newsService.getNewsEntityAll();
+        model.addAttribute("newsList", newsList);
+        return "admin/news_show";
     }
 
 }

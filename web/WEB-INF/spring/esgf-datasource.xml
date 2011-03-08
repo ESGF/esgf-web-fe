@@ -13,8 +13,9 @@
         p:url="${jdbc.url}"
         p:username="${jdbc.username}"
         p:password="${jdbc.password}" />
+-->
 
-
+<!--  
     <bean id="org.h2.tools.Server" class="org.h2.tools.Server"
         factory-method="createTcpServer" init-method="start" destroy-method="stop">
         <constructor-arg value="-tcp,-tcpAllowOthers,true,-tcpPort,8043" />
@@ -31,7 +32,7 @@
     <bean id="feDataSource"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource"
         p:driverClassName="org.h2.Driver"
-        p:url="jdbc:h2:tcp://localhost/~/esgf-fe"
+        p:url="jdbc:h2:~/esgf-fe"
         p:username="sa"
         p:password="" />
 

@@ -78,6 +78,7 @@ public class NewsController {
         }
         news.setImageFileName(multipartFile.getOriginalFilename());
         //this.newsMap.put(news.assignId(), news);
+        LOG.debug("Received: " + news.getImageFileName());
         newsService.saveNewsEntity(news);
 
         return "redirect:list";

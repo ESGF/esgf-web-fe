@@ -55,7 +55,12 @@ AjaxSolr.theme.prototype.actions = function (doc) {
 
     selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
     output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Select</a></span>';
-    output += '<span class="actionitem ai_las"><a href="#">LAS</a></span>';
+    
+    if (doc.service != "undefined" && doc.service[0] == "LAS") {
+    	LOG.debug("LAS service tag detected");
+        output += '<span class="actionitem ai_las"><a href="' + doc.service[2] + '">LAS</a></span>';
+    }
+    
     output += '<span class="actionitem"><a class="annotate" href="/esgf-web-fe/scripts/esgf/annotation_overlay.html" rel="#annotator_overlay"> Annotate</a></span>';
     output += "</div>";
 

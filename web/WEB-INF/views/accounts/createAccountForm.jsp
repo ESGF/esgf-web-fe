@@ -4,7 +4,7 @@
 
     <ti:putAttribute name="extrascript">
 
-          <script type="text/javascript" src="http://view.jquery.com/trunk/plugins/autocomplete/lib/jquery.js"></script>
+        <script type="text/javascript" src="http://view.jquery.com/trunk/plugins/autocomplete/lib/jquery.js"></script>
         <script type='text/javascript' src='http://view.jquery.com/trunk/plugins/autocomplete/lib/jquery.bgiframe.min.js'></script>
         <script type='text/javascript' src='.http://view.jquery.com/trunk/plugins/autocomplete/lib/jquery.ajaxQueue.js'></script>
         <script type='text/javascript' src='http://view.jquery.com/trunk/plugins/autocomplete/lib/thickbox-compressed.js'></script>

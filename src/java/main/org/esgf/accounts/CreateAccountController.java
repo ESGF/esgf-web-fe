@@ -13,6 +13,7 @@ import org.esgf.security.OpenidCookieFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -50,6 +51,8 @@ public class CreateAccountController {
     private UserInfoCredentialedDAO userInfoDAO = null;
     private GroupRoleDAO groupRoleDAO = null;
     
+    private AccountsNotifier notifier;
+    
     @Autowired
     public CreateAccountController(final @Qualifier("dbProperties") Properties props) {
         try {
@@ -61,6 +64,8 @@ public class CreateAccountController {
         } catch(Exception e) {
             LOG.warn(e.getMessage());
         }
+        
+        notifier = new AccountsEmailNotifier(props);
     }
     
     /**
@@ -82,7 +87,7 @@ public class CreateAccountController {
     @RequestMapping(method=RequestMethod.GET)
     protected ModelAndView doGet(final HttpServletRequest request, final @ModelAttribute(MODEL_NAME) CreateAccountBean user) throws Exception {
                 
-        /* FIXME
+        /* FIXME */
         user.setUserName("testman");
         user.setFirstName("Tester");
         user.setMiddleName("Middle");
@@ -92,7 +97,6 @@ public class CreateAccountController {
         user.setCountry("U.S.");
         user.setEmail("joe.tester@test.com");
         user.setState("California");
-        */
 
         final Map<String,Object> model = new HashMap<String,Object>();
         model.put(MODEL_NAME, user);
@@ -124,14 +128,20 @@ public class CreateAccountController {
                     
                     // set password
                     userInfoDAO.setPassword(user.getUser(), user.getPassword1());
+                    // generate verification token
+                    final String verificationToken = userInfoDAO.genVerificationToken(user.getOpenid());
                     // set permissions - FIXME
                     userInfoDAO.addPermission(user.getUser(), GROUP_NAME, ROLE_NAME);
+                    
+                    // notify user
+                    notifier.accountCreated(getServerUrl(request), user.getUser(), verificationToken);
                                     
                     // use POST-REDIRECT-GET pattern with additional model "?openid_identifier=...&remember_openid=..." to set openid cookie
                     String confirmUrl = CONFIRM_VIEW + "?token="+user.getUserName(); // FIXME
                     return new ModelAndView(new RedirectView(SUCCESS_VIEW)).addObject(OpenidCookieFilter.PARAMETER_OPENID, user.getOpenid())
                                                                            .addObject(OpenidCookieFilter.PARAMETER_REMEMBERME, "on")
                                                                            .addObject(PAR_URL, confirmUrl );
+                    
                 }
                 
             }
@@ -141,6 +151,14 @@ public class CreateAccountController {
             throw new ServletException(e);
         }
            
+    }
+    
+    private final String getServerUrl(final HttpServletRequest request) {
+        return request.getScheme()
+               + "://"
+               + request.getServerName()
+               + (StringUtils.hasText(request.getServerPort()+"") ? ":"+request.getServerPort() : "")
+               + request.getContextPath();
     }
     
     /**

@@ -58,7 +58,7 @@ public class OpenidCookieFilter implements Filter {
 		final HttpServletResponse resp = (HttpServletResponse)response;
 		final String openid = req.getParameter(PARAMETER_OPENID);
 		final String rememberme = req.getParameter(PARAMETER_REMEMBERME);		
-		if (LOG.isDebugEnabled()) {
+		if (LOG.isTraceEnabled()) {
 			LOG.debug("Parameter name="+PARAMETER_OPENID+" value="+openid);
 			LOG.debug("Parameter name="+PARAMETER_REMEMBERME+" value="+rememberme);
 		}

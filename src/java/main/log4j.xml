@@ -50,12 +50,7 @@
         <level value="error" />
     </logger>
 
-    <logger name="org.esgf.web">
-        <level value="debug" />
-    </logger>
-
-
-    <logger name="org.esgf.util">
+    <logger name="org.esgf">
         <level value="debug" />
     </logger>
     

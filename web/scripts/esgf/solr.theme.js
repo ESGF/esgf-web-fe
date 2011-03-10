@@ -55,12 +55,15 @@ AjaxSolr.theme.prototype.actions = function (doc) {
 
     selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
     output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Select</a></span>';
-    
-    if (doc.service != "undefined" && doc.service[0] == "LAS") {
-    	LOG.debug("LAS service tag detected");
-        output += '<span class="actionitem ai_las"><a href="' + doc.service[2] + '">LAS</a></span>';
+
+    if (typeof doc.service != "undefined") {
+        LOG.debug("LAS service tag detected");
+        var svcStr = doc.service[0].split("|");
+        if (svcStr[0] == "LAS") {
+            output += '<span class="actionitem ai_las"><a href="' + svcStr[2] + '">LAS</a></span>';
+        }
     }
-    
+
     output += '<span class="actionitem"><a class="annotate" href="/esgf-web-fe/scripts/esgf/annotation_overlay.html" rel="#annotator_overlay"> Annotate</a></span>';
     output += "</div>";
 
@@ -175,44 +178,44 @@ AjaxSolr.theme.prototype.facet_content = function(stopValue,objectedItems,thisOb
 
 
 AjaxSolr.theme.prototype.metadata = function(thisObject) {
-	var self = thisObject;
-	
-	//alert(self);
-	
+    var self = thisObject;
+
+    //alert(self);
+
     var keywordsText = '';
-	
-	//add keywords to the page
-	if(self.keywords != null && self.keywords != '')
-	{
-		for(var i = 0;i<self.keywords.length;i++) {
-			if(i == self.keywords.length-1) {
-				keywordsText += self.keywords[i] + ' (' + self.keywords[i] + ')';
-			}
-			else {
-				keywordsText += self.keywords[i] + ' (' + self.keywords[i] + '), ';
-			}
-		}
-		$('div#keywords_metadata').after('<div class="addedMetadata"><p>' + keywordsText + '</p></div>');
-	}
-	$('div#abstract_metadata').after('<div class="addedMetadata"><p>' + self.description + '</p></div>');
-	
-	//add title and constraints to the page
-	$('div#metadata_summary_dataset').after('<div class="addedMetadataTitle">' + 'Dataset: ' + self.title);
-	
-	//add investigators to the page
-	$('div#investigator_metadata').after('<div class="addedMetadata"><p>' + self.invesigators + '</p></div>');
-	
-	//add contact information to the page
-	$('div#contact_metadata').after('<div class="addedMetadata"><p>' + self.contact + '</p></div>');
-	
-	//add start and stop times to the page
-	$('div#time_metadata').after('<div class="addedMetadata"><p>Begin: ' + self.startTime + ' End: ' + self.stopTime + '</p></div>');
-	
-	//add geospatial info to the page
-	$('div#geospatial_metadata').after('<div class="addedMetadata"><p>' + 'coordinates (N,W,S,E):<br />(' + self.north_degrees + ',' + self.west_degrees + ',' + self.south_degrees + ',' + self.east_degrees + ')</p></div>');
-	//self.display_meta_map(west_degreesText,east_degreesText,north_degreesText,south_degreesText);
-	self.display_meta_map();
-	
+
+    //add keywords to the page
+    if(self.keywords != null && self.keywords != '')
+    {
+        for(var i = 0;i<self.keywords.length;i++) {
+            if(i == self.keywords.length-1) {
+                keywordsText += self.keywords[i] + ' (' + self.keywords[i] + ')';
+            }
+            else {
+                keywordsText += self.keywords[i] + ' (' + self.keywords[i] + '), ';
+            }
+        }
+        $('div#keywords_metadata').after('<div class="addedMetadata"><p>' + keywordsText + '</p></div>');
+    }
+    $('div#abstract_metadata').after('<div class="addedMetadata"><p>' + self.description + '</p></div>');
+
+    //add title and constraints to the page
+    $('div#metadata_summary_dataset').after('<div class="addedMetadataTitle">' + 'Dataset: ' + self.title);
+
+    //add investigators to the page
+    $('div#investigator_metadata').after('<div class="addedMetadata"><p>' + self.invesigators + '</p></div>');
+
+    //add contact information to the page
+    $('div#contact_metadata').after('<div class="addedMetadata"><p>' + self.contact + '</p></div>');
+
+    //add start and stop times to the page
+    $('div#time_metadata').after('<div class="addedMetadata"><p>Begin: ' + self.startTime + ' End: ' + self.stopTime + '</p></div>');
+
+    //add geospatial info to the page
+    $('div#geospatial_metadata').after('<div class="addedMetadata"><p>' + 'coordinates (N,W,S,E):<br />(' + self.north_degrees + ',' + self.west_degrees + ',' + self.south_degrees + ',' + self.east_degrees + ')</p></div>');
+    //self.display_meta_map(west_degreesText,east_degreesText,north_degreesText,south_degreesText);
+    self.display_meta_map();
+
 
 };
 

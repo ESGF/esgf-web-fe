@@ -1,0 +1,8 @@
+Someone, hopefully you, has created an account with the Earth System Grid Federation (ESGF) linked to your email address.
+
+If this operation is legitimate, you don't have to do anything.
+If someone else has used your email address, please click on the link below to disable the newly created account:
+@@disable_url@@
+
+Welcome to the Earth System Grid Federation.
+Please remember your OpenID identifier: @@user_openid@@ - you can use it to sign onto any of the ESGF web sites.

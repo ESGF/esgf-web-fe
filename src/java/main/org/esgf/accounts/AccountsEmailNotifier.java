@@ -3,7 +3,6 @@ package org.esgf.accounts;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.Properties;
@@ -20,6 +19,7 @@ import javax.mail.internet.MimeMessage;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.core.io.ClassPathResource;
 
 import esg.node.security.UserInfo;
 
@@ -41,6 +41,7 @@ public class AccountsEmailNotifier implements AccountsNotifier {
     private final String disableAccountUri = "/disableAccount";
  
     
+    private final static String MESSAGE_TEMPLATE_FILE = "org/esgf/accounts/accountCreated.txt";
     private Pattern openid_pattern = Pattern.compile("@@user_openid@@");
     private Pattern url_pattern = Pattern.compile("@@disable_url@@");
     
@@ -53,8 +54,8 @@ public class AccountsEmailNotifier implements AccountsNotifier {
         try {
             log.info("Initializing AccountsEmailNotifier...");
     
-            //final File file = new ClassPathResource(props.getProperty("accounts.templates.accountCreated")).getFile();
-            final File file = new File(props.getProperty("accounts.templates.accountCreated"));
+            final File file = new ClassPathResource(MESSAGE_TEMPLATE_FILE).getFile();
+            //final File file = new File(props.getProperty("accounts.templates.accountCreated"));
             messageTemplate = FileUtils.readFileToString(file);
             
             sender = props.getProperty("mail.admin.address","esg-admin@llnl.gov");
@@ -134,7 +135,8 @@ public class AccountsEmailNotifier implements AccountsNotifier {
         final String newline  = System.getProperty("line.separator");
         
         final StringWriter sw = new StringWriter();
-        sw.append("Sender=").append(msg.getFrom().toString()).append(newline);
+        sw.append(newline);
+        sw.append("Sender=").append((msg.getFrom()[0]).toString()).append(newline);
         sw.append("Subject=").append(msg.getSubject()).append(newline);
         sw.append("Sent Date=").append(msg.getSentDate().toString()).append(newline);
         sw.append("Text=").append(msg.getContent().toString());

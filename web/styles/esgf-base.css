@@ -288,8 +288,13 @@ font-size: 180%;
 	width:35px;
 }
 
-.left_download .right_download {
+.left_download {
 	font-size: 8pt;	
+	padding-left:20px;
+	background-color:'yellow'
 }
 
+.right_download {
+	font-size: 8pt;	
+}
 

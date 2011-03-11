@@ -68,32 +68,40 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     output += "</div>";
 
     $("a[id=" + selectID + "]").live('click', {doc:doc}, function (evt) {
-
-        selected[evt.data.doc.id] = doc;
-        if ( jQuery.trim(this.innerHTML) == "Select") {
-            var $dialog = $('<div></div>')
-                .html('Dataset <b>' + evt.data.doc.id + "</b> has been added to the selection")
-                .dialog({
-                    autoOpen: true,
-                    show: 'blind',
-                    hide: 'explode'
-                });
-            this.innerHTML="Remove";
-
+    	var metadataFormat = doc.metadata_format;
+    	
+        //right now, we only support downloads through TDS
+    	//when we support others, this if guard will be removed
+        if(metadataFormat === 'THREDDS') {
+        
+        	selected[evt.data.doc.id] = doc;
+	        if ( jQuery.trim(this.innerHTML) == "Select") {
+	            var $dialog = $('<div></div>')
+	                .html('Dataset <b>' + evt.data.doc.id + "</b> has been added to the selection")
+	                .dialog({
+	                    autoOpen: true,
+	                    show: 'blind',
+	                    hide: 'explode'
+	                });
+	            this.innerHTML="Remove";
+	
+	        } else {
+	            var $dialog = $('<div></div>')
+	            .html('Dataset <b>' + evt.data.doc.id + "</b> has been removed to the selection")
+	            .dialog({
+	                autoOpen: true,
+	                show: 'blind',
+	                hide: 'explode'
+	            });
+	            this.innerHTML ="Select";
+	            delete selected[evt.data.doc.id];
+	
+	        }
+    	
         } else {
-            var $dialog = $('<div></div>')
-            .html('Dataset <b>' + evt.data.doc.id + "</b> has been removed to the selection")
-            .dialog({
-                autoOpen: true,
-                show: 'blind',
-                hide: 'explode'
-            });
-            this.innerHTML ="Select";
-            delete selected[evt.data.doc.id];
-
+        	alert('Dataset: ' + doc.id + ' cannot be downloaded at this time');
         }
-
-
+        
 
         return false;
     });

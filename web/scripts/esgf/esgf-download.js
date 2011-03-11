@@ -12,28 +12,30 @@ $(document).ready( function() {
             var arr = ESGF.util.toArray(ESGF.search.selected);
             //need a function that replaces periods in the name of the dataset (events in jquery cannot access elements that have these)
             
-            $( "#cartTemplate").tmpl(arr, 
-        		{ 
+            $( "#cartTemplate").tmpl(arr, { 
         			replacePeriods : function (word) {
-        				
         				return replacePeriod(word);
-        				
         			}
-            
         		}
             )
             .appendTo("#datasetList")
             //.find( "a").click(function() {alert('clicka');})
 			.find( "a.showAllChildren" ).click(function() {
 				var id = $(this).parent().attr("id").replace(/\./g,"_");
-				$('tr.rows_'+id).toggle();
+				$('tr.rows_'+id).toggle();//.css('background-color','yellow');
+				if(this.innerHTML === "Expand") {
+					this.innerHTML="Collapse";
+				} else {
+					this.innerHTML="Expand";
+				}
+				
 			});
         }
 
 
     });
     
-    $(".top_level_data_item").live ('click', function (){
+    $(".wgetAllChildren").live ('click', function (){
     	
     	var selectedItem = $.tmplItem(this);
     	var selectedDoc = selectedItem.data.doc;
@@ -44,6 +46,7 @@ $(document).ready( function() {
     	for(var i=0;i<selectedChildUrls.length;i++) {
     		queryString += '&child_url=' + selectedChildUrls[i] + '&child_id=' + selectedChildIds[i];
     	}
+    	
     	//generate the wget
     	jQuery.ajax({
             url: 'http://localhost:8080/esgf-web-fe/wgetproxy',
@@ -55,7 +58,6 @@ $(document).ready( function() {
         }); 
     	
     	
-    	
     });
     
 
@@ -63,9 +65,10 @@ $(document).ready( function() {
 
 function download(selectedDocId) {
 	//change me
-	//alert(selectedDocId);
 	jQuery('<form action="'+ 'http://localhost:8080/esgf-web-fe/scripts/esgf/' + 'wget_download_' + selectedDocId + '.sh' +'" method="'+ 'get' +'">'+''+'</form>').appendTo('body').submit().remove();
 
+	//delete the wget here (keep it a synchronous process)
+	
 }
 
 /*

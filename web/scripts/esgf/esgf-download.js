@@ -52,7 +52,7 @@ $(document).ready( function() {
             url: 'http://localhost:8080/esgf-web-fe/wgetproxy',
             data: queryString,
             type: 'POST',
-            success: function() {download(selectedDocId);},
+            success: function() {download(selectedItem);},
             error: function() {alert("error http://localhost:8080/esgf-web-fe/wgetproxy");},
             dataType: 'text'
         }); 
@@ -63,12 +63,25 @@ $(document).ready( function() {
 
 });
 
-function download(selectedDocId) {
+function download(selectedItem) {
+	
+	var selectedDocId = selectedItem.data.doc.id;
+	
 	//change me
 	jQuery('<form action="'+ 'http://localhost:8080/esgf-web-fe/scripts/esgf/' + 'wget_download_' + selectedDocId + '.sh' +'" method="'+ 'get' +'">'+''+'</form>').appendTo('body').submit().remove();
 
 	//delete the wget here (keep it a synchronous process)
+	var queryString = 'type=delete&id=' + selectedDocId;
 	
+	//generate the wget
+	jQuery.ajax({
+        url: 'http://localhost:8080/esgf-web-fe/wgetproxy',
+        data: queryString,
+        type: 'POST',
+        success: function() {alert('success');},
+        error: function() {alert("error http://localhost:8080/esgf-web-fe/wgetproxy");},
+        dataType: 'text'
+    }); 
 }
 
 /*

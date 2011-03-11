@@ -18,7 +18,6 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     for (i = 0, l = fq.length; i < l; i++) {
         var fqString = fq[i];
         
-        alert('fqString: ' + fqString);
         //check to see if this is a geospatial query (assuming 'east_degrees' is in every geo query)
         //if it is -> need to change the current selection string
         if(fqString.search('east_degrees') !== -1)
@@ -63,7 +62,6 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
   },
   
   outputBoundingBoxString: function (fqString) {
-	 alert('centroid string');
 	//if there is no OR, it is an enclosed search
       if(fqString.search('OR') === -1)
       {
@@ -85,7 +83,6 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
   outputCentroidString: function (fqString) {
 	  var self = this;
 	//if there is no OR, it is an enclosed search
-	  alert('radius: ' + Manager.widgets['geo_browse'].centroidRadius);
       if(fqString.search('OR') === -1)
       {
 

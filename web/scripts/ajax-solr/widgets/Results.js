@@ -36,7 +36,6 @@
                 radius = Manager.widgets['geo_browse'].centroidRadius;
                 
                 center = Manager.widgets['geo_browse'].centroidCenter;
-                console.log('\tcenter: ' + center + ' radius: ' + radius);
                 
                 if(center != null && radius !=null) {
                 	//get extreme points - they must ALL be within range
@@ -60,7 +59,6 @@
                 
                 
             }
-            console.log('\tIs in range: ' + isInRange);
             return isInRange;
         },
         
@@ -91,14 +89,14 @@
             for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
                 var doc = this.manager.response.response.docs[i];
                 if(self.postSolrProcessing(doc)) {
-                    console.log('keep doc: ' + doc.title);
+                    //console.log('keep doc: ' + doc.title);
                 	//alert('doc: ' + doc.title);
                     $(this.target).append(
                         AjaxSolr.theme('result', doc,
                         AjaxSolr.theme('snippet', doc),
                         AjaxSolr.theme('actions', doc)));
                 } else {
-                    console.log('discard doc: ' + doc.title);
+                    //console.log('discard doc: ' + doc.title);
                 }
                 
             }

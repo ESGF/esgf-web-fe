@@ -3,6 +3,7 @@
  */
 
 $(document).ready( function() {
+	
     $('#myTabs').bind('tabsselect', function(event, ui) {
         if (ui.index == 1) {
             $("#datasetList").empty();
@@ -15,7 +16,31 @@ $(document).ready( function() {
             $( "#cartTemplate").tmpl(arr, { 
         			replacePeriods : function (word) {
         				return replacePeriod(word);
-        			}
+        			},
+            		abbreviate : function (word) {
+            			var abbreviation = '';
+            			if(word.length > 16) {
+            				abbreviation = word.slice(0,7) + '...' + word.slice(word.length-8,word.length-1);
+            			}
+            			return abbreviation;
+            		},
+            		sizeConversion : function(size) {
+            			var convSize;
+            			if(size == null) {
+            				convSize = 'N/A';
+            			} else {
+            				var sizeFlt = parseFloat(size,10);
+                			if(sizeFlt > 1000000000) {
+                				convSize = (sizeFlt / 1000000000) + ' GB';
+                			} else if (sizeFlt > 1000000) {
+                				convSize = (sizeFlt / 1000000) + ' MB';
+                			} else {
+                				convSize = (sizeFlt / 1000000) + ' KB';
+                			}
+            			}
+            			return convSize;
+            		} 
+        			
         		}
             )
             .appendTo("#datasetList")
@@ -59,6 +84,10 @@ $(document).ready( function() {
     	
     	
     });
+    
+
+    $("#demo img[title]").tooltip();
+    $("#demo2 div[id]").tooltip();
     
 
 });

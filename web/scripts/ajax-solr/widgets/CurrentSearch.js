@@ -39,6 +39,10 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     if (links.length > 1) {
       links.unshift($('<a href="#"/>').text('remove all').click(function () {
         self.manager.store.remove('fq');
+        
+        var facet = null;
+        self.removeGeospatialConstraints(facet);  
+        
         self.manager.doRequest(0);
         return false;
       }));
@@ -55,6 +59,7 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     var self = this;
     return function () {
       if (self.manager.store.removeByValue('fq', facet)) {
+    	self.removeGeospatialConstraints(facet);  
         self.manager.doRequest(0);
       }
       return false;
@@ -65,17 +70,17 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
 	//if there is no OR, it is an enclosed search
       if(fqString.search('OR') === -1)
       {
-          fqString = 'encloses bounding (N,W,S,E):\n (' + Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxND).toFixed(self.floatPrecision)) + ',' +
-          Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxWD).toFixed(self.floatPrecision)) + ',' +
-          Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxSD).toFixed(self.floatPrecision)) + ',' +
-          Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxED).toFixed(self.floatPrecision)) + ')';
+          fqString = 'encloses bounding (N,W,S,E):\n (' + self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
+          self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
+          self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
+          self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ')';
       }
       //otherwise it is an overlaps search
       else {
-          fqString = 'overlaps bounding (N,W,S,E): (' + Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxND).toFixed(self.floatPrecision)) + ',' +
-          Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxWD).toFixed(self.floatPrecision)) + ',' +
-          Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxSD).toFixed(self.floatPrecision)) + ',' +
-          Math.round(parseFloat(Manager.widgets['geo_browse'].boundingboxED).toFixed(self.floatPrecision)) + ')';
+          fqString = 'overlaps bounding (N,W,S,E): (' + self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
+          self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
+          self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
+          self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ')';
       }
 	  return fqString;
   },
@@ -101,6 +106,23 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
   roundToPrecision: function (inputNum,desiredPrecision) {
 	  var precisionGuide = Math.pow(10, desiredPrecision);
 	  return( Math.round(inputNum * precisionGuide) / precisionGuide );
+  },
+  
+  removeGeospatialConstraints: function (facet) {
+	  if(facet.search('east_degrees') !== -1 || facet == null) {
+  	//reset ALL temporal and geospatial paramters to null
+        Manager.widgets['geo_browse'].boundingboxND = null;
+        Manager.widgets['geo_browse'].boundingboxSD = null;
+        Manager.widgets['geo_browse'].boundingboxED = null;
+        Manager.widgets['geo_browse'].boundingboxWD = null;
+        console.log('\t\tSetting radius and center to null');
+        Manager.widgets['geo_browse'].centroidRadius = null;
+        Manager.widgets['geo_browse'].centroidCenter = null;  
+       }
+  },
+  
+  removeTemporalConstraints: function (facet) {
+	  
   }
   
 });

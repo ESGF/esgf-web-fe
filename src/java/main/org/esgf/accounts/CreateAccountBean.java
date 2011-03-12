@@ -15,6 +15,16 @@ public class CreateAccountBean {
     private String password2;
     private UserInfo user;
     
+    /**
+     * Honeypot field, must be left blank for form to be accepted.
+     */
+    private String blank = "a";
+    
+    /**
+     * Verification token, set by Javascript to a value stored on the server.
+     */
+    private String uuid = java.util.UUID.randomUUID().toString();;
+    
     public CreateAccountBean() {}
     
     public CreateAccountBean(final UserInfo user) {
@@ -106,6 +116,22 @@ public class CreateAccountBean {
     
     public String getOpenid() {
         return user.getOpenid();
+    }
+    
+    public String getBlank() {
+        return blank;
+    }
+
+    public void setBlank(String blank) {
+        this.blank = blank;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
    
 }

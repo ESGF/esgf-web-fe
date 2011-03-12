@@ -18,7 +18,7 @@ public class CreateAccountBean {
     /**
      * Honeypot field, must be left blank for form to be accepted.
      */
-    private String blank = "a";
+    private String blank = "";
     
     /**
      * Verification token, set by Javascript to a value stored on the server.

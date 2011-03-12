@@ -1,31 +1,37 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
+<style>
+img {
+    vertical-align:text-bottom;
+}
+</style>
 
 <div id="adminTabs">
 
     <ul>
 
-    <li><a href="#headlines">Headlines</a></li>
+    <li><a href="#headline">Headlines</a></li>
 
-    <li><a href="#searchsettings"> Search Settings </a></li>
+    <li><a href="#searchsetting"> Search Settings </a></li>
 
     </ul>
 
 
-    <div id="headlines">
+    <div id="headline">
 
-    <span class="actions">
-    <a href="#"> Create New Headlines </a> or,
-    <a href="#"> List/Edit/Remove Headlines</a>
+    <span class="headline_tabs">
+    <a href="#">
+    <img src='<c:url value="/images/add-24.png" />' width="16">
+     Create New Headlines </a>
     </span>
 
-    <div id="hlcontent">
+    <div id="headline_list">
 
     </div>
 
     </div>
 
-    <div id="searchsettings">
+    <div id="searchsetting">
 
         To be done
 

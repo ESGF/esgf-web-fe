@@ -32,27 +32,33 @@
             var i = null;
             if($("input[name='areaGroup']:checked").val() === 'circle') {
                 //get the radius
-                radius = $("input[name='radius']").val();
-                center = centroidCenter;
-                //get extreme points - they must ALL be within range
-                se = new google.maps.LatLng(doc.south_degrees, doc.east_degrees);
-                ne = new google.maps.LatLng(doc.north_degrees, doc.east_degrees);
-                sw = new google.maps.LatLng(doc.south_degrees, doc.west_degrees);
-                nw = new google.maps.LatLng(doc.north_degrees, doc.west_degrees);
+                //radius = $("input[name='radius']").val();
+                radius = Manager.widgets['geo_browse'].centroidRadius;
+                
+                center = Manager.widgets['geo_browse'].centroidCenter;
+                
+                if(center != null && radius !=null) {
+                	//get extreme points - they must ALL be within range
+                    se = new google.maps.LatLng(doc.south_degrees, doc.east_degrees);
+                    ne = new google.maps.LatLng(doc.north_degrees, doc.east_degrees);
+                    sw = new google.maps.LatLng(doc.south_degrees, doc.west_degrees);
+                    nw = new google.maps.LatLng(doc.north_degrees, doc.west_degrees);
 
-                dist = [];
-                dist[0] = self.distanceInKm(se,center);
-                dist[1] = self.distanceInKm(ne,center);
-                dist[2] = self.distanceInKm(sw,center);
-                dist[3] = self.distanceInKm(nw,center);
+                    dist = [];
+                    dist[0] = self.distanceInKm(se,center);
+                    dist[1] = self.distanceInKm(ne,center);
+                    dist[2] = self.distanceInKm(sw,center);
+                    dist[3] = self.distanceInKm(nw,center);
 
-                for (i = 0, l = dist.length; i < l; i++) {
-                    if(dist[i] > radius) {
-                        isInRange = false;
+                    for (i = 0; i < dist.length; i++) {
+                        if(dist[i] > radius) {
+                            isInRange = false;
+                        }
                     }
                 }
+                
+                
             }
-
             return isInRange;
         },
         
@@ -82,14 +88,17 @@
             $(this.target).empty();
             for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
                 var doc = this.manager.response.response.docs[i];
-                //if(self.postSolrProcessing(doc)) {
+                if(self.postSolrProcessing(doc)) {
+                    //console.log('keep doc: ' + doc.title);
+                	//alert('doc: ' + doc.title);
                     $(this.target).append(
                         AjaxSolr.theme('result', doc,
                         AjaxSolr.theme('snippet', doc),
                         AjaxSolr.theme('actions', doc)));
-                //} else {
-                //    console.log('Do not keep this record: ' + doc.title);
-                //}
+                } else {
+                    //console.log('discard doc: ' + doc.title);
+                }
+                
             }
         },
 

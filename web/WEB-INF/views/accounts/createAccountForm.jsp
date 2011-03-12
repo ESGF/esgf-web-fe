@@ -20,6 +20,12 @@
                 $("#country").autocomplete(countries);
               });
           </script>
+          
+          <script>
+          	$(document).ready(function() {
+          		$("#uuid").val('<c:out value="${user.uuid}"/>');
+          	});
+          </script>
 
     </ti:putAttribute>
 
@@ -120,6 +126,10 @@
                         </tr>
                     </table>
 
+					<!-- no-spam fields -->
+					<form:hidden path="blank"/>
+					<input type="hidden" name="uuid" value="" id="uuid" />
+					
                     <input type="submit" value="submit" class="button"/>
 
                 </form:form>

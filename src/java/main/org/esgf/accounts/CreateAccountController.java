@@ -6,6 +6,7 @@ import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,6 +43,9 @@ public class CreateAccountController {
     
     private final static String GROUP_NAME = "CMIP5 Research";
     private final static String ROLE_NAME = "User";
+    
+    // session attribute to prevent automatic submission by robots
+    private final static String SESSION_ATTRIBUTE = "UUID";
     
     private final static Log LOG = LogFactory.getLog(CreateAccountController.class);
     
@@ -87,7 +91,7 @@ public class CreateAccountController {
     @RequestMapping(method=RequestMethod.GET)
     protected ModelAndView doGet(final HttpServletRequest request, final @ModelAttribute(MODEL_NAME) CreateAccountBean user) throws Exception {
                 
-        /* FIXME */
+        /* FIXME
         user.setUserName("testman");
         user.setFirstName("Tester");
         user.setMiddleName("Middle");
@@ -96,7 +100,11 @@ public class CreateAccountController {
         user.setOrganization("JPL");
         user.setCountry("U.S.");
         user.setEmail("joe.tester@test.com");
-        user.setState("California");
+        user.setState("California"); */
+        
+        // store UUID value in the session for later verification
+        if (LOG.isDebugEnabled()) LOG.debug("GET validation token="+user.getUuid());
+        request.getSession().setAttribute(SESSION_ATTRIBUTE, user.getUuid());
 
         final Map<String,Object> model = new HashMap<String,Object>();
         model.put(MODEL_NAME, user);
@@ -105,8 +113,17 @@ public class CreateAccountController {
     }
     
     @RequestMapping(method=RequestMethod.POST)
-    protected ModelAndView doPost(final HttpServletRequest request, final @ModelAttribute(MODEL_NAME) CreateAccountBean user, final BindingResult errors) throws Exception {
+    protected ModelAndView doPost(final HttpServletRequest request, final HttpServletResponse response, final @ModelAttribute(MODEL_NAME) CreateAccountBean user, final BindingResult errors) throws Exception {
         
+        // anti-spam validation
+        final String token = request.getSession().getAttribute(SESSION_ATTRIBUTE).toString();
+        if (LOG.isDebugEnabled()) LOG.debug("POST token="+user.getUuid()+" session token="+token);
+        if (   !token.equals(user.getUuid()) // value set by javascript must match value stored in session
+            || !user.getBlank().equals(""))  { // value must remain blank - not autofilled by robots
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Robots not allowed to submit this form");
+            return null; // response already handled
+        }
+
         try {
             
             // validate user input
@@ -167,7 +184,7 @@ public class CreateAccountController {
      * @param errors
      */
     private final void validate(final CreateAccountBean user, final BindingResult errors) {
-        
+                
         // validate first name
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "error.required", "'First Name' is required");
         if (StringValidationUtils.hasInvalidCharacters(user.getFirstName())) errors.rejectValue("firstName", "error.invalid", new Object[] {}, getInvalidCharactersErrorMessage("First Name"));

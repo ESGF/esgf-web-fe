@@ -1,11 +1,6 @@
 
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
-<ti:insertDefinition name="main-layout" >
-
-    <ti:putAttribute name="main">
-
-    <div class="push-1 span-22 last">
 
     <h2> Published News </h2>
 
@@ -22,8 +17,4 @@
     </c:forEach>
 
     </table>
-   </div>
 
-    </ti:putAttribute>
-
-</ti:insertDefinition>

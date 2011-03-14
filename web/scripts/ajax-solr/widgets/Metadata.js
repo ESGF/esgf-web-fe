@@ -126,25 +126,71 @@
                     projectsText += self.projects[i].Long_Name + ' (' + self.projects[i].Short_Name + '), ';
                 }
             }
+            
+            
+            
             $('div#projects_metadata').after('<div class="addedMetadata">' + projectsText + '</div>');
             //self.writeToHTML();
-            AjaxSolr.theme('metadata',self);
+            
         }, //end processOAI
         processTHREDDS: function(record) {
             var self = this;
+            
+            alert(record.catalog.dataset.metadata);
             //need to come back to this
             //the title is extracted from a hard coded place
-            self.title = record.catalog.dataset.name;
-            //add title and constraints to the page
-            //$('div#metadata_summary_dataset').after('<div class="addedMetadataTitle">' + 'Dataset: ' + self.title); //+ '</div><p>&lt;insert constraints here&gt;</p>');
-            // Projects 
-            //note i need to change the "0" index and place the correct information 
-            //projects_metadata -> (record)/record[0]/metadata/DIF/Project[0]
-		    //var projects = record.record[0].metadata.DIF.Project;
-            var projectsFirstChar = (record.catalog.dataset.name).search('project');
-            var projectsLastChar = (record.catalog.dataset.name).search('model');
-            self.projects = (record.catalog.dataset.name).substr(projectsFirstChar,projectsLastChar);
-		/*
+            var datasetItem = record.catalog.dataset;
+            alert(datasetItem);
+            if('name' in datasetItem) {
+                self.title = record.catalog.dataset.name;
+                var projectsFirstChar = (record.catalog.dataset.name).search('project');
+                var projectsLastChar = (record.catalog.dataset.name).search('model');
+                self.projects = (record.catalog.dataset.name).substr(projectsFirstChar,projectsLastChar);
+           
+            } else {
+            	self.title = 'N/A';
+            	self.projects = 'N/A';
+            }
+        
+          //var investigators = record.catalog.dataset.creator;
+            if('creator' in datasetItem) {
+            	self.investigators = record.catalog.dataset.creator;
+            } else {
+            	self.contact = 'N/A';
+            }
+            
+            var metadataItem = record.catalog.dataset.metadata;
+            if('timeCoverage' in metadataItem) {
+            	self.startTime = record.catalog.dataset.metadata.timeCoverage.start;
+            	self.stopTime = record.catalog.dataset.metadata.timeCoverage.end;
+            } else {
+            	self.startTime = 'N/A';
+            	self.stopTime = 'N/A';
+            }
+            
+            
+            if('geospatialCoverage' in metadataItem) {
+            	self.east_degrees = parseFloat(record.catalog.dataset.metadata.geospatialCoverage.eastwest.start);
+            	self.west_degrees = (parseFloat(record.catalog.dataset.metadata.geospatialCoverage.eastwest.start) + parseFloat(record.catalog.dataset.metadata.geospatialCoverage.eastwest.size));
+            	self.north_degrees = parseFloat(record.catalog.dataset.metadata.geospatialCoverage.northsouth.start);
+            	self.south_degrees = (parseFloat(record.catalog.dataset.metadata.geospatialCoverage.northsouth.start ) + parseFloat(record.catalog.dataset.metadata.geospatialCoverage.northsouth.size));
+                
+            } else {
+            	self.east_degrees = 'N/A';
+            	self.west_degrees = 'N/A';
+            	self.north_degrees = 'N/A';
+            	self.west_degrees = 'N/A';
+            }
+            
+            
+            self.description = 'N/A';
+            self.keywords = 'N/A';
+            
+            
+            
+            
+    		
+            /*
 		//var projects = record.record.metadata.DIF.Project;
 		//var projectsText = self.projects.substr(8,((self.projects.length)-3));
 		
@@ -155,9 +201,6 @@
 		//investigators += '<br />' + record.catalog.dataset.creator + '<br />' + record.catalog.dataset.creator;
 		//$('div#contact_metadata').after('<div class="addedMetadata"><p>' + investigators + '</p></div>');
 		
-		// Temporal Info 
-		//var startText = record.catalog.dataset.metadata.timeCoverage.start;
-		//var stopText = record.catalog.dataset.metadata.timeCoverage.end;
 		
 		if(stopText == '.')	{
 			var currentTime = new Date();
@@ -186,6 +229,54 @@
 		*/
             AjaxSolr.theme('metadata',self);
         },//end processTHREDDS
+        
+        /*
+        defaultText: function(document) {
+        	var self = document;
+        	
+        	if(self.title == null) {
+            	self.title = 'N/A';
+            }
+            if(self.projects == null) {
+            	self.projects = 'N/A';
+            }
+            if(self.invesigators == null) {
+            	self.invesigators = 'N/A';
+            }
+            if(self.contact == null) {
+            	self.contact = 'N/A';
+            }
+            if(self.startTime == null) {
+            	self.startTime = 'N/A';
+            }
+            if(self.stopTime == null) {
+            	self.stopTime = 'N/A';
+            }
+            if(self.east_degrees == null) {
+            	self.east_degrees = 'N/A';
+            }
+            if(self.west_degrees == null) {
+            	self.west_degrees = 'N/A';
+            }
+            if(self.north_degrees == null) {
+            	self.north_degrees = 'N/A';
+            }
+            if(self.south_degrees == null) {
+            	self.south_degrees = 'N/A';
+            }
+            if(self.description == null) {
+            	self.description = 'N/A';
+            }
+            if(self.keywords == null) {
+            	self.keywords = 'N/A';
+            }
+            if(projectsText == null) {
+            	projectsText = 'N/A';
+            }
+        	return self;
+        },
+        */
+        
     /*
     writeToHTML: function () {
         var self = this;

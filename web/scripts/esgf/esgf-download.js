@@ -4,6 +4,7 @@
 
 $(document).ready( function() {
 	
+	
     $('#myTabs').bind('tabsselect', function(event, ui) {
         if (ui.index == 1) {
             $("#datasetList").empty();
@@ -14,15 +15,21 @@ $(document).ready( function() {
             //need a function that replaces periods in the name of the dataset (events in jquery cannot access elements that have these)
             
             $( "#cartTemplate").tmpl(arr, { 
+            		
         			replacePeriods : function (word) {
         				return replacePeriod(word);
         			},
             		abbreviate : function (word) {
-            			var abbreviation = '';
+            			var abbreviation = word;
+            			/*
             			if(word.length > 16) {
             				abbreviation = word.slice(0,7) + '...' + word.slice(word.length-8,word.length-1);
             			}
+            			*/
             			return abbreviation;
+            		},
+            		addOne: function(num) {
+            			return (num+1);
             		},
             		sizeConversion : function(size) {
             			var convSize;
@@ -31,11 +38,14 @@ $(document).ready( function() {
             			} else {
             				var sizeFlt = parseFloat(size,10);
                 			if(sizeFlt > 1000000000) {
-                				convSize = (sizeFlt / 1000000000) + ' GB';
+                				var num = 1000000000;
+                				convSize = (sizeFlt / num).toFixed(2) + ' GB';
                 			} else if (sizeFlt > 1000000) {
-                				convSize = (sizeFlt / 1000000) + ' MB';
+                				var num = 1000000;
+                				convSize = (sizeFlt / num).toFixed(2) + ' MB';
                 			} else {
-                				convSize = (sizeFlt / 1000000) + ' KB';
+                				var num = 1000;
+                				convSize = (sizeFlt / num).toFixed(2) + ' KB';
                 			}
             			}
             			return convSize;
@@ -44,7 +54,6 @@ $(document).ready( function() {
         		}
             )
             .appendTo("#datasetList")
-            //.find( "a").click(function() {alert('clicka');})
 			.find( "a.showAllChildren" ).click(function() {
 				var id = $(this).parent().attr("id").replace(/\./g,"_");
 				$('tr.rows_'+id).toggle();//.css('background-color','yellow');
@@ -57,8 +66,12 @@ $(document).ready( function() {
 			});
         }
 
+        
 
     });
+    
+    
+    
     
     $(".wgetAllChildren").live ('click', function (){
     	
@@ -89,6 +102,11 @@ $(document).ready( function() {
     $("#demo img[title]").tooltip();
     $("#demo2 div[id]").tooltip();
     
+    $.extend( $.tmpl.tag, {
+        "var": {
+            open: "var $1;"
+        }
+    });
 
 });
 

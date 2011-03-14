@@ -13,7 +13,8 @@
      http://www.springframework.org/schema/mvc 
      http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
-     <util:properties id="dbProperties" location="file:///esg/config/esgf-db.properties"/>
+     <!-- <util:properties id="dbProperties" location="file:///esg/config/esgf-db.properties"/> -->
+     <bean id="esgfProperties" class="esg.common.util.ESGFProperties" />
 
 </beans>
      

@@ -2,6 +2,7 @@ package org.esgf.service;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.esgf.dao.NewsEntityDao;
 import org.esgf.domain.NewsEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 @Service(value = "newsService")
 public class NewsServiceImpl implements NewsService {
+
+    private final static Logger LOG = Logger.getLogger(NewsServiceImpl.class);
 
     private NewsEntityDao newsEntityDao;
 
@@ -24,6 +27,10 @@ public class NewsServiceImpl implements NewsService {
     public void saveNewsEntity(NewsEntity news) throws DataAccessException {
         newsEntityDao.save(news);
 
+    }
+
+    public void removeNewsEntity(Long id) throws DataAccessException {
+        newsEntityDao.delete(id);
     }
 
     @Autowired

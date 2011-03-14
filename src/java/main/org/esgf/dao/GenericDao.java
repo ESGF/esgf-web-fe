@@ -1,6 +1,6 @@
 /**
  * Core Persistence Interface
- * 
+ *
  * @author: fwang2@ornl.gov
  *
  */
@@ -21,5 +21,7 @@ public interface GenericDao<T extends DomainObject> {
     public void save(T object);
 
     public void delete(T object);
+
+    public void delete(Long id);
 
 }

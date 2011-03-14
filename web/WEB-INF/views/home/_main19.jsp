@@ -2,8 +2,9 @@
 
 
 <div class="push-3 span-21 last">
-
+<!--
 <a class="backward">prev</a>
+-->
 
 <div class="images">
 
@@ -28,7 +29,7 @@
 </div> <!--  end of "image" -->
 
 
-<a class="forward">next</a>
+<!--  <a class="forward">next</a>  -->
 
 <div class="slidetabs">
     <c:forEach var="news" items="${newsList}">

@@ -1,12 +1,6 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
-<ti:insertDefinition name="main-layout" >
-
-    <ti:putAttribute name="main">
-     <div class="push-1 span-15 last">
-
-    <h2> Create Article </h2>
-       <form:form modelAttribute="news" method="post" enctype="multipart/form-data">
+       <form:form modelAttribute="news" action="news/save" method="post" enctype="multipart/form-data">
             <fieldset>
                 <legend>Article Fields</legend>
                 <p>
@@ -27,9 +21,4 @@
                 </p>
             </fieldset>
         </form:form>
-   </div>
-
-    </ti:putAttribute>
-
-</ti:insertDefinition>
 

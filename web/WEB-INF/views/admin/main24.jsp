@@ -4,6 +4,11 @@
 img {
     vertical-align:text-bottom;
 }
+
+#headline_list {
+    margin-top: 20px;
+}
+
 </style>
 
 <div id="adminTabs">
@@ -19,16 +24,6 @@ img {
 
     <div id="headline">
 
-    <span class="headline_tabs">
-    <a href="#">
-    <img src='<c:url value="/images/add-24.png" />' width="16">
-     Create New Headlines </a>
-    </span>
-
-    <div id="headline_list">
-
-    </div>
-
     </div>
 
     <div id="searchsetting">
@@ -41,12 +36,4 @@ img {
 </div>
 
 
-<script type="text/javascript">
-
-    $(function(){
-        $('#adminTabs').tabs();
-    });
-
-
-</script>
 

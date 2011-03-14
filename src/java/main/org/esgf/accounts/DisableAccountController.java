@@ -42,7 +42,7 @@ public class DisableAccountController {
     private UserInfoCredentialedDAO userInfoDAO = null;
 
     @Autowired
-    public DisableAccountController(final @Qualifier("dbProperties") Properties props) {
+    public DisableAccountController(final @Qualifier("esgfProperties") Properties props) {
         
         try {
             userInfoDAO = new UserInfoCredentialedDAO("rootAdmin", props.getProperty("security.admin.passwd"), props);

@@ -58,7 +58,7 @@ public class CreateAccountController {
     private AccountsNotifier notifier;
     
     @Autowired
-    public CreateAccountController(final @Qualifier("dbProperties") Properties props) {
+    public CreateAccountController(final @Qualifier("esgfProperties") Properties props) {
         try {
             this.userInfoDAO = new UserInfoCredentialedDAO("rootAdmin", props.getProperty("security.admin.passwd"), props);
             this.groupRoleDAO = new GroupRoleDAO(props);

@@ -51,11 +51,11 @@
     </logger>
 
     <logger name="org.esgf">
-        <level value="debug" />
+        <level value="trace" />
     </logger>
     
     <logger name="esg">
-        <level value="debug" />
+        <level value="trace" />
     </logger>
         
 	<!-- Root Logger -->

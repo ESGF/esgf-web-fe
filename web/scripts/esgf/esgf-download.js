@@ -53,6 +53,11 @@ $(document).ready( function() {
             )
             .appendTo("#datasetList")
 			.find( "a.showAllChildren" ).click(function() {
+				var selectedItem = $.tmplItem(this);
+		    	var selectedDoc = selectedItem.data.doc;
+		    	var selectedDocId = selectedDoc.id;
+				$('input[name=' + selectedDocId + ']').toggle();
+				
 				var id = $(this).parent().attr("id").replace(/\./g,"_");
 				$('tr.rows_'+id).toggle();//.css('background-color','yellow');
 				if(this.innerHTML === "Expand") {
@@ -68,21 +73,72 @@ $(document).ready( function() {
 
     });
     
+    $(".topLevel").live('change', function() {
+    	var selectedItem = $.tmplItem(this);
+    	var selectedDoc = selectedItem.data.doc;
+    	var selectedDocId = selectedDoc.id;
+    	$('input#' + replacePeriod(selectedDocId)).attr('checked', 'checked');
+    	var selectedFileIds = selectedDoc.file_id;
+    	for(var i=0;i<selectedFileIds.length;i++) {
+    		
+    		if(selectedDoc.service_type[i] == 'HTTPServer') {
+    			if($('input#' + replacePeriod(selectedDocId)).is(':checked')) {
+        			$('input#' + replacePeriod(selectedFileIds[i])).attr('checked', 'checked');
+    			}
+    			else {
+    				$('input#' + replacePeriod(selectedFileIds[i])).attr('checked', 'unchecked');
+    			}
+    		}
+    	}
+    	
+    });
     
-    
-    
+    /*
+	$('.topLevel').click(function () {
+		$(this).parents('fieldset:eq(0)').find(':checkbox').attr('checked', this.checked);
+	});
+	*/
+	
     $(".wgetAllChildren").live ('click', function (e){
+    	
+    	
     	
     	var selectedItem = $.tmplItem(this);
     	var selectedDoc = selectedItem.data.doc;
     	var selectedDocId = selectedDoc.id;
+    	
+    	
     	var selectedFileUrls = selectedDoc.file_url;
     	var selectedFileIds = selectedDoc.file_id;
     	var queryString = 'type=create&id=' + selectedDocId;
-    	for(var i=0;i<selectedFileUrls.length;i++) {
-    		queryString += '&child_url=' + selectedFileUrls[i] + '&child_id=' + selectedFileIds[i];
+    
+    	
+    	 var ids   = new Array(); 
+    	 var values = new Array();
+    	    jQuery("input:checkbox:checked").each(function(){ 
+    	         ids.push(this.id) ;
+    	         values.push(this.value);
+    	    });
+    	    
+    	
+    	
+    	for(var j=0;j<ids.length;j++) {
+    		alert(ids[j]);
+    	
+    	
+    	
     	}
     	
+    	
+    	//for(var i=0;i<selectedFileUrls.length;i++) {
+    	for(var i=0;i<ids.length;i++) {
+    		alert('pushing ' + values[i] + ' and ' + ids[i]);
+    		if(selectedDoc.service_type[i] == 'HTTPServer') {
+    			queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
+    		}
+    	}
+    	
+    	alert('queryString: ' + queryString);
     	//generate the wget
     	jQuery.ajax({
             url: '/esgf-web-fe/wgetproxy',
@@ -104,12 +160,13 @@ $(document).ready( function() {
         }
     });
 
+    
+
 });
 
 function download(selectedItem) {
 	
 	var selectedDocId = selectedItem.data.doc.id;
-	alert(selectedDocId);
 	window.location.href = 'http://localhost:8080/esgf-web-fe/scripts/esgf/' + 'wget_download_' + selectedDocId + '.sh';
 	
 	//delete the wget here (keep it a synchronous process)

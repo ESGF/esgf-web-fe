@@ -5,13 +5,6 @@
 
 $(function() {
 
-    $.getJSON("setting/queryAnnotate", function(data) {
-        ESGF.setting["annotate"] = data;
-        LOG.debug("annotate:" + data);
-    });
-
-
-
     $(".slidetabs").tabs(".images > div", {
 
         // enable "cross-fading" effect

@@ -64,10 +64,11 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         }
     }
 
-    LOG.debug("Tesing setting of annotate: " + ESGF.setting["annotate"]);
+    if (ESGF.setting.annotate === true) {
 
-    output += '<span class="actionitem"><a class="annotate" href="/esgf-web-fe/scripts/esgf/annotation_overlay.html" rel="#annotator_overlay"> Annotate</a></span>';
-    output += "</div>";
+        output += '<span class="actionitem"><a class="annotate" href="/esgf-web-fe/scripts/esgf/annotation_overlay.html" rel="#annotator_overlay"> Annotate</a></span>';
+        output += "</div>";
+    }
 
     $("a[id=" + selectID + "]").live('click', {doc:doc}, function (evt) {
         var metadataFormat = doc.metadata_format;

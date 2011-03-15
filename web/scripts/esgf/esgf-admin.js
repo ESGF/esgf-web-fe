@@ -59,13 +59,8 @@ $(document).ready( function() {
 
 
 
-    $("#setting").ajaxForm({
-            target: '#output',
-            dataType: 'html',
-            success: function() {
-                LOG.debug("form submit sucess");
-                $("#output").fadeIn();}
-    });
+
+
 
     $('#adminTabs').bind('tabsselect', function(event, ui) {
         switch(ui.index)
@@ -84,6 +79,17 @@ $(document).ready( function() {
             $.get("setting/show",
                     function(data){
                         $("#search_setting").html(data);
+
+                        // placing here is key
+                        // as the DOM is loaded through ajax
+                        // you have to bind here.
+                        $("#settingForm").ajaxForm({
+                            target: '#output',
+                            success: function() {
+                                LOG.debug("form submit sucess");
+                                $("#output").fadeIn();}
+                    });
+
             });
             break;
         default:

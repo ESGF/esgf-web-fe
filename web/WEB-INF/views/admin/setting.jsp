@@ -7,7 +7,7 @@ width: 40%;
 }
 
 </style>
-<form:form id="setting" modelAttribute="setting" action="setting/save" method="post">
+<form:form id="settingForm" modelAttribute="setting" action="setting/save" method="post">
 <fieldset>
     <legend>Search Setting</legend>
 

@@ -1,3 +1,16 @@
+/**
+ *
+ * SearchSetting controller provides a front an interface to
+ * manipulate search settings, the settings are then persisted to
+ * a file.
+ *
+ * Note that we could piggyback these properties to the existing
+ * /esg/config/esgf.properties, which should be a trivial change.
+ *
+ *
+ * @author fwang2
+ *
+ */
 package org.esgf.web;
 
 import java.io.File;

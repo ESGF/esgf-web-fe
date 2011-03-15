@@ -28,6 +28,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(value = "/setting/*")
@@ -106,4 +107,9 @@ public class SearchSettingController {
         return "admin/setting_saved";
     }
 
+    @RequestMapping(value="queryAnnotate")
+    public @ResponseBody String queryAnnotate() {
+        LOG.debug("setting query received");
+        return loadSetting().getAnnotate();
+    }
 }

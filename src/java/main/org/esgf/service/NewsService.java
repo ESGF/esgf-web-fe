@@ -13,4 +13,6 @@ public interface NewsService {
 
     public void saveNewsEntity(NewsEntity news) throws DataAccessException;
 
+    public void removeNewsEntity(Long id) throws DataAccessException;
+
 }

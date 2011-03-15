@@ -1,29 +1,41 @@
 
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
-<ti:insertDefinition name="main-layout" >
 
-    <ti:putAttribute name="main">
+    <span class="headline_tabs">
+    <a id="create" href="#">
+    <img src='<c:url value="/images/add-24.png" />' width="16">
+     Create New Headlines </a>
+    </span>
 
-    <div class="push-1 span-22 last">
+    <div id="headline_list">
 
-    <h2> Published News </h2>
+
 
     <table>
-
+    <thead>
+        <tr>
+        <th> Titles </th>
+        <th> Edit </th>
+        <th> Remove </th>
+    </thead>
     <c:forEach var="news" items="${newsList}" varStatus="newsLoopCount" >
 
         <tr>
             <td> ${news.title} </td>
-            <td> Edit </td>
-            <td> Remove </td>
+            <td> <a class="edit" href="#"><img src='<c:url value="/images/edit-32.png" />' width="24"> </a></td>
+            <td> <a class="remove" href="<c:out value="${news.id}" />">
+            <img src='<c:url value="/images/delete-24.png" />' width="24"></a></td>
         </tr>
 
     </c:forEach>
 
     </table>
-   </div>
 
-    </ti:putAttribute>
+    </div>
 
-</ti:insertDefinition>
+
+    <div id="dialog-message" style="display:none" title="Not implemented yet">
+    <p> Just delete it first, then create an new entry
+    </p>
+    </div>

@@ -71,8 +71,10 @@
 
     </definition>
 
-    <definition name="news" extends="main-layout">
-        <put-attribute name="main" value="/WEB-INF/views/admin/news.jsp" />
+    <definition name="admin" extends="main-layout">
+        <put-attribute name="extrascript" value="/WEB-INF/views/admin/script_admin.jsp" />
+        <put-attribute name="extrastyle"  value="/WEB-INF/views/admin/style_admin.jsp" />
+        <put-attribute name="main" value="/WEB-INF/views/admin/main24.jsp" />
     </definition>
 
     <!--

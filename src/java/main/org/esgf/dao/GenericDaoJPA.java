@@ -1,14 +1,14 @@
-/** 
- * 
+/**
+ *
  * Core Persistence Implementation (Pure JPA)
  *
  * For JpaTemplate (which is a Hibernate API) approach
- * 
+ *
  *      We can use
  *          private JpaTemplate jpaTemplate;
- *      
+ *
  *      and inject a bean as the following
- *   
+ *
  *   @Autowired
  *   public void setJpaTemplate(JpaTemplate jpaTemplate) {
  *       this.jpaTemplate = jpaTemplate;
@@ -21,11 +21,11 @@
  *   public void save(T object) throws DataAccessException {
  *       jpaTemplate.merge(object);
  *   }
- *   
+ *
  *
  * @author: fwang2@ornl.gov
- * 
- * 
+ *
+ *
  */
 package org.esgf.dao;
 
@@ -52,7 +52,7 @@ public class GenericDaoJPA<T extends DomainObject> implements GenericDao<T> {
         this.type = type;
     }
 
-    
+
     @PersistenceContext
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -72,15 +72,32 @@ public class GenericDaoJPA<T extends DomainObject> implements GenericDao<T> {
     @Transactional(rollbackFor = DataAccessException.class,
             readOnly = false, timeout = 30,
             propagation = Propagation.REQUIRED,
-            isolation = Isolation.DEFAULT)    
+            isolation = Isolation.DEFAULT)
     public void save(T object) throws DataAccessException {
 
         entityManager.persist(object);
     }
-    
 
+
+    /**
+     * the merge statement is to address removing "detached" object instance
+     */
+
+    @Transactional(rollbackFor = DataAccessException.class,
+            readOnly = false, timeout = 30,
+            propagation = Propagation.REQUIRED,
+            isolation = Isolation.DEFAULT)
     public void delete(T object) throws DataAccessException {
         entityManager.remove(object);
+    }
+
+    @Transactional(rollbackFor = DataAccessException.class,
+            readOnly = false, timeout = 30,
+            propagation = Propagation.REQUIRED,
+            isolation = Isolation.DEFAULT)
+    public void delete(Long id) throws DataAccessException {
+        T obj = get(id);
+        entityManager.remove(obj);
     }
 
 }

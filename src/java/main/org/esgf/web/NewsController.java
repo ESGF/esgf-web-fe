@@ -26,11 +26,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 
 @Controller
-@RequestMapping(value = "/news")
+@RequestMapping(value = "/news/*")
 public class NewsController {
 
     private final static Logger LOG = Logger.getLogger(NewsController.class);
@@ -42,7 +43,7 @@ public class NewsController {
         this.newsService = newsService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping("list")
     public String index(Model model) {
         List<NewsEntity> newsList = newsService.getNewsEntityAll();
         model.addAttribute("newsList", newsList);
@@ -50,14 +51,23 @@ public class NewsController {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "create")
+    @RequestMapping(value="remove/{id}")
+    public @ResponseBody void remove(@PathVariable Long id) {
+        LOG.debug("new id [" + id + "] to be removed");
+        newsService.removeNewsEntity(id);
+
+        // if return a new page segment
+        // return "admin/news_list";
+    }
+
+    @RequestMapping("create")
     public String setupForm(Model model) {
         LOG.debug("setup form ... ");
         model.addAttribute("news", new NewsEntity());
         return "admin/news_createForm";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value="save", method = RequestMethod.POST)
     public String processSubmit(
             @ModelAttribute("news") NewsEntity news,
             BindingResult result, @RequestParam("file") MultipartFile file)
@@ -69,6 +79,7 @@ public class NewsController {
             for (ObjectError error: result.getAllErrors()) {
                 LOG.error(error);
             }
+
             return "redirect:create";
         }
         if (!file.isEmpty()) {
@@ -83,7 +94,7 @@ public class NewsController {
         LOG.debug("Received: " + news.getImageFileName());
         newsService.saveNewsEntity(news);
 
-        return "redirect:.";
+        return "redirect:/admin";
     }
 
     /*

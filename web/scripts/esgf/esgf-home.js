@@ -6,7 +6,7 @@
 $(function() {
 
     $.getJSON("setting/queryAnnotate", function(data) {
-        ESGF.search.setting.annotate = data;
+        ESGF.setting["annotate"] = data;
         LOG.debug("annotate:" + data);
     });
 

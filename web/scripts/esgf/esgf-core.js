@@ -28,6 +28,7 @@ ESGF.namespace = function (ns_string) {
 
 var esgf_core    = ESGF.namespace("ESGF.core");
 var esgf_search  = ESGF.namespace("ESGF.search");
+var esgf_setting = ESGF.namespace("ESGF.setting");
 var esgf_util    = ESGF.namespace("ESGF.util");
 
 
@@ -45,9 +46,6 @@ LOG.debug("Logging defined");
 
 // predefine a few properties
 ESGF.search.selected = ESGF.search.selected || {};
-ESGF.search.setting = ESGF.search.setting || {};
-
-
 
 // general util functions
 ESGF.util.toArray = function (obj) {

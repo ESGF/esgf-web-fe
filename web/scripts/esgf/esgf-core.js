@@ -26,13 +26,26 @@ ESGF.namespace = function (ns_string) {
 
 // predefine a few name spaces
 
-var esgf_core   = ESGF.namespace("ESGF.core");
-var esgf_search = ESGF.namespace("ESGF.search");
-var esgf_util   = ESGF.namespace("ESGF.util");
+var esgf_core    = ESGF.namespace("ESGF.core");
+var esgf_search  = ESGF.namespace("ESGF.search");
+var esgf_setting = ESGF.namespace("ESGF.setting");
+var esgf_util    = ESGF.namespace("ESGF.util");
+
+
+//define common logging
+
+ESGF.core.LOG = log4javascript.getLogger("esgf");
+//ESGF.core.popUpAppender = new log4javascript.PopUpAppender();
+//ESGF.core.LOG.addAppender(popUpAppender);
+ESGF.core.bcAppender = new log4javascript.BrowserConsoleAppender();
+ESGF.core.LOG.addAppender(ESGF.core.bcAppender);
+
+var LOG = ESGF.core.LOG;
+LOG.debug("Logging defined");
+
 
 // predefine a few properties
 ESGF.search.selected = ESGF.search.selected || {};
-
 
 // general util functions
 ESGF.util.toArray = function (obj) {
@@ -43,14 +56,3 @@ ESGF.util.toArray = function (obj) {
     }
     return arr;
 };
-
-// define common logging
-
-ESGF.core.LOG = log4javascript.getLogger("esgf");
-//ESGF.core.popUpAppender = new log4javascript.PopUpAppender();
-//ESGF.core.LOG.addAppender(popUpAppender);
-ESGF.core.bcAppender = new log4javascript.BrowserConsoleAppender();
-ESGF.core.LOG.addAppender(ESGF.core.bcAppender);
-
-var LOG = ESGF.core.LOG;
-LOG.debug("Logging defined");

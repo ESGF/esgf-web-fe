@@ -1,3 +1,16 @@
+/**
+ *
+ * SearchSetting controller provides a front an interface to
+ * manipulate search settings, the settings are then persisted to
+ * a file.
+ *
+ * Note that we could piggyback these properties to the existing
+ * /esg/config/esgf.properties, which should be a trivial change.
+ *
+ *
+ * @author fwang2
+ *
+ */
 package org.esgf.web;
 
 import java.io.File;
@@ -15,6 +28,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(value = "/setting/*")
@@ -93,4 +107,9 @@ public class SearchSettingController {
         return "admin/setting_saved";
     }
 
+    @RequestMapping(value="queryAnnotate")
+    public @ResponseBody String queryAnnotate() {
+        LOG.debug("setting query received");
+        return loadSetting().getAnnotate();
+    }
 }

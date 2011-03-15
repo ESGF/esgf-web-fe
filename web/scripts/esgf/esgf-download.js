@@ -21,11 +21,9 @@ $(document).ready( function() {
         			},
             		abbreviate : function (word) {
             			var abbreviation = word;
-            			/*
             			if(word.length > 16) {
             				abbreviation = word.slice(0,7) + '...' + word.slice(word.length-8,word.length-1);
             			}
-            			*/
             			return abbreviation;
             		},
             		addOne: function(num) {
@@ -73,24 +71,24 @@ $(document).ready( function() {
     
     
     
-    $(".wgetAllChildren").live ('click', function (){
+    $(".wgetAllChildren").live ('click', function (e){
     	
     	var selectedItem = $.tmplItem(this);
     	var selectedDoc = selectedItem.data.doc;
     	var selectedDocId = selectedDoc.id;
-    	var selectedChildUrls = selectedDoc.child_dataset_url;
-    	var selectedChildIds = selectedDoc.child_dataset_id;
+    	var selectedFileUrls = selectedDoc.file_url;
+    	var selectedFileIds = selectedDoc.file_id;
     	var queryString = 'type=create&id=' + selectedDocId;
-    	for(var i=0;i<selectedChildUrls.length;i++) {
-    		queryString += '&child_url=' + selectedChildUrls[i] + '&child_id=' + selectedChildIds[i];
+    	for(var i=0;i<selectedFileUrls.length;i++) {
+    		queryString += '&child_url=' + selectedFileUrls[i] + '&child_id=' + selectedFileIds[i];
     	}
     	
     	//generate the wget
     	jQuery.ajax({
-            url: 'http://localhost:8080/esgf-web-fe/wgetproxy',
+            url: '/esgf-web-fe/wgetproxy',
             data: queryString,
             type: 'POST',
-            success: function() {download(selectedItem);},
+            success: function() {download(selectedItem); },
             error: function() {alert("error http://localhost:8080/esgf-web-fe/wgetproxy");},
             dataType: 'text'
         }); 
@@ -99,8 +97,6 @@ $(document).ready( function() {
     });
     
 
-    $("#demo img[title]").tooltip();
-    $("#demo2 div[id]").tooltip();
     
     $.extend( $.tmpl.tag, {
         "var": {
@@ -113,22 +109,22 @@ $(document).ready( function() {
 function download(selectedItem) {
 	
 	var selectedDocId = selectedItem.data.doc.id;
+	alert(selectedDocId);
+	window.location.href = 'http://localhost:8080/esgf-web-fe/scripts/esgf/' + 'wget_download_' + selectedDocId + '.sh';
 	
-	//change me
-	jQuery('<form action="'+ 'http://localhost:8080/esgf-web-fe/scripts/esgf/' + 'wget_download_' + selectedDocId + '.sh' +'" method="'+ 'get' +'">'+''+'</form>').appendTo('body').submit().remove();
-
 	//delete the wget here (keep it a synchronous process)
 	var queryString = 'type=delete&id=' + selectedDocId;
 	
-	//generate the wget
+	//delete the wget
 	jQuery.ajax({
         url: 'http://localhost:8080/esgf-web-fe/wgetproxy',
         data: queryString,
         type: 'POST',
-        success: function() {alert('success');},
+        success: function() {},
         error: function() {alert("error http://localhost:8080/esgf-web-fe/wgetproxy");},
         dataType: 'text'
-    }); 
+    });
+    
 }
 
 /*
@@ -138,4 +134,13 @@ function replacePeriod(word)
 {
 	var newWord = word.replace(/\./g,"_");
 	return newWord;
+}
+
+
+function printObject(object) {
+	var output = '';
+	for (var property in object) {
+	  output += property + ': ' + object[property]+'; ';
+	}
+	alert(output);
 }

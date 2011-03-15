@@ -43,27 +43,38 @@ import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
+import esg.search.publish.api.PublishingService;
 import esg.search.utils.XmlParser;
-
+/**
+ * Implementation of metadata extraction controller responsible for extracting metadata that ARE NOT contained in the solr records.
+ * The controller searches through the metdata file to find the proper record.  Currently parsing of TDS, OAI, CAS, and FGDC files are supported.
+ * 
+ * @author john.harney
+ *
+ */
 @Controller
 @RequestMapping("/metadataproxy")
 public class MetadataExtractorController {
 
-    private String solrURL="http://localhost:8983/solr/";
-    private final static Logger LOG = Logger.getLogger(SolrProxyController.class);
+    private final static Logger LOG = Logger.getLogger(MetadataExtractorController.class);
     
     //hard coded for testing - remove when finished
     private static String METADATA_FILE_LOCATION = System.getProperty("java.io.tmpdir");//System.getProperty("java.io.tmpdir");
-    //private final static String METADATA_FILE = "ORNL-oai_dif";
-    private final static String METADATA_FILE = "ORNL-oai_dif";
-    //private final static String METADATA_FILE = "pcmdi.ipcc4.GFDL.gfdl_cm2_0.picntrl.mon.land.run1.v1";
-    
+   
+    /**
+     * Sends a relay (indirectly) to fetch the appropriate metadata file.
+     * 
+     * Note: GET and POST contain the same functionality.  
+     * 
+     * @param  request  HttpServletRequest object containing the query string
+     * @param  response  HttpServletResponse object containing the metadata in json format
+     * 
+     */
     @RequestMapping(method=RequestMethod.GET)
     public @ResponseBody String doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException {
         LOG.debug("doGet metadataproxy");
         return relay(request, response);
     }
-    
     @RequestMapping(method=RequestMethod.POST)
     public @ResponseBody String doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException {
         LOG.debug("doPost");
@@ -71,19 +82,20 @@ public class MetadataExtractorController {
     }
     
 
-    /*
-     * This method will be changed soon - just used for testing
-     * The metadata files should be accessed via some RESTful architecture
+    /**
+     * Sends a relay to fetch the appropriate metadata file.
+     * 
+     * @param  request  HttpServletRequest object containing the query string
+     * @param  response  HttpServletResponse object containing the metadata in json format
+     * 
      */
     private String relay(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException {
-        //LOG.debug("TEMP VAR: " + System.getenv("tmp"));
         String queryString = request.getQueryString();        
         LOG.debug("queryString=" + queryString);
         
         String requestUri = request.getRequestURI();
         LOG.debug("requestUri=" + requestUri);
 
-        //LOG.debug("curr: " + METADATA_FILE_LOCATION);
         
         if(METADATA_FILE_LOCATION.startsWith("/var/folders/"))
         {
@@ -96,8 +108,6 @@ public class MetadataExtractorController {
         String filename = request.getParameter("metadatafile");
         LOG.debug("URL: " + filename);
         
-        //URL metadataURL = new URL();
-        //File f = new File(METADATA_FILE_LOCATION + METADATA_FILE + ".xml");
         URL f = new URL(filename);
         
         String jsonContent = "";
@@ -120,13 +130,16 @@ public class MetadataExtractorController {
         }
         
         
-        
-        
-        //jsonContent = "";
-        
         return jsonContent;
     }
     
+    /**
+     * Helper function to fetch CAS metadata files.
+     * 
+     * @param  f  URL location of the cas document
+     * @param  id  The string identifier of the dataset that is being searched
+     * 
+     */
     public String processCAS(URL f,String id) throws JSONException
     {
         String jsonContent = "";
@@ -145,31 +158,22 @@ public class MetadataExtractorController {
             LOG.debug("Successful " + rootNode.getName());
             
             List records = (List)rootNode.getChildren();
-            //LOG.debug("Size of Records: " + records.size());
             for(int i=0;i<records.size();i++)
             {
-                //if(i == 0)
-                //{
-                    Element recordEl = (Element) records.get(i);
-                    //Element idEl = (Element)recordEl.getChild("Filename",ns);
-                    //LOG.debug("RecordEl " + recordEl.getChildren().size());
-                    for(int j=0;j<recordEl.getChildren().size();j++)
+                Element recordEl = (Element) records.get(i);
+                for(int j=0;j<recordEl.getChildren().size();j++)
+                {
+                    Element metEl = ((Element)recordEl.getChildren().get(j));
+                    if(metEl.getName().equals("Filename"))
                     {
-                        Element metEl = ((Element)recordEl.getChildren().get(j));
-                        if(metEl.getName().equals("Filename"))
+                        Element filenameEl = (Element)metEl;
+                        if(filenameEl.getText().equals(id))
                         {
-                            Element filenameEl = (Element)metEl;
-                            //LOG.debug("metEl " + ((Element)recordEl.getChildren().get(j)).getName());
-                            //LOG.debug(recordEl.getName());
-                            //LOG.debug(recordEl.getValue());
-                            if(filenameEl.getText().equals(id))
-                            {
-                                LOG.debug("FOUND RECORD for ID: " + id);
-                                returnedEl = recordEl;
-                            }
+                            LOG.debug("FOUND RECORD for ID: " + id);
+                            returnedEl = recordEl;
                         }
                     }
-                //}
+                }
             }
             if(returnedEl == null)
             {
@@ -206,6 +210,13 @@ public class MetadataExtractorController {
         return jsonContent;
     }
     
+    /**
+     * Helper function to fetch OAI metadata files.
+     * 
+     * @param  f  URL location of the oai document
+     * @param  id  The string identifier of the dataset that is being searched
+     * 
+     */
     public String processOAI(URL f,String id) throws JSONException
     {
         
@@ -274,6 +285,13 @@ public class MetadataExtractorController {
         return jsonContent;
     }
     
+    /**
+     * Helper function to fetch TDS metadata files.
+     * 
+     * @param  f  URL location of the tds document
+     * @param  id  The string identifier of the dataset that is being searched
+     * 
+     */
     public String processTHREDDS(URL f,String id) throws JSONException
     {
         String jsonContent = "";
@@ -312,15 +330,16 @@ public class MetadataExtractorController {
             jsonContent = jo.toString();
         }
         
-        
-        
-        
         return jsonContent;
     }
     
-    
-    
-    
+    /**
+     * Helper function to fetch FGDC metadata files.
+     * 
+     * @param  f  URL location of the fgdc document
+     * @param  id  The string identifier of the dataset that is being searched
+     * 
+     */
     public String processFGDC(URL f,String id) throws JSONException
     {
         SAXBuilder builder = new SAXBuilder();
@@ -328,7 +347,6 @@ public class MetadataExtractorController {
         Element returnedEl = null;
         String xmlContent = "";
         try{
- 
            Document document = (Document) builder.build(f);
            Element rootNode = document.getRootElement();
            Namespace ns = (Namespace)rootNode.getNamespace();
@@ -367,14 +385,9 @@ public class MetadataExtractorController {
          
         String jsonContent = jo.toString();
         LOG.debug("json: \n" + jo.toString());
-        
-        
         return jsonContent;
     }
     
-    
-    
-
 }
 
 

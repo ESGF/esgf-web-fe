@@ -15,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(value = "/setting/*")
@@ -55,22 +54,21 @@ public class SearchSettingController {
         SearchSetting setting = new SearchSetting();
 
         if (prop.containsKey("annotate")) {
-            setting.setAnnotate(new Boolean(prop.getProperty("annotate")));
+            setting.setAnnotate(prop.getProperty("annotate"));
         } else {
-            setting.setAnnotate(false);
+            setting.setAnnotate("false");
         }
 
         if (prop.containsKey("googleScholar")) {
-            setting.setGoogleScholar(new Boolean(prop.getProperty("googleScholar")));
+            setting.setGoogleScholar(prop.getProperty("googleScholar"));
         } else {
-            setting.setGoogleScholar(false);
+            setting.setGoogleScholar("false");
         }
 
-
         if (prop.containsKey("mendeley")) {
-            setting.setMendeley(new Boolean(prop.getProperty("mendeley")));
+            setting.setMendeley(prop.getProperty("mendeley"));
         } else {
-            setting.setMendeley(false);
+            setting.setMendeley("false");
         }
 
         return setting;
@@ -85,14 +83,14 @@ public class SearchSettingController {
     }
 
     @RequestMapping(value="save", method = RequestMethod.POST)
-    public @ResponseBody String processSubmit(
+    public String processSubmit(
                 @ModelAttribute("setting") SearchSetting setting,
                 BindingResult results) throws IOException {
 
-        LOG.debug("Saving setting ... ");
         // save java object to prop file format
         saveSetting(setting);
-        return "Setting Saved";
+        LOG.debug("Setting Saved");
+        return "admin/setting_saved";
     }
 
 }

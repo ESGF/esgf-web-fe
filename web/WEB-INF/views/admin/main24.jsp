@@ -17,7 +17,7 @@ img {
 
     <li><a href="#headline">Headlines</a></li>
 
-    <li><a href="#setting"> Search Settings </a></li>
+    <li><a href="#search_setting"> Search Settings </a></li>
 
     </ul>
 
@@ -26,12 +26,11 @@ img {
 
     </div>
 
-    <div id="setting">
+    <div id="search_setting">
 
     </div>
 
-    <div id="setting_output" class="error">
-    </div>
+    <div id="output" class="notice" style="display:none"></div>
 
 </div>
 

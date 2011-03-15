@@ -11,35 +11,34 @@ package org.esgf.domain;
 @SuppressWarnings("serial")
 public class SearchSetting implements DomainObject {
 
-    private Boolean annotate;
+    private String annotate;
 
-    private Boolean googleScholar;
+    private String googleScholar;
 
-    private Boolean mendeley;
+    private String mendeley;
 
-    public void setAnnotate(Boolean annotate) {
+    public void setAnnotate(String annotate) {
         this.annotate = annotate;
     }
 
-    public Boolean getAnnotate() {
+    public String getAnnotate() {
         return annotate;
     }
 
-    public void setGoogleScholar(Boolean googleScholar) {
+    public void setGoogleScholar(String googleScholar) {
         this.googleScholar = googleScholar;
     }
 
-    public Boolean getGoogleScholar() {
+    public String getGoogleScholar() {
         return googleScholar;
     }
 
-    public void setMendeley(Boolean mendeley) {
+    public void setMendeley(String mendeley) {
         this.mendeley = mendeley;
     }
 
-    public Boolean getMendeley() {
+    public String getMendeley() {
         return mendeley;
     }
-
 
 }

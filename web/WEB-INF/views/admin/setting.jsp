@@ -53,7 +53,7 @@ width: 40%;
 <td> </td>
 <td>
    <p>
-        <input type="submit" />
+        <input type="submit" value="Save Settings"/>
     </p>
     </td>
 </tr>

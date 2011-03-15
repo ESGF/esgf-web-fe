@@ -49,23 +49,30 @@ $(document).ready( function() {
         // call backend
         $.getJSON("news/remove/"+newsId);
 
+        // TODO: show notification
+
         // remove, TODO: check return first
         $(this).parent().parent().remove();
 
         return false;
     });
 
-    $("#setting").submit( function() {
-        $(this).ajaxSubmit({
-            target: '#setting_output'
-        });
-        return false;
+
+
+    $("#setting").ajaxForm({
+            target: '#output',
+            dataType: 'html',
+            success: function() {
+                LOG.debug("form submit sucess");
+                $("#output").fadeIn();}
     });
+
     $('#adminTabs').bind('tabsselect', function(event, ui) {
         switch(ui.index)
         {
         case 0:
             LOG.debug("0 index");
+            $("#output").hide();
             $.get("news/list",
                     function(data) {
                         $('#headline').html(data);
@@ -73,15 +80,15 @@ $(document).ready( function() {
             break;
         case 1:
             LOG.debug("1 index");
+            $("#output").hide();
             $.get("setting/show",
                     function(data){
-                        $("#setting").html(data);
+                        $("#search_setting").html(data);
             });
             break;
         default:
             LOG.debug("no match");
-        };
+        }
     }); // bind()
 
 });
-

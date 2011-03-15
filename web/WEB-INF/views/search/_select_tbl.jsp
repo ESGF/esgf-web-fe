@@ -10,7 +10,7 @@
 	{{each(i) doc.file_url}}
 		<tr class="rows_${$item.replacePeriods(doc.id)}" style="display:none"> 
 		{{if doc.service_type[i] == 'HTTPServer'}}
-			<td class="left_download">  <div class="child" id="${doc.file_id[i]}">${$item.abbreviate(doc.file_id[i])} </div></td> <td class="right_download">  <a href="${doc.file_url[i]}">Download (${$item.sizeConversion(doc.file_size[0])})</a>  </td>
+			<td class="left_download">  <div class="child" id="${doc.file_id[i]}">${$item.abbreviate(doc.file_id[i])} </div></td> <td class="right_download">  <a href="${doc.file_url[i]}">Download (${$item.sizeConversion(doc.file_size[i])})</a>  </td>
 		   
 		{{/if}}   
 		</tr>

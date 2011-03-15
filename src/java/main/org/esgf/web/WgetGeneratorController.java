@@ -18,17 +18,28 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 import org.apache.log4j.Logger;
-
+/**
+ * Implementation of a controller that generates wget scripts on the fly.  A request is sent from the front end to generate this script.  
+ * Contained in its query string are the following parameters:
+ * - id name of the dataset
+ * - array of the individual file names contained in the batch of files requested for download
+ * - a 'create' or 'delete' query variable (in lieu of http PUT and DELETE) 
+ * 
+ * 
+ * @author john.harney
+ *
+ */
 @Controller
 @RequestMapping("/wgetproxy")
 public class WgetGeneratorController {
 
     private final static Logger LOG = Logger.getLogger(WgetGeneratorController.class);
     
-    //hard coded file location for the wget script - may need to change this later
-    private final static String WGET_FILE_LOCATION = "C:\\Users\\8xo\\esgProjects\\esgsearch12-20\\esgf-web-fe\\web\\scripts\\esgf\\";
+    //hard coded file location for where the wget script is temporarily stored - will need to change this later
+    private final static String WGET_FILE_LOCATION = System.getProperty("java.io.tmpdir");
     
-        //Not really used as of yet
+    
+        //
         //The wget file is primarily created through the post method
         @RequestMapping(method=RequestMethod.GET)
         public @ResponseBody String doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException {
@@ -36,13 +47,13 @@ public class WgetGeneratorController {
             return createWGET(request, response);
         }
         
+        
         @RequestMapping(method=RequestMethod.POST)
         public @ResponseBody String doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException {
             LOG.debug("doPost wgetproxy");
             
             
             
-            //System.out.println("type parameter: " + request.getParameter("type"));
             if(request.getParameter("type").equals("create")) {
              
                 return createWGET(request, response);
@@ -52,9 +63,9 @@ public class WgetGeneratorController {
             }
         }
         
+        
         private String createWGET(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException {
             
-            queryStringInfo(request);
             
             File wgetFile;
             wgetFile=new File(WGET_FILE_LOCATION + "wget_download_" + request.getParameter("id") + ".sh");

@@ -109,6 +109,7 @@ $(document).ready( function() {
 function download(selectedItem) {
 	
 	var selectedDocId = selectedItem.data.doc.id;
+	alert(selectedDocId);
 	window.location.href = 'http://localhost:8080/esgf-web-fe/scripts/esgf/' + 'wget_download_' + selectedDocId + '.sh';
 	
 	//delete the wget here (keep it a synchronous process)

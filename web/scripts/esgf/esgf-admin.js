@@ -55,6 +55,12 @@ $(document).ready( function() {
         return false;
     });
 
+    $("#setting").submit( function() {
+        $(this).ajaxSubmit({
+            target: '#setting_output'
+        });
+        return false;
+    });
     $('#adminTabs').bind('tabsselect', function(event, ui) {
         switch(ui.index)
         {
@@ -67,6 +73,10 @@ $(document).ready( function() {
             break;
         case 1:
             LOG.debug("1 index");
+            $.get("setting/show",
+                    function(data){
+                        $("#setting").html(data);
+            });
             break;
         default:
             LOG.debug("no match");

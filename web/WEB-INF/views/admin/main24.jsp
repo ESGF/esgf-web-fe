@@ -17,7 +17,7 @@ img {
 
     <li><a href="#headline">Headlines</a></li>
 
-    <li><a href="#searchsetting"> Search Settings </a></li>
+    <li><a href="#setting"> Search Settings </a></li>
 
     </ul>
 
@@ -26,12 +26,12 @@ img {
 
     </div>
 
-    <div id="searchsetting">
-
-        To be done
+    <div id="setting">
 
     </div>
 
+    <div id="setting_output" class="error">
+    </div>
 
 </div>
 

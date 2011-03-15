@@ -73,7 +73,6 @@ $(document).ready( function() {
     
     $(".wgetAllChildren").live ('click', function (e){
     	
-    	alert('in wget');
     	var selectedItem = $.tmplItem(this);
     	var selectedDoc = selectedItem.data.doc;
     	var selectedDocId = selectedDoc.id;
@@ -111,8 +110,6 @@ function download(selectedItem) {
 	
 	var selectedDocId = selectedItem.data.doc.id;
 	window.location.href = 'http://localhost:8080/esgf-web-fe/scripts/esgf/' + 'wget_download_' + selectedDocId + '.sh';
-	alert(selectedDocId);
-	
 	
 	//delete the wget here (keep it a synchronous process)
 	var queryString = 'type=delete&id=' + selectedDocId;

@@ -21,8 +21,8 @@ $(document).ready( function() {
         			},
             		abbreviate : function (word) {
             			var abbreviation = word;
-            			if(word.length > 16) {
-            				abbreviation = word.slice(0,7) + '...' + word.slice(word.length-8,word.length-1);
+            			if(word.length > 25) {
+            				abbreviation = word.slice(0,10) + '...' + word.slice(word.length-11,word.length-1);
             			}
             			return abbreviation;
             		},
@@ -101,11 +101,7 @@ $(document).ready( function() {
     	
     });
     
-    /*
-	$('.topLevel').click(function () {
-		$(this).parents('fieldset:eq(0)').find(':checkbox').attr('checked', this.checked);
-	});
-	*/
+   
 	
     $(".wgetAllChildren").live ('click', function (e){
     	
@@ -124,71 +120,47 @@ $(document).ready( function() {
     	 var ids   = new Array(); 
     	 var values = new Array();
     	    jQuery("input:checkbox:checked").each(function(){ 
+    	    	if(this.id != selectedDocId) {
     	         ids.push(this.id) ;
     	         values.push(this.value);
+    	    	}
     	    });
     	
     	//for(var i=0;i<selectedFileUrls.length;i++) {
     	for(var i=0;i<ids.length;i++) {
-    		if(selectedDoc.service_type[i] == 'HTTPServer') {
+    		//if(selectedDoc.service_type[i] == 'HTTPServer') {
     			queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
-    		}
+    		//}
     	}
     	
-    	//generate the wget
-    	jQuery.ajax({
-            url: '/esgf-web-fe/wgetproxy',
-            data: queryString,
-            type: 'GET',
-            success: function() {download(selectedItem); },
-            error: function() {alert("error http://localhost:8080/esgf-web-fe/wgetproxy");}
-            //dataType: 'text'
-        }); 
+    	var url = '/esgf-web-fe/wgetproxy';
     	
+    	//assemble the input fields with the query string
+    	var input = '';
+    	jQuery.each(queryString.split('&'), function(){ 
+			var pair = this.split('=');
+			input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />'; 
+		});
+    	
+    	//send request
+		jQuery('<form action="'+ url +'" method="post">'+input+'</form>')
+		.appendTo('body').submit().remove();
     	
     });
     
 
-    
+    /* creation of a variable inside the template - may need this later
     $.extend( $.tmpl.tag, {
         "var": {
             open: "var $1;"
         }
     });
-
+	*/
     
 
 });
 
-function download(selectedItem) {
-	
-	/*
-	var selectedDoc = selectedItem.data.doc;
-	var selectedDocId = selectedDoc.id;
-	jQuery('<form action=wget_download_"'+ selectedDocId +'.sh" method=get"' +'"></form>')
-	.appendTo('body').submit().remove();
-	
-	
-	var selectedFileUrls = selectedDoc.file_url;
-	var selectedFileIds = selectedDoc.file_id;
-	
-	var selectedDocId = selectedItem.data.doc.id;
-	window.location.href = 'http://localhost:8080/esgf-web-fe/scripts/esgf/' + 'wget_download_' + selectedDocId + '.sh';
-	
-	//delete the wget here (keep it a synchronous process)
-	var queryString = 'type=delete&id=' + selectedDocId;
-	
-	//delete the wget
-	jQuery.ajax({
-        url: 'http://localhost:8080/esgf-web-fe/wgetproxy',
-        data: queryString,
-        type: 'POST',
-        success: function() {},
-        error: function() {alert("error http://localhost:8080/esgf-web-fe/wgetproxy");},
-        dataType: 'text'
-    });
-    */
-}
+
 
 /*
  * This function is used primarily to avoid annoying errors that occur with strings that have periods in them

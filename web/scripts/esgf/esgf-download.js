@@ -78,8 +78,14 @@ $(document).ready( function() {
 
         var currentValue = $(this).attr('checked');
 
-        $(this).parent().parent().parent().find(':checkbox').each( function(index) {
-            $(this).attr('checked', currentValue);
+        var selectedItem = $.tmplItem(this);
+        var selectedDoc = selectedItem.data.doc;
+        var selectedDocId = selectedDoc.id;
+
+        
+        //$(this).parent().parent().parent().find(':checkbox').each( function(index) {
+        $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDoc.id)).find(':checkbox:').each( function(index) {
+                    $(this).attr('checked', currentValue);
         });
 
 //    	var selectedItem = $.tmplItem(this);
@@ -124,11 +130,13 @@ $(document).ready( function() {
         var selectedFileIds = selectedDoc.file_id;
         var queryString = 'type=create&id=' + selectedDocId;
 
-
+ 		
          var ids   = new Array();
          var values = new Array();
-            jQuery("input:checkbox:checked").each(function(){
-                if(this.id != selectedDocId) {
+            //jQuery("input:checkbox:checked").each(function(){
+         //$(this).parent().parent().parent().find(':checkbox:checked').each( function(index) {
+         $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDoc.id)).find(':checkbox:checked').each( function(index) {
+         		if(this.id != selectedDocId) {
                  ids.push(this.id) ;
                  values.push(this.value);
                 }

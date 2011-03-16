@@ -36,7 +36,7 @@ public class WgetGeneratorController {
     private final static Logger LOG = Logger.getLogger(WgetGeneratorController.class);
     
     //hard coded file location for where the wget script is temporarily stored - will need to change this later
-    private final static String WGET_FILE_LOCATION = System.getProperty("java.io.tmpdir");
+    private final static String WGET_FILE_LOCATION = "C:\\Users\\8xo\\esgProjects\\esgsearch12-20\\esgf-web-fe\\web\\scripts\\esgf";
     
     
         //
@@ -86,9 +86,12 @@ public class WgetGeneratorController {
             
             wgetText += "download() {\n";
             
-            for(int i=0;i<request.getParameterValues("child_url").length;i++) {
-                wgetText += "\twget '" + request.getParameterValues("child_url")[i] + "'\n";
+            if(request.getParameterValues("child_url") != null) {
+                for(int i=0;i<request.getParameterValues("child_url").length;i++) {
+                    wgetText += "\twget '" + request.getParameterValues("child_url")[i] + "'\n";
+                }
             }
+            
             
             wgetText += "}\n";
             wgetText += "#\n# MAIN \n#\n";

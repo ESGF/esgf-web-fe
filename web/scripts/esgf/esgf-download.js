@@ -84,7 +84,7 @@ $(document).ready( function() {
 
         
         //$(this).parent().parent().parent().find(':checkbox').each( function(index) {
-        $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDoc.id)).find(':checkbox:').each( function(index) {
+        $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDoc.id)).find(':checkbox').each( function(index) {
                     $(this).attr('checked', currentValue);
         });
 

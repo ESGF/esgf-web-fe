@@ -21,6 +21,14 @@
         stop_time: null,
         keywords: null,
         description: null,
+        size: null,
+        instrument: null,
+        level: null,
+        mission: null,
+        product: null,
+        realm: null,
+        variable: new Array(),
+        
         
         display_meta_map: function () {
             var self = this;
@@ -56,37 +64,46 @@
              poly.setMap(map);
              map.fitBounds(bounds);
         }, //end displayMetaMap
-        metadata_report: function() {
+        /*
+         * This is the entry point in the metadata.js
+         */
+        metadata_report: function(doc) {
             var self = this;
                 jQuery.ajax({
                     url: 'http://localhost:8080/esgf-web-fe/metadataproxy',
                     data: 'metadataformat=' + self.metadatafileformat + '&metadatafile=' + self.metadatafilename + '&id=' + self.globalRecordId,
                     type: 'GET',
-                    success: function(record) {self.processMetadataRecord(record);},
+                    success: function(record) {self.processMetadataRecord(record,doc);},
                     error: function() {alert("error http://localhost:8080/esgf-web-fe/metadataproxy");},
                     dataType: 'json'
                 }); //end metadata_report
         },
-        processMetadataRecord: function(record) {
+        
+        /*
+         * Processes the metadata from both solr and the raw xml
+         */
+        processMetadataRecord: function(record,doc) {
             var self = this;
             $('.addedMetadata').remove();
             $('.addedMetadataTitle').remove();
             //branch logic depending on the metadata file format
             if(self.metadatafileformat === 'OAI') {
-                self.processOAI(record,self.globalRecordId);
+                self.processOAI(record,doc);
             }
             else if(self.metadatafileformat === 'FGDC') {
-                self.processFGDC(record,self.globalRecordId);
+                self.processFGDC(record,doc);
             }
             else if(self.metadatafileformat === 'CAS') {
-                self.processCAS(record,self.globalRecordId);
+                self.processCAS(record,doc);
             }
             else{ //thredds
-                self.processTHREDDS(record,self.globalRecordId);
+                self.processTHREDDS(record,doc);
             }
         }, //end processMetadataRecord
-    
-        processOAI: function(record) {
+        processCAS: function(record,doc) {},
+        processFGDC: function(record,doc) {},
+                
+        processOAI: function(record,doc) {
             var self = this;
             var i = null;
             self.title = record.record.metadata.DIF.Entry_Title;
@@ -133,9 +150,12 @@
             //self.writeToHTML();
             
         }, //end processOAI
-        processTHREDDS: function(record) {
+        processTHREDDS: function(record,doc) {
             var self = this;
             
+            alert(doc.id);
+            
+            /*
             alert(record.catalog.dataset.metadata);
             //need to come back to this
             //the title is extracted from a hard coded place
@@ -185,7 +205,7 @@
             
             self.description = 'N/A';
             self.keywords = 'N/A';
-            
+            */
             
             
             
@@ -320,8 +340,7 @@
             var self = this;
             //need to attempt to phase this function out
             $("a.met").click(function () {
-                var idStr = $(this).parent().find("a").attr("id");
-                self.globalRecordId = idStr;
+                self.globalRecordId = $(this).parent().find("a").attr("id");
                 self.metadatafileformat = $(this).parent().find("a").attr("format");
                 self.metadatafilename = $(this).parent().find("a").attr("metadata_url");
             });
@@ -338,7 +357,10 @@
                 },//end onBeforeLoad
                 onLoad: function() {
                     $(".scrollable").scrollable({ vertical: true, mousewheel: true });	
-                    self.metadata_report();
+                    
+                    var doc = self.findDoc(self.globalRecordId);
+                    
+                    self.metadata_report(doc);
                     $(".overlay_header").show();
                     $(".overlay_content").show();
                     $(".overlay_footer").show();
@@ -351,7 +373,21 @@
                     $(".overlay_border").hide();
                 }//end onClose
             });
+        },
+        
+        //method that finds a doc based on an id
+        //very slow linear search - need a better way to do this
+        findDoc: function (docId) {
+        	for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
+                var doc = this.manager.response.response.docs[i];
+                
+                if(doc.id == docId) {
+                	return doc;
+                }
+        	}
+        	return null;
         }
+        
     });
 
 }(jQuery));

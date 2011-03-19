@@ -296,7 +296,7 @@ Builds the project via ant (obviously).
 
     <copy todir="${build_dir}" filtering="${filter}" overwrite="true">
       <fileset dir="${conf_dir}" includes="**/*.properties,**/*.template,**/*filter-web.xml"/>
-      <fileset dir="${src_dir}" includes="**/*.properties,**/*.template,**/*.xml"/>
+      <fileset dir="${src_dir}" includes="**/*.properties,**/*.template,**/*.xml,**/*.txt"/>
     </copy> 
 
     <tstamp/>
@@ -318,7 +318,7 @@ Builds the project via ant (obviously).
     <mkdir dir="${dist_dir}" />
     <jar destfile="${dist_dir}/${module}.${version_num}.jar">
       <fileset dir="${build_dir}"
-	       includes="esg/**,**/*.properties,**/*filter-web.xml"
+	       includes="org.esgf/**,**/*.properties,**/*filter-web.xml"
 	       excludes="**/test/**,**/test-instrumented/**"/>
       <manifest>
 	<attribute name="Organization" value="${organization}"/>

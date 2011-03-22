@@ -190,43 +190,122 @@ AjaxSolr.theme.prototype.facet_content = function(stopValue,objectedItems,thisOb
 
 AjaxSolr.theme.prototype.metadata = function(thisObject) {
     var self = thisObject;
+    /*
+     * Searchable solr fields
+     */
+    
+    //alert('writing title: ' + self.searchable_title);
+    //title 
+    $('div#metadata_summary_dataset').after('<div class="addedMetadataTitle">' + 'Dataset: ' + self.searchable_title);
 
-    //alert(self);
+    //alert('writing project: ' + self.facet_project);
+    $('div#projects_metadata').after('<div class="addedMetadata"><p>' + self.facet_project + '</p></div>');
+    
+    //alert('writing investigator: '+ self.misc_investigators);
+    $('div#investigator_metadata').after('<div class="addedMetadata"><p>' + self.misc_investigators + '</p></div>');
+    
+    //alert('writing contact info: ' + self.misc_contactinfo);
+    $('div#contact_metadata').after('<div class="addedMetadata"><p>' + self.misc_contactinfo + '</p></div>');
+    
+    //alert('writing temporal: ' + self.searchable_datetime_start);
+    //temporal
+    $('div#time_metadata').after('<div class="addedMetadata"><p>Begin: ' + self.searchable_datetime_start + ' End: ' + self.searchable_datetime_stop + '</p></div>');
 
-    var keywordsText = '';
-
-    //add keywords to the page
-    if(self.keywords != null && self.keywords != '')
-    {
-        for(var i = 0;i<self.keywords.length;i++) {
-            if(i == self.keywords.length-1) {
-                keywordsText += self.keywords[i] + ' (' + self.keywords[i] + ')';
-            }
-            else {
-                keywordsText += self.keywords[i] + ' (' + self.keywords[i] + '), ';
-            }
-        }
-        $('div#keywords_metadata').after('<div class="addedMetadata"><p>' + keywordsText + '</p></div>');
-    }
-    $('div#abstract_metadata').after('<div class="addedMetadata"><p>' + self.description + '</p></div>');
-
-    //add title and constraints to the page
-    $('div#metadata_summary_dataset').after('<div class="addedMetadataTitle">' + 'Dataset: ' + self.title);
-
-    //add investigators to the page
-    $('div#investigator_metadata').after('<div class="addedMetadata"><p>' + self.invesigators + '</p></div>');
-
-    //add contact information to the page
-    $('div#contact_metadata').after('<div class="addedMetadata"><p>' + self.contact + '</p></div>');
-
-    //add start and stop times to the page
-    $('div#time_metadata').after('<div class="addedMetadata"><p>Begin: ' + self.startTime + ' End: ' + self.stopTime + '</p></div>');
-
-    //add geospatial info to the page
-    $('div#geospatial_metadata').after('<div class="addedMetadata"><p>' + 'coordinates (N,W,S,E):<br />(' + self.north_degrees + ',' + self.west_degrees + ',' + self.south_degrees + ',' + self.east_degrees + ')</p></div>');
-    //self.display_meta_map(west_degreesText,east_degreesText,north_degreesText,south_degreesText);
+    //alert('writing geo (nd): ' + self.searchable_north_degrees);
+    //geospatial
+    $('div#geospatial_metadata').after('<div class="addedMetadata"><p>' + 'coordinates (N,W,S,E):<br />(' + self.searchable_north_degrees + ',' + self.searchable_west_degrees + ',' + self.searchable_south_degrees + ',' + self.searchable_east_degrees + ')</p></div>');
     self.display_meta_map();
-
+    
+    //alert('writing keywords: ' + self.misc_keywords);
+    $('div#keywords_metadata').after('<div class="addedMetadata"><p>' + self.misc_keywords + '</p></div>');
+    
+    //alert('writing description: ' + self.searchable_description);
+    //abstract/description
+    $('div#abstract_metadata').after('<div class="addedMetadata"><p>' + self.searchable_description + '</p></div>');
+   
+    
+    
+    
+    
+		    /*
+		     *  searchable fields that are not displayed
+		    //metadata_format
+		    $('div#metadataformat_metadata').after('<div class="addedMetadata"><p>Format: ' + self.searchable_metadata_format + '</p></div>');
+		
+		    //metadata_url
+		    $('div#metadataurl_metadata').after('<div class="addedMetadata"><p>URL: ' + self.searchable_metadata_url + '</p></div>');
+		
+		    //metadata_filename
+		    $('div#metadatafilename_metadata').after('<div class="addedMetadata"><p>File name: ' + self.searchable_metadata_file_name + '</p></div>');
+		
+		    //file id
+		    $('div#fileid_metadata').after('<div class="addedMetadata"><p>Data File Ids: ' + self.searchable_file_id + '</p></div>');
+		
+		    //file url
+		    $('div#fileurl_metadata').after('<div class="addedMetadata"><p>Data File URLs: ' + self.searchable_file_url + '</p></div>');
+		
+		  //file size
+		    $('div#filesize_metadata').after('<div class="addedMetadata"><p>Data File Size: ' + self.searchable_size + '</p></div>');
+		  
+		    //data url
+		    $('div#url_metadata').after('<div class="addedMetadata"><p>URL: ' + self.searchable_url + '</p></div>');
+		
+		    //data type
+		    $('div#type_metadata').after('<div class="addedMetadata"><p>URL: ' + self.searchable_type + '</p></div>');
+		
+		  //data version
+		    $('div#version_metadata').after('<div class="addedMetadata"><p>Version: ' + self.searchable_version + '</p></div>');
+		  
+		    //data version
+		    $('div#source_url_metadata').after('<div class="addedMetadata"><p>URL: ' + self.searchable_source_url+ '</p></div>');
+		
+		    //timestamp
+		    $('div#timestamp_metadata').after('<div class="addedMetadata"><p>Timestamp: ' + self.searchable_timestamp + '</p></div>');
+		
+			*/
+    
+    
+    
+    
+    /*
+	 * Solr faceted properties not displayed
+	 */
+    /* 
+    //instrument
+    $('div#facet_instrument_metadata').after('<div class="addedMetadata"><p>Data File URLs: ' + self.facet_instrument + '</p></div>');
+    //variable
+    $('div#facet_variable_metadata').after('<div class="addedMetadata"><p>Data File URLs: ' + self.facet_variable + '</p></div>');
+    //cf variable
+    $('div#facet_cfvariable_metadata').after('<div class="addedMetadata"><p>Data File URLs: ' + self.facet_cfvariable + '</p></div>');
+    //gcmd variable
+    $('div#facet_gcmdvariable_metadata').after('<div class="addedMetadata"><p>Data File URLs: ' + self.facet_gcmdvariable + '</p></div>');
+	*/
+   
+    
+		    /*
+		    var keywordsText = '';
+		
+		    //add keywords to the page
+		    if(self.keywords != null && self.keywords != '')
+		    {
+		        for(var i = 0;i<self.keywords.length;i++) {
+		            if(i == self.keywords.length-1) {
+		                keywordsText += self.keywords[i] + ' (' + self.keywords[i] + ')';
+		            }
+		            else {
+		                keywordsText += self.keywords[i] + ' (' + self.keywords[i] + '), ';
+		            }
+		        }
+		        $('div#keywords_metadata').after('<div class="addedMetadata"><p>' + keywordsText + '</p></div>');
+		    }
+		
+		    //add investigators to the page
+		    $('div#investigator_metadata').after('<div class="addedMetadata"><p>' + self.invesigators + '</p></div>');
+		
+		    //add contact information to the page
+		    $('div#contact_metadata').after('<div class="addedMetadata"><p>' + self.contact + '</p></div>');
+		
+			*/
 
 };
 

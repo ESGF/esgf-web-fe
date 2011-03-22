@@ -296,6 +296,9 @@
         }, //end processOAI
         
         processCAS: function(record,doc) {
+        	var self = this;
+            
+        	
         	 /*
              * Need to grab the content from the xml/controller/RESTservice here
              */
@@ -305,7 +308,8 @@
             AjaxSolr.theme('metadata',self);
         },
         processFGDC: function(record,doc) {
-        	
+        	var self = this;
+            
         	 /*
              * Need to grab the content from the xml/controller/RESTservice here
              */
@@ -315,12 +319,11 @@
         },
         
         processTHREDDS: function(record,doc) {
-           
+        	var self = this;
+            
         	 /*
              * Need to grab the content from the xml/controller/RESTservice here
              */
-          
-            
           
             AjaxSolr.theme('metadata',self);
         },//end processTHREDDS

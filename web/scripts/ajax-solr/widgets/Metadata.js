@@ -19,23 +19,25 @@
     	searchable_id: 'searchable',
     	searchable_title: 'searchable',
     	searchable_description: 'searchable',
-    	searchable_url: 'searchable',
-    	searchable_type: 'searchable',
-    	searchable_version: 'searchable',
-    	searchable_source_url: 'searchable',
-    	searchable_timestamp: 'searchable',
     	searchable_datetime_start: 'searchable',
     	searchable_datetime_stop: 'searchable',
     	searchable_north_degrees: 'searchable',
     	searchable_east_degrees: 'searchable',
     	searchable_south_degrees: 'searchable',
     	searchable_west_degrees: 'searchable',
+    	/*
+    	searchable_url: 'searchable',
+    	searchable_type: 'searchable',
+    	searchable_version: 'searchable',
+    	searchable_source_url: 'searchable',
+    	searchable_timestamp: 'searchable',
     	searchable_metadata_format: 'searchable',
     	searchable_metadata_url: 'searchable',
     	searchable_metadata_file_name: 'searchable',
     	searchable_file_id: 'searchable',
     	searchable_file_url: 'searchable',
     	searchable_size: 'searchable',
+    	*/
     	
     	/*
     	 * Solr faceted properties
@@ -50,11 +52,13 @@
     	/*
     	 * Misc properties - properties directly from the metadata file
     	 */
+    	/*
     	misc_level: 'Misc',
     	misc_frequency: 'Misc',
     	misc_mission: 'Misc',
     	misc_product: 'Misc',
     	misc_realm: 'Misc',
+    	*/
     	misc_keywords: 'Misc',
     	misc_investigators: 'Misc',
     	misc_contactinfo: 'Misc',
@@ -69,23 +73,26 @@
     		self.searchable_id = 'searchable';
     		self.searchable_title = 'searchable';
     		self.searchable_description = 'searchable';
-    		self.searchable_url = 'searchable';
-    		self.searchable_type = 'searchable';
-    		self.searchable_version = 'searchable';
-    		self.searchable_source_url = 'searchable';
-    		self.searchable_timestamp = 'searchable';
     		self.searchable_datetime_start = 'searchable';
     		self.searchable_datetime_stop = 'searchable';
     		self.searchable_north_degrees = 'searchable';
     		self.searchable_east_degrees = 'searchable';
     		self.searchable_south_degrees = 'searchable';
     		self.searchable_west_degrees = 'searchable';
+    		
+    		/*
+    		self.searchable_url = 'searchable';
+    		self.searchable_type = 'searchable';
+    		self.searchable_version = 'searchable';
+    		self.searchable_source_url = 'searchable';
+    		self.searchable_timestamp = 'searchable';
     		self.searchable_metadata_format = 'searchable';
     		self.searchable_metadata_url = 'searchable';
     		self.searchable_metadata_file_name = 'searchable';
     		self.searchable_file_id = 'searchable';
     		self.searchable_file_url = 'searchable';
     		self.searchable_size = 'searchable';
+    		*/
     		
     		self.facet_project = 'facet';
     		self.facet_instrument = 'facet';
@@ -93,12 +100,14 @@
     		self.facet_cf_variable = 'facet';
     		self.facet_gcmd_variable = 'facet';
     		
+    		/*
     		self.misc_level = 'N/A';
     		self.misc_frequency = 'N/A';
     		self.misc_mission = 'N/A';
     		self.misc_product = 'N/A';
     		self.misc_realm = 'N/A';
     		self.misc_keywords = 'N/A';
+        	*/
         	self.misc_investigators = 'N/A';
         	self.misc_contactinfo = 'N/A';
     	},
@@ -209,30 +218,26 @@
              */
             self.map(self.createResultingStringArrayForSolrFields, facet_arr, doc);
             
-           
-            
-            
-            
             
             //branch logic depending on the metadata file format
             if(self.metadatafileformat === 'OAI') {
-                self.processOAI(record,doc);
+                self.processOAI(record);
             }
             else if(self.metadatafileformat === 'FGDC') {
-                self.processFGDC(record,doc);
+                self.processFGDC(record);
             }
             else if(self.metadatafileformat === 'CAS') {
-                self.processCAS(record,doc);
+                self.processCAS(record);
             }
             else{ //thredds
-                self.processTHREDDS(record,doc);
+                self.processTHREDDS(record);
             }
         }, //end processMetadataRecord
         
         
         
                 
-        processOAI: function(record,doc) {
+        processOAI: function(record) {
             var self = this;
             
             /*
@@ -295,7 +300,9 @@
             
         }, //end processOAI
         
-        processCAS: function(record,doc) {
+        processCAS: function(record) {
+        	var self = this;
+            
         	 /*
              * Need to grab the content from the xml/controller/RESTservice here
              */
@@ -304,8 +311,9 @@
             //write all the params to HTML
             AjaxSolr.theme('metadata',self);
         },
-        processFGDC: function(record,doc) {
-        	
+        processFGDC: function(record) {
+        	var self = this;
+            
         	 /*
              * Need to grab the content from the xml/controller/RESTservice here
              */
@@ -314,13 +322,12 @@
             AjaxSolr.theme('metadata',self);
         },
         
-        processTHREDDS: function(record,doc) {
-           
+        processTHREDDS: function(record) {
+        	var self = this;
+            
         	 /*
              * Need to grab the content from the xml/controller/RESTservice here
              */
-          
-            
           
             AjaxSolr.theme('metadata',self);
         },//end processTHREDDS

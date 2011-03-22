@@ -214,6 +214,7 @@ AjaxSolr.theme.prototype.metadata = function(thisObject) {
     //alert('writing geo (nd): ' + self.searchable_north_degrees);
     //geospatial
     $('div#geospatial_metadata').after('<div class="addedMetadata"><p>' + 'coordinates (N,W,S,E):<br />(' + self.searchable_north_degrees + ',' + self.searchable_west_degrees + ',' + self.searchable_south_degrees + ',' + self.searchable_east_degrees + ')</p></div>');
+    if(self.searchable_north_degrees != 'N/A')
     self.display_meta_map();
     
     //alert('writing keywords: ' + self.misc_keywords);

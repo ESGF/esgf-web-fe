@@ -67,6 +67,7 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
   },
   
   outputBoundingBoxString: function (fqString) {
+	  var self = this;
 	//if there is no OR, it is an enclosed search
       if(fqString.search('OR') === -1)
       {

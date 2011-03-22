@@ -46,12 +46,15 @@ Builds the project via ant (obviously).
   <echo message="user property file ${basedir}/etc/${module}.ant.properties"/>
 
   <property name="filter" value="false"/>
+  <property name="sign"   value="false"/>
+  <property name="seal"   value="false"/>
 
   <!-- **static defines** -->
   <property name="version_num" value="0.0.0"/>
   <filter token="version_num"  value="${version_num}"/>
   <property name="release_name" value="no_name"/>
   <filter token="release_name" value="${release_name}"/>
+  <filter token="module" value="${module}"/>
 
   <!-- mail property values -->
   <property name="mail.smtp.host" value="no_name"/>
@@ -116,6 +119,7 @@ Builds the project via ant (obviously).
     
     <property name="build_dir"   	  value="${basedir}/build"/>
     <property name="dist_dir"   	  value="${basedir}/dist"/>
+    <property name="bin_dir"              value="${basedir}/bin"/>
     <property name="test_src_dir"  	  value="${basedir}/src/java/test"/>
     <property name="test_build_dir"       value="${basedir}/build/test"/>
     <property name="test_build_dir_inst"  value="${basedir}/build/test-instrumented" />
@@ -157,6 +161,7 @@ Builds the project via ant (obviously).
     <echo message="lib_fetched_dir   = ${lib_fetched_dir}"/>
     <echo message="build_dir         = ${build_dir}"/>
     <echo message="dist_dir          = ${dist_dir}"/>
+    <echo message="build_dir         = ${build_dir}"/>
     <echo message="test_src_dir      = ${test_src_dir}"/>
     <echo message="test_build_dir    = ${test_build_dir}"/>
     <echo message="etc_dir           = ${etc_dir}"/>
@@ -200,6 +205,8 @@ Builds the project via ant (obviously).
 
     <ivy:resolve />  
     <ivy:retrieve pattern="${lib_fetched_dir}/[conf]/[artifact]-[revision].[ext]" />
+    <ivy:deliver deliverpattern="dist/[artifact]-[revision].[ext]"
+                 pubrevision="${version_num}" status="milestone" />
       
     <ivy:cachepath pathid="compile.classpath" conf="compile" useOrigin="true" />
     <ivy:cachepath pathid="runtime.classpath" conf="runtime" useOrigin="true" />
@@ -217,18 +224,6 @@ Builds the project via ant (obviously).
     <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
         <classpath refid="compile.classpath"/>
     </taskdef>
-      
-    <!--
-
-    <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
-      <classpath refid="main_classpath"/>
-    </taskdef>
-      
-    <echo message="MAIN CLASSPATH:"/>
-    <pathconvert property="_cp" refid="main_classpath" pathsep="${line.separator}"/>
-    <echo>${_cp}</echo>
-
-    -->
       
     <echo message="Runtime Classpath:" />
     <pathconvert property="_cp" refid="runtime.classpath" pathsep="${line.separator}"/>
@@ -258,19 +253,6 @@ Builds the project via ant (obviously).
       ************************************************************
     -->
 
-  <target name="gen_jaxb" depends="deps" 
-	  description="(Generates Java Objects from XML schema)">
-    <mkdir dir="${jaxb_gen_src_dir}"/>
-    <xjc package="${jaxb_gen_package}"
-	 destdir="${src_dir}"
-	 removeOldOutput="yes"
-	 readonly="yes">
-      <classpath refid="main_classpath"/>
-      <schema dir="${jaxb_xsd_dir}" includes="*.xsd"/>
-      <produces dir="${jaxb_gen_src_dir}" includes="*.java" />
-    </xjc>
-  </target>
-
   <target name="make" depends="deps" 
 	  description="(Java compiles all the main source code)">
     <echo message="Java compiling ${module}..."/> 
@@ -296,7 +278,7 @@ Builds the project via ant (obviously).
 
     <copy todir="${build_dir}" filtering="${filter}" overwrite="true">
       <fileset dir="${conf_dir}" includes="**/*.properties,**/*.template,**/*filter-web.xml"/>
-      <fileset dir="${src_dir}" includes="**/*.properties,**/*.template,**/*.xml"/>
+      <fileset dir="${src_dir}" includes="**/*.properties,**/*.template,**/*.xml,**/*.txt"/>
     </copy> 
 
     <tstamp/>
@@ -318,7 +300,7 @@ Builds the project via ant (obviously).
     <mkdir dir="${dist_dir}" />
     <jar destfile="${dist_dir}/${module}.${version_num}.jar">
       <fileset dir="${build_dir}"
-	       includes="esg/**,**/*.properties,**/*filter-web.xml"
+	       includes="org.esgf/**,**/*.properties,**/*filter-web.xml"
 	       excludes="**/test/**,**/test-instrumented/**"/>
       <manifest>
 	<attribute name="Organization" value="${organization}"/>
@@ -466,7 +448,9 @@ Builds the project via ant (obviously).
 
   <target name="clean_all"
 	  depends="clean,clean_dist,clean_jaxb,dep_clean_libs"
-	  description="(Cleans out generatable artifacts)"/>
+	  description="(Cleans out generatable artifacts)">
+    <delete file="${bin_dir}/post.manif"/>
+  </target>
   
   <!--
       ************************************************************
@@ -692,7 +676,12 @@ Builds the project via ant (obviously).
   </target>
 
 
-  <target name="post"  depends="init">
+  <!--
+      ************************************************************
+      Artifact and Documentation distribution targets
+      ************************************************************
+    -->
+  <target name="post_docs"  depends="init" description="(posts generated documentatoin to web server)">
     <property name="orig.dir" value="${doc_dir_generated}"/>
     <property name="dest.server" value="esgf.org"/>
     <property name="dest.dir" value="www/${module}-site/"/>
@@ -707,18 +696,23 @@ Builds the project via ant (obviously).
     </exec>
   </target>
 
+  <target name="post" depends="init" description="(posts built artifacts to distribution server)">
+    <copy file="${bin_dir}/post.manif.tmpl" tofile="${bin_dir}/post.manif" filtering="true" overwrite="true"/>
+    <echo message="Posting Files To Distribution Server..."/>
+    <exec executable="post" dir="${bin_dir}">
+      <arg value="--debug"/>
+    </exec>
+  </target>
 
-  <!--
-      ************************************************************
-      Python Targets....(calls targets defined in ${basedir}/src/python/build.xml
-      ************************************************************
-    -->
-  <target name="make_python">
-    <ant dir="${basedir}/src/python" antfile="build.xml" target="gen"/>
+  <target name="publish" depends="init-ivy" description="(publishes built artifacts to artifact repository)">
+    <ivy:publish resolver="esgf_repo_devel" 
+                 organisation="org.esgf"
+                 module="${module}"
+                 revision="${version_num}"
+                 overwrite="true" haltonmissing="false">
+      <artifacts pattern="dist/[artifact]-[revision].[ext]"/>
+      <artifacts pattern="dist/[artifact].war"/>
+    </ivy:publish>
   </target>
-                
-  <target name="clean_python">
-    <ant dir="${basedir}/src/python" antfile="build.xml" target="clean"/>
-  </target>
- 
+
 </project>

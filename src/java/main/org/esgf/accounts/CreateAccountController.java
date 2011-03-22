@@ -41,7 +41,7 @@ public class CreateAccountController {
     public final static String PAR_URL = "url";
     public final static String PAR_DATE = "date";
     
-    private final static String GROUP_NAME = "CMIP5 Research";
+    private final static String[] GROUP_NAMES = new String[] { "CMIP5 Research", "NASA OBS", "ORNL OBS" };
     private final static String ROLE_NAME = "User";
     
     // session attribute to prevent automatic submission by robots
@@ -63,7 +63,9 @@ public class CreateAccountController {
             this.userInfoDAO = new UserInfoCredentialedDAO("rootAdmin", props.getProperty("security.admin.passwd"), props);
             this.groupRoleDAO = new GroupRoleDAO(props);
             // FIXME
-            groupRoleDAO.addGroup(GROUP_NAME);
+            for (final String group : GROUP_NAMES) {
+                groupRoleDAO.addGroup(group);
+            }
             groupRoleDAO.addRole(ROLE_NAME);
         } catch(Exception e) {
             LOG.warn(e.getMessage());
@@ -148,7 +150,9 @@ public class CreateAccountController {
                     // generate verification token
                     final String verificationToken = userInfoDAO.genVerificationToken(user.getOpenid());
                     // set permissions - FIXME
-                    userInfoDAO.addPermission(user.getUser(), GROUP_NAME, ROLE_NAME);
+                    for (final String group : GROUP_NAMES) {
+                        userInfoDAO.addPermission(user.getUser(), group, ROLE_NAME);
+                    }
                     
                     // notify user
                     notifier.accountCreated(getServerUrl(request), user.getUser(), verificationToken);

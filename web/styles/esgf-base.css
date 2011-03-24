@@ -288,6 +288,14 @@ font-size: 180%;
 	width:35px;
 }
 
+/* for potential TDS overlay */
+/*
+div.contentWrap {
+    height:520px;
+	overflow-y:auto;	
+}
+*/
+
 .left_table_header {
 	width: 65%;
 }

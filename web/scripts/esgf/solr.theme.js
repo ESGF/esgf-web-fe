@@ -51,8 +51,10 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     var allStr = idStr + titleStr + urlStr + formatStr +  metadataURLStr;
 
     output += "Further options: ";
-    output += '<span class="actionitem ai_meta"><a href="/esgf-web-fe/scripts/esgf/metadata_overlay.html" class="met" rel="#metadata_overlay"' + allStr + '> Metadata Summary</a></span>';
-
+    output += '<span class="actionitem ai_meta"><a href="/esgf-web-fe/scripts/esgf/metadata_overlay2.html" class="met" rel="#metadata_overlay"' + allStr + '> Metadata Summary</a></span>';
+    //output += '<span class="actionitem ai_meta"><a href="/esgf-web-fe/scripts/esgf/sample.html" class="met" rel="#metadata_overlay"' + allStr + '> Metadata Summary</a></span>';
+    //output += '<span class="actionitem ai_meta"><a href="http://www.forbes.com/2009/02/11/cancer-cure-experimental-lifestyle-health_0212cancer.html" class="met" rel="#metadata_overlay"' + allStr + '> Metadata Summary</a></span>';
+    
     selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
     output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Select</a></span>';
 

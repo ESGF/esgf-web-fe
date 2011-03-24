@@ -96,7 +96,14 @@
               'json.nl': 'map'
             };
     for (var name in params) {
-              Manager.store.addByValue(name, params[name]);
+    	if(name == 'facet.field') {
+    		for(var i=0;i<fields.length;i++) {
+    			Manager.store.addByValue(name,fields[i]);
+    		}
+    	}
+    	else {
+    		Manager.store.addByValue(name, params[name]);
+    	}
     }
 
 

@@ -146,7 +146,7 @@
                     
                     //show the overlay
                     $(".overlay_header").show();
-                    
+                    $(".overlay_header_buttons").hide();    
                   //This will give the link to the TDS metadata if the type selected is thredds
                     if(self.metadatafileformat == 'THREDDS') {
                         
@@ -172,9 +172,7 @@
                 	//rehide the overlay
                     $(".overlay_header").hide();
                     $(".overlay_content").hide();
-                    if(self.metadatafileformat == 'THREDDS') {
-                        $(".overlay_header_buttons").hide();                    	
-                    }
+                    $(".overlay_header_buttons").hide();    
                     $(".overlay_footer").hide();
                     $(".overlay_border").hide();
                 }//end onClose

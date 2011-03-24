@@ -25,7 +25,6 @@
     	searchable_east_degrees: 'searchable',
     	searchable_south_degrees: 'searchable',
     	searchable_west_degrees: 'searchable',
-    	/*
     	searchable_url: 'searchable',
     	searchable_type: 'searchable',
     	searchable_version: 'searchable',
@@ -37,7 +36,6 @@
     	searchable_file_id: 'searchable',
     	searchable_file_url: 'searchable',
     	searchable_size: 'searchable',
-    	*/
     	
     	/*
     	 * Solr faceted properties
@@ -52,13 +50,12 @@
     	/*
     	 * Misc properties - properties directly from the metadata file
     	 */
-    	/*
+    	
     	misc_level: 'Misc',
     	misc_frequency: 'Misc',
     	misc_mission: 'Misc',
     	misc_product: 'Misc',
     	misc_realm: 'Misc',
-    	*/
     	misc_keywords: 'Misc',
     	misc_investigators: 'Misc',
     	misc_contactinfo: 'Misc',
@@ -80,7 +77,6 @@
     		self.searchable_south_degrees = 'searchable';
     		self.searchable_west_degrees = 'searchable';
     		
-    		/*
     		self.searchable_url = 'searchable';
     		self.searchable_type = 'searchable';
     		self.searchable_version = 'searchable';
@@ -92,7 +88,7 @@
     		self.searchable_file_id = 'searchable';
     		self.searchable_file_url = 'searchable';
     		self.searchable_size = 'searchable';
-    		*/
+    		
     		
     		self.facet_project = 'facet';
     		self.facet_instrument = 'facet';
@@ -100,14 +96,12 @@
     		self.facet_cf_variable = 'facet';
     		self.facet_gcmd_variable = 'facet';
     		
-    		/*
     		self.misc_level = 'N/A';
     		self.misc_frequency = 'N/A';
     		self.misc_mission = 'N/A';
     		self.misc_product = 'N/A';
     		self.misc_realm = 'N/A';
     		self.misc_keywords = 'N/A';
-        	*/
         	self.misc_investigators = 'N/A';
         	self.misc_contactinfo = 'N/A';
     	},
@@ -122,6 +116,7 @@
                 self.globalRecordId = $(this).parent().find("a").attr("id");
                 self.metadatafileformat = $(this).parent().find("a").attr("format");
                 self.metadatafilename = $(this).parent().find("a").attr("metadata_url");
+                //alert($(this).parent().find("a").attr("href"));
             });
             $(".ai_meta a[rel]").overlay({
                 //mask: 'darkred',
@@ -151,6 +146,24 @@
                     
                     //show the overlay
                     $(".overlay_header").show();
+                    
+                  //This will give the link to the TDS metadata if the type selected is thredds
+                    if(self.metadatafileformat == 'THREDDS') {
+                        
+                    	/*
+                    	 * Need to assemble the thredds metadata link
+                    	 */
+                        var dSetName = self.metadatafilename.slice(0,self.metadatafilename.length-4);
+                        var dSetNameHTML = self.metadatafilename.slice(0,self.metadatafilename.length-4) + '.html';
+                        var dSetNameMetadata = dSetNameHTML + '?dataset=' + self.globalRecordId + dSetName.slice(dSetName.length-3,dSetName.length);
+                        var tdsLink = dSetNameMetadata;
+                        $("a#tds_metadata").attr("href",tdsLink);
+                        
+                        //show the link to TDS catalog
+                        $(".overlay_header_buttons").css({'padding-right': '50px', "font-size" : '14px'}).show();
+                    }
+                    
+                    
                     $(".overlay_content").show();
                     $(".overlay_footer").show();
                     $(".overlay_border").show();
@@ -159,6 +172,9 @@
                 	//rehide the overlay
                     $(".overlay_header").hide();
                     $(".overlay_content").hide();
+                    if(self.metadatafileformat == 'THREDDS') {
+                        $(".overlay_header_buttons").hide();                    	
+                    }
                     $(".overlay_footer").hide();
                     $(".overlay_border").hide();
                 }//end onClose
@@ -172,15 +188,25 @@
         metadata_report: function(doc) {
             var self = this;
             
+            var metatdata_url = 'http://localhost:8080/esgf-web-fe/metadataproxy';
+            
+            if(self.metadatafileformat == 'THREDDS') {
+            	/*
+            	 * We need another separate conrtoller for getting the metadata for tds
+            	 */
+            	metatdata_url = 'http://localhost:8080/esgf-web-fe/threddsproxy';
+            }
+            
             //find the metadata file and get a json object representing the entire record for the one dataset
                 jQuery.ajax({
-                    url: 'http://localhost:8080/esgf-web-fe/metadataproxy',
+                    url: metatdata_url,
+                	//url: 'http://localhost:8080/SpringRestExample/services/employee/4',
                     data: 'metadataformat=' + self.metadatafileformat + '&metadatafile=' + self.metadatafilename + '&id=' + self.globalRecordId,
                     type: 'GET',
                     //on success process the metadata record
                     success: function(record) {self.processMetadataRecord(record,doc);},
-                    error: function() {alert("error http://localhost:8080/esgf-web-fe/metadataproxy");},
-                    dataType: 'json'
+                    error: function() {alert("error http://localhost:8080/esgf-web-fe/metadataproxy");}
+                    //dataType: 'json'
                 }); 
         },
         
@@ -190,6 +216,7 @@
          */
         processMetadataRecord: function(record,doc) {
             var self = this;
+	
             
             //remove all previously "added metadata" and its title ahead of time 
             $('.addedMetadata').remove();

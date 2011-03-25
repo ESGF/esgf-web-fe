@@ -22,7 +22,7 @@ $(document).ready( function() {
                     abbreviate : function (word) {
                         var abbreviation = word;
                         if(word.length > 25) {
-                            abbreviation = word.slice(0,10) + '...' + word.slice(word.length-11,word.length-1);
+                            abbreviation = word.slice(0,10) + '...' + word.slice(word.length-11,word.length);
                         }
                         return abbreviation;
                     },

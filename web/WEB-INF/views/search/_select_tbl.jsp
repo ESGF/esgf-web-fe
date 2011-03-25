@@ -10,7 +10,7 @@
 	{{each(i) doc.file_url}}
 		<tr class="rows_${$item.replacePeriods(doc.id)}" style="display:none"> 
 		{{if doc.service_type[i] == 'HTTPServer'}}
-			<td class="left_download">  <div class="child" id="${doc.file_id[i]}"> <input type="checkbox" id="${$item.replacePeriods(doc.file_id[i])}" checked="true" value="${doc.file_url[i]}"/> ${$item.abbreviate(doc.file_id[i])} </div></td> <td class="right_download">  <a href="${doc.file_url[i]}">Download (${$item.sizeConversion(doc.file_size[i])})</a>  </td>
+			<td class="left_download">  <div class="child" id="${doc.file_id[i]}"  title="${doc.file_id[i]}"> <input type="checkbox" id="${$item.replacePeriods(doc.file_id[i])}" checked="true" value="${doc.file_url[i]}"/> ${$item.abbreviate(doc.file_id[i])} </div></td> <td class="right_download">  <a href="${doc.file_url[i]}">Download (${$item.sizeConversion(doc.file_size[i])})</a>  </td>
 		   
 		{{/if}}   
 		</tr>

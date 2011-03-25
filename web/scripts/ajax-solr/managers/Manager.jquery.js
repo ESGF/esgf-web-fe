@@ -27,7 +27,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
       else {
           jQuery.getJSON(this.solrUrl + servlet + 
               '?' + this.store.string() + '&wt=json&json.wrf=?', 
-              {}, function (data) { self.handleResponse(data); });
+              {}, function (data) { alert(self.store.string()); self.handleResponse(data); });
       }
   }
 });

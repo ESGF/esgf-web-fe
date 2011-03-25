@@ -3,6 +3,9 @@
 /**
  * @namespace A unique namespace for the AJAX Solr library.
  */
+
+
+
 AjaxSolr = function () {};
 
 /**
@@ -194,13 +197,19 @@ AjaxSolr.theme = function (func) {
     for (i = 1, args = []; i < arguments.length; i++) {
         args.push(arguments[i]);
     }
+    
+    var output = '';
+  
+    
     try {
         return (AjaxSolr.theme[func] || AjaxSolr.theme.prototype[func]).apply(this, args);
     }
     catch (e) {
+    	/*
        if (console && console.log) {
            console.log('Theme function "' + func + '" is not defined.');
        }
+       */
        throw e;
     }
 };

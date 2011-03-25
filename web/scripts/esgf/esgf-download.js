@@ -2,6 +2,9 @@
  * fwang2@ornl.gov
  */
 
+
+//alert('loading esgf-download.js');
+
 $(document).ready( function() {
 
 

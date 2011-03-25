@@ -21,5 +21,7 @@ AjaxSolr.FacetBrowserWidget = AjaxSolr.AbstractFacetWidget.extend({
 
 });
 
+
 }(jQuery));
+
 

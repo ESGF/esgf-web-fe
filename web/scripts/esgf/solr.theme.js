@@ -5,8 +5,12 @@
  *
  */
 
+//alert('loading solr.theme.js');
+
 (function ($) {
 
+	//alert('loading solr.theme.js document ready');
+	
 
 AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
     var output = '';

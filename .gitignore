@@ -24,3 +24,8 @@ generated/
 target/
 .externalToolBuilders/
 .springBeans
+
+################################
+#Generated from templated files
+################################
+bin/post.manif

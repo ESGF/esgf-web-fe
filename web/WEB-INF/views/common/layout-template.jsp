@@ -20,68 +20,46 @@
     <body>
 
         <!-- the banner spans the whole page so it is outside the blueprint container -->
-        <div id="banner" class="banner">
-            <ti:insertAttribute name="banner" />
-        </div>
-
-        <div class="container">
-
-            <!-- header -->
-            <div class="span-24 last" id="header" >
+        
+		
+        <div class="container" style="padding-top:20px;padding-bottom:20px;">
+        	<!-- header -->
+            <div id="header" >
                 <ti:insertAttribute name="header" />
             </div>
-
-            <!-- sub-header -->
-            <div class="span-24 last" id="subheader" >
-                <ti:insertAttribute name="subheader" />
-            </div>
-
-            <!-- main content organized according to different layout geometries -->
             <c:set var="layoutType"><ti:insertAttribute name="layoutType"/></c:set>
-            <c:choose>
+            <!-- <c:out value="${layoutType}" /> -->
+            
+		    <!-- main content filter-->
+		    <!-- The first page content maps to / or /login -->
+		  	<!-- Note each of these pages includes a banner -->
+            <!-- The second page maps to /live -->
+            <!-- The banner is not included, rather the text bar and pagination are substituted -->
+		    <c:choose>
                 <c:when test="${layoutType=='main'}">
+                	<div id="banner" >
+	                		<ti:insertAttribute name="banner" />
+	            	</div>
                     <div class="span-24 last" id="main">
                          <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
-
-                <c:when test="${layoutType=='left4-main20'}">
-
-                    <div class="span-4" id="left"">
+                <c:when test="${layoutType=='left6-main18'}">
+					<div class="span-24 last" id="subheader" >
+                		<ti:insertAttribute name="subheader" />
+            		</div>
+                    <div class="span-6" id="left">
                         <ti:insertAttribute name="left" />
                     </div>
-                    <div class="span-20 last" id="main">
+                    <div class="span-18 last" id="main">
                         <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
-
-                <c:when test="${layoutType=='left-main'}">
-                    <div class="span-5 last" id="left">
-                         <ti:insertAttribute name="left" />
-                    </div>
-                    <div class="prepend-1 span-18 last" id="main">
-                         <ti:insertAttribute name="main" />
-                    </div>
-                </c:when>
-                <c:when test="${layoutType=='left-main-right'}">
-                    <div class="span-5 last" id="left">
-                         <ti:insertAttribute name="left" />
-                    </div>
-                    <div class="prepend-1 span-12" id="main">
-                         <ti:insertAttribute name="main" />
-                    </div>
-                    <div class="prepend-1 span-5 last" id="right">
-                         <ti:insertAttribute name="right" />
-                    </div>
-                </c:when>
-                <c:otherwise>Unknown Layout</c:otherwise>
-            </c:choose>
-
-            <!-- footer -->
-            <div class="span-24 last" id="footer">
+        	</c:choose>
+        	<!-- footer -->
+        	<div id="footer" >
                 <ti:insertAttribute name="footer" />
             </div>
-
         </div>
 
     </body>

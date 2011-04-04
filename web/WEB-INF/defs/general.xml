@@ -17,12 +17,13 @@
         <put-attribute name="extrastyle" value="" />
 
         <!-- HTML -->
-        <put-attribute name="banner"  value=""/>
+        <put-attribute name="banner"  value="/WEB-INF/views/common/banner.jsp"/>
         <!-- <put-attribute name="banner"  value="/WEB-INF/views/common/banner.jsp"/> -->
         <put-attribute name="header"  value="/WEB-INF/views/common/header.jsp"/>
         <put-attribute name="subheader"  value=""/>
-        <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
-
+        <!--   <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" /> -->
+		<put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+		
         <!-- extensible layout type -->
         <put-attribute name="layoutType" type="string" value=""/>
 
@@ -43,6 +44,13 @@
     <definition name="left4-main20" extends="base-layout">
         <put-attribute name="layoutType" type="string" value="left4-main20"/>
     </definition>
+    
+    <!--  left-sidebar + main that matches new css for search page -->
+    <definition name="left6-main18" extends="base-layout">
+        <put-attribute name="layoutType" type="string" value="left6-main18"/>
+    </definition>
+    
+    
 
     <!-- left-sidebar + main content + right sidebar layout -->
     <definition name="left-main-right-layout" extends="base-layout">
@@ -50,14 +58,14 @@
     </definition>
 
     <!-- search template -->
-    <definition name="live-search" extends="left4-main20">
+    <definition name="live-search" extends="left6-main18">
 
         <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
         <put-attribute name="extrastyle"  value="/WEB-INF/views/search/style_search.jsp" />
 
         <put-attribute name="subheader" value="/WEB-INF/views/search/_subheader24.jsp" />
-        <put-attribute name="left" value="/WEB-INF/views/search/_sidebar4.jsp" />
-        <put-attribute name="main" value="/WEB-INF/views/search/_main19.jsp" />
+        <put-attribute name="left" value="/WEB-INF/views/search/_sidebar6.jsp" />
+        <put-attribute name="main" value="/WEB-INF/views/search/_main17.jsp" />
 
     </definition>
 

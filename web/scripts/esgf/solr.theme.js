@@ -34,7 +34,7 @@ AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
       output += doc.title + '</a>';
       output += '</h4>' ;
       output += '<p id="links_' + doc.id + '" class="links"></p>';
-      output += "<p/>" + snippet + actions + '</div>';
+      output += "<p/><div class='snippet'>" + snippet + "</div>" + actions + '</div>';
 
       return output;
 };

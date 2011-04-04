@@ -58,7 +58,9 @@ a:hover { text-decoration: underline; }
 
 a:link { color: #0066CC; }
 
+/*
 a:visited { color: #0066CC;}
+*/
 
 .tabitem {
     margin-right: 10px;

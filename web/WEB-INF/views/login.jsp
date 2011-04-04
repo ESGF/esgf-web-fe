@@ -14,7 +14,6 @@
             <!-- retrieve openid cookie -->
             <c:set var="openid_cookie" value="esgf.idp.cookie"/>
 
-            <p/>
             <c:choose>
 
                 <c:when test="${principal=='anonymousUser'}">

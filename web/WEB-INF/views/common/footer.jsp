@@ -1,20 +1,26 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
-&nbsp;
-<hr/>
 
-<div class="footer">
 
-	<!-- display username -->	   
+
+<div class="span-24 last footer">
 	<div class="span-15 left">
-		<sec:authentication property="principal" var="principal"/>
+<!-- display username -->	 
+		<div class="footerleft">
+			<p>
+			<sec:authentication property="principal" var="principal"/>
 			<c:choose>
 		    	<c:when test="${principal=='anonymousUser'}">Guest User</c:when>
 		   		<c:otherwise><span class="openidlink">&nbsp;</span>User:<c:out value="${principal.username}"/></c:otherwise>
-		   	</c:choose> 
-	</div>
+		   	</c:choose>
+		   	</p> 
+		</div>
 		
+	</div>
 	<!-- display copyright -->
-	<div class="prepend-4 span-5 last">ESGF Copyright &copy; 2011</div>
-
-</div>
-
+	<div class="prepend-3 span-6 last">
+		<div class="footerright">
+                    	<a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a>
+                    </div>
+		</div>
+</div>  
+	

@@ -6,39 +6,361 @@
  ************************************************************/
 
 body {
-    font-family: arial, sans-serif;
+	font-family:Arial, Helvetica, sans-serif;	
+	font-size:13px;
+	background-color:#f9f6f1;	
 }
 
-/* added 2-2 */
-h1 {
-text-align:left;
-color:#6FA5FD;
-font-size:22px;
-font-weight:700;
-border-bottom:1px dotted #D3D3D3;
-padding-bottom:2px;
-margin-bottom:25px;
-}   
-
-h1#logo {
-	margin-top: 20px;
-	border-bottom: none;
+/* style for descriptions */
+.snippet {
+	font-size:11px;
+	padding-left: 5px;
 }
 
-h3 {
-	border-bottom:1px solid #000000; 
-}
-
-/* fix the left margin */
-/* commented out to allow the page to be centered 
-.container {
-	margin-left: 10px;
+/* This is the repeating image 
+	The size must be changed*/
+/*
+.contentwrapmid {
+	float:left;
+	width:1010px; 
+	background:url(../images/wrapmid.jpg) top left repeat-y;
 }
 */
 
 
-/* style the search box */
+/* header and navigation bar */
+.headertop {
+	background:url(../images/header_bg.jpg) top left repeat-x;	
+	height:92px;
+}
 
+.headerbottom {
+	float:left;
+	height:47px;	
+}
+
+.navbar {
+	float:left;
+	height:47px;	
+	background-color:#18638a;
+}
+.nav {
+	height:47px;
+	color: #333333;
+	float:right;	
+}	
+.navbar ul {	
+	display: inline;
+}	
+.navbar ul li {	
+	display: inline;
+	padding: 0px;	
+	list-style: none;	
+}
+.navbar a {
+	float: left;	
+	height:47px;
+	line-height:47px;
+	display: block;	
+	padding: 0px 25px 0px 25px;		
+	text-decoration: none;
+	color:#ffffff;
+	font-size:16px;
+	border-left:2px solid #104d6c;	
+}
+.navbar a.selected {
+	float: left;	
+	height:47px;
+	line-height:47px;	
+	padding: 0px 16px 0px 16px;
+	color:#ffffff;
+	text-decoration:underline;
+	display: block;
+	font-size:16px;	
+}		
+.navbar a:hover {	
+	text-decoration:underline;
+}
+/* end header */
+
+
+/* footer */
+.footer {
+	float:left;
+	height:44px;
+	background-color:#7d5f45; 
+}
+.footerinner {
+	float:left;
+	height:34px;
+	margin-left:5px;
+	margin-top:5px;	
+}
+.footerleft {
+	float:left;
+	padding:0px 20px 0px 20px;
+	height:34px;
+	/* border-right:2px solid #926f51; */
+	padding-top:15px;	
+}
+.footerleft p {
+	color:#e8decd;
+	font-size:12px;
+}
+.footerright {
+	float:right;
+	padding:0px 20px 0px 20px;
+	height:34px;
+	/* border-left:2px solid #926f51; */
+	color:#e8decd;
+	padding-top:15px;	
+}
+.footerright a {
+	color:#e8decd;
+	font-size:12px;
+}
+/* end footer */
+
+
+
+/* home page */
+.info {
+	/* height:460px; */
+	/* margin-left:13px; */
+	background:url(../images/info_bg.jpg) top left repeat-x;
+}
+
+/* headers for each of the 3 columns of the home page */
+.infotitle {
+	float:left;
+	height:40px;
+	background-color:#838943;
+}
+
+.infotitle h1 { 
+	font-size: 20px;
+	color:#FFF;
+	margin:8px 0px 0px 12px;
+	font-weight:normal;	
+}
+
+
+.infoheader {
+	float:left;
+	height:46px;
+	
+	border-bottom:2px solid #e8ddcf;
+}
+
+.infoheadericon {
+	float:left;
+	width:46px;
+	height:46px;
+	padding-left:10px;	
+}
+.infoheadertxt {
+	float:left;
+	height:46px;	
+}
+.infoheadertxt h1 {
+	font-size: 20px;
+	color:#7d5f45;
+	margin-top:5px;
+	font-weight:normal;	
+}
+
+
+
+/* end header info */
+
+
+/* padders for the 3 columns of home page */
+.infoinner {
+	padding-top:20px;
+	padding-left:20px;
+}
+
+.infoinner2 {
+	padding-top:20px;
+	padding-left:20px;
+}
+
+.infoinner3 {
+	padding-top:20px;
+	padding-left:13px;
+}
+
+/* end padders for the 3 columns of home page */
+
+
+/* infocontent styling */
+.infocontent {
+	float:left;
+	height:374px;
+}
+.infocontenttop {
+	float:left;
+	height:274px;	
+}
+.infocontent p {
+	font-size: 13px;
+	color:#7d5f45;	
+	font-weight:normal;
+	padding:10px 10px 10px 10px;
+	line-height:19px;	
+}
+.infocontent a {
+	color:#838943;
+}
+.infocontent ul {
+	/* margin:0px 0px 20px 35px; */
+}
+.infocontent li {
+	margin:0px 0px 5px 0px;
+	color:#7d5f45;	
+}
+
+.infocontent h3 {
+	font-size: 14px;
+	color:#7d5f45;	
+	font-weight:bold;
+	margin-top:10px;
+	
+	/*
+	margin-bottom:10px;	
+	padding-left:20px;
+	*/
+}
+
+/* search form on the home page */
+/*
+.searchformcontainer {
+	float: left;
+	height:35px;
+	margin:10px 10px 5px 10px; 	
+}
+
+.search-field {
+	float: left;
+	background-color:#FFFFFF;
+	background: url(../images/search_bg.jpg) top left;
+	height: 35px;
+	line-height:35px;
+	background: url(../images/search_bg.jpg) top left; 
+	width: 204px;
+	line-height:35px;
+	font-size: 13px;	
+	color: #333333;
+	margin: 0px;
+	padding: 0px 0px 0px 0px;
+	border: none;
+}
+
+.searchform {
+	float: left;
+}
+.search-btn {
+	float: left;
+	width: 52px;	
+	height: 35px;
+}
+*/
+
+
+/* rightmost part of info page */
+.projectitem {
+	float: left;
+	width: 281px;	
+	height: 110px;
+	margin-left:10px;
+	margin-top:10px;
+}
+.projectitemtop {
+	float: left;
+	width: 281px;	
+	height: 46px;
+}
+.projectitemicon {
+	float: left;
+	width: 46px;	
+	height: 46px;
+}
+.projectitemtitle {
+	float: left;
+	width: 235px;	
+	height: 46px;
+}
+
+.projectitemtitle h3 {
+	font-size: 14px;
+	color:#7d5f45;	
+	font-weight:bold;
+	margin-top:15px;
+	margin-left:10px;
+}
+.projectitembottom {
+	float: left;
+	width: 281px;	
+	height: 64px;
+}
+.projectitembottom p {
+	font-size: 13px;
+	color:#7d5f45;	
+	font-weight:normal;	
+	line-height:19px;	
+}
+
+
+
+
+
+
+
+
+
+/* ESGF Live search */
+
+
+/* round box */
+
+.round-box {
+    margin-bottom:2em; 
+}
+
+.round-shadow {
+    -moz-box-shadow: 2px 2px 4px #818181;
+    -webkit-box-shadow: 2px 2px 4px #818181;
+    box-shadow: 2px 2px 4px #818181;    
+}
+
+.round-top {
+    -moz-border-radius: 6px 6px 0px 0px; /* left-top, right-top, left-bottom, right-bottom */
+    -webkit-border-top-left-radius: 6px;
+    -webkit-border-top-right-radius: 6px;
+}
+
+.round-bottom {
+	-moz-border-radius: 0px 0px 3px 3px;	
+    -webkit-border-bottom-left-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+}
+
+.round-header {
+	padding: 5px;
+	background: #18638a;
+	font-size: 110%;
+	color: white;
+	text-align: center;
+}
+.round-content {
+	padding: 5px;
+	border-style: solid;	
+    border-width:1px;
+    border-color: #18638a;
+    overflow: auto;
+}
+
+/* style the search box */
 #query {
     font-weight: normal;  
     font-size: 1.2em;
@@ -84,33 +406,6 @@ h3 {
 	background: #00FF00;
 }
 
-.tabitem {
-	margin-right: 10px;
-}
-
-.actionitem {
-	margin-right: 6px;
-}
-
-
-#current-selection li {
-  list-style-type: none;
-}
-
-#sidebar h5 {
-	margin-bottom: 0.5em;
-}
-
-a:link { color: #0000ff;}
-a:visited { color: #009;}
-
-a {
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
 
 #search-results {
 	padding-left: 10px;
@@ -119,6 +414,11 @@ a:hover {
 
 #constraints {
 	margin-top: 1.5em;
+}
+
+
+/* styles for retrieived records in a search */
+div.desc {
 }
 
 /* add some space between each search entry */
@@ -132,18 +432,7 @@ div.actions {
 	margin-bottom: 6px;
 }
 
-h4.desc {
-	text-decoration: underline;
-}
-
-
-#search-summary {
-	margin: 0px;
-}
-
-
-/* pager */
-
+/* pagination */
 #page-navigation {
   /* border-bottom: 1px solid #ffccff; */
 }
@@ -156,14 +445,37 @@ h4.desc {
   display: inline;
 }
 
-/* facet browser */
-.facet_title {
-	font-weight: bold;
+
+.subheader {
+	margin-top:15px;
+	margin-bottom:10px;
+}
+
+/* end pagination */
+
+
+
+
+
+/* search content - left side */
+.l2contentleftbox {
+	margin:20px 10px 40px 10px;	
+	/*
+	border-top:#CCC 1px solid;
+	border-left:#CCC 1px solid;	
+	border-right:#CCC 1px solid;
+	*/		
+}
+
+/* search content - right side */
+.l2contentrightbox {
+	margin:15px 20px 40px 0px;		
+	
 }
 
 
 /* tagcloud */
-
+/* Note: these are not utilized yet in the alpha release*/
 
 .tagcloud {
   padding: 10px 15px 0;
@@ -212,128 +524,38 @@ a.tagcloud_size_10 {
 font-size: 180%;
 }
 
-
-/* round box */
-
-.round-box {
-    margin-bottom:2em; 
+.actionitem {
+	margin-right: 6px;
 }
+/* end search content styling */
 
-.round-shadow {
-    -moz-box-shadow: 2px 2px 4px #818181;
-    -webkit-box-shadow: 2px 2px 4px #818181;
-    box-shadow: 2px 2px 4px #818181;    
-}
 
-.round-top {
-    -moz-border-radius: 6px 6px 0px 0px; /* left-top, right-top, left-bottom, right-bottom */
-    -webkit-border-top-left-radius: 6px;
-    -webkit-border-top-right-radius: 6px;
-}
 
-.round-bottom {
-	-moz-border-radius: 0px 0px 3px 3px;	
-    -webkit-border-bottom-left-radius: 3px;
-    -webkit-border-bottom-right-radius: 3px;
-}
-
-.round-header {
-	padding: 5px;
-	background: #ffccff;
-	font-size: 110%;
-	text-align: center;
-}
-.round-content {
-	padding: 5px;
-	border-style: solid;	
-    border-width:1px;
-    border-color: #ffccff;
-    overflow: auto;
+/* facet browser */
+.facet_title {
+	font-weight: bold;
 }
 
 
+/* added 2-2 */
 
-/* the overlayed element */
-.apple_overlay {
-	
-	/* initially overlay is hidden */
-	display:none;
-	
-	/* growing background image */
-	background-image:url(../images/metadata_overlay/white.png);
-	/* background-color: white; */
-	
-	/* 
-		width after the growing animation finishes
-		height is automatically calculated
-	*/
-	width:740px;		
-	
-	
-	/* some padding to layout nested elements nicely  */
-	padding:35px;
-	margin-left: 20px;
-
-	/* a little styling */	
-	font-size:11px;
-}
-
-/* default close button positioned on upper right corner */
-.apple_overlay .close {
-	
-	background-image:url(../images/metadata_overlay/close.png); 
-	position:absolute; right:5px; top:5px;
-	cursor:pointer;
-	height:35px;
-	width:35px;
-}
-
-/* for potential TDS overlay */
 /*
-div.contentWrap {
-    height:520px;
-	overflow-y:auto;	
+h1 {
+text-align:left;
+color:#6FA5FD;
+font-size:22px;
+font-weight:700;
+border-bottom:1px dotted #D3D3D3;
+padding-bottom:2px;
+margin-bottom:25px;
+}   
+
+h1#logo {
+	margin-top: 20px;
+	border-bottom: none;
+}
+
+h3 {
+	border-bottom:1px solid #000000; 
 }
 */
-
-.left_table_header {
-	width: 65%;
-}
-
-
-.left_download {
-	width: 65%;
-	font-size: 8pt;	
-	padding-left:20px;
-	/*
-	border: 2px solid #666;
-	*/
-}
-
-.right_download {
-	font-size: 8pt;	
-	float:left;
-	/*
-	border: 1px solid #666;
-	padding-top: 5px;
-	*/
-}
-
-
-/* tooltip styling. by default the element to be styled is .tooltip  */
-.tooltip {
-	display:none;
-	background:transparent url(../images/black_arrow.png);
-	font-size:12px;
-	height:70px;
-	width:160px;
-	padding:25px;
-	color:#fff;	
-}
- 
-/* style the trigger elements */
-#demo img {
-	border:0;
-	cursor:pointer;
-	margin:0 8px;
-}

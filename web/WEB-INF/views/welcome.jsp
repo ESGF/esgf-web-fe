@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
-<ti:insertDefinition name="main-layout" >
+<ti:insertDefinition name="home-layout" >
 	
 	<ti:putAttribute name="main">
 		<!-- info -->

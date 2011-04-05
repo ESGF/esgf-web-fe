@@ -17,11 +17,9 @@
         <put-attribute name="extrastyle" value="" />
 
         <!-- HTML -->
-        <put-attribute name="banner"  value="/WEB-INF/views/common/banner.jsp"/>
-        <!-- <put-attribute name="banner"  value="/WEB-INF/views/common/banner.jsp"/> -->
+        <put-attribute name="banner"  value=""/>
         <put-attribute name="header"  value="/WEB-INF/views/common/header.jsp"/>
         <put-attribute name="subheader"  value=""/>
-        <!--   <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" /> -->
 		<put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
 		
         <!-- extensible layout type -->
@@ -34,6 +32,12 @@
     <definition name="main-layout" extends="base-layout">
         <put-attribute name="layoutType" type="string" value="main"/>
     </definition>
+    <!-- special home page layout that includes banner -->
+    <definition name="home-layout" extends="base-layout">
+        <put-attribute name="banner"  value="/WEB-INF/views/common/banner.jsp"/>
+        <put-attribute name="layoutType" type="string" value="main"/>
+    </definition>
+    
 
     <!-- left-sidebar + main content layout -->
     <definition name="left-main-layout" extends="base-layout">
@@ -69,6 +73,7 @@
 
     </definition>
 
+<!--  obsolete ?
     <definition name="home" extends="left4-main20">
         <put-attribute name="extrascript" value="/WEB-INF/views/home/script_home.jsp" />
         <put-attribute name="extrastyle"  value="/WEB-INF/views/home/style_home.jsp" />
@@ -78,6 +83,7 @@
         <put-attribute name="main" value="/WEB-INF/views/home/_main19.jsp" />
 
     </definition>
+    -->
 
     <definition name="admin" extends="main-layout">
         <put-attribute name="extrascript" value="/WEB-INF/views/admin/script_admin.jsp" />

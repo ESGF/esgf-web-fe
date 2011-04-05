@@ -5,5 +5,5 @@
 </div>
 
 <div class="span-24 last infotitle">
-                <h1>Welcome to PCMDI</h1>
-            </div>
+	<h1>Welcome to PCMDI</h1>
+</div>

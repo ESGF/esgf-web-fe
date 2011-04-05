@@ -30,7 +30,8 @@ body {
 
 /* header and navigation bar */
 .headertop {
-	background:url(../images/header_bg.jpg) top left repeat-x;	
+	background:url(../images/header_bg.jpg) top left repeat-x;
+	/* background: #FFFFFF; */
 	height:92px;
 }
 

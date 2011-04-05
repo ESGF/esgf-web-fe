@@ -2,12 +2,12 @@
 
 <sec:authentication property="principal" var="principal"/>
 <div class="span-24 last headertop">
-	<div class="span-24"></div>
+	<!-- <div class="span-24"></div> -->
 	<div class="span-19 prepend-1">
-		<img src="images/newlogo.png" />
+		<img src="images/esgf_logo.png" height="92px" />
 	</div>
 	<div class="span-3 prepend-1 last">
-		<img src="" style="padding-top:5px" alt="institution" title="institution icon"/>
+		<img src="images/pcmdi.jpg" style="padding-top:10px" alt="institution" title="institution icon"/>
 	</div>
 </div>
 <div class="span-24 last headerbottom" style="background-color:#18638a">

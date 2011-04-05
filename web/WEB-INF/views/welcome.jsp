@@ -56,7 +56,7 @@
                         <img src="images/image002.jpg" />
                     </div>
                     <div class="infoheadertxt">
-                        <h1>About ORNL</h1>
+                        <h1>About <spring:message code="esgf.datanode.name" /></h1>
                     </div>
                 </div>
 				

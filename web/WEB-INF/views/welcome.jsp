@@ -64,22 +64,8 @@
 	            <div class="span-8 last infocontent">
 	            	<div class="infocontenttop">
                          <p>
-                             The Program for Climate Model Diagnosis and Intercomparison (PCMDI) was established in 1989 at the Lawrence Livermore National Laboratory (LLNL), located in the San Francisco Bay area. Our staff includes research scientists, computer scientists, and diverse support personnel. <a href="#" >read more</a>
+                            <spring:message code="esgf.homepage.about" />
                          </p>                                                      
-                         <h3>Resources:</h3>                           
-                         <ul>
-                             <li><a href="#" >Getting Started Guide</a></li>
-                             <li><a href="#" >Create Account</a></li>
-                             <li><a href="#" >Browse Catalogs</a></li>
-                             <li><a href="#" >Search for Data</a></li>
-                         </ul>
-                         <h3>Gateways:</h3>
-                         <!--  drop down list for gateway selection -->      
-                         <!--                                                                         
-                         <div class="dropbg">
-                             &nbsp;
-                         </div>   
-                         -->                                                                                                                                                                               
                      </div>
                      <div class="infocontentbottom">
                          &nbsp;   	       
@@ -94,7 +80,7 @@
                         <img src="images/image003.jpg" />
                     </div>
                     <div class="infoheadertxt">
-                        <h1>Projects &amp; Programs</h1>
+                        <h1>Resources</h1>
                     </div>
                 </div>
                 <div class="span-7 last infocontent">
@@ -104,13 +90,16 @@
                                  <a href="#"><img src="images/image004.jpg" /></a>
                              </div>
                              <div class="projectitemtitle">
-                                 <h3>Consectetur adipiscing</h3>
+                                 <h3>Quick Links</h3>
                              </div>
                          </div>
                          <div class="projectitembottom">
-                             <p>
-                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. consectetur adipiscing elit Nullam id odio tellus. <a href="#" >read more</a>
-                             </p>
+	                         <ul>
+	                             <li>Getting Started Guide</li>
+	                             <li><a href='<c:url value="/createAccount"/>' >Create Account</a></li>
+	                             <li>Browse Catalogs</li> 
+	                             <li><a href='<c:url value="/live"/>'>Search for Data</a></li>
+	                         </ul>
                          </div>
                      </div>
                      <div class="projectitem">
@@ -119,13 +108,15 @@
                                   <a href="#"><img src="images/image005.jpg" /></a>
                               </div>
                               <div class="projectitemtitle">
-                                  <h3>Lorem ipsum dolor sit </h3>
+                                  <h3>ESGF Peer Nodes</h3>
                               </div>
                           </div>
                           <div class="projectitembottom">
-                              <p>
-                                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. consectetur tellus. Lorem ipsum <a href="#" >read more</a>
-                              </p>
+	                         <ul>
+	                             <li><a href='http://esg-test1.llnl.gov/esgf-web-fe/' >PCMDI Node</a></li>                             
+	                             <li><a href='http://esg-datanode.jpl.nasa.gov/esgf-web-fe/' >ORNL Node</a></li>
+	                             <li><a href='http://esg-datanode.jpl.nasa.gov/esgf-web-fe/' >NASA-JPL Node</a></li>
+	                         </ul>
                           </div>
                       </div> 
                       <div class="projectitem">
@@ -134,13 +125,15 @@
                                   <a href="#"><img src="images/image006.jpg" /></a>
                               </div>
                               <div class="projectitemtitle">
-                                  <h3>Adipiscing Elit</h3>
+                                  <h3>Analysis Tools</h3>
                               </div>
                           </div>
                           <div class="projectitembottom">
-                              <p>
-                                  Lorem ipsum dolor sit amet, consectetur. consectetur adipiscing elit Nullam id odio tellus. Lorem ipsum <a href="#" >read more</a>
-                              </p>
+	                         <ul>
+	                             <li><a href='http://esg.llnl.gov/cdat/' >CDAT (Climate DAta Tools)</a></li>                             
+	                             <li><a href='http://cdx.jpl.nasa.gov/' >CDX (Climate Data Exchange)</a></li>
+	                             <li><a href='http://ferret.pmel.noaa.gov/LAS' >LAS (Live Access Server)</a></li>
+	                         </ul>
                           </div>
                       </div> 
       	      	</div>

@@ -12,21 +12,21 @@
 </div>
 <div class="span-24 last headerbottom" style="background-color:#18638a">
 	<div class="span-24 navbar last">
-       <div class="nav">                
+       <div>                
            <ul>                    
                <li><a href="<c:url value='/'/> ">Home</a></li>
                <li id="search"><a href="<c:url value='/live'/> ">Search</a></li>                
                <li id="facet"> <a href="#" rel="#facet_overlay">Browse</a></li>               
                <li><a href="#">Analysis</a></li>
-               <li><a href="#">Search Settings</a></li>
-        		<c:choose>
-            		<c:when test="${principal=='anonymousUser'}">
-                   			<li> <a href="<c:url value='/login'/>" >Login</a></li>
-               		</c:when>
-               		<c:otherwise>
-                   		<li> <a href="<c:url value='/j_spring_security_logout'/>" >Logout</a></li>
-               		</c:otherwise>
-           		</c:choose>                                      
+               <li><a href="#">Search Settings</a></li>               
+           	<c:choose>
+           		<c:when test="${principal=='anonymousUser'}">
+                	<li> <a href="<c:url value='/login'/>" >Login</a></li>
+              	</c:when>
+              	<c:otherwise>
+                  	<li> <a href="<c:url value='/j_spring_security_logout'/>" >Logout</a></li>
+              	</c:otherwise>
+          	</c:choose>                                      
            </ul>                
        </div>
    </div> 

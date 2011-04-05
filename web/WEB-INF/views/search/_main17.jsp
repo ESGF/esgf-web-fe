@@ -34,7 +34,7 @@
         $(".scrollable").scrollable({ vertical: true, mousewheel: true });
 
         // For the facet overlay 
-        $("span#facet a[rel]").overlay({
+        $("li#facet a[rel]").overlay({
         		 
         		mask: {opacity: 0.5, color: '#000'},
         		effect: 'apple',

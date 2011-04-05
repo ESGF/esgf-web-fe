@@ -14,11 +14,19 @@
 }*/
 
 .panel {
-    background: #e8ddcf; border: 1px solid #7d5f45; text-align: center; padding:6px;
+    background: #e8ddcf; 
+    border: 1px solid #7d5f45; 
+    text-align:center; 
+    padding:6px;
+    margin:10px auto; 
 }
 
 .button {
-    background: #7d5f45; padding: 3px 5px; color: #FFFFFF; border: 1px solid #7d5f45; border-color: #7d5f45 #838943 #7d5f45 #838943;
+    background: #7d5f45; 
+    padding: 3px 5px; 
+    color: #FFFFFF; border: 1px solid #7d5f45; 
+    border-color: #7d5f45 #838943 #7d5f45 #838943;
+    font-weight: bold;
 }
 
 .myerror { text-align: center; color: #FF0000; }

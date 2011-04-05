@@ -39,6 +39,7 @@
 
         <div style="margin:0 auto; width:600px">
 
+			<p/>
             <h1>ESGF User Registration</h1>
 
             <div class="panel">
@@ -130,11 +131,13 @@
 					<form:hidden path="blank"/>
 					<input type="hidden" name="uuid" value="" id="uuid" />
 					
-                    <input type="submit" value="submit" class="button"/>
+                    <input type="submit" value="Submit" class="button"/>
 
                 </form:form>
             </div>
 
         </div>
+        <p/>
+        
     </ti:putAttribute>
 </ti:insertDefinition>

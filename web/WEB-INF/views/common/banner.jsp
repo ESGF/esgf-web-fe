@@ -1,7 +1,7 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
 <div class="span-24 last">
-	<img src="images/fma_002.png" />
+	<img src='<c:url value="images/fma_002.png"/>' />
 </div>
 
 <div class="span-24 last infotitle">

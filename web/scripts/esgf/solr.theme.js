@@ -142,7 +142,7 @@ AjaxSolr.theme.prototype.snippet = function (doc) {
 };
 
 AjaxSolr.theme.prototype.facet_browser_title = function(value) {
-    return $('<h1>' + 'Facet Browser' + '<\h1>');
+    return $('<div class="facet_browser_title">' + 'Facet Browser' + '<\div>');
 };
 
 AjaxSolr.theme.prototype.facet_title = function(value) {

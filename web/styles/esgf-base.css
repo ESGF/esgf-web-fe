@@ -537,6 +537,59 @@ font-size: 180%;
 }
 
 
+
+/* overlayed components */
+.apple_overlay {
+	
+	/* initially overlay is hidden */
+	display:none;
+	
+	/* growing background image */
+	background-image:url(../images/metadata_overlay/white.png);
+	
+	/* 
+		width after the growing animation finishes
+		height is automatically calculated
+	*/
+	width:740px;		
+	
+	
+	/* some padding to layout nested elements nicely  */
+	padding:35px;
+	margin-left: 20px;
+
+	/* a little styling */	
+	font-size:11px;
+}
+
+/* default close button positioned on upper right corner */
+.apple_overlay .close {
+	
+	background-image:url(../images/metadata_overlay/close.png); 
+	position:absolute; right:5px; top:5px;
+	cursor:pointer;
+	height:35px;
+	width:35px;
+}
+
+.facet_browser_title {
+	text-align:left;
+	color:#6FA5FD;
+	font-size:22px;
+	font-weight:700;
+	border-bottom:1px dotted #D3D3D3;
+	padding-bottom:2px;
+	margin-bottom:25px;
+}
+
+.facet_title h3 {
+	border-bottom:1px solid #000000;
+}
+/*
+h3{
+	border-bottom:1px solid #000000; 
+}
+*/
 /* added 2-2 */
 
 /*

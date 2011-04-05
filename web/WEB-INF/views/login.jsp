@@ -18,8 +18,8 @@
 
                 <c:when test="${principal=='anonymousUser'}">
 
+					<p/>
                     <h1>ESGF Login</h1>
-
                     <!-- User is not authenticated -->
                     <table align="center">
                         <!-- authentication error -->
@@ -38,7 +38,7 @@
                                         <table border="0" align="center">
                                             <tr>
                                                 <td>
-                                                    <img src='<c:url value="/images/openid.png"/>' width="60" hspace="10px"/>
+                                                    <img src='<c:url value="/images/openid.png"/>' width="40" hspace="10px" style="vertical-align:top" />
                                                 </td>
                                                 <td>
                                                     <table>

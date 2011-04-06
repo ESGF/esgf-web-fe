@@ -33,7 +33,16 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
                 
             }
         }
-        links.push($('<a href="#"/>').text('(x) ' + fqString).click(self.removeFacet(fq[i])));
+        /*
+        links.push($('<a href="#"/>').text('(x) ' + fqString).click( 
+        		function () {
+        			alert('remove facet');
+        			
+        			// include code to remove from cookie 
+        				self.removeFacet(fq[i]);
+        		})); */
+        
+        links.push($('<a href="#"/>').text('(x) ' + fqString).click( self.removeFacet(fq[i])));
     }
 
     if (links.length > 1) {
@@ -57,6 +66,10 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
 
   removeFacet: function (facet) {
     var self = this;
+    
+    /* insert code to delete the fq and/or q parameters */
+    alert('remove facet');
+    
     return function () {
       if (self.manager.store.removeByValue('fq', facet)) {
     	self.removeGeospatialConstraints(facet);  

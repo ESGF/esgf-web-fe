@@ -510,7 +510,6 @@
             onBeforeLoad: function() {
                 $('.apple_overlay').css({'width' : '660px'});
 
-            	alert('loading geo');
                 var wrap = this.getOverlay().find(".contentWrap");
                 wrap.load(this.getTrigger().attr("href"));
             },

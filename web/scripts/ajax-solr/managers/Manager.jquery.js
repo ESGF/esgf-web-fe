@@ -10,7 +10,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   {
       executeRequest: function (servlet) {
           var self = this;
-          self.cookies();
+          self.loadExistingQueries();
           if (this.proxyUrl) {
           // jQuery.post(this.proxyUrl, 
           // { query: "I am something" }, 
@@ -32,26 +32,30 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           }
       },
   
-  	cookies: function () {
+  	loadExistingQueries: function () {
   		var self = this;
   		
+  		//alert(self.store.string());
+  		
+  		//load the cookies in the fq and q arrays from the store
+  		var fq = localStorage['fq'];
+  		var q = localStorage['q'];
   		
   		
-  		//load the cookies in the fq  and q arrays to the store
+  		//add them to the store and the current selection
+  		//first, we must check if such a local store has been created
+  		if(fq != null) {
+  			/* debug */
+  	  		//alert('fq: ' + fq + '\nq: ' + q);
+  			
+  			var allFqs = fq.split(";");
+  			//loop over all existing queries - note 'length-1' was used to ignore the trailing whitespace of the last split
+  	  		for(var i=0;i<allFqs.length-1;i++)
+  			{
+  				Manager.store.addByValue('fq',allFqs[i]);
+  			}
+  		}
   		
-  		//add those cookes to the store
-  		
-  		//this.store.addByValue('fq','hhh:iii');
-  		
-  		/*
-  		alert(this.store.string());
-  		for(var att in self) {
-    		alert('att: ' + att + ' ' + self[att]);
-    		
-    	}
-    	*/
-  		
-  		alert('in the cookiehandler');
   		
   	}
 });

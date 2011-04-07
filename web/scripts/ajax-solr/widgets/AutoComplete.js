@@ -38,11 +38,11 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
       if (self.requestSent === false && e.which === 13) {
         var value = $(this).val();
         
-        alert('adding text:' + value + '; to fq storage');
+        //alert('adding text:' + value + '; to fq storage');
         
         var fq = localStorage['fq'];
   	  	if(fq == null) {
-  	  		alert('add ' + value + '; to fq storage ' + self.fq(value));
+  	  		//alert('add ' + value + '; to fq storage ' + self.fq(value));
   	  		fq = self.fq(value) + ';';
   	  		localStorage['fq'] = fq;
   	  	} else {

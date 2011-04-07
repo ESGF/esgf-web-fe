@@ -92,18 +92,19 @@
            Manager.store.addByValue('fq', datetime_startFQ );	
            Manager.store.addByValue('fq', datetime_stopFQ );	
 
-           alert('adding ' + datetime_startFQ  + '; ' + datetime_stopFQ  + '; to fq storage');
+           //alert('adding ' + datetime_startFQ  + '; ' + datetime_stopFQ  + '; to fq storage');
            
 
      	   var fq = localStorage['fq'];
            if(fq == null) {
-         	  alert('add ' + datetime_startFQ + '; to fq storage ');
+         	  //alert('add ' + datetime_startFQ + '; to fq storage ');
          	  //fq = self.fq(value) + ';';
-         	  fq = datetime_startFQ + ';';
+         	  fq = datetime_startFQ + ';' + datetime_stopFQ + ';';
+         	  
          	  localStorage['fq'] = fq;
      	  } else {
-     		  alert('add ' + datetime_startFQ + '; to fq storage ');
-     		  fq += datetime_startFQ + ';';
+     		  //alert('add ' + datetime_startFQ + '; to fq storage ');
+     		  fq += datetime_startFQ + ';'  + datetime_stopFQ + ';';
         	  //if(fq.search(self.fq(value)) != -1) {
          		  //fq += self.fq(value) + ';';
              	  localStorage['fq'] = fq;

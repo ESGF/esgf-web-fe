@@ -356,7 +356,7 @@
             //console.log(geoQueryString);
         }
         
-        alert('adding ' + geoQueryString + ' to storage');
+        //alert('adding ' + geoQueryString + ' to storage');
         Manager.store.addByValue('fq',geoQueryString);
     },
     
@@ -502,7 +502,7 @@
         }
         //console.log(geoQueryString);
         Manager.store.addByValue('fq',geoQueryString);
-        alert('adding ' + geoQueryString + ' to storage');
+        //alert('adding ' + geoQueryString + ' to storage');
     },
     afterRequest: function () {
         var self = this;
@@ -538,7 +538,7 @@
                             }
                         }
                         self.executeGeospatialQuery();
-                        alert('adding ' + '' + '; to fq storage');
+                        //alert('adding ' + '' + '; to fq storage');
                         Manager.doRequest(0);					
                     } else {
                         alert('A Geospatial search type must be selected');

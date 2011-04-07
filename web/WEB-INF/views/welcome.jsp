@@ -17,12 +17,22 @@
                         <img src="images/image001.jpg" />
                     </div>
                     <div class="infoheadertxt">
-                            <h1>Search &amp; Categories</h1>
+                            <h1>Quick Search</h1>
                     </div>
                 </div>
 				<!-- info content -->
                 <div class="span-7 last infocontent">
                 	<h3>Keyword:</h3> 
+                	<div class="span-7 last">
+                	<!--  <form action="<c:url value="/live"/>" > -->
+                		<input id="home_query" name="text" type="text" value="" />
+	    				<input id="home_search-button" type="submit" value="Search" />
+                	
+                	<!--  </form> -->
+                	</div>
+					<div class="span-7 last">
+                             	&nbsp;
+                    </div>
                 	<!--  
                 	<div class="searchformcontainer">
                 		<form action="" class="searchform" method="get">   
@@ -35,9 +45,10 @@
                     	</form>
                 	</div>
                     -->  
-                    <h3>Search By Category: </h3>
+                    <h3 id="navigate">Advanced Search (Category, Geospatial, Temporal, and more)... </h3>
+                    <!--  
            			<ul>
-                         <li id="home_project"><a href='<c:url value="/live"/>' >Project</a></li>
+                         <li id="home_project"><a href='#' >Project</a></li>
                          <li><a href="#" >Institute</a></li>
                          <li><a href="#" >Model</a></li>
                          <li><a href="#" >Experiment</a></li>
@@ -46,7 +57,8 @@
                          <li><a href="#" >Realm</a></li>
                          <li><a href="#" >Variable</a></li>
                          <li><a href="#" >Ensemble</a></li>
-                    </ul>       
+                    </ul> 
+                    -->      
                 </div>
 			</div>
 			
@@ -151,23 +163,41 @@
 <script type="text/javascript">
 
     $(function(){
-        $('li#home_project').click(function(){
-        	//alert('project stuff');
-        	var fq=localStorage['fq'];
-        	if(fq == null) {
-          	  //alert('add ' + 'project:*' + '; to fq storage ');
-          	  fq = 'project:*' + ';';
-          	  localStorage['fq'] = fq;
+    	$('#home_search-button').click(function(){
+    		//alert($('input#home_query').val());
+    		var fq = localStorage['fq'];
+      	  	if(fq == null) {
+      	  		//alert('add text:' + $('input#home_query').val() + ';');
+      	  		fq = 'text:' + $('input#home_query').val() + ';';
+      	  		localStorage['fq'] = fq;
       	  	} else {
-              //alert('add ' + 'project:*' + '; to fq storage ');
-              fq += 'project:*' + ';';
-              localStorage['fq'] = fq;
-      		  //if(fq.search(self.fq(value)) != -1) {
-          		  //fq += self.fq(value) + ';';
-              	  //localStorage['fq'] = fq;
-      		  //}
-      	  }
-        });
+      	  		//alert('add text:' + $('input#home_query').val() + ';');
+  	  			fq += 'text:' + $('input#home_query').val() + ';';
+      	  		localStorage['fq'] = fq;
+      	  		//}
+      	  	}
+      	  location.href='<c:url value="/live"/>';
+    	});
+    	$('home_query').bind('keydown', function(e) {
+    		if (e.which === 13) {
+    			alert('submitting...');
+    		}
+    	});
+    	
+    	
+    	
+    	$('h3#navigate').hover(
+    		function () {
+        		$(this).css({'color':'blue','cursor':'pointer'});
+    		},
+    		function () {
+    			$(this).css({'color':'#7d5f45'});
+    		}
+    	);
+    	
+    	$('h3#navigate').live('click',function(){
+			location.href='<c:url value="/live"/>';
+    	});
     });
 
 </script>

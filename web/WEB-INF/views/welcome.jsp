@@ -1,5 +1,7 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
+
+
 <ti:insertDefinition name="home-layout" >
 	
 	<ti:putAttribute name="main">
@@ -35,7 +37,7 @@
                     -->  
                     <h3>Search By Category: </h3>
            			<ul>
-                         <li><a href="#" >Project</a></li>
+                         <li id="home_project"><a href='<c:url value="/live"/>' >Project</a></li>
                          <li><a href="#" >Institute</a></li>
                          <li><a href="#" >Model</a></li>
                          <li><a href="#" >Experiment</a></li>
@@ -145,4 +147,28 @@
 	</ti:putAttribute>
 	
 </ti:insertDefinition>
+
+<script type="text/javascript">
+
+    $(function(){
+        $('li#home_project').click(function(){
+        	alert('project stuff');
+        	var fq=localStorage['fq'];
+        	if(fq == null) {
+          	  alert('add ' + 'project:*' + '; to fq storage ');
+          	  fq = 'project:*' + ';';
+          	  localStorage['fq'] = fq;
+      	  	} else {
+              alert('add ' + 'project:*' + '; to fq storage ');
+              fq += 'project:*' + ';';
+              localStorage['fq'] = fq;
+      		  //if(fq.search(self.fq(value)) != -1) {
+          		  //fq += self.fq(value) + ';';
+              	  //localStorage['fq'] = fq;
+      		  //}
+      	  }
+        });
+    });
+
+</script>
   

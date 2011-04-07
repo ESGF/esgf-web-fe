@@ -152,14 +152,14 @@
 
     $(function(){
         $('li#home_project').click(function(){
-        	alert('project stuff');
+        	//alert('project stuff');
         	var fq=localStorage['fq'];
         	if(fq == null) {
-          	  alert('add ' + 'project:*' + '; to fq storage ');
+          	  //alert('add ' + 'project:*' + '; to fq storage ');
           	  fq = 'project:*' + ';';
           	  localStorage['fq'] = fq;
       	  	} else {
-              alert('add ' + 'project:*' + '; to fq storage ');
+              //alert('add ' + 'project:*' + '; to fq storage ');
               fq += 'project:*' + ';';
               localStorage['fq'] = fq;
       		  //if(fq.search(self.fq(value)) != -1) {

@@ -16,8 +16,9 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     
     
     for (i = 0, l = fq.length; i < l; i++) {
+    	
         var fqString = fq[i];
-        
+        //alert('fqStr: ' + i + ' ' + fqString);
         //check to see if this is a geospatial query (assuming 'east_degrees' is in every geo query)
         //if it is -> need to change the current selection string
         if(fqString.search('east_degrees') !== -1)
@@ -33,15 +34,28 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
                 
             }
         }
-        links.push($('<a href="#"/>').text('(x) ' + fqString).click(self.removeFacet(fq[i])));
+        /*
+        links.push($('<a href="#"/>').text('(x) ' + fqString).click( 
+        		function () {
+        			alert('remove facet');
+        			
+        			// include code to remove from cookie 
+        				self.removeFacet(fq[i]);
+        		})); */
+        
+        links.push($('<a href="#"/>').text('(x) ' + fqString).click( self.removeFacet(fq[i])));
     }
 
     if (links.length > 1) {
       links.unshift($('<a href="#"/>').text('remove all').click(function () {
         self.manager.store.remove('fq');
         
+        // alert('clear out the fq store');
+        
+        localStorage['fq'] = "";
+        
         var facet = null;
-        self.removeGeospatialConstraints(facet);  
+        //self.removeGeospatialConstraints(facet);  
         
         self.manager.doRequest(0);
         return false;
@@ -57,8 +71,15 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
 
   removeFacet: function (facet) {
     var self = this;
+    
+    /* insert code to delete the fq and/or q parameters */
+    
     return function () {
       if (self.manager.store.removeByValue('fq', facet)) {
+    	  //alert('remove: ' + facet + ' from the fq store');
+    	  var fq = localStorage['fq'].replace(facet+";","");
+    	  localStorage['fq'] = fq;
+    	  //replace("");
     	self.removeGeospatialConstraints(facet);  
         self.manager.doRequest(0);
       }

@@ -37,6 +37,21 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
     }).bind('keydown', function(e) {
       if (self.requestSent === false && e.which === 13) {
         var value = $(this).val();
+        
+        alert('adding text:' + value + '; to fq storage');
+        
+        var fq = localStorage['fq'];
+  	  	if(fq == null) {
+  	  		alert('add ' + value + '; to fq storage ' + self.fq(value));
+  	  		fq = self.fq(value) + ';';
+  	  		localStorage['fq'] = fq;
+  	  	} else {
+  	  		//if(fq.search(self.fq(value)) != -1) {
+  	  		fq += self.fq(value) + ';';
+  	  		localStorage['fq'] = fq;
+  	  		//}
+  	  	}
+        
         if (value && self.add(value)) {
           self.manager.doRequest(0);
         }

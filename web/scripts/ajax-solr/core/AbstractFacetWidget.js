@@ -107,6 +107,17 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
     var self = this;
     return function () {
       if (self.add(value)) {
+    	  var fq = localStorage['fq'];
+    	  if(fq == null) {
+        	  alert('add ' + value + '; to fq storage ' + self.fq(value));
+        	  fq = self.fq(value) + ';';
+        	  localStorage['fq'] = fq;
+    	  } else {
+    		  //if(fq.search(self.fq(value)) != -1) {
+        		  fq += self.fq(value) + ';';
+            	  localStorage['fq'] = fq;
+    		  //}
+    	  }
         self.manager.doRequest(0);
       }
       return false;

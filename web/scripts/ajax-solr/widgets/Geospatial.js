@@ -355,6 +355,8 @@
             geoQueryString += '(' + south_degreesFQ + ' AND ' + west_degreesFQ + ' AND ' + north_degreesFQ + ' AND ' + east_degreesFQ + ')';
             //console.log(geoQueryString);
         }
+        
+        alert('adding ' + geoQueryString + ' to storage');
         Manager.store.addByValue('fq',geoQueryString);
     },
     
@@ -500,6 +502,7 @@
         }
         //console.log(geoQueryString);
         Manager.store.addByValue('fq',geoQueryString);
+        alert('adding ' + geoQueryString + ' to storage');
     },
     afterRequest: function () {
         var self = this;
@@ -509,8 +512,6 @@
             effect: 'apple',
             onBeforeLoad: function() {
                 $('.apple_overlay').css({'width' : '660px'});
-
-            	alert('loading geo');
                 var wrap = this.getOverlay().find(".contentWrap");
                 wrap.load(this.getTrigger().attr("href"));
             },
@@ -537,6 +538,7 @@
                             }
                         }
                         self.executeGeospatialQuery();
+                        alert('adding ' + '' + '; to fq storage');
                         Manager.doRequest(0);					
                     } else {
                         alert('A Geospatial search type must be selected');

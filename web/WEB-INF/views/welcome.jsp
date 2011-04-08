@@ -163,51 +163,58 @@
 <script type="text/javascript">
 
     $(function(){
-    	$('#home_search-button').click(function(){
-    		//alert($('input#home_query').val());
-    		var fq = localStorage['fq'];
-      	  	if(fq == null) {
+    	
+    	function addToStorage(fq) {
+    		if(fq == null) {
       	  		//alert('add text:' + $('input#home_query').val() + ';');
-      	  		if($('input#home_query').val() == '') {
-      	  			fq = 'text:' + '*;';
-      	  		} else {
-      	  			fq = 'text:' + $('input#home_query').val() + ';';
+      	  		if(!isDuplicate(fq)) {
+	      	  		if($('input#home_query').val() == '') {
+	      	  			fq = 'text:' + '*;';
+	      	  		} else {
+	      	  			fq = 'text:' + $('input#home_query').val() + ';';
+	      	  		}
+	      	  		localStorage['fq'] = fq;
       	  		}
-      	  		localStorage['fq'] = fq;
+      	  		
       	  	} 
       	  	else {
       	  		//alert('add text:' + $('input#home_query').val() + ';');
-      	  		if($('input#home_query').val() == '') {
-      	  			fq += 'text:' + '*;';
-      	  		} else {
-      	  			fq += 'text:' + $('input#home_query').val() + ';';
+      	  		if(!isDuplicate(fq)) {
+	      	  		if($('input#home_query').val() == '') {
+	      	  			fq += 'text:' + '*;';
+	      	  		} else {
+	      	  			fq += 'text:' + $('input#home_query').val() + ';';
+	      	  		}
+	      	  		localStorage['fq'] = fq;
       	  		}
-      	  		localStorage['fq'] = fq;
+      	  		
       	  	}
+    	}
+    	
+    	function isDuplicate(fq) {
+    		var flag = false;
+    		var allFqs = fq.split(";");
+  			//loop over all existing queries - note 'length-1' was used to ignore the trailing whitespace of the last split
+  	  		for(var i=0;i<allFqs.length-1;i++)
+  			{
+  				if(allFqs[i] == ('text:' + $('input#home_query').val().toString())) {
+  					flag = true;
+  				}
+  			}
+    		return flag;
+    	}
+    	
+    	$('#home_search-button').click(function(){
+    		//alert($('input#home_query').val());
+    		var fq = localStorage['fq'];
+    		addToStorage(fq);
       	  location.href='<c:url value="/live"/>';
     	});
     	$('#home_query').bind('keydown', function(e) {
     		if (e.which === 13) {
     			//alert($('input#home_query').val());
         		var fq = localStorage['fq'];
-          	  	if(fq == null) {
-          	  		//alert('add text:' + $('input#home_query').val() + ';');
-          	  		if($('input#home_query').val() == '') {
-          	  			fq = 'text:' + '*;';
-          	  		} else {
-          	  			fq = 'text:' + $('input#home_query').val() + ';';
-          	  		}
-          	  		localStorage['fq'] = fq;
-          	  	} 
-          	  	else {
-          	  		//alert('add text:' + $('input#home_query').val() + ';');
-          	  		if($('input#home_query').val() == '') {
-          	  			fq += 'text:' + '*;';
-          	  		} else {
-          	  			fq += 'text:' + $('input#home_query').val() + ';';
-          	  		}
-          	  		localStorage['fq'] = fq;
-          	  	}
+        		addToStorage(fq)
           	  location.href='<c:url value="/live"/>';
     		}
     	});

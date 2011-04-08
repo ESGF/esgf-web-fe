@@ -44,7 +44,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   		
   		//add them to the store and the current selection
   		//first, we must check if such a local store has been created
-  		if(fq != null) {
+  		if(fq != null || fq != undefined) {
   			/* debug */
   	  		//alert('fq: ' + fq + '\nq: ' + q);
   			

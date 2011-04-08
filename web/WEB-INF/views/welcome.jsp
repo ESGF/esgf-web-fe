@@ -165,16 +165,14 @@
     $(function(){
     	
     	function addToStorage(fq) {
-    		if(fq == null) {
-      	  		//alert('add text:' + $('input#home_query').val() + ';');
-      	  		if(!isDuplicate(fq)) {
-	      	  		if($('input#home_query').val() == '') {
-	      	  			fq = 'text:' + '*;';
-	      	  		} else {
-	      	  			fq = 'text:' + $('input#home_query').val() + ';';
-	      	  		}
-	      	  		localStorage['fq'] = fq;
+    		if(fq == undefined) {
+     	  		//alert('add text:' + $('input#home_query').val() + ';');
+      	  		if($('input#home_query').val() == '') {
+      	  			fq = 'text:' + '*;';
+      	  		} else {
+      	  			fq = 'text:' + $('input#home_query').val() + ';';
       	  		}
+      	  		localStorage['fq'] = fq;
       	  		
       	  	} 
       	  	else {

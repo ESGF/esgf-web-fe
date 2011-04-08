@@ -45,15 +45,17 @@
                     </div>
                 </c:when>
                 <c:when test="${layoutType=='left6-main18'}">
-					<div class="span-24 last" id="subheader" >
-                		<ti:insertAttribute name="subheader" />
-            		</div>
-                    <div class="span-6" id="left">
-                        <ti:insertAttribute name="left" />
-                    </div>
-                    <div class="span-18 last" id="main">
-                        <ti:insertAttribute name="main" />
-                    </div>
+                	<div class="span-24 searchBorder" style="border: 1px solid #eeeeee; width:948px" >
+	                	<div class="span-24 last" id="subheader" style="width:948px">
+	                		<ti:insertAttribute name="subheader" />
+	            		</div>
+	                    <div class="span-6" id="left">
+	                        <ti:insertAttribute name="left" />
+	                    </div>
+	                    <div class="span-18 last" id="main" style="width:708px" >
+	                        <ti:insertAttribute name="main" />
+	                    </div>
+                	</div>
                 </c:when>
         	</c:choose>
         	<!-- footer -->

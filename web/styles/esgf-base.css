@@ -390,15 +390,32 @@ body {
 	float: left;
 }
 
-
-#search-button {
-	font-size: 1.2em;
+#home_search-button {
+	font-size: 13px;
+	color: white;
 	border: 1px solid #9c9c9c;
-	background: #CCFFFF;
+	background: #838943;
+	cursor: pointer;
+	/*
 	padding-top: 5px;
 	padding-bottom: 5px;
 	padding-left: 15px;
 	padding-right: 15px;
+	cursor: pointer;
+	*/
+}
+
+
+#search-button {
+	font-size: 8px;
+	border: 1px solid #9c9c9c;
+	background: #CCFFFF;
+	/*
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	*/
 	cursor: pointer;
 }
 

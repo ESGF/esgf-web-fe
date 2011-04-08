@@ -168,13 +168,21 @@
     		var fq = localStorage['fq'];
       	  	if(fq == null) {
       	  		//alert('add text:' + $('input#home_query').val() + ';');
-      	  		fq = 'text:' + $('input#home_query').val() + ';';
+      	  		if($('input#home_query').val() == '') {
+      	  			fq = 'text:' + '*;';
+      	  		} else {
+      	  			fq = 'text:' + $('input#home_query').val() + ';';
+      	  		}
       	  		localStorage['fq'] = fq;
-      	  	} else {
+      	  	} 
+      	  	else {
       	  		//alert('add text:' + $('input#home_query').val() + ';');
-  	  			fq += 'text:' + $('input#home_query').val() + ';';
+      	  		if($('input#home_query').val() == '') {
+      	  			fq += 'text:' + '*;';
+      	  		} else {
+      	  			fq += 'text:' + $('input#home_query').val() + ';';
+      	  		}
       	  		localStorage['fq'] = fq;
-      	  		//}
       	  	}
       	  location.href='<c:url value="/live"/>';
     	});

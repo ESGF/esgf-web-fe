@@ -34,7 +34,7 @@ body {
 .headertop {
 	background:url(../images/header_bg.jpg) top left repeat-x;
 	/* background: #FFFFFF; */
-	height:92px;
+	/* height:92px;*/
 }
 
 .headerbottom {
@@ -407,15 +407,13 @@ body {
 
 
 #search-button {
-	font-size: 8px;
+	font-size: 1.2em;
 	border: 1px solid #9c9c9c;
 	background: #CCFFFF;
-	/*
 	padding-top: 5px;
 	padding-bottom: 5px;
 	padding-left: 15px;
 	padding-right: 15px;
-	*/
 	cursor: pointer;
 }
 

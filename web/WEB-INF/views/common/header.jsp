@@ -1,9 +1,7 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
 <sec:authentication property="principal" var="principal"/>
-<div class="span-24 last">
-	&nbsp;
-</div>
+
 <div class="span-24 last headertop">
 	<!-- <div class="span-24"></div> -->
 	<div class="span-19 prepend-1">

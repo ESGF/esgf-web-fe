@@ -23,26 +23,13 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
         //if it is -> need to change the current selection string
         if(fqString.search('east_degrees') !== -1)
         {
-        	
             if($("input[name='areaGroup']:checked").val() === 'circle') {
-
             	fqString = self.outputCentroidString(fqString);
-                
             }
             else {
             	fqString = self.outputBoundingBoxString(fqString);
-                
             }
         }
-        /*
-        links.push($('<a href="#"/>').text('(x) ' + fqString).click( 
-        		function () {
-        			alert('remove facet');
-        			
-        			// include code to remove from cookie 
-        				self.removeFacet(fq[i]);
-        		})); */
-        
         links.push($('<a href="#"/>').text('(x) ' + fqString).click( self.removeFacet(fq[i])));
     }
 
@@ -89,22 +76,38 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
   
   outputBoundingBoxString: function (fqString) {
 	  var self = this;
+	  
 	//if there is no OR, it is an enclosed search
-      if(fqString.search('OR') === -1)
+	  var newFqString = "";
+	  if(fqString.search('OR') === -1)
       {
+		  newFqString += 'encloses'; 
+    	  /*
           fqString = 'encloses bounding (N,W,S,E):\n (' + self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
           self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
           self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
           self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ')';
+      	  */
       }
       //otherwise it is an overlaps search
       else {
+    	  newFqString += 'overlaps'; 
+    	  /*
           fqString = 'overlaps bounding (N,W,S,E): (' + self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
           self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
           self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
           self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ')';
+      	  */
       }
-	  return fqString;
+	  newFqString += 'bounding (N,W,S,E):\n';
+	  var printedND = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision);
+	  var printedSD = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxSD),self.floatPrecision);
+	  var printedED = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxED),self.floatPrecision);
+	  var printedWD = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxWD),self.floatPrecision);
+	  
+	  newFqString += '(' + printedND + ',' + printedWD + ',' + printedSD + ',' + printedWD + ')';
+	  
+	  return newFqString;
   },
   
   outputCentroidString: function (fqString) {

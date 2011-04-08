@@ -109,7 +109,6 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
       if (self.add(value)) {
     	  var fq = localStorage['fq'];
     	  if(fq != null || fq != undefined) {
-        	  alert('add ' + value + '; to fq storage ' + self.fq(value));
         	  fq = self.fq(value) + ';';
         	  localStorage['fq'] = fq;
     	  } else {

@@ -214,7 +214,7 @@
     		if (e.which === 13) {
     			//alert($('input#home_query').val());
         		var fq = localStorage['fq'];
-        		addToStorage(fq)
+        		addToStorage(fq);
           	  location.href='<c:url value="/live"/>';
     		}
     	});

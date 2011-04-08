@@ -81,23 +81,11 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
 	  var newFqString = "";
 	  if(fqString.search('OR') === -1)
       {
-		  newFqString += 'encloses'; 
-    	  /*
-          fqString = 'encloses bounding (N,W,S,E):\n (' + self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
-          self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
-          self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
-          self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ')';
-      	  */
+		  newFqString += 'encloses '; 
       }
       //otherwise it is an overlaps search
       else {
-    	  newFqString += 'overlaps'; 
-    	  /*
-          fqString = 'overlaps bounding (N,W,S,E): (' + self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
-          self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
-          self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
-          self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ')';
-      	  */
+    	  newFqString += 'overlaps '; 
       }
 	  newFqString += 'bounding (N,W,S,E):\n';
 	  var printedND = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision);
@@ -115,7 +103,6 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
 	//if there is no OR, it is an enclosed search
       if(fqString.search('OR') === -1)
       {
-
           fqString = 'encloses centroid center(Lat,Long): (' + self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
           self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxED),self.floatPrecision) + ')';
       }
@@ -140,7 +127,6 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
         Manager.widgets['geo_browse'].boundingboxSD = null;
         Manager.widgets['geo_browse'].boundingboxED = null;
         Manager.widgets['geo_browse'].boundingboxWD = null;
-        console.log('\t\tSetting radius and center to null');
         Manager.widgets['geo_browse'].centroidRadius = null;
         Manager.widgets['geo_browse'].centroidCenter = null;  
        }

@@ -186,9 +186,29 @@
       	  	}
       	  location.href='<c:url value="/live"/>';
     	});
-    	$('home_query').bind('keydown', function(e) {
+    	$('#home_query').bind('keydown', function(e) {
     		if (e.which === 13) {
-    			alert('submitting...');
+    			//alert($('input#home_query').val());
+        		var fq = localStorage['fq'];
+          	  	if(fq == null) {
+          	  		//alert('add text:' + $('input#home_query').val() + ';');
+          	  		if($('input#home_query').val() == '') {
+          	  			fq = 'text:' + '*;';
+          	  		} else {
+          	  			fq = 'text:' + $('input#home_query').val() + ';';
+          	  		}
+          	  		localStorage['fq'] = fq;
+          	  	} 
+          	  	else {
+          	  		//alert('add text:' + $('input#home_query').val() + ';');
+          	  		if($('input#home_query').val() == '') {
+          	  			fq += 'text:' + '*;';
+          	  		} else {
+          	  			fq += 'text:' + $('input#home_query').val() + ';';
+          	  		}
+          	  		localStorage['fq'] = fq;
+          	  	}
+          	  location.href='<c:url value="/live"/>';
     		}
     	});
     	

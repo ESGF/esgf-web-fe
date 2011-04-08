@@ -22,7 +22,7 @@
         <!-- the banner spans the whole page so it is outside the blueprint container -->
         
 		
-        <div class="container" style="margin-top:20px;margin-bottom:20px;border: 3px solid #eeeeee">
+        <div class="container" style="margin-top:20px;margin-bottom:20px;border:3px solid #eeeeee">
         	<!-- header -->
             <div id="header" >
                 <ti:insertAttribute name="header" />

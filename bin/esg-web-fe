@@ -63,7 +63,7 @@ VERBOSE=${VERBOSE:-0}
 esg_dist_url=http://198.128.245.140/dist
 envfile="/etc/esg.env"
 
-web_fe_version=${web_fe_version:-"0.9.3"}
+web_fe_version=${web_fe_version:-"0.9.4"}
 
 #--------------
 #User Defined / Settable (public)

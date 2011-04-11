@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/views/search/_select_tbl.jsp" %>
 
  
-<div id="myTabs" class="l2contentrightbox">
+<div id="myTabs" class="l2contentrightbox" >
 
     <ul>
 

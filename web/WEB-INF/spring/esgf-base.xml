@@ -13,7 +13,10 @@
                         http://www.springframework.org/schema/security  http://www.springframework.org/schema/security/spring-security-3.0.xsd
                         http://www.springframework.org/schema/util  http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
+    <!--
     <context:property-placeholder location="classpath:jdbc.properties" />
+    -->
+
     <context:annotation-config />
     <context:component-scan base-package="org.esgf">
         <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>

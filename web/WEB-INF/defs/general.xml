@@ -35,6 +35,7 @@
     <!-- special home page layout that includes banner -->
     <definition name="home-layout" extends="base-layout">
         <put-attribute name="banner"  value="/WEB-INF/views/common/banner.jsp"/>
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
         <put-attribute name="layoutType" type="string" value="main"/>
     </definition>
     

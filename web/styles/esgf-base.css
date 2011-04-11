@@ -34,7 +34,7 @@ body {
 .headertop {
 	background:url(../images/header_bg.jpg) top left repeat-x;
 	/* background: #FFFFFF; */
-	height:92px;
+	/* height:92px;*/
 }
 
 .headerbottom {
@@ -125,7 +125,9 @@ body {
 }
 /* end footer */
 
-
+.searchBorder {
+	
+}
 
 /* home page */
 .info {
@@ -388,6 +390,21 @@ body {
 	float: left;
 }
 
+#home_search-button {
+	font-size: 13px;
+	color: white;
+	border: 1px solid #9c9c9c;
+	background: #838943;
+	cursor: pointer;
+	/*
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	cursor: pointer;
+	*/
+}
+
 
 #search-button {
 	font-size: 1.2em;
@@ -583,30 +600,32 @@ font-size: 180%;
 .facet_title h3 {
 	border-bottom:1px solid #000000;
 }
-/*
-h3{
-	border-bottom:1px solid #000000; 
+
+
+
+.left_table_header {
+	width: 60%;
+	font-size: 12px;
 }
-*/
-/* added 2-2 */
-
-/*
-h1 {
-text-align:left;
-color:#6FA5FD;
-font-size:22px;
-font-weight:700;
-border-bottom:1px dotted #D3D3D3;
-padding-bottom:2px;
-margin-bottom:25px;
-}   
-
-h1#logo {
-	margin-top: 20px;
-	border-bottom: none;
+.right_table_header {
+	font-size: 12px;
 }
 
-h3 {
-	border-bottom:1px solid #000000; 
+
+.left_download {
+	width: 60%;
+	font-size: 8pt;	
+	padding-left:20px;
+	/*
+	border: 2px solid #666;
+	*/
 }
-*/
+
+.right_download {
+	font-size: 8pt;	
+	float:left;
+	/*
+	border: 1px solid #666;
+	padding-top: 5px;
+	*/
+}

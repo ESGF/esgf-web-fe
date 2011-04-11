@@ -93,6 +93,8 @@
 
     <dependency org="net.sf.ehcache" name="ehcache-core" rev="2.3.1" conf="base->default" />
 
+	<dependency org="javassist" name="javassist" rev="3.11.0.GA" conf="base->default" />
+
     <dependency org="org.apache.lucene" name="lucene-core" rev="3.0.3" conf="base->default" />
 
     <dependency org="commons-dbutils" name="commons-dbutils" rev="1.3" conf="base->default" />

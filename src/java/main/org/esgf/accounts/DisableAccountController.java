@@ -45,7 +45,7 @@ public class DisableAccountController {
     public DisableAccountController(final @Qualifier("esgfProperties") Properties props) {
         
         try {
-            userInfoDAO = new UserInfoCredentialedDAO("rootAdmin", props.getProperty("security.admin.passwd"), props);
+            userInfoDAO = new UserInfoCredentialedDAO("rootAdmin", props.getProperty("security.admin.password"), props);
         } catch(Exception e) {
             LOG.error(e.getMessage());
         }

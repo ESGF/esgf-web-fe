@@ -60,7 +60,7 @@ public class CreateAccountController {
     @Autowired
     public CreateAccountController(final @Qualifier("esgfProperties") Properties props) {
         try {
-            this.userInfoDAO = new UserInfoCredentialedDAO("rootAdmin", props.getProperty("security.admin.passwd"), props);
+            this.userInfoDAO = new UserInfoCredentialedDAO("rootAdmin", props.getProperty("security.admin.password"), props);
             this.groupRoleDAO = new GroupRoleDAO(props);
             // FIXME
             for (final String group : GROUP_NAMES) {

@@ -89,30 +89,40 @@ public class SearchSettingController {
     private final static Logger LOG = Logger.getLogger(SearchSettingController.class);
     private final static String ESGF_PROP_FILE = "esgf-fe.properties";
     private final Properties prop = new Properties();
-    private final File f = new File(ESGF_PROP_FILE);
-
+    private File configFile = null;
 
     public SearchSettingController() throws IOException {
         LOG.debug("SearchSettingController init ...");
+
+        //---- Determine/Setup Property File -------
+        String ESGF_ROOT = System.getenv().get("ESGF_ROOT");
+        if(null == ESGF_ROOT) {
+            ESGF_ROOT=File.separator+"esg";
+            LOG.warn("The environtment var ESGF_ROOT not detected using default ["+ESGF_ROOT+"]");
+        }
+        String configFilename=ESGF_ROOT+File.separator+"etc"+File.separator+ESGF_PROP_FILE;
+        configFile = new File(configFilename);
+        //--------------------------------------------
+
         try {
-            prop.load(new FileInputStream(ESGF_PROP_FILE));
+            prop.load(new FileInputStream(configFile));
             LOG.debug("Found old property file");
         } catch (FileNotFoundException e) {
             LOG.debug("Create new property file");
             prop.setProperty("googleScholar", "false");
             prop.setProperty("mendeley", "false");
             prop.setProperty("annotate", "false");
-            prop.store(new FileOutputStream(f), null);
+            prop.store(new FileOutputStream(configFile), null);
         }
 
-        LOG.debug("property file: " + f.getAbsolutePath());
+        LOG.debug("property file: " + configFile.getAbsolutePath());
     }
 
     public void saveSetting(SearchSetting setting) throws IOException {
         prop.setProperty("annotate", setting.getAnnotate().toString());
         prop.setProperty("mendeley", setting.getMendeley().toString());
         prop.setProperty("googleScholar", setting.getGoogleScholar().toString());
-        prop.store(new FileOutputStream(f), null);
+        prop.store(new FileOutputStream(configFile), null);
     }
 
     @ModelAttribute("setting")

@@ -7,7 +7,7 @@
     </ti:putAttribute>
 
     <ti:putAttribute name="main">
-        <div style="margin:0 auto; width:600px">
+        <div class="prepend-4 span-16">
 
             <!-- retrieve current user status -->
             <sec:authentication property="principal" var="principal"/>
@@ -24,32 +24,24 @@
 	            	                           	                         	
 	                <!-- the value of the action attribute must be the same as the URL intercepted by the spring security filter  -->
 	                <form name="loginForm" action='<c:url value="/j_spring_openid_security_check"/>' >
-	                    <div class="panel" style="width:600px">     
+	                    <div class="panel">     
 	                    	<c:if test="${param['failed']==true}">
 	                    		<span class="myerror">Error: unable to resolve OpenID identifier.</span>
 	                		</c:if>                           
 	                        <table border="0" align="center">
 	                            <tr>
-	                                <td>
-	                                    <img src='<c:url value="/images/openid.png"/>' width="40" hspace="10px" style="vertical-align:top" />
-	                                </td>
-	                                <td>
-	                                    <table>
-	                                        <tr>
-	                                            <td align="right" class="required">Openid:</td>
-	                                            <td align="left"><input type="text" name="openid_identifier" size="80" value="${cookie[openid_cookie].value}"/ ></td>
-	                                            <td><input type="submit" value="Login" class="button"/></td>
-	                                        </tr>
-	                                        <tr>
-	                                            <td>&nbsp;</td>
-	                                            <td align="center" colspan="2">
-	                                                <input type="checkbox" name="remember_openid" checked="checked" /> <span class="strong">Remember my OpenID</span> on this computer
-	                                            </td>
-	                                        </tr>
-	                                    </table>
+	                                <td align="right" class="required"><b>Openid:</b></td>
+	                                <td align="left" style="width:100%"><input type="text" name="openid_identifier" size="60" value="${cookie[openid_cookie].value}" style="width:100%"/ ></td>
+	                                <td><input type="submit" value="Login" class="button"/></td>
+	                            </tr>
+	                            <tr>
+	                                <td>&nbsp;</td>
+	                                <td align="center" colspan="2">
+	                                    <input type="checkbox" name="remember_openid" checked="checked" /> <span class="strong">Remember my OpenID</span> on this computer
 	                                </td>
 	                            </tr>
-	                        </table>
+	                       </table>
+	                                   
 	                    </div>
 	                </form>
 	                <p/>

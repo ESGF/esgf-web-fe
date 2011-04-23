@@ -175,8 +175,7 @@ setup_web_fe() {
 write_web_fe_install_log() {
     echo "$(date ${date_format}) webapp:${web_fe_context_root}=${web_fe_version} ${web_fe_app_home}" >> ${install_logfile}
     dedup ${install_logfile}
+    write_as_property web_fe_service_endpoint http://${esgf_host}/${web_fe_context_root}/
+    write_as_property web_fe_app_home
     return 0
 }
-
-
-

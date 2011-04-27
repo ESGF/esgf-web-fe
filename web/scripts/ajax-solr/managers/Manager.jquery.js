@@ -28,34 +28,38 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           else {
 	          jQuery.getJSON(this.solrUrl + servlet + 
 	              '?' + this.store.string() + '&wt=json&json.wrf=?', 
-	              {}, function (data) { alert(self.store.string()); self.handleResponse(data); });
+	              {}, function (data) { self.handleResponse(data); });
           }
       },
   
   	loadExistingQueries: function () {
   		var self = this;
   		
-  		//alert(self.store.string());
-  		
-  		//load the cookies in the fq and q arrays from the store
+  		//compare the parameter store with the local store
+  		//if the local store contains something that is not in the parameter store, then add to parameter store
   		var fq = localStorage['fq'];
-  		var q = localStorage['q'];
   		
-  		
-  		//add them to the store and the current selection
-  		//first, we must check if such a local store has been created
-  		if(fq != null || fq != undefined) {
-  			/* debug */
-  	  		//alert('fq: ' + fq + '\nq: ' + q);
-  			
+  		if(fq != undefined) {
   			var allFqs = fq.split(";");
-  			//loop over all existing queries - note 'length-1' was used to ignore the trailing whitespace of the last split
-  	  		for(var i=0;i<allFqs.length-1;i++)
+  			//alert('allFqs: ' + allFqs);
+  			for(var i=0;i<allFqs.length-1;i++)
   			{
-  				Manager.store.addByValue('fq',allFqs[i]);
+  				
+  				//alert('i: ' + escape(allFqs[i]));
+  				//alert(self.store.string().search(escape(allFqs[i])));
+  				if(self.store.string().search(escape(allFqs[i])) == -1) {
+  					//alert('   I need to add ' +  allFqs[i] + ' to the parameter store');
+  					Manager.store.addByValue('fq',allFqs[i]);
+  				}
   			}
+  	  		//alert('Parameter Store: ' + self.store.string() + ' localStore: ' + escape(localStorage['fq'].substring(0,localStorage['fq'].length-1)));
+  		}
+  		else {
+  			//alert('undefined doesnt matter');
   		}
   		
+  		
+
   		
   	}
 });

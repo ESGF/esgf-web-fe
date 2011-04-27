@@ -52,7 +52,7 @@
 	                    <div class="span-6" id="left">
 	                        <ti:insertAttribute name="left" />
 	                    </div>
-	                    <div class="span-18 last" id="main" style="width:708px" >
+	                    <div class="span-18 last" id="main" style="width:708px;" >
 	                        <ti:insertAttribute name="main" />
 	                    </div>
                 	</div>

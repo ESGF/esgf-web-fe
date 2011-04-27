@@ -104,7 +104,7 @@
                                  <a href="#"><img src="images/image004.jpg" /></a>
                              </div>
                              <div class="projectitemtitle">
-                                 <h3>Quick Links</h3>
+                                 <h3>Quick Linkss</h3>
                              </div>
                          </div>
                          <div class="projectitembottom">

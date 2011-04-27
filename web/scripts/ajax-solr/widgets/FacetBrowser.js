@@ -12,10 +12,17 @@ AjaxSolr.FacetBrowserWidget = AjaxSolr.AbstractFacetWidget.extend({
 	},
 	
 	afterRequest: function () {
-        var self = this;
+
+		var self = this;
+		
+		/* for facet browser */
 	    $(self.target).empty();
 	    $(self.target).append(AjaxSolr.theme('facet_title',self.capFirstLetter(self.field)));
 	    this.displayFacetValues();
+	    
+	    
+	    
+	    
 	}
 
 

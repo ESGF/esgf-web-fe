@@ -8,65 +8,6 @@
     AjaxSolr.TemporalWidget = AjaxSolr.AbstractWidget.extend({
         afterRequest: function () {
             var self = this;
-            
-            /* dialog */
-        	$('#dialog').dialog( {
-        		autoOpen:false,
-        		show:"blind",
-        		hide: "explode"
-        	});
-        	
-        	$('a#temporal').click(function(){
-        		//$('#dialog').dialog('open');
-        		//return false;
-        		
-        		
-        		$('#dialog').dialog('open');
-        		
-        		 var dateFrom = '';
-                 var dateTo ='';
-                 
-        		$(function() {
-                    dates = $( "#from, #to" ).datepicker({
-                        defaultDate: "+1w",
-                        dateFormat: "yy-mm-dd",
-                        changeMonth: true,
-                        changeYear: true,
-                        showOn: "button",
-                        buttonImage: "images/temporal_overlay/calendar.png",
-                        buttonImageOnly: true,
-                        onSelect: function( selectedDate ) {
-                            var option = this.id === "from" ? "minDate" : "maxDate",
-                            instance = $( this ).data( "datepicker");
-                            date = $.datepicker.parseDate(
-                            instance.settings.dateFormat,
-                            selectedDate, instance.settings );
-                            dateFrom = document.getElementById('from');
-                            dateTo = document.getElementById('to');
-                            dates.not(this).datepicker("option",option,date);
-                        }
-                    });
-                }); //end datepicker
-                $("button#submitTemporal").button({ });
-        		
-        		
-        		$(".overlay_header").show();
-                $(".overlay_content").show();
-                $(".overlay_footer").show();
-                $(".overlay_border").show();
-                
-                $('div#tButton').click(function() {
-                    //call the helper method to assemble the fq and execute it
-                	alert('here');
-                    self.executeDateQuery(dateFrom,dateTo);
-                });
-                
-        	});
-        	
-        	
-        	
-            
-            /*
             $("div#temporal a[rel]").overlay({
                 mask: {opacity: 0.5, color: '#000'},
                 effect: 'apple',
@@ -79,7 +20,9 @@
                 onLoad: function() {
                     var dateFrom = '';
                     var dateTo ='';
-                    
+                    /*
+                     * Date picker object created when the temporal search is activated 
+                     */
                     $(function() {
                         dates = $( "#from, #to" ).datepicker({
                             defaultDate: "+1w",
@@ -119,9 +62,8 @@
                     $(".overlay_border").hide();
                 }//end onClose
            });
-    		*/
-       },
-       //end afterRequest
+    
+       },//end afterRequest
   
     
        /*
@@ -129,8 +71,6 @@
         * Utilizes both the datetime_start and datetime_stop fields from solr
         * The default searches each from [* TO *]
         */
-       
-       
 	   executeDateQuery: function (dateFrom,dateTo){
 		   var datetime_start, datetime_startFQ,
            datetime_stop, datetime_stopFQ; 
@@ -170,11 +110,10 @@
              	  localStorage['fq'] = fq;
      		  //}
      	  }
-           alert('before temporal request');
-           Manager.doRequest(0);
            
+           Manager.doRequest(0);
 	  }//end executeDateQuery
-        
+	
     });
 
 }(jQuery));

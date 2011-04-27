@@ -62,18 +62,19 @@
 (function ($) {
 
     $(function () {
-
          Manager = new AjaxSolr.Manager({
                 proxyUrl: '/esgf-web-fe/solrproxy',
                 //proxyUrl: 'http://esg-gw.ornl.teragrid.org:8080/esgf-web-fe/solrproxy'
                 metadataProxyUrl: '/esgf-web-fe/metadataproxy'
             });
 
+         
          Manager.addWidget(new AjaxSolr.ResultWidget({
               id: 'result',
               target: '#search-results'
             }));
-
+		
+         
          Manager.addWidget(new AjaxSolr.PagerWidget({
               id: 'pager',
               target: '#pager',
@@ -92,6 +93,7 @@
               target: '#current-selection'
             }));
 
+         
          Manager.addWidget(new AjaxSolr.AutocompleteWidget({
               id: 'text',
               target: '#search-box',
@@ -125,10 +127,11 @@
             }
          }
 
+         /*
          Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
               id: 'geo_browse'
             }));
-
+		*/
 
          Manager.addWidget(new AjaxSolr.TemporalWidget({
               id: 'temp-browse'
@@ -137,6 +140,10 @@
          Manager.addWidget(new AjaxSolr.MetadataWidget({
                 id: 'metadata-browse'
               }));
+         
+         Manager.addWidget(new AjaxSolr.FacetSideBarWidget({
+             id: 'facet-sidebar'
+           }));
 
          for (var i = 0, l = fields.length; i < l; i++) {
               Manager.addWidget(new AjaxSolr.FacetBrowserWidget({

@@ -241,20 +241,31 @@ AjaxSolr.PagerWidget = AjaxSolr.AbstractWidget.extend(
   },
 
   afterRequest: function () {
-    var perPage = parseInt(this.manager.response.responseHeader.params && this.manager.response.responseHeader.params.rows || 10);
-    var offset = parseInt(this.manager.response.responseHeader.params && this.manager.response.responseHeader.params.start || 0);
-    var total = parseInt(this.manager.response.response.numFound);
+	  
+	  var fq = localStorage['fq'];
+      
+			   
+	    	var perPage = parseInt(this.manager.response.responseHeader.params && this.manager.response.responseHeader.params.rows || 10);
+    	    var offset = parseInt(this.manager.response.responseHeader.params && this.manager.response.responseHeader.params.start || 0);
+    	    var total = parseInt(this.manager.response.response.numFound);
 
-    // Normalize the offset to a multiple of perPage.
-    offset = offset - offset % perPage;
+    	    // Normalize the offset to a multiple of perPage.
+    	    offset = offset - offset % perPage;
 
-    this.currentPage = Math.ceil((offset + 1) / perPage);
-    this.totalPages = Math.ceil(total / perPage);
+    	    this.currentPage = Math.ceil((offset + 1) / perPage);
+    	    this.totalPages = Math.ceil(total / perPage);
 
-    $(this.target).empty();
-
-    this.renderLinks(this.windowedLinks());
-    this.renderHeader(perPage, offset, total);
+    	    //erase BOTH the pagination and the "extra display"
+    	    $(this.target).empty();
+    	    $('#pager-header').empty();
+    	    
+    	    //only if there is a query should the pagination be displayed
+    	    if (fq != undefined) {
+    			  this.renderLinks(this.windowedLinks());
+    			  this.renderHeader(perPage, offset, total);
+    	    }
+	  
+    
   }
 });
 

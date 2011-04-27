@@ -13,12 +13,11 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     var links = [];
     var i = null;
     var fq = this.manager.store.values('fq');
-    
-    
+    //alert('in afterrequest of currentsearch: localstorage: ' + localStorage['fq'] + ' managerstore: ' + fq);
     for (i = 0, l = fq.length; i < l; i++) {
     	
         var fqString = fq[i];
-        //alert('fqStr: ' + i + ' ' + fqString);
+        
         //check to see if this is a geospatial query (assuming 'east_degrees' is in every geo query)
         //if it is -> need to change the current selection string
         if(fqString.search('east_degrees') !== -1)
@@ -37,12 +36,11 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
       links.unshift($('<a href="#"/>').text('remove all').click(function () {
         self.manager.store.remove('fq');
         
-        // alert('clear out the fq store');
-        
-        localStorage['fq'] = "";
+         //delete the localStorage
+        delete localStorage['fq'];
         
         var facet = null;
-        //self.removeGeospatialConstraints(facet);  
+        self.removeGeospatialConstraints(facet);  
         
         self.manager.doRequest(0);
         return false;
@@ -63,12 +61,16 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     
     return function () {
       if (self.manager.store.removeByValue('fq', facet)) {
-    	  //alert('remove: ' + facet + ' from the fq store');
-    	  var fq = localStorage['fq'].replace(facet+";","");
+    	  var fq = localStorage['fq'].replace((facet+';'),"");
     	  localStorage['fq'] = fq;
-    	  //replace("");
-    	self.removeGeospatialConstraints(facet);  
-        self.manager.doRequest(0);
+    	  
+    	  if(fq == '') {
+    		  delete localStorage['fq'];
+    	  } 
+    	  
+
+    	  self.removeGeospatialConstraints(facet);  
+          self.manager.doRequest(0);
       }
       return false;
     };
@@ -88,11 +90,17 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     	  newFqString += 'overlaps '; 
       }
 	  newFqString += 'bounding (N,W,S,E):\n';
-	  var printedND = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision);
+	  //var printedND = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision);
+	  var printedND = self.roundToPrecision(parseFloat(localStorage['ND']),self.floatPrecision);
+	  var printedSD = self.roundToPrecision(parseFloat(localStorage['SD']),self.floatPrecision);
+	  var printedED = self.roundToPrecision(parseFloat(localStorage['ED']),self.floatPrecision);
+	  var printedWD = self.roundToPrecision(parseFloat(localStorage['WD']),self.floatPrecision);
+	  
+	  /*
 	  var printedSD = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxSD),self.floatPrecision);
 	  var printedED = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxED),self.floatPrecision);
 	  var printedWD = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxWD),self.floatPrecision);
-	  
+	  */
 	  newFqString += '(' + printedND + ',' + printedWD + ',' + printedSD + ',' + printedWD + ')';
 	  
 	  return newFqString;
@@ -121,6 +129,12 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
   },
   
   removeGeospatialConstraints: function (facet) {
+
+	  delete localStorage['ED'];
+	  delete localStorage['WD'];
+	  delete localStorage['SD'];
+	  delete localStorage['ND'];
+	  
 	  if(facet.search('east_degrees') !== -1 || facet == null) {
   	//reset ALL temporal and geospatial paramters to null
         Manager.widgets['geo_browse'].boundingboxND = null;

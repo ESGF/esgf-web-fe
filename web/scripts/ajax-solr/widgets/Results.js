@@ -86,20 +86,36 @@
 	        var i = null;
 	        var self = this;
             $(this.target).empty();
-            for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
-                var doc = this.manager.response.response.docs[i];
-                if(self.postSolrProcessing(doc)) {
-                    //console.log('keep doc: ' + doc.title);
-                	//alert('doc: ' + doc.title);
-                    $(this.target).append(
-                        AjaxSolr.theme('result', doc,
-                        AjaxSolr.theme('snippet', doc),
-                        AjaxSolr.theme('actions', doc)));
-                } else {
-                    //console.log('discard doc: ' + doc.title);
-                }
-                
+            
+            var fq = localStorage['fq'];
+            
+           
+            /* only display results if there is a search */
+            if (fq != undefined) {
+            	
+            	//alert ('i should not display this if ' + fq);
+            	for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
+                    var doc = this.manager.response.response.docs[i];
+                    
+                   
+                		if(self.postSolrProcessing(doc)) {
+                            //console.log('keep doc: ' + doc.title);
+                        	//alert('doc: ' + doc.title);
+                            $(this.target).append(
+                                AjaxSolr.theme('result', doc,
+                                AjaxSolr.theme('snippet', doc),
+                                AjaxSolr.theme('actions', doc)));
+                        } 
+                    	
+                    	
+                    }
+            
+            
             }
+            
+                
+                
+                
         },
 
 

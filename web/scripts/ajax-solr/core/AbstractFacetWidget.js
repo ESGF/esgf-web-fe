@@ -104,11 +104,14 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
    *   filter query with the given value.
    */
   clickHandler: function (value) {
+	if(value === 'value') {
+		alert('in click handeler');
+	}
     var self = this;
     return function () {
       if (self.add(value)) {
     	  var fq = localStorage['fq'];
-    	  if(fq != null || fq != undefined) {
+    	  if(fq == undefined) {
         	  fq = self.fq(value) + ';';
         	  localStorage['fq'] = fq;
     	  } else {
@@ -117,6 +120,19 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
             	  localStorage['fq'] = fq;
     		  //}
     	  }
+    	  /*
+    	  var fq = localStorage['fq'];
+    	  alert('adding value: ' + value);
+    	  if(fq != undefined) {
+        	  fq = self.fq(value) + ';';
+        	  localStorage['fq'] = fq;
+    	  } else {
+    		  //if(fq.search(self.fq(value)) != -1) {
+        		  fq += self.fq(value) + ';';
+            	  localStorage['fq'] = fq;
+    		  //}
+    	  }
+    	  */
         self.manager.doRequest(0);
       }
       return false;
@@ -228,6 +244,7 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
    * @returns {String} An fq parameter value.
    */
   fq: function (value, exclude) {
+	  alert('fq');
     // If the field value has a space or a colon in it, wrap it in quotes,
     // unless it is a range query.
     if (value.match(/[ :]/) && !value.match(/[\[\{]\S+ TO \S+[\]\}]/)) {

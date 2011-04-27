@@ -151,7 +151,6 @@ AjaxSolr.AbstractManager = AjaxSolr.Class.extend(
    */
   doRequest: function (start, servlet) {
 	var widgetId = null;  
-	  
     if (this.initialized === false) {
       this.init();
     }
@@ -203,6 +202,9 @@ AjaxSolr.AbstractManager = AjaxSolr.Class.extend(
 
     for (widgetId in this.widgets) {
         if(this.widgets.hasOwnProperty(widgetId)) {
+        	if(widgetId == 'text') {
+            	//alert('calling after request for ' + widgetId);
+        	}
             this.widgets[widgetId].afterRequest();
         }
     }

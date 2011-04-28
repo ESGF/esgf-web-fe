@@ -16,10 +16,13 @@
 	    -->
 	    <div class="span-3" style="margin-top:5px">
 	    	<div><a href="" style="font-size:10px">Geospatial Search</a></div>
+	    	<div><a href="" style="font-size:10px">Temporal Search</a></div>
 	    	<!--  
 	    	<div id="geo"><a href="<c:url value="/scripts/esgf/geospatial_overlay.html" />" rel="#geospatial_overlay" style="font-size:10px" id="geo"> Geospatial</a>
 	    	-->
+	    	<!--
 	    	<div id="temporal"><a href="#" id="temporal" rel="#temporal_overlay" style="font-size:10px">Temporal Search</a></div>
+	    	-->
 	    	<div><a href="" style="font-size:10px">Advanced...&#9660;</a></div>
 	    </div>
 	   	<div class="span-3 last">

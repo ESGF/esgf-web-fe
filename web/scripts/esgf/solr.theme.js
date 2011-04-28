@@ -143,6 +143,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                     .dialog({
                         autoOpen: true,
                         show: 'blind',
+                        modal: true,
                         hide: 'explode'
                     });
                 this.innerHTML="Remove From Cart";
@@ -153,6 +154,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                 .dialog({
                     autoOpen: true,
                     show: 'blind',
+                    modal: true,
                     hide: 'explode'
                 });
                 this.innerHTML ="Add To Cart";

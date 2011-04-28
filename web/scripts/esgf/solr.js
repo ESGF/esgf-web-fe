@@ -127,11 +127,11 @@
             }
          }
 
-         /*
+         
          Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
               id: 'geo_browse'
             }));
-		*/
+		
 
          Manager.addWidget(new AjaxSolr.TemporalWidget({
               id: 'temp-browse'

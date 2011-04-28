@@ -98,7 +98,6 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         selected = ESGF.search.selected,
         carts = [];
 
-
     var idStr = 'id="' + doc.id + '" ';
     var titleStr = 'title="' + doc.title + '" ';
     var urlStr = 'url="' + doc.url + '" ';
@@ -112,7 +111,8 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     //output += '<span class="actionitem ai_meta"><a href="http://www.forbes.com/2009/02/11/cancer-cure-experimental-lifestyle-health_0212cancer.html" class="met" rel="#metadata_overlay"' + allStr + '> Metadata Summary</a></span>';
 
     selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
-    output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Select</a></span>';
+   // alert('selectID: ' + selectID);
+    output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Add To Cart</a></span>';
 
     if (typeof doc.service != "undefined") {
         LOG.debug("LAS service tag detected");
@@ -129,6 +129,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     }
 
     $("a[id=" + selectID + "]").live('click', {doc:doc}, function (evt) {
+    	
         var metadataFormat = doc.metadata_format;
 
         //right now, we only support downloads through TDS
@@ -136,7 +137,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         if(metadataFormat === 'THREDDS') {
 
             selected[evt.data.doc.id] = doc;
-            if ( jQuery.trim(this.innerHTML) == "Select") {
+            if ( jQuery.trim(this.innerHTML) == "Add To Cart") {
                 var $dialog = $('<div></div>')
                     .html('Dataset <b>' + evt.data.doc.id + "</b> has been added to the selection")
                     .dialog({
@@ -144,7 +145,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                         show: 'blind',
                         hide: 'explode'
                     });
-                this.innerHTML="Remove";
+                this.innerHTML="Remove From Cart";
 
             } else {
                 var $dialog = $('<div></div>')
@@ -154,7 +155,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                     show: 'blind',
                     hide: 'explode'
                 });
-                this.innerHTML ="Select";
+                this.innerHTML ="Add To Cart";
                 delete selected[evt.data.doc.id];
 
             }

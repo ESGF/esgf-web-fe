@@ -171,7 +171,24 @@ $(document).ready( function() {
 
     });
 
-
+    $('.remove_dataset_from_datacart').live ('click', function(e) {
+    	
+    	//remove from the selected store
+    	var selectedItem = $.tmplItem(this);
+        var selectedDoc = selectedItem.data.doc;
+        var selectedDocId = selectedDoc.id;
+    	//alert(ESGF.search.selected + ' ' + selectedDocId);
+    	delete ESGF.search.selected[selectedDocId];
+    	
+    	//remove visually
+    	//alert($(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDoc.id)).html());
+    	($('tr.rows_'+ replacePeriod(selectedDoc.id))).remove();
+    	$('tr#' + replacePeriod(selectedDoc.id)).remove();
+    	
+    	//change from remove from cart to add to cart
+    	$('a#ai_select_'+ selectedDoc.id.replace(/\./g, "_")).html('Add To Cart');
+    	
+    });
 
     $(".wgetAllChildren").live ('click', function (e){
 

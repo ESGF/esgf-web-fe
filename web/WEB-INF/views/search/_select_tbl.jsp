@@ -4,8 +4,8 @@
 
 
 <script id="cartTemplate" type="text/x-jquery-tmpl">
- 	<tr class="top_level_data_item">
-		<td class="left_table_header"><input class="topLevel" type="checkbox" id="${doc.id}" name="${doc.id}" checked="true" style="display:none" />${doc.id} </td><td id="${doc.id}" class="right_table_header"> <a href="#" class="showAllChildren">Expand</a> | <a href="#" class="wgetAllChildren">Download wget (${$item.sizeConversion(doc.size)})</a></td>
+ 	<tr class="top_level_data_item" id="${$item.replacePeriods(doc.id)}">
+		<td class="left_table_header"><input class="topLevel" type="checkbox" id="${doc.id}" name="${doc.id}" checked="true" style="display:none" />${doc.id} </td><td id="${doc.id}" class="right_table_header"> <a href="#" class="showAllChildren">Expand</a> | <a href="#" class="wgetAllChildren">wget (${$item.sizeConversion(doc.size)})</a> | <a href="#" class="remove_dataset_from_datacart">Remove</a></td>
 	</tr>
 	{{each(i) doc.file_url}}
 		<tr class="rows_${$item.replacePeriods(doc.id)}" style="display:none"> 

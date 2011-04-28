@@ -144,31 +144,6 @@ $(document).ready( function() {
                     $(this).attr('checked', currentValue);
         });
 
-//    	var selectedItem = $.tmplItem(this);
-//    	var selectedDoc = selectedItem.data.doc;
-//    	var selectedDocId = selectedDoc.id;
-//    	$('input#' + replacePeriod(selectedDocId)).attr('checked', 'checked');
-//
-//    	/*debugging stateent id like to keep in here
-//    	jQuery("input:checkbox:checked").each(function(){
-//	         alert(this.id + ' ' + $(this).attr("checked"));
-//	    });
-//    	*/
-//
-//    	var selectedFileIds = selectedDoc.file_id;
-//    	for(var i=0;i<selectedFileIds.length;i++) {
-//
-//    		if(selectedDoc.service_type[i] == 'HTTPServer') {
-//    			if($('input#' + replacePeriod(selectedDocId)).attr('checked')) {
-//        			$('input#' + replacePeriod(selectedFileIds[i])).attr('checked', 'checked');
-//    			}
-//    			else {
-//    				//not working
-//    				$('input#' + replacePeriod(selectedFileIds[i])).attr('checked', 'false');
-//    			}
-//    		}
-//    	}
-
     });
 
     $('.remove_dataset_from_datacart').live ('click', function(e) {

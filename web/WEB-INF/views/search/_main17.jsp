@@ -49,9 +49,8 @@
 
 
 
-
-<div id="dialog" title="Temporal Search">
 <!--  
+<div id="dialog" title="Temporal Search">
 	<div class="overlay_header" style="display:none">
 	  
 		<div class="overlay_header_title">
@@ -63,9 +62,7 @@
 	
 	</div>
 	<div class="overlay_border" style="display:none"></div>
--->
 	<div class="overlay_content" style="display:none">
-	<!--  this needs to be changed -->
  		<div id="temporalbox">	
 	  		<div id="lb">  
 		  		<div id="rb">  
@@ -104,7 +101,7 @@
 	</div> 
 </div>
 
-
+-->
 
 
 
@@ -188,7 +185,6 @@
         		onBeforeLoad: function() {
         		
         			$('.apple_overlay').css({'width' : '700px'});
-        			alert('loading browser');
         		},
 
         		onLoad: function() {

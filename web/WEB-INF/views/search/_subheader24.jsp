@@ -1,11 +1,14 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
 <div class="subheader">
+	<!--  
 	<div class="push-1 span-2 prepend-1">
 	    <img src="<c:url value="/images/search2.png" />" >
 	</div>
-	
-	<div class="span-18 last">
+	<div class="span-1">
+    	&nbsp;
+	</div>
+	<div class="span-17 last">
 		<span id="search-box">
 	    <input id="query" name="text" type="text" value="" />
 	    </span>
@@ -23,7 +26,10 @@
 		    </div>
 	
 	    </div>  
+	    
 	</div>
-
+	
+	-->
+	
 
 </div>

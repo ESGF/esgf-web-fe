@@ -17,6 +17,9 @@
 		    	var facet_val_arr = new Array();
 		    	for(var facet_value in self.manager.response.facet_counts.facet_fields[facet]) {
 		    		facet_val_arr.push(facet_value);
+		    		if (facet === 'variable') {
+			    		//alert('facet_value: ' + facet_value);
+		    		}
 		    	}
 		    	facet_obj.Facet_name = facet;
 		    	facet_obj.Facet_values = facet_val_arr;
@@ -36,7 +39,7 @@
 		    	.find( "a.showFacetValues" ).click(function() {
 	                var selectedItem = $.tmplItem(this);
 	                for(var i = 0;i<selectedItem.data.Facet_values.length;i++) {
-	                    $('li#' + selectedItem.data.Facet_values[i].toString()).toggle();
+	                    $('li#' + selectedItem.data.Facet_name + '_' + selectedItem.data.Facet_values[i].toString()).toggle();
 	                }
 	                
 		   		});
@@ -44,6 +47,7 @@
 		    
 		    $('a.alink').live('click', function () {
 				var facet_value = $(this).html();
+				
 				var facet = $(this).parent().parent().find('a.showFacetValues').html();
 				
 				Manager.store.addByValue('fq', facet + ':' + facet_value );

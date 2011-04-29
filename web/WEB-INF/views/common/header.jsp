@@ -5,7 +5,7 @@
 <div class="span-24 last headertop">
 	<!-- <div class="span-24"></div> -->
 	<div class="span-19 prepend-1">
-		<img src='<c:url value="/images/esgf_logo.png"/>' height="92px" />
+		<img src='<c:url value="/images/esgf.png"/>' height="92px" />
 	</div>
 	<div class="span-4 last">
 		<c:set var="logo"><spring:message code="esgf.homepage.institutionLogo" /></c:set>

@@ -140,7 +140,6 @@
                 });
                 self.markerGroup[self.num_of_markers] = marker;
                 self.num_of_markers += 1;
-                //alert('Marker group length: ' + self.markerGroup.length);
                 google.maps.event.addListener(marker, "dragstart", function() {
                     if (self.infowindow) {
                         self.infowindow.close();
@@ -160,11 +159,9 @@
             }
         },
         getBoundingBox: function () {
-            //alert('get Bounding box');
             var self = this;
             var i = null;
             self.bounds = new google.maps.LatLngBounds();
-            //alert('num markers: ' + self.num_of_markers);
             for (i=0; i < self.num_of_markers; i++) {
                 var marker = self.markerGroup[i];
                 if (marker){
@@ -184,7 +181,6 @@
             }
         },
         draw_rect: function() {
-            //alert('draw rect');
             var self = this;
             //alert('bounds: ' + self.bounds + ' ' + self.bounds.length);
             var ne = self.bounds.getNorthEast();
@@ -269,10 +265,13 @@
     
     
     executeGeospatialQuery: function () {
+    	
+    	
         var self = this;
         //alert('executing geo spatial query');
         var geoSearchType = $("input[name='searchType']:checked").val();
         var geoShape = $("input[name='areaGroup']:checked").val();
+
         if(geoSearchType === 'Encloses') {
             self.encloses(geoShape);
         }
@@ -280,12 +279,15 @@
             //alert('overlaps');
             self.overlaps(geoShape);
         }
+        
+
     },
     
     
     
     
     encloses: function (geoSearchType) {
+    	
         var self = this;
         var geoQueryString = '';
         var sw = null;
@@ -331,7 +333,6 @@
              * It is actually handled in Results
              * This may be changed due to pagination issues
              */
-            //console.log(geoQueryString);
         }else { // geosearch type is a bounding box
             sw = self.bounds.getSouthWest();
             ne = self.bounds.getNorthEast();
@@ -351,7 +352,6 @@
             //north_degrees limit
             self.boundingboxND = ne.lat();
             localStorage['ND'] = self.boundingboxND;
-            //console.log('BoundingBoxND: ' + boundingboxND);
             west_degrees = self.boundingboxWD;
             east_degrees = self.boundingboxED;
             south_degrees = self.boundingboxSD;
@@ -361,7 +361,6 @@
             north_degreesFQ = 'north_degrees:[ * TO ' + north_degrees + ']';
             east_degreesFQ = 'east_degrees:[ * TO ' + east_degrees + ']';
             geoQueryString += '(' + south_degreesFQ + ' AND ' + west_degreesFQ + ' AND ' + north_degreesFQ + ' AND ' + east_degreesFQ + ')';
-            //console.log(geoQueryString);
         }
         
         var fq = localStorage['fq'];
@@ -381,6 +380,7 @@
     
 	overlaps: function(geoSearchType) {
         var self = this;
+        
         geoQueryString = '';
         var sw = null;
         var ne = null;
@@ -525,8 +525,9 @@
                 'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
                 'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
         }
-        //console.log(geoQueryString);
+        
         var fq = localStorage['fq'];
+        
         if(fq == undefined) {
       	  fq = geoQueryString + ';';
       	  localStorage['fq'] = fq;
@@ -538,22 +539,26 @@
   	  	}
         
         
-        
         Manager.store.addByValue('fq',geoQueryString);
         //alert('adding ' + geoQueryString + ' to storage');
     },
     afterRequest: function () {
+    	
+		
         var self = this;
         var i = null;
         $("div#geo a[rel]").overlay({
             mask: 'darkred',
             effect: 'apple',
+            top: '0%',
             onBeforeLoad: function() {
                 $('.apple_overlay').css({'width' : '660px'});
                 var wrap = this.getOverlay().find(".contentWrap");
                 wrap.load(this.getTrigger().attr("href"));
             },
             onLoad: function() {
+
+        		
                 $("button#submitGeo").button({ });
                 $(".overlay_header").show();
                 $(".overlay_content").show();
@@ -562,12 +567,13 @@
                 self.clearMarkers();
                 self.clearAreaChoice();
                 self.display_map();
-                /* All events are placed here */
-                $('button#submitGeo').live('click',function() {
-                    //alert('click');
-                    //execute the geospatial query
+                
+                $('button#submitGeo').click( function(){
+                	//alert('submitGeo');
+                	//execute the geospatial query
                     if($("input[name='searchType']:checked").val() !== null && $("input[name='areaGroup']:checked").val() !== null) {
-                        //erase any previous geospatial request
+                        
+                    	//erase any previous geospatial request
                         var fq = Manager.store.values('fq');
                         for (i = 0, l = fq.length; i < l; i++) {
                             //any previous filter query that contains 'east_degrees' can be assumed to be a geo search
@@ -575,13 +581,17 @@
                                 Manager.store.removeByValue('fq', fq[i]);
                             }
                         }
+
                         self.executeGeospatialQuery();
-                        //alert('adding ' + '' + '; to fq storage');
                         Manager.doRequest(0);					
+                    
                     } else {
                         alert('A Geospatial search type must be selected');
                     }
+                	
+                	
                 });
+                
                 //ensure that the radio buttons for encloses is checked by default	
                 $("input[name='searchType']:first").attr('checked', true);
                 $('#geospatial_marker_fieldset input[name="clear_markers"]').live('click',function(e) {
@@ -632,6 +642,8 @@
                 $('input[name="redraw_circle"]').live('click',function(e) {
                     self.redraw_circle();
                 });
+                
+
             },
             onClose: function() {
                 $(".overlay_header").hide();
@@ -640,6 +652,8 @@
 			    $(".overlay_border").hide();
             }
         }); 
+        
+		
     }
     
     

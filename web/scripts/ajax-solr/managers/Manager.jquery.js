@@ -47,18 +47,22 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   		
   		//compare the parameter store with the local store
   		//if the local store contains something that is not in the parameter store, then add to parameter store
-  		var fq = localStorage['fq'];
   		
-  		if(fq != undefined) {
-  			var allFqs = fq.split(";");
-  			for(var i=0;i<allFqs.length-1;i++)
-  			{
-  				if(self.store.string().search(escape(allFqs[i])) == -1) {
-  					Manager.store.addByValue('fq',allFqs[i]);
-  				}
-  			}
-  	  	}
-  		LOG.debug('\tlocalStorage: ' + fq);
+  		if(ESGF.setting.storage) {
+  			var fq = localStorage['fq'];
+  	  		
+  	  		if(fq != undefined) {
+  	  			var allFqs = fq.split(";");
+  	  			for(var i=0;i<allFqs.length-1;i++)
+  	  			{
+  	  				if(self.store.string().search(escape(allFqs[i])) == -1) {
+  	  					Manager.store.addByValue('fq',allFqs[i]);
+  	  				}
+  	  			}
+  	  	  	}
+  	  		LOG.debug('\tlocalStorage: ' + fq);
+  		} 
+  		
   		LOG.debug('\tparameter store: ' + Manager.store.values('fq'));
   		
   		

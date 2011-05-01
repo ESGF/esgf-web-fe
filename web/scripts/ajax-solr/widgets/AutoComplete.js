@@ -14,15 +14,17 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 			
 			//var value = $(this).val();
 			var value = $('input#query').val();
+			if(ESGF.setting.storage) {
+				var fq = localStorage['fq'];
+				if(fq == undefined) {
+			  		fq = 'text:' + value + ';';
+			  		localStorage['fq'] = fq;
+			  	} else {
+			  		fq += 'text:' + value + ';';
+			  		localStorage['fq'] = fq;
+			  	}
+			}
 			
-			var fq = localStorage['fq'];
-			if(fq == undefined) {
-		  		fq = 'text:' + value + ';';
-		  		localStorage['fq'] = fq;
-		  	} else {
-		  		fq += 'text:' + value + ';';
-		  		localStorage['fq'] = fq;
-		  	}
 		  	
 			if (value && self.add(value)) {
 		        self.manager.doRequest(0);
@@ -35,14 +37,16 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 			if (e.which == 13) {
 
 				var value = $(this).val();
-				var fq = localStorage['fq'];
-				if(fq == undefined) {
-			  		fq = 'text:' + value + ';';
-			  		localStorage['fq'] = fq;
-			  	} else {
-			  		fq += 'text:' + value + ';';
-			  		localStorage['fq'] = fq;
-			  	}
+				if(ESGF.setting.storage) {
+					var fq = localStorage['fq'];
+					if(fq == undefined) {
+				  		fq = 'text:' + value + ';';
+				  		localStorage['fq'] = fq;
+				  	} else {
+				  		fq += 'text:' + value + ';';
+				  		localStorage['fq'] = fq;
+				  	}
+				}
 				
 				if (value && self.add(value)) {
 					self.manager.doRequest(0);

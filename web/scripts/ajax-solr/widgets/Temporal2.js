@@ -20,6 +20,9 @@
                 onLoad: function() {
                     var dateFrom = '';
                     var dateTo ='';
+                    
+
+        			LOG.debug('\tIn Temporal.onLoad');
                     /*
                      * Date picker object created when the temporal search is activated 
                      */
@@ -33,6 +36,7 @@
                             buttonImage: "images/temporal_overlay/calendar.png",
                             buttonImageOnly: true,
                             onSelect: function( selectedDate ) {
+                            	alert('in onselect');
                                 var option = this.id === "from" ? "minDate" : "maxDate",
                                 instance = $( this ).data( "datepicker");
                                 date = $.datepicker.parseDate(
@@ -53,6 +57,10 @@
                         //call the helper method to assemble the fq and execute it
                         self.executeDateQuery(dateFrom,dateTo);
                     });
+                    
+
+        			LOG.debug('\tEnd In Temporal.onLoad');
+        			
                 },//end onLoad
                 
                 onClose: function() {
@@ -94,22 +102,24 @@
 
            //alert('adding ' + datetime_startFQ  + '; ' + datetime_stopFQ  + '; to fq storage');
            
-
-     	   var fq = localStorage['fq'];
-           if(fq == null) {
-         	  //alert('add ' + datetime_startFQ + '; to fq storage ');
-         	  //fq = self.fq(value) + ';';
-         	  fq = datetime_startFQ + ';' + datetime_stopFQ + ';';
-         	  
-         	  localStorage['fq'] = fq;
-     	  } else {
-     		  //alert('add ' + datetime_startFQ + '; to fq storage ');
-     		  fq += datetime_startFQ + ';'  + datetime_stopFQ + ';';
-        	  //if(fq.search(self.fq(value)) != -1) {
-         		  //fq += self.fq(value) + ';';
+           if(ESGF.setting.storage) {
+        	   var fq = localStorage['fq'];
+               if(fq == null) {
+             	  //alert('add ' + datetime_startFQ + '; to fq storage ');
+             	  //fq = self.fq(value) + ';';
+             	  fq = datetime_startFQ + ';' + datetime_stopFQ + ';';
+             	  
              	  localStorage['fq'] = fq;
-     		  //}
-     	  }
+         	  } else {
+         		  //alert('add ' + datetime_startFQ + '; to fq storage ');
+         		  fq += datetime_startFQ + ';'  + datetime_stopFQ + ';';
+            	  //if(fq.search(self.fq(value)) != -1) {
+             		  //fq += self.fq(value) + ';';
+                 	  localStorage['fq'] = fq;
+         		  //}
+         	  }
+           }
+     	   
            
            Manager.doRequest(0);
 	  }//end executeDateQuery

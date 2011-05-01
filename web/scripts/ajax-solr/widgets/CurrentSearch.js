@@ -37,7 +37,9 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
       links.unshift($('<a href="#"/>').text('remove all').click(function () {
         self.manager.store.remove('fq');
          //delete the localStorage
-        delete localStorage['fq'];
+        if(ESGF.setting.storage) {
+            delete localStorage['fq'];
+        }
         
         var facet = null;
         self.removeGeospatialConstraints(facet);  
@@ -58,43 +60,20 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     var self = this;
     return function () {
     	if(self.manager.store.removeByValue('fq',facet)) {
-    		var fq = localStorage['fq'].replace((facet+';'),"");
-      	  	localStorage['fq'] = fq;
-      	  
-      	  	if(fq == '') {
-      		  delete localStorage['fq'];
-      	  	} 
+    		if(ESGF.setting.storage) {
+    			var fq = localStorage['fq'].replace((facet+';'),"");
+          	  	localStorage['fq'] = fq;
+          	  
+          	  	if(fq == '') {
+          		  delete localStorage['fq'];
+          	  	} 
+    		}
+    		
     		self.manager.doRequest(0);
         }
     }
     
-    	
-    /*
-    return function() {
-    	self.manager.store.removeByValue('fq', facet);
-    	if (self.manager.store.removeByValue('fq', facet)) {
-    		
-    	}
-    	return false;
-    };
-    */
-    /* insert code to delete the fq and/or q parameters */
-    /*
-    return function () {
-      if (self.manager.store.removeByValue('fq', facet)) {
-    	  var fq = localStorage['fq'].replace((facet+';'),"");
-    	  localStorage['fq'] = fq;
-    	  
-    	  if(fq == '') {
-    		  delete localStorage['fq'];
-    	  } 
-    	  
-    	  self.removeGeospatialConstraints(facet);  
-          self.manager.doRequest(0);
-      }
-      return false;
-    };
-    */
+    
   },
   
   outputBoundingBoxString: function (fqString) {
@@ -112,10 +91,20 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
       }
 	  newFqString += 'bounding (N,W,S,E):\n';
 	  //var printedND = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision);
-	  var printedND = self.roundToPrecision(parseFloat(localStorage['ND']),self.floatPrecision);
-	  var printedSD = self.roundToPrecision(parseFloat(localStorage['SD']),self.floatPrecision);
-	  var printedED = self.roundToPrecision(parseFloat(localStorage['ED']),self.floatPrecision);
-	  var printedWD = self.roundToPrecision(parseFloat(localStorage['WD']),self.floatPrecision);
+	  
+	  
+	  printedND = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision);
+	  printedSD = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxSD),self.floatPrecision);
+	  printedED = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxED),self.floatPrecision);
+	  printedWD = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxWD),self.floatPrecision);
+  
+	  
+	  if(ESGF.setting.storage) {
+		  printedND = self.roundToPrecision(parseFloat(localStorage['ND']),self.floatPrecision);
+		  printedSD = self.roundToPrecision(parseFloat(localStorage['SD']),self.floatPrecision);
+		  printedED = self.roundToPrecision(parseFloat(localStorage['ED']),self.floatPrecision);
+		  printedWD = self.roundToPrecision(parseFloat(localStorage['WD']),self.floatPrecision);
+	  }
 	  
 	  /*
 	  var printedSD = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxSD),self.floatPrecision);
@@ -150,11 +139,13 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
   },
   
   removeGeospatialConstraints: function (facet) {
-
-	  delete localStorage['ED'];
-	  delete localStorage['WD'];
-	  delete localStorage['SD'];
-	  delete localStorage['ND'];
+	  if(ESGF.setting.storage) {
+		  delete localStorage['ED'];
+		  delete localStorage['WD'];
+		  delete localStorage['SD'];
+		  delete localStorage['ND'];
+	  }
+	  
 	  
 	  if(facet != null) {
 		  if(facet.search('east_degrees') !== -1 || facet == null) {

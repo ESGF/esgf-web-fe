@@ -101,6 +101,10 @@ LOG.debug("Logging defined");
 // predefine a few properties
 ESGF.search.selected = ESGF.search.selected || {};
 
+// flag for using html5 localStorage
+ESGF.setting.storage = true;
+
+
 // general util functions
 ESGF.util.toArray = function (obj) {
     var arr = [],

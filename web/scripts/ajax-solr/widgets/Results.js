@@ -87,17 +87,29 @@
 	        var self = this;
             $(this.target).empty();
             
-            var fq = localStorage['fq'];
             
-           
-            /* only display results if there is a search */
-            if (fq != undefined) {
-            	
-            	//alert ('i should not display this if ' + fq);
-            	for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
-                    var doc = this.manager.response.response.docs[i];
-                    
-                   
+            if(ESGF.setting.storage) {
+            	var fq = localStorage['fq'];
+                /* only display results if there is a search */
+                if (fq != undefined) {
+                	
+                	//alert ('i should not display this if ' + fq);
+                	for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
+                        var doc = this.manager.response.response.docs[i];
+                    		if(self.postSolrProcessing(doc)) {
+                                //console.log('keep doc: ' + doc.title);
+                            	//alert('doc: ' + doc.title);
+                                $(this.target).append(
+                                    AjaxSolr.theme('result', doc,
+                                    AjaxSolr.theme('snippet', doc),
+                                    AjaxSolr.theme('actions', doc)));
+                            } 
+                        }
+                }
+            } else {
+            	if(this.manager.store.values('fq') != 0)
+            		for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
+                        var doc = this.manager.response.response.docs[i];
                 		if(self.postSolrProcessing(doc)) {
                             //console.log('keep doc: ' + doc.title);
                         	//alert('doc: ' + doc.title);
@@ -106,12 +118,10 @@
                                 AjaxSolr.theme('snippet', doc),
                                 AjaxSolr.theme('actions', doc)));
                         } 
-                    	
-                    	
                     }
-            
-            
+            	
             }
+            
             
                 
                 

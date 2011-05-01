@@ -242,7 +242,9 @@ AjaxSolr.PagerWidget = AjaxSolr.AbstractWidget.extend(
 
   afterRequest: function () {
 	  
-	  var fq = localStorage['fq'];
+	  if(ESGF.setting.storage) {
+		  var fq = localStorage['fq'];
+	  }
       
 			   
 	    	var perPage = parseInt(this.manager.response.responseHeader.params && this.manager.response.responseHeader.params.rows || 10);
@@ -258,12 +260,15 @@ AjaxSolr.PagerWidget = AjaxSolr.AbstractWidget.extend(
     	    //erase BOTH the pagination and the "extra display"
     	    $(this.target).empty();
     	    $('#pager-header').empty();
-    	    
-    	    //only if there is a query should the pagination be displayed
-    	    if (fq != undefined) {
-    			  this.renderLinks(this.windowedLinks());
-    			  this.renderHeader(perPage, offset, total);
+      
+    	    if(ESGF.setting.storage) {
+    	    	//only if there is a query should the pagination be displayed
+        	    if (fq != undefined) {
+        			  this.renderLinks(this.windowedLinks());
+        			  this.renderHeader(perPage, offset, total);
+        	    }
     	    }
+    	    
 	  
     
   }

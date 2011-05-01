@@ -59,15 +59,17 @@
 				var facet = $(this).parent().parent().find('a.showFacetValues').html();
 				
 				Manager.store.addByValue('fq', facet + ':' + facet_value );
+				if(ESGF.setting.storage) {
+					var fq = localStorage['fq'];
+		     	   	if(fq == null) {
+		     	   		fq = facet + ':' + facet_value + ';';
+		     	   		localStorage['fq'] = fq;
+		     	   	} else {
+			     		  fq += facet + ':' + facet_value + ';';
+			              localStorage['fq'] = fq;
+			     	}
+				}
 				
-				var fq = localStorage['fq'];
-	     	   	if(fq == null) {
-	     	   		fq = facet + ':' + facet_value + ';';
-	     	   		localStorage['fq'] = fq;
-	     	   	} else {
-		     		  fq += facet + ':' + facet_value + ';';
-		              localStorage['fq'] = fq;
-		     	}
 	     	   	Manager.doRequest(0);
 				
 				

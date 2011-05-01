@@ -303,19 +303,22 @@
             //this is the min long 
             //west_degrees limit
             self.boundingboxWD = sw.lng();
-            localStorage['WD'] = self.boundingboxWD;
             //this is the min lat
             //south_degrees limit
             self.boundingboxSD = sw.lat();
-            localStorage['SD'] = self.boundingboxSD;
             //this is the max long
             //east_degrees limit
             self.boundingboxED = ne.lng();
-            localStorage['ED'] = self.boundingboxED;
             //this is the max lat
             //north_degrees limit
             self.boundingboxND = ne.lat();
-            localStorage['ND'] = self.boundingboxND;
+            
+            if(ESGF.setting.storage) {
+            	localStorage['WD'] = self.boundingboxWD;
+                localStorage['SD'] = self.boundingboxSD;
+                localStorage['ED'] = self.boundingboxED;
+                localStorage['ND'] = self.boundingboxND;
+            }
             west_degrees = self.boundingboxWD;
             east_degrees = self.boundingboxED;
             south_degrees = self.boundingboxSD;
@@ -338,20 +341,27 @@
             ne = self.bounds.getNorthEast();
             //this is the min long 
             //west_degrees limit
+            
+            
+
             self.boundingboxWD = sw.lng();
-            localStorage['WD'] = self.boundingboxWD;
-            //this is the min lat
-            //south_degrees limit
             self.boundingboxSD = sw.lat();
-            localStorage['SD'] = self.boundingboxSD;
-            //this is the max long
-            //east_degrees limit
             self.boundingboxED = ne.lng();
-            localStorage['ED'] = self.boundingboxED;
-            //this is the max lat
-            //north_degrees limit
             self.boundingboxND = ne.lat();
-            localStorage['ND'] = self.boundingboxND;
+            
+            if(ESGF.setting.storage) {
+            	localStorage['WD'] = self.boundingboxWD;
+                //this is the min lat
+                //south_degrees limit
+                localStorage['SD'] = self.boundingboxSD;
+                //this is the max long
+                //east_degrees limit
+                localStorage['ED'] = self.boundingboxED;
+                //this is the max lat
+                //north_degrees limit
+                localStorage['ND'] = self.boundingboxND;
+            }
+            
             west_degrees = self.boundingboxWD;
             east_degrees = self.boundingboxED;
             south_degrees = self.boundingboxSD;
@@ -362,15 +372,17 @@
             east_degreesFQ = 'east_degrees:[ * TO ' + east_degrees + ']';
             geoQueryString += '(' + south_degreesFQ + ' AND ' + west_degreesFQ + ' AND ' + north_degreesFQ + ' AND ' + east_degreesFQ + ')';
         }
-        
-        var fq = localStorage['fq'];
-        if(fq == undefined) {
-      	  fq = geoQueryString + ';';
-      	  localStorage['fq'] = fq;
-  	  	} else {
-      		  fq += geoQueryString + ';';
+        if(ESGF.setting.storage) {
+        	var fq = localStorage['fq'];
+            if(fq == undefined) {
+          	  fq = geoQueryString + ';';
           	  localStorage['fq'] = fq;
-  	  	}
+      	  	} else {
+          		  fq += geoQueryString + ';';
+              	  localStorage['fq'] = fq;
+      	  	}
+        }
+        
         
         
         Manager.store.addByValue('fq',geoQueryString);
@@ -392,19 +404,23 @@
             //this is the min long 
             //west_degrees limit
             self.boundingboxWD = sw.lng();
-            localStorage['WD'] = self.boundingboxWD;
-            //this is the min lat
-            //south_degrees limit
             self.boundingboxSD = sw.lat();
-            localStorage['SD'] = self.boundingboxSD;
-            //this is the max long
-            //east_degrees limit
             self.boundingboxED = ne.lng();
-            localStorage['ED'] = self.boundingboxED;
-            //this is the max lat
-            //north_degrees limit
             self.boundingboxND = ne.lat();
-            localStorage['ND'] = self.boundingboxND;
+            
+            if(ESGF.setting.storage) {
+            	localStorage['WD'] = self.boundingboxWD;
+                //this is the min lat
+                //south_degrees limit
+                localStorage['SD'] = self.boundingboxSD;
+                //this is the max long
+                //east_degrees limit
+                localStorage['ED'] = self.boundingboxED;
+                //this is the max lat
+                //north_degrees limit
+                localStorage['ND'] = self.boundingboxND;
+            }
+            
             //case 1
             //NE point in bounding box
             geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
@@ -461,19 +477,23 @@
             //this is the min long 
             //west_degrees limit
             self.boundingboxWD = sw.lng();
-            localStorage['WD'] = self.boundingboxWD;
             //this is the min lat
             //south_degrees limit
             self.boundingboxSD = sw.lat();
-            localStorage['SD'] = self.boundingboxSD;
             //this is the max long
             //east_degrees limit
             self.boundingboxED = ne.lng();
-            localStorage['ED'] = self.boundingboxED;
             //this is the max lat
             //north_degrees limit
             self.boundingboxND = ne.lat();
-            localStorage['ND'] = self.boundingboxND;
+            
+            if(ESGF.setting.storage) {
+            	localStorage['WD'] = self.boundingboxWD;
+                localStorage['SD'] = self.boundingboxSD;
+                localStorage['ED'] = self.boundingboxED;
+                localStorage['ND'] = self.boundingboxND;
+            }
+            
             //case 1
             //NE point in bounding box
             geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
@@ -525,18 +545,20 @@
                 'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
                 'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
         }
-        
-        var fq = localStorage['fq'];
-        
-        if(fq == undefined) {
-      	  fq = geoQueryString + ';';
-      	  localStorage['fq'] = fq;
-  	  	} else {
-  		  //if(fq.search(self.fq(value)) != -1) {
-      		  fq += geoQueryString + ';';
+        if(ESGF.setting.storage) {
+        	var fq = localStorage['fq'];
+            
+            if(fq == undefined) {
+          	  fq = geoQueryString + ';';
           	  localStorage['fq'] = fq;
-  		  //}
-  	  	}
+      	  	} else {
+      		  //if(fq.search(self.fq(value)) != -1) {
+          		  fq += geoQueryString + ';';
+              	  localStorage['fq'] = fq;
+      		  //}
+      	  	}
+        }
+        
         
         
         Manager.store.addByValue('fq',geoQueryString);

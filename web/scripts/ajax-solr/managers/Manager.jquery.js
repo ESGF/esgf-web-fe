@@ -32,7 +32,17 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           }
       },
   
+      
+      /**
+       * This property (private) loads any existing constraint from the local store into the search
+       * application.
+       *
+       * @field
+       * @public
+       * @type String
+       */
   	loadExistingQueries: function () {
+  		LOG.debug('In Manager.loadingExistingQueries');
   		var self = this;
   		
   		//compare the parameter store with the local store
@@ -41,25 +51,19 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   		
   		if(fq != undefined) {
   			var allFqs = fq.split(";");
-  			//alert('allFqs: ' + allFqs);
   			for(var i=0;i<allFqs.length-1;i++)
   			{
-  				
-  				//alert('i: ' + escape(allFqs[i]));
-  				//alert(self.store.string().search(escape(allFqs[i])));
   				if(self.store.string().search(escape(allFqs[i])) == -1) {
-  					//alert('   I need to add ' +  allFqs[i] + ' to the parameter store');
   					Manager.store.addByValue('fq',allFqs[i]);
   				}
   			}
-  	  		//alert('Parameter Store: ' + self.store.string() + ' localStore: ' + escape(localStorage['fq'].substring(0,localStorage['fq'].length-1)));
-  		}
-  		else {
-  			//alert('undefined doesnt matter');
-  		}
+  	  	}
+  		LOG.debug('\tlocalStorage: ' + fq);
+  		LOG.debug('\tparameter store: ' + Manager.store.values('fq'));
   		
   		
-
+  		LOG.debug('End in Manager.loadingExistingQueries');
+  		
   		
   	}
 });

@@ -13,9 +13,7 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     var links = [];
     var i = null;
     var fq = this.manager.store.values('fq');
-    //alert('in afterrequest of currentsearch: localstorage: ' + localStorage['fq'] + ' managerstore: ' + fq);
     for (i = 0, l = fq.length; i < l; i++) {
-    	
         var fqString = fq[i];
         
         //check to see if this is a geospatial query (assuming 'east_degrees' is in every geo query)
@@ -29,7 +27,10 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
             	fqString = self.outputBoundingBoxString(fqString);
             }
         }
-        links.push($('<a href="#"/>').text('(x) ' + fqString).click( self.removeFacet(fq[i])));
+        links.push($('<a href="#"/>').text('(x) ' + fqString).click( //function () {
+        		
+        	self.removeFacet(fq[i]))
+        );
     }
 
     if (links.length > 1) {
@@ -55,8 +56,30 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
 
   removeFacet: function (facet) {
     var self = this;
-    /* insert code to delete the fq and/or q parameters */
+    return function () {
+    	if(self.manager.store.removeByValue('fq',facet)) {
+    		var fq = localStorage['fq'].replace((facet+';'),"");
+      	  	localStorage['fq'] = fq;
+      	  
+      	  	if(fq == '') {
+      		  delete localStorage['fq'];
+      	  	} 
+    		self.manager.doRequest(0);
+        }
+    }
     
+    	
+    /*
+    return function() {
+    	self.manager.store.removeByValue('fq', facet);
+    	if (self.manager.store.removeByValue('fq', facet)) {
+    		
+    	}
+    	return false;
+    };
+    */
+    /* insert code to delete the fq and/or q parameters */
+    /*
     return function () {
       if (self.manager.store.removeByValue('fq', facet)) {
     	  var fq = localStorage['fq'].replace((facet+';'),"");
@@ -66,12 +89,12 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     		  delete localStorage['fq'];
     	  } 
     	  
-
     	  self.removeGeospatialConstraints(facet);  
           self.manager.doRequest(0);
       }
       return false;
     };
+    */
   },
   
   outputBoundingBoxString: function (fqString) {

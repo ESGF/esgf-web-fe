@@ -15,14 +15,22 @@
 		    for (facet in self.manager.response.facet_counts.facet_fields) {
 		    	var facet_obj = new Object();
 		    	var facet_val_arr = new Array();
+		    	var facet_val_counts = new Array();
 		    	for(var facet_value in self.manager.response.facet_counts.facet_fields[facet]) {
+		    		var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
+				    facet_val_counts.push(count);
 		    		facet_val_arr.push(facet_value);
-		    		if (facet === 'variable') {
+		    		if (facet === 'project') {
 			    		//alert('facet_value: ' + facet_value);
+		    			var radix = 10;
+		    			//var count = parseInt(self.manager.response.facet_counts,radix);
+		    			//alert('facet_value: ' + facet_value + ' ' + count);
 		    		}
+		    		
 		    	}
 		    	facet_obj.Facet_name = facet;
 		    	facet_obj.Facet_values = facet_val_arr;
+		    	facet_obj.Facet_counts = facet_val_counts;
 		    	facet_arr.push(facet_obj);
 		    	
 	    	}
@@ -45,7 +53,7 @@
 		   		});
 		    }
 		    
-		    $('a.alink').live('click', function () {
+		    $('a.alink').click( function () {
 				var facet_value = $(this).html();
 				
 				var facet = $(this).parent().parent().find('a.showFacetValues').html();
@@ -54,15 +62,11 @@
 				
 				var fq = localStorage['fq'];
 	     	   	if(fq == null) {
-	     	   		fq = facet + ':' + facet_value;
+	     	   		fq = facet + ':' + facet_value + ';';
 	     	   		localStorage['fq'] = fq;
 	     	   	} else {
-		     		  //alert('add ' + datetime_startFQ + '; to fq storage ');
-		     		  fq += facet + ':' + facet_value;
-		        	  //if(fq.search(self.fq(value)) != -1) {
-		         		  //fq += self.fq(value) + ';';
-		             	  localStorage['fq'] = fq;
-		     		  //}
+		     		  fq += facet + ':' + facet_value + ';';
+		              localStorage['fq'] = fq;
 		     	}
 	     	   	Manager.doRequest(0);
 				

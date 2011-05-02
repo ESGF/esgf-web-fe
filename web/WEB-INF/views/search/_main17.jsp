@@ -4,29 +4,17 @@
 
 <div class="span-18 last" >
 		<div class="span-12">
-			<input id="query" name="text" type="text" value="" />
+			<span id="search-box">
+				<input id="query" name="text" type="text" value="" />
+			</span>
 		</div>
-		<!--  
-		<span class="span-13" id="search-box">
-	    	<input id="query" name="text" type="text" value="" />
-	    </span>
-	    -->
-	    <!--  
-	    
-	    -->
+	   
 	    <div class="span-3" style="margin-top:5px">
-	    <!--  
-	    	<div><a href="" style="font-size:10px">Geospatial Search</a></div>
-	    	<div><a href="" style="font-size:10px">Temporal Search</a></div>
-	    	
-	    	
-	    	<div id="temporal"><a href="<c:url value="/scripts/esgf/temporal_overlay.html" />" id="temporal" rel="#temporal_overlay" style="font-size:10px">Temporal Search</a></div>
-	    	
-	    	-->
+
 	    	<div id="temporal"><a href="<c:url value="/scripts/esgf/temporal_overlay.html" />" id="temporal" rel="#temporal_overlay" style="font-size:10px">Temporal Search</a></div>
 	    	<div id="geo"><a href="<c:url value="/scripts/esgf/geospatial_overlay.html" />" rel="#geospatial_overlay" style="font-size:10px" id="geo">Geospatial Search</a></div>
 	    	
-	    	<div><a href="" style="font-size:10px">Advanced...&#9660;</a></div>
+	    	<div><a href="#" style="font-size:10px">Advanced...&#9660;</a></div>
 	    </div>
 	   	<div class="span-3 last">
 	    	<input id="search-button" type="submit" value="Search" />
@@ -45,66 +33,6 @@
 		    </div>
 	
 	    </div>  
-
-
-
-
-<!--  
-<div id="dialog" title="Temporal Search">
-	<div class="overlay_header" style="display:none">
-	  
-		<div class="overlay_header_title">
-			Temporal Search
-		</div>
-		<div class="overlay_header_buttons">
-			
-		</div>
-	
-	</div>
-	<div class="overlay_border" style="display:none"></div>
-	<div class="overlay_content" style="display:none">
- 		<div id="temporalbox">	
-	  		<div id="lb">  
-		  		<div id="rb">  
-			  		<div id="bb">
-			  			<div id="blc">
-			  				<div id="brc">  
-								<div id="tb">
-									<div id="tlc">
-										<div id="trc">  
-											<div id="temporal_range_title">  
-												Date Range  
-											</div>  
-											<div id="temporal_content1">  	
-												<div id="time_range">  
-													Search from: <input type="text" id="from" name="from" size="10" />  
-													to: <input type="text" id="to" name="to" size="10" />   
-												</div> 
-												<br />  
-												<div id="adv_temp1">  
-													<p class="legend"></p>	   
-												</div> 
-						
-											</div>  
-										</div>
-									</div>
-								</div>
-							</div> 
-						</div>
-					</div>
-				</div>
-			</div>  
-		</div> 
-	</div>
-	<div class="overlay_footer" id="tButton" style="display:none">
-	    <button id="submitTemporal">Submit Temporal Constraints</button> 
-	</div> 
-</div>
-
--->
-
-
-
 
 
 	

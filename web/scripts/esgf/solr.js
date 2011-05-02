@@ -88,6 +88,17 @@
               }
             }));
 
+         var fields = ['project', 'model', 'experiment', 'frequency', 'realm', 'instrument', 'variable', 'cf_variable', 'gcmd_variable']; //['project' , 'model', 'experiment', 'frequency', 'realm', 'instrument', 'variable', 'cf_variable', 'gcmd_variable'];
+
+         for (var i = 0, l = fields.length; i < l; i++) {
+             Manager.addWidget(new AjaxSolr.FacetBrowserWidget({
+               id: fields[i],
+               target: '#' + fields[i],
+               field: fields[i]
+             }));
+           }
+
+         
          Manager.addWidget(new AjaxSolr.CurrentSearchWidget({
               id: 'currentsearch',
               target: '#current-selection'
@@ -101,12 +112,30 @@
               fields: [ 'project', 'model' , 'experiment']
             }));
 
+         
+         Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
+              id: 'geo_browse'
+            }));
+		
 
+         Manager.addWidget(new AjaxSolr.TemporalWidget({
+              id: 'temp-browse'
+            }));
+
+         Manager.addWidget(new AjaxSolr.MetadataWidget({
+                id: 'metadata-browse'
+              }));
+         
+         Manager.addWidget(new AjaxSolr.FacetSideBarWidget({
+             id: 'facet-sidebar'
+           }));
+
+         
+         
          Manager.init();
          Manager.store.addByValue('q','*:*');
 
-         var fields = ['project', 'model', 'experiment', 'frequency', 'realm', 'instrument', 'variable', 'cf_variable', 'gcmd_variable']; //['project' , 'model', 'experiment', 'frequency', 'realm', 'instrument', 'variable', 'cf_variable', 'gcmd_variable'];
-
+         
          var params = {
                   'facet': true,
                   'facet.field': fields,
@@ -127,32 +156,8 @@
             }
          }
 
+        
          
-         Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
-              id: 'geo_browse'
-            }));
-		
-
-         Manager.addWidget(new AjaxSolr.TemporalWidget({
-              id: 'temp-browse'
-            }));
-
-         Manager.addWidget(new AjaxSolr.MetadataWidget({
-                id: 'metadata-browse'
-              }));
-         
-         Manager.addWidget(new AjaxSolr.FacetSideBarWidget({
-             id: 'facet-sidebar'
-           }));
-
-         for (var i = 0, l = fields.length; i < l; i++) {
-              Manager.addWidget(new AjaxSolr.FacetBrowserWidget({
-                id: fields[i],
-                target: '#' + fields[i],
-                field: fields[i]
-              }));
-            }
-
 
 
          Manager.doRequest();

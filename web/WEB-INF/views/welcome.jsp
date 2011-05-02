@@ -166,7 +166,6 @@
     	
     	function addToStorage(fq) {
     		if(fq == undefined) {
-     	  		//alert('add text:' + $('input#home_query').val() + ';');
       	  		if($('input#home_query').val() == '') {
       	  			fq = 'text:' + '*;';
       	  		} else {
@@ -204,15 +203,19 @@
     	
     	$('#home_search-button').click(function(){
     		//alert($('input#home_query').val());
-    		var fq = localStorage['fq'];
-    		addToStorage(fq);
+    		if(ESGF.setting.storage) {
+    			var fq = localStorage['fq'];
+        		addToStorage(fq);
+    		}
+    		
       	  location.href='<c:url value="/live"/>';
     	});
     	$('#home_query').bind('keydown', function(e) {
     		if (e.which === 13) {
-    			//alert($('input#home_query').val());
-        		var fq = localStorage['fq'];
-        		addToStorage(fq);
+    			if(ESGF.setting.storage) {
+    	    		var fq = localStorage['fq'];
+        			addToStorage(fq);
+    			}
           	  location.href='<c:url value="/live"/>';
     		}
     	});

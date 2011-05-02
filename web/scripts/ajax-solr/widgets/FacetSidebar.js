@@ -58,14 +58,18 @@
 				
 				var facet = $(this).parent().parent().find('a.showFacetValues').html();
 				
-				Manager.store.addByValue('fq', facet + ':' + facet_value );
+				/* NEED TO COME BACK - IT ONLY MATCHES whitespace */
+				var index = facet_value.search(' ');
+				var trimmedFacetValue = facet_value.substr(0,index);
+				
+				Manager.store.addByValue('fq', facet + ':' + trimmedFacetValue );
 				if(ESGF.setting.storage) {
 					var fq = localStorage['fq'];
 		     	   	if(fq == null) {
-		     	   		fq = facet + ':' + facet_value + ';';
+		     	   		fq = facet + ':' + trimmedFacetValue + ';';
 		     	   		localStorage['fq'] = fq;
 		     	   	} else {
-			     		  fq += facet + ':' + facet_value + ';';
+			     		  fq += facet + ':' + trimmedFacetValue + ';';
 			              localStorage['fq'] = fq;
 			     	}
 				}

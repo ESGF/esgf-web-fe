@@ -9,7 +9,7 @@
 
 		{{each Facet_values}}
 			<li class="li_facet_value_class" id="${Facet_name}_${$value}" style="display:none">
-        		<a href="#" id="${$value}" class="alink" >${$value}</a>
+        		<a href="#" id="${$value}" class="alink" >${$value} (${Facet_counts[$index]}) </a>
 
 			</li>
     	{{/each}}

@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
-<div class="subheader">
+<div class="subheader" style="margin-bottom:30px">
 	<!--  
 	<div class="push-1 span-2 prepend-1">
 	    <img src="<c:url value="/images/search2.png" />" >

@@ -3,9 +3,8 @@
 
 
 <div class="span-6 last">
-
+<!--  
 	<div class="l2contentleftbox">        
-		<!--  current selection -->
 		  
 		<div class="round-box">
 		    <div class="round-header round-top"> Current Selections</div> 
@@ -13,6 +12,15 @@
 		
 		</div> 
 	</div>      
+-->
+	<div class="l2contentleftbox">
+		<ul class="ul_class">
+			<li class="li_class_title">
+				Current Selections
+			</li>
+		</ul>	
+		<div id="current-selection" class="round-content"></div>
+	</div>
 	
 </div>
 

@@ -628,7 +628,8 @@
         $("div#geo a[rel]").overlay({
             mask: 'darkred',
             effect: 'apple',
-            top: '0%',
+    		left: "30%",
+    		top: "2%",
             onBeforeLoad: function() {
                 $('.apple_overlay').css({'width' : '660px'});
                 var wrap = this.getOverlay().find(".contentWrap");

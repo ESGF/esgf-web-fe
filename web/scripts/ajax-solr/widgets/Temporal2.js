@@ -64,6 +64,8 @@
             $("div#temporal a[rel]").overlay({
                 mask: {opacity: 0.5, color: '#000'},
                 effect: 'apple',
+        		left: "30%",
+        		top: "2%",
                 onBeforeLoad: function() {
                     $('.apple_overlay').css({'width' : '440px'});	
 			        var wrap = this.getOverlay().find(".contentWrap");

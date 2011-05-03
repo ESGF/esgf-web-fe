@@ -179,7 +179,7 @@
                 mask: {opacity: 0.5, color: '#000'},
                 effect: 'apple',
                 top: '2%',
-                left: '2%',
+                left: '20%',
                 onBeforeLoad: function() {
                     $('.apple_overlay').css({'width' : '720px'});
                     var wrap = this.getOverlay().find(".contentWrap");

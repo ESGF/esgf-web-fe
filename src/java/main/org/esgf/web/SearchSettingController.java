@@ -83,25 +83,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-@Controller
-@RequestMapping(value = "/setting/*")
+//@Controller
+//@RequestMapping(value = "/setting/*")
 public class SearchSettingController {
     private final static Logger LOG = Logger.getLogger(SearchSettingController.class);
-    private final static String ESGF_PROP_FILE = "esgf-fe.properties";
+    private final static String ESGF_PROP_FILE = "classpath:esgf-fe.properties";
     private final Properties prop = new Properties();
     private File configFile = null;
 
     public SearchSettingController() throws IOException {
-        LOG.debug("SearchSettingController init ...");
-
-        //---- Determine/Setup Property File -------
-        String ESGF_ROOT = System.getenv().get("ESGF_ROOT");
-        if(null == ESGF_ROOT) {
-            ESGF_ROOT=File.separator+"esg";
-            LOG.warn("The environtment var ESGF_ROOT not detected using default ["+ESGF_ROOT+"]");
-        }
-        String configFilename=ESGF_ROOT+File.separator+"etc"+File.separator+ESGF_PROP_FILE;
-        configFile = new File(configFilename);
+        configFile = null;
         //--------------------------------------------
 
         try {

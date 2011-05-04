@@ -118,7 +118,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         LOG.debug("LAS service tag detected");
         var svcStr = doc.service[0].split("|");
         if (svcStr[0] == "LAS") {
-            output += '<span class="actionitem ai_las"><a href="' + svcStr[2] + '">LAS</a></span>';
+            output += '<span class="actionitem ai_las"><a href="' + svcStr[2] + '">Visualize and Analyze</a></span>';
         }
     }
 

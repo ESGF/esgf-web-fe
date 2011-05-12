@@ -63,7 +63,7 @@ VERBOSE=${VERBOSE:-0}
 esg_dist_url=http://198.128.245.140/dist
 envfile="/etc/esg.env"
 
-web_fe_version=${web_fe_version:-"0.9.5"}
+esgf_web_fe_version=${esgf_web_fe_version:-"0.9.6"}
 
 #--------------
 #User Defined / Settable (public)
@@ -102,8 +102,8 @@ init() {
 setup_web_fe() {
     init
 
-    echo -n "Checking for web front-end  ${web_fe_version}"
-    check_webapp_version "${web_fe_context_root}" "${web_fe_version}"
+    echo -n "Checking for web front-end  ${esgf_web_fe_version}"
+    check_webapp_version "${web_fe_context_root}" "${esgf_web_fe_version}"
     local ret=$?
     ((ret == 0)) && (( ! force_install )) && echo " [OK]" && return 0
         
@@ -173,7 +173,7 @@ setup_web_fe() {
 }
 
 write_web_fe_install_log() {
-    echo "$(date ${date_format}) webapp:${web_fe_context_root}=${web_fe_version} ${web_fe_app_home}" >> ${install_logfile}
+    echo "$(date ${date_format}) webapp:${web_fe_context_root}=${esgf_web_fe_version} ${web_fe_app_home}" >> ${install_logfile}
     dedup ${install_logfile}
     write_as_property web_fe_service_endpoint http://${esgf_host}/${web_fe_context_root}/
     write_as_property web_fe_app_home

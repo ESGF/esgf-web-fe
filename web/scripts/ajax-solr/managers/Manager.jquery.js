@@ -106,6 +106,19 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   		//compare the parameter store with the local store
   		//if the local store contains something that is not in the parameter store, then add to parameter store
   		
+  		//add the type here 
+        Manager.store.addByValue('fq','type:Dataset');
+  	   	var fq = localStorage['fq'];
+        if(fq == null) {
+      	  fq = 'type:Dataset' + ';';
+      	  
+      	  localStorage['fq'] = fq;
+  	  	} else {
+  		  fq = 'type:Dataset' + ';';
+          localStorage['fq'] = fq;
+  	  	}
+        
+  		
   		if(ESGF.setting.storage) {
   			var fq = localStorage['fq'];
   	  		

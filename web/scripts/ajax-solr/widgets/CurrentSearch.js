@@ -72,21 +72,24 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     for (i = 0, l = fq.length; i < l; i++) {
         var fqString = fq[i];
         
-        //check to see if this is a geospatial query (assuming 'east_degrees' is in every geo query)
-        //if it is -> need to change the current selection string
-        if(fqString.search('east_degrees') !== -1)
-        {
-            if($("input[name='areaGroup']:checked").val() === 'circle') {
-            	fqString = self.outputCentroidString(fqString);
+        if(fqString.search('Dataset') == -1) {
+        	//check to see if this is a geospatial query (assuming 'east_degrees' is in every geo query)
+            //if it is -> need to change the current selection string
+            if(fqString.search('east_degrees') !== -1)
+            {
+                if($("input[name='areaGroup']:checked").val() === 'circle') {
+                	fqString = self.outputCentroidString(fqString);
+                }
+                else {
+                	fqString = self.outputBoundingBoxString(fqString);
+                }
             }
-            else {
-            	fqString = self.outputBoundingBoxString(fqString);
-            }
+            links.push($('<a href="#"/>').text('(x) ' + fqString).click( //function () {
+            		
+            	self.removeFacet(fq[i]))
+            );
         }
-        links.push($('<a href="#"/>').text('(x) ' + fqString).click( //function () {
-        		
-        	self.removeFacet(fq[i]))
-        );
+        
     }
 
     if (links.length > 1) {

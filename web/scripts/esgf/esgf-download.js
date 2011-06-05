@@ -55,24 +55,31 @@
  *
  */
 
-
-//alert('loading esgf-download.js');
-
 $(document).ready( function() {
 
 
-    $('#myTabs').bind('tabsselect', function(event, ui) {
-        if (ui.index == 1) {
-            $("#datasetList").empty();
-            // selection tab
-            LOG.debug("Selection tab");
-            // convert object to array
-            var arr = ESGF.util.toArray(ESGF.search.selected);
-            //need a function that replaces periods in the name of the dataset (events in jquery cannot access elements that have these)
-
-            $( "#cartTemplate").tmpl(arr, {
-
-                    replacePeriods : function (word) {
+	function createTemplate(arr) {
+		var query_arr = new Array();
+        //create a query string of just the dataset ids
+    	for(var i=0;i<arr.length;i++) {
+    		query_arr.push(arr[i].doc.id);
+    	}
+        
+    	var solr_url = ESGF.search.fileDownloadTemplateProxyUrl;
+        
+    	var query = { "id" : query_arr };
+    	
+    	$.ajax({
+    		url: solr_url,
+    		global: false,
+    		type: "GET",
+    		data: query,
+    		dataType: 'json',
+    		success: function(data) {
+    			var fileDownloadTemplate = data.response.doc;
+    			
+    			$( "#cartTemplate").tmpl(fileDownloadTemplate, {
+    				replacePeriods : function (word) {
                         return replacePeriod(word);
                     },
                     abbreviate : function (word) {
@@ -104,74 +111,92 @@ $(document).ready( function() {
                         }
                         return convSize;
                     }
+                })
+                .appendTo("#datasetList")
+                .find( "a.showAllChildren" ).click(function() {
+                	var selectedItem = $.tmplItem(this);
+                    var selectedDoc = selectedItem;
+                   
+                    var selectedDocId = selectedDoc.data.dataset_id;
+                    $('input[name=' + selectedDocId + ']').toggle();
 
-                }
-            )
-            .appendTo("#datasetList")
-            .find( "a.showAllChildren" ).click(function() {
-                var selectedItem = $.tmplItem(this);
-                var selectedDoc = selectedItem.data.doc;
-                var selectedDocId = selectedDoc.id;
-                $('input[name=' + selectedDocId + ']').toggle();
-
-                var id = $(this).parent().attr("id").replace(/\./g,"_");
-                $('tr.rows_'+id).toggle();//.css('background-color','yellow');
-                if(this.innerHTML === "Expand") {
-                    this.innerHTML="Collapse";
-                } else {
-                    this.innerHTML="Expand";
-                }
-
-            });
+                    var id = $(this).parent().attr("id").replace(/\./g,"_");
+                    $('tr.rows_'+id).toggle();
+                    if(this.innerHTML === "Expand") {
+                        this.innerHTML="Collapse";
+                    } else {
+                        this.innerHTML="Expand";
+                    }
+                });
+    		}
+    	});
+	}
+	
+	/**
+     * Event for tab selection (as of now, toggling between "Results" and "Datacart")
+     */
+    $('#myTabs').bind('tabsselect', function(event, ui) {
+        if (ui.index == 1) {
+            $("#datasetList").empty();
+            // selection tab
+            LOG.debug("Selection tab");
+            // convert object to array
+            var arr = ESGF.util.toArray(ESGF.search.selected);
+            //need a function that replaces periods in the name of the dataset (events in jquery cannot access elements that have these)
+            
+            if (arr != null || arr != undefined || arr.length == 0 || arr != '') {
+            	createTemplate(arr);
+            }
         }
-
-
-
     });
 
+    /**
+     * Event for checkbox file selection
+     */
     $(".topLevel").live('change', function() {
         LOG.debug("top level changed");
 
         var currentValue = $(this).attr('checked');
 
-        var selectedItem = $.tmplItem(this);
-        var selectedDoc = selectedItem.data.doc;
-        var selectedDocId = selectedDoc.id;
+    	//grab the dataset id from the template
+    	var selectedItem = $.tmplItem(this);
+    	var selectedDocId = selectedItem.data.dataset_id;
 
-
-        //$(this).parent().parent().parent().find(':checkbox').each( function(index) {
-        $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDoc.id)).find(':checkbox').each( function(index) {
+        $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDocId)).find(':checkbox').each( function(index) {
                     $(this).attr('checked', currentValue);
         });
 
     });
 
+    
+    /**
+     * Click event for removing datasets from the data cart
+     */
     $('.remove_dataset_from_datacart').live ('click', function(e) {
     	
-    	//remove from the selected store
+    	//grab the dataset id from the template
     	var selectedItem = $.tmplItem(this);
-        var selectedDoc = selectedItem.data.doc;
-        var selectedDocId = selectedDoc.id;
-    	//alert(ESGF.search.selected + ' ' + selectedDocId);
+    	var selectedDocId = selectedItem.data.dataset_id;
+
+    	//remove the dataset_id from the selected store
     	delete ESGF.search.selected[selectedDocId];
     	
-    	//remove visually
-    	//alert($(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDoc.id)).html());
-    	($('tr.rows_'+ replacePeriod(selectedDoc.id))).remove();
-    	$('tr#' + replacePeriod(selectedDoc.id)).remove();
+    	//remove the dataset and files visually
+    	//file rows in the template
+    	($('tr.rows_'+ replacePeriod(selectedDocId))).remove();
+    	//dataset rows in the template
+    	$('tr#' + replacePeriod(selectedDocId)).remove();
     	
     	//change from remove from cart to add to cart
-    	$('a#ai_select_'+ selectedDoc.id.replace(/\./g, "_")).html('Add To Cart');
+    	$('a#ai_select_'+ selectedDocId.replace(/\./g, "_")).html('Add To Cart');
     	
     });
 
     $(".wgetAllChildren").live ('click', function (e){
 
-
-
-        var selectedItem = $.tmplItem(this);
-        var selectedDoc = selectedItem.data.doc;
-        var selectedDocId = selectedDoc.id;
+    	//grab the dataset id from the template
+    	var selectedItem = $.tmplItem(this);
+    	var selectedDocId = selectedItem.data.dataset_id;
 
 
         var selectedFileUrls = selectedDoc.file_url;
@@ -181,20 +206,15 @@ $(document).ready( function() {
 
          var ids   = new Array();
          var values = new Array();
-            //jQuery("input:checkbox:checked").each(function(){
-         //$(this).parent().parent().parent().find(':checkbox:checked').each( function(index) {
-         $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDoc.id)).find(':checkbox:checked').each( function(index) {
+         $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDocId)).find(':checkbox:checked').each( function(index) {
                  if(this.id != selectedDocId) {
                  ids.push(this.id) ;
                  values.push(this.value);
                 }
             });
 
-        //for(var i=0;i<selectedFileUrls.length;i++) {
         for(var i=0;i<ids.length;i++) {
-            //if(selectedDoc.service_type[i] == 'HTTPServer') {
-                queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
-            //}
+        	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
         }
 
         var url = '/esgf-web-fe/wgetproxy';
@@ -213,33 +233,25 @@ $(document).ready( function() {
     });
 
 
-    /* creation of a variable inside the template - may need this later
-    $.extend( $.tmpl.tag, {
-        "var": {
-            open: "var $1;"
-        }
-    });
-    */
 
+    /*
+     * This function is used primarily to avoid annoying errors that occur with strings that have periods in them
+     */
+    function replacePeriod(word)
+    {
+        var newWord = word.replace(/\./g,"_");
+        return newWord;
+    }
+
+
+    function printObject(object) {
+        var output = '';
+        for (var property in object) {
+          output += property + ': ' + object[property]+'; ';
+        }
+        alert(output);
+    }
 
 });
 
 
-
-/*
- * This function is used primarily to avoid annoying errors that occur with strings that have periods in them
- */
-function replacePeriod(word)
-{
-    var newWord = word.replace(/\./g,"_");
-    return newWord;
-}
-
-
-function printObject(object) {
-    var output = '';
-    for (var property in object) {
-      output += property + ': ' + object[property]+'; ';
-    }
-    alert(output);
-}

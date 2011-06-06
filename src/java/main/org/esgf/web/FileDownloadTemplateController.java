@@ -52,7 +52,7 @@
 
 /**
  *
- * @author Feiyi Wang (fwang2@ornl.gov)
+ * @author John Harney (harneyjf@ornl.gov)
  *
  */
 
@@ -291,7 +291,9 @@ public class FileDownloadTemplateController {
      
         // create file/url element
         Element urlEl = new Element("url");
-        urlEl.addContent(docJSON.get("url").toString());
+        JSONArray urlsJSON = docJSON.getJSONArray("url");
+        
+        urlEl.addContent(urlsJSON.get(0).toString());
         fileEl.addContent(urlEl);
      
         
@@ -303,7 +305,6 @@ public class FileDownloadTemplateController {
             Element serviceEl = new Element("service");
             String serviceStr = docsJSON.get(i).toString();
             String [] serviceTokens = serviceStr.split("|");
-            
             //serviceEl.addContent(docsJSON.get(i).toString());
             serviceEl.addContent(serviceTokens[2]);
             LOG.debug("service: " + serviceTokens[2]);

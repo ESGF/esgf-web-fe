@@ -198,38 +198,53 @@ $(document).ready( function() {
     	var selectedItem = $.tmplItem(this);
     	var selectedDocId = selectedItem.data.dataset_id;
 
+        //var selectedFileUrls = selectedItem.data.file_url;
+        //alert('selectedFileUrls: ' + selectedFileUrls); 
+        
+        
 
-        var selectedFileUrls = selectedDoc.file_url;
-        var selectedFileIds = selectedDoc.file_id;
         var queryString = 'type=create&id=' + selectedDocId;
 
-
-         var ids   = new Array();
-         var values = new Array();
-         $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDocId)).find(':checkbox:checked').each( function(index) {
-                 if(this.id != selectedDocId) {
-                 ids.push(this.id) ;
-                 values.push(this.value);
-                }
-            });
+    	
+    	var ids   = new Array();
+        var values = new Array();
+        $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDocId)).find(':checkbox:checked').each( function(index) {
+                if(this.id != selectedDocId) {
+                ids.push(this.id);
+                values.push(this.value);
+               }
+           });
+        
+        //alert('values: ' + values);
 
         for(var i=0;i<ids.length;i++) {
         	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
         }
+        
 
         var url = '/esgf-web-fe/wgetproxy';
-
+        
         //assemble the input fields with the query string
         var input = '';
         jQuery.each(queryString.split('&'), function(){
             var pair = this.split('=');
             input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
         });
-
+        
+        
+        
         //send request
         jQuery('<form action="'+ url +'" method="post">'+input+'</form>')
         .appendTo('body').submit().remove();
+        
+        
+        /*
+        var selectedFileIds = selectedDoc.file_id;
 
+
+
+
+        */
     });
 
 

@@ -108,6 +108,7 @@ public class WgetGeneratorController {
             String filename = request.getParameter("id") + ".sh";
 
             LOG.debug("filename = " + filename);
+            
             // create content
 
             String wgetText = "#!/bin/sh\n";
@@ -122,7 +123,8 @@ public class WgetGeneratorController {
             wgetText += "download() {\n";
 
             for(int i=0;i<request.getParameterValues("child_url").length;i++) {
-            wgetText += "\twget '" + request.getParameterValues("child_url")[i] + "'\n";
+                LOG.debug("CHILD_URL: " + request.getParameterValues("child_url")[i]);
+                wgetText += "\twget '" + request.getParameterValues("child_url")[i] + "'\n";
             }
 
             wgetText += "}\n";

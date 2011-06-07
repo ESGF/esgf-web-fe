@@ -124,23 +124,28 @@ public class MetadataExtractorController {
 
         String requestUri = request.getRequestURI();
         LOG.debug("requestUri=" + requestUri);
+        
+        String jsonContent = "";
 
-
+        String id = request.getParameter("id");
+        LOG.debug("id: " + id);
+        String title = request.getParameter("title");
+        LOG.debug("title: " + title);
+        
+        //String format = request.getParameter("metadataformat");
+        //String filename = request.getParameter("metadatafile");
+        /*
         if(METADATA_FILE_LOCATION.startsWith("/var/folders/"))
         {
             METADATA_FILE_LOCATION = "/tmp/";
         }
 
 
-        String id = request.getParameter("id");
-        String format = request.getParameter("metadataformat");
-        String filename = request.getParameter("metadatafile");
-        LOG.debug("URL: " + filename);
+        
 
         URL f = new URL(filename);
 
-        String jsonContent = "";
-
+        
         if(format.equalsIgnoreCase("oai"))
         {
             jsonContent = processOAI(f,id);
@@ -157,7 +162,7 @@ public class MetadataExtractorController {
         {
             jsonContent = processTHREDDS(f,id);
         }
-
+         */
 
         return jsonContent;
     }

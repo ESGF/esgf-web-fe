@@ -104,6 +104,8 @@ ESGF.search.selected = ESGF.search.selected || {};
 // flag for using html5 localStorage
 ESGF.setting.storage = true;
 
+
+
 /**
  * Proxy for creating the template for file downloads.
  *
@@ -112,6 +114,12 @@ ESGF.setting.storage = true;
  * @type String
  */
 ESGF.search.fileDownloadTemplateProxyUrl = '/esgf-web-fe/solrfileproxy',
+
+
+
+
+
+
 
 // general util functions
 ESGF.util.toArray = function (obj) {

@@ -1,5 +1,8 @@
 <%@ page isELIgnored="true" %>
 
+<script id="metadata_summaryTemplate" type="text/x-jquery-tmpl">
+    
+</script>
 
 <script id="cartTemplate" type="text/x-jquery-tmpl">
  	<tr class="top_level_data_item" id="${$item.replacePeriods(dataset_id)}">

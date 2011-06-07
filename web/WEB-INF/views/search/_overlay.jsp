@@ -84,4 +84,5 @@
 </div>
 
 <div id="temp-browse"></div>
+ 
 <div id="metadata-browse"></div>

@@ -57,6 +57,23 @@
 
 $(document).ready( function() {
 
+	/**
+     * Event for tab selection (as of now, toggling between "Results" and "Datacart")
+     */
+    $('#myTabs').bind('tabsselect', function(event, ui) {
+        if (ui.index == 1) {
+            $("#datasetList").empty();
+            // selection tab
+            LOG.debug("Selection tab");
+            // convert object to array
+            var arr = ESGF.util.toArray(ESGF.search.selected);
+            //need a function that replaces periods in the name of the dataset (events in jquery cannot access elements that have these)
+            
+            if (arr != null || arr != undefined || arr.length == 0 || arr != '') {
+            	createTemplate(arr);
+            }
+        }
+    });
 
 	function createTemplate(arr) {
 		var query_arr = new Array();
@@ -132,23 +149,7 @@ $(document).ready( function() {
     	});
 	}
 	
-	/**
-     * Event for tab selection (as of now, toggling between "Results" and "Datacart")
-     */
-    $('#myTabs').bind('tabsselect', function(event, ui) {
-        if (ui.index == 1) {
-            $("#datasetList").empty();
-            // selection tab
-            LOG.debug("Selection tab");
-            // convert object to array
-            var arr = ESGF.util.toArray(ESGF.search.selected);
-            //need a function that replaces periods in the name of the dataset (events in jquery cannot access elements that have these)
-            
-            if (arr != null || arr != undefined || arr.length == 0 || arr != '') {
-            	createTemplate(arr);
-            }
-        }
-    });
+	
 
     /**
      * Event for checkbox file selection
@@ -238,13 +239,7 @@ $(document).ready( function() {
         .appendTo('body').submit().remove();
         
         
-        /*
-        var selectedFileIds = selectedDoc.file_id;
-
-
-
-
-        */
+        
     });
 
 

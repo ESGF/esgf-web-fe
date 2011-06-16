@@ -95,16 +95,32 @@
                 onBeforeLoad: function() {
                 	
                 	LOG.debug("In Metadata - onBeforeLoad");
-                	/*
+                	
                     $('.apple_overlay').css({'width' : '720px'});
                     var wrap = this.getOverlay().find(".contentWrap");
 				    wrap.load(this.getTrigger().attr("href"));
-				    */
+				    
                 	
                 },//end onBeforeLoad
                 onLoad: function() {
                 	LOG.debug("In Metadata - onLoad");
                 	alert('Metadata summary disabled');
+                	
+                	//find the appropriate document in the solr index
+                	//note this HAS to be changed to a more efficient way to grab this data
+                    var doc = self.findDoc(self.globalRecordId);
+                	
+                    self.metadata_report(doc);
+                    
+
+                    alert('showing metadata');
+                    $(".overlay_header").show();
+                    $(".overlay_header_buttons").hide(); 
+                    $(".overlay_content").show();
+                    $(".overlay_footer").show();
+                    $(".overlay_border").show();
+                    
+                    
                 	/*
                     $(".scrollable").scrollable({ vertical: true, mousewheel: true });	
                     
@@ -124,8 +140,13 @@
                     */
                 },//end onLoad
                 onClose: function() {
-                	LOG.debug("In Metadata - on close")
-                	
+                	LOG.debug("In Metadata - on close");
+
+                    $(".overlay_header").hide();
+                    $(".overlay_content").hide();
+                    $(".overlay_header_buttons").hide();    
+                    $(".overlay_footer").hide();
+                    $(".overlay_border").hide();
                 	/*
                 	//rehide the overlay
                     $(".overlay_header").hide();
@@ -179,7 +200,9 @@
             $('.addedMetadata').remove();
             $('.addedMetadataTitle').remove();
             
-            //self.processUsingTemplate(record,doc);
+            
+            
+            self.processUsingTemplate(record,doc);
             
             //self.processUsingHtml(record,doc);  
             
@@ -191,7 +214,56 @@
         
         processUsingTemplate: function(record,doc) {
         	for (var property in doc) {
+        		var field = doc[property];
+        		
+        		$('.m_items').append('<div class="m_item" id="' + property + '"></div>');
+        		$('#'+property).append('<div class="leftsd">' + property + '</div>');
+        		
+        		if(field instanceof Array)  {
+        			var str = '';
+        			for(var i=0;i<field.length;i++) {
+        				if(field.length > 1) {
+            				str += field[i] + ', ';
+        				} else {
+        					str += field[i];
+        				}
+        			}
+            		$('#'+property).append('<div class="rightsd">' + str + '</div>');
+        		} else {
+        			$('#'+property).append('<div class="rightsd">' + field + '</div>');
+            		
+        		}
+        		/*
+        		$('.m_items').append('<div class="m_item"><div class="leftsd" id="' + property + '">' + property + '</div></div>');
+        		
+        		$('#'+property).append('<div class="leftsd">' + 'jjj' + '</div>');
+        		*/
+        		
+        		/* 
+        		$('.m_items').append('<div class="m_item"><div class="leftsd" id="' + property + '">' + property + '</div></div>' );
+            	
+        		
+        		if(field instanceof Array)  {
+        			alert('property: ' + property + ' field: ' + field + " size: " + field.length + " field[0]: " + field[0]);
+        			for(var i=0;i<field.length;i++) {
+            			//alert('field val: ' + field[i]);
+            			//alert('appending: ' + field[i] + ' to ' + field);
+            			//$('#'+property).append(' ' + field[i]);
+            		}
+        		}
+        		else {
+        			$('#'+property).append(' ' + field);
+        		}
+        		*/
+        		
+        		
+        		
+        		/*
+        		if(property == 'variable') {
+        			alert('Variable: ' + doc[property][0]);
+        		}
         		$('.m_items').append('<div class="m_item"><div class="leftsd">' + property + '</div><div>' + doc[property] + '</div></div>' );
+        		*/
         	}
         	
         },

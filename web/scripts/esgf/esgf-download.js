@@ -87,6 +87,7 @@ $(document).ready( function() {
         
     	var query = { "id" : query_arr };
     	
+    	
     	$.ajax({
     		url: solr_url,
     		global: false,
@@ -97,6 +98,7 @@ $(document).ready( function() {
     			var fileDownloadTemplate = data.response.doc;
     			
     			$( "#cartTemplate").tmpl(fileDownloadTemplate, {
+    				
     				replacePeriods : function (word) {
                         return replacePeriod(word);
                     },
@@ -129,6 +131,7 @@ $(document).ready( function() {
                         }
                         return convSize;
                     }
+                    /**/
                 })
                 .appendTo("#datasetList")
                 .find( "a.showAllChildren" ).click(function() {
@@ -148,6 +151,7 @@ $(document).ready( function() {
                 });
     		}
     	});
+    	
 	}
 	
 	

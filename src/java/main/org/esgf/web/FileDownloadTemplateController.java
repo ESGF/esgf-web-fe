@@ -308,7 +308,7 @@ public class FileDownloadTemplateController {
             String [] serviceTokens = serviceStr.split("|");
             //serviceEl.addContent(docsJSON.get(i).toString());
             serviceEl.addContent(serviceTokens[2]);
-            LOG.debug("service: " + serviceTokens[2]);
+            //LOG.debug("service: " + serviceTokens[2]);
             servicesEl.addContent(serviceEl);
         }
         fileEl.addContent(servicesEl);

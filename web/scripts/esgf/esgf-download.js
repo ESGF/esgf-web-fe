@@ -87,70 +87,72 @@ $(document).ready( function() {
         
     	var query = { "id" : query_arr };
     	
-    	
-    	$.ajax({
-    		url: solr_url,
-    		global: false,
-    		type: "GET",
-    		data: query,
-    		dataType: 'json',
-    		success: function(data) {
-    			var fileDownloadTemplate = data.response.doc;
-    			
-    			$( "#cartTemplate").tmpl(fileDownloadTemplate, {
-    				
-    				replacePeriods : function (word) {
-                        return replacePeriod(word);
-                    },
-                    abbreviate : function (word) {
-                        var abbreviation = word;
-                        if(word.length > 25) {
-                            abbreviation = word.slice(0,10) + '...' + word.slice(word.length-11,word.length);
-                        }
-                        return abbreviation;
-                    },
-                    addOne: function(num) {
-                        return (num+1);
-                    },
-                    sizeConversion : function(size) {
-                        var convSize;
-                        if(size == null) {
-                            convSize = 'N/A';
-                        } else {
-                            var sizeFlt = parseFloat(size,10);
-                            if(sizeFlt > 1000000000) {
-                                var num = 1000000000;
-                                convSize = (sizeFlt / num).toFixed(2) + ' GB';
-                            } else if (sizeFlt > 1000000) {
-                                var num = 1000000;
-                                convSize = (sizeFlt / num).toFixed(2) + ' MB';
-                            } else {
-                                var num = 1000;
-                                convSize = (sizeFlt / num).toFixed(2) + ' KB';
+    	if(query_arr.length != 0) {
+    		$.ajax({
+        		url: solr_url,
+        		global: false,
+        		type: "GET",
+        		data: query,
+        		dataType: 'json',
+        		success: function(data) {
+        			var fileDownloadTemplate = data.response.doc;
+        			
+        			$( "#cartTemplate").tmpl(fileDownloadTemplate, {
+        				
+        				replacePeriods : function (word) {
+                            return replacePeriod(word);
+                        },
+                        abbreviate : function (word) {
+                            var abbreviation = word;
+                            if(word.length > 25) {
+                                abbreviation = word.slice(0,10) + '...' + word.slice(word.length-11,word.length);
                             }
+                            return abbreviation;
+                        },
+                        addOne: function(num) {
+                            return (num+1);
+                        },
+                        sizeConversion : function(size) {
+                            var convSize;
+                            if(size == null) {
+                                convSize = 'N/A';
+                            } else {
+                                var sizeFlt = parseFloat(size,10);
+                                if(sizeFlt > 1000000000) {
+                                    var num = 1000000000;
+                                    convSize = (sizeFlt / num).toFixed(2) + ' GB';
+                                } else if (sizeFlt > 1000000) {
+                                    var num = 1000000;
+                                    convSize = (sizeFlt / num).toFixed(2) + ' MB';
+                                } else {
+                                    var num = 1000;
+                                    convSize = (sizeFlt / num).toFixed(2) + ' KB';
+                                }
+                            }
+                            return convSize;
                         }
-                        return convSize;
-                    }
-                    /**/
-                })
-                .appendTo("#datasetList")
-                .find( "a.showAllChildren" ).click(function() {
-                	var selectedItem = $.tmplItem(this);
-                    var selectedDoc = selectedItem;
-                   
-                    var selectedDocId = selectedDoc.data.dataset_id;
-                    $('input[name=' + selectedDocId + ']').toggle();
+                        /**/
+                    })
+                    .appendTo("#datasetList")
+                    .find( "a.showAllChildren" ).click(function() {
+                    	var selectedItem = $.tmplItem(this);
+                        var selectedDoc = selectedItem;
+                       
+                        var selectedDocId = selectedDoc.data.dataset_id;
+                        $('input[name=' + selectedDocId + ']').toggle();
 
-                    var id = $(this).parent().attr("id").replace(/\./g,"_");
-                    $('tr.rows_'+id).toggle();
-                    if(this.innerHTML === "Expand") {
-                        this.innerHTML="Collapse";
-                    } else {
-                        this.innerHTML="Expand";
-                    }
-                });
-    		}
-    	});
+                        var id = $(this).parent().attr("id").replace(/\./g,"_");
+                        $('tr.rows_'+id).toggle();
+                        if(this.innerHTML === "Expand") {
+                            this.innerHTML="Collapse";
+                        } else {
+                            this.innerHTML="Expand";
+                        }
+                    });
+        		}
+        	});
+    	}
+    	
     	
 	}
 	

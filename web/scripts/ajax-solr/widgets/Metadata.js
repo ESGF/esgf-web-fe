@@ -96,7 +96,7 @@
                 	
                 	LOG.debug("In Metadata - onBeforeLoad");
                 	
-                    $('.apple_overlay').css({'width' : '720px'});
+                    $('.apple_overlay').css({'width' : '750px'},{'height':'700px'});
                     var wrap = this.getOverlay().find(".contentWrap");
 				    wrap.load(this.getTrigger().attr("href"));
 				    
@@ -104,7 +104,6 @@
                 },//end onBeforeLoad
                 onLoad: function() {
                 	LOG.debug("In Metadata - onLoad");
-                	alert('Metadata summary disabled');
                 	
                 	//find the appropriate document in the solr index
                 	//note this HAS to be changed to a more efficient way to grab this data
@@ -113,7 +112,6 @@
                     self.metadata_report(doc);
                     
 
-                    alert('showing metadata');
                     $(".overlay_header").show();
                     $(".overlay_header_buttons").hide(); 
                     $(".overlay_content").show();
@@ -147,14 +145,14 @@
                     $(".overlay_header_buttons").hide();    
                     $(".overlay_footer").hide();
                     $(".overlay_border").hide();
-                	/*
+                	
                 	//rehide the overlay
                     $(".overlay_header").hide();
                     $(".overlay_content").hide();
                     $(".overlay_header_buttons").hide();    
                     $(".overlay_footer").hide();
                     $(".overlay_border").hide();
-                    */
+                    
                 }//end onClose
             });
         },
@@ -194,15 +192,20 @@
          * Processes the metadata from both solr and the raw xml file
          */
         processMetadataRecord: function(record,doc) {
-        	alert('process metadata record here for ' + doc.id);
+        	//alert('process metadata record here for ' + doc.id);
 
             var self = this;
             $('.addedMetadata').remove();
             $('.addedMetadataTitle').remove();
             
-            
-            
-            self.processUsingTemplate(record,doc);
+            //should probably use a closure here
+            if(ESGF.setting.metadata_summary == 'html') {
+            	self.processUsingHtml(record,doc);
+            } else if(ESGF.setting.metadata_summary == 'oldhtml') {
+            	self.processUsingOldHtml(record,doc);
+            } else if(ESGF.setting.metadata_summary == 'oldhtml') {
+            	self.processUsingDropBox(record,doc);
+            }
             
             //self.processUsingHtml(record,doc);  
             
@@ -212,63 +215,88 @@
         }, //end processMetadataRecord
         
         
-        processUsingTemplate: function(record,doc) {
-        	for (var property in doc) {
-        		var field = doc[property];
+        processUsingHtml: function(record,doc) {
+        	
+        	//add the title first 
+    		$('div#metadata_summary_dataset').after('<div class="addedMetadataTitle">' + 'Dataset: ' + doc['title']);
+        	var degreeCount = 0;
+        	var self = this;
+        	
+    		for (var property in doc) {
         		
-        		$('.m_items').append('<div class="m_item" id="' + property + '"></div>');
-        		$('#'+property).append('<div class="leftsd">' + property + '</div>');
-        		
-        		if(field instanceof Array)  {
-        			var str = '';
-        			for(var i=0;i<field.length;i++) {
-        				if(field.length > 1) {
-            				str += field[i] + ', ';
-        				} else {
-        					str += field[i];
-        				}
-        			}
-            		$('#'+property).append('<div class="rightsd">' + str + '</div>');
-        		} else {
-        			$('#'+property).append('<div class="rightsd">' + field + '</div>');
+        		//only do this if it is NOT the title 
+        		if(property != 'title') {
+        			var field = doc[property];
+
+            		$('.m_items').append('<div class="m_item" id="' + property + '"></div>');
+            		
+            		/*
+            		 * Property output
+            		 */
+            		//special case for variables
+            		if(property != 'text') {//don't want to display random text in report
+	            		if(property == 'variable') {
+	                		$('#'+property).append('<div class="leftsd">' + property + '(s):</div>');
+	            		} else if (property.search("degrees") == -1) {
+	                		$('#'+property).append('<div class="leftsd">' + property + ':</div>');
+	            		}	
+            		}
+            		
+            		/*
+            		 * Property value output
+            		 */
+            		//if the value is a "geo" property, it must be handled differently
+            		if(property.search("degrees") != -1) {
+            			degreeCount = degreeCount + 1;
+            			if(degreeCount == 4) {
+            				//alert('wd: ' + doc['west_degrees'] + ' ed: ' + ' sd: ' + ' nd: ');
+            				$('#'+property).append('<div class="leftsd">' + 'Geospatial Information' + ':</div>');
+            				
+            				var str = '<span style="padding-bottom:10px;font-weight:bold">Bounding Coordinates</span><br /><span style="padding-right:50px;">West degree: ' + doc['west_degrees'] + ' &deg;</span>  East degree: ' + doc['east_degrees'] +  
+            				          ' &deg;<br /><span style="padding-right:50px;">South degree: ' + doc['south_degrees'] +  ' &deg;</span>North degree: ' + doc['north_degrees'] + ' &deg;';
+            				
+            				$('#'+property).append('<div class="rightsd">' + str + '<div id="geo_map">' + 'map her' + '</div></div>');
+            				
+            				self.display_meta_map(doc['north_degrees'], doc['south_degrees'], doc['west_degrees'], doc['east_degrees']);
+            				
+            			}
+            			
+            			
+            		} else if (property != 'text'){ //don't want to display random text
+            			//if the value is an array it must be handled differently, as browser will view it as one giant string
+                		if(field instanceof Array)  {
+                			var str = '';
+                			for(var i=0;i<field.length;i++) {
+                				if(field.length > 1 && i < field.length-1) {
+                    				str += field[i] + ', ';
+                				} else {
+                					str += field[i];
+                				}
+                			}
+                    		$('#'+property).append('<div class="rightsd">' + str + '</div>');
+                		} else {
+                			$('#'+property).append('<div class="rightsd">' + field + '</div>');
+                    		
+                		}
+            		}
+            		
+            		
             		
         		}
-        		/*
-        		$('.m_items').append('<div class="m_item"><div class="leftsd" id="' + property + '">' + property + '</div></div>');
-        		
-        		$('#'+property).append('<div class="leftsd">' + 'jjj' + '</div>');
-        		*/
-        		
-        		/* 
-        		$('.m_items').append('<div class="m_item"><div class="leftsd" id="' + property + '">' + property + '</div></div>' );
-            	
-        		
-        		if(field instanceof Array)  {
-        			alert('property: ' + property + ' field: ' + field + " size: " + field.length + " field[0]: " + field[0]);
-        			for(var i=0;i<field.length;i++) {
-            			//alert('field val: ' + field[i]);
-            			//alert('appending: ' + field[i] + ' to ' + field);
-            			//$('#'+property).append(' ' + field[i]);
-            		}
-        		}
-        		else {
-        			$('#'+property).append(' ' + field);
-        		}
-        		*/
         		
         		
-        		
-        		/*
-        		if(property == 'variable') {
-        			alert('Variable: ' + doc[property][0]);
-        		}
-        		$('.m_items').append('<div class="m_item"><div class="leftsd">' + property + '</div><div>' + doc[property] + '</div></div>' );
-        		*/
         	}
-        	
+    		
+    		//add border
+    		$('.overlay_footer').before('<div class="overlay_border"></div>');
+    		
+    		//add button
+    		/*
+    		$('.overlay_footer').append('<span class="box2 border2"><div style="float:left"><img src="images/shopping-cart.png" style="width:20px;height:20px;margin-top:6px;padding-right:3px;"/></div><div style="margin-top:6px;margin-left:3px;">ADD TO CART</div></span>');
+        	*/
         },
         
-        processUsingHtml: function(record,doc) {
+        processUsingOldHtml: function(record,doc) {
         	var self = this;
         	
         	for (var property in doc) {
@@ -318,6 +346,9 @@
         },
                
         
+        processUsingDropBox: function(record,doc) {
+        	alert('Drop Box');
+        },
         
         /*
          * Helper methods for bulk array processing (similar to map reduce)

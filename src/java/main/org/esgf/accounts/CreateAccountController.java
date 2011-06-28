@@ -41,7 +41,6 @@ public class CreateAccountController {
     public final static String PAR_URL = "url";
     public final static String PAR_DATE = "date";
     
-    private final static String[] GROUP_NAMES = new String[] { "CMIP5 Research", "NASA OBS", "ORNL OBS" };
     private final static String ROLE_NAME = "User";
     
     // session attribute to prevent automatic submission by robots
@@ -62,10 +61,6 @@ public class CreateAccountController {
         try {
             this.userInfoDAO = new UserInfoCredentialedDAO("rootAdmin", props.getProperty("security.admin.password"), props);
             this.groupRoleDAO = new GroupRoleDAO(props);
-            // FIXME
-            for (final String group : GROUP_NAMES) {
-                groupRoleDAO.addGroup(group);
-            }
             groupRoleDAO.addRole(ROLE_NAME);
         } catch(Exception e) {
             LOG.warn(e.getMessage());
@@ -92,18 +87,7 @@ public class CreateAccountController {
 
     @RequestMapping(method=RequestMethod.GET)
     protected ModelAndView doGet(final HttpServletRequest request, final @ModelAttribute(MODEL_NAME) CreateAccountBean user) throws Exception {
-                
-        /* FIXME
-        user.setUserName("testman");
-        user.setFirstName("Tester");
-        user.setMiddleName("Middle");
-        user.setLastName("Smith");
-        user.setCity("Los Angeles");
-        user.setOrganization("JPL");
-        user.setCountry("U.S.");
-        user.setEmail("joe.tester@test.com");
-        user.setState("California"); */
-        
+                        
         // store UUID value in the session for later verification
         if (LOG.isDebugEnabled()) LOG.debug("GET validation token="+user.getUuid());
         request.getSession().setAttribute(SESSION_ATTRIBUTE, user.getUuid());
@@ -149,10 +133,6 @@ public class CreateAccountController {
                     userInfoDAO.setPassword(user.getUser(), user.getPassword1());
                     // generate verification token
                     final String verificationToken = userInfoDAO.genVerificationToken(user.getOpenid());
-                    // set permissions - FIXME
-                    for (final String group : GROUP_NAMES) {
-                        userInfoDAO.addPermission(user.getUser(), group, ROLE_NAME);
-                    }
                     
                     // notify user
                     notifier.accountCreated(getServerUrl(request), user.getUser(), verificationToken);

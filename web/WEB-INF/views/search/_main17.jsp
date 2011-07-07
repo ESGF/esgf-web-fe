@@ -13,8 +13,9 @@
 
 	    	<div id="temporal"><a href="<c:url value="/scripts/esgf/temporal_overlay.html" />" id="temporal" rel="#temporal_overlay" style="font-size:10px">Temporal Search</a></div>
 	    	<div id="geo"><a href="<c:url value="/scripts/esgf/geospatial_overlay.html" />" rel="#geospatial_overlay" style="font-size:10px" id="geo">Geospatial Search</a></div>
+	    	<div id="distributed"><a href="#" style="font-size:10px" id="distributed">Turn on Distributed Search</a></div>
 	    	
-	    	<div><a href="#" style="font-size:10px">Advanced...&#9660;</a></div>
+	    	<!-- <div><a href="#" style="font-size:10px">Advanced...&#9660;</a></div>  -->
 	    </div>
 	   	<div class="span-3 last">
 	    	<input id="search-button" type="submit" value="Search" />
@@ -143,6 +144,28 @@
                 Manager.doRequest(0);
             }
         });
+         
+        $('div#distributed').click(function () {
+        	//alert($('a#distributed').html());
+        	//if($('a#distributed').html() == 'Turn off Distributed Search') {
+        	if(ESGF.setting.searchType == 'local') {
+        		//alert('change to distributed');
+        		//change the text to Distributed
+            	$('a#distributed').html('Turn off Distributed Search');
+            	//change the flag to Distributed
+            	ESGF.setting.searchType = 'Distributed';
+            	Manager.doRequest(0);
+        	} else {
+        		//alert('change to local');
+        		//change the text to Local
+            	$('a#distributed').html('Turn on Distributed Search');
+            	//change the flag to Local
+            	ESGF.setting.searchType = 'local';
+            	Manager.doRequest(0);
+        	}
+        }); 
+         
+         
     });
 
 </script>

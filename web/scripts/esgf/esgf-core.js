@@ -107,6 +107,8 @@ ESGF.setting.storage = true;
 // flag for determining which metadata summary to display
 ESGF.setting.metadata_summary = 'html';
 
+ESGF.setting.searchType = 'local';
+
 /**
  * Proxy for creating the template for file downloads.
  *

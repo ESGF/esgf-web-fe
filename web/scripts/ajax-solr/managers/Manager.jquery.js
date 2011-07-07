@@ -69,19 +69,21 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
       executeRequest: function (servlet) {
           var self = this;
           self.loadExistingQueries();
+          self.appendDistributedRequestHandler();
+          //alert('this.store.string(): ' + this.store.string());
           if (this.proxyUrl) {
           // jQuery.post(this.proxyUrl, 
           // { query: "I am something" }, 
           // function (data) { self.handleResponse(data); }, 
           // 'json');
-          jQuery.ajax({
-              url: this.proxyUrl,
-              data: this.store.string(),
-              type: 'GET',
-              success: function(data) {self.handleResponse(data);},
-              error: function() {alert("error");},
-              dataType: 'json'
-          });
+	          jQuery.ajax({
+	              url: this.proxyUrl,
+	              data: this.store.string(),
+	              type: 'GET',
+	              success: function(data) {self.handleResponse(data);},
+	              error: function() {alert("error");},
+	              dataType: 'json'
+	          });
           }
           else {
 	          jQuery.getJSON(this.solrUrl + servlet + 
@@ -90,6 +92,22 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           }
       },
   
+      appendDistributedRequestHandler: function () {
+
+    	 
+      	 //alert('IN Manager appendDistribubtedRequestHandler...ESGF.setting.searchType: ' + ESGF.setting.searchType);
+      	 if(ESGF.setting.searchType == 'Distributed') {
+      		//alert('adding distrib');
+         	 
+          	 Manager.store.addByValue('qt','/distrib');
+      	 }
+      	 else {
+      		//alert('removing distrib');
+        	 
+      		Manager.store.removeByValue('qt','/distrib');
+      	 }
+      	
+      },
       
       /**
        * This property (private) loads any existing constraint from the local store into the search

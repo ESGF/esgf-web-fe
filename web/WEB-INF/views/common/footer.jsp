@@ -11,6 +11,7 @@
 		    	<c:when test="${principal=='anonymousUser'}">Guest User</c:when>
 		   		<c:otherwise>User: <c:out value="${principal.username}"/></c:otherwise>
 		   	</c:choose>
+		   	| ESGF P2P Version <spring:message code="esgf.footer.version" />
 		   	</p> 
 		</div>
 	</div>
@@ -18,7 +19,7 @@
 	<!-- display copyright -->
 	<div class="prepend-3 span-6 last">
 		<div class="footerright">
-        	<a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a>
+        	<a href="#">Privacy Policy</a> | <a href="#">Terms of Use </a> 
         </div>
 	</div>
 </div>  

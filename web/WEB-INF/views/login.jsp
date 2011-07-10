@@ -15,16 +15,15 @@
             <c:set var="openid_cookie" value="esgf.idp.cookie"/>
 
             <c:choose>
-
                 <c:when test="${principal=='anonymousUser'}">
                   
                     <!-- User is not authenticated -->
                     <p/>
 	             	<h1>ESGF Login</h1>
-	            	                           	                         	
-	                <!-- the value of the action attribute must be the same as the URL intercepted by the spring security filter  -->
+	                                        
+				    <!-- the value of the action attribute must be the same as the URL intercepted by the spring security filter  -->
 	                <form name="loginForm" action='<c:url value="/j_spring_openid_security_check"/>' >
-	                    <div class="panel">     
+	                    <div class="panel">  	                         	
 	                    	<c:if test="${param['failed']==true}">
 	                    		<span class="myerror">Error: unable to resolve OpenID identifier.</span>
 	                		</c:if>                           

@@ -43,6 +43,11 @@
                          <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
+                <c:when test="${layoutType=='accounts'}">
+                    <div class="span-24 last" id="main">
+                         <ti:insertAttribute name="main" />
+                    </div>
+                </c:when>
                 <c:when test="${layoutType=='left6-main18'}">
                 	<div class="span-24 searchBorder" style="border: 1px solid #eeeeee; width:948px" >
 	                	<div class="span-24 last" id="subheader" style="width:948px">

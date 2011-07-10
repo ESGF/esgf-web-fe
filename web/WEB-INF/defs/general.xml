@@ -32,6 +32,7 @@
     <definition name="main-layout" extends="base-layout">
         <put-attribute name="layoutType" type="string" value="main"/>
     </definition>
+    
     <!-- special home page layout that includes banner -->
     <definition name="home-layout" extends="base-layout">
         <put-attribute name="banner"  value="/WEB-INF/views/common/banner.jsp"/>
@@ -39,6 +40,11 @@
         <put-attribute name="layoutType" type="string" value="main"/>
     </definition>
     
+	<!-- accounts page layout  -->
+    <definition name="account-layout" extends="base-layout">
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+        <put-attribute name="layoutType" type="string" value="accounts"/>
+    </definition>
 
     <!-- left-sidebar + main content layout -->
     <definition name="left-main-layout" extends="base-layout">
@@ -71,9 +77,18 @@
         <put-attribute name="subheader" value="/WEB-INF/views/search/_subheader24.jsp" />
         <put-attribute name="left" value="/WEB-INF/views/search/_sidebar6.jsp" />
         <put-attribute name="main" value="/WEB-INF/views/search/_main17.jsp" />
-
     </definition>
 
+
+	<!-- search template -->
+    <definition name="accounts" extends="account-layout">
+
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+        <put-attribute name="extrastyle"  value="/WEB-INF/views/search/style_search.jsp" />
+
+        <put-attribute name="main" value="/WEB-INF/views/accounts/accounts_main.jsp" />
+
+    </definition>
 <!--  obsolete ?
     <definition name="home" extends="left4-main20">
         <put-attribute name="extrascript" value="/WEB-INF/views/home/script_home.jsp" />

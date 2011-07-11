@@ -88,82 +88,123 @@
               }
             }));
 
-         var fields = ['project', 'model', 'experiment', 'frequency', 'realm', 'instrument', 'variable', 'cf_variable', 'gcmd_variable']; //['project' , 'model', 'experiment', 'frequency', 'realm', 'instrument', 'variable', 'cf_variable', 'gcmd_variable'];
-
-         for (var i = 0, l = fields.length; i < l; i++) {
-             Manager.addWidget(new AjaxSolr.FacetBrowserWidget({
-               id: fields[i],
-               target: '#' + fields[i],
-               field: fields[i]
-             }));
-           }
-
-         
-         Manager.addWidget(new AjaxSolr.CurrentSearchWidget({
-              id: 'currentsearch',
-              target: '#current-selection'
-            }));
-
-         
-         Manager.addWidget(new AjaxSolr.AutocompleteWidget({
-              id: 'text',
-              target: '#search-box',
-              field: 'text',
-              fields: [ 'project', 'model' , 'experiment']
-            }));
-
-         
-         Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
-              id: 'geo_browse'
-            }));
-		
-
-         Manager.addWidget(new AjaxSolr.TemporalWidget({
-              id: 'temp-browse'
-            }));
-
-         Manager.addWidget(new AjaxSolr.MetadataWidget({
-                id: 'metadata-browse'
-              }));
-         
-         Manager.addWidget(new AjaxSolr.FacetSideBarWidget({
-             id: 'facet-sidebar'
-           }));
-
          
          
-         Manager.init();
-         Manager.store.addByValue('q','*:*');
-
          
-         var params = {
-                  'facet': true,
-                  'facet.field': fields,
-                  'facet.limit': 20,
-                  'facet.mincount': 1,
-                  'f.topics.facet.limit': 50,
-                  'json.nl': 'map'
-                };
+         //Ajax call to get the facets from the facets.properties file 
+         //Upon success it calls the processWidgets method to register all the widgets with the UI
+         //This file is defined in esgf-core.js as 'ESGF.setting.facetFile'.
 
-         for (var name in params) {
-            if(name == 'facet.field') {
-                for(var i=0;i<fields.length;i++) {
-                    Manager.store.addByValue(name,fields[i]);
-                }
-            }
-            else {
-                Manager.store.addByValue(name, params[name]);
-            }
-         }
-
-        
+         var solr_url = ESGF.setting.facetFile;
          
-
-
-         Manager.doRequest();
+         var query = "";
+         $.ajax({
+     		url: solr_url,
+     		global: false,
+     		type: "GET",
+     		data: query,
+     		dataType: 'json',
+     		success: function(data) {
+     			processWidgets(data);
+     		}
+         });
+         
+         
     });
 
+    function processWidgets(fields) {
+    	
+    	//Register widgets for facet browser
+    	//Also, add those facets to the overlay defined in esgf-web-fe/web/WEB-INF/views/search/_overlay.jsp
+        for (var i = 0, l = fields.length; i < l; i++) {
+            Manager.addWidget(new AjaxSolr.FacetBrowserWidget({
+              id: fields[i],
+              target: '#' + fields[i],
+              field: fields[i]
+            }));
+            var facet_div = '<div class="facet_item"><div id="' + fields[i] + '"></div></div>';
+            $('div.facet_items').append(facet_div);
+        }
+        
+        //Register the current search widget.
+        //This widget is responsible for displaying the current search constraints
+        Manager.addWidget(new AjaxSolr.CurrentSearchWidget({
+             id: 'currentsearch',
+             target: '#current-selection'
+           }));
 
+        //Register the current search widget.
+        //This widget is responsible for text autocompletion
+        Manager.addWidget(new AjaxSolr.AutocompleteWidget({
+             id: 'text',
+             target: '#search-box',
+             field: 'text',
+             fields: [ 'project', 'model' , 'experiment']
+           }));
+
+        //Register the geospatial search widget.
+        //This widget is responsible for the geospatial overlay
+        Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
+             id: 'geo_browse'
+           }));
+    	
+
+        //Register the temporal search widget.
+        //This widget is responsible for the temporal overlay
+        Manager.addWidget(new AjaxSolr.TemporalWidget({
+             id: 'temp-browse'
+           }));
+
+        //Register the metadata widget.
+        //This widget is responsible for the metadata summary overlay
+        Manager.addWidget(new AjaxSolr.MetadataWidget({
+               id: 'metadata-browse'
+             }));
+        
+        //Register the facet sidebar widget.
+        //This widget is responsible for the facet accordion style sidebar
+        Manager.addWidget(new AjaxSolr.FacetSideBarWidget({
+            id: 'facet-sidebar'
+          }));
+
+        
+        
+        Manager.init();
+        Manager.store.addByValue('q','*:*');
+
+        
+        var params = {
+                 'facet': true,
+                 'facet.field': fields,
+                 'facet.limit': 20,
+                 'facet.mincount': 1,
+                 'f.topics.facet.limit': 50,
+                 'json.nl': 'map'
+               };
+
+        for (var name in params) {
+           if(name == 'facet.field') {
+               for(var i=0;i<fields.length;i++) {
+                   Manager.store.addByValue(name,fields[i]);
+               }
+           }
+           else {
+               Manager.store.addByValue(name, params[name]);
+           }
+        }
+
+        
+        
+        
+        
+
+
+        Manager.doRequest();
+    }
+
+    
+    
 
 })(jQuery);
+
 

@@ -119,14 +119,11 @@ public class FacetFileController {
         try {
             String fileContents = FileUtils.readFileToString(file);
             
-            LOG.debug("FileContents: " + fileContents + "\n---\n");
+            //LOG.debug("FileContents: " + fileContents + "\n---\n");
             
             String delims = ";";
             String [] tokens = fileContents.split(delims);
             
-            for(int i=0;i<tokens.length;i++) {
-                LOG.debug(tokens[i]);
-            }
             return tokens;
         } catch(Exception e) {
             LOG.debug("Could not find file: " + file.getName());

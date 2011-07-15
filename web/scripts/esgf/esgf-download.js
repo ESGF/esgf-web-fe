@@ -199,21 +199,16 @@ $(document).ready( function() {
     	$('a#ai_select_'+ selectedDocId.replace(/\./g, "_")).html('Add To Cart');
     	
     });
-
-    $(".wgetAllChildren").live ('click', function (e){
-
+    
+    /**
+     * Click event for launching globus online bulk data transfer
+     */
+    $(".globusOnlineAllChildren").live('click',function(e){
     	//grab the dataset id from the template
     	var selectedItem = $.tmplItem(this);
     	var selectedDocId = selectedItem.data.dataset_id;
 
-        //var selectedFileUrls = selectedItem.data.file_url;
-        //alert('selectedFileUrls: ' + selectedFileUrls); 
-        
-        
-
-        var queryString = 'type=create&id=' + selectedDocId;
-
-    	
+    	//gather the ids and the urls for download
     	var ids   = new Array();
         var values = new Array();
         $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDocId)).find(':checkbox:checked').each( function(index) {
@@ -221,10 +216,61 @@ $(document).ready( function() {
                 ids.push(this.id);
                 values.push(this.value);
                }
-           });
+     	});
         
-        //alert('values: ' + values);
+        
+        //begin assembling queryString
+        var queryString = 'type=create&id=' + selectedDocId;
 
+        //assemble the input fields with the query string
+        for(var i=0;i<ids.length;i++) {
+        	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
+        }
+        
+        var globus_url = '/esgf-web-fe/globusonlineproxy';
+        
+        $.ajax({
+    		url: globus_url,
+    		global: false,
+    		type: "POST",
+    		data: queryString,
+    		dataType: 'json',
+    		success: function(data) {
+    			alert('initiate notification here...');
+    		}	
+        });
+        
+        alert('done with method');
+    });
+    
+    
+    
+    /**
+     * Click event for generating the wget script
+     * Submits a form with hidden values that calls the wget proxy class that returns the 
+     * wget script as content type text/x-sh.
+     * The form is deleted upon completion.
+     */
+    $(".wgetAllChildren").live ('click', function (e){
+
+    	//grab the dataset id from the template
+    	var selectedItem = $.tmplItem(this);
+    	var selectedDocId = selectedItem.data.dataset_id;
+
+    	//begin assembling queryString
+        var queryString = 'type=create&id=' + selectedDocId;
+    	
+        //gather the ids and the urls for download
+    	var ids   = new Array();
+        var values = new Array();
+        $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDocId)).find(':checkbox:checked').each( function(index) {
+                if(this.id != selectedDocId) {
+                ids.push(this.id);
+                values.push(this.value);
+               }
+    	});
+        
+        //assemble parameters of the queryString
         for(var i=0;i<ids.length;i++) {
         	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
         }
@@ -239,13 +285,9 @@ $(document).ready( function() {
             input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
         });
         
-        
-        
         //send request
         jQuery('<form action="'+ url +'" method="post">'+input+'</form>')
         .appendTo('body').submit().remove();
-        
-        
         
     });
 
@@ -260,7 +302,9 @@ $(document).ready( function() {
         return newWord;
     }
 
-
+    /*
+     * This function is primarily used for debugging
+     */
     function printObject(object) {
         var output = '';
         for (var property in object) {

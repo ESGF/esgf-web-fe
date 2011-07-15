@@ -236,11 +236,10 @@ $(document).ready( function() {
     		data: queryString,
     		dataType: 'json',
     		success: function(data) {
-    			alert('initiate notification here...');
+    			alert('Globus Online transfer complete - initiate notification here...');
     		}	
         });
         
-        alert('done with method');
     });
     
     

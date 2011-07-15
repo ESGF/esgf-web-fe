@@ -156,6 +156,27 @@ public class AccountsController {
         return new ModelAndView("accountsview", model);
     }
     
+    /**
+     * Method invoked in response to a POST request:
+     * both results and facets are retrieved.
+     * @param request
+     * @param input
+     * @param result
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(method=RequestMethod.POST)
+    @SuppressWarnings("unchecked")
+    protected String doPost(final HttpServletRequest request,
+            final @ModelAttribute(ACCOUNTS_INPUT) String accountsInput,
+            final BindingResult result) throws Exception {
+        LOG.debug("doPost() called");
+        
+        
+        return "";
+    }
+    
+    
     
     /**
      *

@@ -67,8 +67,11 @@
  */
 package org.esgf.adminui;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -80,6 +83,10 @@ import org.esgf.manager.InputManager;
 import org.esgf.manager.InputManagerImpl;
 import org.esgf.manager.OutputManager;
 import org.esgf.manager.OutputManagerImpl;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.input.SAXBuilder;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -98,11 +105,12 @@ import esg.search.query.impl.solr.SearchInputImpl;
 
 public class ManageUsersController {
 
-    private final static String ManageUsers_MISC = "ManageUsers_misc";
     private final static String ManageUsers_INPUT = "ManageUsers_input";
+    private final static String ManageUsers_USER = "ManageUsers_user";
     private final static String ManageUsers_MODEL = "ManageUsers_model";
 
     private final static Logger LOG = Logger.getLogger(ManageUsersController.class);
+    private final static String USERS_FILE = "users.store";
 
     /**
      * List of invalid text characters -
@@ -123,13 +131,13 @@ public class ManageUsersController {
      * @param input
      * @param result
      * @return
+     * @throws IOException 
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
     @RequestMapping(method=RequestMethod.GET)
     public ModelAndView doGet(final HttpServletRequest request,
-            final @ModelAttribute(ManageUsers_MISC) String ManageUsersMisc,
-            final @ModelAttribute(ManageUsers_INPUT) String ManageUsersInput) {
+            final @ModelAttribute(ManageUsers_INPUT) String ManageUsersInput) throws IOException {
         LOG.debug("In do get");
         
         Map<String,Object> model = new HashMap<String,Object>();
@@ -143,12 +151,15 @@ public class ManageUsersController {
         } else {
             LOG.debug("null");
             LOG.debug("ManageUsers Input: " + ManageUsersInput);
-            LOG.debug("ManageUsers Misc: " + ManageUsersMisc);
             
 
+            
+             
+            User [] users = getUsersFromXML();
+            
             // populate model
-            model.put(ManageUsers_MISC, ManageUsersMisc);
             model.put(ManageUsers_INPUT, ManageUsersInput);
+            model.put(ManageUsers_USER, users);
             
 
             request.getSession().setAttribute(ManageUsers_MODEL, model);
@@ -157,20 +168,126 @@ public class ManageUsersController {
         return new ModelAndView("usermanagement", model);
     }
     
+    private User [] getUsersHardCoded() {
+        
+        
+        Group group1 = new Group("CDIAC","Standard","Valid");
+        Group group2 = new Group("C-LAMP","Standard","Valid");
+        
+        Group [] user1_groups = {group1, group2}; 
+        Group [] user2_groups = {group2}; 
+       
+        
+        User user1 = new User("user1_lastName","user1_firstName","user1_userName","user1_emailAddress",
+                "user1_status","user1_organization","user1_city","user1_state","user1_country","user1_openId","user1_DN",user1_groups);
+        User user2 = new User("user2_lastName","user2_firstName","user2_userName","user2_emailAddress",
+                "user2_status","user2_organization","user2_city","user2_state","user2_country","user2_openId","user2_DN",user2_groups);
+        
+        User [] users = {user1,user2};
+        
+        return users;
+    }
     
-    /**
-     *
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    @ModelAttribute(ManageUsers_MISC)
-    public String formManageUsersMiscObject(final HttpServletRequest request) throws Exception {
-        LOG.debug("formManageUsersMiscObject");
+    private User [] getUsersFromXML() throws IOException {
         
+        LOG.debug("In getUsers()");
         
+        /* this logic is deprecated and only used for testing - it utilizes the xml in users.store */
+        final File file = new ClassPathResource(USERS_FILE).getFile();
+
+        SAXBuilder builder = new SAXBuilder();
+        String xmlContent = "";
+        User [] userArray = new User[1];
         
-        return "ManageUsers_MISC here";
+        try{
+
+            Document document = (Document) builder.build(file);
+            LOG.debug("Building document");
+            
+            Element rootNode = document.getRootElement();
+            LOG.debug("root name: " + rootNode.getName());
+            
+            List users = (List)rootNode.getChildren();
+            LOG.debug(users.size());
+            userArray =  new User[users.size()];
+            
+            for(int i=0;i<users.size();i++)
+            {
+                
+                Element userEl = (Element) users.get(i);
+                LOG.debug("USER: " + i);
+                List attributes = (List)userEl.getChildren();
+                
+                String firstName = "";
+                String lastName = "";
+                String userName = "";
+                String emailAddress = "";
+                String status = "";
+                String organization = "";
+                String city = "";
+                String state = "";
+                String country = "";
+                String openId = "";
+                String DN = "";
+                String groups = "";
+                
+                for(int j=0;j<attributes.size();j++)
+                {
+                    Element attEl = (Element) attributes.get(j);
+                    if(attEl.getName().equals("firstName")) {
+                        firstName = attEl.getTextNormalize();
+                    }
+                    else if(attEl.getName().equals("lastName")) {
+                        lastName = attEl.getTextNormalize();
+                    }
+                    else if(attEl.getName().equals("userName")) {
+                        userName = attEl.getTextNormalize();
+                    }
+                    else if(attEl.getName().equals("emailAddress")) {
+                        emailAddress = attEl.getTextNormalize();
+                    }
+                    else if(attEl.getName().equals("status")) {
+                        status = attEl.getTextNormalize();
+                    }
+                    else if(attEl.getName().equals("organization")) {
+                        organization = attEl.getTextNormalize();
+                    }
+                    else if(attEl.getName().equals("city")) {
+                        city = attEl.getTextNormalize();
+                    }
+                    else if(attEl.getName().equals("state")) {
+                        state = attEl.getTextNormalize();
+                    }
+                    else if(attEl.getName().equals("country")) {
+                        country = attEl.getTextNormalize();
+                    }
+                    else if(attEl.getName().equals("openId")) {
+                        openId = attEl.getTextNormalize();
+                    }
+                    else if(attEl.getName().equals("DN")) {
+                        DN = attEl.getTextNormalize();
+                    }
+                    else if(attEl.getName().equals("groups")) {
+                        groups = attEl.getTextNormalize();
+                        
+                    }
+                }
+                
+                //create new User object
+                //generic groups for now
+                Group grp = new Group("CDIAC","Standard","Valid");
+                Group [] grps = {grp};
+                User user = new User(firstName,lastName,userName,emailAddress,status,organization,city,state,country,openId,DN,grps);
+                
+                userArray[i] = user;
+                
+            }
+            
+        }catch(Exception e) {
+            LOG.debug("File not found");
+        }
+        
+        return userArray;
     }
     
     

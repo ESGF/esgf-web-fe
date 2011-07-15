@@ -13,6 +13,7 @@
   					<div style="margin-top:20px">
 						<h2>
 						usermanagment
+						<c:out value="${ManageUsers_USER}"/>
 						</h2>
 					</div>
   				</c:when>

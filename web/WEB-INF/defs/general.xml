@@ -130,6 +130,8 @@
         <put-attribute name="main" value="/WEB-INF/views/adminview/adminview_main.jsp" />
     </definition>
     
+   
+    
     <!-- usermanagement page layout  -->
     <definition name="usermanagement-layout" extends="base-layout">
         <put-attribute name="layoutType" type="string" value="usermanagement"/>
@@ -149,6 +151,9 @@
     <definition name="creategroups" extends="creategroups-layout">
         <put-attribute name="main" value="/WEB-INF/views/adminview/creategroups_main.jsp" />
     </definition>
+    
+    
+    
 <!--  end admin pages -->
 
 

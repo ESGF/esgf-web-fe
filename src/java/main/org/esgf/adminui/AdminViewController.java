@@ -142,17 +142,19 @@ public class AdminViewController {
         } else {
             LOG.debug("null");
             LOG.debug("AdminView Input: " + AdminViewInput);
-            LOG.debug("AdminView Misc: " + AdminViewMisc);
+            //LOG.debug("AdminView Misc: " + AdminViewMisc);
             
 
             // populate model
-            model.put(AdminView_MISC, AdminViewMisc);
+            //model.put(AdminView_MISC, AdminViewMisc);
             model.put(AdminView_INPUT, AdminViewInput);
             
 
             request.getSession().setAttribute(AdminView_MODEL, model);
-            
+            LOG.debug("Setting attribute");
         }
+        LOG.debug("Model: " + model);
+        
         return new ModelAndView("adminview", model);
     }
     

@@ -68,8 +68,13 @@
 package org.esgf.adminui;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,8 +82,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.transform.Result;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.log4j.Logger;
+import org.apache.xml.serialize.XMLSerializer;
 import org.esgf.manager.InputManager;
 import org.esgf.manager.InputManagerImpl;
 import org.esgf.manager.OutputManager;
@@ -86,6 +99,7 @@ import org.esgf.manager.OutputManagerImpl;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -94,6 +108,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.w3c.dom.Node;
 
 import esg.search.query.api.FacetProfile;
 import esg.search.query.api.SearchOutput;
@@ -166,6 +181,121 @@ public class ManageUsersController {
             
         }
         return new ModelAndView("usermanagement", model);
+    }
+    
+    
+    /**
+     * Method invoked in response to a POST request:
+     * -) if invoked directly, a new set of facets is retrieved (but no results)
+     * -) if invoked in response to a POST-REDIRECT,
+     * @param request
+     * @param input
+     * @param result
+     * @return
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    @RequestMapping(method=RequestMethod.POST)
+    public ModelAndView doPost(final HttpServletRequest request,
+            final @ModelAttribute(ManageUsers_INPUT) String ManageUsersInput) throws IOException {
+            
+        LOG.debug("in dopost");
+        headerStringInfo(request);
+        queryStringInfo(request);
+        
+        //if user is the root admin 
+        addUser(request);
+        
+        Map<String,Object> model = new HashMap<String,Object>();
+
+        
+        if (request.getParameter(ManageUsers_MODEL)!=null) {
+            LOG.debug("Not null");
+            // retrieve model from session
+            model = (Map<String,Object>)request.getSession().getAttribute(ManageUsers_MODEL);
+
+        } else {
+            LOG.debug("null");
+            LOG.debug("ManageUsers Input: " + ManageUsersInput);
+            
+
+            
+             
+            User [] users = getUsersFromXML();
+            
+            // populate model
+            model.put(ManageUsers_INPUT, ManageUsersInput);
+            model.put(ManageUsers_USER, users);
+            
+
+            request.getSession().setAttribute(ManageUsers_MODEL, model);
+            
+        }
+        return new ModelAndView("usermanagement", model);
+    }
+   
+    private void addUser(final HttpServletRequest request) throws IOException {
+        LOG.debug("*****In AddUser*****");
+
+        /* this logic is deprecated and only used for testing - it utilizes the xml in users.store */
+        final File file = new ClassPathResource(USERS_FILE).getFile();
+        SAXBuilder builder = new SAXBuilder();
+        String xmlContent = "";
+        
+        try{
+
+            Document document = (Document) builder.build(file);
+            LOG.debug("Building document");
+            
+            Element rootNode = document.getRootElement();
+            LOG.debug("root name: " + rootNode.getName());
+            
+            Element userElement = new Element("user");
+            
+            Enumeration<String> paramEnum = request.getParameterNames();
+            
+            while(paramEnum.hasMoreElements()) { 
+                String postContent = (String) paramEnum.nextElement();
+                LOG.debug("postContent: " + postContent);
+                
+                
+               
+                
+            }
+            
+            rootNode.addContent(userElement);
+            
+            document.setContent(rootNode);
+            
+            XMLOutputter outputter = new XMLOutputter();
+            xmlContent = outputter.outputString(rootNode);
+            
+            LOG.debug("XMLCONTNET");
+            
+            Writer out = new OutputStreamWriter(new FileOutputStream(file));
+            out.write(xmlContent);
+            
+        }catch(Exception e) {
+            LOG.debug("Couldn't write new xml to file");
+        }
+        
+        
+        LOG.debug("*****End In AddUser*****");
+        
+    }
+    
+ // This method writes a DOM document to a file
+    public static void writeXmlFile(Document doc, OutputStream filename) {
+        LOG.debug("WriteXMLFile Method");
+        
+        try{
+            // use specific Xerces class to write DOM-data to a file:
+         // Create an output formatter, and have it write the doc.
+            new XMLOutputter().output(doc, filename);
+        } catch(Exception e){
+            
+        }
+       
     }
     
     private User [] getUsersHardCoded() {
@@ -289,6 +419,40 @@ public class ManageUsersController {
         
         return userArray;
     }
+    
+    /**
+     * headerStringInfo(HttpServletRequest request)
+     * Private method that prints out the header contents of the request.  Used mainly for debugging.
+     * 
+     * @param request
+     */
+    private void headerStringInfo(HttpServletRequest request) {
+        LOG.debug("--------Header String Info--------");
+        Enumeration headerNames = request.getHeaderNames(); 
+        while(headerNames.hasMoreElements()) { 
+            String headerName = (String)headerNames.nextElement(); 
+            LOG.debug(headerName+"-->"); 
+            LOG.debug(request.getHeader(headerName)); 
+        }
+        LOG.debug("--------End Header String Info--------");
+    }
+    /**
+     * queryStringInfo(HttpServletRequest request)
+     * Private method that prints out the contents of the request.  Used mainly for debugging.
+     * 
+     * @param request
+     */
+    private void queryStringInfo(HttpServletRequest request) {
+        LOG.debug("--------Query String Info--------");
+        Enumeration<String> paramEnum = request.getParameterNames();
+        
+        while(paramEnum.hasMoreElements()) { 
+            String postContent = (String) paramEnum.nextElement();
+            LOG.debug("postContent: " + postContent);
+        }
+        LOG.debug("--------End Query String Info--------");
+    }
+    
     
     
     /**

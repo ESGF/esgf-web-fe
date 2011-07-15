@@ -32,9 +32,7 @@
 	}
 	
 	#toggleMenu h4 {
-	    /*background: #FFFFFF url('http://www.unidata.ucar.edu/img/v3/closed.png') repeat-x bottom left; */
 	    background: #aaa;
-	    /* open http://www.unidata.ucar.edu/img/v3/open.png */
 	    border: 1px solid #EEEEEE;
 	    -moz-border-radius: 4px;
 	    -webkit-border-radius: 4px;
@@ -66,7 +64,6 @@
 	    border-bottom: 1px solid #EEEEEE;
 	    border-left: 1px solid #EEEEEE;
 	    border-right: 1px solid #EEEEEE;
-	    /* background: #FFFFFF url('/img/v3/vertMenuBG.png') repeat-x bottom left;  */
 	    background: #FFFFFF;
 	}
 	
@@ -89,7 +86,6 @@
     height: 20px;   
     padding: 0px 0px 0px 45px;
     margin: 0px 0px 0px 0px;
-    /* background: transparent url(/img/v3/bullet.png) no-repeat 26px center; */
 }
 
 .togglebox .block ul li a {
@@ -102,9 +98,19 @@
     text-decoration: underline;
 }
 	
+.adminbutton {
+	font-size: 13px;
+	color: white;
+	border: 1px solid #9c9c9c;
+	background: #838943;
+	cursor: pointer;
+}
 	
-	
-	
+.formLabels {
+	font-size: 16px;
+	margin-right:10px;
+}
+
 </style>
 
 
@@ -132,7 +138,7 @@
   						</div>
 						
 						<!-- user table -->
-						<div class="span-16">
+						<div class="prepend-2 span-20 append-2 last">
 							<table id="table_id">  
 	  
 	    						<!-- Table header -->  
@@ -144,23 +150,11 @@
 						                <th>First Name</th>  
 						                <th>User Name</th>  
 						                <th>Email Address</th>  
-						                <!--<th>Status</th>  
-						                --> 
+						                <th>Status</th>  
 						            </tr>  
 						        </thead>  
 	  
-						    <!-- Table footer -->  
-						  	<!--  
-						        <tfoot>  
-						            <tr>  
-						                  <td>footer1</td>  
-						                  <td>footer2</td>  
-						                  <td>footer1</td>  
-						                  <td>footer2</td>  
-						                  <td>footer2</td>  
-						            </tr>  
-						        </tfoot>  
-						  	-->
+						   
 						    <!-- Table body -->  
 						  
 						        <tbody>   
@@ -171,9 +165,7 @@
 						                <td>${ManageUsers_user[j].firstName}</td>  
 						                <td>${ManageUsers_user[j].userName}</td>  
 						                <td>${ManageUsers_user[j].emailAddress}</td>    
-						                <!--
-						                <td>body55</td> 
-						                -->  
+						                <td>${ManageUsers_user[j].status}</td>    
 						            </tr> 
 						            <c:set var="j" value="${j+1}"/>
 									
@@ -184,25 +176,68 @@
 						        </tbody>  
 						  
 							</table> 
-						</div>
-						<div class="span-8 last">
-							<div id="user_info_header"></div>
 							
-							<div id="toggleMenu"> 
- 								<h4>Account Summary</h4> 
-      							<div class="togglebox"> 
-       								<div class="block"> 
-       								Account Summary
-       								</div> 
-     							</div>
-     							<h4>Group Roles</h4> 
-      							<div class="togglebox"> 
-       								<div class="block"> 
-       								Group Roles
-       								</div> 
-     							</div>
-							</div>
+		    				<input class="adminbutton" id="add_user-button" type="submit" value="Add User" />
+		    				<input class="adminbutton" id="add_user-button" type="submit" value="Edit User" />
+		    				
+						</div>
+						<div class="span-24 last">
 						
+							<div id="user_info"></div>
+							
+							<div class="prepend-3 span-18 append-3">
+								<form id="new_user_form" action="" method="post" style="display:none">
+									 
+							      	<fieldset>
+							      		<legend>New User Form</legend>
+							
+							          	<p>
+							          		<label class="formLabels" for="lastName" style="">Last Name:</label>
+							      		 	<input type="text" class="text" name="lastName" id="lastName" value=""> <br />
+							      		 	
+							          		<label class="formLabels" for="firstName">First Name:</label>
+							      			<input type="text" class="text" id="firstName" name="firstName" value=""> <br />	
+							      											
+											<label class="formLabels" for="userName">User Name:</label>
+							      		  	<input type="text" class="text" id="userName" name="userName" value=""> <br />
+							      		  	
+							      		  	<label class="formLabels" for="emailAddress" style="">Email:</label>
+							      		 	<input type="text" class="text" name="emailAddress" id="emailAddress" value=""> <br />
+							      		 	
+							          		<label class="formLabels" for="status">Status:</label>
+							      			<input type="text" class="text" id="status" name="status" value=""> <br />	
+							      											
+											<label class="formLabels" for="organization">Organization:</label>
+							      		  	<input type="text" class="text" id="organization" name="organization" value=""> <br />
+							      		  	
+							      		  	<label class="formLabels" for="city" style="">City:</label>
+							      		 	<input type="text" class="text" name="city" id="city" value=""> <br />
+							      		 	
+							          		<label class="formLabels" for="country">Country:</label>
+							      			<input type="text" class="text" id="country" name="country" value=""> <br />	
+							      											
+											<label class="formLabels" for="openId">OpenId:</label>
+							      		  	<input type="text" class="text" id="openId" name="openId" value=""> <br />
+							      		  	
+											<label class="formLabels" for="DN">DN:</label>
+							      		  	<input type="text" class="text" id="DN" name="DN" value=""> <br />
+							      		  	
+							      		  	
+							      		  	
+							      		  	
+							      		</p>
+							      		<p>
+							      			<input type="submit" value="Submit">
+							      		  	<input type="reset" value="Reset">
+							      		</p>
+							
+							      	</fieldset>
+							      	
+							    </form>
+							</div> 
+							
+						    
+							
 					 
 						</div>
   				</c:when>
@@ -218,18 +253,32 @@
 $(document).ready(function(){
 	
 	/**
-	*	Will display the user's information
+	* Will display the user's information
 	*/
-	
 	$('tr.user_rows').click(function(){
 		var userName = $(this).attr("id");
 		$('div#header_name').remove();
-		$('div#user_info_header').append('<div id="header_name" style="text-align:center">' + userName + '</div>');
+		$('#new_user_form').hide();
+		$('div#user_info').append('<div id="header_name" style="text-align:center">' + userName + '</div>');
 		
 	});
 	
+	/*
+	* Add User
+	*/
+	$('input#add_user-button').click(function(){
+		$('div#header_name').remove();
+		$('#new_user_form').hide();
+		
+		//alert('add user');
+		$('div#user_info').append('<div id="header_name" style="text-align:center">' + 'Adding new User' + '</div>');
+		$('#new_user_form').show();
+	});
 	
 	
+	/**
+	* Toggle boxes - not used (yet)
+	*/
 	$("h4").click(function(){
         $(this).next(".togglebox").slideToggle("fast");
         $(this).toggleClass('open');
@@ -237,7 +286,26 @@ $(document).ready(function(){
 
         return true;
     });
+	
+	
 });
 
 
 </script>
+
+<!--  
+	<div id="toggleMenu"> 
+			<h4>Account Summary</h4> 
+							<div class="togglebox"> 
+ 								<div class="block"> 
+ 								Account Summary
+ 								</div> 
+						</div>
+						<h4>Group Roles</h4> 
+							<div class="togglebox"> 
+ 								<div class="block"> 
+ 								Group Roles
+ 								</div> 
+						</div>
+	</div>
+-->

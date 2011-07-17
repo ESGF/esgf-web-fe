@@ -10,6 +10,7 @@ public class User implements Serializable{
     private String emailAddress;
     private String status;
     
+    /*
     private String organization;
     private String city;
     private String state;
@@ -17,7 +18,7 @@ public class User implements Serializable{
     
     private String openId;
     private String DN;
-    
+    */
     private Group [] groups;
     
     public User(String lastName,
@@ -37,12 +38,14 @@ public class User implements Serializable{
         this.userName = userName;
         this.emailAddress = emailAddress;
         this.status = status;
+        /*
         this.organization = organization;
         this.city = city;
         this.state = state;
         this.country = country;
         this.openId = openId;
         this.DN = DN;
+        */
         
         this.groups = new Group[groups.length];
         for(int i=0;i<groups.length;i++) {
@@ -60,6 +63,8 @@ public class User implements Serializable{
         this.userName = "userName";
         this.emailAddress = "emailAddress";
         this.status = "status";
+        
+        /*
         this.organization = "organization";
         
         this.city = "city";
@@ -67,7 +72,7 @@ public class User implements Serializable{
         this.country = "country";
         this.openId = "openId";
         this.DN = "DN";
-        
+        */
         this.groups = new Group[1];
         this.groups[0] = new Group();
     }
@@ -104,6 +109,7 @@ public class User implements Serializable{
         this.status = status;
     }
 
+    /*
     public String getOrganization() {
         return organization;
     }
@@ -151,7 +157,7 @@ public class User implements Serializable{
     public void setDN(String dN) {
         DN = dN;
     }
-
+     */
     public Group[] getGroups() {
         return groups;
     }

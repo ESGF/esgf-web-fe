@@ -17,6 +17,7 @@
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.livequery.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.autocomplete.js" /> '></script>
 
+	<script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-core.js" /> '></script>
 
 <style>
 	table tbody tr:hover { background: #aaa; }
@@ -160,7 +161,13 @@
 						        <tbody>   
 						        <c:set var="j" value="0"/>
 						        <c:forEach var="user" items="${ManageUsers_user}">
-									 <tr class="user_rows" id="${ManageUsers_user[j].userName}" style="cursor:pointer">  
+									 <tr class="user_rows" 
+									 	 id="${ManageUsers_user[j].userName}" 
+									 	 attLastName = "${ManageUsers_user[j].lastName}"
+									 	 attFirstName = "${ManageUsers_user[j].firstName}"
+									 	 attEmailAddress = "${ManageUsers_user[j].emailAddress}"
+									 	 attStatus = "${ManageUsers_user[j].status}"
+									 	 style="cursor:pointer">  
 						                <td>${ManageUsers_user[j].lastName}</td> 
 						                <td>${ManageUsers_user[j].firstName}</td>  
 						                <td>${ManageUsers_user[j].userName}</td>  
@@ -178,18 +185,21 @@
 							</table> 
 							
 		    				<input class="adminbutton" id="add_user-button" type="submit" value="Add User" />
-		    				<input class="adminbutton" id="add_user-button" type="submit" value="Edit User" />
+		    				<input class="adminbutton" id="edit_user-button" type="submit" value="Edit User" />
+		    				<input class="adminbutton" id="delete_user-button" type="submit" value="Remove Selected User" />
 		    				
 						</div>
 						<div class="span-24 last">
 						
 							<div id="user_info"></div>
 							
-							<div class="prepend-3 span-18 append-3">
+							<div class="prepend-3 span-18 append-3 last">
+								
+							
 								<form id="new_user_form" action="" method="post" style="display:none">
 									 
 							      	<fieldset>
-							      		<legend>New User Form</legend>
+							      		<legend class="formclass">New User Form</legend>
 							
 							          	<p>
 							          		<label class="formLabels" for="lastName" style="">Last Name:</label>
@@ -206,7 +216,8 @@
 							      		 	
 							          		<label class="formLabels" for="status">Status:</label>
 							      			<input type="text" class="text" id="status" name="status" value=""> <br />	
-							      											
+							      				
+							      			<!--  							
 											<label class="formLabels" for="organization">Organization:</label>
 							      		  	<input type="text" class="text" id="organization" name="organization" value=""> <br />
 							      		  	
@@ -221,8 +232,8 @@
 							      		  	
 											<label class="formLabels" for="DN">DN:</label>
 							      		  	<input type="text" class="text" id="DN" name="DN" value=""> <br />
-							      		  	
-							      		  	
+							      		  	-->
+							      		  	<input type="hidden" name="type" value="add"/>
 							      		  	
 							      		  	
 							      		</p>
@@ -236,9 +247,6 @@
 							    </form>
 							</div> 
 							
-						    
-							
-					 
 						</div>
   				</c:when>
   				<c:otherwise>
@@ -256,23 +264,147 @@ $(document).ready(function(){
 	* Will display the user's information
 	*/
 	$('tr.user_rows').click(function(){
-		var userName = $(this).attr("id");
-		$('div#header_name').remove();
+
 		$('#new_user_form').hide();
-		$('div#user_info').append('<div id="header_name" style="text-align:center">' + userName + '</div>');
+
+		$('div.user_info_header').remove();
+		$('div.user_info_content').remove();
 		
+		
+		var userName = $(this).attr("id");
+
+		
+		/* from username we can get the rest of the info via an ajax cal */
+		var query = { "id" : userName };
+		var userinfo_url = '/esgf-web-fe/extractuserdataproxy';
+		$.ajax({
+    		url: userinfo_url,
+    		type: "GET",
+    		data: query,
+    		dataType: 'json',
+    		success: function(data) {
+    			processUserContent(data);
+    		},
+			error: function() {
+				alert('error');
+			}
+		});
+		
+		
+		//var user_info_content = '<div class="user_info_content">LastName: ' + lastName + '</div>';
+		//$('div#user_info').append(user_info_content);
+		
+		/*
+		$('div.user_content').hide();
+		//alert($(this).attr("attLastName") + ' ' + $(this).attr("attFirstName") + ' ' +  $(this).attr("attEmailAddress") + ' ' + $(this).attr("attStatus"));
+		
+		
+		
+		//$('div#user_info').append('<div id="' + userName + '" class="userContent" style="text-align:center">' + userName + '</div>');
+		$('div#user_info').append('<div class="user_content" style="display:none">User info</div>');
+
+		$('div.user_content').show();
+		*/
 	});
+	
+	function processUserContent(data) {
+		alert('in process UserContent');
+		//printObject(data);
+		var userName = data.user.userName;
+		
+		alert(status);
+		var user_info_header = getUserInfoHeader(userName);
+		var user_info_content = getUserInfoContent(data);
+		
+		$('div#user_info').append(user_info_header);
+		$('div#user_info').append(user_info_content);
+		
+		
+	}
+	
+	function getUserInfoHeader(userName) {
+		var user_info_header = '<div id="' + userName + '" class="user_info_header" style="text-align:center">' + userName + '</div>';
+		return user_info_header;
+	}
+	
+	function getUserInfoContent(data) {
+		var lastName = data.user.lastName;
+		var firstName = data.user.firstName;
+		var emailAddress = data.user.emailAddress;
+		var status = data.user.status;
+		var userName = data.user.userName;
+		var user_info_content = '<div class="user_info_content">' + firstName + ' ' + lastName + '</div>';
+		return user_info_content;
+	}
+	
+	/*
+     * This function is primarily used for debugging
+     */
+    function printObject(object) {
+        var output = '';
+        for (var property in object) {
+          output += property + ': ' + object[property]+'; ';
+        }
+        alert(output);
+    }
 	
 	/*
 	* Add User
 	*/
 	$('input#add_user-button').click(function(){
-		$('div#header_name').remove();
+		
+		/*
+		$('div.header_name').remove();
+		$('div.user_content').remove();
+		
+		
+		$('div.user_content').hide();
+		//$('div.user_content').remove();
+		
 		$('#new_user_form').hide();
 		
-		//alert('add user');
-		$('div#user_info').append('<div id="header_name" style="text-align:center">' + 'Adding new User' + '</div>');
+		$('div#user_info').append('<div id="' + userName + '" class="header_name" style="text-align:center">' + 'Add User' + '</div>');
+		//$('div#user_info').append('<div id="' + userName + '" class="userContent" style="text-align:center">' + userName + '</div>');
 		$('#new_user_form').show();
+		*/
+	});
+	
+	/*
+	* Add User
+	*/
+	$('input#edit_user-button').click(function(){
+		alert('In edit user...');
+
+		
+		/*)
+		$('div.user_content').remove();
+		$('div.header_name').remove();
+		//$('div.user_content').remove();
+		$('#new_user_form').hide();
+		
+		$('div#user_info').append('<div id="' + userName + '" class="header_name" style="text-align:center">' + 'Adding new User' + '</div>');
+		//$('div#user_info').append('<div id="' + userName + '" class="userContent" style="text-align:center">' + userName + '</div>');
+		$('#new_user_form').show();
+		*/
+		
+	});
+	
+	/*
+	* Remove User
+	*/
+	$('input#delete_user-button').click(function(){
+
+		$('div.user_content').hide();
+		if($('div.header_name').html() != null) {
+			var url = '';
+			var input = '<input type="hidden" name="'+ 'type' +'" value="delete" />';
+			//send request
+			var formStr = '<form action="" method="post">' + input + '</form>';
+			
+			jQuery(formStr).appendTo('body').submit().remove();
+		}
+
+		$('div.header_name').remove();
 	});
 	
 	

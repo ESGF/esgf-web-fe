@@ -67,8 +67,10 @@
  */
 package org.esgf.adminui;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -125,8 +127,11 @@ public class ManageUsersController {
     private final static String ManageUsers_MODEL = "ManageUsers_model";
 
     private final static Logger LOG = Logger.getLogger(ManageUsersController.class);
-    private final static String USERS_FILE = "users.store";
+    private final static String USERS_FILE = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\users.file";
 
+    private final static String ROOT_USER = "https://pcmdi3.llnl.gov/esgcet/myopenid/jfharney";
+    
+    
     /**
      * List of invalid text characters -
      * anything that is not within square brackets.
@@ -159,24 +164,15 @@ public class ManageUsersController {
 
         
         if (request.getParameter(ManageUsers_MODEL)!=null) {
-            LOG.debug("Not null");
             // retrieve model from session
             model = (Map<String,Object>)request.getSession().getAttribute(ManageUsers_MODEL);
 
         } else {
-            LOG.debug("null");
-            LOG.debug("ManageUsers Input: " + ManageUsersInput);
-            
-
-            
-             
             User [] users = getUsersFromXML();
             
             // populate model
             model.put(ManageUsers_INPUT, ManageUsersInput);
             model.put(ManageUsers_USER, users);
-            
-
             request.getSession().setAttribute(ManageUsers_MODEL, model);
             
         }
@@ -200,26 +196,73 @@ public class ManageUsersController {
             final @ModelAttribute(ManageUsers_INPUT) String ManageUsersInput) throws IOException {
             
         LOG.debug("in dopost");
-        headerStringInfo(request);
-        queryStringInfo(request);
         
-        //if user is the root admin 
-        addUser(request);
+        //check here if the user is the root admin
+        boolean rootFlag = false;
+        Enumeration headerNames = request.getHeaderNames(); 
+        while(headerNames.hasMoreElements()) { 
+            String headerName = (String)headerNames.nextElement();
+            if(headerName.equalsIgnoreCase("cookie")) {
+                /*
+                 * ALERT! - Change this logic to get the cookie info
+                 */
+                String [] cookies = request.getHeader("cookie").split(";");
+                LOG.debug("cookies: " + cookies[1]);
+                if(cookies[1].contains(ROOT_USER)) {
+                    rootFlag = true;
+                }
+            }
+        }
+        
+        //if the rootFlag is true, we next look for the 'type' parameter to see if it is an add,
+        //delete, or edit
+        if(rootFlag) {
+            String type = "";
+            
+            Enumeration<String> paramEnum = request.getParameterNames();
+            
+            while(paramEnum.hasMoreElements()) { 
+                String postContent = (String) paramEnum.nextElement();
+                if(postContent.equalsIgnoreCase("type")) {
+
+                    type = request.getParameter(postContent);
+                    LOG.debug(postContent+"-->"+type); 
+                    if(type.equalsIgnoreCase("add")) {
+                        LOG.debug("Check Add Users");
+                        addUser(request);
+                    }
+                    else if(type.equalsIgnoreCase("edit")){
+                        editUser(request);
+                        LOG.debug("Check Edit Users");
+                    }
+                    else if(type.equalsIgnoreCase("delete")) {
+                        deleteUser(request);
+                        LOG.debug("Check Delete Users");
+                    }
+                }
+                
+            }
+        }
+        
+        Map<String,Object> model = formModel(request,ManageUsersInput);
+
+        return new ModelAndView("usermanagement", model);
+    }
+
+    /*
+     * Helper method to formulate the model for the usermanagement view
+     */
+    private Map<String,Object> formModel(final HttpServletRequest request,final @ModelAttribute(ManageUsers_INPUT) String ManageUsersInput) throws IOException{
         
         Map<String,Object> model = new HashMap<String,Object>();
 
-        
         if (request.getParameter(ManageUsers_MODEL)!=null) {
             LOG.debug("Not null");
             // retrieve model from session
             model = (Map<String,Object>)request.getSession().getAttribute(ManageUsers_MODEL);
 
         } else {
-            LOG.debug("null");
             LOG.debug("ManageUsers Input: " + ManageUsersInput);
-            
-
-            
              
             User [] users = getUsersFromXML();
             
@@ -227,24 +270,42 @@ public class ManageUsersController {
             model.put(ManageUsers_INPUT, ManageUsersInput);
             model.put(ManageUsers_USER, users);
             
-
             request.getSession().setAttribute(ManageUsers_MODEL, model);
-            
         }
-        return new ModelAndView("usermanagement", model);
+        return model;
     }
-   
+    
+    private void editUser(final HttpServletRequest request) throws IOException {
+        LOG.debug("*****In DeleteUser*****");
+        
+        
+        
+        LOG.debug("*****End DeleteUser*****");
+
+    }
+    
+    private void deleteUser(final HttpServletRequest request) throws IOException {
+        LOG.debug("*****In DeleteUser*****");
+        
+        
+        
+        LOG.debug("*****End DeleteUser*****");
+
+    }
+    
     private void addUser(final HttpServletRequest request) throws IOException {
         LOG.debug("*****In AddUser*****");
 
         /* this logic is deprecated and only used for testing - it utilizes the xml in users.store */
-        final File file = new ClassPathResource(USERS_FILE).getFile();
+        final File file = new File(USERS_FILE);
         SAXBuilder builder = new SAXBuilder();
         String xmlContent = "";
         
+        /*
         try{
 
             Document document = (Document) builder.build(file);
+            
             LOG.debug("Building document");
             
             Element rootNode = document.getRootElement();
@@ -263,6 +324,26 @@ public class ManageUsersController {
                 
             }
             
+            Element lastNameEl = new Element("lastName");
+            lastNameEl.addContent("user3_lastName");
+            Element firstNameEl = new Element("firstName");
+            firstNameEl.addContent("user3_firstName");
+            Element userNameEl = new Element("userName");
+            userNameEl.addContent("user3_userName");
+            Element emailEl = new Element("emailAddress");
+            emailEl.addContent("user3_emailAddress");
+            Element statusEl = new Element("status");
+            statusEl.addContent("user3_status");
+            Element groupsEl = new Element("groups");
+            groupsEl.addContent("user3_groups");
+            
+            userElement.addContent(lastNameEl);
+            userElement.addContent(firstNameEl);
+            userElement.addContent(userNameEl);
+            userElement.addContent(emailEl);
+            userElement.addContent(statusEl);
+            userElement.addContent(groupsEl);
+            
             rootNode.addContent(userElement);
             
             document.setContent(rootNode);
@@ -270,15 +351,18 @@ public class ManageUsersController {
             XMLOutputter outputter = new XMLOutputter();
             xmlContent = outputter.outputString(rootNode);
             
-            LOG.debug("XMLCONTNET");
+            LOG.debug("XMLCONTNET \n" + xmlContent);
             
-            Writer out = new OutputStreamWriter(new FileOutputStream(file));
-            out.write(xmlContent);
+            Writer output = null;
+            output = new BufferedWriter(new FileWriter(file));
+            output.write(xmlContent);
+            LOG.debug("Writing to file");
+            output.close();
             
         }catch(Exception e) {
             LOG.debug("Couldn't write new xml to file");
         }
-        
+        */
         
         LOG.debug("*****End In AddUser*****");
         
@@ -323,7 +407,7 @@ public class ManageUsersController {
         LOG.debug("In getUsers()");
         
         /* this logic is deprecated and only used for testing - it utilizes the xml in users.store */
-        final File file = new ClassPathResource(USERS_FILE).getFile();
+        final File file = new File(USERS_FILE);
 
         SAXBuilder builder = new SAXBuilder();
         String xmlContent = "";
@@ -345,7 +429,6 @@ public class ManageUsersController {
             {
                 
                 Element userEl = (Element) users.get(i);
-                LOG.debug("USER: " + i);
                 List attributes = (List)userEl.getChildren();
                 
                 String firstName = "";
@@ -448,7 +531,8 @@ public class ManageUsersController {
         
         while(paramEnum.hasMoreElements()) { 
             String postContent = (String) paramEnum.nextElement();
-            LOG.debug("postContent: " + postContent);
+            LOG.debug(postContent+"-->"); 
+            LOG.debug(request.getParameter(postContent));
         }
         LOG.debug("--------End Query String Info--------");
     }
@@ -463,13 +547,27 @@ public class ManageUsersController {
      */
     @ModelAttribute(ManageUsers_INPUT)
     public String formManageUsersInputObject(final HttpServletRequest request) throws Exception {
-
         LOG.debug("formManageUsersInputObject called");
-
-
         return "ManageUsers_Table here";
-
     }
 
 }
 
+
+
+
+/*
+if (request.getParameter(ManageUsers_MODEL)!=null) {
+    LOG.debug("Not null");
+    // retrieve model from session
+    model = (Map<String,Object>)request.getSession().getAttribute(ManageUsers_MODEL);
+} else {
+    LOG.debug("null");
+    LOG.debug("ManageUsers Input: " + ManageUsersInput);
+    User [] users = getUsersFromXML();
+    // populate model
+    model.put(ManageUsers_INPUT, ManageUsersInput);
+    model.put(ManageUsers_USER, users);
+    request.getSession().setAttribute(ManageUsers_MODEL, model);
+}
+*/

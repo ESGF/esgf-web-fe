@@ -214,6 +214,7 @@ public class ManageUsersController {
             }
         }
         
+        
         //if the rootFlag is true, we next look for the 'type' parameter to see if it is an add,
         //delete, or edit
         if(rootFlag) {
@@ -228,16 +229,13 @@ public class ManageUsersController {
                     type = request.getParameter(postContent);
                     LOG.debug(postContent+"-->"+type); 
                     if(type.equalsIgnoreCase("add")) {
-                        LOG.debug("Check Add Users");
                         addUser(request);
                     }
                     else if(type.equalsIgnoreCase("edit")){
                         editUser(request);
-                        LOG.debug("Check Edit Users");
                     }
                     else if(type.equalsIgnoreCase("delete")) {
                         deleteUser(request);
-                        LOG.debug("Check Delete Users");
                     }
                 }
                 
@@ -276,111 +274,55 @@ public class ManageUsersController {
     }
     
     private void editUser(final HttpServletRequest request) throws IOException {
-        LOG.debug("*****In DeleteUser*****");
+        LOG.debug("*****In EditUser*****");
         
+        queryStringInfo(request);
         
+        editUserInfoInXML(request);
         
-        LOG.debug("*****End DeleteUser*****");
+        LOG.debug("*****End EditUser*****\n");
 
     }
+    
+    
     
     private void deleteUser(final HttpServletRequest request) throws IOException {
         LOG.debug("*****In DeleteUser*****");
         
+        queryStringInfo(request);
+        
+        deleteUserInfoFromXML(request);
         
         
-        LOG.debug("*****End DeleteUser*****");
+        LOG.debug("*****End DeleteUser*****\n");
 
     }
+    
+    
     
     private void addUser(final HttpServletRequest request) throws IOException {
-        LOG.debug("*****In AddUser*****");
+        LOG.debug("\n\n*****In AddUser*****");
 
-        /* this logic is deprecated and only used for testing - it utilizes the xml in users.store */
-        final File file = new File(USERS_FILE);
-        SAXBuilder builder = new SAXBuilder();
-        String xmlContent = "";
+        queryStringInfo(request);
         
-        /*
-        try{
-
-            Document document = (Document) builder.build(file);
-            
-            LOG.debug("Building document");
-            
-            Element rootNode = document.getRootElement();
-            LOG.debug("root name: " + rootNode.getName());
-            
-            Element userElement = new Element("user");
-            
-            Enumeration<String> paramEnum = request.getParameterNames();
-            
-            while(paramEnum.hasMoreElements()) { 
-                String postContent = (String) paramEnum.nextElement();
-                LOG.debug("postContent: " + postContent);
-                
-                
-               
-                
-            }
-            
-            Element lastNameEl = new Element("lastName");
-            lastNameEl.addContent("user3_lastName");
-            Element firstNameEl = new Element("firstName");
-            firstNameEl.addContent("user3_firstName");
-            Element userNameEl = new Element("userName");
-            userNameEl.addContent("user3_userName");
-            Element emailEl = new Element("emailAddress");
-            emailEl.addContent("user3_emailAddress");
-            Element statusEl = new Element("status");
-            statusEl.addContent("user3_status");
-            Element groupsEl = new Element("groups");
-            groupsEl.addContent("user3_groups");
-            
-            userElement.addContent(lastNameEl);
-            userElement.addContent(firstNameEl);
-            userElement.addContent(userNameEl);
-            userElement.addContent(emailEl);
-            userElement.addContent(statusEl);
-            userElement.addContent(groupsEl);
-            
-            rootNode.addContent(userElement);
-            
-            document.setContent(rootNode);
-            
-            XMLOutputter outputter = new XMLOutputter();
-            xmlContent = outputter.outputString(rootNode);
-            
-            LOG.debug("XMLCONTNET \n" + xmlContent);
-            
-            Writer output = null;
-            output = new BufferedWriter(new FileWriter(file));
-            output.write(xmlContent);
-            LOG.debug("Writing to file");
-            output.close();
-            
-        }catch(Exception e) {
-            LOG.debug("Couldn't write new xml to file");
-        }
-        */
+        //using the xml store
+        writeUserInfoToXML(request);
         
-        LOG.debug("*****End In AddUser*****");
+        
+        
+        
+        
+        //using the esgf-security store
+        //writeUserInfoToDB(request);
+        
+        
+        LOG.debug("*****End In AddUser*****\n\n");
         
     }
     
- // This method writes a DOM document to a file
-    public static void writeXmlFile(Document doc, OutputStream filename) {
-        LOG.debug("WriteXMLFile Method");
-        
-        try{
-            // use specific Xerces class to write DOM-data to a file:
-         // Create an output formatter, and have it write the doc.
-            new XMLOutputter().output(doc, filename);
-        } catch(Exception e){
-            
-        }
-       
-    }
+   
+ 
+    
     
     private User [] getUsersHardCoded() {
         
@@ -422,7 +364,6 @@ public class ManageUsersController {
             LOG.debug("root name: " + rootNode.getName());
             
             List users = (List)rootNode.getChildren();
-            LOG.debug(users.size());
             userArray =  new User[users.size()];
             
             for(int i=0;i<users.size();i++)
@@ -503,6 +444,190 @@ public class ManageUsersController {
         return userArray;
     }
     
+    
+    
+    /* Operations over the XML data source (users.file) */
+    
+    /* Editing user info */
+    private void editUserInfoInXML(final HttpServletRequest request) {
+        String userName = request.getParameter("userName");
+        String lastName = request.getParameter("lastName");
+        String firstName = request.getParameter("firstName");
+        String emailAddress = request.getParameter("emailAddress");
+        String status = request.getParameter("status");
+        
+        /* this logic is deprecated and only used for testing - it utilizes the xml in users.store */
+        final File file = new File(USERS_FILE);
+        SAXBuilder builder = new SAXBuilder();
+        String xmlContent = "";
+        
+        try{
+
+            Document document = (Document) builder.build(file);
+            
+            Element rootNode = document.getRootElement();
+            LOG.debug("root name: " + rootNode.getName());
+            
+            List users = (List)rootNode.getChildren();
+            //userArray =  new User[users.size()];
+            
+            for(int i=0;i<users.size();i++)
+            {
+                Element userEl = (Element) users.get(i);
+                LOG.debug(userName + " " + userEl.getChild("userName").getTextNormalize());
+                if(userEl.getChild("userName").getTextNormalize().equals(userName)) {
+                    LOG.debug("\t\t\tChange this one");
+                    //rootNode.removeContent(userEl);
+                    userEl.getChild("lastName").setText(lastName);
+                    userEl.getChild("firstName").setText(firstName);
+                    userEl.getChild("status").setText(lastName);
+                    userEl.getChild("emailAddress").setText(emailAddress);
+                    
+                }
+            }
+            
+
+            XMLOutputter outputter = new XMLOutputter();
+            xmlContent = outputter.outputString(rootNode);
+            
+            LOG.debug("NEW XMLCONTENT \n" + xmlContent);
+            
+            Writer output = null;
+            output = new BufferedWriter(new FileWriter(file));
+            output.write(xmlContent);
+            LOG.debug("Writing to file");
+            output.close();
+            
+            
+        }catch(Exception e) {
+            LOG.debug("Couldn't write new xml to file");
+        }
+    }
+    
+    
+    /* Deleting user info */
+    private void deleteUserInfoFromXML(final HttpServletRequest request) {
+        String userName = request.getParameter("user");
+        
+        /* this logic is deprecated and only used for testing - it utilizes the xml in users.store */
+        final File file = new File(USERS_FILE);
+        SAXBuilder builder = new SAXBuilder();
+        String xmlContent = "";
+        
+        try{
+
+            Document document = (Document) builder.build(file);
+            
+            Element rootNode = document.getRootElement();
+            LOG.debug("root name: " + rootNode.getName());
+            
+            List users = (List)rootNode.getChildren();
+            //userArray =  new User[users.size()];
+            
+            for(int i=0;i<users.size();i++)
+            {
+                Element userEl = (Element) users.get(i);
+                LOG.debug(userName + " " + userEl.getChild("userName").getTextNormalize());
+                if(userEl.getChild("userName").getTextNormalize().equals(userName)) {
+                    LOG.debug("\t\t\tDelete this one");
+                    rootNode.removeContent(userEl);
+                }
+            }
+            
+
+            XMLOutputter outputter = new XMLOutputter();
+            xmlContent = outputter.outputString(rootNode);
+            
+            LOG.debug("NEW XMLCONTENT \n" + xmlContent);
+            
+            Writer output = null;
+            output = new BufferedWriter(new FileWriter(file));
+            output.write(xmlContent);
+            LOG.debug("Writing to file");
+            output.close();
+            
+        }catch(Exception e) {
+            LOG.debug("Couldn't write new xml to file");
+        }
+    }
+    
+    
+    
+    
+    /* Adding user info */
+    private void writeUserInfoToXML(final HttpServletRequest request) {
+        LOG.debug("\n*****In WriteUserInfoTOXML*****");
+
+        /* this logic is deprecated and only used for testing - it utilizes the xml in users.store */
+        final File file = new File(USERS_FILE);
+        SAXBuilder builder = new SAXBuilder();
+        String xmlContent = "";
+        
+        try{
+
+            Document document = (Document) builder.build(file);
+            
+            LOG.debug("Building document");
+            
+            Element rootNode = document.getRootElement();
+            LOG.debug("root name: " + rootNode.getName());
+            
+            Element userElement = new Element("user");
+            
+            Enumeration<String> paramEnum = request.getParameterNames();
+            
+            Element lastNameEl = new Element("lastName");
+            lastNameEl.addContent("user3_lastName");
+            Element firstNameEl = new Element("firstName");
+            firstNameEl.addContent("user3_firstName");
+            Element userNameEl = new Element("userName");
+            userNameEl.addContent("user3_userName");
+            Element emailEl = new Element("emailAddress");
+            emailEl.addContent("user3_emailAddress");
+            Element statusEl = new Element("status");
+            String user_status = request.getParameter("status");
+            if(user_status != null && user_status != "") {
+                statusEl.addContent(user_status);
+            } 
+            else {
+                statusEl.addContent("N/A");
+            }
+            Element groupsEl = new Element("groups");
+            groupsEl.addContent("user3_groups");
+            
+            userElement.addContent(lastNameEl);
+            userElement.addContent(firstNameEl);
+            userElement.addContent(userNameEl);
+            userElement.addContent(emailEl);
+            userElement.addContent(statusEl);
+            userElement.addContent(groupsEl);
+            
+            rootNode.addContent(userElement);
+            
+            document.setContent(rootNode);
+            
+            XMLOutputter outputter = new XMLOutputter();
+            xmlContent = outputter.outputString(rootNode);
+            
+            LOG.debug("XMLCONTNET \n" + xmlContent);
+            
+            Writer output = null;
+            output = new BufferedWriter(new FileWriter(file));
+            output.write(xmlContent);
+            LOG.debug("Writing to file");
+            output.close();
+            
+        }catch(Exception e) {
+            LOG.debug("Couldn't write new xml to file");
+        }
+
+        LOG.debug("*****End WriteUserInfoTOXML*****\n");
+    }
+    
+    
+    /* Debugging methods */
+    
+    
     /**
      * headerStringInfo(HttpServletRequest request)
      * Private method that prints out the header contents of the request.  Used mainly for debugging.
@@ -551,6 +676,19 @@ public class ManageUsersController {
         return "ManageUsers_Table here";
     }
 
+    
+    private void writeUserInfoToDB(final HttpServletRequest request) {
+        LOG.debug("\n*****In WriteUserInfoToDB*****");
+        LOG.debug("*****End WriteUserInfoTODB*****\n");
+
+    }
+    
+    private void deleteUserInfoFromDB(final HttpServletRequest request) {
+        LOG.debug("\n*****In WriteUserInfoToDB*****");
+        LOG.debug("*****End WriteUserInfoTODB*****\n");
+
+    }
+    
 }
 
 

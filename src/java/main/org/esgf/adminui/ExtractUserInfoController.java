@@ -75,7 +75,6 @@ public class ExtractUserInfoController {
         String jsonContent = "jsonContent";
 
         String userName = request.getParameter("id");
-        LOG.debug("\n\n\n" + userName + "\n\n\n");
         queryStringInfo(request);
         
         try {
@@ -124,7 +123,7 @@ public class ExtractUserInfoController {
         
         
         LOG.debug("JsonContent: " + jsonContent);
-        LOG.debug("\n---------------end Relay---------------\n");
+        LOG.debug("\nend doGet extractuserdataproxy\n");
         return jsonContent;
         
         /*

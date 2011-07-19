@@ -1,23 +1,12 @@
 <users>
 	<user>
-		<lastName>
-			user1_lastName
-		</lastName>
-		<firstName>
-			user1_firstName
-		</firstName>
+		<lastName>user1_lastNamee</lastName>
+		<firstName>user1_firstNamee</firstName>
 		<userName>
 			user1_userName
 		</userName>
-		<emailAddress>
-			user1_emailAddress1
-		</emailAddress>
-		<status>
-			user1_status
-		</status>
-		<groups>
-			user1_groups
-		</groups>
+		<emailAddress>user1_emailAddress1</emailAddress>
+		<status>user1_lastNamee</status>
 	</user>
 	<user>
 		<lastName>
@@ -35,8 +24,5 @@
 		<status>
 			user2_status
 		</status>
-		<groups>
-			user2_groups
-		</groups>
 	</user>
 </users>

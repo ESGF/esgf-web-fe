@@ -163,10 +163,6 @@
 						        <c:forEach var="user" items="${ManageUsers_user}">
 									 <tr class="user_rows" 
 									 	 id="${ManageUsers_user[j].userName}" 
-									 	 attLastName = "${ManageUsers_user[j].lastName}"
-									 	 attFirstName = "${ManageUsers_user[j].firstName}"
-									 	 attEmailAddress = "${ManageUsers_user[j].emailAddress}"
-									 	 attStatus = "${ManageUsers_user[j].status}"
 									 	 style="cursor:pointer">  
 						                <td>${ManageUsers_user[j].lastName}</td> 
 						                <td>${ManageUsers_user[j].firstName}</td>  
@@ -184,9 +180,11 @@
 						  
 							</table> 
 							
-		    				<input class="adminbutton" id="add_user-button" type="submit" value="Add User" />
-		    				<input class="adminbutton" id="edit_user-button" type="submit" value="Edit User" />
-		    				<input class="adminbutton" id="delete_user-button" type="submit" value="Remove Selected User" />
+							<div class="buttons" style="margin-bottom:40px;">
+			    				<input class="adminbutton" id="add_user-button" type="submit" value="Add User" />
+			    				<input class="adminbutton" id="edit_user-button" type="submit" value="Edit User" />
+			    				<input class="adminbutton" id="delete_user-button" type="submit" value="Remove Selected User" />
+							</div>
 		    				
 						</div>
 						<div class="span-24 last">
@@ -202,20 +200,20 @@
 							      		<legend class="formclass">New User Form</legend>
 							
 							          	<p>
-							          		<label class="formLabels" for="lastName" style="">Last Name:</label>
-							      		 	<input type="text" class="text" name="lastName" id="lastName" value=""> <br />
+							          		<label class="formLabels" for="userName">User Name:</label>
+							      		  	<input type="text" class="text" id="form_userName" name="userName" value=""> <br />
+							      		  	
+							      		  	<label class="formLabels" id="lastName" for="lastName" style="">Last Name:</label>
+							      		 	<input type="text" class="text" name="lastName" id="form_lastName" value=""> <br />
 							      		 	
 							          		<label class="formLabels" for="firstName">First Name:</label>
-							      			<input type="text" class="text" id="firstName" name="firstName" value=""> <br />	
+							      			<input type="text" class="text" id="form_firstName" name="firstName" value=""> <br />	
 							      											
-											<label class="formLabels" for="userName">User Name:</label>
-							      		  	<input type="text" class="text" id="userName" name="userName" value=""> <br />
-							      		  	
-							      		  	<label class="formLabels" for="emailAddress" style="">Email:</label>
-							      		 	<input type="text" class="text" name="emailAddress" id="emailAddress" value=""> <br />
+											<label class="formLabels" for="emailAddress" style="">Email:</label>
+							      		 	<input type="text" class="text" name="emailAddress" id="form_emailAddress" value=""> <br />
 							      		 	
 							          		<label class="formLabels" for="status">Status:</label>
-							      			<input type="text" class="text" id="status" name="status" value=""> <br />	
+							      			<input type="text" class="text" id="form_status" name="status" value=""> <br />	
 							      				
 							      			<!--  							
 											<label class="formLabels" for="organization">Organization:</label>
@@ -233,13 +231,12 @@
 											<label class="formLabels" for="DN">DN:</label>
 							      		  	<input type="text" class="text" id="DN" name="DN" value=""> <br />
 							      		  	-->
-							      		  	<input type="hidden" name="type" value="add"/>
+							      		  	<input type="hidden" name="type" id="type" value="add"/>
 							      		  	
 							      		  	
 							      		</p>
 							      		<p>
-							      			<input type="submit" value="Submit">
-							      		  	<input type="reset" value="Reset">
+							      			<input class="adminbutton" type="submit" value="Submit">
 							      		</p>
 							
 							      	</fieldset>
@@ -260,22 +257,133 @@
 <script>
 $(document).ready(function(){
 	
+	//global variable...needs to be changed!!!
+	var currentUserName = '';
+	
 	/**
-	* Will display the user's information
+	* Will display the user's information when the admin clicks on a row
 	*/
 	$('tr.user_rows').click(function(){
 
+		//first we must hide/remove any information previously there
 		$('#new_user_form').hide();
+		$('#user_info').hide();
 
 		$('div.user_info_header').remove();
 		$('div.user_info_content').remove();
 		
-		
+		//grab the username from the id of the row
 		var userName = $(this).attr("id");
 
+		currentUserName = userName;
 		
-		/* from username we can get the rest of the info via an ajax cal */
-		var query = { "id" : userName };
+		
+		
+		/* from username we can get the rest of the info via an ajax call to extractuserdataproxy */
+		/* but MAKE SURE THAT IT IS NOT NULL!!! */
+		if(userName != null && userName != "") {
+			var query = { "id" : userName };
+			var userinfo_url = '/esgf-web-fe/extractuserdataproxy';
+			$.ajax({
+	    		url: userinfo_url,
+	    		type: "GET",
+	    		data: query,
+	    		dataType: 'json',
+	    		success: function(data) {
+	    			processUserContent(data);
+	    		},
+				error: function() {
+					alert('error');
+				}
+			});
+		} else {
+			alert('Must have a valid user name to perform this operation');
+		}
+		
+		
+		
+		
+	});
+	
+	/*
+	* Helper function for post ajax call processing
+	*/
+	function processUserContent(data) {
+		//printObject(data);
+		var userName = data.user.userName;
+		
+		var user_info_header = getUserInfoHeader(userName);
+		var user_info_content = getUserInfoContent(data);
+		
+		$('div#user_info').append(user_info_header);
+		$('div#user_info').append(user_info_content);
+		
+		$('div#user_info').show();
+		
+	}
+	
+	/*
+	* Helper function for displaying the userName
+	*/
+	function getUserInfoHeader(userName) {
+		var user_info_header = '<div id="' + userName + '" class="user_info_header" style="text-align:center">' + userName + '</div>';
+		return user_info_header;
+	}
+	
+	/*
+	* Helper function for displaying the userContent
+	*/
+	function getUserInfoContent(data) {
+		var lastName = data.user.lastName;
+		var firstName = data.user.firstName;
+		var emailAddress = data.user.emailAddress;
+		var status = data.user.status;
+		var userName = data.user.userName;
+		var content = '<div>First Name: ' + firstName + '</div>' +
+					  '<div>Last Name: ' + lastName + '</div>' + 
+					  '<div>Email: ' + emailAddress + '</div>' + 
+					  '<div>Status: ' + status + '</div>'
+					  ;
+		var user_info_content = '<div class="user_info_content">' + content + '</div>';
+		return user_info_content;
+	}
+	
+	
+	/*
+	* Add User
+	*/
+	$('input#add_user-button').click(function(){
+		
+		//first we must hide/remove any information previously there
+		$('#new_user_form').hide();
+		$('#user_info').hide();
+
+		$('div.user_info_header').remove();
+		$('div.user_info_content').remove();
+		
+		clearFormValues();
+		
+		$('input#type').val('add');
+		
+		
+		$('#new_user_form').show();
+		
+	});
+	
+	/*
+	* Edit User - same as add user but we must add the current values to the form
+	*/
+	$('input#edit_user-button').click(function(){
+		$('#new_user_form').hide();
+		$('#user_info').hide();
+
+		$('div.user_info_header').remove();
+		$('div.user_info_content').remove();
+		clearFormValues();
+		
+		$('input#type').val('edit');
+		
+		var query = { "id" : currentUserName };
 		var userinfo_url = '/esgf-web-fe/extractuserdataproxy';
 		$.ajax({
     		url: userinfo_url,
@@ -283,127 +391,56 @@ $(document).ready(function(){
     		data: query,
     		dataType: 'json',
     		success: function(data) {
-    			processUserContent(data);
+    			fillFormContentForEdit(data);
     		},
 			error: function() {
 				alert('error');
 			}
 		});
-		
-		
-		//var user_info_content = '<div class="user_info_content">LastName: ' + lastName + '</div>';
-		//$('div#user_info').append(user_info_content);
-		
-		/*
-		$('div.user_content').hide();
-		//alert($(this).attr("attLastName") + ' ' + $(this).attr("attFirstName") + ' ' +  $(this).attr("attEmailAddress") + ' ' + $(this).attr("attStatus"));
-		
-		
-		
-		//$('div#user_info').append('<div id="' + userName + '" class="userContent" style="text-align:center">' + userName + '</div>');
-		$('div#user_info').append('<div class="user_content" style="display:none">User info</div>');
 
-		$('div.user_content').show();
-		*/
+		$('#new_user_form').show();
+		
+		
 	});
 	
-	function processUserContent(data) {
-		alert('in process UserContent');
-		//printObject(data);
-		var userName = data.user.userName;
-		
-		alert(status);
-		var user_info_header = getUserInfoHeader(userName);
-		var user_info_content = getUserInfoContent(data);
-		
-		$('div#user_info').append(user_info_header);
-		$('div#user_info').append(user_info_content);
-		
-		
-	}
 	
-	function getUserInfoHeader(userName) {
-		var user_info_header = '<div id="' + userName + '" class="user_info_header" style="text-align:center">' + userName + '</div>';
-		return user_info_header;
-	}
-	
-	function getUserInfoContent(data) {
+	/* Helper function for filling content for edtiing data */	
+	function fillFormContentForEdit(data) {
 		var lastName = data.user.lastName;
 		var firstName = data.user.firstName;
 		var emailAddress = data.user.emailAddress;
 		var status = data.user.status;
 		var userName = data.user.userName;
-		var user_info_content = '<div class="user_info_content">' + firstName + ' ' + lastName + '</div>';
-		return user_info_content;
+		
+		//Note there may be more values later, this is for demo purposes
+		$('input#form_firstName').val(firstName);
+		$('input#form_lastName').val(lastName);
+		$('input#form_userName').val(userName);
+		$('input#form_emailAddress').val(emailAddress);
+		$('input#form_status').val(status);
+		
 	}
-	
-	/*
-     * This function is primarily used for debugging
-     */
-    function printObject(object) {
-        var output = '';
-        for (var property in object) {
-          output += property + ': ' + object[property]+'; ';
-        }
-        alert(output);
-    }
-	
-	/*
-	* Add User
-	*/
-	$('input#add_user-button').click(function(){
-		
-		/*
-		$('div.header_name').remove();
-		$('div.user_content').remove();
-		
-		
-		$('div.user_content').hide();
-		//$('div.user_content').remove();
-		
-		$('#new_user_form').hide();
-		
-		$('div#user_info').append('<div id="' + userName + '" class="header_name" style="text-align:center">' + 'Add User' + '</div>');
-		//$('div#user_info').append('<div id="' + userName + '" class="userContent" style="text-align:center">' + userName + '</div>');
-		$('#new_user_form').show();
-		*/
-	});
-	
-	/*
-	* Add User
-	*/
-	$('input#edit_user-button').click(function(){
-		alert('In edit user...');
-
-		
-		/*)
-		$('div.user_content').remove();
-		$('div.header_name').remove();
-		//$('div.user_content').remove();
-		$('#new_user_form').hide();
-		
-		$('div#user_info').append('<div id="' + userName + '" class="header_name" style="text-align:center">' + 'Adding new User' + '</div>');
-		//$('div#user_info').append('<div id="' + userName + '" class="userContent" style="text-align:center">' + userName + '</div>');
-		$('#new_user_form').show();
-		*/
-		
-	});
 	
 	/*
 	* Remove User
 	*/
 	$('input#delete_user-button').click(function(){
+		$('#new_user_form').hide();
+		$('#user_info').hide();
 
-		$('div.user_content').hide();
-		if($('div.header_name').html() != null) {
-			var url = '';
-			var input = '<input type="hidden" name="'+ 'type' +'" value="delete" />';
+		$('div.user_info_header').remove();
+		$('div.user_info_content').remove();
+		clearFormValues();
+		
+		if(currentUserName != '') {
+			var deletedUserInput = '<input type="hidden" name="'+ 'user' +'" value="' + currentUserName + '" />';
+			var input = '<input type="hidden" name="'+ 'type' +'" value="delete" />' + deletedUserInput;
 			//send request
 			var formStr = '<form action="" method="post">' + input + '</form>';
 			
 			jQuery(formStr).appendTo('body').submit().remove();
 		}
-
+		alert('done deletin');
 		$('div.header_name').remove();
 	});
 	
@@ -416,10 +453,30 @@ $(document).ready(function(){
         $(this).toggleClass('open');
         var index = ($(this).index() /2);
 
-        return true;
+        return true;0
     });
 	
+
+	/*   Utility functions   */
+	function clearFormValues() {
+		$('input#form_firstName').val("");
+		$('input#form_lastName').val("");
+		$('input#form_userName').val("");
+		$('input#form_emailAddress').val("");
+		$('input#form_status').val("");
+	}
 	
+	
+	/*
+     * This function is primarily used for debugging
+     */
+    function printObject(object) {
+        var output = '';
+        for (var property in object) {
+          output += property + ': ' + object[property]+'; ';
+        }
+        alert(output);
+    }
 });
 
 

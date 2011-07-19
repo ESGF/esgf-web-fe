@@ -9,20 +9,12 @@
 		<status>user1_lastNamee</status>
 	</user>
 	<user>
-		<lastName>
-			user2_lastName
-		</lastName>
-		<firstName>
-			user2_firstName
-		</firstName>
+		<lastName>user2_lastName</lastName>
+		<firstName>user2_firstName8</firstName>
 		<userName>
 			user2_userName
 		</userName>
-		<emailAddress>
-			user2_emailAddress
-		</emailAddress>
-		<status>
-			user2_status
-		</status>
+		<emailAddress>user2_emailAddress</emailAddress>
+		<status>user2_lastName</status>
 	</user>
 </users>

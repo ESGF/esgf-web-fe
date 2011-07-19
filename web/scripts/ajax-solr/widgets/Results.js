@@ -146,12 +146,12 @@
 	        var self = this;
             $(this.target).empty();
             
-            
             if(ESGF.setting.storage) {
             	var fq = localStorage['fq'];
+
                 /* only display results if there is a search */
-                if (fq != undefined) {
-                	
+            	/* for now that means the localStorage ONLY has type:Dataset; */
+            	if(Manager.store.values('fq') != 'type:Dataset') {	
                 	//alert ('i should not display this if ' + fq);
                 	for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
                         var doc = this.manager.response.response.docs[i];

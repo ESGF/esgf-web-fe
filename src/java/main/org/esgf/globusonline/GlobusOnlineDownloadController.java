@@ -51,7 +51,7 @@
  *
  ******************************************************************************/
 
-package org.esgf.filedownload;
+package org.esgf.globusonline;
 
 import java.io.IOException;
 import java.io.PrintWriter;

@@ -74,8 +74,9 @@ esgf_web_fe_version=${esgf_web_fe_version:-"0.9.6"}
 #User Defined / Settable (public)
 #--------------
 install_prefix=${install_prefix:-"/usr/local"}
-workdir=${workdir:-~/workbench/esg}
-install_logfile=${install_logfile:-"/etc/esg.install_log"}
+workdir=${workdir:-${installer_home:-"/usr/local/src/esgf"}/workbench/esg}
+esg_root_dir=${esg_root_dir:-${ESGF_HOME:-"/esg"}}
+install_manifest=${install_manifest:-"${esg_root_dir}/esgf-install-manifest"}
 #--------------
 
 date_format=${date_format:-"+%Y_%m_%d_%H%M%S"}
@@ -178,8 +179,8 @@ setup_web_fe() {
 }
 
 write_web_fe_install_log() {
-    echo "$(date ${date_format}) webapp:${web_fe_context_root}=${esgf_web_fe_version} ${web_fe_app_home}" >> ${install_logfile}
-    dedup ${install_logfile}
+    echo "$(date ${date_format}) webapp:${web_fe_context_root}=${esgf_web_fe_version} ${web_fe_app_home}" >> ${install_manifest}
+    dedup ${install_manifest}
     write_as_property web_fe_service_endpoint http://${esgf_host}/${web_fe_context_root}/
     write_as_property web_fe_app_home
     return 0

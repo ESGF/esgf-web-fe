@@ -321,7 +321,8 @@ AjaxSolr.PagerWidget = AjaxSolr.AbstractWidget.extend(
       
     	    if(ESGF.setting.storage) {
     	    	//only if there is a query should the pagination be displayed
-        	    if (fq != undefined) {
+        	    //if (fq != undefined) {
+        	    if(Manager.store.values('fq') != 'type:Dataset') {	
         			  this.renderLinks(this.windowedLinks());
         			  this.renderHeader(perPage, offset, total);
         	    }

@@ -110,6 +110,8 @@ ESGF.setting.metadata_summary = 'html';
 //distributed search switch
 ESGF.setting.searchType = 'local';
 
+//for admin's usermanagement interface - currentUserName
+ESGF.setting.currentUserName = 'default';
 
 /**
  * Proxy for creating the template for file downloads.

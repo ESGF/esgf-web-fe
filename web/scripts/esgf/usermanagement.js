@@ -1,11 +1,5 @@
 $(document).ready(function(){
 	
-
-	//$("a#add1[rel]").overlay();
-	
-	
-	//global variable...needs to be changed!!!
-	var currentUserName = '';
 	
 	/**
 	* Will display the user's information when the admin clicks on a row
@@ -22,14 +16,14 @@ $(document).ready(function(){
 		//grab the username from the id of the row
 		var userName = $(this).attr("id");
 
-		currentUserName = userName;
+		ESGF.setting.currentUserName = userName;
 		
 		
 		
 		/* from username we can get the rest of the info via an ajax call to extractuserdataproxy */
 		/* but MAKE SURE THAT IT IS NOT NULL!!! */
 		if(userName != null && userName != "") {
-			var query = { "id" : currentUserName, "type" : "edit" };
+			var query = { "id" : ESGF.setting.currentUserName, "type" : "edit" };
 			var userinfo_url = '/esgf-web-fe/extractuserdataproxy';
 			$.ajax({
 	    		url: userinfo_url,
@@ -135,7 +129,7 @@ $(document).ready(function(){
 		onLoad: function() {
 			$('#new_user_form').show();
 			$('#userName_input').hide();
-			$('h3#form_title').html('Edit User ' + currentUserName);
+			$('h3#form_title').html('Edit User ' + ESGF.setting.currentUserName);
 			$('#new_user_form').hide();
 			//$('#user_info').hide();
 			$('#userName_input').hide();
@@ -146,7 +140,7 @@ $(document).ready(function(){
 			
 			$('input#type').val('edit');
 			
-			var query = { "id" : currentUserName, "type" : "edit" };
+			var query = { "id" : ESGF.setting.currentUserName, "type" : "edit" };
 			var userinfo_url = '/esgf-web-fe/extractuserdataproxy';
 			$.ajax({
 	    		url: userinfo_url,
@@ -201,10 +195,10 @@ $(document).ready(function(){
 		$('#user_info').hide();
 
 		
-		if (confirm("Are you sure you want to delete user " + currentUserName + "?")) {
+		if (confirm("Are you sure you want to delete user " + ESGF.setting.currentUserName + "?")) {
 		 
-			if(currentUserName != '') {
-				var deletedUserInput = '<input type="hidden" name="'+ 'user' +'" value="' + currentUserName + '" />';
+			if(ESGF.setting.currentUserName != '') {
+				var deletedUserInput = '<input type="hidden" name="'+ 'user' +'" value="' + ESGF.setting.currentUserName + '" />';
 				var input = '<input type="hidden" name="'+ 'type' +'" value="delete" />' + deletedUserInput;
 				//send request
 				var formStr = '<form action="" method="post">' + input + '</form>';

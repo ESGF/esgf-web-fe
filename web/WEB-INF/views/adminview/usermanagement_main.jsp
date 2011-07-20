@@ -1,9 +1,6 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
 <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery-1.4.2.min.js" /> '></script>
-    <!-- 
-    <script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-search-setting.js" />'> </script>
-    -->
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery-ui-1.8.12.custom.min.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/overlay.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/overlay.apple.js" /> '></script>
@@ -18,7 +15,7 @@
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.autocomplete.js" /> '></script>
 
 	<script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-core.js" /> '></script>
-	<script type="text/javascript" src='<c:url value="/scripts/esgf/usermanagment.js" /> '></script>
+	<script type="text/javascript" src='<c:url value="/scripts/esgf/usermanagement.js" /> '></script>
 	
 
     <link rel="stylesheet"
@@ -29,11 +26,6 @@
         href='<c:url value="/styles/usermanagement.css" />'
         type="text/css" media="screen">	
     
-
-<style>
-	
-
-</style>
 
 
 
@@ -201,7 +193,9 @@
 </div>
 
 <script>
-
+$(document).ready(function(){
+	
+});
 
 </script>
 

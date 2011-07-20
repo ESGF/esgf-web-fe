@@ -29,17 +29,23 @@
            	<c:choose>
            		<c:when test="${principal=='anonymousUser'}">
                 	<li> <a href="<c:url value='/login'/>" >Login</a></li>
+                	<li> <a href="<c:url value='/adminview'/>" >Admin</a></li>
               	</c:when>
               	<c:otherwise>
                   	<c:set var="root"><spring:message code="esgf.openidRoot" /></c:set>
+						<!--  
 						<c:choose>
-                  		<c:when test="${principal.username==root}">
-                  			<li> <a href="<c:url value='/adminview'/>" >Admin</a></li>
-              			</c:when>
-              			<c:otherwise>
-              			</c:otherwise>
-                  	</c:choose>
-              		
+							  
+	                  		<c:when test="${principal.username==root}">
+	                  			<li> <a href="<c:url value='/adminview'/>" >Admin</a></li>
+	              			</c:when>
+	              			
+              			
+	              			<c:otherwise>
+	              			</c:otherwise>
+                  		</c:choose>
+              			-->
+              			<li> <a href="<c:url value='/adminview'/>" >Admin</a></li>
                 	<li> <a href="<c:url value='/j_spring_security_logout'/>" >Logout</a></li>
               	</c:otherwise>
           	</c:choose>                                      

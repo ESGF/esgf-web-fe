@@ -1,20 +1,12 @@
 <users>
 	<user>
-		<lastName>user1_lastNamee</lastName>
-		<firstName>user1_firstNamee</firstName>
+		<lastName>user1_lastName</lastName>
+		<firstName>user1_firstName</firstName>
 		<userName>
 			user1_userName
 		</userName>
 		<emailAddress>user1_emailAddress1</emailAddress>
-		<status>user1_lastNamee</status>
+		<status>user1_lastName</status>
 	</user>
-	<user>
-		<lastName>user2_lastName</lastName>
-		<firstName>user2_firstName8</firstName>
-		<userName>
-			user2_userName
-		</userName>
-		<emailAddress>user2_emailAddress</emailAddress>
-		<status>user2_lastName</status>
-	</user>
-</users>
+	
+<user><lastName>N/A</lastName><firstName>N/A</firstName><userName>N/A</userName><emailAddress>N/A</emailAddress><status>N/A</status><groups>user3_groups</groups></user></users>

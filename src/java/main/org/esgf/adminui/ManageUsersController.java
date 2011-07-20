@@ -132,6 +132,13 @@ public class ManageUsersController {
     private final static String ROOT_USER = "https://pcmdi3.llnl.gov/esgcet/myopenid/jfharney";
     
     
+    private final static boolean writeXMLTOLogFlag = false;
+
+    private final static boolean writeLogFlag = false;
+    private final static boolean editLogFlag = false;
+    private final static boolean deleteLogFlag = false;
+    
+    
     /**
      * List of invalid text characters -
      * anything that is not within square brackets.
@@ -275,8 +282,8 @@ public class ManageUsersController {
     
     private void editUser(final HttpServletRequest request) throws IOException {
         LOG.debug("*****In EditUser*****");
-        
-        queryStringInfo(request);
+        if(editLogFlag)
+            queryStringInfo(request);
         
         editUserInfoInXML(request);
         
@@ -288,8 +295,8 @@ public class ManageUsersController {
     
     private void deleteUser(final HttpServletRequest request) throws IOException {
         LOG.debug("*****In DeleteUser*****");
-        
-        queryStringInfo(request);
+        if(deleteLogFlag)
+            queryStringInfo(request);
         
         deleteUserInfoFromXML(request);
         
@@ -302,15 +309,11 @@ public class ManageUsersController {
     
     private void addUser(final HttpServletRequest request) throws IOException {
         LOG.debug("\n\n*****In AddUser*****");
-
-        queryStringInfo(request);
+        if(writeLogFlag)
+            queryStringInfo(request);
         
         //using the xml store
         writeUserInfoToXML(request);
-        
-        
-        
-        
         
         //using the esgf-security store
         //writeUserInfoToDB(request);
@@ -324,26 +327,8 @@ public class ManageUsersController {
  
     
     
-    private User [] getUsersHardCoded() {
-        
-        
-        Group group1 = new Group("CDIAC","Standard","Valid");
-        Group group2 = new Group("C-LAMP","Standard","Valid");
-        
-        Group [] user1_groups = {group1, group2}; 
-        Group [] user2_groups = {group2}; 
-       
-        
-        User user1 = new User("user1_lastName","user1_firstName","user1_userName","user1_emailAddress",
-                "user1_status","user1_organization","user1_city","user1_state","user1_country","user1_openId","user1_DN",user1_groups);
-        User user2 = new User("user2_lastName","user2_firstName","user2_userName","user2_emailAddress",
-                "user2_status","user2_organization","user2_city","user2_state","user2_country","user2_openId","user2_DN",user2_groups);
-        
-        User [] users = {user1,user2};
-        
-        return users;
-    }
     
+    /* helper function for getting users from xml store */
     private User [] getUsersFromXML() throws IOException {
         
         LOG.debug("In getUsers()");
@@ -466,7 +451,8 @@ public class ManageUsersController {
             Document document = (Document) builder.build(file);
             
             Element rootNode = document.getRootElement();
-            LOG.debug("root name: " + rootNode.getName());
+            if(editLogFlag)
+                LOG.debug("root name: " + rootNode.getName());
             
             List users = (List)rootNode.getChildren();
             //userArray =  new User[users.size()];
@@ -474,13 +460,14 @@ public class ManageUsersController {
             for(int i=0;i<users.size();i++)
             {
                 Element userEl = (Element) users.get(i);
-                LOG.debug(userName + " " + userEl.getChild("userName").getTextNormalize());
+                if(editLogFlag)
+                    LOG.debug(userName + " " + userEl.getChild("userName").getTextNormalize());
                 if(userEl.getChild("userName").getTextNormalize().equals(userName)) {
-                    LOG.debug("\t\t\tChange this one");
-                    //rootNode.removeContent(userEl);
+                    if(editLogFlag)
+                        LOG.debug("\t\t\tChange this one");
                     userEl.getChild("lastName").setText(lastName);
                     userEl.getChild("firstName").setText(firstName);
-                    userEl.getChild("status").setText(lastName);
+                    userEl.getChild("status").setText(status);
                     userEl.getChild("emailAddress").setText(emailAddress);
                     
                 }
@@ -490,12 +477,17 @@ public class ManageUsersController {
             XMLOutputter outputter = new XMLOutputter();
             xmlContent = outputter.outputString(rootNode);
             
-            LOG.debug("NEW XMLCONTENT \n" + xmlContent);
-            
+            if(editLogFlag) {
+                if(writeXMLTOLogFlag) {
+                    LOG.debug("NEW XMLCONTENT \n" + xmlContent);
+                }
+            } 
+                    
             Writer output = null;
             output = new BufferedWriter(new FileWriter(file));
             output.write(xmlContent);
-            LOG.debug("Writing to file");
+            if(editLogFlag)
+                LOG.debug("Writing to file");
             output.close();
             
             
@@ -519,7 +511,8 @@ public class ManageUsersController {
             Document document = (Document) builder.build(file);
             
             Element rootNode = document.getRootElement();
-            LOG.debug("root name: " + rootNode.getName());
+            if(deleteLogFlag)
+                LOG.debug("root name: " + rootNode.getName());
             
             List users = (List)rootNode.getChildren();
             //userArray =  new User[users.size()];
@@ -527,9 +520,11 @@ public class ManageUsersController {
             for(int i=0;i<users.size();i++)
             {
                 Element userEl = (Element) users.get(i);
-                LOG.debug(userName + " " + userEl.getChild("userName").getTextNormalize());
+                if(deleteLogFlag)
+                    LOG.debug(userName + " " + userEl.getChild("userName").getTextNormalize());
                 if(userEl.getChild("userName").getTextNormalize().equals(userName)) {
-                    LOG.debug("\t\t\tDelete this one");
+                    if(deleteLogFlag)
+                        LOG.debug("\t\t\tDelete this one");
                     rootNode.removeContent(userEl);
                 }
             }
@@ -538,12 +533,16 @@ public class ManageUsersController {
             XMLOutputter outputter = new XMLOutputter();
             xmlContent = outputter.outputString(rootNode);
             
-            LOG.debug("NEW XMLCONTENT \n" + xmlContent);
-            
+            if(deleteLogFlag) {
+                if(writeXMLTOLogFlag) {
+                    LOG.debug("NEW XMLCONTENT \n" + xmlContent);
+                }
+            }
             Writer output = null;
             output = new BufferedWriter(new FileWriter(file));
             output.write(xmlContent);
-            LOG.debug("Writing to file");
+            if(deleteLogFlag)
+                LOG.debug("Writing to file");
             output.close();
             
         }catch(Exception e) {
@@ -558,40 +557,76 @@ public class ManageUsersController {
     private void writeUserInfoToXML(final HttpServletRequest request) {
         LOG.debug("\n*****In WriteUserInfoTOXML*****");
 
+        String userName = request.getParameter("userName");
+        String lastName = request.getParameter("lastName");
+        String firstName = request.getParameter("firstName");
+        String emailAddress = request.getParameter("emailAddress");
+        String status = request.getParameter("status");
+        
+        
         /* this logic is deprecated and only used for testing - it utilizes the xml in users.store */
         final File file = new File(USERS_FILE);
         SAXBuilder builder = new SAXBuilder();
         String xmlContent = "";
         
+        queryStringInfo(request);
+        
         try{
 
             Document document = (Document) builder.build(file);
-            
-            LOG.debug("Building document");
+            if(writeLogFlag)
+                LOG.debug("Building document");
             
             Element rootNode = document.getRootElement();
-            LOG.debug("root name: " + rootNode.getName());
+            if(writeLogFlag)
+                LOG.debug("root name: " + rootNode.getName());
             
             Element userElement = new Element("user");
             
             Enumeration<String> paramEnum = request.getParameterNames();
             
             Element lastNameEl = new Element("lastName");
-            lastNameEl.addContent("user3_lastName");
+            if(lastName != null && lastName != "") {
+                lastNameEl.addContent(lastName);
+            } 
+            else {
+                lastNameEl.addContent("N/A");
+            }
+            
             Element firstNameEl = new Element("firstName");
-            firstNameEl.addContent("user3_firstName");
+            if(firstName != null && firstName != "") {
+                firstNameEl.addContent(firstName);
+            } 
+            else {
+                firstNameEl.addContent("N/A");
+            }
+            
             Element userNameEl = new Element("userName");
-            userNameEl.addContent("user3_userName");
+            if(userName != null && userName != "") {
+                userNameEl.addContent(userName);
+            } 
+            else {
+                userNameEl.addContent("N/A");
+            }
+            
             Element emailEl = new Element("emailAddress");
-            emailEl.addContent("user3_emailAddress");
+            if(emailAddress != null && emailAddress != "") {
+                emailEl.addContent(emailAddress);
+            } 
+            else {
+                emailEl.addContent("N/A");
+            }
+            
             Element statusEl = new Element("status");
-            String user_status = request.getParameter("status");
-            if(user_status != null && user_status != "") {
-                statusEl.addContent(user_status);
+            
+            if(status != null && status != "") {
+                statusEl.addContent(status);
             } 
             else {
                 statusEl.addContent("N/A");
             }
+            
+            
             Element groupsEl = new Element("groups");
             groupsEl.addContent("user3_groups");
             
@@ -609,12 +644,18 @@ public class ManageUsersController {
             XMLOutputter outputter = new XMLOutputter();
             xmlContent = outputter.outputString(rootNode);
             
-            LOG.debug("XMLCONTNET \n" + xmlContent);
+            if(writeLogFlag) {
+                if(writeXMLTOLogFlag) {
+                    LOG.debug("NEW XMLCONTENT \n" + xmlContent);
+                }
+            }
+            
             
             Writer output = null;
             output = new BufferedWriter(new FileWriter(file));
             output.write(xmlContent);
-            LOG.debug("Writing to file");
+            if(writeLogFlag)
+                LOG.debug("Writing to file");
             output.close();
             
         }catch(Exception e) {
@@ -623,6 +664,9 @@ public class ManageUsersController {
 
         LOG.debug("*****End WriteUserInfoTOXML*****\n");
     }
+    
+    
+    
     
     
     /* Debugging methods */
@@ -688,6 +732,34 @@ public class ManageUsersController {
         LOG.debug("*****End WriteUserInfoTODB*****\n");
 
     }
+    
+    
+    
+    
+    
+    
+    
+    /* Deprecated */
+    private User [] getUsersHardCoded() {
+        
+        
+        Group group1 = new Group("CDIAC","Standard","Valid");
+        Group group2 = new Group("C-LAMP","Standard","Valid");
+        
+        Group [] user1_groups = {group1, group2}; 
+        Group [] user2_groups = {group2}; 
+       
+        
+        User user1 = new User("user1_lastName","user1_firstName","user1_userName","user1_emailAddress",
+                "user1_status","user1_organization","user1_city","user1_state","user1_country","user1_openId","user1_DN",user1_groups);
+        User user2 = new User("user2_lastName","user2_firstName","user2_userName","user2_emailAddress",
+                "user2_status","user2_organization","user2_city","user2_state","user2_country","user2_openId","user2_DN",user2_groups);
+        
+        User [] users = {user1,user2};
+        
+        return users;
+    }
+    
     
 }
 

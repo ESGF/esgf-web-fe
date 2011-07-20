@@ -18,99 +18,19 @@
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.autocomplete.js" /> '></script>
 
 	<script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-core.js" /> '></script>
+	
+
+    <link rel="stylesheet"
+        href='<c:url value="/styles/lightgray/jquery-ui-1.8.10.custom.css" />'
+        type="text/css" media="screen">	
+    
+    <link rel="stylesheet"
+        href='<c:url value="/styles/usermanagement.css" />'
+        type="text/css" media="screen">	
+    
 
 <style>
-	table tbody tr:hover { background: #aaa; }
 	
-	
-	#toggleMenu {
-	    padding: 0px 0px 0px 0px; 
-	    margin: 15px 0px 30px 0px;
-	    clear: left;
-	    float: left; 
-	    width: 220px;
-	    text-align: left;
-	}
-	
-	#toggleMenu h4 {
-	    background: #aaa;
-	    border: 1px solid #EEEEEE;
-	    -moz-border-radius: 4px;
-	    -webkit-border-radius: 4px;
-	    -khtml-border-radius: 4px;
-	    border-radius: 4px;
-	    margin: 4px 0px 0px 0px;
-	    padding: 0px 0px 0px 23px;
-	    line-height: 32px; 
-	    font-weight: normal;
-	    white-space: nowrap;
-	    text-decoration: none; 
-	    color: #696969;
-	    cursor:pointer;
-	    font-size: 13px;
-	}
-	.togglebox {
-	    -moz-border-radius-bottomleft: 4px;
-	    -moz-border-radius-bottomright: 4px;
-	    -webkit-border-bottom-left-radius: 4px;
-	    -webkit-border-bottom-right-radius: 4px;
-	    -khtml-border-radius-bottomleft: 4px;
-	    -khtml-border-radius-bottomright: 4px;
-	    border-bottom-right-radius: 4px;
-	    border-bottom-left-radius: 4px;
-	    overflow: hidden;
-	    clear: both;
-	    padding: 0px 0px 0px 0px; 
-	    margin: 0px 0px 0px 0px;
-	    border-bottom: 1px solid #EEEEEE;
-	    border-left: 1px solid #EEEEEE;
-	    border-right: 1px solid #EEEEEE;
-	    background: #FFFFFF;
-	}
-	
-	
-	.togglebox .block {
-    padding: 0px 0px 0px 0px; 
-    margin: 0px 0px 0px 0px;
-}
-
-
-.togglebox .block ul {
-    list-style: none;
-    padding: 5px 0px 10px 0px;
-    margin: 0px 0px 0px 0px;
-}
-
-.togglebox .block ul li {
-    font-size: 11px;
-    line-height: 20px;
-    height: 20px;   
-    padding: 0px 0px 0px 45px;
-    margin: 0px 0px 0px 0px;
-}
-
-.togglebox .block ul li a {
-    color: #006996;
-    text-decoration: none;
-}
-
-.togglebox .block ul li a:hover {
-    color: #0088B5;
-    text-decoration: underline;
-}
-	
-.adminbutton {
-	font-size: 13px;
-	color: white;
-	border: 1px solid #9c9c9c;
-	background: #838943;
-	cursor: pointer;
-}
-	
-.formLabels {
-	font-size: 16px;
-	margin-right:10px;
-}
 
 </style>
 
@@ -123,12 +43,12 @@
 
 <div style="margin-top:20px;margin-bottom:20px;min-height:500px;">
 	<c:choose>
-		<c:when test="${principal=='anonymousUser'}">
+		<c:when test="${principal=='anonymousUser1'}">
     		<div> <c:out value="${principal}"/> IS NOT AUTHORIZED TO VIEW THIS PAGE</div>
   		</c:when>
   		<c:otherwise>
       		<c:choose>
-      			<c:when test="${principal.username=='https://pcmdi3.llnl.gov/esgcet/myopenid/jfharney'}">
+      			<c:when test="${principal=='anonymousUser'}">
   					<div style="margin-top:20px">
   					
   						<!--  header info -->
@@ -146,10 +66,9 @@
 	  
 						        <thead>  
 						            <tr>  
-						                <th>Last Name</th> 
-						                  
-						                <th>First Name</th>  
 						                <th>User Name</th>  
+						                <th>Last Name</th> 
+						                <th>First Name</th>  
 						                <th>Email Address</th>  
 						                <th>Status</th>  
 						            </tr>  
@@ -164,9 +83,9 @@
 									 <tr class="user_rows" 
 									 	 id="${ManageUsers_user[j].userName}" 
 									 	 style="cursor:pointer">  
+						                <td>${ManageUsers_user[j].userName}</td>  
 						                <td>${ManageUsers_user[j].lastName}</td> 
 						                <td>${ManageUsers_user[j].firstName}</td>  
-						                <td>${ManageUsers_user[j].userName}</td>  
 						                <td>${ManageUsers_user[j].emailAddress}</td>    
 						                <td>${ManageUsers_user[j].status}</td>    
 						            </tr> 
@@ -181,8 +100,8 @@
 							</table> 
 							
 							<div class="buttons" style="margin-bottom:40px;">
-			    				<input class="adminbutton" id="add_user-button" type="submit" value="Add User" />
-			    				<input class="adminbutton" id="edit_user-button" type="submit" value="Edit User" />
+			    				<input class="adminbutton" id="add_user-button" type="submit" value="Add User" rel="#addUserForm" />
+			    				<input class="adminbutton" id="edit_user-button" type="submit" value="Edit User" rel="#addUserForm" />
 			    				<input class="adminbutton" id="delete_user-button" type="submit" value="Remove Selected User" />
 							</div>
 		    				
@@ -193,16 +112,17 @@
 							
 							<div class="prepend-3 span-18 append-3 last">
 								
-							
+							<!-- 
 								<form id="new_user_form" action="" method="post" style="display:none">
 									 
 							      	<fieldset>
 							      		<legend class="formclass">New User Form</legend>
 							
 							          	<p>
-							          		<label class="formLabels" for="userName">User Name:</label>
-							      		  	<input type="text" class="text" id="form_userName" name="userName" value=""> <br />
-							      		  	
+							          		<div id="userName_input" style="display:none">
+							          			<label class="formLabels" for="userName">User Name:</label>
+							      		  		<input type="text" class="text" id="form_userName" name="userName" value=""> <br />
+							      		  	</div>
 							      		  	<label class="formLabels" id="lastName" for="lastName" style="">Last Name:</label>
 							      		 	<input type="text" class="text" name="lastName" id="form_lastName" value=""> <br />
 							      		 	
@@ -215,7 +135,7 @@
 							          		<label class="formLabels" for="status">Status:</label>
 							      			<input type="text" class="text" id="form_status" name="status" value=""> <br />	
 							      				
-							      			<!--  							
+							      			 							
 											<label class="formLabels" for="organization">Organization:</label>
 							      		  	<input type="text" class="text" id="organization" name="organization" value=""> <br />
 							      		  	
@@ -230,7 +150,7 @@
 							      		  	
 											<label class="formLabels" for="DN">DN:</label>
 							      		  	<input type="text" class="text" id="DN" name="DN" value=""> <br />
-							      		  	-->
+							      		
 							      		  	<input type="hidden" name="type" id="type" value="add"/>
 							      		  	
 							      		  	
@@ -242,20 +162,99 @@
 							      	</fieldset>
 							      	
 							    </form>
+							    -->
 							</div> 
 							
 						</div>
+						
+						<!-- scratch space here -->
+						<div class="span-24 last">
+						
+						
+		<!-- trigger elements --> 
+	
+				
+						<!-- overlays --> 
+<div class="simple_overlay" id="addUserForm"> 
+
+	 
+	<form id="new_user_form" action="" method="post" >
+									 
+							      	
+							<h3 style="margin-top:10px;text-align:center;text-style:bold" id="form_title">New User Information</h3>
+							<p>
+								
+				          			<label class="formLabels" for="userName">User Name:</label>
+				      		  		<input type="text" class="text" id="form_userName" name="userName" value=""> 
+				      		  		
+				      		  		<br />
+				      		  	
+				      		  		<label class="formLabels" id="lastName" for="lastName" style="">Last Name:</label>
+					      		 	<input type="text" class="text" name="lastName" id="form_lastName" value=""> <br />
+					      		 	
+					          		<label class="formLabels" for="firstName">First Name:</label>
+					      			<input type="text" class="text" id="form_firstName" name="firstName" value=""> <br />	
+					      											
+									<label class="formLabels" for="emailAddress" style="">Email:</label>
+					      		 	<input type="text" class="text" name="emailAddress" id="form_emailAddress" value=""> <br />
+					      		 	
+					          		<label class="formLabels" for="status">Status:</label>
+					      			<input type="text" class="text" id="form_status" name="status" value=""> <br />	
+							      			
+							      			
+							      	<label class="formLabels" for="organization">Organization:</label>
+							      		  	<input type="text" class="text" id="organization" name="organization" value=""> <br />
+							      		  	
+							      		  	<label class="formLabels" for="city" style="">City:</label>
+							      		 	<input type="text" class="text" name="city" id="city" value=""> <br />
+							      		 	
+							          		<label class="formLabels" for="country">Country:</label>
+							      			<input type="text" class="text" id="country" name="country" value=""> <br />	
+							      											
+											<label class="formLabels" for="openId">OpenId:</label>
+							      		  	<input type="text" class="text" id="openId" name="openId" value=""> <br />
+							      		  	
+											<label class="formLabels" for="DN">DN:</label>
+							      		  	<input type="text" class="text" id="DN" name="DN" value=""> <br />
+							      		  	
+							      		  	
+					      		  	<input type="hidden" name="type" id="type" value="add"/>
+							</p>
+							<p>
+					      			<input style="margin-left: 15px" class="adminbutton" type="submit" value="Submit">
+					      			<!-- 
+					      			<input style="margin-left: 15px" class="adminbutton" type="submit" value="Cancel">
+					      			 -->
+				      		</p>
+							
+	</form>
+							
+</div> 
+ 
+						
+						
+						
+						
+						
+						
+						
+						</div><!-- end scratch -->
+						
   				</c:when>
   				<c:otherwise>
   					<div> <c:out value="${principal.username}"/> IS NOT AUTHORIZED TO VIEW THIS PAGE</div>
   				</c:otherwise>
       		</c:choose>
   		</c:otherwise>
-	</c:choose>      
+	</c:choose>   
 </div>
 
 <script>
 $(document).ready(function(){
+	
+
+	//$("a#add1[rel]").overlay();
+	
 	
 	//global variable...needs to be changed!!!
 	var currentUserName = '';
@@ -282,7 +281,7 @@ $(document).ready(function(){
 		/* from username we can get the rest of the info via an ajax call to extractuserdataproxy */
 		/* but MAKE SURE THAT IT IS NOT NULL!!! */
 		if(userName != null && userName != "") {
-			var query = { "id" : userName };
+			var query = { "id" : currentUserName, "type" : "edit" };
 			var userinfo_url = '/esgf-web-fe/extractuserdataproxy';
 			$.ajax({
 	    		url: userinfo_url,
@@ -326,7 +325,7 @@ $(document).ready(function(){
 	* Helper function for displaying the userName
 	*/
 	function getUserInfoHeader(userName) {
-		var user_info_header = '<div id="' + userName + '" class="user_info_header" style="text-align:center">' + userName + '</div>';
+		var user_info_header = '<div id="' + userName + '" class="user_info_header" style="text-align:center">User Information for ' + userName + '</div>';
 		return user_info_header;
 	}
 	
@@ -352,56 +351,81 @@ $(document).ready(function(){
 	/*
 	* Add User
 	*/
-	$('input#add_user-button').click(function(){
-		
-		//first we must hide/remove any information previously there
-		$('#new_user_form').hide();
-		$('#user_info').hide();
+	$("input#add_user-button[rel]").overlay({
+		mask: '#000',
+		onLoad: function() {
+			$('#new_user_form').show();
+			$('#userName_input').show();
+			//overlay method
+			$('h3#form_title').html('New User Information');
+			
+			//first we must hide/remove any information previously there
+			//$('#new_user_form').hide();
+			$('#user_info').hide();
 
-		$('div.user_info_header').remove();
-		$('div.user_info_content').remove();
-		
-		clearFormValues();
-		
-		$('input#type').val('add');
-		
-		
-		$('#new_user_form').show();
+			$('div.user_info_header').remove();
+			$('div.user_info_content').remove();
+		},
+	
+		onClose: function() {
+			$('#new_user_form').hide();
+			$('#userName_input').hide();
+			clearFormValues();
+		}
 		
 	});
 	
+	
+	
+	
+	
 	/*
-	* Edit User - same as add user but we must add the current values to the form
+	* Edit User
 	*/
-	$('input#edit_user-button').click(function(){
-		$('#new_user_form').hide();
-		$('#user_info').hide();
+	$("input#edit_user-button[rel]").overlay({
+		mask: '#000',
+		onLoad: function() {
+			$('#new_user_form').show();
+			$('#userName_input').hide();
+			$('h3#form_title').html('Edit User ' + currentUserName);
+			$('#new_user_form').hide();
+			//$('#user_info').hide();
+			$('#userName_input').hide();
+			
+			//$('div.user_info_header').remove();
+			//$('div.user_info_content').remove();
+			//clearFormValues();
+			
+			$('input#type').val('edit');
+			
+			var query = { "id" : currentUserName, "type" : "edit" };
+			var userinfo_url = '/esgf-web-fe/extractuserdataproxy';
+			$.ajax({
+	    		url: userinfo_url,
+	    		type: "GET",
+	    		data: query,
+	    		dataType: 'json',
+	    		success: function(data) {
+	    			fillFormContentForEdit(data);
+	    		},
+				error: function() {
+					alert('error');
+				}
+			});
 
-		$('div.user_info_header').remove();
-		$('div.user_info_content').remove();
-		clearFormValues();
-		
-		$('input#type').val('edit');
-		
-		var query = { "id" : currentUserName };
-		var userinfo_url = '/esgf-web-fe/extractuserdataproxy';
-		$.ajax({
-    		url: userinfo_url,
-    		type: "GET",
-    		data: query,
-    		dataType: 'json',
-    		success: function(data) {
-    			fillFormContentForEdit(data);
-    		},
-			error: function() {
-				alert('error');
-			}
-		});
-
-		$('#new_user_form').show();
-		
+			$('#new_user_form').show();
+		},
+	
+		onClose: function() {
+			$('#new_user_form').hide();
+			$('div.user_info_header').remove();
+			$('div.user_info_content').remove();
+		}
 		
 	});
+	
+	
+	
 	
 	
 	/* Helper function for filling content for edtiing data */	
@@ -428,20 +452,23 @@ $(document).ready(function(){
 		$('#new_user_form').hide();
 		$('#user_info').hide();
 
-		$('div.user_info_header').remove();
-		$('div.user_info_content').remove();
-		clearFormValues();
 		
-		if(currentUserName != '') {
-			var deletedUserInput = '<input type="hidden" name="'+ 'user' +'" value="' + currentUserName + '" />';
-			var input = '<input type="hidden" name="'+ 'type' +'" value="delete" />' + deletedUserInput;
-			//send request
-			var formStr = '<form action="" method="post">' + input + '</form>';
+		if (confirm("Are you sure you want to delete user " + currentUserName + "?")) {
+		 
+			if(currentUserName != '') {
+				var deletedUserInput = '<input type="hidden" name="'+ 'user' +'" value="' + currentUserName + '" />';
+				var input = '<input type="hidden" name="'+ 'type' +'" value="delete" />' + deletedUserInput;
+				//send request
+				var formStr = '<form action="" method="post">' + input + '</form>';
+				
+				jQuery(formStr).appendTo('body').submit().remove();
+			}
+
+			$('div.user_info_header').remove();
+			$('div.user_info_content').remove();
+			$('div.header_name').remove();
 			
-			jQuery(formStr).appendTo('body').submit().remove();
 		}
-		alert('done deletin');
-		$('div.header_name').remove();
 	});
 	
 	
@@ -453,7 +480,7 @@ $(document).ready(function(){
         $(this).toggleClass('open');
         var index = ($(this).index() /2);
 
-        return true;0
+        return true;
     });
 	
 
@@ -477,6 +504,22 @@ $(document).ready(function(){
         }
         alert(output);
     }
+	
+    
+    /*
+	* Edit User - same as add user but we must add the current values to the form
+	*/
+	$('input#edit_user-button').click(function(){
+	
+	});
+    
+	/*
+	* Add User - same as add user but we must add the current values to the form
+	*/
+	$('input#add_user-button').click(function(){
+		
+	});
+    
 });
 
 

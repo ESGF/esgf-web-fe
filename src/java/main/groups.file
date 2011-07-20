@@ -1,0 +1,24 @@
+<groups>
+	<group>
+		<name>
+			CDIAC
+		</name>
+		<role>
+			Standard
+		</role>
+		<status>
+			Valid
+		</status>
+	</group>
+	<group>
+		<name>
+			C-LAMP
+		</name>
+		<role>
+			Standard
+		</role>
+		<status>
+			Valid
+		</status>
+	</group>
+</groups>

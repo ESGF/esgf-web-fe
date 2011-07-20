@@ -26,7 +26,12 @@
         href='<c:url value="/styles/usermanagement.css" />'
         type="text/css" media="screen">	
     
+<!-- scratch space for any additional styles
+	 will be placed in usermanagement.css if needed
+ -->
+<style>
 
+</style>
 
 
 
@@ -42,16 +47,16 @@
   		<c:otherwise>
       		<c:choose>
       			<c:when test="${principal=='anonymousUser'}">
-  					<div style="margin-top:20px">
+  					
   					
   						<!--  header info -->
-  						<div class="span-24 last">
+  						<div class="span-24 last" style="margin-top:20px">
   							<h2 style="text-align:center">
 							Manage User Accounts
 							</h2>
   						</div>
 						
-						<!-- user table -->
+						<!-- user information table -->
 						<div class="prepend-2 span-20 append-2 last">
 							<table id="table_id">  
 	  
@@ -71,27 +76,25 @@
 						    <!-- Table body -->  
 						  
 						        <tbody>   
-						        <c:set var="j" value="0"/>
-						        <c:forEach var="user" items="${ManageUsers_user}">
-									 <tr class="user_rows" 
-									 	 id="${ManageUsers_user[j].userName}" 
-									 	 style="cursor:pointer">  
-						                <td>${ManageUsers_user[j].userName}</td>  
-						                <td>${ManageUsers_user[j].lastName}</td> 
-						                <td>${ManageUsers_user[j].firstName}</td>  
-						                <td>${ManageUsers_user[j].emailAddress}</td>    
-						                <td>${ManageUsers_user[j].status}</td>    
-						            </tr> 
-						            <c:set var="j" value="${j+1}"/>
-									
-								</c:forEach>
-						           
-						            
-						           
+							        <c:set var="j" value="0"/>
+							        <c:forEach var="user" items="${ManageUsers_user}">
+										 <tr class="user_rows" 
+										 	 id="${ManageUsers_user[j].userName}" 
+										 	 style="cursor:pointer">  
+							                <td>${ManageUsers_user[j].userName}</td>  
+							                <td>${ManageUsers_user[j].lastName}</td> 
+							                <td>${ManageUsers_user[j].firstName}</td>  
+							                <td>${ManageUsers_user[j].emailAddress}</td>    
+							                <td>${ManageUsers_user[j].status}</td>    
+							            </tr> 
+							            <c:set var="j" value="${j+1}"/>
+										
+									</c:forEach>
 						        </tbody>  
 						  
 							</table> 
 							
+							<!-- the add user, edit user, and delete user buttons -->
 							<div class="buttons" style="margin-bottom:40px;">
 			    				<input class="adminbutton" id="add_user-button" type="submit" value="Add User" rel="#addUserForm" />
 			    				<input class="adminbutton" id="edit_user-button" type="submit" value="Edit User" rel="#addUserForm" />
@@ -100,88 +103,75 @@
 		    				
 						</div>
 						<div class="span-24 last">
-						
-							<div id="user_info"></div>
-							
 							<div class="prepend-3 span-18 append-3 last">
-								
-							
+								<div id="user_info"></div>
 							</div> 
 							
 						</div>
 						
-						<!-- scratch space here -->
+						<!-- overlay form material here -->
 						<div class="span-24 last">
 						
-						
-		<!-- trigger elements --> 
-	
 				
-						<!-- overlays --> 
-<div class="simple_overlay" id="addUserForm"> 
-
-	 
-	<form id="new_user_form" action="" method="post" >
-									 
-							      	
-							<h3 style="margin-top:10px;text-align:center;text-style:bold" id="form_title">New User Information</h3>
-							<p>
+							<!-- form overlay --> 
+							<div class="simple_overlay" id="addUserForm"> 
+								<form id="new_user_form" action="" method="post" >
+								<h3 style="margin-top:10px;text-align:center;text-style:bold" id="form_title">New User Information</h3>
+									<p>
+										<label class="formLabels" for="userName">User Name:</label>
+					      		  		<input type="text" class="text" id="form_userName" name="userName" value=""> 
+					      		  		<br />
+					      		  	
+					      		  		<label class="formLabels" id="lastName" for="lastName" style="">Last Name:</label>
+						      		 	<input type="text" class="text" name="lastName" id="form_lastName" value=""> 
+						      		 	<br />
+						      		 	
+						          		<label class="formLabels" for="firstName">First Name:</label>
+						      			<input type="text" class="text" id="form_firstName" name="firstName" value=""> 
+						      			<br />	
+						      											
+										<label class="formLabels" for="emailAddress" style="">Email:</label>
+						      		 	<input type="text" class="text" name="emailAddress" id="form_emailAddress" value=""> 
+						      		 	<br />
+						      		 	
+						          		<label class="formLabels" for="status">Status:</label>
+						      			<input type="text" class="text" id="form_status" name="status" value=""> 
+						      			<br />	
+								      			
+								      	<label class="formLabels" for="organization">Organization:</label>
+								      	<input type="text" class="text" id="organization" name="organization" value=""> 
+								      	<br />
+								      		  	
+								    	<label class="formLabels" for="city" style="">City:</label>
+								    	<input type="text" class="text" name="city" id="city" value=""> 
+								    	<br />
+								      		 	
+								    	<label class="formLabels" for="country">Country:</label>
+								    	<input type="text" class="text" id="country" name="country" value=""> 
+								    	<br />	
+								      											
+										<label class="formLabels" for="openId">OpenId:</label>
+								      	<input type="text" class="text" id="openId" name="openId" value=""> 
+								      	<br />
+								      		  	
+										<label class="formLabels" for="DN">DN:</label>
+								      	<input type="text" class="text" id="DN" name="DN" value=""> 
+								      	<br />
+								      	
+								      	<input type="hidden" name="type" id="type" value="add"/>
+									</p>
+									<p>
+						      			<input style="margin-left: 15px" class="adminbutton" type="submit" value="Submit">
+						      			<!-- cancel button...not needed for now
+						      			<input style="margin-left: 15px" class="adminbutton" type="submit" value="Cancel">
+						      			 -->
+					      			</p>
+								</form>
 								
-				          			<label class="formLabels" for="userName">User Name:</label>
-				      		  		<input type="text" class="text" id="form_userName" name="userName" value=""> 
-				      		  		
-				      		  		<br />
-				      		  	
-				      		  		<label class="formLabels" id="lastName" for="lastName" style="">Last Name:</label>
-					      		 	<input type="text" class="text" name="lastName" id="form_lastName" value=""> <br />
-					      		 	
-					          		<label class="formLabels" for="firstName">First Name:</label>
-					      			<input type="text" class="text" id="form_firstName" name="firstName" value=""> <br />	
-					      											
-									<label class="formLabels" for="emailAddress" style="">Email:</label>
-					      		 	<input type="text" class="text" name="emailAddress" id="form_emailAddress" value=""> <br />
-					      		 	
-					          		<label class="formLabels" for="status">Status:</label>
-					      			<input type="text" class="text" id="form_status" name="status" value=""> <br />	
-							      			
-							      			
-							      	<label class="formLabels" for="organization">Organization:</label>
-							      		  	<input type="text" class="text" id="organization" name="organization" value=""> <br />
-							      		  	
-							      		  	<label class="formLabels" for="city" style="">City:</label>
-							      		 	<input type="text" class="text" name="city" id="city" value=""> <br />
-							      		 	
-							          		<label class="formLabels" for="country">Country:</label>
-							      			<input type="text" class="text" id="country" name="country" value=""> <br />	
-							      											
-											<label class="formLabels" for="openId">OpenId:</label>
-							      		  	<input type="text" class="text" id="openId" name="openId" value=""> <br />
-							      		  	
-											<label class="formLabels" for="DN">DN:</label>
-							      		  	<input type="text" class="text" id="DN" name="DN" value=""> <br />
-							      		  	
-							      		  	
-					      		  	<input type="hidden" name="type" id="type" value="add"/>
-							</p>
-							<p>
-					      			<input style="margin-left: 15px" class="adminbutton" type="submit" value="Submit">
-					      			<!-- 
-					      			<input style="margin-left: 15px" class="adminbutton" type="submit" value="Cancel">
-					      			 -->
-				      		</p>
-							
-	</form>
-							
-</div> 
- 
+							</div> 
+	 
 						
-						
-						
-						
-						
-						
-						
-						</div><!-- end scratch -->
+						</div><!-- end overlay section -->
 						
   				</c:when>
   				<c:otherwise>
@@ -192,6 +182,9 @@
 	</c:choose>   
 </div>
 
+<!-- scratch space for any additional scripts
+	 will be placed in usermanagement.js if needed
+ -->
 <script>
 $(document).ready(function(){
 	
@@ -216,55 +209,3 @@ $(document).ready(function(){
 	</div>
 -->
 
-
-<!-- previous form...can probably delete
-								<form id="new_user_form" action="" method="post" style="display:none">
-									 
-							      	<fieldset>
-							      		<legend class="formclass">New User Form</legend>
-							
-							          	<p>
-							          		<div id="userName_input" style="display:none">
-							          			<label class="formLabels" for="userName">User Name:</label>
-							      		  		<input type="text" class="text" id="form_userName" name="userName" value=""> <br />
-							      		  	</div>
-							      		  	<label class="formLabels" id="lastName" for="lastName" style="">Last Name:</label>
-							      		 	<input type="text" class="text" name="lastName" id="form_lastName" value=""> <br />
-							      		 	
-							          		<label class="formLabels" for="firstName">First Name:</label>
-							      			<input type="text" class="text" id="form_firstName" name="firstName" value=""> <br />	
-							      											
-											<label class="formLabels" for="emailAddress" style="">Email:</label>
-							      		 	<input type="text" class="text" name="emailAddress" id="form_emailAddress" value=""> <br />
-							      		 	
-							          		<label class="formLabels" for="status">Status:</label>
-							      			<input type="text" class="text" id="form_status" name="status" value=""> <br />	
-							      				
-							      			 							
-											<label class="formLabels" for="organization">Organization:</label>
-							      		  	<input type="text" class="text" id="organization" name="organization" value=""> <br />
-							      		  	
-							      		  	<label class="formLabels" for="city" style="">City:</label>
-							      		 	<input type="text" class="text" name="city" id="city" value=""> <br />
-							      		 	
-							          		<label class="formLabels" for="country">Country:</label>
-							      			<input type="text" class="text" id="country" name="country" value=""> <br />	
-							      											
-											<label class="formLabels" for="openId">OpenId:</label>
-							      		  	<input type="text" class="text" id="openId" name="openId" value=""> <br />
-							      		  	
-											<label class="formLabels" for="DN">DN:</label>
-							      		  	<input type="text" class="text" id="DN" name="DN" value=""> <br />
-							      		
-							      		  	<input type="hidden" name="type" id="type" value="add"/>
-							      		  	
-							      		  	
-							      		</p>
-							      		<p>
-							      			<input class="adminbutton" type="submit" value="Submit">
-							      		</p>
-							
-							      	</fieldset>
-							      	
-							    </form>
--->

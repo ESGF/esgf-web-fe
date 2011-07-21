@@ -1,6 +1,5 @@
-table tbody tr:hover { background: #aaa; }
 	
-	
+/*	not used...yet
 	#toggleMenu {
 	    padding: 0px 0px 0px 0px; 
 	    margin: 15px 0px 30px 0px;
@@ -76,7 +75,11 @@ table tbody tr:hover { background: #aaa; }
     color: #0088B5;
     text-decoration: underline;
 }
-	
+*/
+
+/* used */
+table tbody tr:hover { background: #aaa; }
+
 .adminbutton {
 	font-size: 13px;
 	color: white;

@@ -102,6 +102,8 @@
 							</div>
 		    				
 						</div>
+						
+						<!-- this section displays the selected user's information -->
 						<div class="span-24 last">
 							<div class="prepend-3 span-18 append-3 last">
 								<div id="user_info"></div>

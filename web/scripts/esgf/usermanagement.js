@@ -10,9 +10,9 @@ $(document).ready(function(){
 		$('#new_user_form').hide();
 		$('#user_info').hide();
 
-		$('div.user_info_header').remove();
-		$('div.user_info_content').remove();
-		
+		//$('div.user_info_header').remove();
+		//$('div.user_info_content').remove();
+		$('fieldset#user_info').remove();
 		//grab the username from the id of the row
 		var userName = $(this).attr("id");
 
@@ -48,6 +48,7 @@ $(document).ready(function(){
 	
 	/*
 	* Helper function for post ajax call processing
+	* This displas
 	*/
 	function processUserContent(data) {
 		//printObject(data);
@@ -56,9 +57,13 @@ $(document).ready(function(){
 		var user_info_header = getUserInfoHeader(userName);
 		var user_info_content = getUserInfoContent(data);
 		
+		$('div#user_info').append('<fieldset id="user_info"><legend >User Information for ' + userName + '</legend></fieldset>');
+		$('fieldset#user_info').append(user_info_content);
+		
+		/*
 		$('div#user_info').append(user_info_header);
 		$('div#user_info').append(user_info_content);
-		
+		*/
 		$('div#user_info').show();
 		
 	}
@@ -98,6 +103,7 @@ $(document).ready(function(){
 		onLoad: function() {
 			$('#new_user_form').show();
 			$('#userName_input').show();
+			clearFormValues();
 			//overlay method
 			$('h3#form_title').html('New User Information');
 			
@@ -105,8 +111,9 @@ $(document).ready(function(){
 			//$('#new_user_form').hide();
 			$('#user_info').hide();
 
-			$('div.user_info_header').remove();
-			$('div.user_info_content').remove();
+			$('fieldset#user_info').remove();
+			//$('div.user_info_header').remove();
+			//$('div.user_info_content').remove();
 		},
 	
 		onClose: function() {
@@ -160,8 +167,10 @@ $(document).ready(function(){
 	
 		onClose: function() {
 			$('#new_user_form').hide();
-			$('div.user_info_header').remove();
-			$('div.user_info_content').remove();
+
+			$('fieldset#user_info').remove();
+			//$('div.user_info_header').remove();
+			//$('div.user_info_content').remove();
 		}
 		
 	});

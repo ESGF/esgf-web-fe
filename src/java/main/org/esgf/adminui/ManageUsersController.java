@@ -470,8 +470,21 @@ public class ManageUsersController {
                     userEl.getChild("status").setText(status);
                     userEl.getChild("emailAddress").setText(emailAddress);
                     
+                    /*Debugging for groups
+                     * MUST TAKE THIS OUT FOR PRODUCTION
+                     */
+                    if(userEl.getChild("groups") == null) {
+                        Element groupsEl = new Element("groups");
+                        Element groupEl = new Element("group");
+                        groupEl.setText("group1");
+                        groupsEl.addContent(groupEl);
+                    }
+                    
                 }
             }
+            
+            
+            
             
 
             XMLOutputter outputter = new XMLOutputter();
@@ -626,16 +639,28 @@ public class ManageUsersController {
                 statusEl.addContent("N/A");
             }
             
-            
-            Element groupsEl = new Element("groups");
-            groupsEl.addContent("user3_groups");
+           
             
             userElement.addContent(lastNameEl);
             userElement.addContent(firstNameEl);
             userElement.addContent(userNameEl);
             userElement.addContent(emailEl);
             userElement.addContent(statusEl);
+            
+            /*Debugging for groups
+             * MUST TAKE THIS OUT FOR PRODUCTION
+             */
+            Element groupsEl = new Element("groups");
+            Element groupEl = new Element("group");
+            Element groupNameEl = new Element("name");
+            groupNameEl.setText("group1");
+            groupEl.addContent(groupNameEl);
+            groupsEl.addContent(groupEl);
             userElement.addContent(groupsEl);
+            /*
+             * End debugging group
+             */
+            //Insert real code here^^^  
             
             rootNode.addContent(userElement);
             

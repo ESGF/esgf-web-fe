@@ -41,7 +41,7 @@ public class ExtractUserInfoController {
     private final static String USERS_FILE = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\users.file";
 
 
-    private final static boolean debugFlag = false;
+    private final static boolean debugFlag = true;
     /**
      * Note: GET and POST contain the same functionality.
      *

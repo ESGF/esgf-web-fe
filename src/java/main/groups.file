@@ -1,7 +1,7 @@
 <groups>
 	<group>
 		<name>
-			CDIAC
+			Group1
 		</name>
 		<role>
 			Standard
@@ -12,7 +12,7 @@
 	</group>
 	<group>
 		<name>
-			C-LAMP
+			Group2
 		</name>
 		<role>
 			Standard

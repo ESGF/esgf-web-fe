@@ -1,7 +1,7 @@
 <groups>
 	<group>
 		<name>
-			Group1
+			group1
 		</name>
 		<role>
 			Standard
@@ -12,7 +12,7 @@
 	</group>
 	<group>
 		<name>
-			Group2
+			group2
 		</name>
 		<role>
 			Standard

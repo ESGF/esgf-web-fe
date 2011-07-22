@@ -255,18 +255,48 @@ $(document).ready(function(){
 	* Helper function for post ajax call processing for user content
 	*/
 	function processGroupContent(data) {
-		alert('process group content ' + data);
+		//alert('process group content ' + data);
 		
-		var userName = data.user.userName;
+		var groups = data.groups.name[1];
+		var userName = data.groups.userName;
+		$('div#group_info').append('<fieldset id="group_info"><legend >Group Information for ' + userName + '</legend></fieldset>');
+		
+		var group_info_content = getGroupInfoContent(data);
+		$('fieldset#group_info').append(group_info_content);
+		
+		$('div#group_info').show();
+		
+		
+	}
+	
+	/*
+	* Helper function for displaying the userContent
+	*/
+	function getGroupInfoContent(data) {
+		
+		var content = '';
+		
+		//this if statement takes care of a bug in the JSON java code...if the name array is of length one, it will automatically convert 
+		//that element into a string array and print out one letter at a time
+		//probably need a more sophisticated way of handling this problem
+		if(data.groups.name instanceof Array) {
+			for(var i=0;i<data.groups.name.length;i++) {
+				content = content + '<div>' + data.groups.name[i] + '</div>';
+			}
+		} else {
+			content = content + '<div>' + data.groups.name + '</div>';
+		}
+		
+		var group_info_content = '<div class="group_info_content">' + content + '</div>';
+		
+		return group_info_content;
 	}
 	
 	/*
 	* Helper function for post ajax call processing for user content
 	*/
 	function processUserContent(data) {
-		//alert('process user content ' + data);
 		
-		//printObject(data);
 		var userName = data.user.userName;
 		
 		var user_info_content = getUserInfoContent(data);
@@ -274,16 +304,9 @@ $(document).ready(function(){
 		
 		
 		$('div#user_info').append('<fieldset id="user_info"><legend >User Information for ' + userName + '</legend></fieldset>');
-		$('div#group_info').append('<fieldset id="group_info"><legend >Group Information for ' + userName + '</legend></fieldset>');
-		$('fieldset#user_info').append(user_info_content);
-		//$('fieldset#group_info').append(user_info_content);
 		
-		/*
-		$('div#user_info').append(user_info_header);
-		$('div#user_info').append(user_info_content);
-		*/
+		$('fieldset#user_info').append(user_info_content);
 		$('div#user_info').show();
-		//$('div#group_info').show();
 		
 		
 	}
@@ -333,6 +356,7 @@ $(document).ready(function(){
 			//first we must hide/remove any information previously there
 			//$('#new_user_form').hide();
 			$('#user_info').hide();
+			$('#group_info').hide();
 
 			$('fieldset#user_info').remove();
 			//$('div.user_info_header').remove();
@@ -392,6 +416,7 @@ $(document).ready(function(){
 			$('#new_user_form').hide();
 
 			$('fieldset#user_info').remove();
+			$('fieldset#group_info').remove();
 			//$('div.user_info_header').remove();
 			//$('div.user_info_content').remove();
 		}
@@ -425,6 +450,7 @@ $(document).ready(function(){
 	$('input#delete_user-button').click(function(){
 		$('#new_user_form').hide();
 		$('#user_info').hide();
+		$('#group_info').hide();
 
 		
 		if (confirm("Are you sure you want to delete user " + ESGF.setting.currentUserName + "?")) {
@@ -440,6 +466,8 @@ $(document).ready(function(){
 
 			$('div.user_info_header').remove();
 			$('div.user_info_content').remove();
+			$('div.group_info_header').remove();
+			$('div.group_info_content').remove();
 			$('div.header_name').remove();
 			
 		}

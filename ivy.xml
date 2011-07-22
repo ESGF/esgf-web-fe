@@ -25,8 +25,12 @@
       <exclude org="javax.jms"/>
     </dependency>
     <dependency org="org.jdom" name="jdom" rev="1.1" transitive="true" conf="base->default"/>
-    <dependency org="org.slf4j" name="slf4j-api" rev="1.5.11" transitive="false" conf="base->default"/>
-    <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.10" conf="base->default" />
+    <!--
+    <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.1" conf="base->default" />
+    -->
+
+    <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.11" conf="base->default" />
+
     <dependency org="org.springframework" name="spring-context" rev="${spring.version}" transitive="true" conf="base->default" />
     <dependency org="org.springframework" name="spring-web" rev="${spring.version}" transitive="true" conf="base->default" />
     <dependency org="org.springframework" name="spring-webmvc" rev="${spring.version}" transitive="true" conf="base->default" />
@@ -62,7 +66,9 @@
     </dependency>
 
     <dependency org="org.hibernate" name="hibernate-core" rev="${hibernate.version}"
-        transitive="false" conf="base->default" />
+        transitive="false" conf="base->default">
+        <exclude name="slf4j-api" />
+    </dependency>
 
     <dependency org="org.hibernate" name="hibernate-entitymanager" rev="${hibernate.version}"
         transitive="false"  conf="base->default" />
@@ -77,10 +83,16 @@
         rev="${spring.version}" transitive="false" conf="base->default" />
 
     <dependency org="org.hibernate" name="hibernate-commons-annotations"
-        rev="3.2.0.Final" transitive="false" conf="base->default"/>
+        rev="3.2.0.Final" transitive="false" conf="base->default">
+        <exclude name="slf4j-api" />
+    </dependency>
 
+    <!--
     <dependency org="org.hibernate" name="hibernate-search"
-        rev="3.3.0.Final" conf="base->default" />
+        rev="3.3.0.Final" conf="base->default">
+        <exclude name="slf4j-api" />
+    </dependency>
+    -->
 
     <dependency org="javax.validation" name="validation-api"
         rev="1.0.0.GA" transitive="false" conf="base->default" />
@@ -110,6 +122,6 @@
     <dependency org="xerces" name="xercesImpl" rev="2.9.1" />
     
     <dependency org="javax.mail" name="mail" rev="1.4.3"/>
-
+    
   </dependencies>
 </ivy-module>

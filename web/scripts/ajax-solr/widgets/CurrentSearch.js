@@ -111,7 +111,7 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
       AjaxSolr.theme('list_items', this.target, links);
     }
     else {
-      $(this.target).html('<div>Viewing all documents!</div>');
+      $(this.target).html('<div>No search criteria selected</div>');
     }
   },
 

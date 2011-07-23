@@ -43,7 +43,22 @@
                          <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
-                <c:when test="${layoutType=='accounts'}">
+                <c:when test="${layoutType=='accountsview'}">
+                    <div class="span-24 last" id="main">
+                         <ti:insertAttribute name="main" />
+                    </div>
+                </c:when>
+                <c:when test="${layoutType=='adminview'}">
+                    <div class="span-24 last" id="main">
+                         <ti:insertAttribute name="main" />
+                    </div>
+                </c:when>
+                <c:when test="${layoutType=='usermanagement'}">
+                    <div class="span-24 last" id="main">
+                         <ti:insertAttribute name="main" />
+                    </div>
+                </c:when>
+                <c:when test="${layoutType=='creategroups'}">
                     <div class="span-24 last" id="main">
                          <ti:insertAttribute name="main" />
                     </div>

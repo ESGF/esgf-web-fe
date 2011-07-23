@@ -117,6 +117,7 @@ public class SearchController {
 
     public SearchController(final SearchService searchService,
             final FacetProfile facetProfile) {
+        LOG.debug("SearchController Constructor");
         this.searchService = searchService;
         this.facetProfile = facetProfile;
     }

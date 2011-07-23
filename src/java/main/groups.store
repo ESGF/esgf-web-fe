@@ -1,0 +1,24 @@
+<groups>
+	<group>
+		<name>
+			Group1
+		</name>
+		<role>
+			Standard
+		</role>
+		<status>
+			Valid
+		</status>
+	</group>
+	<group>
+		<name>
+			Group2
+		</name>
+		<role>
+			Standard
+		</role>
+		<status>
+			Valid
+		</status>
+	</group>
+</groups>

@@ -40,11 +40,7 @@
         <put-attribute name="layoutType" type="string" value="main"/>
     </definition>
     
-	<!-- accounts page layout  -->
-    <definition name="account-layout" extends="base-layout">
-        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
-        <put-attribute name="layoutType" type="string" value="accounts"/>
-    </definition>
+	
 
     <!-- left-sidebar + main content layout -->
     <definition name="left-main-layout" extends="base-layout">
@@ -80,15 +76,7 @@
     </definition>
 
 
-	<!-- search template -->
-    <definition name="accounts" extends="account-layout">
-
-        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
-        <put-attribute name="extrastyle"  value="/WEB-INF/views/search/style_search.jsp" />
-
-        <put-attribute name="main" value="/WEB-INF/views/accounts/accounts_main.jsp" />
-
-    </definition>
+	
 <!--  obsolete ?
     <definition name="home" extends="left4-main20">
         <put-attribute name="extrascript" value="/WEB-INF/views/home/script_home.jsp" />
@@ -117,6 +105,71 @@
             value="/WEB-INF/views/search/_main19.jsp" />
     </definition>
     -->
+    
+    <!-- accounts page layout  -->
+    <definition name="account-layout" extends="base-layout">
+        <put-attribute name="layoutType" type="string" value="accountsview"/>
+    </definition>
+    
+    <!-- accounts template -->
+    <definition name="accountsview" extends="account-layout">
+        
+        <put-attribute name="main" value="/WEB-INF/views/accountsview/accounts_main.jsp" />
+    </definition>
+
+
+<!-- start admin pages -->
+
+    <!-- adminview page layout  -->
+    <definition name="admin-layout" extends="base-layout">
+        <put-attribute name="layoutType" type="string" value="adminview"/>
+    </definition>
+    
+    <!-- adminview template -->
+    <definition name="adminview" extends="account-layout">
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+       <put-attribute name="main" value="/WEB-INF/views/adminview/adminview_main.jsp" />
+    </definition>
+    
+   
+    
+    <!-- usermanagement page layout  -->
+    <definition name="usermanagement-layout" extends="base-layout">
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+       <put-attribute name="layoutType" type="string" value="usermanagement"/>
+    </definition>
+    
+    <!-- adminview template -->
+    <definition name="usermanagement" extends="usermanagement-layout">
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+       <put-attribute name="main" value="/WEB-INF/views/adminview/usermanagement_main.jsp" />
+    </definition>
+    
+    <!-- creategroups page layout  -->
+    <definition name="creategroups-layout" extends="base-layout">
+        <put-attribute name="layoutType" type="string" value="creategroups"/>
+    </definition>
+    
+    <!-- creategroups template -->
+    <definition name="creategroups" extends="creategroups-layout">
+        <put-attribute name="main" value="/WEB-INF/views/adminview/creategroups_main.jsp" />
+    </definition>
+    
+     <!-- adminview page layout  -->
+    <definition name="accounts-layout" extends="base-layout">
+        <put-attribute name="layoutType" type="string" value="accountsview"/>
+    </definition>
+    
+    <!-- adminview template -->
+    <definition name="accountsview" extends="account-layout">
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+       <put-attribute name="main" value="/WEB-INF/views/accountsview/accountsview_main.jsp" />
+    </definition>
+    
+<!--  end admin pages -->
+
+
+
 
 <!-- start obsolete ? -->
 

@@ -57,7 +57,7 @@
  *
  */
 
-package org.esgf.web;
+package org.esgf.filedownload;
 
 import java.io.IOException;
 import java.util.Collection;

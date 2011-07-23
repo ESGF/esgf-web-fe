@@ -107,7 +107,11 @@ ESGF.setting.storage = true;
 // flag for determining which metadata summary to display
 ESGF.setting.metadata_summary = 'html';
 
+//distributed search switch
 ESGF.setting.searchType = 'local';
+
+//for admin's usermanagement interface - currentUserName
+ESGF.setting.currentUserName = 'default';
 
 /**
  * Proxy for creating the template for file downloads.
@@ -119,6 +123,7 @@ ESGF.setting.searchType = 'local';
 ESGF.search.fileDownloadTemplateProxyUrl = '/esgf-web-fe/solrfileproxy',
 
 
+ESGF.setting.facetFile = '/esgf-web-fe/facetfileproxy',
 
 
 

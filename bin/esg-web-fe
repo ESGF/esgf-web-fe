@@ -74,8 +74,9 @@ esgf_web_fe_version=${esgf_web_fe_version:-"0.9.6"}
 #User Defined / Settable (public)
 #--------------
 install_prefix=${install_prefix:-"/usr/local"}
+esg_root_dir=${esg_root_dir:-"/esg"}
 workdir=${workdir:-~/workbench/esg}
-install_logfile=${install_logfile:-"/etc/esg.install_log"}
+install_manifest=${install_manifest:-"${esg_root_dir}/esgf-install-manifest"}
 #--------------
 
 date_format=${date_format:-"+%Y_%m_%d_%H%M%S"}
@@ -178,9 +179,26 @@ setup_web_fe() {
 }
 
 write_web_fe_install_log() {
-    echo "$(date ${date_format}) webapp:${web_fe_context_root}=${esgf_web_fe_version} ${web_fe_app_home}" >> ${install_logfile}
-    dedup ${install_logfile}
+    echo "$(date ${date_format}) webapp:${web_fe_context_root}=${esgf_web_fe_version} ${web_fe_app_home}" >> ${install_manifest}
+    dedup ${install_manifest}
     write_as_property web_fe_service_endpoint http://${esgf_host}/${web_fe_context_root}/
     write_as_property web_fe_app_home
+    return 0
+}
+
+clean_web_fe_webapp_subsystem() {
+    init
+    local doit="N"
+    if [ -e ${web_fe_app_home} ]; then
+        read -p "remove ESGF Search Front-End web service? (${web_fe_app_home}) [y/N]: " doit
+        if [ "doit" = "Y" ] || [ "$doit" = "y" ]; then
+            echo "removing ${web_fe_app_home}"
+            if [ -n ${web_fe_app_home} ]; then
+                rm -rf ${web_fe_app_home}
+                [ $? != 0 ] && echo "ERROR: Unable to remove ${web_fe_app_home}" && return 1
+                perl -n -i -e'print unless m!webapp:esgf-web-fe!' ${install_manifest}
+            fi
+        fi
+    fi 
     return 0
 }

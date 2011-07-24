@@ -66,8 +66,12 @@
  */
 package org.esgf.adminui;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -79,6 +83,10 @@ import org.esgf.manager.InputManager;
 import org.esgf.manager.InputManagerImpl;
 import org.esgf.manager.OutputManager;
 import org.esgf.manager.OutputManagerImpl;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -87,6 +95,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import org.esgf.commonui.Utils;
 import esg.search.query.api.FacetProfile;
 import esg.search.query.api.SearchOutput;
 import esg.search.query.api.SearchService;
@@ -97,12 +106,15 @@ import esg.search.query.impl.solr.SearchInputImpl;
 
 public class AccountsController {
 
-    private final static String ACCOUNTS_MISC = "accounts_misc";
     private final static String ACCOUNTS_INPUT = "accounts_input";
-    private final static String ACCOUNTS_MODEL = "accounts_model";
+    private final static String ACCOUNTS_MODEL = "accounts_input";
+    private final static String ACCOUNTS_USERINFO = "accounts_userinfo";
 
     private final static Logger LOG = Logger.getLogger(AccountsController.class);
 
+    private final static String USERS_FILE = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\users.file";
+
+    private final static boolean debugFlag = true;
     /**
      * List of invalid text characters -
      * anything that is not within square brackets.
@@ -122,39 +134,54 @@ public class AccountsController {
      * @param input
      * @param result
      * @return
+     * @throws IOException 
+     * @throws JDOMException 
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
     @RequestMapping(method=RequestMethod.GET)
     public ModelAndView doGet(final HttpServletRequest request,
-            final @ModelAttribute(ACCOUNTS_MISC) String accountsMisc,
-            final @ModelAttribute(ACCOUNTS_INPUT) String accountsInput) {
+            final @ModelAttribute(ACCOUNTS_INPUT) String accountsInput) throws JDOMException, IOException {
+
         LOG.debug("In do get");
+
+        //get the userId from the cookie
+        String userId = Utils.getIdFromHeaderCookie(request);
+        if(debugFlag) {
+            LOG.debug("UserId Retrieved: " + userId);
+        }
         
+        //debug
+        if(userId.equals("https://pcmdi3.llnl.gov/esgcet/myopenid/jfharney")) {
+            userId = "user1_userName";
+        }
+        
+        //initialize the model sent to the view
         Map<String,Object> model = new HashMap<String,Object>();
 
-        
+        //make sure this is a "fresh" model
         if (request.getParameter(ACCOUNTS_MODEL)!=null) {
             LOG.debug("Not null");
             // retrieve model from session
             model = (Map<String,Object>)request.getSession().getAttribute(ACCOUNTS_MODEL);
 
-        } else {
-            LOG.debug("null");
-            LOG.debug("Accounts Input: " + accountsInput);
-            LOG.debug("Accounts Misc: " + accountsMisc);
+        } 
+        else {
             
-
-            // populate model
-            model.put(ACCOUNTS_MISC, accountsMisc);
+            User user = Utils.populateUserObjectFromIdXML(userId,new File(USERS_FILE));
+            
+            // populate model with the UserInfo
+            model.put( ACCOUNTS_USERINFO, user);
             model.put(ACCOUNTS_INPUT, accountsInput);
             
-
+            //put the model in the session
             request.getSession().setAttribute(ACCOUNTS_MODEL, model);
             
         }
         return new ModelAndView("accountsview", model);
     }
+    
+    
     
     /**
      * Method invoked in response to a POST request:
@@ -167,13 +194,43 @@ public class AccountsController {
      */
     @RequestMapping(method=RequestMethod.POST)
     @SuppressWarnings("unchecked")
-    protected String doPost(final HttpServletRequest request,
-            final @ModelAttribute(ACCOUNTS_INPUT) String accountsInput,
-            final BindingResult result) throws Exception {
-        LOG.debug("doPost() called");
+    protected ModelAndView doPost(final HttpServletRequest request,
+            final @ModelAttribute(ACCOUNTS_INPUT) String accountsInput) throws Exception {
+        LOG.debug("In do get");
+
+        //get the userId from the cookie
+        String userId = Utils.getIdFromHeaderCookie(request);
+        if(debugFlag) {
+            LOG.debug("UserId Retrieved: " + userId);
+        }
         
+        if(userId.equals("https://pcmdi3.llnl.gov/esgcet/myopenid/jfharney")) {
+            userId = "user1_userName";
+        }
         
-        return "";
+        //initialize the model sent to the view
+        Map<String,Object> model = new HashMap<String,Object>();
+
+        //make sure this is a "fresh" model
+        if (request.getParameter(ACCOUNTS_MODEL)!=null) {
+            LOG.debug("Not null");
+            // retrieve model from session
+            model = (Map<String,Object>)request.getSession().getAttribute(ACCOUNTS_MODEL);
+
+        } 
+        else {
+            
+            User user = Utils.populateUserObjectFromIdXML(userId,new File(USERS_FILE));
+            
+            // populate model with the UserInfo
+            model.put( ACCOUNTS_USERINFO, user);
+            model.put(ACCOUNTS_INPUT, accountsInput);
+            
+            //put the model in the session
+            request.getSession().setAttribute(ACCOUNTS_MODEL, model);
+            
+        }
+        return new ModelAndView("accountsview", model);
     }
     
     
@@ -184,6 +241,7 @@ public class AccountsController {
      * @return
      * @throws Exception
      */
+    /*
     @ModelAttribute(ACCOUNTS_MISC)
     public String formAccountsMiscObject(final HttpServletRequest request) throws Exception {
         LOG.debug("formAccountsMiscObject");
@@ -192,7 +250,7 @@ public class AccountsController {
         
         return "ACCOUNTS_MISC here";
     }
-    
+    */
     
     /**
      *
@@ -205,10 +263,11 @@ public class AccountsController {
 
         LOG.debug("formAccountsInputObject called");
 
-
         return "ACCOUNTS_INPUT here";
 
     }
+    
+    
 
 }
 

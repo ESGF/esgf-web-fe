@@ -20,7 +20,7 @@ import org.springframework.ui.Model;
 
 public class Utils {
     
-    private final static Logger LOG = Logger.getLogger(AccountsController.class);
+    private final static Logger LOG = Logger.getLogger(Utils.class);
 
     private final static boolean debugFlag = true;
     
@@ -40,6 +40,19 @@ public class Utils {
         }
         
         return userId;
+    }
+    
+    //Used by ManageUsersController to obtain the "type"
+    public static String getTypeFromQueryString(HttpServletRequest request) {
+        String type = "";
+        Enumeration<String> paramEnum = request.getParameterNames();
+        while(paramEnum.hasMoreElements()) { 
+            String postContent = (String) paramEnum.nextElement();
+            if(postContent.equalsIgnoreCase("type")) {
+                type = request.getParameter(postContent);
+            }
+        }
+        return type;
     }
     
     public static User populateUserObjectFromIdXML(String id, File file) throws JDOMException, IOException {

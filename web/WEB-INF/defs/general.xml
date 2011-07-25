@@ -150,12 +150,21 @@
         <put-attribute name="layoutType" type="string" value="creategroups"/>
     </definition>
     
-    <!-- adminview template -->
+    <!-- creategroups template -->
     <definition name="creategroups" extends="creategroups-layout">
         <put-attribute name="main" value="/WEB-INF/views/adminview/creategroups_main.jsp" />
     </definition>
     
+     <!-- adminview page layout  -->
+    <definition name="accounts-layout" extends="base-layout">
+        <put-attribute name="layoutType" type="string" value="accountsview"/>
+    </definition>
     
+    <!-- adminview template -->
+    <definition name="accountsview" extends="account-layout">
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+       <put-attribute name="main" value="/WEB-INF/views/accountsview/accountsview_main.jsp" />
+    </definition>
     
 <!--  end admin pages -->
 

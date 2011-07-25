@@ -185,3 +185,20 @@ write_web_fe_install_log() {
     write_as_property web_fe_app_home
     return 0
 }
+
+clean_web_fe_webapp_subsystem() {
+    init
+    local doit="N"
+    if [ -e ${web_fe_app_home} ]; then
+        read -p "remove ESGF Search Front-End web service? (${web_fe_app_home}) [y/N]: " doit
+        if [ "doit" = "Y" ] || [ "$doit" = "y" ]; then
+            echo "removing ${web_fe_app_home}"
+            if [ -n ${web_fe_app_home} ]; then
+                rm -rf ${web_fe_app_home}
+                [ $? != 0 ] && echo "ERROR: Unable to remove ${web_fe_app_home}" && return 1
+                perl -n -i -e'print unless m!webapp:esgf-web-fe!' ${install_manifest}
+            fi
+        fi
+    fi 
+    return 0
+}

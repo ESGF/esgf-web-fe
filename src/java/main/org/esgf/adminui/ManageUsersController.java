@@ -94,6 +94,8 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.log4j.Logger;
 import org.apache.xml.serialize.XMLSerializer;
+import org.esgf.commonui.UserOperations;
+import org.esgf.commonui.Utils;
 import org.esgf.manager.InputManager;
 import org.esgf.manager.InputManagerImpl;
 import org.esgf.manager.OutputManager;
@@ -165,17 +167,21 @@ public class ManageUsersController {
     @RequestMapping(method=RequestMethod.GET)
     public ModelAndView doGet(final HttpServletRequest request,
             final @ModelAttribute(ManageUsers_INPUT) String ManageUsersInput) throws IOException {
-        LOG.debug("In do get");
-        
-        Map<String,Object> model = new HashMap<String,Object>();
 
+        LOG.debug("------ManageUsersController doGet------");
+        Map<String,Object> model = getModel(request,ManageUsersInput);
+        
+        /*
+        Map<String,Object> model = new HashMap<String,Object>();
         
         if (request.getParameter(ManageUsers_MODEL)!=null) {
             // retrieve model from session
             model = (Map<String,Object>)request.getSession().getAttribute(ManageUsers_MODEL);
 
         } else {
-            User [] users = getUsersFromXML();
+            final File file = new File(USERS_FILE);
+            LOG.debug("FileInfo->" + file.getName());
+            User [] users = getUsersFromXML(file);
             
             // populate model
             model.put(ManageUsers_INPUT, ManageUsersInput);
@@ -183,8 +189,13 @@ public class ManageUsersController {
             request.getSession().setAttribute(ManageUsers_MODEL, model);
             
         }
+        */
+        
+        LOG.debug("------End ManageUsersController doGet------\n\n\n\n");
         return new ModelAndView("usermanagement", model);
     }
+    
+    
     
     
     /**
@@ -202,58 +213,67 @@ public class ManageUsersController {
     public ModelAndView doPost(final HttpServletRequest request,
             final @ModelAttribute(ManageUsers_INPUT) String ManageUsersInput) throws IOException {
             
-        LOG.debug("in dopost");
+        LOG.debug("------ManageUsersController doPost------");
         
-        //check here if the user is the root admin
-        boolean rootFlag = false;
-        Enumeration headerNames = request.getHeaderNames(); 
-        while(headerNames.hasMoreElements()) { 
-            String headerName = (String)headerNames.nextElement();
-            if(headerName.equalsIgnoreCase("cookie")) {
-                /*
-                 * ALERT! - Change this logic to get the cookie info
-                 */
-                String [] cookies = request.getHeader("cookie").split(";");
-                LOG.debug("cookies: " + cookies[1]);
-                if(cookies[1].contains(ROOT_USER)) {
-                    rootFlag = true;
-                }
-            }
+        Map<String,Object> model = getModel(request,ManageUsersInput);
+        
+        
+        //obtain the file of user info - this will be deprecated
+        File file = new File(USERS_FILE);
+        
+        //get the userId from the cookie
+        String userId = Utils.getIdFromHeaderCookie(request);
+        LOG.debug("UserId Retrieved: " + userId);
+        
+        //get the type of operation (add, edit, delete)
+        String type = Utils.getTypeFromQueryString(request);
+        
+        LOG.debug("TYPE->" + type);
+        
+        //from the type perform the appropriate operation
+        if(type.equalsIgnoreCase("add")) {
+            addUser(request,file);
+        }
+        else if(type.equalsIgnoreCase("edit")){
+            editUser(request);
+        }
+        else if(type.equalsIgnoreCase("delete")) {
+            deleteUser(request);
         }
         
         
-        //if the rootFlag is true, we next look for the 'type' parameter to see if it is an add,
-        //delete, or edit
-        if(rootFlag) {
-            String type = "";
-            
-            Enumeration<String> paramEnum = request.getParameterNames();
-            
-            while(paramEnum.hasMoreElements()) { 
-                String postContent = (String) paramEnum.nextElement();
-                if(postContent.equalsIgnoreCase("type")) {
-
-                    type = request.getParameter(postContent);
-                    LOG.debug(postContent+"-->"+type); 
-                    if(type.equalsIgnoreCase("add")) {
-                        addUser(request);
-                    }
-                    else if(type.equalsIgnoreCase("edit")){
-                        editUser(request);
-                    }
-                    else if(type.equalsIgnoreCase("delete")) {
-                        deleteUser(request);
-                    }
-                }
-                
-            }
-        }
         
-        Map<String,Object> model = formModel(request,ManageUsersInput);
-
+        
+        LOG.debug("------End ManageUsersController doPost------\n\n\n\n");
         return new ModelAndView("usermanagement", model);
     }
 
+    
+    /* Helper function for extracting the model */
+    private Map<String,Object> getModel(final HttpServletRequest request,
+                                       final @ModelAttribute(ManageUsers_INPUT)  String ManageUsersInput) throws IOException {
+        Map<String,Object> model = new HashMap<String,Object>();
+        
+        if (request.getParameter(ManageUsers_MODEL)!=null) {
+            // retrieve model from session
+            model = (Map<String,Object>)request.getSession().getAttribute(ManageUsers_MODEL);
+
+        } else {
+            final File file = new File(USERS_FILE);
+            LOG.debug("FileInfo->" + file.getName());
+            User [] users = getUsersFromXML(file);
+            
+            // populate model
+            model.put(ManageUsers_INPUT, ManageUsersInput);
+            model.put(ManageUsers_USER, users);
+            request.getSession().setAttribute(ManageUsers_MODEL, model);
+            
+        }
+        
+        return model;
+    }
+    
+    
     /*
      * Helper method to formulate the model for the usermanagement view
      */
@@ -268,8 +288,8 @@ public class ManageUsersController {
 
         } else {
             LOG.debug("ManageUsers Input: " + ManageUsersInput);
-             
-            User [] users = getUsersFromXML();
+            final File file = new File(USERS_FILE);
+            User [] users = getUsersFromXML(file);
             
             // populate model
             model.put(ManageUsers_INPUT, ManageUsersInput);
@@ -283,7 +303,7 @@ public class ManageUsersController {
     private void editUser(final HttpServletRequest request) throws IOException {
         LOG.debug("*****In EditUser*****");
         if(editLogFlag)
-            queryStringInfo(request);
+            Utils.queryStringInfo(request);
         
         editUserInfoInXML(request);
         
@@ -296,7 +316,7 @@ public class ManageUsersController {
     private void deleteUser(final HttpServletRequest request) throws IOException {
         LOG.debug("*****In DeleteUser*****");
         if(deleteLogFlag)
-            queryStringInfo(request);
+            Utils.queryStringInfo(request);
         
         deleteUserInfoFromXML(request);
         
@@ -307,17 +327,16 @@ public class ManageUsersController {
     
     
     
-    private void addUser(final HttpServletRequest request) throws IOException {
+    private void addUser(final HttpServletRequest request,File file) throws IOException {
         LOG.debug("\n\n*****In AddUser*****");
-        if(writeLogFlag)
-            queryStringInfo(request);
+        
         
         //using the xml store
-        writeUserInfoToXML(request);
+        UserOperations.writeUserInfoToXML(request,file);
         
         //using the esgf-security store
         //writeUserInfoToDB(request);
-        
+        /**/
         
         LOG.debug("*****End In AddUser*****\n\n");
         
@@ -329,21 +348,21 @@ public class ManageUsersController {
     
     
     /* helper function for getting users from xml store */
-    private User [] getUsersFromXML() throws IOException {
+    private User [] getUsersFromXML(File file) throws IOException {
         
-        LOG.debug("In getUsers()");
+        LOG.debug("------ManageUsersController getUsersFromXML------");
         
         /* this logic is deprecated and only used for testing - it utilizes the xml in users.store */
-        final File file = new File(USERS_FILE);
+        
 
         SAXBuilder builder = new SAXBuilder();
         String xmlContent = "";
         User [] userArray = new User[1];
         
         try{
-
-            Document document = (Document) builder.build(file);
             LOG.debug("Building document");
+            
+            Document document = (Document) builder.build(file);
             
             Element rootNode = document.getRootElement();
             LOG.debug("root name: " + rootNode.getName());
@@ -424,8 +443,10 @@ public class ManageUsersController {
             
         }catch(Exception e) {
             LOG.debug("File not found");
+            e.printStackTrace();
         }
-        
+
+        LOG.debug("------End ManageUsersController getUsersFromXML------");
         return userArray;
     }
     
@@ -566,170 +587,10 @@ public class ManageUsersController {
     
     
     
-    /* Adding user info */
-    private void writeUserInfoToXML(final HttpServletRequest request) {
-        LOG.debug("\n*****In WriteUserInfoTOXML*****");
-
-        String userName = request.getParameter("userName");
-        String lastName = request.getParameter("lastName");
-        String firstName = request.getParameter("firstName");
-        String emailAddress = request.getParameter("emailAddress");
-        String status = request.getParameter("status");
-        
-        
-        /* this logic is deprecated and only used for testing - it utilizes the xml in users.store */
-        final File file = new File(USERS_FILE);
-        SAXBuilder builder = new SAXBuilder();
-        String xmlContent = "";
-        
-        queryStringInfo(request);
-        
-        try{
-
-            Document document = (Document) builder.build(file);
-            if(writeLogFlag)
-                LOG.debug("Building document");
-            
-            Element rootNode = document.getRootElement();
-            if(writeLogFlag)
-                LOG.debug("root name: " + rootNode.getName());
-            
-            Element userElement = new Element("user");
-            
-            Enumeration<String> paramEnum = request.getParameterNames();
-            
-            Element lastNameEl = new Element("lastName");
-            if(lastName != null && lastName != "") {
-                lastNameEl.addContent(lastName);
-            } 
-            else {
-                lastNameEl.addContent("N/A");
-            }
-            
-            Element firstNameEl = new Element("firstName");
-            if(firstName != null && firstName != "") {
-                firstNameEl.addContent(firstName);
-            } 
-            else {
-                firstNameEl.addContent("N/A");
-            }
-            
-            Element userNameEl = new Element("userName");
-            if(userName != null && userName != "") {
-                userNameEl.addContent(userName);
-            } 
-            else {
-                userNameEl.addContent("N/A");
-            }
-            
-            Element emailEl = new Element("emailAddress");
-            if(emailAddress != null && emailAddress != "") {
-                emailEl.addContent(emailAddress);
-            } 
-            else {
-                emailEl.addContent("N/A");
-            }
-            
-            Element statusEl = new Element("status");
-            
-            if(status != null && status != "") {
-                statusEl.addContent(status);
-            } 
-            else {
-                statusEl.addContent("N/A");
-            }
-            
-           
-            
-            userElement.addContent(lastNameEl);
-            userElement.addContent(firstNameEl);
-            userElement.addContent(userNameEl);
-            userElement.addContent(emailEl);
-            userElement.addContent(statusEl);
-            
-            /*Debugging for groups
-             * MUST TAKE THIS OUT FOR PRODUCTION
-             */
-            Element groupsEl = new Element("groups");
-            Element groupEl = new Element("group");
-            Element groupNameEl = new Element("name");
-            groupNameEl.setText("group1");
-            groupEl.addContent(groupNameEl);
-            groupsEl.addContent(groupEl);
-            userElement.addContent(groupsEl);
-            /*
-             * End debugging group
-             */
-            //Insert real code here^^^  
-            
-            rootNode.addContent(userElement);
-            
-            document.setContent(rootNode);
-            
-            XMLOutputter outputter = new XMLOutputter();
-            xmlContent = outputter.outputString(rootNode);
-            
-            if(writeLogFlag) {
-                if(writeXMLTOLogFlag) {
-                    LOG.debug("NEW XMLCONTENT \n" + xmlContent);
-                }
-            }
-            
-            
-            Writer output = null;
-            output = new BufferedWriter(new FileWriter(file));
-            output.write(xmlContent);
-            if(writeLogFlag)
-                LOG.debug("Writing to file");
-            output.close();
-            
-        }catch(Exception e) {
-            LOG.debug("Couldn't write new xml to file");
-        }
-
-        LOG.debug("*****End WriteUserInfoTOXML*****\n");
-    }
     
     
     
     
-    
-    /* Debugging methods */
-    
-    
-    /**
-     * headerStringInfo(HttpServletRequest request)
-     * Private method that prints out the header contents of the request.  Used mainly for debugging.
-     * 
-     * @param request
-     */
-    private void headerStringInfo(HttpServletRequest request) {
-        LOG.debug("--------Header String Info--------");
-        Enumeration headerNames = request.getHeaderNames(); 
-        while(headerNames.hasMoreElements()) { 
-            String headerName = (String)headerNames.nextElement(); 
-            LOG.debug(headerName+"-->"); 
-            LOG.debug(request.getHeader(headerName)); 
-        }
-        LOG.debug("--------End Header String Info--------");
-    }
-    /**
-     * queryStringInfo(HttpServletRequest request)
-     * Private method that prints out the contents of the request.  Used mainly for debugging.
-     * 
-     * @param request
-     */
-    private void queryStringInfo(HttpServletRequest request) {
-        LOG.debug("--------Query String Info--------");
-        Enumeration<String> paramEnum = request.getParameterNames();
-        
-        while(paramEnum.hasMoreElements()) { 
-            String postContent = (String) paramEnum.nextElement();
-            LOG.debug(postContent+"-->"); 
-            LOG.debug(request.getParameter(postContent));
-        }
-        LOG.debug("--------End Query String Info--------");
-    }
     
     
     

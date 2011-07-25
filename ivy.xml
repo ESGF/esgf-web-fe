@@ -29,7 +29,7 @@
     <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.1" conf="base->default" />
     -->
 
-    <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.11" conf="base->default" />
+    <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.10" conf="base->default" />
 
     <dependency org="org.springframework" name="spring-context" rev="${spring.version}" transitive="true" conf="base->default" />
     <dependency org="org.springframework" name="spring-web" rev="${spring.version}" transitive="true" conf="base->default" />

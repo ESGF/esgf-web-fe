@@ -169,29 +169,13 @@ public class ManageUsersController {
             final @ModelAttribute(ManageUsers_INPUT) String ManageUsersInput) throws IOException {
 
         LOG.debug("------ManageUsersController doGet------");
+        
+        //get the model given the httprequest and the manageusersinput model attr
         Map<String,Object> model = getModel(request,ManageUsersInput);
+       
         
-        /*
-        Map<String,Object> model = new HashMap<String,Object>();
+        LOG.debug("------End ManageUsersController doGet------");
         
-        if (request.getParameter(ManageUsers_MODEL)!=null) {
-            // retrieve model from session
-            model = (Map<String,Object>)request.getSession().getAttribute(ManageUsers_MODEL);
-
-        } else {
-            final File file = new File(USERS_FILE);
-            LOG.debug("FileInfo->" + file.getName());
-            User [] users = getUsersFromXML(file);
-            
-            // populate model
-            model.put(ManageUsers_INPUT, ManageUsersInput);
-            model.put(ManageUsers_USER, users);
-            request.getSession().setAttribute(ManageUsers_MODEL, model);
-            
-        }
-        */
-        
-        LOG.debug("------End ManageUsersController doGet------\n\n\n\n");
         return new ModelAndView("usermanagement", model);
     }
     
@@ -214,9 +198,7 @@ public class ManageUsersController {
             final @ModelAttribute(ManageUsers_INPUT) String ManageUsersInput) throws IOException {
             
         LOG.debug("------ManageUsersController doPost------");
-        
-        Map<String,Object> model = getModel(request,ManageUsersInput);
-        
+
         
         //obtain the file of user info - this will be deprecated
         File file = new File(USERS_FILE);
@@ -230,21 +212,23 @@ public class ManageUsersController {
         
         LOG.debug("TYPE->" + type);
         
+        
         //from the type perform the appropriate operation
         if(type.equalsIgnoreCase("add")) {
             addUser(request,file);
         }
         else if(type.equalsIgnoreCase("edit")){
-            editUser(request);
+            editUser(request,file);
         }
         else if(type.equalsIgnoreCase("delete")) {
-            deleteUser(request);
+            deleteUser(request,file);
         }
+        //otherwise ignore and return the model
         
+      //get the model given the httprequest and the manageusersinput model attr
+        Map<String,Object> model = getModel(request,ManageUsersInput);
         
-        
-        
-        LOG.debug("------End ManageUsersController doPost------\n\n\n\n");
+        LOG.debug("------End ManageUsersController doPost------");
         return new ModelAndView("usermanagement", model);
     }
 
@@ -252,6 +236,7 @@ public class ManageUsersController {
     /* Helper function for extracting the model */
     private Map<String,Object> getModel(final HttpServletRequest request,
                                        final @ModelAttribute(ManageUsers_INPUT)  String ManageUsersInput) throws IOException {
+        LOG.debug("------ManageUsersController getModel------");
         Map<String,Object> model = new HashMap<String,Object>();
         
         if (request.getParameter(ManageUsers_MODEL)!=null) {
@@ -261,7 +246,8 @@ public class ManageUsersController {
         } else {
             final File file = new File(USERS_FILE);
             LOG.debug("FileInfo->" + file.getName());
-            User [] users = getUsersFromXML(file);
+            
+            User [] users = UserOperations.getAllUsersFromXML(file);
             
             // populate model
             model.put(ManageUsers_INPUT, ManageUsersInput);
@@ -269,15 +255,20 @@ public class ManageUsersController {
             request.getSession().setAttribute(ManageUsers_MODEL, model);
             
         }
-        
+
+        LOG.debug("------End ManageUsersController getModel------");
         return model;
     }
+    
+    
     
     
     /*
      * Helper method to formulate the model for the usermanagement view
      */
     private Map<String,Object> formModel(final HttpServletRequest request,final @ModelAttribute(ManageUsers_INPUT) String ManageUsersInput) throws IOException{
+
+        LOG.debug("------ManageUsersController formModel------");
         
         Map<String,Object> model = new HashMap<String,Object>();
 
@@ -289,7 +280,7 @@ public class ManageUsersController {
         } else {
             LOG.debug("ManageUsers Input: " + ManageUsersInput);
             final File file = new File(USERS_FILE);
-            User [] users = getUsersFromXML(file);
+            User [] users = UserOperations.getAllUsersFromXML(file);
             
             // populate model
             model.put(ManageUsers_INPUT, ManageUsersInput);
@@ -297,38 +288,43 @@ public class ManageUsersController {
             
             request.getSession().setAttribute(ManageUsers_MODEL, model);
         }
+        LOG.debug("------End ManageUsersController formModel------");
         return model;
     }
     
-    private void editUser(final HttpServletRequest request) throws IOException {
-        LOG.debug("*****In EditUser*****");
+    
+    
+    
+    
+    
+    private void editUser(final HttpServletRequest request,File file) throws IOException {
+        LOG.debug("------ManageUsersController editUser------");
         if(editLogFlag)
             Utils.queryStringInfo(request);
         
-        editUserInfoInXML(request);
-        
-        LOG.debug("*****End EditUser*****\n");
+        UserOperations.editUserInfoInXML(request,file);
 
+        LOG.debug("------End ManageUsersController editUser------");
     }
     
     
     
-    private void deleteUser(final HttpServletRequest request) throws IOException {
-        LOG.debug("*****In DeleteUser*****");
+    private void deleteUser(final HttpServletRequest request,File file) throws IOException {
+        LOG.debug("------ManageUsersController deleteUser------");
         if(deleteLogFlag)
             Utils.queryStringInfo(request);
         
-        deleteUserInfoFromXML(request);
+        UserOperations.deleteUserInfoFromXML(request,file);
         
-        
-        LOG.debug("*****End DeleteUser*****\n");
+
+        LOG.debug("------End ManageUsersController deleteUser------");
 
     }
     
     
     
     private void addUser(final HttpServletRequest request,File file) throws IOException {
-        LOG.debug("\n\n*****In AddUser*****");
+        LOG.debug("------ManageUsersController addUser------");
         
         
         //using the xml store
@@ -337,8 +333,8 @@ public class ManageUsersController {
         //using the esgf-security store
         //writeUserInfoToDB(request);
         /**/
-        
-        LOG.debug("*****End In AddUser*****\n\n");
+
+        LOG.debug("------End ManageUsersController addUser------");
         
     }
     
@@ -347,247 +343,10 @@ public class ManageUsersController {
     
     
     
-    /* helper function for getting users from xml store */
-    private User [] getUsersFromXML(File file) throws IOException {
-        
-        LOG.debug("------ManageUsersController getUsersFromXML------");
-        
-        /* this logic is deprecated and only used for testing - it utilizes the xml in users.store */
-        
-
-        SAXBuilder builder = new SAXBuilder();
-        String xmlContent = "";
-        User [] userArray = new User[1];
-        
-        try{
-            LOG.debug("Building document");
-            
-            Document document = (Document) builder.build(file);
-            
-            Element rootNode = document.getRootElement();
-            LOG.debug("root name: " + rootNode.getName());
-            
-            List users = (List)rootNode.getChildren();
-            userArray =  new User[users.size()];
-            
-            for(int i=0;i<users.size();i++)
-            {
-                
-                Element userEl = (Element) users.get(i);
-                List attributes = (List)userEl.getChildren();
-                
-                String firstName = "";
-                String lastName = "";
-                String userName = "";
-                String emailAddress = "";
-                String status = "";
-                String organization = "";
-                String city = "";
-                String state = "";
-                String country = "";
-                String openId = "";
-                String DN = "";
-                String groups = "";
-                
-                for(int j=0;j<attributes.size();j++)
-                {
-                    Element attEl = (Element) attributes.get(j);
-                    if(attEl.getName().equals("firstName")) {
-                        firstName = attEl.getTextNormalize();
-                    }
-                    else if(attEl.getName().equals("lastName")) {
-                        lastName = attEl.getTextNormalize();
-                    }
-                    else if(attEl.getName().equals("userName")) {
-                        userName = attEl.getTextNormalize();
-                    }
-                    else if(attEl.getName().equals("emailAddress")) {
-                        emailAddress = attEl.getTextNormalize();
-                    }
-                    else if(attEl.getName().equals("status")) {
-                        status = attEl.getTextNormalize();
-                    }
-                    else if(attEl.getName().equals("organization")) {
-                        organization = attEl.getTextNormalize();
-                    }
-                    else if(attEl.getName().equals("city")) {
-                        city = attEl.getTextNormalize();
-                    }
-                    else if(attEl.getName().equals("state")) {
-                        state = attEl.getTextNormalize();
-                    }
-                    else if(attEl.getName().equals("country")) {
-                        country = attEl.getTextNormalize();
-                    }
-                    else if(attEl.getName().equals("openId")) {
-                        openId = attEl.getTextNormalize();
-                    }
-                    else if(attEl.getName().equals("DN")) {
-                        DN = attEl.getTextNormalize();
-                    }
-                    else if(attEl.getName().equals("groups")) {
-                        groups = attEl.getTextNormalize();
-                        
-                    }
-                }
-                
-                //create new User object
-                //generic groups for now
-                Group grp = new Group("CDIAC","Standard","Valid");
-                Group [] grps = {grp};
-                User user = new User(firstName,lastName,userName,emailAddress,status,organization,city,state,country,openId,DN,grps);
-                
-                userArray[i] = user;
-                
-            }
-            
-        }catch(Exception e) {
-            LOG.debug("File not found");
-            e.printStackTrace();
-        }
-
-        LOG.debug("------End ManageUsersController getUsersFromXML------");
-        return userArray;
-    }
     
     
     
     /* Operations over the XML data source (users.file) */
-    
-    /* Editing user info */
-    private void editUserInfoInXML(final HttpServletRequest request) {
-        String userName = request.getParameter("userName");
-        String lastName = request.getParameter("lastName");
-        String firstName = request.getParameter("firstName");
-        String emailAddress = request.getParameter("emailAddress");
-        String status = request.getParameter("status");
-        
-        /* this logic is deprecated and only used for testing - it utilizes the xml in users.store */
-        final File file = new File(USERS_FILE);
-        SAXBuilder builder = new SAXBuilder();
-        String xmlContent = "";
-        
-        try{
-
-            Document document = (Document) builder.build(file);
-            
-            Element rootNode = document.getRootElement();
-            if(editLogFlag)
-                LOG.debug("root name: " + rootNode.getName());
-            
-            List users = (List)rootNode.getChildren();
-            //userArray =  new User[users.size()];
-            
-            for(int i=0;i<users.size();i++)
-            {
-                Element userEl = (Element) users.get(i);
-                if(editLogFlag)
-                    LOG.debug(userName + " " + userEl.getChild("userName").getTextNormalize());
-                if(userEl.getChild("userName").getTextNormalize().equals(userName)) {
-                    if(editLogFlag)
-                        LOG.debug("\t\t\tChange this one");
-                    userEl.getChild("lastName").setText(lastName);
-                    userEl.getChild("firstName").setText(firstName);
-                    userEl.getChild("status").setText(status);
-                    userEl.getChild("emailAddress").setText(emailAddress);
-                    
-                    /*Debugging for groups
-                     * MUST TAKE THIS OUT FOR PRODUCTION
-                     */
-                    if(userEl.getChild("groups") == null) {
-                        Element groupsEl = new Element("groups");
-                        Element groupEl = new Element("group");
-                        groupEl.setText("group1");
-                        groupsEl.addContent(groupEl);
-                    }
-                    
-                }
-            }
-            
-            
-            
-            
-
-            XMLOutputter outputter = new XMLOutputter();
-            xmlContent = outputter.outputString(rootNode);
-            
-            if(editLogFlag) {
-                if(writeXMLTOLogFlag) {
-                    LOG.debug("NEW XMLCONTENT \n" + xmlContent);
-                }
-            } 
-                    
-            Writer output = null;
-            output = new BufferedWriter(new FileWriter(file));
-            output.write(xmlContent);
-            if(editLogFlag)
-                LOG.debug("Writing to file");
-            output.close();
-            
-            
-        }catch(Exception e) {
-            LOG.debug("Couldn't write new xml to file");
-        }
-    }
-    
-    
-    /* Deleting user info */
-    private void deleteUserInfoFromXML(final HttpServletRequest request) {
-        String userName = request.getParameter("user");
-        
-        /* this logic is deprecated and only used for testing - it utilizes the xml in users.store */
-        final File file = new File(USERS_FILE);
-        SAXBuilder builder = new SAXBuilder();
-        String xmlContent = "";
-        
-        try{
-
-            Document document = (Document) builder.build(file);
-            
-            Element rootNode = document.getRootElement();
-            if(deleteLogFlag)
-                LOG.debug("root name: " + rootNode.getName());
-            
-            List users = (List)rootNode.getChildren();
-            //userArray =  new User[users.size()];
-            
-            for(int i=0;i<users.size();i++)
-            {
-                Element userEl = (Element) users.get(i);
-                if(deleteLogFlag)
-                    LOG.debug(userName + " " + userEl.getChild("userName").getTextNormalize());
-                if(userEl.getChild("userName").getTextNormalize().equals(userName)) {
-                    if(deleteLogFlag)
-                        LOG.debug("\t\t\tDelete this one");
-                    rootNode.removeContent(userEl);
-                }
-            }
-            
-
-            XMLOutputter outputter = new XMLOutputter();
-            xmlContent = outputter.outputString(rootNode);
-            
-            if(deleteLogFlag) {
-                if(writeXMLTOLogFlag) {
-                    LOG.debug("NEW XMLCONTENT \n" + xmlContent);
-                }
-            }
-            Writer output = null;
-            output = new BufferedWriter(new FileWriter(file));
-            output.write(xmlContent);
-            if(deleteLogFlag)
-                LOG.debug("Writing to file");
-            output.close();
-            
-        }catch(Exception e) {
-            LOG.debug("Couldn't write new xml to file");
-        }
-    }
-    
-    
-    
-    
-    
     
     
     
@@ -636,10 +395,10 @@ public class ManageUsersController {
         Group [] user2_groups = {group2}; 
        
         
-        User user1 = new User("user1_lastName","user1_firstName","user1_userName","user1_emailAddress",
-                "user1_status","user1_organization","user1_city","user1_state","user1_country","user1_openId","user1_DN",user1_groups);
-        User user2 = new User("user2_lastName","user2_firstName","user2_userName","user2_emailAddress",
-                "user2_status","user2_organization","user2_city","user2_state","user2_country","user2_openId","user2_DN",user2_groups);
+        User user1 = new User("user1_lastName","user1_firstName","user1_middleName","user1_userName","user1_emailAddress",
+                "user1_status","user1_organization","user1_city","user1_state","user1_country","user1_openId","user1_DN");
+        User user2 = new User("user2_lastName","user2_firstName","user2_middleName","user2_userName","user2_emailAddress",
+                "user2_status","user2_organization","user2_city","user2_state","user2_country","user2_openId","user2_DN");
         
         User [] users = {user1,user2};
         

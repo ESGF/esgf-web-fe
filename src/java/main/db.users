@@ -105,10 +105,11 @@
 		<email>user8_email</email>
 		<username>user8_userName</username>
 		<dn>user8_dn</dn>
-		<openid>user8_openid</openid>
+		<openid>https://pcmdi3.llnl.gov/esgcet/myopenid/jfharney</openid>
 		<organization>user8_organization</organization>
 		<city>user8_city</city>
 		<state>user8_state</state>
 		<country>user8_country</country>
 	</user>
+	
 </users>

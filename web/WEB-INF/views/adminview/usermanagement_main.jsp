@@ -121,6 +121,9 @@
 							<div class="simple_overlay" id="addUserForm"> 
 								<form id="new_user_form" action="" method="post" >
 								<h3 style="margin-top:10px;text-align:center;text-style:bold;font-style:italic" id="form_title">New User Information</h3>
+								
+								
+								<!-- 
 								<table id="adduser_table_id" style="font-size:10px">  
 									<tr>
 										<td>
@@ -191,7 +194,8 @@
 						      	<p>
 						      		<div style="margin-left:15px;font-size:10px">* denotes required</div>
 						      	</p>
-							    <!--  
+						      	 -->
+							     
 									<p>
 										<label class="formLabels" for="userName">User Name:</label>
 					      		  		<input type="text" class="text" id="form_userName" name="userName" value=""> 
@@ -239,7 +243,7 @@
 						      			<input style="margin-left: 15px" class="adminbutton" type="submit" value="Submit">
 						      			
 					      			</p>
-					      			-->
+					      			
 								</form>
 								
 							</div> 

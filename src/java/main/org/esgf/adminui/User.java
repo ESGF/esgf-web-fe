@@ -4,11 +4,15 @@ import java.io.Serializable;
 
 public class User implements Serializable{
 
+    
+    private static final long serialVersionUID = 1L;
+    
+    private String userId;
     private String lastName;
     private String firstName;
+    private String middleName;
     private String userName;
     private String emailAddress;
-    private String status;
     
     
     private String organization;
@@ -19,25 +23,25 @@ public class User implements Serializable{
     private String openId;
     private String DN;
     
-    private Group [] groups;
     
-    public User(String lastName,
+    public User(String userId,
+                String lastName,
                 String firstName,
+                String middleName,
                 String userName,
                 String emailAddress,
-                String status,
                 String organization,
                 String city,
                 String state,
                 String country,
                 String openId,
-                String DN,
-                Group [] groups) {
+                String DN) {
+        this.setUserId(userId);
         this.lastName = lastName;
         this.firstName = firstName;
+        this.setMiddleName(middleName);
         this.userName = userName;
         this.emailAddress = emailAddress;
-        this.status = status;
         
         this.organization = organization;
         this.city = city;
@@ -46,23 +50,17 @@ public class User implements Serializable{
         this.openId = openId;
         this.DN = DN;
         
-        /*
-        this.groups = new Group[groups.length];
-        for(int i=0;i<groups.length;i++) {
-            this.groups[i] = new Group(groups[i].getName(),groups[i].getRole(),groups[i].getStatus());
-        }
-        */  
-        
         
     }
     
     
     public User() {
+        this.setUserId("userId");
         this.lastName = "lastName";
         this.firstName = "firstName";
         this.userName = "userName";
+        this.setMiddleName("middleName");
         this.emailAddress = "emailAddress";
-        this.status = "status";
         
         
         this.organization = "organization";
@@ -72,11 +70,7 @@ public class User implements Serializable{
         this.country = "country";
         this.openId = "openId";
         this.DN = "DN";
-        
-        /*
-        this.groups = new Group[1];
-        this.groups[0] = new Group();
-        */
+       
     }
     
     public String getFirstName() {
@@ -101,14 +95,6 @@ public class User implements Serializable{
 
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     
@@ -159,15 +145,6 @@ public class User implements Serializable{
     public void setDN(String dN) {
         DN = dN;
     }
-     
-    public Group[] getGroups() {
-        return groups;
-    }
-
-    public void setGroups(Group[] groups) {
-        this.groups = groups;
-    }
-
     
 
     public void setLastName(String lastName) {
@@ -177,4 +154,46 @@ public class User implements Serializable{
     public String getLastName() {
         return lastName;
     }
+    
+    public String toString() {
+        String str = "";
+        
+        str += "User Information" + System.getProperty("line.separator");
+        str += "\tUserId: " + this.userId + System.getProperty("line.separator");
+        str += "\tUserName: " + this.userName + System.getProperty("line.separator");
+        str += "\tLastName: " + this.lastName +  System.getProperty("line.separator");
+        str += "\tFirstName: " + this.firstName +  System.getProperty("line.separator");
+        str += "\tMiddleName: " + this.middleName +  System.getProperty("line.separator");
+        str += "\tEmail: " + this.emailAddress +  System.getProperty("line.separator");
+        str += "\tOrganization: " + this.organization +  System.getProperty("line.separator");
+        str += "\tCity: " + this.city +  System.getProperty("line.separator");
+        str += "\tState: " + this.state +  System.getProperty("line.separator");
+        str += "\tCountry: " + this.country +  System.getProperty("line.separator");
+        str += "\tOpenId: " + this.openId +  System.getProperty("line.separator");
+        str += "\tDN: " + this.DN +  System.getProperty("line.separator");
+        
+        
+        return str;
+    }
+
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+
+    public String getUserId() {
+        return userId;
+    }
+    
 }

@@ -52,14 +52,6 @@
 
 
 /**
- * On request mapping:
- *
- *     url rewrite filter will take over first, then we do regular Spring mapping.
- *     RedirectView is discouraged here as it will mess up the current rewrite
- *     rule, use "redirect:" prefix instead, and it is regarded as a better alternative
- *     anyway.
- *
- * For any redirect trouble, please refers to ROOT/urlrewrite.xml
  *
  * @author John Harney (harneyjf@ornl.gov)
  * @author Feiyi Wang (fwang2@ornl.gov)
@@ -67,61 +59,29 @@
  */
 package org.esgf.adminui;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.transform.Result;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.apache.log4j.Logger;
-import org.apache.xml.serialize.XMLSerializer;
-import org.esgf.commonui.UserOperations;
+import org.esgf.commonui.UserOperationsInterface;
+import org.esgf.commonui.UserOperationsXMLImpl;
 import org.esgf.commonui.Utils;
-import org.esgf.manager.InputManager;
-import org.esgf.manager.InputManagerImpl;
-import org.esgf.manager.OutputManager;
-import org.esgf.manager.OutputManagerImpl;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.w3c.dom.Node;
-
-import esg.search.query.api.FacetProfile;
-import esg.search.query.api.SearchOutput;
-import esg.search.query.api.SearchService;
-import esg.search.query.impl.solr.SearchInputImpl;
 
 @Controller
 @RequestMapping(value="/usermanagement")
 
+/*
+ * Insert class description here...Basically manages the user management view
+ */
 public class ManageUsersController {
 
     private final static String ManageUsers_INPUT = "ManageUsers_input";
@@ -129,33 +89,27 @@ public class ManageUsersController {
     private final static String ManageUsers_MODEL = "ManageUsers_model";
 
     private final static Logger LOG = Logger.getLogger(ManageUsersController.class);
-    private final static String USERS_FILE = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\users.file";
-
-    private final static String ROOT_USER = "https://pcmdi3.llnl.gov/esgcet/myopenid/jfharney";
     
-    
-    private final static boolean writeXMLTOLogFlag = false;
-
-    private final static boolean writeLogFlag = false;
-    private final static boolean editLogFlag = false;
-    private final static boolean deleteLogFlag = false;
-    
+    private UserOperationsInterface uoi;
     
     /**
      * List of invalid text characters -
      * anything that is not within square brackets.
      */
+    /*
     private static Pattern pattern =
         Pattern.compile(".*[^a-zA-Z0-9_\\-\\.\\@\\'\\:\\;\\,\\s/()].*");
-
+    */
+    
     public ManageUsersController() {
         LOG.debug("IN ManageUsersController Constructor");
+        //declare a UserOperations "Object"
+        uoi = new UserOperationsXMLImpl();
     }
 
     /**
      * Method invoked in response to a GET request:
-     * -) if invoked directly, a new set of facets is retrieved (but no results)
-     * -) if invoked in response to a POST-REDIRECT,
+     * --fill in description later
      * @param request
      * @param input
      * @param result
@@ -180,12 +134,9 @@ public class ManageUsersController {
     }
     
     
-    
-    
     /**
      * Method invoked in response to a POST request:
-     * -) if invoked directly, a new set of facets is retrieved (but no results)
-     * -) if invoked in response to a POST-REDIRECT,
+     * --fill in description later
      * @param request
      * @param input
      * @param result
@@ -199,29 +150,25 @@ public class ManageUsersController {
             
         LOG.debug("------ManageUsersController doPost------");
 
-        
-        //obtain the file of user info - this will be deprecated
-        File file = new File(USERS_FILE);
-        
         //get the userId from the cookie
         String userId = Utils.getIdFromHeaderCookie(request);
         LOG.debug("UserId Retrieved: " + userId);
         
-        //get the type of operation (add, edit, delete)
+        //get the type of operation from the request parameter (add, edit, delete)
         String type = Utils.getTypeFromQueryString(request);
+        
         
         LOG.debug("TYPE->" + type);
         
-        
         //from the type perform the appropriate operation
         if(type.equalsIgnoreCase("add")) {
-            addUser(request,file);
+            addUser(request);
         }
         else if(type.equalsIgnoreCase("edit")){
-            editUser(request,file);
+            editUser(request);
         }
         else if(type.equalsIgnoreCase("delete")) {
-            deleteUser(request,file);
+            deleteUser(request);
         }
         //otherwise ignore and return the model
         
@@ -244,14 +191,16 @@ public class ManageUsersController {
             model = (Map<String,Object>)request.getSession().getAttribute(ManageUsers_MODEL);
 
         } else {
-            final File file = new File(USERS_FILE);
-            LOG.debug("FileInfo->" + file.getName());
             
-            User [] users = UserOperations.getAllUsersFromXML(file);
-            
+            List<User> users = uoi.getAllUsers();
+            //convert to user array so jsp doesn't complain
+            User [] userArray = users.toArray(new User[users.size()]);
+        
             // populate model
             model.put(ManageUsers_INPUT, ManageUsersInput);
-            model.put(ManageUsers_USER, users);
+            //LOG.debug("About to plug in USERS");
+            model.put(ManageUsers_USER, userArray);
+            //LOG.debug("After plug in USERS");
             request.getSession().setAttribute(ManageUsers_MODEL, model);
             
         }
@@ -274,17 +223,20 @@ public class ManageUsersController {
 
         if (request.getParameter(ManageUsers_MODEL)!=null) {
             LOG.debug("Not null");
-            // retrieve model from session
+            // retrieve model from session if needed
             model = (Map<String,Object>)request.getSession().getAttribute(ManageUsers_MODEL);
 
         } else {
             LOG.debug("ManageUsers Input: " + ManageUsersInput);
-            final File file = new File(USERS_FILE);
-            User [] users = UserOperations.getAllUsersFromXML(file);
+            
+            List<User> users = uoi.getAllUsers();
             
             // populate model
             model.put(ManageUsers_INPUT, ManageUsersInput);
+            LOG.debug("About to plug in USERS");
             model.put(ManageUsers_USER, users);
+            LOG.debug("After plug in USERS");
+            
             
             request.getSession().setAttribute(ManageUsers_MODEL, model);
         }
@@ -297,24 +249,68 @@ public class ManageUsersController {
     
     
     
-    private void editUser(final HttpServletRequest request,File file) throws IOException {
+    private void editUser(final HttpServletRequest request) throws IOException {
         LOG.debug("------ManageUsersController editUser------");
-        if(editLogFlag)
-            Utils.queryStringInfo(request);
         
-        UserOperations.editUserInfoInXML(request,file);
+        //Utils.queryStringInfo(request);
+        
 
+        String userName = request.getParameter("userName");
+        LOG.debug("USERNAME->" + userName + "\n\n\n\n\n\n");
+        
+        String first = request.getParameter("firstName");
+        if(first == null || first.equals("")) {
+            first = "N/A";
+        }
+        String middle = request.getParameter("middle");
+        if(middle == null || middle.equals("")) {
+            middle = "N/A";
+        }
+        String last = request.getParameter("lastName");
+        if(last == null || last.equals("")) {
+            last = "N/A";
+        }
+        String email = request.getParameter("emailAddress");
+        if(email == null || email.equals("")) {
+            email = "N/A";
+        }
+        String organization = request.getParameter("organization");
+        if(organization == null || organization.equals("")) {
+            organization = "N/A";
+        }
+        String city = request.getParameter("city");
+        if(city == null || city.equals("")) {
+            city = "N/A";
+        }
+        String state = request.getParameter("state");
+        if(state == null || state.equals("")) {
+            state = "N/A";
+        }
+        String country = request.getParameter("country");
+        if(country == null || country.equals("")) {
+            country = "N/A";
+        }
+        
+        String userId = uoi.getUserIdFromUserName(userName);
+        uoi.editUser(userId,first,middle,last,email,userName,organization,city,state,country);
+
+        
+        
+        
+        
         LOG.debug("------End ManageUsersController editUser------");
     }
     
     
     
-    private void deleteUser(final HttpServletRequest request,File file) throws IOException {
+    private void deleteUser(final HttpServletRequest request) throws IOException {
         LOG.debug("------ManageUsersController deleteUser------");
-        if(deleteLogFlag)
-            Utils.queryStringInfo(request);
         
-        UserOperations.deleteUserInfoFromXML(request,file);
+        //Utils.queryStringInfo(request);
+        
+        String userName = request.getParameter("user");
+        String userId = uoi.getUserIdFromUserName(userName);
+        uoi.deleteUser(userId);
         
 
         LOG.debug("------End ManageUsersController deleteUser------");
@@ -323,106 +319,59 @@ public class ManageUsersController {
     
     
     
-    private void addUser(final HttpServletRequest request,File file) throws IOException {
+    private void addUser(final HttpServletRequest request) throws IOException {
         LOG.debug("------ManageUsersController addUser------");
         
+        //Utils.queryStringInfo(request);
+        
+        String username = request.getParameter("userName");
+        if(username == null || username.equals("")) {
+            username = "N/A";
+        }
+        String first = request.getParameter("firstName");
+        if(first == null || first.equals("")) {
+            first = "N/A";
+        }
+        String middle = request.getParameter("middle");
+        if(middle == null || middle.equals("")) {
+            middle = "N/A";
+        }
+        String last = request.getParameter("lastName");
+        if(last == null || last.equals("")) {
+            last = "N/A";
+        }
+        String email = request.getParameter("emailAddress");
+        if(email == null || email.equals("")) {
+            email = "N/A";
+        }
+        String organization = request.getParameter("organization");
+        if(organization == null || organization.equals("")) {
+            organization = "N/A";
+        }
+        String city = request.getParameter("city");
+        if(city == null || city.equals("")) {
+            city = "N/A";
+        }
+        String state = request.getParameter("state");
+        if(state == null || state.equals("")) {
+            state = "N/A";
+        }
+        String country = request.getParameter("country");
+        if(country == null || country.equals("")) {
+            country = "N/A";
+        }
         
         //using the xml store
-        UserOperations.writeUserInfoToXML(request,file);
-        
-        //using the esgf-security store
-        //writeUserInfoToDB(request);
-        /**/
+        uoi.addUser(first,middle,last,email,username,organization,city,state,country);
 
         LOG.debug("------End ManageUsersController addUser------");
         
     }
     
-   
- 
     
     
-    
-    
-    
-    
-    /* Operations over the XML data source (users.file) */
-    
-    
-    
-    
-    
-    
-    /**
-     *
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    @ModelAttribute(ManageUsers_INPUT)
-    public String formManageUsersInputObject(final HttpServletRequest request) throws Exception {
-        LOG.debug("formManageUsersInputObject called");
-        return "ManageUsers_Table here";
-    }
-
-    
-    private void writeUserInfoToDB(final HttpServletRequest request) {
-        LOG.debug("\n*****In WriteUserInfoToDB*****");
-        LOG.debug("*****End WriteUserInfoTODB*****\n");
-
-    }
-    
-    private void deleteUserInfoFromDB(final HttpServletRequest request) {
-        LOG.debug("\n*****In WriteUserInfoToDB*****");
-        LOG.debug("*****End WriteUserInfoTODB*****\n");
-
-    }
-    
-    
-    
-    
-    
-    
-    
-    /* Deprecated */
-    private User [] getUsersHardCoded() {
-        
-        
-        Group group1 = new Group("CDIAC","Standard","Valid");
-        Group group2 = new Group("C-LAMP","Standard","Valid");
-        
-        Group [] user1_groups = {group1, group2}; 
-        Group [] user2_groups = {group2}; 
-       
-        
-        User user1 = new User("user1_lastName","user1_firstName","user1_middleName","user1_userName","user1_emailAddress",
-                "user1_status","user1_organization","user1_city","user1_state","user1_country","user1_openId","user1_DN");
-        User user2 = new User("user2_lastName","user2_firstName","user2_middleName","user2_userName","user2_emailAddress",
-                "user2_status","user2_organization","user2_city","user2_state","user2_country","user2_openId","user2_DN");
-        
-        User [] users = {user1,user2};
-        
-        return users;
-    }
     
     
 }
 
 
-
-
-/*
-if (request.getParameter(ManageUsers_MODEL)!=null) {
-    LOG.debug("Not null");
-    // retrieve model from session
-    model = (Map<String,Object>)request.getSession().getAttribute(ManageUsers_MODEL);
-} else {
-    LOG.debug("null");
-    LOG.debug("ManageUsers Input: " + ManageUsersInput);
-    User [] users = getUsersFromXML();
-    // populate model
-    model.put(ManageUsers_INPUT, ManageUsersInput);
-    model.put(ManageUsers_USER, users);
-    request.getSession().setAttribute(ManageUsers_MODEL, model);
-}
-*/

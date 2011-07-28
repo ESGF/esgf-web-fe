@@ -67,8 +67,10 @@
  */
 package org.esgf.adminui;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -76,8 +78,11 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.esgf.commonui.GroupOperations;
+import org.esgf.commonui.GroupOperationsInterface;
 //import org.esgf.commonui.UserOperations;
+import org.esgf.commonui.GroupOperationsXMLImpl;
+import org.esgf.commonui.UserOperationsInterface;
+import org.esgf.commonui.UserOperationsXMLImpl;
 import org.esgf.commonui.UserOps;
 import org.esgf.commonui.Utils;
 import org.esgf.manager.InputManager;
@@ -109,15 +114,22 @@ public class CreateGroupsController {
 
     private final static Logger LOG = Logger.getLogger(CreateGroupsController.class);
 
+    private GroupOperationsInterface goi;
+    
+    
     /**
      * List of invalid text characters -
      * anything that is not within square brackets.
      */
+    /*
     private static Pattern pattern =
         Pattern.compile(".*[^a-zA-Z0-9_\\-\\.\\@\\'\\:\\;\\,\\s/()].*");
-
+    */
+    
     public CreateGroupsController() {
         LOG.debug("IN CreateGroupsController Constructor");
+        //goi = new GroupOperationsXMLImpl();
+        goi = new GroupOperationsXMLImpl();
     }
 
     /**
@@ -128,60 +140,21 @@ public class CreateGroupsController {
      * @param input
      * @param result
      * @return
+     * @throws IOException 
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
     @RequestMapping(method=RequestMethod.GET)
     public ModelAndView doGet(final HttpServletRequest request,
             final @ModelAttribute(CreateGroups_MISC) String CreateGroupsMisc,
-            final @ModelAttribute(CreateGroups_INPUT) String CreateGroupsInput) {
+            final @ModelAttribute(CreateGroups_INPUT) String CreateGroupsInput) throws IOException {
         LOG.debug("------CreateGroupsController doGet------");
         
-        Map<String,Object> model = new HashMap<String,Object>();
         
-        if (request.getParameter(CreateGroups_MODEL)!=null) {
-            LOG.debug("Getting from session");
-            // retrieve model from session
-            model = (Map<String,Object>)request.getSession().getAttribute(CreateGroups_MODEL);
-
-        } else {
-/*
-            // populate model
-            model.put(CreateGroups_MISC, CreateGroupsMisc);
-            model.put(CreateGroups_INPUT, CreateGroupsInput);
-            request.getSession().setAttribute(CreateGroups_MODEL, model);
-*/            
-         // populate model
-            model.put(CreateGroups_MISC, CreateGroupsMisc);
-            model.put(CreateGroups_INPUT, CreateGroupsInput);
-            
-            Group [] groups = new Group[3];
-            String id = "group1_id";
-            String name = "group1_name";
-            String description = "group1_description";
-            Group g1 = new Group(id, name, description);
-            
-            id = "group2_id";
-            name = "group2_name";
-            description = "group2_description";
-            Group g2 = new Group(id, name, description);
-            groups[0] = g1;
-            groups[1] = g2;
-            
-            Group group = GroupOperations.getGroupObjectFromGroupId("group1_id");
-            groups[2] = group;
-            
-            //get the userId from the cookie
-            String openId = Utils.getIdFromHeaderCookie(request);
-            String userId = UserOps.getUserIdFromOpenID(openId);
-            LOG.debug("UserId Retrieved: " + openId + " " + userId);
-            
-            
-            model.put(CreateGroups_GROUP, groups);
-            request.getSession().setAttribute(CreateGroups_MODEL, model);
-        }
+        Map<String,Object> model = getModel(request,CreateGroupsInput);
+        
+        
         LOG.debug("------End CreateGroupsController doGet------");
-        
         return new ModelAndView("creategroups", model);
     }
     
@@ -193,50 +166,164 @@ public class CreateGroupsController {
      * @param input
      * @param result
      * @return
+     * @throws IOException 
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
     @RequestMapping(method=RequestMethod.POST)
     public ModelAndView doPost(final HttpServletRequest request,
             final @ModelAttribute(CreateGroups_MISC) String CreateGroupsMisc,
-            final @ModelAttribute(CreateGroups_INPUT) String CreateGroupsInput) {
+            final @ModelAttribute(CreateGroups_INPUT) String CreateGroupsInput) throws IOException {
         LOG.debug("------CreateGroupsController doPost------");
         
-Map<String,Object> model = new HashMap<String,Object>();
         
-        if (request.getParameter(CreateGroups_MODEL)!=null) {
-            LOG.debug("Getting from session");
-            // retrieve model from session
-            model = (Map<String,Object>)request.getSession().getAttribute(CreateGroups_MODEL);
-
-        } else {
-
-            // populate model
-            model.put(CreateGroups_MISC, CreateGroupsMisc);
-            model.put(CreateGroups_INPUT, CreateGroupsInput);
-            
-            Group [] groups = new Group[2];
-            String name = "name1";
-            String role = "role1";
-            String status = "status1";
-            Group g1 = new Group(name, role, status);
-            
-            name = "name2";
-            role = "role2";
-            status = "status2";
-            Group g2 = new Group(name, role, status);
-            groups[0] = g1;
-            groups[1] = g2;
-            
-            model.put(CreateGroups_GROUP, groups);
-            request.getSession().setAttribute(CreateGroups_MODEL, model);
+      //get the userId from the cookie
+        String userId = Utils.getIdFromHeaderCookie(request);
+        LOG.debug("UserId Retrieved: " + userId);
+        
+        //get the type of operation from the request parameter (add, edit, delete)
+        String type = Utils.getTypeFromQueryString(request);
+        
+        
+        LOG.debug("TYPE->" + type);
+        
+        //from the type perform the appropriate operation
+        if(type.equalsIgnoreCase("add")) {
+            addUser(request);
         }
+        else if(type.equalsIgnoreCase("edit")){
+            editUser(request);
+        }
+        else if(type.equalsIgnoreCase("delete")) {
+            deleteUser(request);
+        }
+       
+        Map<String,Object> model = getModel(request,CreateGroupsInput);
+        
+        
         LOG.debug("------End CreateGroupsController doPost------");
         
         return new ModelAndView("creategroups", model);
     }
     
     
+    
+
+    
+    private void editUser(final HttpServletRequest request) throws IOException {
+        LOG.debug("------ManageUsersController editUser------");
+        
+      //Utils.queryStringInfo(request);
+        String groupId = request.getParameter("id");
+        
+        groupId = goi.getGroupIdFromGroupName(request.getParameter("groupName"));
+        
+        String groupName = request.getParameter("groupName");
+        if(groupName == null || groupName.equals("")) {
+            groupName = "N/A";
+        }
+        String groupDescription = request.getParameter("groupDescription");
+        if(groupDescription == null || groupDescription.equals("")) {
+            groupDescription = "N/A";
+        }
+        
+        LOG.debug("HERE - editing: " + groupId + " " + groupName + " " + groupDescription + "\n\n\n");
+        goi.editGroup(groupId, groupName, groupDescription);
+        
+        /*
+        String userName = request.getParameter("userName");
+        LOG.debug("USERNAME->" + userName + "\n\n\n\n\n\n");
+        
+        String first = request.getParameter("firstName");
+        if(first == null || first.equals("")) {
+            first = "N/A";
+        }
+        */
+        //String userId = uoi.getUserIdFromUserName(userName);
+        //uoi.editUser(userId,first,middle,last,email,userName,organization,city,state,country);
+
+        
+        
+        
+        
+        LOG.debug("------End CreateGroupsController editUser------");
+    }
+    
+    
+    
+    private void deleteUser(final HttpServletRequest request) throws IOException {
+        LOG.debug("------CreateGroupsController deleteUser------");
+        
+        //Utils.queryStringInfo(request);
+        String groupId = request.getParameter("groupName");
+        
+        //String groupId = goi.getGroupIdFromGroupName(groupName);
+        
+        LOG.debug("Deleteing->" + groupId);
+        goi.deleteGroup(groupId);
+
+        LOG.debug("------End CreateGroupsController deleteUser------");
+
+    }
+    
+    
+    
+    private void addUser(final HttpServletRequest request) throws IOException {
+        LOG.debug("------CreateGroupsController addUser------");
+        
+        Utils.queryStringInfo(request);
+        
+        String groupName = request.getParameter("groupName");
+        if(groupName == null || groupName.equals("")) {
+            groupName = "N/A";
+        }
+        String groupDescription = request.getParameter("groupName");
+        if(groupDescription == null || groupDescription.equals("")) {
+            groupDescription = "N/A";
+        }
+
+        //using the xml store
+        goi.addGroup(groupName, groupDescription);
+        
+
+        LOG.debug("------CreateGroupsController addUser------");
+        
+    }
+    
+    
+    
+    
+    /* Helper function for extracting the model */
+    private Map<String,Object> getModel(final HttpServletRequest request,
+                                       final @ModelAttribute(CreateGroups_INPUT)  String ManageUsersInput) throws IOException {
+        LOG.debug("------CreateGroupsController getModel------");
+        Map<String,Object> model = new HashMap<String,Object>();
+        
+        if (request.getParameter(CreateGroups_MODEL)!=null) {
+            // retrieve model from session
+            model = (Map<String,Object>)request.getSession().getAttribute(CreateGroups_MODEL);
+
+        } else {
+            
+            List<Group> groups = goi.getAllGroups();
+            //convert to user array so jsp doesn't complain
+            Group [] groupArray = groups.toArray(new Group[groups.size()]);
+            /*
+            List<User> users = uoi.getAllUsers();
+            User [] userArray = users.toArray(new User[users.size()]);
+            */
+            // populate model
+            model.put(CreateGroups_INPUT, ManageUsersInput);
+            //LOG.debug("About to plug in USERS");
+            model.put(CreateGroups_GROUP, groupArray);
+            //LOG.debug("After plug in USERS");
+            request.getSession().setAttribute(CreateGroups_MODEL, model);
+            
+        }
+
+        LOG.debug("------End CreateGroupsController getModel------");
+        return model;
+    }
     
     
     /**

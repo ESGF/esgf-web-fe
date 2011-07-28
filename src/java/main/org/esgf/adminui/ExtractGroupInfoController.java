@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
+import org.esgf.commonui.GroupOperationsInterface;
+import org.esgf.commonui.GroupOperationsXMLImpl;
+import org.esgf.commonui.UserOps;
 import org.esgf.metadata.JSONArray;
 import org.esgf.metadata.JSONException;
 import org.esgf.metadata.JSONObject;
@@ -39,11 +42,22 @@ public class ExtractGroupInfoController {
     private final static Logger LOG = Logger.getLogger(ExtractGroupInfoController.class);
     
     //change me later
-    private final static String USERS_FILE = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\users.file";
-    private final static String GROUPS_FILE = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\groups.file";
+    
+    private final static String USERS_FILE = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\db.users";
+    private final static String GROUPS_FILE = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\db.groups";
 
 
     private final static boolean debugFlag = true;
+    
+    private GroupOperationsInterface goi;
+    
+    public ExtractGroupInfoController() {
+        LOG.debug("IN CreateGroupsController Constructor");
+        //goi = new GroupOperationsXMLImpl();
+        goi = new GroupOperationsXMLImpl();
+    }
+    
+    
     /**
      * Note: GET and POST contain the same functionality.
      *
@@ -79,7 +93,7 @@ public class ExtractGroupInfoController {
      */
     @RequestMapping(method=RequestMethod.POST)
     public @ResponseBody String doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException, JDOMException {
-        LOG.debug("ExtractUserInfoController doPost");
+        LOG.debug("ExtractGroupInfoController doPost");
 
         String type = request.getParameter("type");
         if(debugFlag)
@@ -100,11 +114,12 @@ public class ExtractGroupInfoController {
      *
      */
     private String processEditType(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException, JDOMException {
+        LOG.debug("ExtractGroupInfoController processEditType");
         String jsonContent = "jsonContent";
 
-        String userName = request.getParameter("id");
+        String groupId = request.getParameter("id");
         
-        if(debugFlag)
+        //if(debugFlag)
             queryStringInfo(request);
         
         /* Search through the data store to see if the id (username or openid) is there 
@@ -115,10 +130,14 @@ public class ExtractGroupInfoController {
          */
         try {
             //xml store version
-            String xmlOutput = getXMLTupleOutputFromEdit(userName);
+            //String xmlOutput = getXMLTupleOutputFromEdit(userName);
             
             //db version
-            
+            //LOG.debug("GroupId->" + groupId);
+            Group group = goi.getGroupObjectFromGroupId(groupId);
+            //User user = UserOps.getUserObjectFromUserName(userName);
+            String xmlOutput = group.toXml();
+            //LOG.debug(xmlOutput);
             
             JSONObject jo = XML.toJSONObject(xmlOutput);
 

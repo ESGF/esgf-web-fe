@@ -270,7 +270,7 @@ public class ManageUsersController {
         if(last == null || last.equals("")) {
             last = "N/A";
         }
-        String email = request.getParameter("emailAddress");
+        String email = request.getParameter("email");
         if(email == null || email.equals("")) {
             email = "N/A";
         }
@@ -340,7 +340,7 @@ public class ManageUsersController {
         if(last == null || last.equals("")) {
             last = "N/A";
         }
-        String email = request.getParameter("emailAddress");
+        String email = request.getParameter("email");
         if(email == null || email.equals("")) {
             email = "N/A";
         }

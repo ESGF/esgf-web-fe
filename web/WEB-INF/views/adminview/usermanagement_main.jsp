@@ -151,7 +151,7 @@
 											<div style="font-size:12px;font-weight:bold;margin-left:15px;">Email *</div>
 										</td>
 										<td>
-											<input type="text" class="text" name="emailAddress" id="form_emailAddress" value="">
+											<input type="text" class="text" name="email" id="form_email" value="">
 										</td>
 									</tr>
 									<tr>
@@ -159,7 +159,7 @@
 											<div style="font-size:12px;font-weight:bold;margin-left:15px;">Organization </div>
 										</td>
 										<td>
-											<input type="text" class="text" id="organization" name="organization" value=""> 
+											<input type="text" class="text" id="form_organization" name="organization" value=""> 
 										</td>
 									</tr>
 									<tr>
@@ -167,7 +167,7 @@
 											<div style="font-size:12px;font-weight:bold;margin-left:15px;">City</div>
 										</td>
 										<td>
-											<input type="text" class="text" name="city" id="city" value=""> 
+											<input type="text" class="text" name="city" id="form_city" value=""> 
 										</td>
 									</tr>
 									<tr>
@@ -175,7 +175,7 @@
 											<div style="font-size:12px;font-weight:bold;margin-left:15px;">Country</div>
 										</td>
 										<td>
-								    		<input type="text" class="text" id="country" name="country" value=""> 
+								    		<input type="text" class="text" id="form_country" name="country" value=""> 
 										</td>
 									</tr>
 									<tr>
@@ -450,18 +450,22 @@ $(document).ready(function(){
 	
 	/* Helper function for filling content for edtiing data */	
 	function fillFormContentForEdit(data) {
-		var lastName = data.user.lastName;
-		var firstName = data.user.firstName;
-		var emailAddress = data.user.emailAddress;
-		var status = data.user.status;
-		var userName = data.user.userName;
-		
-		//Note there may be more values later, this is for demo purposes
+
+		var firstName = data.user.first;
+		var lastName = data.user.last;
+		var email = data.user.email;
+		var organization = data.user.organization;
+		var city = data.user.city;
+		var country = data.user.country;
+
 		$('input#form_firstName').val(firstName);
 		$('input#form_lastName').val(lastName);
-		$('input#form_userName').val(userName);
-		$('input#form_emailAddress').val(emailAddress);
-		$('input#form_status').val(status);
+		$('input#form_email').val(email);
+		$('input#form_organization').val(organization);
+		$('input#form_city').val(city);
+		$('input#form_country').val(country);
+		
+		//Note there may be more values later, this is for demo purposes
 		
 	}
 	

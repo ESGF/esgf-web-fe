@@ -68,7 +68,6 @@
 						                <th>Last Name</th> 
 						                <th>First Name</th>  
 						                <th>Email Address</th>  
-						                <th>Status</th>  
 						            </tr>  
 						        </thead>  
 	  
@@ -84,8 +83,7 @@
 							                <td>${ManageUsers_user[j].userName}</td>  
 							                <td>${ManageUsers_user[j].lastName}</td> 
 							                <td>${ManageUsers_user[j].firstName}</td>  
-							                <td>${ManageUsers_user[j].emailAddress}</td>    
-							                <td>${ManageUsers_user[j].status}</td>    
+							                <td>${ManageUsers_user[j].emailAddress}</td>  
 							            </tr> 
 							            <c:set var="j" value="${j+1}"/>
 										
@@ -123,14 +121,13 @@
 								<h3 style="margin-top:10px;text-align:center;text-style:bold;font-style:italic" id="form_title">New User Information</h3>
 								
 								
-								<!-- 
 								<table id="adduser_table_id" style="font-size:10px">  
-									<tr>
+									<tr id="userName_input">
 										<td>
 											<div style="font-size:12px;font-weight:bold;margin-left:15px;">User Name *</div> 
 										</td>
 										<td>
-											<input type="text" class="text" id="form_userName" name="userName" value=""> 
+											<input type="text" class="text" id="userName" name="userName" value=""> 
 										</td>
 									</tr>
 									<tr>
@@ -138,7 +135,7 @@
 											<div style="font-size:12px;font-weight:bold;margin-left:15px;">First Name *</div>
 										</td>
 										<td>
-											<input type="text" class="text" name="lastName" id="form_firstName" value=""> 
+											<input type="text" class="text" name="firstName" id="form_firstName" value=""> 
 										</td>
 									</tr>
 									<tr>
@@ -194,56 +191,7 @@
 						      	<p>
 						      		<div style="margin-left:15px;font-size:10px">* denotes required</div>
 						      	</p>
-						      	 -->
 							     
-									<p>
-										<label class="formLabels" for="userName">User Name:</label>
-					      		  		<input type="text" class="text" id="form_userName" name="userName" value=""> 
-					      		  		<br />
-					      		  	
-					      		  		<label class="formLabels" id="lastName" for="lastName" style="">Last Name:</label>
-						      		 	<input type="text" class="text" name="lastName" id="form_lastName" value=""> 
-						      		 	<br />
-						      		 	
-						          		<label class="formLabels" for="firstName">First Name:</label>
-						      			<input type="text" class="text" id="form_firstName" name="firstName" value=""> 
-						      			<br />	
-						      											
-										<label class="formLabels" for="emailAddress" style="">Email:</label>
-						      		 	<input type="text" class="text" name="emailAddress" id="form_emailAddress" value=""> 
-						      		 	<br />
-						      		 	
-						          		<label class="formLabels" for="status">Status:</label>
-						      			<input type="text" class="text" id="form_status" name="status" value=""> 
-						      			<br />	
-								      			
-								      	<label class="formLabels" for="organization">Organization:</label>
-								      	<input type="text" class="text" id="organization" name="organization" value=""> 
-								      	<br />
-								      		  	
-								    	<label class="formLabels" for="city" style="">City:</label>
-								    	<input type="text" class="text" name="city" id="city" value=""> 
-								    	<br />
-								      		 	
-								    	<label class="formLabels" for="country">Country:</label>
-								    	<input type="text" class="text" id="country" name="country" value=""> 
-								    	<br />	
-								      											
-										<label class="formLabels" for="openId">OpenId:</label>
-								      	<input type="text" class="text" id="openId" name="openId" value=""> 
-								      	<br />
-								      		  	
-										<label class="formLabels" for="DN">DN:</label>
-								      	<input type="text" class="text" id="DN" name="DN" value=""> 
-								      	<br />
-								      	
-								      	<input type="hidden" name="type" id="type" value="add"/>
-									</p>
-									<p>
-						      			<input style="margin-left: 15px" class="adminbutton" type="submit" value="Submit">
-						      			
-					      			</p>
-					      			
 								</form>
 								
 							</div> 
@@ -302,7 +250,7 @@ $(document).ready(function(){
 				}
 			});
 			
-			
+			/*
 			query = { "id" : ESGF.setting.currentUserName, "type" : "edit" };
 			var userinfo_url = '/esgf-web-fe/extractgroupdataproxy';
 			$.ajax({
@@ -317,6 +265,7 @@ $(document).ready(function(){
 					alert('error');
 				}
 			});
+			*/
 			
 		} else {
 			alert('Must have a valid user name to perform this operation');
@@ -370,10 +319,9 @@ $(document).ready(function(){
 	*/
 	function processUserContent(data) {
 		
-		var userName = data.user.userName;
+		var userName = data.user.username;
 		
 		var user_info_content = getUserInfoContent(data);
-		
 		
 		
 		$('div#user_info').append('<fieldset id="user_info"><legend >User Information for ' + userName + '</legend></fieldset>');
@@ -399,15 +347,13 @@ $(document).ready(function(){
 	* Helper function for displaying the userContent
 	*/
 	function getUserInfoContent(data) {
-		var lastName = data.user.lastName;
-		var firstName = data.user.firstName;
-		var emailAddress = data.user.emailAddress;
-		var status = data.user.status;
-		var userName = data.user.userName;
+		var lastName = data.user.last;
+		var firstName = data.user.first;
+		var emailAddress = data.user.email;
+		var userName = data.user.username;
 		var content = '<div>First Name: ' + firstName + '</div>' +
 					  '<div>Last Name: ' + lastName + '</div>' + 
-					  '<div>Email: ' + emailAddress + '</div>' + 
-					  '<div>Status: ' + status + '</div>'
+					  '<div>Email: ' + emailAddress + '</div>' 
 					  ;
 		var user_info_content = '<div class="user_info_content">' + content + '</div>';
 		return user_info_content;
@@ -468,7 +414,7 @@ $(document).ready(function(){
 			//clearFormValues();
 			
 			$('input#type').val('edit');
-			
+			$('input#userName').val(ESGF.setting.currentUserName);
 			var query = { "id" : ESGF.setting.currentUserName, "type" : "edit" };
 			var userinfo_url = '/esgf-web-fe/extractuserdataproxy';
 			$.ajax({
@@ -618,3 +564,52 @@ $(document).ready(function(){
 	</div>
 -->
 
+<!--  
+									<p>
+										<label class="formLabels" for="userName">User Name:</label>
+					      		  		<input type="text" class="text" id="form_userName" name="userName" value=""> 
+					      		  		<br />
+					      		  	
+					      		  		<label class="formLabels" id="lastName" for="lastName" style="">Last Name:</label>
+						      		 	<input type="text" class="text" name="lastName" id="form_lastName" value=""> 
+						      		 	<br />
+						      		 	
+						          		<label class="formLabels" for="firstName">First Name:</label>
+						      			<input type="text" class="text" id="form_firstName" name="firstName" value=""> 
+						      			<br />	
+						      											
+										<label class="formLabels" for="emailAddress" style="">Email:</label>
+						      		 	<input type="text" class="text" name="emailAddress" id="form_emailAddress" value=""> 
+						      		 	<br />
+						      		 	
+						          		<label class="formLabels" for="status">Status:</label>
+						      			<input type="text" class="text" id="form_status" name="status" value=""> 
+						      			<br />	
+								      			
+								      	<label class="formLabels" for="organization">Organization:</label>
+								      	<input type="text" class="text" id="organization" name="organization" value=""> 
+								      	<br />
+								      		  	
+								    	<label class="formLabels" for="city" style="">City:</label>
+								    	<input type="text" class="text" name="city" id="city" value=""> 
+								    	<br />
+								      		 	
+								    	<label class="formLabels" for="country">Country:</label>
+								    	<input type="text" class="text" id="country" name="country" value=""> 
+								    	<br />	
+								      											
+										<label class="formLabels" for="openId">OpenId:</label>
+								      	<input type="text" class="text" id="openId" name="openId" value=""> 
+								      	<br />
+								      		  	
+										<label class="formLabels" for="DN">DN:</label>
+								      	<input type="text" class="text" id="DN" name="DN" value=""> 
+								      	<br />
+								      	
+								      	<input type="hidden" name="type" id="type" value="add"/>
+									</p>
+									<p>
+						      			<input style="margin-left: 15px" class="adminbutton" type="submit" value="Submit">
+						      			
+					      			</p>
+					      			-->

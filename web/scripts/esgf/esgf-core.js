@@ -113,6 +113,9 @@ ESGF.setting.searchType = 'local';
 //for admin's usermanagement interface - currentUserName
 ESGF.setting.currentUserName = 'default';
 
+//for admin's usermanagement interface - currentGroupName
+ESGF.setting.currentGroupName = 'default';
+
 /**
  * Proxy for creating the template for file downloads.
  *

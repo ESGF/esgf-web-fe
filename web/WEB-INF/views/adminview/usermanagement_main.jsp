@@ -120,7 +120,78 @@
 							<!-- form overlay --> 
 							<div class="simple_overlay" id="addUserForm"> 
 								<form id="new_user_form" action="" method="post" >
-								<h3 style="margin-top:10px;text-align:center;text-style:bold" id="form_title">New User Information</h3>
+								<h3 style="margin-top:10px;text-align:center;text-style:bold;font-style:italic" id="form_title">New User Information</h3>
+								<table id="adduser_table_id" style="font-size:10px">  
+									<tr>
+										<td>
+											<div style="font-size:12px;font-weight:bold;margin-left:15px;">User Name *</div> 
+										</td>
+										<td>
+											<input type="text" class="text" id="form_userName" name="userName" value=""> 
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div style="font-size:12px;font-weight:bold;margin-left:15px;">First Name *</div>
+										</td>
+										<td>
+											<input type="text" class="text" name="lastName" id="form_firstName" value=""> 
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div style="font-size:12px;font-weight:bold;margin-left:15px;">Last Name *</div>
+										</td>
+										<td>
+											<input type="text" class="text" name="lastName" id="form_lastName" value="">  
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div style="font-size:12px;font-weight:bold;margin-left:15px;">Email *</div>
+										</td>
+										<td>
+											<input type="text" class="text" name="emailAddress" id="form_emailAddress" value="">
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div style="font-size:12px;font-weight:bold;margin-left:15px;">Organization </div>
+										</td>
+										<td>
+											<input type="text" class="text" id="organization" name="organization" value=""> 
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div style="font-size:12px;font-weight:bold;margin-left:15px;">City</div>
+										</td>
+										<td>
+											<input type="text" class="text" name="city" id="city" value=""> 
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div style="font-size:12px;font-weight:bold;margin-left:15px;">Country</div>
+										</td>
+										<td>
+								    		<input type="text" class="text" id="country" name="country" value=""> 
+										</td>
+									</tr>
+									<tr>
+										<td>
+											
+										</td>
+									</tr>
+							    </table>
+							    <p>
+								  	<input type="hidden" name="type" id="type" value="add"/>
+						      		<input style="margin-left: 15px" class="adminbutton" type="submit" value="Submit">
+						      	</p>
+						      	<p>
+						      		<div style="margin-left:15px;font-size:10px">* denotes required</div>
+						      	</p>
+							    <!--  
 									<p>
 										<label class="formLabels" for="userName">User Name:</label>
 					      		  		<input type="text" class="text" id="form_userName" name="userName" value=""> 
@@ -166,15 +237,13 @@
 									</p>
 									<p>
 						      			<input style="margin-left: 15px" class="adminbutton" type="submit" value="Submit">
-						      			<!-- cancel button...not needed for now
-						      			<input style="margin-left: 15px" class="adminbutton" type="submit" value="Cancel">
-						      			 -->
+						      			
 					      			</p>
+					      			-->
 								</form>
 								
 							</div> 
-	 
-						
+							
 						</div><!-- end overlay section -->
 						
   				</c:when>
@@ -347,7 +416,9 @@ $(document).ready(function(){
 	$("input#add_user-button[rel]").overlay({
 		mask: '#000',
 		onLoad: function() {
+			
 			$('#new_user_form').show();
+			
 			$('#userName_input').show();
 			clearFormValues();
 			//overlay method

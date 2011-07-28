@@ -3,6 +3,9 @@
 
 <sec:authentication property="principal" var="principal"/>
 
+
+<%@ include file="/WEB-INF/views/accountsview/accountscontent.jsp" %>
+<!-- 
 <c:choose>
 	<c:when test="${principal=='anonymousUser'}">
     		<div> YOU MUST HAVE AN ACCOUNT TO VIEW THIS PAGE</div>
@@ -12,11 +15,10 @@
 			
    		<c:choose>	
    			<c:when test="${principal.username==root}">
-				<%@ include file="/WEB-INF/views/accountsview/accounts_root_content.jsp" %>
 			</c:when>
 			<c:otherwise>
-				<%@ include file="/WEB-INF/views/accountsview/accounts_user_content.jsp" %>
 			</c:otherwise>
    		</c:choose>
   	</c:otherwise>
 </c:choose>     
+ -->

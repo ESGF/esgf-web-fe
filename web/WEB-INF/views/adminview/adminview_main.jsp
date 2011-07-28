@@ -5,6 +5,8 @@
 
 <div style="margin-top:20px;margin-bottom:20px;">
 <%@ include file="/WEB-INF/views/adminview/admincontent.jsp" %>
+<!--  
+-->
 	<!--  
 	<c:choose>
 		<c:when test="${principal=='anonymousUser'}">

@@ -19,9 +19,9 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
-public class UserOperations {
+public class UserOperations1 {
 
-    private final static Logger LOG = Logger.getLogger(UserOperations.class);
+    private final static Logger LOG = Logger.getLogger(UserOperations1.class);
 
     private static boolean writeLogFlag = false;
     private static boolean writeXMLTOLogFlag = false;

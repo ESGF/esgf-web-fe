@@ -21,10 +21,11 @@ import org.springframework.ui.Model;
 public class Utils {
     
     private final static Logger LOG = Logger.getLogger(Utils.class);
-
-    private final static boolean debugFlag = true;
     
     
+    /*
+     * Used to extract the openid from the cookie in the header of a request
+     */
     public static String getIdFromHeaderCookie(HttpServletRequest request) {
         LOG.debug("------Utils getIdFromHeaderCookie------");
         
@@ -59,42 +60,6 @@ public class Utils {
         return type;
     }
     
-    public static User populateUserObjectFromIdXML(String id, File file) throws JDOMException, IOException {
-        LOG.debug("------Utils populateUserObjectFromIdXML------");
-        User user = new User();
-        
-        Element element = UserOperations.getUserInfoFromUserNameXML(id, file);
-        
-        
-        String user_userName = element.getChild("userName").getTextNormalize();
-        LOG.debug("USERNAME: " + user_userName);
-        String user_lastName = element.getChild("lastName").getTextNormalize();
-        String user_firstName = element.getChild("firstName").getTextNormalize();
-        String user_emailAddress = element.getChild("emailAddress").getTextNormalize();
-        String user_status = element.getChild("status").getTextNormalize();
-        String user_organization = "";
-        String user_city = "";
-        String user_state = "";
-        String user_country = "";
-        String user_openId = "";
-        String user_DN = "";
-        
-        user = new User(user_userName,
-             user_lastName,
-             user_firstName,
-             user_emailAddress,
-             user_status,
-             user_organization,
-             user_city,
-             user_state,
-             user_country,
-             user_openId,
-             user_DN,
-             null);
-
-        LOG.debug("------Utils populateUserObjectFromIdXML------");
-        return user;
-    }
     
     
     

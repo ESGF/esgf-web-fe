@@ -2,6 +2,9 @@ package org.esgf.adminui;
 
 import java.io.Serializable;
 
+import org.jdom.Element;
+import org.jdom.output.XMLOutputter;
+
 public class User implements Serializable{
 
     
@@ -194,6 +197,57 @@ public class User implements Serializable{
 
     public String getUserId() {
         return userId;
+    }
+   
+    
+    public String toXml() {
+        String xmlContent = "";
+        
+        Element userElement = new Element("user");
+        
+        Element userIdEl = new Element("id");
+        userIdEl.addContent(this.userId);
+        Element userfirstEl = new Element("first");
+        userfirstEl.addContent(this.firstName);
+        Element userlastEl = new Element("last");
+        userlastEl.addContent(this.lastName);
+        Element usermiddleEl = new Element("middle");
+        usermiddleEl.addContent(this.middleName);
+        Element userNameEl = new Element("username");
+        userNameEl.addContent(this.userName);
+        Element emailEl = new Element("email");
+        emailEl.addContent(this.emailAddress);
+        Element organizationEl = new Element("organization");
+        organizationEl.addContent(this.organization);
+        Element cityEl = new Element("city");
+        cityEl.addContent(this.city);
+        Element stateEl = new Element("state");
+        stateEl.addContent(this.state);
+        Element countryEl = new Element("country");
+        countryEl.addContent(this.country);
+        Element openIdEl = new Element("openid");
+        openIdEl.addContent(this.openId);
+        Element dnEl = new Element("dn");
+        dnEl.addContent(this.DN);
+        
+        userElement.addContent(userIdEl);
+        userElement.addContent(userfirstEl);
+        userElement.addContent(userlastEl);
+        userElement.addContent(usermiddleEl);
+        userElement.addContent(userNameEl);
+        userElement.addContent(emailEl);
+        userElement.addContent(organizationEl);
+        userElement.addContent(cityEl);
+        userElement.addContent(stateEl);
+        userElement.addContent(countryEl);
+        userElement.addContent(openIdEl);
+        userElement.addContent(dnEl);
+
+        XMLOutputter outputter = new XMLOutputter();
+        xmlContent = outputter.outputString(userElement);
+        
+        
+        return xmlContent;
     }
     
 }

@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -56,6 +57,9 @@ public class UserOps {
         
         
         User user = getUserObjectFromUserName(userName);
+        
+        List<User> users = getAllUsers();
+        System.out.println(users);
     }
     
     
@@ -99,7 +103,60 @@ public class UserOps {
     
     }
     
-    
+    public static List<User> getAllUsers() {
+        List<User> usersList = new ArrayList<User>();
+        
+        SAXBuilder builder = new SAXBuilder();
+        String xmlContent = "";
+        try{
+            Document groups_document = (Document) builder.build(USERS_FILE);
+            Element rootNode = groups_document.getRootElement();
+            List users = (List)rootNode.getChildren();
+            for(int i=0;i<users.size();i++)
+            {
+                Element userEl = (Element)users.get(i);
+                Element userIdEl = userEl.getChild("id");
+                Element userFirstEl = userEl.getChild("first");
+                Element userMiddleEl = userEl.getChild("middle");
+                Element userLastEl = userEl.getChild("last");
+                Element userEmailEl = userEl.getChild("email");
+                Element userUserNameEl = userEl.getChild("username");
+                Element userDNEl = userEl.getChild("dn");
+                Element userOpenIDEl = userEl.getChild("openid");
+                Element userOrganizationEl = userEl.getChild("organization");
+                Element userCityEl = userEl.getChild("city");
+                Element userStateEl = userEl.getChild("state");
+                Element userCountryEl = userEl.getChild("country");
+                
+                //if(userUserNameEl.getTextNormalize().equals(userName)) {
+                User user = new User();
+                user.setUserId(userIdEl.getTextNormalize());
+                user.setUserName(userUserNameEl.getTextNormalize());
+                user.setFirstName(userFirstEl.getTextNormalize());
+                user.setLastName(userLastEl.getTextNormalize());
+                user.setMiddleName(userMiddleEl.getTextNormalize());
+                user.setEmailAddress(userEmailEl.getTextNormalize());
+                user.setOpenId(userOpenIDEl.getTextNormalize());
+                user.setCity(userCityEl.getTextNormalize());
+                user.setCountry(userCountryEl.getTextNormalize());
+                user.setDN(userDNEl.getTextNormalize());
+                user.setOrganization(userIdEl.getTextNormalize());
+                user.setState(userStateEl.getTextNormalize());
+                    
+                usersList.add(user);
+            }
+            
+            
+        }catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("Problem in getAllUsers");
+            
+        }
+        
+        
+        
+        return usersList;
+    }
     
     
     /*
@@ -270,7 +327,7 @@ public class UserOps {
             Element usermiddleEl = new Element("middle");
             usermiddleEl.addContent(middle);
             Element userNameEl = new Element("username");
-            userNameEl.addContent(username);
+            userNameEl.addContent(userName);
             Element emailEl = new Element("email");
             emailEl.addContent(email);
             Element organizationEl = new Element("organization");
@@ -281,6 +338,10 @@ public class UserOps {
             stateEl.addContent(state);
             Element countryEl = new Element("country");
             countryEl.addContent(country);
+            Element openIdEl = new Element("openid");
+            openIdEl.addContent(openId);
+            Element dnEl = new Element("dn");
+            dnEl.addContent(dn);
 
             userElement.addContent(userIdEl);
             userElement.addContent(userfirstEl);
@@ -292,6 +353,8 @@ public class UserOps {
             userElement.addContent(cityEl);
             userElement.addContent(stateEl);
             userElement.addContent(countryEl);
+            userElement.addContent(openIdEl);
+            userElement.addContent(dnEl);
 
             rootNode.addContent(userElement);
             XMLOutputter outputter = new XMLOutputter();
@@ -355,6 +418,7 @@ public class UserOps {
             
             
         }catch(Exception e) {
+            e.printStackTrace();
             System.out.println("Problem in getUserObjectFromUserName");
             
         }
@@ -389,6 +453,30 @@ public class UserOps {
         return userId;
     }
     
+    public static String getUserIdFromUserName(String userName) {
+        String userId = null;
+        
+        SAXBuilder builder = new SAXBuilder();
+        String xmlContent = "";
+        try{
+            Document users_document = (Document) builder.build(USERS_FILE);
+            Element rootNode = users_document.getRootElement();
+            List users = (List)rootNode.getChildren();
+            for(int i=0;i<users.size();i++)
+            {
+                Element userEl = (Element)users.get(i);
+                if(userEl.getChild("username").getTextNormalize().equals(userName)){
+                    userId = userEl.getChildText("id");
+                }
+            }
+            
+        }catch(Exception e) {
+            e.printStackTrace();
+            LOG.debug("Error in getUserIdFromUserName");
+        }
+        
+        return userId;
+    }
     
     public static String getUserIdFromOpenID(String openId) {
         String userId = null;
@@ -490,6 +578,9 @@ public class UserOps {
         
         return idExists;
     }
+    
+    
+    
     
     
 }

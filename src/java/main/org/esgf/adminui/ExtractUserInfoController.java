@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
+import org.esgf.commonui.UserOps;
 import org.esgf.metadata.JSONArray;
 import org.esgf.metadata.JSONException;
 import org.esgf.metadata.JSONObject;
@@ -112,9 +113,15 @@ public class ExtractUserInfoController {
          */
         try {
             //xml store version
-            String xmlOutput = getXMLTupleOutputFromEdit(userName);
+            LOG.debug("UserName->" + userName);
             
+            User user = UserOps.getUserObjectFromUserName(userName);
+            //String xmlOutput = getXMLTupleOutputFromEdit(userName);
+            String xmlOutput = user.toXml();
+
             //db version
+            
+            
             
             
             JSONObject jo = XML.toJSONObject(xmlOutput);

@@ -2,6 +2,9 @@ package org.esgf.adminui;
 
 import java.io.Serializable;
 
+import org.jdom.Element;
+import org.jdom.output.XMLOutputter;
+
 public class Group implements Serializable{
 
     private String id;
@@ -51,5 +54,30 @@ public class Group implements Serializable{
         
         return str;
     }
+    
+    public String toXml() {
+        String xmlContent = "";
+        
+        Element groupElement = new Element("group");
+        
+        Element groupIdEl = new Element("groupid");
+        groupIdEl.addContent(this.id);
+        Element groupNameEl = new Element("groupname");
+        groupNameEl.addContent(this.name);
+        Element groupDescriptionEl = new Element("groupdescription");
+        groupDescriptionEl.addContent(this.description);
+        
+        
+        groupElement.addContent(groupIdEl);
+        groupElement.addContent(groupNameEl);
+        groupElement.addContent(groupDescriptionEl);
+
+        XMLOutputter outputter = new XMLOutputter();
+        xmlContent = outputter.outputString(groupElement);
+        
+        
+        return xmlContent;
+    }
+    
     
 }

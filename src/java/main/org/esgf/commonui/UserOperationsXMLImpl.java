@@ -3,6 +3,7 @@ package org.esgf.commonui;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +16,24 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
+import org.springframework.core.io.ClassPathResource;
 
 public class UserOperationsXMLImpl implements UserOperationsInterface {
     
-    private final static String USERS_FILE = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\db.users";
-
+    //private final static String USERS_FILE = "db.users";
     private final static Logger LOG = Logger.getLogger(UserOperationsXMLImpl.class);
 
+    private File USERS_FILE;
+    
+    public UserOperationsXMLImpl(){
+        USERS_FILE = new File("");
+        try {
+            USERS_FILE = new ClassPathResource("db.users").getFile();
+        }catch(Exception e) {
+            System.out.println("error in db.users");
+        }
+    }
+    
     public static void main(String [] args) {
         
         
@@ -507,7 +519,7 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
     }
     
     
-    private static String createUserId() {
+    private String createUserId() {
         Random rand = new Random();
         
         int num = rand.nextInt(100);
@@ -518,7 +530,7 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
         return str;
     }
     
-    private static String createUserName() {
+    private String createUserName() {
         Random rand = new Random();
         
         int num = rand.nextInt(100);
@@ -529,7 +541,7 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
         return str;
     }
     
-    private static String createOpenId() {
+    private String createOpenId() {
         Random rand = new Random();
         
         int num = rand.nextInt(100);
@@ -541,7 +553,7 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
     }
     
 
-    private static String createDN() {
+    private String createDN() {
         Random rand = new Random();
         
         int num = rand.nextInt(100);
@@ -552,7 +564,7 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
         return str;
     }
     
-    private static boolean idExists(int id,String cat) {
+    private boolean idExists(int id,String cat) {
         boolean idExists = false;
         SAXBuilder builder = new SAXBuilder();
         String xmlContent = "";

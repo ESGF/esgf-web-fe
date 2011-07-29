@@ -11,6 +11,7 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.esgf.adminui.CreateGroupsController;
+import org.esgf.adminui.Group;
 import org.esgf.adminui.User;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -24,58 +25,23 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
     private final static Logger LOG = Logger.getLogger(UserOperationsXMLImpl.class);
 
     private File USERS_FILE;
+    private File GROUPS_FILE;
+    private File PERMISSIONS_FILE;
     
     public UserOperationsXMLImpl(){
         USERS_FILE = new File("");
+        GROUPS_FILE = new File("");
+        PERMISSIONS_FILE = new File("");
         try {
             USERS_FILE = new ClassPathResource("db.users").getFile();
+            GROUPS_FILE = new ClassPathResource("db.groups").getFile();
+            PERMISSIONS_FILE = new ClassPathResource("db.permissions").getFile();
         }catch(Exception e) {
             System.out.println("error in db.users");
         }
     }
     
-    public static void main(String [] args) {
-        
-        
-        UserOperationsInterface uoi = new UserOperationsXMLImpl();
-        
-        String openId = "https://pcmdi3.llnl.gov/esgcet/myopenid/jfharney";
-        
-        String userId = uoi.getUserIdFromOpenID(openId);
-        String userName = uoi.getUserNameFromOpenID(openId);
-        System.out.println(userId);
-        System.out.println(userName);
-        
-        String first = "first1";
-        String middle = "middle1";
-        String last = "last1";
-        String email = "email1";
-        String username = "username1";
-        String organization = "organization1";
-        String city = "city1";
-        String state = "state1";
-        String country = "country1";
-        
-        
-        uoi.editUser("user1_id",
-                first,
-                middle,
-                last,
-                email,
-                username,
-                organization,
-                city,
-                state,
-                country);
-        
-        uoi.deleteUser("user1_id");
-        
-        
-        User user = uoi.getUserObjectFromUserName(userName);
-        
-        List<User> users = uoi.getAllUsers();
-        System.out.println(users);
-    }
+    
     
     
     public void deleteUser(String userId) {
@@ -387,12 +353,123 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
         
     }
     
+    public User getUserObjectFromUserId(String userId) {
+        User user = null;
+
+        SAXBuilder builder = new SAXBuilder();
+        try{
+            Document groups_document = (Document) builder.build(USERS_FILE);
+            Element rootNode = groups_document.getRootElement();
+            List users = (List)rootNode.getChildren();
+            for(int i=0;i<users.size();i++)
+            {
+                Element userEl = (Element)users.get(i);
+                Element userIdEl = userEl.getChild("id");
+                Element userFirstEl = userEl.getChild("first");
+                Element userMiddleEl = userEl.getChild("middle");
+                Element userLastEl = userEl.getChild("last");
+                Element userEmailEl = userEl.getChild("email");
+                Element userUserNameEl = userEl.getChild("username");
+                Element userDNEl = userEl.getChild("dn");
+                Element userOpenIDEl = userEl.getChild("openid");
+                Element userOrganizationEl = userEl.getChild("organization");
+                Element userCityEl = userEl.getChild("city");
+                Element userStateEl = userEl.getChild("state");
+                Element userCountryEl = userEl.getChild("country");
+                
+                if(userIdEl.getTextNormalize().equals(userId)) {
+                    user = new User();
+                    user.setUserId(userIdEl.getTextNormalize());
+                    user.setUserName(userUserNameEl.getTextNormalize());
+                    user.setFirstName(userFirstEl.getTextNormalize());
+                    user.setLastName(userLastEl.getTextNormalize());
+                    user.setMiddleName(userMiddleEl.getTextNormalize());
+                    user.setEmailAddress(userEmailEl.getTextNormalize());
+                    user.setOpenId(userOpenIDEl.getTextNormalize());
+                    user.setOrganization(userOrganizationEl.getTextNormalize());
+                    user.setCity(userCityEl.getTextNormalize());
+                    user.setCountry(userCountryEl.getTextNormalize());
+                    user.setDN(userDNEl.getTextNormalize());
+                    user.setOrganization(userIdEl.getTextNormalize());
+                    user.setState(userStateEl.getTextNormalize());
+                    
+                }
+            }
+            
+            
+        }catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("Problem in getUserObjectFromUserName");
+            
+        }
+        
+        
+        
+        return user;
+    }
+    
+
+    public User getUserObjectFromUserOpenID(final String openId) {
+        User user = null;
+        
+        SAXBuilder builder = new SAXBuilder();
+        try{
+            Document groups_document = (Document) builder.build(USERS_FILE);
+            Element rootNode = groups_document.getRootElement();
+            List users = (List)rootNode.getChildren();
+            for(int i=0;i<users.size();i++)
+            {
+                Element userEl = (Element)users.get(i);
+                Element userIdEl = userEl.getChild("id");
+                Element userFirstEl = userEl.getChild("first");
+                Element userMiddleEl = userEl.getChild("middle");
+                Element userLastEl = userEl.getChild("last");
+                Element userEmailEl = userEl.getChild("email");
+                Element userUserNameEl = userEl.getChild("username");
+                Element userDNEl = userEl.getChild("dn");
+                Element userOpenIDEl = userEl.getChild("openid");
+                Element userOrganizationEl = userEl.getChild("organization");
+                Element userCityEl = userEl.getChild("city");
+                Element userStateEl = userEl.getChild("state");
+                Element userCountryEl = userEl.getChild("country");
+                
+                if(userOpenIDEl.getTextNormalize().equals(openId)) {
+                    user = new User();
+                    user.setUserId(userIdEl.getTextNormalize());
+                    user.setUserName(userUserNameEl.getTextNormalize());
+                    user.setFirstName(userFirstEl.getTextNormalize());
+                    user.setLastName(userLastEl.getTextNormalize());
+                    user.setMiddleName(userMiddleEl.getTextNormalize());
+                    user.setEmailAddress(userEmailEl.getTextNormalize());
+                    user.setOpenId(userOpenIDEl.getTextNormalize());
+                    user.setOrganization(userOrganizationEl.getTextNormalize());
+                    user.setCity(userCityEl.getTextNormalize());
+                    user.setCountry(userCountryEl.getTextNormalize());
+                    user.setDN(userDNEl.getTextNormalize());
+                    user.setOrganization(userIdEl.getTextNormalize());
+                    user.setState(userStateEl.getTextNormalize());
+                    
+                }
+            }
+            
+            
+        }catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("Problem in getUserObjectFromUserName");
+            
+        }
+        
+        
+        
+        return user;
+    }
+    
+    
     public User getUserObjectFromUserName(String userName) {
         User user = null;
 
         
         SAXBuilder builder = new SAXBuilder();
-        String xmlContent = "";
         try{
             Document groups_document = (Document) builder.build(USERS_FILE);
             Element rootNode = groups_document.getRootElement();
@@ -422,6 +499,7 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
                     user.setMiddleName(userMiddleEl.getTextNormalize());
                     user.setEmailAddress(userEmailEl.getTextNormalize());
                     user.setOpenId(userOpenIDEl.getTextNormalize());
+                    user.setOrganization(userOrganizationEl.getTextNormalize());
                     user.setCity(userCityEl.getTextNormalize());
                     user.setCountry(userCountryEl.getTextNormalize());
                     user.setDN(userDNEl.getTextNormalize());
@@ -472,7 +550,6 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
         String userId = null;
         
         SAXBuilder builder = new SAXBuilder();
-        String xmlContent = "";
         try{
             Document users_document = (Document) builder.build(USERS_FILE);
             Element rootNode = users_document.getRootElement();
@@ -595,7 +672,86 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
     }
     
     
+    public List<User> getUsersFromGroup(String groupId) {
+        List<User> users = new ArrayList<User>();
+        
+        SAXBuilder builder = new SAXBuilder();
+        String xmlContent = "";
+        try{
+            Document permissions_document = (Document) builder.build(PERMISSIONS_FILE);
+            
+            Element rootNode = permissions_document.getRootElement();
+            List permissions = (List)rootNode.getChildren();
+            
+            for(int i=0;i<permissions.size();i++)
+            {
+                Element tupleEl = (Element)permissions.get(i);
+                Element userIdEl = tupleEl.getChild("userid");
+                Element groupIdEl = tupleEl.getChild("groupid");
+                if(groupIdEl.getTextNormalize().equals(groupId)) {
+                    String userId = userIdEl.getTextNormalize();
+                    User user = getUserObjectFromUserId(userId);
+                    users.add(user);
+                }
+            }
+            
+        }catch(Exception e) {
+            System.out.println("Error in getUsersFromGroup");
+        }
+        
+        return users;
+    }
     
+   
     
+    public static void main(String [] args) {
+        
+        
+        //UserOperationsInterface uoi = new UserOperationsXMLImpl();
+        UserOperationsXMLImpl uoi = new UserOperationsXMLImpl();
+        String groupId = "group1_id";
+        
+        List<User> users = uoi.getUsersFromGroup(groupId);
+        System.out.println(users);
+        
+        /*
+        String openId = "https://pcmdi3.llnl.gov/esgcet/myopenid/jfharney";
+        
+        String userId = uoi.getUserIdFromOpenID(openId);
+        String userName = uoi.getUserNameFromOpenID(openId);
+        System.out.println(userId);
+        System.out.println(userName);
+        
+        String first = "first1";
+        String middle = "middle1";
+        String last = "last1";
+        String email = "email1";
+        String username = "username1";
+        String organization = "organization1";
+        String city = "city1";
+        String state = "state1";
+        String country = "country1";
+        
+        
+        uoi.editUser("user1_id",
+                first,
+                middle,
+                last,
+                email,
+                username,
+                organization,
+                city,
+                state,
+                country);
+        
+        uoi.deleteUser("user1_id");
+        
+        
+        User user = uoi.getUserObjectFromUserName(userName);
+        
+        List<User> users = uoi.getAllUsers();
+        System.out.println(users);
+        */
+    }
     
 }

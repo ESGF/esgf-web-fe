@@ -18,8 +18,12 @@ public interface UserOperationsInterface {
     //could be better to do this:
     //public void deleteUser(User user)
     
-    
+
     public User getUserObjectFromUserName(final String userName);
+
+    public User getUserObjectFromUserId(final String userId);
+    
+    public User getUserObjectFromUserOpenID(final String openId);
     
     public String getUserNameFromOpenID(final String openId);
     
@@ -27,7 +31,7 @@ public interface UserOperationsInterface {
     
     public String getUserIdFromOpenID(final String openId);
     
-    //public List<User> getAllUsersInGroup(final String groupId);
+    public List<User> getUsersFromGroup(final String groupId);
     
     public List<User> getAllUsers();
     

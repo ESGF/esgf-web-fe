@@ -250,8 +250,8 @@ $(document).ready(function(){
 				}
 			});
 			
-			/*
-			query = { "id" : ESGF.setting.currentUserName, "type" : "edit" };
+			
+			query = { "id" : ESGF.setting.currentUserName, "type" : "getGroupForUser" };
 			var userinfo_url = '/esgf-web-fe/extractgroupdataproxy';
 			$.ajax({
 	    		url: userinfo_url,
@@ -265,7 +265,8 @@ $(document).ready(function(){
 					alert('error');
 				}
 			});
-			*/
+			
+			
 			
 		} else {
 			alert('Must have a valid user name to perform this operation');
@@ -277,22 +278,18 @@ $(document).ready(function(){
 	* Helper function for post ajax call processing for user content
 	*/
 	function processGroupContent(data) {
-		//alert('process group content ' + data);
 		
-		var groups = data.groups.name[1];
-		var userName = data.groups.userName;
-		$('div#group_info').append('<fieldset id="group_info"><legend >Group Information for ' + userName + '</legend></fieldset>');
-		
+		var groups = data.groups;
+		$('div#group_info').append('<fieldset id="group_info"><legend >Group Information for ' + ESGF.setting.currentUserName + '</legend></fieldset>');
 		var group_info_content = getGroupInfoContent(data);
 		$('fieldset#group_info').append(group_info_content);
-		
+
 		$('div#group_info').show();
-		
 		
 	}
 	
 	/*
-	* Helper function for displaying the userContent
+	* Helper function for displaying the group info attached to a user
 	*/
 	function getGroupInfoContent(data) {
 		
@@ -301,17 +298,18 @@ $(document).ready(function(){
 		//this if statement takes care of a bug in the JSON java code...if the name array is of length one, it will automatically convert 
 		//that element into a string array and print out one letter at a time
 		//probably need a more sophisticated way of handling this problem
-		if(data.groups.name instanceof Array) {
-			for(var i=0;i<data.groups.name.length;i++) {
-				content = content + '<div>' + data.groups.name[i] + '</div>';
+		if(data.groups.group instanceof Array) {
+			for(var i=0;i<data.groups.group.length;i++) {
+				content = content + '<div>' + data.groups.group[i].groupname + ' - ' + data.groups.group[i].groupdescription + ' ' + '</div>';
 			}
 		} else {
-			content = content + '<div>' + data.groups.name + '</div>';
+			content = content + '<div>' + data.groups.group.groupname+ ' - ' + data.groups.group.groupdescription + ' ' + '</div>';
 		}
 		
 		var group_info_content = '<div class="group_info_content">' + content + '</div>';
 		
 		return group_info_content;
+		
 	}
 	
 	/*
@@ -550,70 +548,3 @@ $(document).ready(function(){
 });
 
 </script>
-
-<!--  toggle menu that might come in handy later
-	<div id="toggleMenu"> 
-			<h4>Account Summary</h4> 
-							<div class="togglebox"> 
- 								<div class="block"> 
- 								Account Summary
- 								</div> 
-						</div>
-						<h4>Group Roles</h4> 
-							<div class="togglebox"> 
- 								<div class="block"> 
- 								Group Roles
- 								</div> 
-						</div>
-	</div>
--->
-
-<!--  
-									<p>
-										<label class="formLabels" for="userName">User Name:</label>
-					      		  		<input type="text" class="text" id="form_userName" name="userName" value=""> 
-					      		  		<br />
-					      		  	
-					      		  		<label class="formLabels" id="lastName" for="lastName" style="">Last Name:</label>
-						      		 	<input type="text" class="text" name="lastName" id="form_lastName" value=""> 
-						      		 	<br />
-						      		 	
-						          		<label class="formLabels" for="firstName">First Name:</label>
-						      			<input type="text" class="text" id="form_firstName" name="firstName" value=""> 
-						      			<br />	
-						      											
-										<label class="formLabels" for="emailAddress" style="">Email:</label>
-						      		 	<input type="text" class="text" name="emailAddress" id="form_emailAddress" value=""> 
-						      		 	<br />
-						      		 	
-						          		<label class="formLabels" for="status">Status:</label>
-						      			<input type="text" class="text" id="form_status" name="status" value=""> 
-						      			<br />	
-								      			
-								      	<label class="formLabels" for="organization">Organization:</label>
-								      	<input type="text" class="text" id="organization" name="organization" value=""> 
-								      	<br />
-								      		  	
-								    	<label class="formLabels" for="city" style="">City:</label>
-								    	<input type="text" class="text" name="city" id="city" value=""> 
-								    	<br />
-								      		 	
-								    	<label class="formLabels" for="country">Country:</label>
-								    	<input type="text" class="text" id="country" name="country" value=""> 
-								    	<br />	
-								      											
-										<label class="formLabels" for="openId">OpenId:</label>
-								      	<input type="text" class="text" id="openId" name="openId" value=""> 
-								      	<br />
-								      		  	
-										<label class="formLabels" for="DN">DN:</label>
-								      	<input type="text" class="text" id="DN" name="DN" value=""> 
-								      	<br />
-								      	
-								      	<input type="hidden" name="type" id="type" value="add"/>
-									</p>
-									<p>
-						      			<input style="margin-left: 15px" class="adminbutton" type="submit" value="Submit">
-						      			
-					      			</p>
-					      			-->

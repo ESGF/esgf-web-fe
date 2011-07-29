@@ -510,6 +510,38 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
     }
     
     
+    public List<Group> getGroupsFromUser(String userId) {
+        List<Group> groups = new ArrayList<Group>();
+        
+        
+        SAXBuilder builder = new SAXBuilder();
+        String xmlContent = "";
+        try{
+            Document permissions_document = (Document) builder.build(PERMISSIONS_FILE);
+            
+            Element rootNode = permissions_document.getRootElement();
+            List permissions = (List)rootNode.getChildren();
+            
+            for(int i=0;i<permissions.size();i++) {
+                Element tupleEl = (Element)permissions.get(i);
+                Element userIdEl = tupleEl.getChild("userid");
+                Element groupIdEl = tupleEl.getChild("groupid");
+                if(userIdEl.getTextNormalize().equals(userId)) {
+                    //System.out.println("add group " + groupIdEl.getTextNormalize());
+                    String groupId = groupIdEl.getTextNormalize();
+                    Group group = this.getGroupObjectFromGroupId(groupId);
+                    groups.add(group);
+                }
+                
+            }
+            
+        }catch(Exception e) {
+            System.out.println("Error in getGroupsFromUser");
+            e.printStackTrace();
+        }
+        
+        return groups;
+    }
     
     
     
@@ -540,6 +572,11 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
         
         GroupOperationsInterface goi = new GroupOperationsXMLImpl();
         //List<Group> groups = goi.getAllGroups();
+        
+        UserOperationsXMLImpl uoi = new UserOperationsXMLImpl();
+        List<Group> groups = goi.getGroupsFromUser("user2_id");
+        
+        System.out.println(groups);
         
     }
 }

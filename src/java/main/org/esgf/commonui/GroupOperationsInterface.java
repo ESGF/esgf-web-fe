@@ -16,8 +16,9 @@ public interface GroupOperationsInterface {
     
     public String getGroupIdFromGroupName(String groupName);
     
+    public List<Group> getGroupsFromUser(String userId);
+    
     /*
-    public List<Group> getGroupsForUser(final String userId);
     
     public List<Group> getGroupsForAdminUser(final String userId);
     */

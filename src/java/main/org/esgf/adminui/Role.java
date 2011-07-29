@@ -1,6 +1,9 @@
 package org.esgf.adminui;
 
 import java.io.Serializable;
+
+import org.jdom.Element;
+import org.jdom.output.XMLOutputter;
 /*
 <roleid>1</roleid>
 <rolename>super</rolename>
@@ -61,6 +64,30 @@ public class Role  implements Serializable{
         
         
         return str;
+    }
+    
+    public String toXml() {
+        String xmlContent = "";
+        
+        Element roleElement = new Element("group");
+        
+        Element roleIdEl = new Element("roleid");
+        roleIdEl.addContent(this.roleId);
+        Element roleNameEl = new Element("rolename");
+        roleNameEl.addContent(this.roleName);
+        Element roleDescriptionEl = new Element("roledescription");
+        roleDescriptionEl.addContent(this.roleDescription);
+        
+        
+        roleElement.addContent(roleIdEl);
+        roleElement.addContent(roleNameEl);
+        roleElement.addContent(roleDescriptionEl);
+
+        XMLOutputter outputter = new XMLOutputter();
+        xmlContent = outputter.outputString(roleElement);
+        
+        
+        return xmlContent;
     }
     
 }

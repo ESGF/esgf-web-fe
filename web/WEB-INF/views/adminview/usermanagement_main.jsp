@@ -250,11 +250,12 @@ $(document).ready(function(){
 				}
 			});
 			
+			//alert('make a call to extractgroupdataproxy here for user ' + ESGF.setting.currentUserName);
 			
-			query = { "id" : ESGF.setting.currentUserName, "type" : "getGroupForUser" };
-			var userinfo_url = '/esgf-web-fe/extractgroupdataproxy';
+			query = { "userName" : ESGF.setting.currentUserName, "type" : "groupsForUser" };
+			var groupinfo_url = '/esgf-web-fe/extractgroupdataproxy';
 			$.ajax({
-	    		url: userinfo_url,
+	    		url: groupinfo_url,
 	    		type: "GET",
 	    		data: query,
 	    		dataType: 'json',
@@ -293,6 +294,7 @@ $(document).ready(function(){
 	*/
 	function getGroupInfoContent(data) {
 		
+		var query = '';
 		var content = '';
 		
 		//this if statement takes care of a bug in the JSON java code...if the name array is of length one, it will automatically convert 
@@ -300,10 +302,46 @@ $(document).ready(function(){
 		//probably need a more sophisticated way of handling this problem
 		if(data.groups.group instanceof Array) {
 			for(var i=0;i<data.groups.group.length;i++) {
-				content = content + '<div>' + data.groups.group[i].groupname + ' - ' + data.groups.group[i].groupdescription + ' ' + '</div>';
+				content = content + '<div id="groupListing_' + data.groups.group[i].groupname + '"">' + data.groups.group[i].groupname + ' - ' + data.groups.group[i].groupdescription + ' ' + '</div>';
+				
+				
+				query = { "username" : ESGF.setting.currentUserName, "groupname" : data.groups.group[i].groupname };
+				var roleinfo_url = '/esgf-web-fe/extractroledataproxy';
+				$.ajax({
+		    		url: roleinfo_url,
+		    		type: "GET",
+		    		data: query,
+		    		dataType: 'json',
+		    		success: function(data) {
+		    			processUserRoleForGroup(data);
+		    		},
+					error: function() {
+						alert('error');
+					}
+				});
+				
+				
 			}
 		} else {
-			content = content + '<div>' + data.groups.group.groupname+ ' - ' + data.groups.group.groupdescription + ' ' + '</div>';
+			content = content + '<div id="groupListing_' + data.groups.group.groupname + '"">' + data.groups.group.groupname+ ' - ' + data.groups.group.groupdescription + ' ' + '</div>';
+		
+			/*
+			query = { "userid" : ESGF.setting.currentUserName, "groupid" : data.groups.group[i].groupname };
+			var userinfo_url = '/esgf-web-fe/extractgroupdataproxy';
+			$.ajax({
+	    		url: userinfo_url,
+	    		type: "GET",
+	    		data: query,
+	    		dataType: 'json',
+	    		success: function(data) {
+	    			processUserRoleForGroup(data);
+	    		},
+				error: function() {
+					alert('error');
+				}
+			});
+			*/
+		
 		}
 		
 		var group_info_content = '<div class="group_info_content">' + content + '</div>';
@@ -311,6 +349,12 @@ $(document).ready(function(){
 		return group_info_content;
 		
 	}
+	
+	
+	function processUserRoleForGroup () {
+		alert('processUserRoleForGroup');
+	}
+	
 	
 	/*
 	* Helper function for post ajax call processing for user content

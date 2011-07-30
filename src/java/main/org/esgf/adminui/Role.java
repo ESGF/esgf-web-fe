@@ -69,8 +69,9 @@ public class Role  implements Serializable{
     public String toXml() {
         String xmlContent = "";
         
-        Element roleElement = new Element("group");
-        
+        Element roleElement = new Element("role");
+
+        System.out.println("\n\nHere\n\n");
         Element roleIdEl = new Element("roleid");
         roleIdEl.addContent(this.roleId);
         Element roleNameEl = new Element("rolename");
@@ -78,13 +79,14 @@ public class Role  implements Serializable{
         Element roleDescriptionEl = new Element("roledescription");
         roleDescriptionEl.addContent(this.roleDescription);
         
-        
+        System.out.println("\n\nHere\n\n");
         roleElement.addContent(roleIdEl);
         roleElement.addContent(roleNameEl);
         roleElement.addContent(roleDescriptionEl);
 
         XMLOutputter outputter = new XMLOutputter();
         xmlContent = outputter.outputString(roleElement);
+        System.out.println("\n\nHere\n\n");
         
         
         return xmlContent;

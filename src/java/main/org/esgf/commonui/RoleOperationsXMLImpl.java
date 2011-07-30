@@ -66,6 +66,7 @@ public class RoleOperationsXMLImpl implements RoleOperationsInterface {
                 Element userIdEl = tupleEl.getChild("userid");
                 Element groupIdEl = tupleEl.getChild("groupid");
                 Element roleIdEl = tupleEl.getChild("roleid");
+                System.out.println("user: " + userIdEl.getTextNormalize() + " group: " + groupIdEl.getTextNormalize() + " role: " + roleIdEl.getTextNormalize());
                 if(userIdEl.getTextNormalize().equals(userId) && userIdEl.getTextNormalize().equals(userId)) {
                     String roleId = roleIdEl.getTextNormalize();
                     role = getRoleObjectFromRoleId(roleId);
@@ -82,6 +83,30 @@ public class RoleOperationsXMLImpl implements RoleOperationsInterface {
     }
 
 
+    public String getRoleIdFromUserName(String roleName) {
+        String roleId = null;
+        
+        SAXBuilder builder = new SAXBuilder();
+        try{
+            Document roles_document = (Document) builder.build(ROLES_FILE);
+            Element rootNode = roles_document.getRootElement();
+            List roles = (List)rootNode.getChildren();
+            for(int i=0;i<roles.size();i++)
+            {
+                Element roleEl = (Element)roles.get(i);
+                if(roleEl.getChild("rolename").getTextNormalize().equals(roleName)){
+                    roleId = roleEl.getChildText("id");
+                }
+            }
+            
+        }catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("Error in getRoleIdFromRoleName");
+        }
+        
+        return roleId;
+    }
+    
     @Override
     public Role getRoleObjectFromRoleId(String roleId) {
         

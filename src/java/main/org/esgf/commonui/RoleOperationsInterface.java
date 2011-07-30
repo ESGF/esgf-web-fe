@@ -8,4 +8,6 @@ public interface RoleOperationsInterface {
     
     public Role getRoleObjectFromRoleId(String roleId);
     
+    public String getRoleIdFromUserName(String roleName);
+    
 }

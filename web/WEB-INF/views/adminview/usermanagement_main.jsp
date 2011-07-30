@@ -304,7 +304,8 @@ $(document).ready(function(){
 			for(var i=0;i<data.groups.group.length;i++) {
 				content = content + '<div id="groupListing_' + data.groups.group[i].groupname + '"">' + data.groups.group[i].groupname + ' - ' + data.groups.group[i].groupdescription + ' ' + '</div>';
 				
-				
+				alert('data.groups.group[i].groupname: ' + data.groups.group[i].groupname);
+				/*
 				query = { "username" : ESGF.setting.currentUserName, "groupname" : data.groups.group[i].groupname };
 				var roleinfo_url = '/esgf-web-fe/extractroledataproxy';
 				$.ajax({
@@ -319,7 +320,7 @@ $(document).ready(function(){
 						alert('error');
 					}
 				});
-				
+				*/
 				
 			}
 		} else {

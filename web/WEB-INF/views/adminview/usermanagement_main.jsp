@@ -295,19 +295,23 @@ $(document).ready(function(){
 	/*
 	* Helper function for displaying the group info attached to a user
 	*/
+	/*
+	* Need to come back here...there is a race condition that I need to resolve here
+	*/
 	function getGroupInfoContent(data) {
 		
 		var query = '';
 		var content = '';
 		
-		//this if statement takes care of a bug in the JSON java code...if the name array is of length one, it will automatically convert 
-		//that element into a string array and print out one letter at a time
-		//probably need a more sophisticated way of handling this problem
 		if(data.groups.group instanceof Array) {
 			for(var i=0;i<data.groups.group.length;i++) {
-				content = content + '<div id="groupListing_' + data.groups.group[i].groupname + '"">Group: ' + data.groups.group[i].groupname + ' Group Description: ' + data.groups.group[i].groupdescription + ' Role: ' + '</div>';
+				ESGF.setting.currentGroupName = data.groups.group[i].groupname;
 				
-				query = { "userName" : ESGF.setting.currentUserName, "groupName" : data.groups.group[i].groupname };
+				var groupName = data.groups.group[i].groupname;
+				var groupDescription = data.groups.group[i].groupdescription;
+				content = content + '<div id="groupListing_' + groupName + '"">Group: ' + groupName + ' Group Description: ' + groupDescription + ' Role: ' + '</div>';
+				
+				query = { "userName" : ESGF.setting.currentUserName, "groupName" : groupName };
 				var roleinfo_url = '/esgf-web-fe/extractroledataproxy';
 				$.ajax({
 		    		url: roleinfo_url,
@@ -315,7 +319,8 @@ $(document).ready(function(){
 		    		data: query,
 		    		dataType: 'json',
 		    		success: function(data) {
-		    			processUserRoleForGroup(data);
+		    			var gn = groupName;
+		    			processUserRoleForGroup(gn,data);
 		    		},
 					error: function() {
 						alert('error');
@@ -325,9 +330,12 @@ $(document).ready(function(){
 				
 			}
 		} else {
-			content = content + '<div id="groupListing_' + data.groups.group.groupname + '"">Group: ' + data.groups.group.groupname+ ' Group Description: ' + data.groups.group.groupdescription + ' Role: ' + '</div>';
+
+			ESGF.setting.currentGroupName = data.groups.group.groupname;
 			
-			query = { "userName" : ESGF.setting.currentUserName, "groupName" : data.groups.group.groupname };
+			content = content + '<div id="groupListing_' + ESGF.setting.currentGroupName + '"">Group: ' + ESGF.setting.currentGroupName + ' Group Description: ' + data.groups.group.groupdescription + ' Role: ' + '</div>';
+			
+			query = { "userName" : ESGF.setting.currentUserName, "groupName" : ESGF.setting.currentGroupName };
 			
 			var roleinfo_url = '/esgf-web-fe/extractroledataproxy';
 			$.ajax({
@@ -336,7 +344,8 @@ $(document).ready(function(){
 	    		data: query,
 	    		dataType: 'json',
 	    		success: function(data) {
-	    			processUserRoleForGroup(data);
+	    			var gn = groupName;
+	    			processUserRoleForGroup(gn,data);
 	    		},
 				error: function() {
 					alert('error');
@@ -351,12 +360,15 @@ $(document).ready(function(){
 	}
 	
 	
-	function processUserRoleForGroup (data) {
+	function processUserRoleForGroup (groupName,data) {
+		
 		var roleid = data.role.roleid;
 		var rolename = data.role.rolename;
 		var roledescription = data.role.roledescription;
-		
+		$("div#groupListing_"+groupName).append(rolename);
 	}
+	
+	
 	
 	
 	/*

@@ -42,7 +42,7 @@
 <div style="margin-top:20px;margin-bottom:20px;min-height:500px;">
 	<c:choose>
 		<c:when test="${principal=='anonymousUser1'}">
-    		<div> <c:out value="${principal}"/> AnonymousUser1 IS NOT AUTHORIZED TO VIEW THIS PAGE (usermanagement_main) </div>
+    		<div> <c:out value="${principal}"/> IS NOT AUTHORIZED TO VIEW THIS PAGE</div>
   		</c:when>
   		<c:otherwise>
       		<c:choose>
@@ -68,7 +68,6 @@
 						                <th>Last Name</th> 
 						                <th>First Name</th>  
 						                <th>Email Address</th>  
-						                <th>Status</th>  
 						            </tr>  
 						        </thead>  
 	  
@@ -84,8 +83,7 @@
 							                <td>${ManageUsers_user[j].userName}</td>  
 							                <td>${ManageUsers_user[j].lastName}</td> 
 							                <td>${ManageUsers_user[j].firstName}</td>  
-							                <td>${ManageUsers_user[j].emailAddress}</td>    
-							                <td>${ManageUsers_user[j].status}</td>    
+							                <td>${ManageUsers_user[j].emailAddress}</td>  
 							            </tr> 
 							            <c:set var="j" value="${j+1}"/>
 										
@@ -121,13 +119,15 @@
 							<div class="simple_overlay" id="addUserForm"> 
 								<form id="new_user_form" action="" method="post" >
 								<h3 style="margin-top:10px;text-align:center;text-style:bold;font-style:italic" id="form_title">New User Information</h3>
+								
+								
 								<table id="adduser_table_id" style="font-size:10px">  
-									<tr>
+									<tr id="userName_input">
 										<td>
 											<div style="font-size:12px;font-weight:bold;margin-left:15px;">User Name *</div> 
 										</td>
 										<td>
-											<input type="text" class="text" id="form_userName" name="userName" value=""> 
+											<input type="text" class="text" id="userName" name="userName" value=""> 
 										</td>
 									</tr>
 									<tr>
@@ -135,7 +135,7 @@
 											<div style="font-size:12px;font-weight:bold;margin-left:15px;">First Name *</div>
 										</td>
 										<td>
-											<input type="text" class="text" name="lastName" id="form_firstName" value=""> 
+											<input type="text" class="text" name="firstName" id="form_firstName" value=""> 
 										</td>
 									</tr>
 									<tr>
@@ -151,7 +151,7 @@
 											<div style="font-size:12px;font-weight:bold;margin-left:15px;">Email *</div>
 										</td>
 										<td>
-											<input type="text" class="text" name="emailAddress" id="form_emailAddress" value="">
+											<input type="text" class="text" name="email" id="form_email" value="">
 										</td>
 									</tr>
 									<tr>
@@ -159,7 +159,7 @@
 											<div style="font-size:12px;font-weight:bold;margin-left:15px;">Organization </div>
 										</td>
 										<td>
-											<input type="text" class="text" id="organization" name="organization" value=""> 
+											<input type="text" class="text" id="form_organization" name="organization" value=""> 
 										</td>
 									</tr>
 									<tr>
@@ -167,7 +167,7 @@
 											<div style="font-size:12px;font-weight:bold;margin-left:15px;">City</div>
 										</td>
 										<td>
-											<input type="text" class="text" name="city" id="city" value=""> 
+											<input type="text" class="text" name="city" id="form_city" value=""> 
 										</td>
 									</tr>
 									<tr>
@@ -175,7 +175,7 @@
 											<div style="font-size:12px;font-weight:bold;margin-left:15px;">Country</div>
 										</td>
 										<td>
-								    		<input type="text" class="text" id="country" name="country" value=""> 
+								    		<input type="text" class="text" id="form_country" name="country" value=""> 
 										</td>
 									</tr>
 									<tr>
@@ -191,55 +191,7 @@
 						      	<p>
 						      		<div style="margin-left:15px;font-size:10px">* denotes required</div>
 						      	</p>
-							    <!--  
-									<p>
-										<label class="formLabels" for="userName">User Name:</label>
-					      		  		<input type="text" class="text" id="form_userName" name="userName" value=""> 
-					      		  		<br />
-					      		  	
-					      		  		<label class="formLabels" id="lastName" for="lastName" style="">Last Name:</label>
-						      		 	<input type="text" class="text" name="lastName" id="form_lastName" value=""> 
-						      		 	<br />
-						      		 	
-						          		<label class="formLabels" for="firstName">First Name:</label>
-						      			<input type="text" class="text" id="form_firstName" name="firstName" value=""> 
-						      			<br />	
-						      											
-										<label class="formLabels" for="emailAddress" style="">Email:</label>
-						      		 	<input type="text" class="text" name="emailAddress" id="form_emailAddress" value=""> 
-						      		 	<br />
-						      		 	
-						          		<label class="formLabels" for="status">Status:</label>
-						      			<input type="text" class="text" id="form_status" name="status" value=""> 
-						      			<br />	
-								      			
-								      	<label class="formLabels" for="organization">Organization:</label>
-								      	<input type="text" class="text" id="organization" name="organization" value=""> 
-								      	<br />
-								      		  	
-								    	<label class="formLabels" for="city" style="">City:</label>
-								    	<input type="text" class="text" name="city" id="city" value=""> 
-								    	<br />
-								      		 	
-								    	<label class="formLabels" for="country">Country:</label>
-								    	<input type="text" class="text" id="country" name="country" value=""> 
-								    	<br />	
-								      											
-										<label class="formLabels" for="openId">OpenId:</label>
-								      	<input type="text" class="text" id="openId" name="openId" value=""> 
-								      	<br />
-								      		  	
-										<label class="formLabels" for="DN">DN:</label>
-								      	<input type="text" class="text" id="DN" name="DN" value=""> 
-								      	<br />
-								      	
-								      	<input type="hidden" name="type" id="type" value="add"/>
-									</p>
-									<p>
-						      			<input style="margin-left: 15px" class="adminbutton" type="submit" value="Submit">
-						      			
-					      			</p>
-					      			-->
+							     
 								</form>
 								
 							</div> 
@@ -248,7 +200,7 @@
 						
   				</c:when>
   				<c:otherwise>
-  					<div> <c:out value="${principal.username}"/> IS NOT AUTHORIZED TO VIEW THIS PAGE (usermanagement_main) </div>
+  					<div> <c:out value="${principal.username}"/> IS NOT AUTHORIZED TO VIEW THIS PAGE</div>
   				</c:otherwise>
       		</c:choose>
   		</c:otherwise>
@@ -283,7 +235,7 @@ $(document).ready(function(){
 		/* from username we can get the rest of the info via an ajax call to extractuserdataproxy */
 		/* but MAKE SURE THAT IT IS NOT NULL!!! */
 		if(userName != null && userName != "") {
-			var query = { "id" : ESGF.setting.currentUserName, "type" : "edit" };
+			var query = { "userName" : ESGF.setting.currentUserName, "type" : "getUserInfo" };
 			var userinfo_url = '/esgf-web-fe/extractuserdataproxy';
 			$.ajax({
 	    		url: userinfo_url,
@@ -299,10 +251,11 @@ $(document).ready(function(){
 			});
 			
 			
-			query = { "id" : ESGF.setting.currentUserName, "type" : "edit" };
-			var userinfo_url = '/esgf-web-fe/extractgroupdataproxy';
+			
+			query = { "userName" : ESGF.setting.currentUserName, "type" : "groupsForUser" };
+			var groupinfo_url = '/esgf-web-fe/extractgroupdataproxy';
 			$.ajax({
-	    		url: userinfo_url,
+	    		url: groupinfo_url,
 	    		type: "GET",
 	    		data: query,
 	    		dataType: 'json',
@@ -314,6 +267,7 @@ $(document).ready(function(){
 				}
 			});
 			
+			
 		} else {
 			alert('Must have a valid user name to perform this operation');
 		}
@@ -324,69 +278,116 @@ $(document).ready(function(){
 	* Helper function for post ajax call processing for user content
 	*/
 	function processGroupContent(data) {
-		//alert('process group content ' + data);
 		
-		var groups = data.groups.name[1];
-		var userName = data.groups.userName;
-		$('div#group_info').append('<fieldset id="group_info"><legend >Group Information for ' + userName + '</legend></fieldset>');
-		
+		//call helper function that assembles all of the user's group data
 		var group_info_content = getGroupInfoContent(data);
+		
+		
+		//append the fieldset to the div user_info element and fill it with the user's info
+		$('div#group_info').append('<fieldset id="group_info"><legend >Group Information for ' + ESGF.setting.currentUserName + '</legend></fieldset>');
 		$('fieldset#group_info').append(group_info_content);
-		
+
+		//show the user's group info
 		$('div#group_info').show();
-		
 		
 	}
 	
 	/*
-	* Helper function for displaying the userContent
+	* Helper function for displaying the group info attached to a user
+	*/
+	/*
+	* Need to come back here...there is a race condition that I need to resolve here
 	*/
 	function getGroupInfoContent(data) {
 		
+		var query = '';
 		var content = '';
 		
-		//this if statement takes care of a bug in the JSON java code...if the name array is of length one, it will automatically convert 
-		//that element into a string array and print out one letter at a time
-		//probably need a more sophisticated way of handling this problem
-		if(data.groups.name instanceof Array) {
-			for(var i=0;i<data.groups.name.length;i++) {
-				content = content + '<div>' + data.groups.name[i] + '</div>';
+		if(data.groups.group instanceof Array) {
+			for(var i=0;i<data.groups.group.length;i++) {
+				ESGF.setting.currentGroupName = data.groups.group[i].groupname;
+				
+				var groupName = data.groups.group[i].groupname;
+				var groupDescription = data.groups.group[i].groupdescription;
+				content = content + '<div id="groupListing_' + groupName + '"">Group: ' + groupName + ' Group Description: ' + groupDescription + ' Role: ' + '</div>';
+				
+				query = { "userName" : ESGF.setting.currentUserName, "groupName" : groupName };
+				var roleinfo_url = '/esgf-web-fe/extractroledataproxy';
+				$.ajax({
+		    		url: roleinfo_url,
+		    		type: "GET",
+		    		data: query,
+		    		dataType: 'json',
+		    		success: function(data) {
+		    			var gn = groupName;
+		    			processUserRoleForGroup(gn,data);
+		    		},
+					error: function() {
+						alert('error');
+					}
+				});
+				
+				
 			}
 		} else {
-			content = content + '<div>' + data.groups.name + '</div>';
+
+			ESGF.setting.currentGroupName = data.groups.group.groupname;
+			
+			content = content + '<div id="groupListing_' + ESGF.setting.currentGroupName + '"">Group: ' + ESGF.setting.currentGroupName + ' Group Description: ' + data.groups.group.groupdescription + ' Role: ' + '</div>';
+			
+			query = { "userName" : ESGF.setting.currentUserName, "groupName" : ESGF.setting.currentGroupName };
+			
+			var roleinfo_url = '/esgf-web-fe/extractroledataproxy';
+			$.ajax({
+	    		url: roleinfo_url,
+	    		type: "GET",
+	    		data: query,
+	    		dataType: 'json',
+	    		success: function(data) {
+	    			var gn = groupName;
+	    			processUserRoleForGroup(gn,data);
+	    		},
+				error: function() {
+					alert('error');
+				}
+			});
 		}
 		
 		var group_info_content = '<div class="group_info_content">' + content + '</div>';
 		
 		return group_info_content;
+		
 	}
+	
+	
+	function processUserRoleForGroup (groupName,data) {
+		
+		var roleid = data.role.roleid;
+		var rolename = data.role.rolename;
+		var roledescription = data.role.roledescription;
+		$("div#groupListing_"+groupName).append(rolename);
+	}
+	
+	
+	
 	
 	/*
 	* Helper function for post ajax call processing for user content
 	*/
 	function processUserContent(data) {
 		
-		var userName = data.user.userName;
+		//get the userName from the returned jsonContent
+		var userName = data.user.username;
 		
+		//call helper function that assembles all of the user's data
 		var user_info_content = getUserInfoContent(data);
 		
-		
-		
-		$('div#user_info').append('<fieldset id="user_info"><legend >User Information for ' + userName + '</legend></fieldset>');
-		
+		//append the fieldset to the div user_info element and fill it with the user's info
+		$('div#user_info').append('<fieldset id="user_info"><legend >User Information for ' + userName + '</legend></fieldset>');		
 		$('fieldset#user_info').append(user_info_content);
+		
+		//show the user's info
 		$('div#user_info').show();
-		
-		
-	}
-	
-	/*
-	* Helper function for displaying the userName
-	* Deprecated
-	*/
-	function getUserInfoHeader(userName) {
-		var user_info_header = '<div id="' + userName + '" class="user_info_header" style="text-align:center">User Information for ' + userName + '</div>';
-		return user_info_header;
 	}
 	
 	
@@ -395,21 +396,26 @@ $(document).ready(function(){
 	* Helper function for displaying the userContent
 	*/
 	function getUserInfoContent(data) {
-		var lastName = data.user.lastName;
-		var firstName = data.user.firstName;
-		var emailAddress = data.user.emailAddress;
-		var status = data.user.status;
-		var userName = data.user.userName;
+		var lastName = data.user.last;
+		var firstName = data.user.first;
+		var emailAddress = data.user.email;
+		var userName = data.user.username;
+		var organization = data.user.organization;
+		var city = data.user.city;
+		var state = data.user.state;
+		var country = data.user.country;
 		var content = '<div>First Name: ' + firstName + '</div>' +
 					  '<div>Last Name: ' + lastName + '</div>' + 
-					  '<div>Email: ' + emailAddress + '</div>' + 
-					  '<div>Status: ' + status + '</div>'
+					  '<div>Email: ' + emailAddress + '</div>' +
+					  '<div>Organization: ' + organization + '</div>' + 
+					  '<div>City: ' + city + '</div>' + 
+					  '<div>State: ' + state + '</div>' + 
+					  '<div>Country: ' + country + '</div>'
 					  ;
 		var user_info_content = '<div class="user_info_content">' + content + '</div>';
 		return user_info_content;
 	}
-	
-	
+
 	/*
 	* Add User
 	*/
@@ -448,24 +454,45 @@ $(document).ready(function(){
 	
 	/*
 	* Edit User
+	*
+	* When the "Edit User" button is clicked, an overlay will be displayed.
+	* This overlay is the form (form element "new_user_form") containing the following data:
+		- firstName
+		- lastName
+		- emailAddress
+		- organization
+		- city 
+		- country
+		
+		To add more editable values, add fields to the new user form html as well as  
+		fillFormContentForEdit function.
 	*/
 	$("input#edit_user-button[rel]").overlay({
 		mask: '#000',
+		//several events must be triggered when the overlay is loaded
 		onLoad: function() {
-			$('#new_user_form').show();
+			
+			//hide the username input...the username CANNOT be changed once it has been created
 			$('#userName_input').hide();
+			
+			//Change the form title to "Edit User" (default is "Add New User")
 			$('h3#form_title').html('Edit User ' + ESGF.setting.currentUserName);
+			
 			$('#new_user_form').hide();
 			//$('#user_info').hide();
 			$('#userName_input').hide();
 			
-			//$('div.user_info_header').remove();
-			//$('div.user_info_content').remove();
-			//clearFormValues();
-			
+			//change the input type parameter to "edit"
+			//this is an important parameter as it is sent to the ManageUsersController which
+			//must distinguish an 'update' operation from a 'create' operation
 			$('input#type').val('edit');
 			
-			var query = { "id" : ESGF.setting.currentUserName, "type" : "edit" };
+			//change the user name paramter to the current username
+			$('input#userName').val(ESGF.setting.currentUserName);
+			
+			//make an ajax call to get the pre-existing values of the user
+			//The call is sent to the "ExtractUserInfoController" and se
+			var query = { "userName" : ESGF.setting.currentUserName, "type" : "getUserInfo" };
 			var userinfo_url = '/esgf-web-fe/extractuserdataproxy';
 			$.ajax({
 	    		url: userinfo_url,
@@ -480,6 +507,7 @@ $(document).ready(function(){
 				}
 			});
 
+			//reveal the form
 			$('#new_user_form').show();
 		},
 	
@@ -500,18 +528,22 @@ $(document).ready(function(){
 	
 	/* Helper function for filling content for edtiing data */	
 	function fillFormContentForEdit(data) {
-		var lastName = data.user.lastName;
-		var firstName = data.user.firstName;
-		var emailAddress = data.user.emailAddress;
-		var status = data.user.status;
-		var userName = data.user.userName;
-		
-		//Note there may be more values later, this is for demo purposes
+
+		var firstName = data.user.first;
+		var lastName = data.user.last;
+		var email = data.user.email;
+		var organization = data.user.organization;
+		var city = data.user.city;
+		var country = data.user.country;
+
 		$('input#form_firstName').val(firstName);
 		$('input#form_lastName').val(lastName);
-		$('input#form_userName').val(userName);
-		$('input#form_emailAddress').val(emailAddress);
-		$('input#form_status').val(status);
+		$('input#form_email').val(email);
+		$('input#form_organization').val(organization);
+		$('input#form_city').val(city);
+		$('input#form_country').val(country);
+		
+		//Note there may be more values later, this is for demo purposes
 		
 	}
 	
@@ -595,22 +627,15 @@ $(document).ready(function(){
     
 });
 
+/*
+* Helper function for displaying the userName
+* Deprecated
+*/
+/*
+function getUserInfoHeader(userName) {
+	var user_info_header = '<div id="' + userName + '" class="user_info_header" style="text-align:center">User Information for ' + userName + '</div>';
+	return user_info_header;
+}
+*/
+
 </script>
-
-<!--  toggle menu that might come in handy later
-	<div id="toggleMenu"> 
-			<h4>Account Summary</h4> 
-							<div class="togglebox"> 
- 								<div class="block"> 
- 								Account Summary
- 								</div> 
-						</div>
-						<h4>Group Roles</h4> 
-							<div class="togglebox"> 
- 								<div class="block"> 
- 								Group Roles
- 								</div> 
-						</div>
-	</div>
--->
-

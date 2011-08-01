@@ -1,10 +1,10 @@
 /*****************************************************************************
- * Copyright ï¿½ 2011 , UT-Battelle, LLC All rights reserved
+ * Copyright © 2011 , UT-Battelle, LLC All rights reserved
  *
  * OPEN SOURCE LICENSE
  *
  * Subject to the conditions of this License, UT-Battelle, LLC (the
- * ï¿½Licensorï¿½) hereby grants to any person (the ï¿½Licenseeï¿½) obtaining a copy
+ * ÒLicensorÓ) hereby grants to any person (the ÒLicenseeÓ) obtaining a copy
  * of this software and associated documentation files (the "Software"), a
  * perpetual, worldwide, non-exclusive, irrevocable copyright license to use,
  * copy, modify, merge, publish, distribute, and/or sublicense copies of the
@@ -14,7 +14,7 @@
  * grant, copyright and license notices, this list of conditions, and the
  * disclaimer listed below.  Changes or modifications to, or derivative works
  * of the Software must be noted with comments and the contributor and
- * organizationï¿½s name.  If the Software is protected by a proprietary
+ * organizationÕs name.  If the Software is protected by a proprietary
  * trademark owned by Licensor or the Department of Energy, then derivative
  * works of the Software may not be distributed using the trademark without
  * the prior written approval of the trademark owner.
@@ -27,7 +27,7 @@
  * acknowledgment:
  *
  *    "This product includes software produced by UT-Battelle, LLC under
- *    Contract No. DE-AC05-00OR22725 with the Department of Energy.ï¿½
+ *    Contract No. DE-AC05-00OR22725 with the Department of Energy.Ó
  *
  * 4. Licensee is authorized to commercialize its derivative works of the
  * Software.  All derivative works of the Software must include paragraphs 1,
@@ -152,7 +152,7 @@ public class AccountsController {
         }
         
         //debug
-        if(userId.equals("https://pcmdi3.llnl.gov/esgcet/myopenid/banks12")) {
+        if(userId.equals("https://pcmdi3.llnl.gov/esgcet/myopenid/jfharney")) {
             userId = "user1_userName";
         }
         
@@ -168,10 +168,10 @@ public class AccountsController {
         } 
         else {
             
-            User user = Utils.populateUserObjectFromIdXML(userId,new File(USERS_FILE));
+            //User user = Utils.populateUserObjectFromIdXML(userId,new File(USERS_FILE));
             
             // populate model with the UserInfo
-            model.put( ACCOUNTS_USERINFO, user);
+            //model.put( ACCOUNTS_USERINFO, user);
             model.put(ACCOUNTS_INPUT, accountsInput);
             
             //put the model in the session
@@ -204,7 +204,7 @@ public class AccountsController {
             LOG.debug("UserId Retrieved: " + userId);
         }
         
-        if(userId.equals("https://pcmdi3.llnl.gov/esgcet/myopenid/banks12")) {
+        if(userId.equals("https://pcmdi3.llnl.gov/esgcet/myopenid/jfharney")) {
             userId = "user1_userName";
         }
         
@@ -220,10 +220,10 @@ public class AccountsController {
         } 
         else {
             
-            User user = Utils.populateUserObjectFromIdXML(userId,new File(USERS_FILE));
+            //User user = Utils.populateUserObjectFromIdXML(userId,new File(USERS_FILE));
             
             // populate model with the UserInfo
-            model.put( ACCOUNTS_USERINFO, user);
+            //model.put( ACCOUNTS_USERINFO, user);
             model.put(ACCOUNTS_INPUT, accountsInput);
             
             //put the model in the session

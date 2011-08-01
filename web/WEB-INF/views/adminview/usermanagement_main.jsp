@@ -42,7 +42,7 @@
 <div style="margin-top:20px;margin-bottom:20px;min-height:500px;">
 	<c:choose>
 		<c:when test="${principal=='anonymousUser1'}">
-    		<div> <c:out value="${principal}"/> IS NOT AUTHORIZED TO VIEW THIS PAGE</div>
+    		<div> <c:out value="${principal}"/> AnonymousUser1 IS NOT AUTHORIZED TO VIEW THIS PAGE (usermanagement_main) </div>
   		</c:when>
   		<c:otherwise>
       		<c:choose>
@@ -248,7 +248,7 @@
 						
   				</c:when>
   				<c:otherwise>
-  					<div> <c:out value="${principal.username}"/> IS NOT AUTHORIZED TO VIEW THIS PAGE</div>
+  					<div> <c:out value="${principal.username}"/> IS NOT AUTHORIZED TO VIEW THIS PAGE (usermanagement_main) </div>
   				</c:otherwise>
       		</c:choose>
   		</c:otherwise>

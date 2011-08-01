@@ -100,15 +100,6 @@ public class CreateGroupsController {
     private GroupOperationsInterface goi;
     
     
-    /**
-     * List of invalid text characters -
-     * anything that is not within square brackets.
-     */
-    /*
-    private static Pattern pattern =
-        Pattern.compile(".*[^a-zA-Z0-9_\\-\\.\\@\\'\\:\\;\\,\\s/()].*");
-    */
-    
     public CreateGroupsController() {
         LOG.debug("IN CreateGroupsController Constructor");
         //goi = new GroupOperationsXMLImpl();
@@ -210,23 +201,7 @@ public class CreateGroupsController {
             groupDescription = "N/A";
         }
         
-        //LOG.debug("HERE - editing: " + groupId + " " + groupName + " " + groupDescription + "\n\n\n");
         goi.editGroup(groupId, groupName, groupDescription);
-        
-        /*
-        String userName = request.getParameter("userName");
-        LOG.debug("USERNAME->" + userName + "\n\n\n\n\n\n");
-        
-        String first = request.getParameter("firstName");
-        if(first == null || first.equals("")) {
-            first = "N/A";
-        }
-        */
-        //String userId = uoi.getUserIdFromUserName(userName);
-        //uoi.editUser(userId,first,middle,last,email,userName,organization,city,state,country);
-
-        
-        
         
         
         LOG.debug("------End CreateGroupsController editUser------");

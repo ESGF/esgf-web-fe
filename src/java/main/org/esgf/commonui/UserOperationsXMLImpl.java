@@ -24,20 +24,32 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
     //private final static String USERS_FILE = "db.users";
     private final static Logger LOG = Logger.getLogger(UserOperationsXMLImpl.class);
 
+    private final static String users_file = ".\\db.users";
+    private final static String groups_file = ".\\db.groups";
+    private final static String roles_file = ".\\db.roles";
+    private final static String permissions_file = ".\\db.permissions";
+    
+    
     private File USERS_FILE;
     private File GROUPS_FILE;
+    private File ROLES_FILE;
     private File PERMISSIONS_FILE;
     
     public UserOperationsXMLImpl(){
         USERS_FILE = new File("");
         GROUPS_FILE = new File("");
+        ROLES_FILE = new File("");
         PERMISSIONS_FILE = new File("");
+        
         try {
-            USERS_FILE = new ClassPathResource("db.users").getFile();
-            GROUPS_FILE = new ClassPathResource("db.groups").getFile();
-            PERMISSIONS_FILE = new ClassPathResource("db.permissions").getFile();
+            File dir1 = new File(".");
+            System.out.println("Current dir->" + dir1.getCanonicalPath());
+            USERS_FILE = new File(users_file); //new ClassPathResource("db.users").getFile();
+            GROUPS_FILE = new File(groups_file); //new ClassPathResource("db.groups").getFile();
+            PERMISSIONS_FILE = new File(permissions_file);//new ClassPathResource("db.permissions").getFile();
+            ROLES_FILE = new File(roles_file);
         }catch(Exception e) {
-            System.out.println("error in db.users");
+            System.out.println("error in UserOperationsXMLImpl constructor");
         }
     }
     

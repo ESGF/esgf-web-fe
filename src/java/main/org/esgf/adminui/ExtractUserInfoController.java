@@ -1,6 +1,5 @@
 package org.esgf.adminui;
 import java.io.IOException;
-import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +10,7 @@ import org.esgf.commonui.GroupOperationsInterface;
 import org.esgf.commonui.GroupOperationsXMLImpl;
 import org.esgf.commonui.UserOperationsInterface;
 import org.esgf.commonui.UserOperationsXMLImpl;
+import org.esgf.commonui.Utils;
 import org.esgf.metadata.JSONException;
 import org.esgf.metadata.JSONObject;
 import org.esgf.metadata.XML;
@@ -20,8 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 /**
- * Implementation of metadata extraction controller responsible for extracting metadata that ARE NOT contained in the solr records.
- * The controller searches through the metdata file to find the proper record.  Currently parsing of TDS, OAI, CAS, and FGDC files are supported.
+ * The ExtractUserInfoController is responsible for getting group information out of the 
+ * database.  As of now, this controller is utilized by ajax calls in the following views:
+ * - web/WEB-INF/views/adminview/usermanagement_main.jsp
+ * 
+ * The constructor is called when the page loads.  This is necessary to create Operations objects
+ * that allow us to utilize the CRUD methods that are called on the data store.
+ * 
+ * The entry point is in the doGet method - doPost is not utilized as of yet.
+ * 
  *
  * @author john.harney
  *
@@ -29,14 +36,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/extractuserdataproxy")
 public class ExtractUserInfoController {
+    
+    //Logger for the controller
     private final static Logger LOG = Logger.getLogger(ExtractUserInfoController.class);
     
-    
+    //Need to define two interfaces for group and user operations
     private GroupOperationsInterface goi;
     private UserOperationsInterface uoi;
     
-
-    private final static boolean debugFlag = true;
     
     public ExtractUserInfoController() {
         LOG.debug("IN ExtractUserInfoController Constructor");
@@ -54,12 +61,33 @@ public class ExtractUserInfoController {
      *
      */
     @RequestMapping(method=RequestMethod.GET)
-    public @ResponseBody String doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException, JDOMException {
+    public @ResponseBody String doGet(HttpServletRequest request, HttpServletResponse response) {
         LOG.debug("ExtractUserInfoController doGet");
 
+        String jsonContent = "";
+            
+        Utils.queryStringInfo(request);
+        
+        String userName = request.getParameter("userName");
         String type = request.getParameter("type");
-        if(debugFlag)
-            LOG.debug("Type: " + type);
+        
+        if(type.equalsIgnoreCase("getUserInfo")) {
+
+            jsonContent = processGetUserInfoType(userName);
+            
+        }
+        else if(type.equalsIgnoreCase("edit")) {
+            
+        }
+        else {
+            
+        }
+
+        LOG.debug("JsonContent: " + jsonContent);
+        return jsonContent;
+        /*
+        String type = request.getParameter("type");
+        LOG.debug("Type: " + type);
         
         if(type.equalsIgnoreCase("edit")) {
             return processEditType(request, response);
@@ -67,6 +95,7 @@ public class ExtractUserInfoController {
         else {
             return null;
         }
+        */
     }
     
     /**
@@ -82,15 +111,19 @@ public class ExtractUserInfoController {
         LOG.debug("ExtractUserInfoController doPost");
 
         String type = request.getParameter("type");
-        if(debugFlag)
+        
             LOG.debug("Type: " + type);
         
+        /*
         if(type.equalsIgnoreCase("edit")) {
             return processEditType(request, response);
         }
         else {
             return null;
         }
+        */
+            
+        return null;
     }
     
     /**
@@ -99,61 +132,32 @@ public class ExtractUserInfoController {
      * @throws JDOMException 
      *
      */
-    private String processEditType(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException, JDOMException {
-        String jsonContent = "jsonContent";
+    private String processGetUserInfoType(String userName) {
+        LOG.debug("ExtractUserInfoController processGetUserInfoType");
 
-        String userName = request.getParameter("id");
         
-        if(debugFlag)
-            queryStringInfo(request);
+        String jsonContent = "";
         
-        /* Search through the data store to see if the id (username or openid) is there 
-         * If it is there, then make the appropriate updates,
-         * otherwise, just ignore
-         * 
-         * As of now, the returned data is in JSON format, so there needs to be some conversion between xml/db store to key/value json pairs
-         */
+        User user = uoi.getUserObjectFromUserName(userName);
+        //String xmlOutput = getXMLTupleOutputFromEdit(userName);
+        String xmlOutput = user.toXml();
+
         try {
-            //xml store version
-            LOG.debug("UserName->" + userName);
-            
-            User user = uoi.getUserObjectFromUserName(userName);
-            //String xmlOutput = getXMLTupleOutputFromEdit(userName);
-            String xmlOutput = user.toXml();
-
-            
             JSONObject jo = XML.toJSONObject(xmlOutput);
 
             jsonContent = jo.toString();
-            
-        }catch(Exception e) {
-            LOG.debug("Problem with conversion to json content in processEditType");
+        } catch(Exception e) {
+            LOG.debug("Problem in ExtractUserInfoController processGetUserInfoType");
+            e.printStackTrace();
         }
         
-        if(debugFlag)
-            LOG.debug("JsonContent: " + jsonContent);
-        
+        LOG.debug("ExtractUserInfoController processGetUserInfoType");
+
         return jsonContent;
     }
     
     
     
-    /**
-     * queryStringInfo(HttpServletRequest request)
-     * Private method that prints out the contents of the request.  Used mainly for debugging.
-     * 
-     * @param request
-     */
-    private void queryStringInfo(HttpServletRequest request) {
-        LOG.debug("--------Query String Info--------");
-        Enumeration<String> paramEnum = request.getParameterNames();
-        
-        while(paramEnum.hasMoreElements()) { 
-            String postContent = (String) paramEnum.nextElement();
-            LOG.debug(postContent+"-->"); 
-            LOG.debug(request.getParameter(postContent));
-        }
-        LOG.debug("--------End Query String Info--------");
-    }
+    
 }
 

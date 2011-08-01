@@ -19,32 +19,40 @@ import org.springframework.core.io.ClassPathResource;
 
 public class GroupOperationsXMLImpl implements GroupOperationsInterface {
 
-    //private final static String GROUPS_FILE = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\db.groups";
     
-    //private final static String PERMISSIONS_FILE = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\db.permissions";
-
+    private final static String users_file = ".\\db.users";
+    private final static String groups_file = ".\\db.groups";
+    private final static String roles_file = ".\\db.roles";
+    private final static String permissions_file = ".\\db.permissions";
+    
+    
+    private File USERS_FILE;
     private File GROUPS_FILE;
+    private File ROLES_FILE;
     private File PERMISSIONS_FILE;
     
     public GroupOperationsXMLImpl(){
+        USERS_FILE = new File("");
         GROUPS_FILE = new File("");
-        try {
-            GROUPS_FILE = new ClassPathResource("db.groups").getFile();
-        }catch(Exception e) {
-            System.out.println("error in db.users");
-        }
-        
+        ROLES_FILE = new File("");
         PERMISSIONS_FILE = new File("");
+        
         try {
-            PERMISSIONS_FILE = new ClassPathResource("db.permissions").getFile();
+            File dir1 = new File(".");
+            System.out.println("Current dir->" + dir1.getCanonicalPath());
+            USERS_FILE = new File(users_file); //new ClassPathResource("db.users").getFile();
+            GROUPS_FILE = new File(groups_file); //new ClassPathResource("db.groups").getFile();
+            PERMISSIONS_FILE = new File(permissions_file);//new ClassPathResource("db.permissions").getFile();
+            ROLES_FILE = new File(roles_file);
         }catch(Exception e) {
-            System.out.println("error in db.permissions");
+            System.out.println("error in GroupOperationsXMLImpl constructor");
         }
     }
     
+    
+    
     public List<String> getGroupIdsForUserId(String userId) {
         
-        System.out.println("Returning all groups for user " + userId);
         ArrayList<String> returnedGroupsList = new ArrayList<String>();
         SAXBuilder builder = new SAXBuilder();
         String xmlContent = "";
@@ -76,7 +84,6 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
     }
     
     public Element getGroupsForUserId(String userId) {
-        System.out.println("Returning all groups for user " + userId);
         
         SAXBuilder builder = new SAXBuilder();
         String xmlContent = "";
@@ -113,8 +120,6 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
     
     /* delete group */
     public void deleteGroup(String groupId) {
-        
-        System.out.println("Deleted group " + groupId);
         
         SAXBuilder builder = new SAXBuilder();
         String xmlContent = "";
@@ -157,8 +162,6 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
      * */
     public void editGroup(final String groupId, String groupName, String groupDescription) {
         
-        System.out.println("Edited group " + groupId);
-
         SAXBuilder builder = new SAXBuilder();
         String xmlContent = "";
         
@@ -202,7 +205,6 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
                 newElement_group.addContent((Element)newElement_groupNameEl);
                 newElement_group.addContent((Element)newElement_groupDescriptionEl);
 
-                System.out.println(groupIdText);
                 newElement_groups.addContent(newElement_group);
             }
             
@@ -211,7 +213,6 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
             
             Writer output = null;
             output = new BufferedWriter(new FileWriter(GROUPS_FILE));
-            System.out.println("WRITING..." + xmlContent);
             output.write(xmlContent);
             output.close();
         }catch(Exception e) {
@@ -261,24 +262,6 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
     }
     
     
-    /*
-    public Element getAllGroups() {
-        System.out.println("Returning all groups ");
-        SAXBuilder builder = new SAXBuilder();
-        String xmlContent = "";
-        Element returnedEl = null;
-        
-        try{
-            Document document = (Document) builder.build(GROUPS_FILE);
-            Element rootNode = document.getRootElement();
-            returnedEl = rootNode;
-        }catch(Exception e) {
-            System.out.println("Error in getAllGroups");
-        }
-        
-        return returnedEl;
-    }
-    */
     
     private String createGroupId() {
         Random rand = new Random();
@@ -312,7 +295,6 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
                 String groupId = groupIdEl.getTextNormalize();
                 if(groupId.contains(intStr)) {
                     idExists = true;
-                    System.out.println("Id exists");
                 }
             }
         
@@ -329,7 +311,6 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
     /* addGroup */
     public void addGroup(String groupName,String description) {
         String groupId = createGroupId();
-        System.out.println("Added group " + groupId + " " + groupName + " " + description);
         
         SAXBuilder builder = new SAXBuilder();
         String xmlContent = "";
@@ -527,7 +508,6 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
                 Element userIdEl = tupleEl.getChild("userid");
                 Element groupIdEl = tupleEl.getChild("groupid");
                 if(userIdEl.getTextNormalize().equals(userId)) {
-                    //System.out.println("add group " + groupIdEl.getTextNormalize());
                     String groupId = groupIdEl.getTextNormalize();
                     Group group = this.getGroupObjectFromGroupId(groupId);
                     groups.add(group);

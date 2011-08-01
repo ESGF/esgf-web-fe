@@ -210,7 +210,7 @@ public class CreateGroupsController {
             groupDescription = "N/A";
         }
         
-        LOG.debug("HERE - editing: " + groupId + " " + groupName + " " + groupDescription + "\n\n\n");
+        //LOG.debug("HERE - editing: " + groupId + " " + groupName + " " + groupDescription + "\n\n\n");
         goi.editGroup(groupId, groupName, groupDescription);
         
         /*

@@ -92,14 +92,7 @@ public class ManageUsersController {
     
     private UserOperationsInterface uoi;
     
-    /**
-     * List of invalid text characters -
-     * anything that is not within square brackets.
-     */
-    /*
-    private static Pattern pattern =
-        Pattern.compile(".*[^a-zA-Z0-9_\\-\\.\\@\\'\\:\\;\\,\\s/()].*");
-    */
+   
     
     public ManageUsersController() {
         LOG.debug("IN ManageUsersController Constructor");
@@ -117,7 +110,6 @@ public class ManageUsersController {
      * @throws IOException 
      * @throws Exception
      */
-    @SuppressWarnings("unchecked")
     @RequestMapping(method=RequestMethod.GET)
     public ModelAndView doGet(final HttpServletRequest request,
             final @ModelAttribute(ManageUsers_INPUT) String ManageUsersInput) throws IOException {
@@ -172,7 +164,7 @@ public class ManageUsersController {
         }
         //otherwise ignore and return the model
         
-      //get the model given the httprequest and the manageusersinput model attr
+        //get the model given the httprequest and the manageusersinput model attr
         Map<String,Object> model = getModel(request,ManageUsersInput);
         
         LOG.debug("------End ManageUsersController doPost------");
@@ -244,19 +236,11 @@ public class ManageUsersController {
         return model;
     }
     
-    
-    
-    
-    
-    
     private void editUser(final HttpServletRequest request) throws IOException {
         LOG.debug("------ManageUsersController editUser------");
         
-        //Utils.queryStringInfo(request);
-        
-
         String userName = request.getParameter("userName");
-        LOG.debug("USERNAME->" + userName + "\n\n\n\n\n\n");
+        LOG.debug("USERNAME->" + userName);
         
         String first = request.getParameter("firstName");
         if(first == null || first.equals("")) {
@@ -306,23 +290,17 @@ public class ManageUsersController {
     private void deleteUser(final HttpServletRequest request) throws IOException {
         LOG.debug("------ManageUsersController deleteUser------");
         
-        //Utils.queryStringInfo(request);
-        
         String userName = request.getParameter("user");
         String userId = uoi.getUserIdFromUserName(userName);
         uoi.deleteUser(userId);
         
-
         LOG.debug("------End ManageUsersController deleteUser------");
-
     }
     
     
     
     private void addUser(final HttpServletRequest request) throws IOException {
         LOG.debug("------ManageUsersController addUser------");
-        
-        //Utils.queryStringInfo(request);
         
         String username = request.getParameter("userName");
         if(username == null || username.equals("")) {

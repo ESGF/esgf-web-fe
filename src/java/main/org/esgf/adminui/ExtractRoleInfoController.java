@@ -63,25 +63,23 @@ public class ExtractRoleInfoController {
     public @ResponseBody String doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException, JDOMException {
         LOG.debug("ExtractRoleInfoController doGet");
 
-        Utils.queryStringInfo(request);
+        //Utils.queryStringInfo(request);
         
-        String groupName = request.getParameter("groupname");
-        String userName = request.getParameter("username");
-        LOG.debug("\n\n\n\n\n\n");
-        LOG.debug("groupid: " + groupName + " userid: " + userName);
+        String groupName = request.getParameter("groupName");
+        String userName = request.getParameter("userName");
+        
+        LOG.debug("groupName->" + groupName);
+        LOG.debug("userName->" + userName);
+        
         String groupId = goi.getGroupIdFromGroupName(groupName);
         String userId = uoi.getUserIdFromUserName(userName);
+
         Role role = roi.getRoleForUserInGroup(userId, groupId);
-        LOG.debug("groupid: " + groupId + " userid: " + userId);
         
-        if(role == null) {
-            LOG.debug("NULL");
-        }
-        LOG.debug("role: " + role.toString());
-        
-        String xmlOutput = "<roles>";
+        //String xmlOutput = "<roles>";
+        String xmlOutput = "";
         xmlOutput += role.toXml();
-        xmlOutput += "</roles>";
+        //xmlOutput += "</roles>";
         JSONObject jo = XML.toJSONObject(xmlOutput);
         String jsonContent = jo.toString();
 
@@ -101,8 +99,23 @@ public class ExtractRoleInfoController {
     public @ResponseBody String doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException, JDOMException {
         LOG.debug("ExtractRoleInfoController doPost");
 
-        String xmlOutput = "<role>";
-        xmlOutput += "</role>";
+        //Utils.queryStringInfo(request);
+        
+        String groupName = request.getParameter("groupName");
+        String userName = request.getParameter("userName");
+        
+        LOG.debug("groupName->" + groupName);
+        LOG.debug("userName->" + userName);
+        
+        String groupId = goi.getGroupIdFromGroupName(groupName);
+        String userId = uoi.getUserIdFromUserName(userName);
+
+        Role role = roi.getRoleForUserInGroup(userId, groupId);
+        
+        //String xmlOutput = "<roles>";
+        String xmlOutput = "";
+        xmlOutput += role.toXml();
+        //xmlOutput += "</roles>";
         JSONObject jo = XML.toJSONObject(xmlOutput);
         String jsonContent = jo.toString();
 

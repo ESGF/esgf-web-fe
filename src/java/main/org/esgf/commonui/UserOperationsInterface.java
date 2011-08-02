@@ -21,7 +21,7 @@ public interface UserOperationsInterface {
 
     public User getUserObjectFromUserName(final String userName);
 
-    public User getUserObjectFromUserId(final String userId);
+    //public User getUserObjectFromUserId(final String userId);
     
     public User getUserObjectFromUserOpenID(final String openId);
     

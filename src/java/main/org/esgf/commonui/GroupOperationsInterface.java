@@ -12,7 +12,7 @@ public interface GroupOperationsInterface {
     
     public void deleteGroup(final String groupId);
     
-    public Group getGroupObjectFromGroupId(final String groupId);
+    public Group getGroupObjectFromGroupName(final String groupName);
     
     public String getGroupIdFromGroupName(String groupName);
     

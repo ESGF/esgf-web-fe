@@ -20,10 +20,10 @@ import org.springframework.core.io.ClassPathResource;
 public class GroupOperationsXMLImpl implements GroupOperationsInterface {
 
     
-    private final static String users_file = ".\\db.users";
-    private final static String groups_file = ".\\db.groups";
-    private final static String roles_file = ".\\db.roles";
-    private final static String permissions_file = ".\\db.permissions";
+    private final static String users_file = "/home/John/clones/esgf-web-fe/src/java/main/db.users";
+    private final static String groups_file = "/home/John/clones/esgf-web-fe/src/java/main/db.groups";
+    private final static String roles_file = "/home/John/clones/esgf-web-fe/src/java/main/db.roles";
+    private final static String permissions_file = "/home/John/clones/esgf-web-fe/src/java/main/db.permissions";
     
     
     private File USERS_FILE;
@@ -558,6 +558,42 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
         
         System.out.println(groups);
         
+    }
+
+
+
+    @Override
+    public Group getGroupObjectFromGroupName(String groupName) {
+        Group group = new Group();
+        
+        SAXBuilder builder = new SAXBuilder();
+        String xmlContent = "";
+        try{
+            Document groups_document = (Document) builder.build(GROUPS_FILE);
+            Element rootNode = groups_document.getRootElement();
+            List groups = (List)rootNode.getChildren();
+            for(int i=0;i<groups.size();i++)
+            {
+                Element groupEl = (Element)groups.get(i);
+                Element groupIdEl = groupEl.getChild("groupid");
+                Element groupNameEl = groupEl.getChild("groupname");
+                Element groupDescriptionEl = groupEl.getChild("groupdescription");
+                
+                if(groupNameEl.getTextNormalize().equals(groupName)) {
+                    group.setid(groupIdEl.getTextNormalize());
+                    group.setname(groupNameEl.getTextNormalize());
+                    group.setdescription(groupDescriptionEl.getTextNormalize());
+                }
+            }
+            
+            
+            
+        }catch(Exception e) {
+            System.out.println("Problem in getGroupObjectFromGroupId");
+            
+        }
+        
+        return group;
     }
 }
 

@@ -145,7 +145,7 @@ public class ExtractGroupInfoController {
         LOG.debug("ExtractGroupInfoController processEditType");
         String jsonContent = "jsonContent";
 
-        String groupId = request.getParameter("id");
+        String groupName = request.getParameter("id");
         
         //if(debugFlag)
             queryStringInfo(request);
@@ -160,12 +160,15 @@ public class ExtractGroupInfoController {
             //xml store version
             //String xmlOutput = getXMLTupleOutputFromEdit(userName);
             
+            
+            
             //db version
             //LOG.debug("GroupId->" + groupId);
-            Group group = goi.getGroupObjectFromGroupId(groupId);
+            Group group = goi.getGroupObjectFromGroupName(groupName);
             //User user = UserOps.getUserObjectFromUserName(userName);
             String xmlOutput = group.toXml();
             //LOG.debug(xmlOutput);
+            //String xmlOutput = "<group></group>";
             
             JSONObject jo = XML.toJSONObject(xmlOutput);
 

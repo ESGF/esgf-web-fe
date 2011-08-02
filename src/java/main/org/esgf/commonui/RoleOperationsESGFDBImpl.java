@@ -7,19 +7,25 @@ public class RoleOperationsESGFDBImpl implements RoleOperationsInterface {
     @Override
     public Role getRoleForUserInGroup(String userId, String groupId) {
         // TODO Auto-generated method stub
-        return null;
+        
+        Role role = new Role();
+        
+        return role;
     }
 
     @Override
     public Role getRoleObjectFromRoleId(String roleId) {
         // TODO Auto-generated method stub
-        return null;
+        Role role = new Role();
+        
+        
+        return role;
     }
 
     @Override
     public String getRoleIdFromUserName(String roleName) {
         // TODO Auto-generated method stub
-        return null;
+        return roleName;
     }
 
 }

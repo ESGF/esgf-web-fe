@@ -30,7 +30,9 @@
 	 will be placed in usermanagement.css if needed
  -->
 <style>
-
+	tr.user_rows:hover {
+		/* background: #FAECC8; */
+	}
 </style>
 
 
@@ -213,12 +215,17 @@
 <script>
 $(document).ready(function(){
 	
+	$('tr.user_rows').hover(function() {
+		
+	});
 	
 	/**
 	* Will display the user's information when the admin clicks on a row
 	*/
 	$('tr.user_rows').click(function(){
 
+		
+		
 		//first we must hide/remove any information previously there
 		$('#new_user_form').hide();
 		$('#user_info').hide();
@@ -230,6 +237,10 @@ $(document).ready(function(){
 		//grab the username from the id of the row
 		var userName = $(this).attr("id");
 
+		var backgroundColor = $(this).css('background-color');
+		$('tr#' + ESGF.setting.currentUserName).css('background','#ffffff');
+		$(this).css('background','#FAECC8');
+		
 		ESGF.setting.currentUserName = userName;
 		
 		/* from username we can get the rest of the info via an ajax call to extractuserdataproxy */
@@ -252,6 +263,8 @@ $(document).ready(function(){
 			
 			
 			
+			
+			/*
 			query = { "userName" : ESGF.setting.currentUserName, "type" : "groupsForUser" };
 			var groupinfo_url = '/esgf-web-fe/extractgroupdataproxy';
 			$.ajax({
@@ -266,7 +279,7 @@ $(document).ready(function(){
 					alert('error');
 				}
 			});
-			
+			*/
 			
 		} else {
 			alert('Must have a valid user name to perform this operation');
@@ -377,13 +390,13 @@ $(document).ready(function(){
 	function processUserContent(data) {
 		
 		//get the userName from the returned jsonContent
-		var userName = data.user.username;
+		var userName = data.userinfo.user.username;
 		
 		//call helper function that assembles all of the user's data
 		var user_info_content = getUserInfoContent(data);
 		
 		//append the fieldset to the div user_info element and fill it with the user's info
-		$('div#user_info').append('<fieldset id="user_info"><legend >User Information for ' + userName + '</legend></fieldset>');		
+		$('div#user_info').append('<fieldset id="user_info"><legend >' + userName + '</legend></fieldset>');		
 		$('fieldset#user_info').append(user_info_content);
 		
 		//show the user's info
@@ -396,22 +409,48 @@ $(document).ready(function(){
 	* Helper function for displaying the userContent
 	*/
 	function getUserInfoContent(data) {
-		var lastName = data.user.last;
-		var firstName = data.user.first;
-		var emailAddress = data.user.email;
-		var userName = data.user.username;
-		var organization = data.user.organization;
-		var city = data.user.city;
-		var state = data.user.state;
-		var country = data.user.country;
-		var content = '<div>First Name: ' + firstName + '</div>' +
-					  '<div>Last Name: ' + lastName + '</div>' + 
-					  '<div>Email: ' + emailAddress + '</div>' +
-					  '<div>Organization: ' + organization + '</div>' + 
-					  '<div>City: ' + city + '</div>' + 
-					  '<div>State: ' + state + '</div>' + 
-					  '<div>Country: ' + country + '</div>'
+		var lastName = data.userinfo.user.last;
+		var firstName = data.userinfo.user.first;
+		var middleName = data.userinfo.user.middle;
+		var emailAddress = data.userinfo.user.email;
+		var userName = data.userinfo.user.username;
+		var organization = data.userinfo.user.organization;
+		var city = data.userinfo.user.city;
+		var state = data.userinfo.user.state;
+		var country = data.userinfo.user.country;
+		
+		
+		var content = '<h5 style="margin-top:10px;">User Information</h5>';
+		content = content + '<div style="margin-bottom:5px;">First Name: ' + firstName + ' Middle Name: ' + middleName + ' Last Name: ' + lastName + '</div>' +
+					  '<div style="margin-bottom:5px;">Email: ' + emailAddress + ' Organization ' + organization + '</div>' +
+					  '<div style="margin-bottom:5px;">City: ' + city + ' State: ' + state + ' Country: ' + country + '</div>'
 					  ;
+		content = content + '<div style="margin-bottom:10px"></div><hr /><h5 style="margin-top:10px;">Group Memberships</h5>';
+		
+		if(typeof data.userinfo.groups.group != 'undefined') {
+			if(data.userinfo.groups.group instanceof Array) {
+				for(var i=0;i<data.userinfo.groups.group.length;i++) {
+					var groupId = data.userinfo.groups.group[i].groupid;
+					var groupName = data.userinfo.groups.group[i].groupname;
+					var groupDescription = data.userinfo.groups.group[i].groupdescription;
+					
+					content = content + '<div style="border: 1px dotted #eee;margin-top:5px;margin-left:10px" id="userListing_' + 
+										groupName + '"">Group: ' + groupName + ' Description: ' + groupDescription + ' Role: ' + '</div>';
+					
+				}
+			} else {
+
+				var groupId = data.userinfo.groups.group.groupid;
+				var groupName = data.userinfo.groups.group.groupname;
+				var groupDescription = data.userinfo.groups.group.groupdescription;
+				
+				content = content + '<div style="border: 1px dotted #eee;margin-top:5px;margin-left:10px" id="userListing_' + 
+				groupName + '"">Group: ' + groupName + ' Description: ' + groupDescription + ' Role: ' + '</div>';
+
+			}
+		}
+		
+		
 		var user_info_content = '<div class="user_info_content">' + content + '</div>';
 		return user_info_content;
 	}
@@ -529,12 +568,12 @@ $(document).ready(function(){
 	/* Helper function for filling content for edtiing data */	
 	function fillFormContentForEdit(data) {
 
-		var firstName = data.user.first;
-		var lastName = data.user.last;
-		var email = data.user.email;
-		var organization = data.user.organization;
-		var city = data.user.city;
-		var country = data.user.country;
+		var firstName = data.userinfo.user.first;
+		var lastName = data.userinfo.user.last;
+		var email = data.userinfo.user.email;
+		var organization = data.userinfo.user.organization;
+		var city = data.userinfo.user.city;
+		var country = data.userinfo.user.country;
 
 		$('input#form_firstName').val(firstName);
 		$('input#form_lastName').val(lastName);

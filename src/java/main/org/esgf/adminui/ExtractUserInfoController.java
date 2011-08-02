@@ -1,5 +1,6 @@
 package org.esgf.adminui;
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -140,9 +141,26 @@ public class ExtractUserInfoController {
         
         User user = uoi.getUserObjectFromUserName(userName);
         //String xmlOutput = getXMLTupleOutputFromEdit(userName);
-        String xmlOutput = user.toXml();
-
+        //String xmlOutput = user.toXml();
         try {
+            String xmlOutput = "<userinfo>";
+            xmlOutput += user.toXml();
+            
+            String userId = (uoi.getUserObjectFromUserName(userName)).getUserId();
+            List<Group> groups = goi.getGroupsFromUser(userId);
+            
+            if(groups != null) {
+                xmlOutput += "<groups>";
+                
+                for(int i=0;i<groups.size();i++) {
+                    xmlOutput += groups.get(i).toXml();
+                }
+                xmlOutput += "</groups>";
+                
+            }
+            
+            xmlOutput += "</userinfo>";
+            
             JSONObject jo = XML.toJSONObject(xmlOutput);
 
             jsonContent = jo.toString();
@@ -150,6 +168,7 @@ public class ExtractUserInfoController {
             LOG.debug("Problem in ExtractUserInfoController processGetUserInfoType");
             e.printStackTrace();
         }
+        
         
         LOG.debug("ExtractUserInfoController processGetUserInfoType");
 

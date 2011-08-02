@@ -186,6 +186,8 @@ $(document).ready(function(){
 		var groupName = $(this).attr("id");
 		//ESGF.setting.currentGroupName = groupName;
 
+		$('tr#' + ESGF.setting.currentGroupName).css('background','#ffffff');
+		$(this).css('background','#FAECC8');
 		
 		//first we must hide/remove any information previously there
 		$('#new_group_form').hide();
@@ -231,9 +233,9 @@ $(document).ready(function(){
 
 		
 		//append the fieldset to the div user_info element and fill it with the user's info
-		$('div#group_info').append('<fieldset id="group_info"><legend >Group Information for ' + ESGF.setting.currentGroupName + 
+		$('div#group_info').append('<fieldset id="group_info"><legend >' + ESGF.setting.currentGroupName + 
 									'</legend>' +
-									'<div>Description: ' + data.groupinfo.group.groupdescription +'</div>' +
+									'<h5>Group Information</h5><div style="margin-bottom:10px">Description: ' + data.groupinfo.group.groupdescription +'</div>' +
 									'</fieldset>');
 		$('fieldset#group_info').append(group_info_content);
 		
@@ -253,7 +255,7 @@ $(document).ready(function(){
 		var query = '';
 		var content = '';
 		//content = content + '<div>Description: ' + data.groupinfo.group.groupdescription +'</div>';
-		content = content + '<h5 style="margin-top:10px">Users In Group</h5>';
+		content = content + '<hr /><h5 style="margin-top:10px;">Users In Group</h5>';
 		if(data.groupinfo.user instanceof Array) {
 			for(var i=0;i<data.groupinfo.user.length;i++) {
 				var userId = data.groupinfo.user[i].id;
@@ -322,30 +324,10 @@ $(document).ready(function(){
 		}
 		
 		var group_info_content = '<div class="group_info_content">' + content + '</div>';
-		
 		return group_info_content;
-		
 		
 	}
 	
-	
-	
-	/*
-	* Helper function for displaying the userContent
-	*/
-	/*
-	function getGroupInfoContent(data) {
-		var groupId = data.group.groupid;
-		var groupName = data.group.groupname;
-		var groupDescription = data.group.groupdescription;
-		var content = '<div>Group Id: ' + groupId + '</div>' +
-					  '<div>Group Name: ' + groupName + '</div>' + 
-					  '<div>Group Descrption: ' + groupDescription + '</div>' 
-					  ;
-		var group_info_content = '<div class="user_info_content">' + content + '</div>';
-		return group_info_content;
-	}
-	*/
 	
 	/*
 	* Add User
@@ -391,10 +373,12 @@ $(document).ready(function(){
 			
 			$('h3#form_title').html('Edit User ' + ESGF.setting.currentGroupName);
 			$('input#type').val('edit');
-			var query = { "id" : ESGF.setting.currentGroupName, "type" : "edit" };
-			var userinfo_url = '/esgf-web-fe/extractgroupdataproxy';
+			
+			query = { "groupName" : ESGF.setting.currentGroupName,"type" : "getGroupInfo" };
+			var groupinfo_url = '/esgf-web-fe/extractgroupdataproxy';
+			
 			$.ajax({
-	    		url: userinfo_url,
+	    		url: groupinfo_url,
 	    		type: "GET",
 	    		data: query,
 	    		dataType: 'json',
@@ -409,35 +393,6 @@ $(document).ready(function(){
 			$('#new_group_form').show();
 
 			
-			/*
-			$('#userName_input').hide();
-			$('#new_user_form').hide();
-			//$('#user_info').hide();
-			$('#userName_input').hide();
-			
-			//$('div.user_info_header').remove();
-			//$('div.user_info_content').remove();
-			//clearFormValues();
-			
-			$('input#type').val('edit');
-			$('input#userName').val(ESGF.setting.currentUserName);
-			var query = { "id" : ESGF.setting.currentUserName, "type" : "edit" };
-			var userinfo_url = '/esgf-web-fe/extractuserdataproxy';
-			$.ajax({
-	    		url: userinfo_url,
-	    		type: "GET",
-	    		data: query,
-	    		dataType: 'json',
-	    		success: function(data) {
-	    			fillFormContentForEdit(data);
-	    		},
-				error: function() {
-					alert('error');
-				}
-			});
-
-			$('#new_user_form').show();
-			*/
 		},
 	
 		onClose: function() {
@@ -458,29 +413,12 @@ $(document).ready(function(){
 	/* Helper function for filling content for edtiing data */	
 	function fillFormContentForEdit(data) {
 
-		var groupName = data.group.groupname;
-		var groupDescription = data.group.groupdescription;
-
+		var groupName = data.groupinfo.group.groupname;
+		var groupDescription = data.groupinfo.group.groupdescription;
+		
 		$('input#groupName').val(groupName);
 		$('textarea#groupDescription').val(groupDescription);
 		
-		/*
-		var firstName = data.user.first;
-		var lastName = data.user.last;
-		var email = data.user.email;
-		var organization = data.user.organization;
-		var city = data.user.city;
-		var country = data.user.country;
-
-		$('input#form_firstName').val(firstName);
-		$('input#form_lastName').val(lastName);
-		$('input#form_email').val(email);
-		$('input#form_organization').val(organization);
-		$('input#form_city').val(city);
-		$('input#form_country').val(country);
-		
-		//Note there may be more values later, this is for demo purposes
-		*/
 	}
 	
 	/*

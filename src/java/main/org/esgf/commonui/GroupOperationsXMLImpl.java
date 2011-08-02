@@ -186,7 +186,6 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
                 String groupIdText = groupIdEl.getTextNormalize();
                 String groupNameText = groupNameEl.getTextNormalize();
                 String groupDescriptionText = groupDescriptionEl.getTextNormalize();
-
                 if(groupIdEl.getTextNormalize().equals(groupId)) {
                     groupIdText = groupId;
                     groupNameText = groupName;

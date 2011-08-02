@@ -100,15 +100,6 @@ public class CreateGroupsController {
     private GroupOperationsInterface goi;
     
     
-    /**
-     * List of invalid text characters -
-     * anything that is not within square brackets.
-     */
-    /*
-    private static Pattern pattern =
-        Pattern.compile(".*[^a-zA-Z0-9_\\-\\.\\@\\'\\:\\;\\,\\s/()].*");
-    */
-    
     public CreateGroupsController() {
         LOG.debug("IN CreateGroupsController Constructor");
         //goi = new GroupOperationsXMLImpl();
@@ -172,13 +163,13 @@ public class CreateGroupsController {
         
         //from the type perform the appropriate operation
         if(type.equalsIgnoreCase("add")) {
-            addUser(request);
+            addGroup(request);
         }
         else if(type.equalsIgnoreCase("edit")){
-            editUser(request);
+            editGroup(request);
         }
         else if(type.equalsIgnoreCase("delete")) {
-            deleteUser(request);
+            deleteGroup(request);
         }
        
         Map<String,Object> model = getModel(request,CreateGroupsInput);
@@ -193,13 +184,14 @@ public class CreateGroupsController {
     
 
     
-    private void editUser(final HttpServletRequest request) throws IOException {
+    private void editGroup(final HttpServletRequest request) throws IOException {
         LOG.debug("------ManageUsersController editUser------");
         
-      //Utils.queryStringInfo(request);
-        String groupId = request.getParameter("id");
+        Utils.queryStringInfo(request);
         
-        groupId = goi.getGroupIdFromGroupName(request.getParameter("groupName"));
+        LOG.debug("\n\n\n\nHERE");
+        
+        //groupId = goi.getGroupIdFromGroupName(request.getParameter("groupName"));
         
         String groupName = request.getParameter("groupName");
         if(groupName == null || groupName.equals("")) {
@@ -210,23 +202,10 @@ public class CreateGroupsController {
             groupDescription = "N/A";
         }
         
-        //LOG.debug("HERE - editing: " + groupId + " " + groupName + " " + groupDescription + "\n\n\n");
+        String groupId = goi.getGroupIdFromGroupName(groupName);//request.getParameter("id");
+        
+        
         goi.editGroup(groupId, groupName, groupDescription);
-        
-        /*
-        String userName = request.getParameter("userName");
-        LOG.debug("USERNAME->" + userName + "\n\n\n\n\n\n");
-        
-        String first = request.getParameter("firstName");
-        if(first == null || first.equals("")) {
-            first = "N/A";
-        }
-        */
-        //String userId = uoi.getUserIdFromUserName(userName);
-        //uoi.editUser(userId,first,middle,last,email,userName,organization,city,state,country);
-
-        
-        
         
         
         LOG.debug("------End CreateGroupsController editUser------");
@@ -234,13 +213,13 @@ public class CreateGroupsController {
     
     
     
-    private void deleteUser(final HttpServletRequest request) throws IOException {
+    private void deleteGroup(final HttpServletRequest request) throws IOException {
         LOG.debug("------CreateGroupsController deleteUser------");
         
         //Utils.queryStringInfo(request);
-        String groupId = request.getParameter("groupName");
+        String groupName = request.getParameter("groupName");
         
-        //String groupId = goi.getGroupIdFromGroupName(groupName);
+        String groupId = goi.getGroupIdFromGroupName(groupName);
         
         LOG.debug("Deleteing->" + groupId);
         goi.deleteGroup(groupId);
@@ -251,7 +230,7 @@ public class CreateGroupsController {
     
     
     
-    private void addUser(final HttpServletRequest request) throws IOException {
+    private void addGroup(final HttpServletRequest request) throws IOException {
         LOG.debug("------CreateGroupsController addUser------");
         
         Utils.queryStringInfo(request);
@@ -260,12 +239,11 @@ public class CreateGroupsController {
         if(groupName == null || groupName.equals("")) {
             groupName = "N/A";
         }
-        String groupDescription = request.getParameter("groupName");
+        String groupDescription = request.getParameter("groupDescription");
         if(groupDescription == null || groupDescription.equals("")) {
             groupDescription = "N/A";
         }
 
-        //using the xml store
         goi.addGroup(groupName, groupDescription);
         
 

@@ -72,32 +72,66 @@
 			
 			var facet_arr = new Array();
 			
+			
+			
 		    for (facet in self.manager.response.facet_counts.facet_fields) {
 		    	var facet_obj = new Object();
 		    	var facet_val_arr = new Array();
 		    	var facet_val_counts = new Array();
 		    	var facet_max_count = 0;
 		    	for(var facet_value in self.manager.response.facet_counts.facet_fields[facet]) {
-		    		var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
-				    if(facet == 'instrument' && count > 24) {
-				    	//alert('facet-value ' + facet_value + ' count ' + count + ' facet_max: ' + facet_max_count);
-			    		//alert(facet_val_arr.length);
-				    }
-				    	if(count > facet_max_count) {
-				    	facet_max_count = count;
-				    }
 		    		
-		    		facet_val_counts.push(count);
-		    		facet_val_arr.push(facet_value);
-		    		if(facet == 'instrument' && count > 24) {
-		    			//alert('after length ' + facet_val_arr.length);
+		    		if(!isConstraint(facet)) {
+		    			var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
+					    
+		    			if(count > facet_max_count) {
+		    				facet_max_count = count;
+		    			}
+		    		
+		    			facet_val_counts.push(count);
+		    			facet_val_arr.push(facet_value);
+		    			if(facet == 'instrument' && count > 24) {
+		    				//alert('after length ' + facet_val_arr.length);
+		    			}
+		    			if (facet === 'project') {
+		    				//alert('facet_value: ' + facet_value);
+		    				var radix = 10;
+		    				//var count = parseInt(self.manager.response.facet_counts,radix);
+		    				//alert('facet_value: ' + facet_value + ' ' + count);
+		    			}
+		    		} else if(matchesFacetValue(facet,facet_value)) {
+		    			var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
+					    
+		    			if(count > facet_max_count) {
+		    				facet_max_count = count;
+		    			}
+		    		
+		    			facet_val_counts.push(count);
+		    			facet_val_arr.push(facet_value);
+		    			if(facet == 'instrument' && count > 24) {
+		    				//alert('after length ' + facet_val_arr.length);
+		    			}
+		    			if (facet === 'project') {
+		    				//alert('facet_value: ' + facet_value);
+		    				var radix = 10;
+		    				//var count = parseInt(self.manager.response.facet_counts,radix);
+		    				//alert('facet_value: ' + facet_value + ' ' + count);
+		    			}
 		    		}
-		    		if (facet === 'project') {
-			    		//alert('facet_value: ' + facet_value);
-		    			var radix = 10;
-		    			//var count = parseInt(self.manager.response.facet_counts,radix);
-		    			//alert('facet_value: ' + facet_value + ' ' + count);
-		    		}
+		    		
+		    		/*
+		    		if(isConstraint(facet)) {
+		    			alert(facet + ' has constraint');
+		    			
+		    			if(!matchesFacetValue(facet,facet_value)) {
+		    				//alert('value: ' + facet_value + ' doesn't match);
+		    			
+		    			}
+		    			
+		    			
+		    		} 
+		    		*/
+		    			
 		    		
 		    	}
 		    	facet_obj.Facet_name = facet;
@@ -166,6 +200,41 @@
 	function replaceWhiteSpace(word) {
 		var convertedStr = word.split(' ').join('_'); 
 		return convertedStr;
+	}
+	
+	
+	function matchesFacetValue(facet,value) {
+		var matchesFacetValue = false;
+
+		var fq = Manager.store.get('fq');
+		
+		for(var i=0;i<fq.length;i++) {
+			var constraint = fq[i];
+			var facet_constraint = constraint['value'].split(":")[0];
+			if(facet == facet_constraint) {
+				var facet_value = constraint['value'].split(":")[1];
+				if(facet_value == value) {
+					matchesFacetValue = true;
+				}
+			}
+		}
+		return matchesFacetValue;
+		
+	}
+	
+	function isConstraint(facet) {
+		var isConstraint = false;
+		
+		var fq = Manager.store.get('fq');
+		
+		for(var i=0;i<fq.length;i++) {
+			var constraint = fq[i];
+			var facet_constraint = constraint['value'].split(":")[0];
+			if(facet == facet_constraint) {
+				isConstraint = true;
+			}
+		}
+		return isConstraint;
 	}
 	
 }(jQuery));

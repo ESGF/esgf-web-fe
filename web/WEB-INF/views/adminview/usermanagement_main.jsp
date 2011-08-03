@@ -224,8 +224,6 @@ $(document).ready(function(){
 	*/
 	$('tr.user_rows').click(function(){
 
-		
-		
 		//first we must hide/remove any information previously there
 		$('#new_user_form').hide();
 		$('#user_info').hide();

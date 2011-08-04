@@ -42,13 +42,6 @@
 
 
 <div style="margin-top:20px;margin-bottom:20px;min-height:500px;">
-	<c:choose>
-		<c:when test="${principal=='anonymousUser1'}">
-    		<div> <c:out value="${principal}"/> IS NOT AUTHORIZED TO VIEW THIS PAGE</div>
-  		</c:when>
-  		<c:otherwise>
-      		<c:choose>
-      			<c:when test="${principal=='anonymousUser'}">
   					
   					
   						<!--  header info -->
@@ -213,13 +206,6 @@
 							
 						</div><!-- end overlay section -->
 						
-  				</c:when>
-  				<c:otherwise>
-  					<div> <c:out value="${principal.username}"/> IS NOT AUTHORIZED TO VIEW THIS PAGE</div>
-  				</c:otherwise>
-      		</c:choose>
-  		</c:otherwise>
-	</c:choose>   
 </div>
 
 <!-- scratch space for any additional scripts

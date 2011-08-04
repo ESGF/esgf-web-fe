@@ -16,6 +16,8 @@
 		</div>
 	</div>
 	
+	<sec:authentication property="principal" />
+	
 	<!-- display copyright -->
 	<div class="prepend-3 span-6 last">
 		<div class="footerright">

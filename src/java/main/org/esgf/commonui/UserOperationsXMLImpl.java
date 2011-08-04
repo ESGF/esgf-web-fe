@@ -25,11 +25,11 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
     //private final static String USERS_FILE = "db.users";
     private final static Logger LOG = Logger.getLogger(UserOperationsXMLImpl.class);
 
-    private final static String users_file = "/home/John/clones/esgf-web-fe/src/java/main/db.users";
-    private final static String groups_file = "/home/John/clones/esgf-web-fe/src/java/main/db.groups";
-    private final static String roles_file = "/home/John/clones/esgf-web-fe/src/java/main/db.roles";
-    private final static String permissions_file = "/home/John/clones/esgf-web-fe/src/java/main/db.permissions";
-    
+    private final static String users_file = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\db.users";
+    private final static String groups_file = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\db.groups";
+    private final static String roles_file = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\db.roles";
+    private final static String permissions_file = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\db.permissions";
+   
     
     private File USERS_FILE;
     private File GROUPS_FILE;
@@ -685,8 +685,11 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
     }
     
     
-    public List<User> getUsersFromGroup(String groupId) {
+    public List<User> getUsersFromGroup(String groupName) {
         List<User> users = new ArrayList<User>();
+        
+        GroupOperationsInterface goi = new GroupOperationsXMLImpl();
+        String groupId = goi.getGroupIdFromGroupName(groupName);
         
         SAXBuilder builder = new SAXBuilder();
         String xmlContent = "";

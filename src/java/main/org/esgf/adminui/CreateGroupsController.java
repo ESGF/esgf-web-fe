@@ -69,6 +69,7 @@ package org.esgf.adminui;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,8 +105,8 @@ public class CreateGroupsController {
     
     public CreateGroupsController() throws FileNotFoundException, IOException {
         LOG.debug("IN CreateGroupsController Constructor");
-        //goi = new GroupOperationsXMLImpl();
-        goi = new GroupOperationsESGFDBImpl();
+        goi = new GroupOperationsXMLImpl();
+        //goi = new GroupOperationsESGFDBImpl();
     }
 
     /**
@@ -160,8 +161,10 @@ public class CreateGroupsController {
         //get the type of operation from the request parameter (add, edit, delete)
         String type = Utils.getTypeFromQueryString(request);
         
-        
+        String groupName = request.getParameter("groupName");
+
         LOG.debug("TYPE->" + type);
+        LOG.debug("\t\t\t\tGroupName->" + groupName);
         
         //from the type perform the appropriate operation
         if(type.equalsIgnoreCase("add")) {
@@ -172,6 +175,26 @@ public class CreateGroupsController {
         }
         else if(type.equalsIgnoreCase("delete")) {
             deleteGroup(request);
+        } else if(type.equalsIgnoreCase("editUsersInGroup")) {
+            
+            Enumeration<String> paramEnum = request.getParameterNames();
+            
+            while(paramEnum.hasMoreElements()) { 
+                String postContent = (String) paramEnum.nextElement();
+                
+                String userName = request.getParameter(postContent);
+                
+                if(!postContent.equals("groupName") && !postContent.equals("type")) {
+
+                    LOG.debug("\tpostContent " + postContent + " " + request.getParameter(postContent));
+                    goi.addUserToGroup(userName,groupName);
+                }
+                
+                
+                
+                
+            }
+            
         }
        
         Map<String,Object> model = getModel(request,CreateGroupsInput);
@@ -191,7 +214,6 @@ public class CreateGroupsController {
         
         Utils.queryStringInfo(request);
         
-        LOG.debug("\n\n\n\nHERE");
         
         //groupId = goi.getGroupIdFromGroupName(request.getParameter("groupName"));
         

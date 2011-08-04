@@ -123,6 +123,7 @@
 			<input class="adminbutton" id="add_group-button" type="submit" value="Add Group" rel="#addGroupForm" />
 			<input class="adminbutton" id="edit_group-button" type="submit" value="Edit Group" rel="#addGroupForm" />
 			<input class="adminbutton" id="delete_group-button" type="submit" value="Remove Selected Group" />
+	    	<input class="adminbutton" id="add_user_to_group-button" type="submit" value="Edit User(s) In Selected Group" rel="#addUsersToGroups"/>
 	    </div>
 	  
 	</div>
@@ -137,7 +138,22 @@
 	</div>
 	<!-- overlay form material here -->
 	<div class="span-24 last">
+		
+		<div class="simple_overlay" id="addUsersToGroups">
+			<form id="add_group_form" action="" method="post" >
+				<h3 style="margin-top:10px;text-align:center;text-style:bold;font-style:italic" id="form_title1">Add Users To Group</h3>
+				<div id="potential_users"></div>
+				<p>
+					<input type="hidden" name="type" id="type" value="editUsersInGroup"/>
+					<input type="hidden" name="groupName" id="groupName" value=""/>
+				  	<input style="margin-left: 15px" class="adminbutton" type="submit" value="Submit">
+		      	</p>
+			</form>
+		</div>
+		
 		<!-- form overlay --> 
+		
+		
 		<div class="simple_overlay" id="addGroupForm"> 
 			<form id="new_group_form" action="" method="post" >
 				<h3 style="margin-top:10px;text-align:center;text-style:bold;font-style:italic" id="form_title">New User Information</h3>
@@ -204,7 +220,7 @@ $(document).ready(function(){
 		//then make the ajax call to the group 
 		if(ESGF.setting.currentGroupName != null && ESGF.setting.currentGroupName != "") {
 			
-			query = { "groupName" : ESGF.setting.currentGroupName,"type" : "edit" };
+			query = { "groupName" : ESGF.setting.currentGroupName, "type" : "getGroupInfo" };
 			var groupinfo_url = '/esgf-web-fe/extractgroupdataproxy';
 			$.ajax({
 	    		url: groupinfo_url,
@@ -230,14 +246,12 @@ $(document).ready(function(){
 	
 	function processGroupContent(data) {
 		
-		alert('process group: ' + data);
-		
+		var group_info_content = '';
 		
 		//call helper function that assembles all of the user's group data
 		if(typeof data.groupinfo.user != 'undefined') {
-			var group_info_content = getGroupInfoContent(data);
+			group_info_content = getGroupInfoContent(data);
 		}
-
 		
 		//append the fieldset to the div user_info element and fill it with the user's info
 		$('div#group_info').append('<fieldset id="group_info"><legend >' + ESGF.setting.currentGroupName + 
@@ -259,11 +273,8 @@ $(document).ready(function(){
 	*/
 	function getGroupInfoContent(data) {
 		
-		alert('getGroupInfoContent: ' + data);
-		
-		var query = '';
 		var content = '';
-		//content = content + '<div>Description: ' + data.groupinfo.group.groupdescription +'</div>';
+		
 		content = content + '<hr /><h5 style="margin-top:10px;">Users In Group</h5>';
 		if(data.groupinfo.user instanceof Array) {
 			for(var i=0;i<data.groupinfo.user.length;i++) {
@@ -285,16 +296,16 @@ $(document).ready(function(){
 																			' UserId: ' + userId + 
 																			' email: ' + email + 
 																			' lastName: ' + lastName + 
-																			/*
-																			' middleName: ' + middleName + 
-																			' firstName: ' + firstName + 
-																			' organization: ' + organization + 
-																			' city: ' + city + 
-																			' state: ' + state + 
-																			' country: ' + country + 
-																			' dn: ' + dn + 
-																			' openid: ' + openid + 
-																			*/
+																			
+																			//' middleName: ' + middleName + 
+																			//' firstName: ' + firstName + 
+																			//' organization: ' + organization + 
+																			//' city: ' + city + 
+																			//' state: ' + state + 
+																			//' country: ' + country + 
+																			//' dn: ' + dn + 
+																			//' openid: ' + openid + 
+																			
 																			'</div>';
 				//role info
 				content = content + '<div style="margin-top:5px;margin-left:40px;font-style: italic;">' + 'Role: ' + '</div>';
@@ -318,21 +329,28 @@ $(document).ready(function(){
 																		' UserId: ' + userId + 
 																		' email: ' + email + 
 																		' lastName: ' + lastName + 
-																		/*
-																		' middleName: ' + middleName + 
-																		' firstName: ' + firstName + 
-																		' organization: ' + organization + 
-																		' city: ' + city + 
-																		' state: ' + state + 
-																		' country: ' + country + 
-																		' dn: ' + dn + 
-																		' openid: ' + openid + 
-																		*/
+																		
+																		//' middleName: ' + middleName + 
+																		//' firstName: ' + firstName + 
+																		//' organization: ' + organization + 
+																		//' city: ' + city + 
+																		//' state: ' + state + 
+																		//' country: ' + country + 
+																		//' dn: ' + dn + 
+																		//' openid: ' + openid + 
+																		
 																		'</div>';
 			
 		}
+		/*
+		
+		
+		*/
+		
 		
 		var group_info_content = '<div class="group_info_content">' + content + '</div>';
+		
+		
 		return group_info_content;
 		
 	}
@@ -429,6 +447,71 @@ $(document).ready(function(){
 		$('textarea#groupDescription').val(groupDescription);
 		
 	}
+	
+	
+	/*
+	* Add User To Group
+	*/
+		
+	$('input#add_user_to_group-button[rel]').overlay({
+		mask: '#000',
+		onLoad: function() {
+			
+			
+			var query = { "groupName" : ESGF.setting.currentGroupName ,"type" : "getAllUsersInGroup" };
+			var groupinfo_url = '/esgf-web-fe/extractgroupdataproxy';
+			
+			//alert('ajax');
+			
+			$.ajax({
+	    		url: groupinfo_url,
+	    		type: "GET",
+	    		data: query,
+	    		dataType: 'json',
+	    		success: function(data) {
+	    			displayPotentialUsers(data);
+	    		},
+				error: function() {
+					alert('error');
+				}
+			});
+			
+			
+			
+			
+		},
+		onClose: function() {
+			//alert('close');
+			$('#potential_users').empty();
+		}
+	});
+	
+	function displayPotentialUsers(data) {
+
+		var checkbox = '';
+		$('input#groupName').val(ESGF.setting.currentGroupName);
+		for(var i=0;i<data.users.allusers.user.length;i++) {
+			var userName = data.users.allusers.user[i].username;
+			if(isUserInGroup(data,userName)) {
+				checkbox = '<p><input style="margin-left:10px;margin-bottom:0px" type="checkbox" checked="yes" id="userss" name="' + userName + '" value="' + userName + '" /> ' + userName + '</p>';
+			} else {
+				checkbox = '<p><input style="margin-left:10px;margin-bottom:0px" type="checkbox" id="userss" name="' + userName + '" value="' + userName + '" /> ' + userName + '</p>';
+			}
+			$('#potential_users').append(checkbox);
+		}
+		
+		
+	}
+	function isUserInGroup(data,user) {
+		var isUserInGroup = false;
+		for(var i=0;i<data.users.ingroup.user.length;i++) {
+			if(user == data.users.ingroup.user[i].username) {
+				isUserInGroup = true;
+			}
+		}
+		return isUserInGroup;
+	}
+	
 	
 	/*
 	* Remove User

@@ -44,35 +44,8 @@ public class ExtractGroupInfoController {
     
     public ExtractGroupInfoController() throws FileNotFoundException, IOException {
         LOG.debug("IN CreateGroupsController Constructor");
-        goi = new GroupOperationsESGFDBImpl();
-        uoi = new UserOperationsESGFDBImpl();
-    }
-    
-    
-    /**
-     * Note: GET and POST contain the same functionality.
-     *
-     * @param  request  HttpServletRequest object containing the query string
-     * @param  response  HttpServletResponse object containing the metadata in json format
-     * @throws JDOMException 
-     *
-     */
-    @RequestMapping(method=RequestMethod.GET)
-    public @ResponseBody String doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException, JDOMException {
-        LOG.debug("ExtractGroupInfoController doGet");
-
-        String type = request.getParameter("type");
-        LOG.debug("Type->" + type);
-        if(type.equalsIgnoreCase("edit")) {
-            return processEditType(request, response);
-        }
-        else if(type.equalsIgnoreCase("getGroupForUser")) {
-            return processgetGroupsForUserType(request, response);
-            
-        }
-        else {
-            return null;
-        }
+        goi = new GroupOperationsXMLImpl();
+        uoi = new UserOperationsXMLImpl();
     }
     
     /**
@@ -88,11 +61,19 @@ public class ExtractGroupInfoController {
         LOG.debug("ExtractGroupInfoController doPost");
 
         String type = request.getParameter("type");
+        
+        String groupName = request.getParameter("groupName");
         if(debugFlag)
             LOG.debug("Type: " + type);
         
         if(type.equalsIgnoreCase("edit")) {
             return processEditType(request, response);
+        }
+        else if(type.equalsIgnoreCase("getGroupInfo")) {
+            return processGetGroupInfoType(groupName);
+        }
+        else if(type.equalsIgnoreCase("getAllUsersInGroup")) {
+            return processGetAllUsersInGroupType(groupName);
         }
         else if(type.equalsIgnoreCase("getGroupForUser")) {
             return processgetGroupsForUserType(request, response);
@@ -102,6 +83,119 @@ public class ExtractGroupInfoController {
             return null;
         }
     }
+    
+    /**
+     * Note: GET and POST contain the same functionality.
+     *
+     * @param  request  HttpServletRequest object containing the query string
+     * @param  response  HttpServletResponse object containing the metadata in json format
+     * @throws JDOMException 
+     *
+     */
+    @RequestMapping(method=RequestMethod.GET)
+    public @ResponseBody String doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException, JDOMException {
+        LOG.debug("ExtractGroupInfoController doGet");
+
+        String type = request.getParameter("type");
+        
+        String groupName = request.getParameter("groupName");
+        
+        
+        LOG.debug("Type->" + type);
+        LOG.debug("groupName->" + groupName);
+        if(type.equalsIgnoreCase("edit")) {
+            return processEditType(request, response);
+        }
+        else if(type.equalsIgnoreCase("getGroupInfo")) {
+            return processGetGroupInfoType(groupName);
+        }
+        else if(type.equalsIgnoreCase("getAllUsersInGroup")) {
+            return processGetAllUsersInGroupType(groupName);
+        }
+        else if(type.equalsIgnoreCase("getGroupForUser")) {
+            return processgetGroupsForUserType(request, response);
+            
+        }
+        else {
+            return null;
+        }
+    }
+    
+    
+    /**
+     * @param  request  HttpServletRequest object containing the query string
+     * @param  response  HttpServletResponse object containing the metadata in json format
+     * @throws JDOMException 
+     *
+     */
+    private String processGetAllUsersInGroupType(String groupName) throws IOException, JSONException, ParserConfigurationException, JDOMException {
+        LOG.debug("ExtractGroupInfoController processGetGroupInfoType");
+        String jsonContent = "jsonContent";
+
+        String xmlOutput = "<users>";
+        
+        xmlOutput += "<ingroup>";
+        List<User> users = uoi.getUsersFromGroup(groupName);//uoi.getAllUsers();
+        
+        for(int i=0;i<users.size();i++) {
+            User user = users.get(i);
+            xmlOutput += user.toXml();
+        }
+        xmlOutput += "</ingroup>";
+        
+        xmlOutput += "<allusers>";
+        users = uoi.getAllUsers();//uoi.getAllUsers();
+        
+        for(int i=0;i<users.size();i++) {
+            User user = users.get(i);
+            xmlOutput += user.toXml();
+        }
+        xmlOutput += "</allusers>";
+        
+        xmlOutput += "</users>";
+        
+
+        JSONObject jo = XML.toJSONObject(xmlOutput);
+        jsonContent = jo.toString();
+        
+        LOG.debug("JsonContent: " + jsonContent);
+        return jsonContent;
+    }
+    
+    
+    /**
+     * @param  request  HttpServletRequest object containing the query string
+     * @param  response  HttpServletResponse object containing the metadata in json format
+     * @throws JDOMException 
+     *
+     */
+    private String processGetGroupInfoType(String groupName) throws IOException, JSONException, ParserConfigurationException, JDOMException {
+        LOG.debug("ExtractGroupInfoController processGetGroupInfoType");
+        String jsonContent = "jsonContent";
+
+        String xmlOutput = "<groupinfo>";
+        
+        Group group = goi.getGroupObjectFromGroupName(groupName);
+
+        xmlOutput += group.toXml();
+        
+        List<User> users = uoi.getUsersFromGroup(groupName);
+        
+        for(int i=0;i<users.size();i++) {
+            User user = users.get(i);
+            xmlOutput += user.toXml();
+        }
+        
+        xmlOutput += "</groupinfo>";
+        
+        JSONObject jo = XML.toJSONObject(xmlOutput);
+        jsonContent = jo.toString();
+
+        LOG.debug("JsonContent: " + jsonContent);
+        
+        return jsonContent;
+    }
+    
     
     /**
      * @param  request  HttpServletRequest object containing the query string

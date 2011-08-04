@@ -23,6 +23,8 @@ public interface GroupOperationsInterface {
     public List<Group> getGroupsForAdminUser(final String userId);
     */
     
+    public void addUserToGroup(String userName,String groupName);
+    
     public List<Group> getAllGroups();
     
 }

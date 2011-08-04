@@ -20,22 +20,25 @@ import org.springframework.core.io.ClassPathResource;
 public class GroupOperationsXMLImpl implements GroupOperationsInterface {
 
     
-    private final static String users_file = "/home/John/clones/esgf-web-fe/src/java/main/db.users";
-    private final static String groups_file = "/home/John/clones/esgf-web-fe/src/java/main/db.groups";
-    private final static String roles_file = "/home/John/clones/esgf-web-fe/src/java/main/db.roles";
-    private final static String permissions_file = "/home/John/clones/esgf-web-fe/src/java/main/db.permissions";
+    private final static String users_file = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\db.users";
+    private final static String groups_file = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\db.groups";
+    private final static String roles_file = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\db.roles";
+    private final static String permissions_file = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\db.permissions";
+    private final static String permissions_file1 = "C:\\Users\\8xo\\db.permissions1";
     
     
     private File USERS_FILE;
     private File GROUPS_FILE;
     private File ROLES_FILE;
     private File PERMISSIONS_FILE;
+    private File PERMISSIONS_FILE1;
     
     public GroupOperationsXMLImpl(){
         USERS_FILE = new File("");
         GROUPS_FILE = new File("");
         ROLES_FILE = new File("");
         PERMISSIONS_FILE = new File("");
+        PERMISSIONS_FILE1 = new File("");
         
         try {
             File dir1 = new File(".");
@@ -43,6 +46,7 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
             USERS_FILE = new File(users_file); //new ClassPathResource("db.users").getFile();
             GROUPS_FILE = new File(groups_file); //new ClassPathResource("db.groups").getFile();
             PERMISSIONS_FILE = new File(permissions_file);//new ClassPathResource("db.permissions").getFile();
+            PERMISSIONS_FILE1 = new File(permissions_file1);//new ClassPathResource("db.permissions").getFile();
             ROLES_FILE = new File(roles_file);
         }catch(Exception e) {
             System.out.println("error in GroupOperationsXMLImpl constructor");
@@ -577,8 +581,9 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
                 Element groupIdEl = groupEl.getChild("groupid");
                 Element groupNameEl = groupEl.getChild("groupname");
                 Element groupDescriptionEl = groupEl.getChild("groupdescription");
-                
+                System.out.println("\t\t" + groupNameEl.getTextNormalize() + " " + groupName);
                 if(groupNameEl.getTextNormalize().equals(groupName)) {
+                    System.out.println("MATCH");
                     group.setid(groupIdEl.getTextNormalize());
                     group.setname(groupNameEl.getTextNormalize());
                     group.setdescription(groupDescriptionEl.getTextNormalize());
@@ -593,6 +598,91 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
         }
         
         return group;
+    }
+
+
+
+    @Override
+    public void addUserToGroup(String userName, String groupName) {
+        
+        
+        System.out.println("\n\n\n\n");
+
+        
+        SAXBuilder builder = new SAXBuilder();
+        String xmlContent = "";
+        try{
+            
+            
+            System.out.println("\tAdding User: " + userName + " to group: " + groupName);
+            
+            Document document = (Document) builder.build(PERMISSIONS_FILE);
+           
+            Element rootNode = document.getRootElement();
+            List tuples = (List)rootNode.getChildren();
+            
+            boolean exists = false;
+
+            GroupOperationsInterface goi = new GroupOperationsXMLImpl();
+            UserOperationsInterface uoi = new UserOperationsXMLImpl();
+            
+            for(int i=0;i<tuples.size();i++)
+            {
+                Element tupleEl = (Element)tuples.get(i);
+                Element groupIdEl = tupleEl.getChild("groupid");
+                Element userIdEl = tupleEl.getChild("userid");
+                Element roleIdEl = tupleEl.getChild("roleid");
+                
+                String groupId = goi.getGroupIdFromGroupName(groupName);
+                String userId = uoi.getUserIdFromUserName(userName);
+                //System.out.println("\t\t" + groupId + " " + groupIdEl.getTextNormalize());
+                if(groupIdEl.getTextNormalize().equals(groupId) &&
+                   userIdEl.getTextNormalize().equals(userId)     ) {
+                    exists = true;
+                }
+            }
+            
+            
+            
+            if(!exists) {
+                Element returnedEl = new Element("tuple");
+                Element returnedGroupEl = new Element("groupid");
+                Element returnedUserEl = new Element("userid");
+                Element returnedRoleEl = new Element("roleid");
+
+                returnedGroupEl.addContent(goi.getGroupIdFromGroupName(groupName));
+                returnedUserEl.addContent(uoi.getUserIdFromUserName(userName));
+                returnedRoleEl.addContent("role4_id");
+                returnedEl.addContent(returnedGroupEl);
+                returnedEl.addContent(returnedUserEl);
+                returnedEl.addContent(returnedRoleEl);
+                
+                rootNode.addContent(returnedEl);
+                
+                document.setContent(rootNode);
+
+                
+                XMLOutputter outputter = new XMLOutputter();
+                xmlContent = outputter.outputString(rootNode);
+                
+                Writer output = null;
+                output = new BufferedWriter(new FileWriter(PERMISSIONS_FILE));
+                output.write(xmlContent);
+                
+                
+                output.close();
+                
+            }
+            
+            
+        } catch(Exception e) {
+            System.out.println("Error in add user to group");
+        }
+        
+        
+        System.out.println("\n\n\n\n");
+        // TODO Auto-generated method stub
+        
     }
 }
 

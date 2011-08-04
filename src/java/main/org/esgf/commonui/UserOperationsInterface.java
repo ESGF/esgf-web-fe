@@ -31,7 +31,7 @@ public interface UserOperationsInterface {
     
     public String getUserIdFromOpenID(final String openId);
     
-    public List<User> getUsersFromGroup(final String groupId);
+    public List<User> getUsersFromGroup(final String groupName);
     
     public List<User> getAllUsers();
     

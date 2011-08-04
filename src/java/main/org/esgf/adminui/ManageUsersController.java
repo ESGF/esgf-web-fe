@@ -99,7 +99,8 @@ public class ManageUsersController {
     public ManageUsersController() throws FileNotFoundException, IOException {
         LOG.debug("IN ManageUsersController Constructor");
         //declare a UserOperations "Object"
-        uoi = new UserOperationsESGFDBImpl();
+        //uoi = new UserOperationsESGFDBImpl();
+        uoi = new UserOperationsXMLImpl();
     }
 
     /**

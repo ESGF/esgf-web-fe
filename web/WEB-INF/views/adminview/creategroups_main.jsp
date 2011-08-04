@@ -184,6 +184,8 @@ $(document).ready(function(){
 	$('tr.group_rows').click(function(){
 
 		var groupName = $(this).attr("id");
+		
+		
 		//ESGF.setting.currentGroupName = groupName;
 
 		$('tr#' + ESGF.setting.currentGroupName).css('background','#ffffff');
@@ -197,11 +199,12 @@ $(document).ready(function(){
 		//set the current group name variable to the clicked groupname
 		ESGF.setting.currentGroupName = groupName;
 		
+		
 		//if this value is not empty or null
 		//then make the ajax call to the group 
 		if(ESGF.setting.currentGroupName != null && ESGF.setting.currentGroupName != "") {
 			
-			query = { "groupName" : ESGF.setting.currentGroupName,"type" : "getGroupInfo" };
+			query = { "groupName" : ESGF.setting.currentGroupName,"type" : "edit" };
 			var groupinfo_url = '/esgf-web-fe/extractgroupdataproxy';
 			$.ajax({
 	    		url: groupinfo_url,
@@ -226,6 +229,10 @@ $(document).ready(function(){
 	
 	
 	function processGroupContent(data) {
+		
+		alert('process group: ' + data);
+		
+		
 		//call helper function that assembles all of the user's group data
 		if(typeof data.groupinfo.user != 'undefined') {
 			var group_info_content = getGroupInfoContent(data);
@@ -251,6 +258,8 @@ $(document).ready(function(){
 	* Need to come back here...there is a race condition that I need to resolve here
 	*/
 	function getGroupInfoContent(data) {
+		
+		alert('getGroupInfoContent: ' + data);
 		
 		var query = '';
 		var content = '';

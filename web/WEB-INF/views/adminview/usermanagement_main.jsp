@@ -223,7 +223,11 @@ $(document).ready(function(){
 	* Will display the user's information when the admin clicks on a row
 	*/
 	$('tr.user_rows').click(function(){
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> 213ee743dfd2b235b57216a16cc00c82c0af665c
 		//first we must hide/remove any information previously there
 		$('#new_user_form').hide();
 		$('#user_info').hide();
@@ -293,11 +297,11 @@ $(document).ready(function(){
 		//call helper function that assembles all of the user's group data
 		var group_info_content = getGroupInfoContent(data);
 		
-		
 		//append the fieldset to the div user_info element and fill it with the user's info
 		$('div#group_info').append('<fieldset id="group_info"><legend >Group Information for ' + ESGF.setting.currentUserName + '</legend></fieldset>');
 		$('fieldset#group_info').append(group_info_content);
 
+		
 		//show the user's group info
 		$('div#group_info').show();
 		
@@ -389,16 +393,20 @@ $(document).ready(function(){
 		
 		//get the userName from the returned jsonContent
 		var userName = data.userinfo.user.username;
-		
+
 		//call helper function that assembles all of the user's data
 		var user_info_content = getUserInfoContent(data);
+
 		
 		//append the fieldset to the div user_info element and fill it with the user's info
 		$('div#user_info').append('<fieldset id="user_info"><legend >' + userName + '</legend></fieldset>');		
 		$('fieldset#user_info').append(user_info_content);
 		
+		
 		//show the user's info
 		$('div#user_info').show();
+		
+		var l = $('fieldset#user_info').html();
 	}
 	
 	
@@ -508,7 +516,7 @@ $(document).ready(function(){
 		mask: '#000',
 		//several events must be triggered when the overlay is loaded
 		onLoad: function() {
-			
+
 			//hide the username input...the username CANNOT be changed once it has been created
 			$('#userName_input').hide();
 			
@@ -604,6 +612,7 @@ $(document).ready(function(){
 				jQuery(formStr).appendTo('body').submit().remove();
 			}
 
+			
 			$('div.user_info_header').remove();
 			$('div.user_info_content').remove();
 			$('div.group_info_header').remove();

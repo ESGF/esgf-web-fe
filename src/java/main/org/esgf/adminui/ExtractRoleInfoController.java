@@ -1,4 +1,5 @@
 package org.esgf.adminui;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
@@ -8,10 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
+import org.esgf.commonui.GroupOperationsESGFDBImpl;
 import org.esgf.commonui.GroupOperationsInterface;
 import org.esgf.commonui.GroupOperationsXMLImpl;
+import org.esgf.commonui.RoleOperationsESGFDBImpl;
 import org.esgf.commonui.RoleOperationsInterface;
 import org.esgf.commonui.RoleOperationsXMLImpl;
+import org.esgf.commonui.UserOperationsESGFDBImpl;
 import org.esgf.commonui.UserOperationsInterface;
 import org.esgf.commonui.UserOperationsXMLImpl;
 import org.esgf.commonui.Utils;
@@ -43,11 +47,11 @@ public class ExtractRoleInfoController {
     private UserOperationsInterface uoi;
     private RoleOperationsInterface roi;
     
-    public ExtractRoleInfoController() {
+    public ExtractRoleInfoController() throws FileNotFoundException, IOException {
         LOG.debug("IN ExtractRoleInfoController Constructor");
-        goi = new GroupOperationsXMLImpl();
-        uoi = new UserOperationsXMLImpl();
-        roi = new RoleOperationsXMLImpl();
+        goi = new GroupOperationsESGFDBImpl();
+        uoi = new UserOperationsESGFDBImpl();
+        roi = new RoleOperationsESGFDBImpl();
     }
     
     

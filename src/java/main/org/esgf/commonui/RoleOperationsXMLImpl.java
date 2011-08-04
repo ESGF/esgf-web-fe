@@ -11,10 +11,10 @@ import org.springframework.core.io.ClassPathResource;
 
 public class RoleOperationsXMLImpl implements RoleOperationsInterface {
 
-    private final static String users_file = ".\\db.users";
-    private final static String groups_file = ".\\db.groups";
-    private final static String roles_file = ".\\db.roles";
-    private final static String permissions_file = ".\\db.permissions";
+    private final static String users_file = "/home/John/clones/esgf-web-fe/src/java/main/db.users";
+    private final static String groups_file = "/home/John/clones/esgf-web-fe/src/java/main/db.groups";
+    private final static String roles_file = "/home/John/clones/esgf-web-fe/src/java/main/db.roles";
+    private final static String permissions_file = "/home/John/clones/esgf-web-fe/src/java/main/db.permissions";
     
     
     private File USERS_FILE;

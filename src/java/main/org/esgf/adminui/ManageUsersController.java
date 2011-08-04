@@ -1,10 +1,10 @@
 /*****************************************************************************
- * Copyright © 2011 , UT-Battelle, LLC All rights reserved
+ * Copyright ï¿½ 2011 , UT-Battelle, LLC All rights reserved
  *
  * OPEN SOURCE LICENSE
  *
  * Subject to the conditions of this License, UT-Battelle, LLC (the
- * ÒLicensorÓ) hereby grants to any person (the ÒLicenseeÓ) obtaining a copy
+ * ï¿½Licensorï¿½) hereby grants to any person (the ï¿½Licenseeï¿½) obtaining a copy
  * of this software and associated documentation files (the "Software"), a
  * perpetual, worldwide, non-exclusive, irrevocable copyright license to use,
  * copy, modify, merge, publish, distribute, and/or sublicense copies of the
@@ -14,7 +14,7 @@
  * grant, copyright and license notices, this list of conditions, and the
  * disclaimer listed below.  Changes or modifications to, or derivative works
  * of the Software must be noted with comments and the contributor and
- * organizationÕs name.  If the Software is protected by a proprietary
+ * organizationï¿½s name.  If the Software is protected by a proprietary
  * trademark owned by Licensor or the Department of Energy, then derivative
  * works of the Software may not be distributed using the trademark without
  * the prior written approval of the trademark owner.
@@ -27,7 +27,7 @@
  * acknowledgment:
  *
  *    "This product includes software produced by UT-Battelle, LLC under
- *    Contract No. DE-AC05-00OR22725 with the Department of Energy.Ó
+ *    Contract No. DE-AC05-00OR22725 with the Department of Energy.ï¿½
  *
  * 4. Licensee is authorized to commercialize its derivative works of the
  * Software.  All derivative works of the Software must include paragraphs 1,
@@ -59,6 +59,7 @@
  */
 package org.esgf.adminui;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +68,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.esgf.commonui.UserOperationsESGFDBImpl;
 import org.esgf.commonui.UserOperationsInterface;
 import org.esgf.commonui.UserOperationsXMLImpl;
 import org.esgf.commonui.Utils;
@@ -94,10 +96,10 @@ public class ManageUsersController {
     
    
     
-    public ManageUsersController() {
+    public ManageUsersController() throws FileNotFoundException, IOException {
         LOG.debug("IN ManageUsersController Constructor");
         //declare a UserOperations "Object"
-        uoi = new UserOperationsXMLImpl();
+        uoi = new UserOperationsESGFDBImpl();
     }
 
     /**
@@ -291,8 +293,13 @@ public class ManageUsersController {
         LOG.debug("------ManageUsersController deleteUser------");
         
         String userName = request.getParameter("user");
+        
+        LOG.debug("\n\n\n\n\n");
+        LOG.debug("userName->"+userName);
+        LOG.debug("\n\n\n\n\n");
+        
         String userId = uoi.getUserIdFromUserName(userName);
-        uoi.deleteUser(userId);
+        uoi.deleteUser(userName);
         
         LOG.debug("------End ManageUsersController deleteUser------");
     }

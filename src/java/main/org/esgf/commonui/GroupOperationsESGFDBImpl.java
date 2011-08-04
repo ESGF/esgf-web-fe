@@ -141,11 +141,11 @@ public class GroupOperationsESGFDBImpl implements GroupOperationsInterface {
         GroupOperationsESGFDBImpl go = new GroupOperationsESGFDBImpl();
         
         String groupId = "1";
-        String groupName = "mygroup2";
+        String groupName = "rootAdmin";
         String groupDescription = "groupdescription22";
         
         
-        //go.editGroup(groupId, groupName, groupDescription);
+        go.editGroup(groupId, groupName, groupDescription);
         //go.deleteGroup(groupName);
         System.out.println(go.getGroupIdFromGroupName(groupName));
     }

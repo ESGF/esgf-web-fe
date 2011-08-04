@@ -74,10 +74,24 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
     @Override
     public void deleteUser(String userId) {
         // TODO Auto-generated method stub
+System.out.println("\n\n\n\n");
+        
+        System.out.println("userId: " + userId);
+        
+        System.out.println("\n\n\n\n");
         
         UserInfo user = null;
         if(userId != null) user = this.myUserInfoDAO.getUserById(userId);
 
+
+        System.out.println("\n\n\n\n");
+        
+        System.out.println("USER: " + user);
+        
+        System.out.println("\n\n\n\n");
+        
+        
+        
         myUserInfoDAO.deleteUserInfo(user);
         
 

@@ -1,4 +1,5 @@
 package org.esgf.adminui;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
@@ -8,8 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
+import org.esgf.commonui.GroupOperationsESGFDBImpl;
 import org.esgf.commonui.GroupOperationsInterface;
 import org.esgf.commonui.GroupOperationsXMLImpl;
+import org.esgf.commonui.UserOperationsESGFDBImpl;
 import org.esgf.commonui.UserOperationsInterface;
 import org.esgf.commonui.UserOperationsXMLImpl;
 import org.esgf.metadata.JSONException;
@@ -39,10 +42,10 @@ public class ExtractGroupInfoController {
     private GroupOperationsInterface goi;
     private UserOperationsInterface uoi;
     
-    public ExtractGroupInfoController() {
+    public ExtractGroupInfoController() throws FileNotFoundException, IOException {
         LOG.debug("IN CreateGroupsController Constructor");
-        goi = new GroupOperationsXMLImpl();
-        uoi = new UserOperationsXMLImpl();
+        goi = new GroupOperationsESGFDBImpl();
+        uoi = new UserOperationsESGFDBImpl();
     }
     
     
@@ -147,6 +150,9 @@ public class ExtractGroupInfoController {
 
         String groupName = request.getParameter("id");
         
+        LOG.debug("\n\n\n\n\n\n\n" + groupName + "\n\n\n\n\n");
+        
+        
         //if(debugFlag)
             queryStringInfo(request);
         
@@ -178,7 +184,7 @@ public class ExtractGroupInfoController {
             LOG.debug("Problem with conversion to json content in processEditType");
         }
         
-            LOG.debug("JsonContent: " + jsonContent);
+       LOG.debug("JsonContent: " + jsonContent);
         
         return jsonContent;
     }

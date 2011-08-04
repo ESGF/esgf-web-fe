@@ -87,7 +87,9 @@
 							                <td>${ManageUsers_user[j].firstName}</td>  
 							                <td>${ManageUsers_user[j].emailAddress}</td>  
 							            </tr> 
+							            <%--
    							            <tr>
+   							            	 
 							            	<td colspan="4">
 												<!-- this section displays the selected user's information -->
 												<div class="span-24 last">
@@ -98,8 +100,9 @@
 														<div id="group_info"></div>
 													</div> 
 												</div>
-											</td>							            	
+											</td>					            	
 							            </tr> 
+											--%>		
 							            <c:set var="j" value="${j+1}"/>
 										
 									</c:forEach>
@@ -117,14 +120,14 @@
 						</div>
 						
 						<!-- this section displays the selected user's information -->
-						<!-- <div class="span-24 last">
+						<div class="span-24 last">
 							<div class="prepend-3 span-18 append-3 last">
 								<div id="user_info"></div>
 							</div> 
 							<div class="prepend-3 span-18 append-3 last">
 								<div id="group_info"></div>
 							</div> 
-						</div> -->
+						</div> 
 						
 						<!-- overlay form material here -->
 						<div class="span-24 last">
@@ -227,6 +230,8 @@
  -->
 <script>
 $(document).ready(function(){
+	
+	/*
     var prevrow = null;
     $("#table_id tr:odd").addClass("odd");
     $("#table_id tr:not(.odd)").hide();
@@ -237,7 +242,7 @@ $(document).ready(function(){
     	$(this).next("tr").toggle();
     	prevrow = $(this).next("tr");
     });
-    
+    */
 	
 	$('tr.user_rows').hover(function() {
 		
@@ -247,11 +252,14 @@ $(document).ready(function(){
 	* Will display the user's information when the admin clicks on a row
 	*/
 	$('tr.user_rows').click(function(){
-<<<<<<< HEAD
+//<<<<<<< HEAD
 
-=======
+//=======
 		
->>>>>>> 213ee743dfd2b235b57216a16cc00c82c0af665c
+//>>>>>>> 213ee743dfd2b235b57216a16cc00c82c0af665c
+
+
+
 		//first we must hide/remove any information previously there
 		$('#new_user_form').hide();
 		$('#user_info').hide();
@@ -414,6 +422,7 @@ $(document).ready(function(){
 	* Helper function for post ajax call processing for user content
 	*/
 	function processUserContent(data) {
+		
 		
 		//get the userName from the returned jsonContent
 		var userName = data.userinfo.user.username;

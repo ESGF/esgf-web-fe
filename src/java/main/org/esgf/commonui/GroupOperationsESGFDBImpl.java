@@ -12,49 +12,6 @@ import esg.node.security.GroupRoleDAO;
 
 public class GroupOperationsESGFDBImpl implements GroupOperationsInterface {
 
-    @Override
-    public void addGroup(String groupName, String groupDescription) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void editGroup(String groupId, String groupName,
-            String groupDescription) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void deleteGroup(String groupId) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public Group getGroupObjectFromGroupName(String groupName) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public String getGroupIdFromGroupName(String groupName) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<Group> getGroupsFromUser(String userId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<Group> getAllGroups() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-/*
     GroupRoleDAO groupRoleDAO;
     
     public GroupOperationsESGFDBImpl() throws FileNotFoundException, IOException {
@@ -193,14 +150,16 @@ public class GroupOperationsESGFDBImpl implements GroupOperationsInterface {
         System.out.println(go.getGroupIdFromGroupName(groupName));
     }
 
-    
-*/
-
     @Override
-    public void addUserToGroup(String userName, String groupName) {
+    public void editUsersInGroup(String userName, String groupName) {
         // TODO Auto-generated method stub
         
     }
+
+    
+
+
+    
     
     
 }

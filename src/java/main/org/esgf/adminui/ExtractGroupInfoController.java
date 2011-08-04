@@ -129,14 +129,20 @@ public class ExtractGroupInfoController {
      *
      */
     private String processGetAllUsersInGroupType(String groupName) throws IOException, JSONException, ParserConfigurationException, JDOMException {
-        LOG.debug("ExtractGroupInfoController processGetGroupInfoType");
+        LOG.debug("ExtractGroupInfoController processGetAllUsersInGroupType");
         String jsonContent = "jsonContent";
 
         String xmlOutput = "<users>";
         
         xmlOutput += "<ingroup>";
+
         List<User> users = uoi.getUsersFromGroup(groupName);//uoi.getAllUsers();
-        
+
+        if(users == null) {
+            LOG.debug("\t\t\t\tNULL");
+        }
+
+        LOG.debug("\t\t\t\tHere\n\n\n\n");
         for(int i=0;i<users.size();i++) {
             User user = users.get(i);
             xmlOutput += user.toXml();
@@ -174,9 +180,12 @@ public class ExtractGroupInfoController {
         String jsonContent = "jsonContent";
 
         String xmlOutput = "<groupinfo>";
-        
-        Group group = goi.getGroupObjectFromGroupName(groupName);
 
+        LOG.debug("\t\t\t\tHere" + groupName + "\n\n\n\n");
+        Group group = goi.getGroupObjectFromGroupName(groupName);
+        if(group == null) LOG.debug("null");
+        else
+            LOG.debug("group: " + group);
         xmlOutput += group.toXml();
         
         List<User> users = uoi.getUsersFromGroup(groupName);

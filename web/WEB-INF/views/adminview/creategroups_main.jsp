@@ -109,17 +109,20 @@
 		        		<td>${CreateGroups_group[j].name}</td>
 		        		<td>${CreateGroups_group[j].description}</td>
 		        	</tr>
-		        	<tr>
-		        		<td colspan="2">
+		        	<%--<tr>
+		        		  <td colspan="2"> 
 		        			<!--  this section displays users in group -->
 		        			<div class="span-24 last">
 		        				<div class="prepend-3 span-18 append-3 last">
 		        					<div id="group_user_info"></div>
 		        				</div>
 		        			</div>
-		        	</tr>
+		        		
+		        	</tr>--%>
 		            <c:set var="j" value="${j+1}"/>
 		       	</c:forEach>
+		       	
+		       
 		    </tbody>
 							       	
 			
@@ -131,7 +134,7 @@
 	    <div class="buttons" style="margin-bottom:40px;">
 			<input class="adminbutton" id="add_group-button" type="submit" value="Add Group" rel="#addGroupForm" />
 			<input class="adminbutton" id="edit_group-button" type="submit" value="Edit Group" rel="#addGroupForm" />
-			<input class="adminbutton" id="add_user_to_group-button" type="submit" value="Add User To Selected Group" rel="#addUserToGroupForm" />
+			<!--  <input class="adminbutton" id="add_user_to_group-button" type="submit" value="Add User To Selected Group" rel="#addUserToGroupForm" /> -->
 			<input class="adminbutton" id="delete_group-button" type="submit" value="Remove Selected Group" />
 	    	<input class="adminbutton" id="add_user_to_group-button" type="submit" value="Edit User(s) In Selected Group" rel="#addUsersToGroups"/>
 	    </div>
@@ -141,11 +144,11 @@
 	
 	
 	<!-- this section displays the selected group's information -->
-	<!-- <div class="span-24 last"> 
+	<div class="span-24 last"> 
 		<div class="prepend-3 span-18 append-3 last">
 			<div id="group_info"></div>
 		</div> 
-	</div> -->
+	</div> 
 	
 	<!-- overlay form material here -->
 	<div class="span-24 last">
@@ -204,6 +207,8 @@
 <script type="text/javascript">
 
 $(document).ready(function(){
+	
+	/*
     var prevrow = null;
     $("#table_id tr:odd").addClass("odd");
     $("#table_id tr:not(.odd)").hide();
@@ -214,7 +219,7 @@ $(document).ready(function(){
     	$(this).next("tr").toggle();
     	prevrow = $(this).next("tr");
     });
-    
+    */
 	/**
 	* Will display the group's information when the admin clicks on a row
 	*/
@@ -222,8 +227,6 @@ $(document).ready(function(){
 
 		var groupName = $(this).attr("id");
 		
-		
-		//ESGF.setting.currentGroupName = groupName;
 
 		$('tr#' + ESGF.setting.currentGroupName).css('background','#ffffff');
 		$(this).css('background','#FAECC8');
@@ -482,7 +485,6 @@ $(document).ready(function(){
 			var query = { "groupName" : ESGF.setting.currentGroupName ,"type" : "getAllUsersInGroup" };
 			var groupinfo_url = '/esgf-web-fe/extractgroupdataproxy';
 			
-			//alert('ajax');
 			
 			$.ajax({
 	    		url: groupinfo_url,
@@ -502,7 +504,6 @@ $(document).ready(function(){
 			
 		},
 		onClose: function() {
-			//alert('close');
 			$('#potential_users').empty();
 		}
 	});
@@ -511,6 +512,7 @@ $(document).ready(function(){
 
 		var checkbox = '';
 		$('input#groupName').val(ESGF.setting.currentGroupName);
+		
 		for(var i=0;i<data.users.allusers.user.length;i++) {
 			var userName = data.users.allusers.user[i].username;
 			if(isUserInGroup(data,userName)) {

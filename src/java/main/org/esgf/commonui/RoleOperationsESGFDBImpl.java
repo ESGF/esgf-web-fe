@@ -4,25 +4,8 @@ import org.esgf.adminui.Role;
 
 public class RoleOperationsESGFDBImpl implements RoleOperationsInterface {
 
-    @Override
-    public Role getRoleForUserInGroup(String userId, String groupId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     @Override
-    public Role getRoleObjectFromRoleId(String roleId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public String getRoleIdFromUserName(String roleName) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /*@Override
     public Role getRoleForUserInGroup(String userId, String groupId) {
         // TODO Auto-generated method stub
         
@@ -45,5 +28,5 @@ public class RoleOperationsESGFDBImpl implements RoleOperationsInterface {
         // TODO Auto-generated method stub
         return roleName;
     }
-*/
+
 }

@@ -196,6 +196,7 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
                     groupDescriptionText = groupDescription;
                 }
 
+                //tuple
                 Element newElement_groupIdEl = new Element("groupid");
                 Element newElement_groupNameEl = new Element("groupname");
                 Element newElement_groupDescriptionEl = new Element("groupdescription");
@@ -318,6 +319,9 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
         SAXBuilder builder = new SAXBuilder();
         String xmlContent = "";
         
+
+        GroupOperationsInterface goi = new GroupOperationsXMLImpl();
+        UserOperationsInterface uoi = new UserOperationsXMLImpl();
         
         try{
 
@@ -351,6 +355,44 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
             output.write(xmlContent);
             
             output.close();
+            
+            /*permissions*/
+            document = (Document) builder.build(PERMISSIONS_FILE);
+            
+            rootNode = document.getRootElement();
+            List tuples = (List)rootNode.getChildren();
+            
+            
+            
+            Element returnedEl = new Element("tuple");
+            Element returnedGroupEl = new Element("groupid");
+            Element returnedUserEl = new Element("userid");
+            Element returnedRoleEl = new Element("roleid");
+
+            returnedGroupEl.addContent(goi.getGroupIdFromGroupName(groupName));
+            returnedUserEl.addContent("rootAdmin_id");
+            returnedRoleEl.addContent("role1_id");
+            returnedEl.addContent(returnedGroupEl);
+            returnedEl.addContent(returnedUserEl);
+            returnedEl.addContent(returnedRoleEl);
+            
+            rootNode.addContent(returnedEl);
+            
+            document.setContent(rootNode);
+
+            outputter = new XMLOutputter();
+            xmlContent = outputter.outputString(rootNode);
+            System.out.println(xmlContent);
+            output = null;
+            output = new BufferedWriter(new FileWriter(PERMISSIONS_FILE));
+            output.write(xmlContent);
+            
+            output.close();
+            
+            
+            
+            
+            
             
         }catch(Exception e) {
             System.out.println("Error in group add");
@@ -603,7 +645,7 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
 
 
     @Override
-    public void addUserToGroup(String userName, String groupName) {
+    public void editUsersInGroup(String userName, String groupName) {
         
         
         System.out.println("\n\n\n\n");
@@ -621,6 +663,7 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
             Element rootNode = document.getRootElement();
             List tuples = (List)rootNode.getChildren();
             
+
             boolean exists = false;
 
             GroupOperationsInterface goi = new GroupOperationsXMLImpl();
@@ -628,6 +671,9 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
             
             for(int i=0;i<tuples.size();i++)
             {
+                
+                
+                
                 Element tupleEl = (Element)tuples.get(i);
                 Element groupIdEl = tupleEl.getChild("groupid");
                 Element userIdEl = tupleEl.getChild("userid");
@@ -640,6 +686,97 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
                    userIdEl.getTextNormalize().equals(userId)     ) {
                     exists = true;
                 }
+                
+                
+            }
+            
+            System.out.println(exists);
+            if(!exists) {
+                Element returnedEl = new Element("tuple");
+                Element returnedGroupEl = new Element("groupid");
+                Element returnedUserEl = new Element("userid");
+                Element returnedRoleEl = new Element("roleid");
+
+                returnedGroupEl.addContent(goi.getGroupIdFromGroupName(groupName));
+                returnedUserEl.addContent(uoi.getUserIdFromUserName(userName));
+                returnedRoleEl.addContent("role4_id");
+                returnedEl.addContent(returnedGroupEl);
+                returnedEl.addContent(returnedUserEl);
+                returnedEl.addContent(returnedRoleEl);
+                
+                rootNode.addContent(returnedEl);
+                
+                document.setContent(rootNode);
+
+                
+                XMLOutputter outputter = new XMLOutputter();
+                xmlContent = outputter.outputString(rootNode);
+                System.out.println(xmlContent);
+                Writer output = null;
+                output = new BufferedWriter(new FileWriter(PERMISSIONS_FILE));
+                output.write(xmlContent);
+                
+                
+                output.close();
+                
+            }
+            
+            
+        } catch(Exception e) {
+            System.out.println("Error in add user to group");
+        }
+        
+        
+        System.out.println("\n\n\n\n");
+        // TODO Auto-generated method stub
+        
+    }
+    
+    public void deleteUserFromGroup(String userName, String groupName) {
+
+        System.out.println("\n\n\n\n");
+
+        
+        SAXBuilder builder = new SAXBuilder();
+        String xmlContent = "";
+        try{
+            
+            
+            System.out.println("\tAdding User: " + userName + " to group: " + groupName);
+            
+            Document document = (Document) builder.build(PERMISSIONS_FILE);
+           
+            Element rootNode = document.getRootElement();
+            List tuples = (List)rootNode.getChildren();
+            
+
+            boolean exists = false;
+
+            GroupOperationsInterface goi = new GroupOperationsXMLImpl();
+            UserOperationsInterface uoi = new UserOperationsXMLImpl();
+            
+            for(int i=0;i<tuples.size();i++)
+            {
+                
+                
+                
+                Element tupleEl = (Element)tuples.get(i);
+                Element groupIdEl = tupleEl.getChild("groupid");
+                Element userIdEl = tupleEl.getChild("userid");
+                Element roleIdEl = tupleEl.getChild("roleid");
+                
+                String groupId = goi.getGroupIdFromGroupName(groupName);
+                String userId = uoi.getUserIdFromUserName(userName);
+                //System.out.println("\t\t" + groupId + " " + groupIdEl.getTextNormalize());
+                if(groupIdEl.getTextNormalize().equals(groupId) &&
+                   userIdEl.getTextNormalize().equals(userId)     ) {
+                    exists = true;
+                } else {
+                    rootNode.removeContent(tupleEl);
+                }
+                
+                
+                
             }
             
             
@@ -684,6 +821,10 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
         // TODO Auto-generated method stub
         
     }
+    
+    
+    
+    
 }
 
 

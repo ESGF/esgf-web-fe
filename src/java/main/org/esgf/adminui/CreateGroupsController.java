@@ -187,7 +187,10 @@ public class CreateGroupsController {
                 if(!postContent.equals("groupName") && !postContent.equals("type")) {
 
                     LOG.debug("\tpostContent " + postContent + " " + request.getParameter(postContent));
-                    goi.addUserToGroup(userName,groupName);
+                    //goi.a.addUserToGroup(userName,groupName);
+                    
+                    //Note that the group MUST be in the permissions table for this to work
+                    goi.editUsersInGroup(userName, groupName);
                 }
                 
                 

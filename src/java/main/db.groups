@@ -1,17 +1,2 @@
 <groups>
-	<group>
-		<groupid>group1_id</groupid>
-		<groupname>group1_name</groupname>
-		<groupdescription>group1_description</groupdescription>
-	</group>
-	<group>
-		<groupid>group2_id</groupid>
-		<groupname>group2_name</groupname>
-		<groupdescription>group2_description</groupdescription>
-	</group>
-	<group>
-		<groupid>group3_id</groupid>
-		<groupname>group3_name</groupname>
-		<groupdescription>group3_description</groupdescription>
-	</group>
-</groups>
+<group><groupid>group1967724655_id</groupid><groupname>q</groupname><groupdescription>q</groupdescription></group><group><groupid>group338312387_id</groupid><groupname>4</groupname><groupdescription>4</groupdescription></group></groups>

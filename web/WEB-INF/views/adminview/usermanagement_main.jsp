@@ -87,6 +87,19 @@
 							                <td>${ManageUsers_user[j].firstName}</td>  
 							                <td>${ManageUsers_user[j].emailAddress}</td>  
 							            </tr> 
+   							            <tr>
+							            	<td colspan="4">
+												<!-- this section displays the selected user's information -->
+												<div class="span-24 last">
+													<div class="prepend-3 span-18 append-3 last">
+														<div id="user_info"></div>
+													</div> 
+													<div class="prepend-3 span-18 append-3 last">
+														<div id="group_info"></div>
+													</div> 
+												</div>
+											</td>							            	
+							            </tr> 
 							            <c:set var="j" value="${j+1}"/>
 										
 									</c:forEach>
@@ -104,14 +117,14 @@
 						</div>
 						
 						<!-- this section displays the selected user's information -->
-						<div class="span-24 last">
+						<!-- <div class="span-24 last">
 							<div class="prepend-3 span-18 append-3 last">
 								<div id="user_info"></div>
 							</div> 
 							<div class="prepend-3 span-18 append-3 last">
 								<div id="group_info"></div>
 							</div> 
-						</div>
+						</div> -->
 						
 						<!-- overlay form material here -->
 						<div class="span-24 last">
@@ -214,6 +227,17 @@
  -->
 <script>
 $(document).ready(function(){
+    var prevrow = null;
+    $("#table_id tr:odd").addClass("odd");
+    $("#table_id tr:not(.odd)").hide();
+    $("#table_id tr:first-child").show(); // header
+
+    $("#table_id tr.odd").click(function() {
+        if (prevrow) prevrow.hide();
+    	$(this).next("tr").toggle();
+    	prevrow = $(this).next("tr");
+    });
+    
 	
 	$('tr.user_rows').hover(function() {
 		

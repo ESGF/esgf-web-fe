@@ -112,11 +112,11 @@
 		        	<tr>
 		        		<td colspan="2">
 		        			<!--  this section displays users in group -->
-		        			<div class="span-24 last">
-		        				<div class="prepend-3 span-18 append-3 last">
+		        			<!--  <div class="span-24 last"> -->
+		        				<!--  <div class="prepend-3 span-18 append-3 last"> -->
 		        					<div id="group_user_info"></div>
-		        				</div>
-		        			</div>
+		        				<!--  </div> -->
+		        			<!--  </div> -->
 		        	</tr>
 		            <c:set var="j" value="${j+1}"/>
 		       	</c:forEach>

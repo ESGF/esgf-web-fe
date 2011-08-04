@@ -109,6 +109,15 @@
 		        		<td>${CreateGroups_group[j].name}</td>
 		        		<td>${CreateGroups_group[j].description}</td>
 		        	</tr>
+		        	<tr>
+		        		<td colspan="2">
+		        			<!--  this section displays users in group -->
+		        			<div class="span-24 last">
+		        				<div class="prepend-3 span-18 append-3 last">
+		        					<div id="group_user_info"></div>
+		        				</div>
+		        			</div>
+		        	</tr>
 		            <c:set var="j" value="${j+1}"/>
 		       	</c:forEach>
 		    </tbody>
@@ -122,6 +131,7 @@
 	    <div class="buttons" style="margin-bottom:40px;">
 			<input class="adminbutton" id="add_group-button" type="submit" value="Add Group" rel="#addGroupForm" />
 			<input class="adminbutton" id="edit_group-button" type="submit" value="Edit Group" rel="#addGroupForm" />
+			<input class="adminbutton" id="add_user_to_group-button" type="submit" value="Add User To Selected Group" rel="#addUserToGroupForm" />
 			<input class="adminbutton" id="delete_group-button" type="submit" value="Remove Selected Group" />
 	    	<input class="adminbutton" id="add_user_to_group-button" type="submit" value="Edit User(s) In Selected Group" rel="#addUsersToGroups"/>
 	    </div>
@@ -131,11 +141,12 @@
 	
 	
 	<!-- this section displays the selected group's information -->
-	<div class="span-24 last"> 
+	<!-- <div class="span-24 last"> 
 		<div class="prepend-3 span-18 append-3 last">
 			<div id="group_info"></div>
 		</div> 
-	</div>
+	</div> -->
+	
 	<!-- overlay form material here -->
 	<div class="span-24 last">
 		
@@ -193,7 +204,17 @@
 <script type="text/javascript">
 
 $(document).ready(function(){
-	
+    var prevrow = null;
+    $("#table_id tr:odd").addClass("odd");
+    $("#table_id tr:not(.odd)").hide();
+    $("#table_id tr:first-child").show(); // header
+
+    $("#table_id tr.odd").click(function() {
+        if (prevrow) prevrow.hide();
+    	$(this).next("tr").toggle();
+    	prevrow = $(this).next("tr");
+    });
+    
 	/**
 	* Will display the group's information when the admin clicks on a row
 	*/

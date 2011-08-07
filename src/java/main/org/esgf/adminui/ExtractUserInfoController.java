@@ -82,14 +82,8 @@ public class ExtractUserInfoController {
             jsonContent = processGetUserInfoType(userName);
             
         }
-        else if(type.equalsIgnoreCase("edit")) {
-            
-        }
-        else {
-            
-        }
 
-        LOG.debug("JsonContent: " + jsonContent);
+        //LOG.debug("JsonContent: " + jsonContent);
         return jsonContent;
         
     }

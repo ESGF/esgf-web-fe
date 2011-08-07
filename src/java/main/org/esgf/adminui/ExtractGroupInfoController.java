@@ -166,7 +166,7 @@ public class ExtractGroupInfoController {
         JSONObject jo = XML.toJSONObject(xmlOutput);
         jsonContent = jo.toString();
         
-        LOG.debug("JsonContent: " + jsonContent);
+        //LOG.debug("JsonContent: " + jsonContent);
         return jsonContent;
     }
     
@@ -203,7 +203,7 @@ public class ExtractGroupInfoController {
         JSONObject jo = XML.toJSONObject(xmlOutput);
         jsonContent = jo.toString();
 
-        LOG.debug("JsonContent: " + jsonContent);
+        //LOG.debug("JsonContent: " + jsonContent);
         
         return jsonContent;
     }
@@ -238,7 +238,7 @@ public class ExtractGroupInfoController {
         JSONObject jo = XML.toJSONObject(xmlOutput);
         jsonContent = jo.toString();
 
-        LOG.debug("JsonContent: " + jsonContent);
+        //LOG.debug("JsonContent: " + jsonContent);
         return jsonContent;
     }
     
@@ -256,24 +256,12 @@ public class ExtractGroupInfoController {
 
         String groupName = request.getParameter("id");
         
-        LOG.debug("\n\n\n\n\n\n\n" + groupName + "\n\n\n\n\n");
         
         
-        //if(debugFlag)
-            queryStringInfo(request);
+        //queryStringInfo(request);
         
-        /* Search through the data store to see if the id (username or openid) is there 
-         * If it is there, then make the appropriate updates,
-         * otherwise, just ignore
-         * 
-         * As of now, the returned data is in JSON format, so there needs to be some conversion between xml/db store to key/value json pairs
-         */
+        
         try {
-            //xml store version
-            //String xmlOutput = getXMLTupleOutputFromEdit(userName);
-            
-            
-            
             //db version
             //LOG.debug("GroupId->" + groupId);
             Group group = goi.getGroupObjectFromGroupName(groupName);
@@ -290,7 +278,7 @@ public class ExtractGroupInfoController {
             LOG.debug("Problem with conversion to json content in processEditType");
         }
         
-       LOG.debug("JsonContent: " + jsonContent);
+        //LOG.debug("JsonContent: " + jsonContent);
         
         return jsonContent;
     }

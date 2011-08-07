@@ -138,24 +138,26 @@ public class ExtractGroupInfoController {
 
         List<User> users = uoi.getUsersFromGroup(groupName);//uoi.getAllUsers();
 
-        if(users == null) {
-            LOG.debug("\t\t\t\tNULL");
+        if(users != null) {
+            for(int i=0;i<users.size();i++) {
+                User user = users.get(i);
+                xmlOutput += user.toXml();
+            }
         }
-
-        LOG.debug("\t\t\t\tHere\n\n\n\n");
-        for(int i=0;i<users.size();i++) {
-            User user = users.get(i);
-            xmlOutput += user.toXml();
-        }
+        
         xmlOutput += "</ingroup>";
         
-        xmlOutput += "<allusers>";
-        users = uoi.getAllUsers();//uoi.getAllUsers();
         
-        for(int i=0;i<users.size();i++) {
-            User user = users.get(i);
-            xmlOutput += user.toXml();
+        xmlOutput += "<allusers>";
+        
+        users = uoi.getAllUsers();//uoi.getAllUsers();
+        if(users != null) {
+            for(int i=0;i<users.size();i++) {
+                User user = users.get(i);
+                xmlOutput += user.toXml();
+            }
         }
+        
         xmlOutput += "</allusers>";
         
         xmlOutput += "</users>";
@@ -181,6 +183,7 @@ public class ExtractGroupInfoController {
 
         String xmlOutput = "<groupinfo>";
 
+        
         LOG.debug("\t\t\t\tHere" + groupName + "\n\n\n\n");
         Group group = goi.getGroupObjectFromGroupName(groupName);
         if(group == null) LOG.debug("null");
@@ -223,14 +226,14 @@ public class ExtractGroupInfoController {
         LOG.debug("userId->" + userId);
         
         
-        List<Group> groups = goi.getGroupsFromUser(userId);
-        LOG.debug(groups);
+        //List<Group> groups = goi.getGroupsFromUser(userId);
+        //LOG.debug(groups);
         
         String xmlOutput = "<groups>";
-        for(int i=0;i<groups.size();i++) {
-            Group group = (Group)groups.get(i);
-            xmlOutput += group.toXml();
-        }
+        //for(int i=0;i<groups.size();i++) {
+        //    Group group = (Group)groups.get(i);
+        //    xmlOutput += group.toXml();
+        //}
         xmlOutput += "</groups>";
         JSONObject jo = XML.toJSONObject(xmlOutput);
         jsonContent = jo.toString();

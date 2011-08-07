@@ -91,17 +91,7 @@ public class ExtractUserInfoController {
 
         LOG.debug("JsonContent: " + jsonContent);
         return jsonContent;
-        /*
-        String type = request.getParameter("type");
-        LOG.debug("Type: " + type);
         
-        if(type.equalsIgnoreCase("edit")) {
-            return processEditType(request, response);
-        }
-        else {
-            return null;
-        }
-        */
     }
     
     /**
@@ -118,16 +108,8 @@ public class ExtractUserInfoController {
 
         String type = request.getParameter("type");
         
-            LOG.debug("Type: " + type);
+        LOG.debug("Type: " + type);
         
-        /*
-        if(type.equalsIgnoreCase("edit")) {
-            return processEditType(request, response);
-        }
-        else {
-            return null;
-        }
-        */
             
         return null;
     }
@@ -145,16 +127,17 @@ public class ExtractUserInfoController {
         String jsonContent = "";
         
         User user = uoi.getUserObjectFromUserName(userName);
-        //String xmlOutput = getXMLTupleOutputFromEdit(userName);
-        //String xmlOutput = user.toXml();
+        
         try {
             String xmlOutput = "<userinfo>";
             xmlOutput += user.toXml();
             
             String userId = (uoi.getUserObjectFromUserName(userName)).getUserId();
-            List<Group> groups = goi.getGroupsFromUser(userId);
+            List<Group> groups = uoi.getGroupsFromUser(userName);
+            //goi.getGroupObjectFromGroupName(groupName)
+            //List<Group> groups = goi.getGroupsFromUser(userId);
             
-            if(groups != null) {
+            //if(groups != null) {
                 xmlOutput += "<groups>";
                 
                 for(int i=0;i<groups.size();i++) {
@@ -162,7 +145,7 @@ public class ExtractUserInfoController {
                 }
                 xmlOutput += "</groups>";
                 
-            }
+            //}
             
             xmlOutput += "</userinfo>";
             

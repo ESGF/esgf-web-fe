@@ -282,9 +282,6 @@ public class ManageUsersController {
         uoi.editUser(userId,first,middle,last,email,userName,organization,city,state,country);
 
         
-        
-        
-        
         LOG.debug("------End ManageUsersController editUser------");
     }
     
@@ -295,9 +292,7 @@ public class ManageUsersController {
         
         String userName = request.getParameter("user");
         
-        LOG.debug("\n\n\n\n\n");
         LOG.debug("userName->"+userName);
-        LOG.debug("\n\n\n\n\n");
         
         String userId = uoi.getUserIdFromUserName(userName);
         uoi.deleteUser(userName);

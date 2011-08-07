@@ -160,15 +160,14 @@ public class CreateGroupsController {
         
       //get the userId from the cookie
         String userId = Utils.getIdFromHeaderCookie(request);
-        LOG.debug("UserId Retrieved: " + userId);
         
         //get the type of operation from the request parameter (add, edit, delete)
         String type = Utils.getTypeFromQueryString(request);
         
         String groupName = request.getParameter("groupName");
 
-        LOG.debug("Type->" + type);
-        LOG.debug("GroupName->" + groupName);
+        //LOG.debug("Type->" + type);
+        //LOG.debug("GroupName->" + groupName);
         
         //from the type perform the appropriate operation
         if(type.equalsIgnoreCase("add")) {
@@ -196,21 +195,12 @@ public class CreateGroupsController {
                 
                 if(!postContent.equals("groupName") && !postContent.equals("type")) {
 
-                    //LOG.debug("\tpostContent " + postContent + " " + request.getParameter(postContent));
-                    //goi.a.addUserToGroup(userName,groupName);
                     //System.out.println("Adding User->" + userName + " from group " + groupName);
-                    
                     checkedUsers.add(uoi.getUserObjectFromUserName(userName));
-                    
                     uoi.addUserToGroup(userName, groupName);
                 }
             }
             
-            /*
-            for(int i=0;i<checkedUsers.size();i++) {
-                System.out.println("\tChecked User: " + checkedUsers.get(i).getUserName());
-            }
-            */
             
             //next find the users that were excluded from the check list and delete them
             //i.e. delete whatever user is leftover
@@ -227,6 +217,9 @@ public class CreateGroupsController {
                 }
                 if(canDelete) {
                     System.out.println("Deleting User->" + user.getUserName() + " from group " + groupName);
+                
+                    //insert 
+                    uoi.deleteUserFromGroup(user.getUserName(), groupName);
                 }
                 
                 

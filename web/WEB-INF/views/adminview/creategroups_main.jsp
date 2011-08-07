@@ -22,68 +22,9 @@
         href='<c:url value="/styles/lightgray/jquery-ui-1.8.10.custom.css" />'
         type="text/css" media="screen">	
     					
-<style>
-
-	/* used */
-	/* table tbody tr:hover { background: #aaa; } */
-	
-	.adminbutton {
-		font-size: 13px;
-		color: white;
-		border: 1px solid #9c9c9c;
-		background: #838943;
-		cursor: pointer;
-	}
-		
-	.formLabels {
-		font-size: 12px;
-		margin-right:10px;
-		margin-left:15px;
-	}
-	
-	text {
-		font-size: 12px;
-		}
-	
-	
-	/* Overlay */
-	
-	/* the overlayed element */
-	.simple_overlay {
-		
-		/* must be initially hidden */
-		display:none;
-		
-		/* place overlay on top of other elements */
-		z-index:10000;
-		
-		/* styling */
-		/* background-color:#333; */
-		background-color:#fff;
-		
-		width:475px;	
-		min-height:400px;
-		border:1px solid #666;
-		
-		/* CSS3 styling for latest browsers */
-		-moz-box-shadow:0 0 90px 5px #000;
-		-webkit-box-shadow: 0 0 90px #000;	
-	}
-	
-	/* close button positioned on upper right corner */
-	.simple_overlay .close {
-		background-image:url(../images/metadata_overlay/close.png); 
-		position:absolute;
-		right:-15px;
-		top:-15px;
-		cursor:pointer;
-		height:35px;
-		width:35px;
-	}
-
-
-
-</style>
+	<link rel="stylesheet"
+        href='<c:url value="/styles/groupmanagement.css" />'
+        type="text/css" media="screen">	
 
 
 
@@ -136,7 +77,7 @@
 			<input class="adminbutton" id="edit_group-button" type="submit" value="Edit Group" rel="#addGroupForm" />
 			<!--  <input class="adminbutton" id="add_user_to_group-button" type="submit" value="Add User To Selected Group" rel="#addUserToGroupForm" /> -->
 			<input class="adminbutton" id="delete_group-button" type="submit" value="Remove Selected Group" />
-	    	<input class="adminbutton" id="add_user_to_group-button" type="submit" value="Edit User(s) In Selected Group" rel="#addUsersToGroups"/>
+	    	<input class="adminbutton" id="edit_users_in_group-button" type="submit" value="Edit User(s) In Selected Group" rel="#addUsersToGroups"/>
 	    </div>
 	  
 	</div>
@@ -239,7 +180,6 @@ $(document).ready(function(){
 		//set the current group name variable to the clicked groupname
 		ESGF.setting.currentGroupName = groupName;
 		
-		
 		//if this value is not empty or null
 		//then make the ajax call to the group 
 		if(ESGF.setting.currentGroupName != null && ESGF.setting.currentGroupName != "") {
@@ -261,9 +201,6 @@ $(document).ready(function(){
 			
 		}
 		
-
-		
-		
 		
 	});	
 	
@@ -273,14 +210,14 @@ $(document).ready(function(){
 		var group_info_content = '';
 		
 		//call helper function that assembles all of the user's group data
-		if(typeof data.groupinfo.user != 'undefined') {
-			group_info_content = getGroupInfoContent(data);
-		}
-		
+		//if(typeof data.groupinfo.user != 'undefined') {
+		//	group_info_content = getGroupInfoContent(data);
+		//}
+		group_info_content = getGroupInfoContent(data);
 		//append the fieldset to the div user_info element and fill it with the user's info
 		$('div#group_info').append('<fieldset id="group_info"><legend >' + ESGF.setting.currentGroupName + 
 									'</legend>' +
-									'<h5>Group Information</h5><div style="margin-bottom:10px">Description: ' + data.groupinfo.group.groupdescription +'</div>' +
+									'<h5>Group Information</h5><div style="margin-bottom:10px;margin-left:10px">Description: ' + data.groupinfo.group.groupdescription +'</div>' +
 									'</fieldset>');
 		$('fieldset#group_info').append(group_info_content);
 		
@@ -300,22 +237,69 @@ $(document).ready(function(){
 		var content = '';
 		
 		content = content + '<hr /><h5 style="margin-top:10px;">Users In Group</h5>';
-		if(data.groupinfo.user instanceof Array) {
-			for(var i=0;i<data.groupinfo.user.length;i++) {
-				var userId = data.groupinfo.user[i].id;
-				var userName = data.groupinfo.user[i].username;
-				var email = data.groupinfo.user[i].email;
-				var lastName = data.groupinfo.user[i].last;
-				var firstName = data.groupinfo.user[i].first;
-				var middleName = data.groupinfo.user[i].middle;
-				var organization = data.groupinfo.user[i].organization;
-				var city = data.groupinfo.user[i].city;
-				var state = data.groupinfo.user[i].state;
-				var country = data.groupinfo.user[i].country;
-				var dn = data.groupinfo.user[i].dn;
-				var openid = data.groupinfo.user[i].openid;
+		if(typeof data.groupinfo.user != 'undefined') {
+			if(data.groupinfo.user instanceof Array) {
+				for(var i=0;i<data.groupinfo.user.length;i++) {
+					var userId = data.groupinfo.user[i].id;
+					var userName = data.groupinfo.user[i].username;
+					var email = data.groupinfo.user[i].email;
+					var lastName = data.groupinfo.user[i].last;
+					var firstName = data.groupinfo.user[i].first;
+					var middleName = data.groupinfo.user[i].middle;
+					var organization = data.groupinfo.user[i].organization;
+					var city = data.groupinfo.user[i].city;
+					var state = data.groupinfo.user[i].state;
+					var country = data.groupinfo.user[i].country;
+					var dn = data.groupinfo.user[i].dn;
+					var openid = data.groupinfo.user[i].openid;
+					
+					var roleType = '';
+					if(userName == 'rootAdmin') {
+						roleType = 'super';
+					} else {
+						roleType = 'default';
+					}
+					
+					//user info
+					content = content + '<div style="border: 1px dotted #eee;margin-top:5px;margin-left:10px" id="userListing_' + userName + '"">User: ' + userName + 
+																				' UserId: ' + userId + 
+																				' email: ' + email + 
+																				' lastName: ' + lastName + 
+																				
+																				//' middleName: ' + middleName + 
+																				//' firstName: ' + firstName + 
+																				//' organization: ' + organization + 
+																				//' city: ' + city + 
+																				//' state: ' + state + 
+																				//' country: ' + country + 
+																				//' dn: ' + dn + 
+																				//' openid: ' + openid + 
+																				
+																				'</div>';
+					//role info
+					content = content + '<div style="margin-top:5px;margin-left:40px;font-style: italic;">' + 'Role: '  + roleType + '</div>';
+				}
 				
-				//user info
+			} else {
+				var userName = data.groupinfo.user.username;
+				var userId = data.groupinfo.user.id;
+				var email = data.groupinfo.user.email;
+				var lastName = data.groupinfo.user.last;
+				var firstName = data.groupinfo.user.first;
+				var middleName = data.groupinfo.user.middle;
+				var organization = data.groupinfo.user.organization;
+				var city = data.groupinfo.user.city;
+				var state = data.groupinfo.user.state;
+				var country = data.groupinfo.user.country;
+				var dn = data.groupinfo.user.dn;
+				var openid = data.groupinfo.user.openid;
+				var roleType = '';
+				if(userName == 'rootAdmin') {
+					roleType = 'super';
+				} else {
+					roleType = 'default';
+				}
+				
 				content = content + '<div style="border: 1px dotted #eee;margin-top:5px;margin-left:10px" id="userListing_' + userName + '"">User: ' + userName + 
 																			' UserId: ' + userId + 
 																			' email: ' + email + 
@@ -331,52 +315,15 @@ $(document).ready(function(){
 																			//' openid: ' + openid + 
 																			
 																			'</div>';
-				//role info
-				content = content + '<div style="margin-top:5px;margin-left:40px;font-style: italic;">' + 'Role: ' + '</div>';
+				
 			}
-			
 		} else {
-			var userName = data.groupinfo.user.username;
-			var userId = data.groupinfo.user.id;
-			var email = data.groupinfo.user.email;
-			var lastName = data.groupinfo.user.last;
-			var firstName = data.groupinfo.user.first;
-			var middleName = data.groupinfo.user.middle;
-			var organization = data.groupinfo.user.organization;
-			var city = data.groupinfo.user.city;
-			var state = data.groupinfo.user.state;
-			var country = data.groupinfo.user.country;
-			var dn = data.groupinfo.user.dn;
-			var openid = data.groupinfo.user.openid;
-			
-			content = content + '<div style="border: 1px dotted #eee;margin-top:5px;margin-left:10px" id="userListing_' + userName + '"">User: ' + userName + 
-																		' UserId: ' + userId + 
-																		' email: ' + email + 
-																		' lastName: ' + lastName + 
-																		
-																		//' middleName: ' + middleName + 
-																		//' firstName: ' + firstName + 
-																		//' organization: ' + organization + 
-																		//' city: ' + city + 
-																		//' state: ' + state + 
-																		//' country: ' + country + 
-																		//' dn: ' + dn + 
-																		//' openid: ' + openid + 
-																		
-																		'</div>';
+			content = content + '<div style="margin-left:10px">' + 'There are no users currently in this group</div>';
 			
 		}
-		/*
-		
-		
-		*/
-		
 		
 		var group_info_content = '<div class="group_info_content">' + content + '</div>';
-		
-		
 		return group_info_content;
-		
 	}
 	
 	
@@ -477,11 +424,9 @@ $(document).ready(function(){
 	* Add User To Group
 	*/
 		
-	$('input#add_user_to_group-button[rel]').overlay({
+	$('input#edit_users_in_group-button[rel]').overlay({
 		mask: '#000',
 		onLoad: function() {
-			
-			
 			var query = { "groupName" : ESGF.setting.currentGroupName ,"type" : "getAllUsersInGroup" };
 			var groupinfo_url = '/esgf-web-fe/extractgroupdataproxy';
 			
@@ -499,39 +444,54 @@ $(document).ready(function(){
 				}
 			});
 			
-			
-			
-			
 		},
 		onClose: function() {
 			$('#potential_users').empty();
 		}
 	});
 	
+	/* Data coming in as follows:
+		
+	 */
 	function displayPotentialUsers(data) {
 
 		var checkbox = '';
 		$('input#groupName').val(ESGF.setting.currentGroupName);
 		
+		
 		for(var i=0;i<data.users.allusers.user.length;i++) {
 			var userName = data.users.allusers.user[i].username;
+			//alert('userName: ' + userName);
 			if(isUserInGroup(data,userName)) {
-				checkbox = '<p><input style="margin-left:10px;margin-bottom:0px" type="checkbox" checked="yes" id="userss" name="' + userName + '" value="' + userName + '" /> ' + userName + '</p>';
+				checkbox = '<p><input style="margin-left:10px;margin-bottom:0px" type="checkbox" checked="yes" id="userChoices" name="' + userName + '" value="' + userName + '" /> ' + userName + '</p>';
 			} else {
-				checkbox = '<p><input style="margin-left:10px;margin-bottom:0px" type="checkbox" id="userss" name="' + userName + '" value="' + userName + '" /> ' + userName + '</p>';
+				checkbox = '<p><input style="margin-left:10px;margin-bottom:0px" type="checkbox" id="userChoices" name="' + userName + '" value="' + userName + '" /> ' + userName + '</p>';
 			}
 			$('#potential_users').append(checkbox);
 		}
-		
-		
 	}
+	
+	
+	/* boolean function to determine if a user is in a group
+	*/
 	function isUserInGroup(data,user) {
 		var isUserInGroup = false;
-		for(var i=0;i<data.users.ingroup.user.length;i++) {
-			if(user == data.users.ingroup.user[i].username) {
+		
+		if(data.users.ingroup.user instanceof Array) {
+			
+			for(var i=0;i<data.users.ingroup.user.length;i++) {
+				if(user == data.users.ingroup.user[i].username) {
+					isUserInGroup = true;
+				}
+			}
+			
+		} else {
+			//alert('user: ' + user + ' username: ' + data.users.ingroup.user.username);
+			if(user == data.users.ingroup.user.username) {
 				isUserInGroup = true;
 			}
 		}
+		
 		return isUserInGroup;
 	}
 	

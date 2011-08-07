@@ -252,33 +252,35 @@ $(document).ready(function(){
 	* Will display the user's information when the admin clicks on a row
 	*/
 	$('tr.user_rows').click(function(){
-//<<<<<<< HEAD
 
-//=======
-		
-//>>>>>>> 213ee743dfd2b235b57216a16cc00c82c0af665c
-
-
-
-		//first we must hide/remove any information previously there
+		//first we must hide/remove any information that has previously been displayed
+		//overlay user form
 		$('#new_user_form').hide();
+		//user information displayed on page
 		$('#user_info').hide();
+		//group information displayed on page
 		$('#group_info').hide();
 
+		//content in the user and groups info divs
 		$('fieldset#user_info').remove();
 		$('fieldset#group_info').remove();
 		
 		//grab the username from the id of the row
 		var userName = $(this).attr("id");
 
-		var backgroundColor = $(this).css('background-color');
-		$('tr#' + ESGF.setting.currentUserName).css('background','#ffffff');
+		//change the background color of the row so that the user
+		//can see the selection highlighted
 		$(this).css('background','#FAECC8');
+
+		//change the previously selected userName back to the previous background
+		//NOTE-> this background (ffffff) DOES NOT MATCH the main background
+		$('tr#' + ESGF.setting.currentUserName).css('background','#ffffff');
 		
+		//set the global current user name to the username selected
 		ESGF.setting.currentUserName = userName;
 		
-		/* from username we can get the rest of the info via an ajax call to extractuserdataproxy */
-		/* but MAKE SURE THAT IT IS NOT NULL!!! */
+		// from username we can get the rest of the info via an ajax call to extractuserdataproxy //
+		// but MAKE SURE THAT IT IS NOT NULL!!! //
 		if(userName != null && userName != "") {
 			var query = { "userName" : ESGF.setting.currentUserName, "type" : "getUserInfo" };
 			var userinfo_url = '/esgf-web-fe/extractuserdataproxy';
@@ -296,24 +298,21 @@ $(document).ready(function(){
 			});
 			
 			
+			//query = { "userName" : ESGF.setting.currentUserName, "type" : "groupsForUser" };
+			//var groupinfo_url = '/esgf-web-fe/extractgroupdataproxy';
+			//$.ajax({
+	    	//	url: groupinfo_url,
+	    	//	type: "GET",
+	    	//	data: query,
+	    	//	dataType: 'json',
+	    	//	success: function(data) {
+	    	//		processGroupContent(data);
+	    	//	},
+			//	error: function() {
+			//		alert('error');
+			//	}
+			//});
 			
-			
-			/*
-			query = { "userName" : ESGF.setting.currentUserName, "type" : "groupsForUser" };
-			var groupinfo_url = '/esgf-web-fe/extractgroupdataproxy';
-			$.ajax({
-	    		url: groupinfo_url,
-	    		type: "GET",
-	    		data: query,
-	    		dataType: 'json',
-	    		success: function(data) {
-	    			processGroupContent(data);
-	    		},
-				error: function() {
-					alert('error');
-				}
-			});
-			*/
 			
 		} else {
 			alert('Must have a valid user name to perform this operation');
@@ -322,8 +321,107 @@ $(document).ready(function(){
 	});
 	
 	/*
+	* Helper function for viewing user content
+	* This is the resulting callback function from the ajax call to the extractdatauserproxy
+	* The data has the following hierarchical structure:
+		userinfo
+			user
+				<user properties (first, last, etc)>
+			groups
+				group
+					<group properties>
+			
+	*/
+	function processUserContent(data) {
+		
+		
+		//get the userName from the returned jsonContent
+		var userName = data.userinfo.user.username;
+
+		//call helper function that assembles all of the user's data
+		var user_info_content = getUserInfoContent(data);
+
+		
+		//append the fieldset to the div user_info element and fill it with the user's info
+		$('div#user_info').append('<fieldset id="user_info"><legend >' + userName + '</legend></fieldset>');		
+		$('fieldset#user_info').append(user_info_content);
+		
+		
+		//show the user's info
+		$('div#user_info').show();
+		
+		//var l = $('fieldset#user_info').html();
+		
+	}
+	
+	/*
+	* Helper function for displaying the userContent
+	* Basically assembles the properties of the user and the groups to which they belong
+	*/
+	function getUserInfoContent(data) {
+		
+		var content = '';
+		
+		var lastName = data.userinfo.user.last;
+		var firstName = data.userinfo.user.first;
+		var middleName = data.userinfo.user.middle;
+		var emailAddress = data.userinfo.user.email;
+		var userName = data.userinfo.user.username;
+		var organization = data.userinfo.user.organization;
+		var city = data.userinfo.user.city;
+		var state = data.userinfo.user.state;
+		var country = data.userinfo.user.country;
+		
+		content = '<h5 style="margin-top:10px;">User Information</h5>';
+		content = content + '<div style="margin-bottom:5px;margin-left:10px">First Name: ' + firstName + ' Middle Name: ' + middleName + ' Last Name: ' + lastName + '</div>' +
+					  '<div style="margin-bottom:5px;margin-left:10px">Email: ' + emailAddress + ' Organization ' + organization + '</div>' +
+					  '<div style="margin-bottom:5px;margin-left:10px">City: ' + city + ' State: ' + state + ' Country: ' + country + '</div>'
+					  ;
+		content = content + '<div style="margin-bottom:10px"></div><hr /><h5 style="margin-top:10px;">Group Memberships</h5>';
+		
+		var roleType = '';
+		if(userName == 'rootAdmin') {
+			roleType = 'super';
+		} else {
+			roleType = 'default';
+		}
+		
+		if(typeof data.userinfo.groups.group != 'undefined') {
+			if(data.userinfo.groups.group instanceof Array) {
+				for(var i=0;i<data.userinfo.groups.group.length;i++) {
+					var groupId = data.userinfo.groups.group[i].groupid;
+					var groupName = data.userinfo.groups.group[i].groupname;
+					var groupDescription = data.userinfo.groups.group[i].groupdescription;
+					
+					content = content + '<div style="border: 1px dotted #eee;margin-top:5px;margin-left:10px" id="userListing_' + 
+										groupName + '"">Group: ' + groupName + ' Description: ' + groupDescription + ' Role: ' + roleType + '</div>';
+					
+				}
+			} else {
+
+				var groupId = data.userinfo.groups.group.groupid;
+				var groupName = data.userinfo.groups.group.groupname;
+				var groupDescription = data.userinfo.groups.group.groupdescription;
+				
+				content = content + '<div style="border: 1px dotted #eee;margin-top:5px;margin-left:10px" id="userListing_' + 
+				groupName + '"">Group: ' + groupName + ' Description: ' + groupDescription + ' Role: ' + roleType + '</div>';
+
+			}
+		} else {
+			content = content + '<div style="margin-left:10px">' + 'No group memberships</div>';
+		}
+		
+		var user_info_content = '<div class="user_info_content">' + content + '</div>';
+		return user_info_content;
+	}
+
+	
+	
+	
+	/*
 	* Helper function for post ajax call processing for user content
 	*/
+	/*
 	function processGroupContent(data) {
 		
 		//call helper function that assembles all of the user's group data
@@ -338,6 +436,8 @@ $(document).ready(function(){
 		$('div#group_info').show();
 		
 	}
+	*/
+	
 	
 	/*
 	* Helper function for displaying the group info attached to a user
@@ -345,6 +445,7 @@ $(document).ready(function(){
 	/*
 	* Need to come back here...there is a race condition that I need to resolve here
 	*/
+	/*
 	function getGroupInfoContent(data) {
 		
 		var query = '';
@@ -405,6 +506,7 @@ $(document).ready(function(){
 		return group_info_content;
 		
 	}
+	*/
 	
 	
 	function processUserRoleForGroup (groupName,data) {
@@ -418,82 +520,11 @@ $(document).ready(function(){
 	
 	
 	
-	/*
-	* Helper function for post ajax call processing for user content
-	*/
-	function processUserContent(data) {
-		
-		
-		//get the userName from the returned jsonContent
-		var userName = data.userinfo.user.username;
-
-		//call helper function that assembles all of the user's data
-		var user_info_content = getUserInfoContent(data);
-
-		
-		//append the fieldset to the div user_info element and fill it with the user's info
-		$('div#user_info').append('<fieldset id="user_info"><legend >' + userName + '</legend></fieldset>');		
-		$('fieldset#user_info').append(user_info_content);
-		
-		
-		//show the user's info
-		$('div#user_info').show();
-		
-		var l = $('fieldset#user_info').html();
-	}
 	
 	
 	
-	/*
-	* Helper function for displaying the userContent
-	*/
-	function getUserInfoContent(data) {
-		var lastName = data.userinfo.user.last;
-		var firstName = data.userinfo.user.first;
-		var middleName = data.userinfo.user.middle;
-		var emailAddress = data.userinfo.user.email;
-		var userName = data.userinfo.user.username;
-		var organization = data.userinfo.user.organization;
-		var city = data.userinfo.user.city;
-		var state = data.userinfo.user.state;
-		var country = data.userinfo.user.country;
-		
-		
-		var content = '<h5 style="margin-top:10px;">User Information</h5>';
-		content = content + '<div style="margin-bottom:5px;">First Name: ' + firstName + ' Middle Name: ' + middleName + ' Last Name: ' + lastName + '</div>' +
-					  '<div style="margin-bottom:5px;">Email: ' + emailAddress + ' Organization ' + organization + '</div>' +
-					  '<div style="margin-bottom:5px;">City: ' + city + ' State: ' + state + ' Country: ' + country + '</div>'
-					  ;
-		content = content + '<div style="margin-bottom:10px"></div><hr /><h5 style="margin-top:10px;">Group Memberships</h5>';
-		
-		if(typeof data.userinfo.groups.group != 'undefined') {
-			if(data.userinfo.groups.group instanceof Array) {
-				for(var i=0;i<data.userinfo.groups.group.length;i++) {
-					var groupId = data.userinfo.groups.group[i].groupid;
-					var groupName = data.userinfo.groups.group[i].groupname;
-					var groupDescription = data.userinfo.groups.group[i].groupdescription;
-					
-					content = content + '<div style="border: 1px dotted #eee;margin-top:5px;margin-left:10px" id="userListing_' + 
-										groupName + '"">Group: ' + groupName + ' Description: ' + groupDescription + ' Role: ' + '</div>';
-					
-				}
-			} else {
-
-				var groupId = data.userinfo.groups.group.groupid;
-				var groupName = data.userinfo.groups.group.groupname;
-				var groupDescription = data.userinfo.groups.group.groupdescription;
-				
-				content = content + '<div style="border: 1px dotted #eee;margin-top:5px;margin-left:10px" id="userListing_' + 
-				groupName + '"">Group: ' + groupName + ' Description: ' + groupDescription + ' Role: ' + '</div>';
-
-			}
-		}
-		
-		
-		var user_info_content = '<div class="user_info_content">' + content + '</div>';
-		return user_info_content;
-	}
-
+	
+	
 	/*
 	* Add User
 	*/
@@ -690,31 +721,8 @@ $(document).ready(function(){
     }
 	
     
-    /*
-	* Edit User - same as add user but we must add the current values to the form
-	*/
-	$('input#edit_user-button').click(function(){
-	
-	});
-    
-	/*
-	* Add User - same as add user but we must add the current values to the form
-	*/
-	$('input#add_user-button').click(function(){
-		
-	});
-    
 });
 
-/*
-* Helper function for displaying the userName
-* Deprecated
-*/
-/*
-function getUserInfoHeader(userName) {
-	var user_info_header = '<div id="' + userName + '" class="user_info_header" style="text-align:center">User Information for ' + userName + '</div>';
-	return user_info_header;
-}
-*/
+
 
 </script>

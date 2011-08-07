@@ -29,17 +29,20 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
     private final static String roles_file = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\db.roles";
     private final static String permissions_file = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\db.permissions";
    
+    private String passwd;
     
     private File USERS_FILE;
     private File GROUPS_FILE;
     private File ROLES_FILE;
     private File PERMISSIONS_FILE;
+    private File PASSWORD_FILE;
     
     public UserOperationsXMLImpl(){
         USERS_FILE = new File("");
         GROUPS_FILE = new File("");
         ROLES_FILE = new File("");
         PERMISSIONS_FILE = new File("");
+        PASSWORD_FILE = new File("");
         
         try {
             File dir1 = new File(".");
@@ -47,6 +50,12 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
             GROUPS_FILE = new File(groups_file); //new ClassPathResource("db.groups").getFile();
             PERMISSIONS_FILE = new File(permissions_file);//new ClassPathResource("db.permissions").getFile();
             ROLES_FILE = new File(roles_file);
+            
+            //get the password
+            PASSWORD_FILE = new File("/usr/local/.esg_pg_pass");
+            this.passwd = Utils.getPassword(PASSWORD_FILE);
+            
+            
         }catch(Exception e) {
             LOG.debug("error in UserOperationsXMLImpl constructor");
         }
@@ -232,7 +241,7 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
     }
 
     @Override
-    public void deleteUser(String userId) {
+    public void deleteUser(String userName) {
         
         SAXBuilder builder = new SAXBuilder();
         String xmlContent = "";
@@ -245,8 +254,9 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
             for(int i=0;i<users.size();i++)
             {
                 Element userEl = (Element)users.get(i);
-                Element userIdEl = userEl.getChild("id");
-                if(userIdEl.getTextNormalize().equals(userId)) {
+                Element userIdEl = userEl.getChild("username");
+                System.out.println("\t\tuserId: " + userName + " " + " userIdTextNorm: " + userIdEl.getTextNormalize());
+                if(userIdEl.getTextNormalize().equals(userName)) {
                     rootNode.removeContent(userEl);
                 }
                 
@@ -678,7 +688,14 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
                 Element tupleEl = (Element)permissions.get(i);
                 Element groupIdEl = tupleEl.getChild("groupid");
                 Element userIdEl = tupleEl.getChild("userid");
+                /*
+                System.out.println("\t\t\ti: " + i + " " + 
+                        userIdEl.getTextNormalize() + " " + uo.getUserIdFromUserName(userName) + " " +
+                        userIdEl.getTextNormalize().equalsIgnoreCase(uo.getUserIdFromUserName(userName))
+                        );
+                */
                 if(userIdEl.getTextNormalize().equalsIgnoreCase(uo.getUserIdFromUserName(userName))) {
+                    //System.out.println("\t\t\tMATCH");
                     String groupName = go.getGroupNameFromGroupId(groupIdEl.getTextNormalize());
                     Group group = go.getGroupObjectFromGroupName(groupName);
                     groups.add(group);
@@ -690,6 +707,7 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
             e.printStackTrace();
         }
         
+        System.out.println("GROUPS: " + groups);
         
         return groups;
     }

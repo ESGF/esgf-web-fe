@@ -1,7 +1,12 @@
 package org.esgf.commonui;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -26,30 +31,34 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
     private final static String groups_file = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\db.groups";
     private final static String roles_file = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\db.roles";
     private final static String permissions_file = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\db.permissions";
-    private final static String permissions_file1 = "C:\\Users\\8xo\\db.permissions1";
+    private final static String password_file = "C:\\usr\\local\\.esg_pg_pass";
     
     
     private File USERS_FILE;
     private File GROUPS_FILE;
     private File ROLES_FILE;
     private File PERMISSIONS_FILE;
-    private File PERMISSIONS_FILE1;
+    private File PASSWORD_FILE;
+    
+    private String passwd;
     
     public GroupOperationsXMLImpl(){
         USERS_FILE = new File("");
         GROUPS_FILE = new File("");
         ROLES_FILE = new File("");
         PERMISSIONS_FILE = new File("");
-        PERMISSIONS_FILE1 = new File("");
-        
+        PASSWORD_FILE = new File("");
         try {
-            File dir1 = new File(".");
-            System.out.println("Current dir->" + dir1.getCanonicalPath());
+            File dir1 = new File("/usr/local");
             USERS_FILE = new File(users_file); //new ClassPathResource("db.users").getFile();
             GROUPS_FILE = new File(groups_file); //new ClassPathResource("db.groups").getFile();
             PERMISSIONS_FILE = new File(permissions_file);//new ClassPathResource("db.permissions").getFile();
-            PERMISSIONS_FILE1 = new File(permissions_file1);//new ClassPathResource("db.permissions").getFile();
             ROLES_FILE = new File(roles_file);
+            
+            //get the password
+            PASSWORD_FILE = new File("/usr/local/.esg_pg_pass");
+            this.passwd = Utils.getPassword(PASSWORD_FILE);
+            
         }catch(Exception e) {
             LOG.debug("error in GroupOperationsXMLImpl constructor");
         }
@@ -279,12 +288,10 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
 
                 groupsList.add(group);
             }
-            
         } catch(Exception e) {
             LOG.debug("Problem in getAllGroups");
             e.printStackTrace();
         }
-        
         return groupsList;
        
     }
@@ -317,7 +324,6 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
             LOG.debug("Problem in getGroupObjectFromGroupName");
             
         }
-        
         return group;
     }
     
@@ -342,8 +348,6 @@ public class GroupOperationsXMLImpl implements GroupOperationsInterface {
                     groupName = groupNameEl.getTextNormalize();
                 }
             }
-            
-            
         } catch(Exception e) {
             LOG.debug("Error in getGroupNameFromGroupId");
         }

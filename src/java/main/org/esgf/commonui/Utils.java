@@ -1,7 +1,9 @@
 package org.esgf.commonui;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -27,6 +29,27 @@ public class Utils {
     
     private final static Logger LOG = Logger.getLogger(Utils.class);
     
+    public static String getPassword(File file) {
+        String passwd = null;
+        
+        StringBuffer contents = new StringBuffer();
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            int counter = 0;
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                if(counter == 0) {
+                    passwd = line;
+                }
+                counter++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return passwd;
+    }
     
     /*
      * Used to extract the openid from the cookie in the header of a request
@@ -192,7 +215,6 @@ public class Utils {
         Enumeration<String> paramEnum = request.getParameterNames();
         while(paramEnum.hasMoreElements()) { 
             String postContent = (String) paramEnum.nextElement();
-            LOG.debug("POSTCONTENT: " + postContent + "\n\n\n");
             if(postContent.equalsIgnoreCase("type")) {
                 type = request.getParameter(postContent);
             }

@@ -1,5 +1,6 @@
 package org.esgf.commonui;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,14 +21,22 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
 
     private final static Logger LOG = Logger.getLogger(UserOperationsESGFDBImpl.class);
     
-    //change me
-    private static String passwd = "mattryan12!";
+    private File PASSWORD_FILE;
+    
+    private String passwd;
+    private String root = "rootAdmin"; 
     
     public UserInfoCredentialedDAO myUserInfoDAO;
     
     public UserOperationsESGFDBImpl() throws FileNotFoundException, IOException {
+
+        //get the password
+        PASSWORD_FILE = new File("/usr/local/.esg_pg_pass");
+        this.passwd = Utils.getPassword(PASSWORD_FILE);
+        
+        
         ESGFProperties myESGFProperties = new ESGFProperties();
-        setMyUserInfoDAO(new UserInfoCredentialedDAO("rootAdmin",passwd,myESGFProperties));
+        setMyUserInfoDAO(new UserInfoCredentialedDAO(root,passwd,myESGFProperties));
     }
     
     public void setMyUserInfoDAO(UserInfoCredentialedDAO myUserInfoDAO) {

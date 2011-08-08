@@ -122,6 +122,7 @@ public class ExtractUserInfoController {
         
         User user = uoi.getUserObjectFromUserName(userName);
         
+        System.out.println("user|-> " + userName);
         try {
             String xmlOutput = "<userinfo>";
             xmlOutput += user.toXml();

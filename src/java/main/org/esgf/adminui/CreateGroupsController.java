@@ -188,10 +188,6 @@ public class CreateGroupsController {
             Enumeration<String> paramEnum = request.getParameterNames();
             
             
-            LOG.debug("\n\n\n\n\n\n\n\nIN EDITUSERSINGROUP");
-            
-            
-
             List<User> users = uoi.getAllUsers();
             List<User> checkedUsers = new ArrayList<User>();
             
@@ -201,7 +197,6 @@ public class CreateGroupsController {
                 
                 String userName = request.getParameter(postContent);
 
-                LOG.debug("USERNAME: " + userName);
                 if(!postContent.equals("groupName") && !postContent.equals("type")) {
 
                     //System.out.println("Adding User->" + userName + " from group " + groupName);
@@ -210,7 +205,6 @@ public class CreateGroupsController {
                 }
             }
 
-            LOG.debug("\n\n\n\n\n\n\n\nIN EDITUSERSINGROUP");
             
             //next find the users that were excluded from the check list and delete them
             //i.e. delete whatever user is leftover
@@ -220,10 +214,12 @@ public class CreateGroupsController {
                 //System.out.println("user.getUserName() " + user.getUserName());
                 for(int j=0;j<checkedUsers.size();j++) {
                     User checkedUser = checkedUsers.get(j);
-                    //System.out.println("\tcheckedUser.getUserName() " + checkedUser.getUserName());
-                    
+                    System.out.println("\tcheckedUser.getUserName() " + checkedUser.getUserName());
+                    if(user == null) {
+                        System.out.println("\t\tuser is null");
+                    }
                     if(checkedUser != null) {
-                        if(user.getUserName().equalsIgnoreCase(checkedUser.getUserName())) {
+                        if(user.getUserName().equals("rootAdmin") && user.getUserName().equalsIgnoreCase(checkedUser.getUserName())) {
                             canDelete = false;
                         }
                     }
@@ -232,8 +228,8 @@ public class CreateGroupsController {
                 if(canDelete) {
                     System.out.println("Deleting User->" + user.getUserName() + " from group " + groupName);
                 
-                    //insert 
-                    uoi.deleteUserFromGroup(user.getUserName(), groupName);
+                    //delete the user from the group
+                    //uoi.deleteUserFromGroup(user.getUserName(), groupName);
                 }
                 
                 
@@ -317,6 +313,11 @@ public class CreateGroupsController {
         goi.addGroup(groupName, groupDescription);
         
 
+        //must add the root user to the group
+        uoi.addUserToGroup("rootAdmin", groupName);
+        
+        
+        
         LOG.debug("------CreateGroupsController addUser------");
         
     }
@@ -343,6 +344,8 @@ public class CreateGroupsController {
             List<User> users = uoi.getAllUsers();
             User [] userArray = users.toArray(new User[users.size()]);
             */
+            
+            System.out.println("groupArr|->" + groupArray.length);
             // populate model
             model.put(CreateGroups_INPUT, ManageUsersInput);
             //LOG.debug("About to plug in USERS");

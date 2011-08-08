@@ -31,11 +31,10 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
     public UserOperationsESGFDBImpl() throws FileNotFoundException, IOException {
 
         //get the password
-        //PASSWORD_FILE = new File("/usr/local/.esg_pg_pass");
-        //this.passwd = Utils.getPassword(PASSWORD_FILE);
-        this.passwd = "mattryan12!";
-        
+
         ESGFProperties myESGFProperties = new ESGFProperties();
+        this.passwd = myESGFProperties.getAdminPassword();
+        
         setMyUserInfoDAO(new UserInfoCredentialedDAO(root,passwd,myESGFProperties));
     }
     
@@ -315,10 +314,12 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
     }
     
     public static void main(String [] args) throws FileNotFoundException, IOException {
-        UserOperationsInterface u = new UserOperationsESGFDBImpl();
-        List<User> users = u.getAllUsers();
+        //UserOperationsInterface u = new UserOperationsESGFDBImpl();
+        //List<User> users = u.getAllUsers();
         
-        System.out.println(users);
+        //System.out.println(users);
+        ESGFProperties props = new ESGFProperties();
+        System.out.println(props.getAdminPassword());
         /*
         ESGFProperties props = new ESGFProperties();
         UserInfoDAO uid = new UserInfoDAO(props);
@@ -345,7 +346,7 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
             ESGFProperties props = new ESGFProperties();
             UserInfoDAO uid = new UserInfoDAO(props);
             
-            for(int i=0;i<uid.getUserEntries().size();i++) {
+            for(int i=1;i<uid.getUserEntries().size();i++) {
                 String [] str = uid.getUserEntries().get(i);
                 LOG.debug("ADDING USER: |-> " + str[0]);
                 User user = this.getUserObjectFromUserName(str[0]);

@@ -142,6 +142,7 @@ public class ExtractGroupInfoController {
 
         System.out.println("2|->");
         if(users != null) {
+            System.out.println("Users size: " + users.size());
             for(int i=0;i<users.size();i++) {
                 User user = users.get(i);
                 xmlOutput += user.toXml();

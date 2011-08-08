@@ -332,6 +332,8 @@ $(document).ready(function(){
 	$("input#add_group-button[rel]").overlay({
 		mask: '#000',
 		onLoad: function() {
+			
+			
 			$('#new_group_form').show();
 			
 			//$('#userName_input').show();
@@ -373,22 +375,25 @@ $(document).ready(function(){
 			
 			query = { "groupName" : ESGF.setting.currentGroupName,"type" : "getGroupInfo" };
 			var groupinfo_url = '/esgf-web-fe/extractgroupdataproxy';
+			if(ESGF.setting.currentGroupName == 'default') {
+				alert('You must select a group to edit');
+			} else {
 			
-			$.ajax({
-	    		url: groupinfo_url,
-	    		type: "GET",
-	    		data: query,
-	    		dataType: 'json',
-	    		success: function(data) {
-	    			fillFormContentForEdit(data);
-	    		},
-				error: function() {
-					alert('error');
-				}
-			});
+				$.ajax({
+		    		url: groupinfo_url,
+		    		type: "GET",
+		    		data: query,
+		    		dataType: 'json',
+		    		success: function(data) {
+		    			fillFormContentForEdit(data);
+		    		},
+					error: function() {
+						alert('error');
+					}
+				});
 			
 			$('#new_group_form').show();
-
+		}
 			
 		},
 	
@@ -429,18 +434,24 @@ $(document).ready(function(){
 			var query = { "groupName" : ESGF.setting.currentGroupName ,"type" : "getAllUsersInGroup" };
 			var groupinfo_url = '/esgf-web-fe/extractgroupdataproxy';
 			
-			$.ajax({
-	    		url: groupinfo_url,
-	    		type: "GET",
-	    		data: query,
-	    		dataType: 'json',
-	    		success: function(data) {
-	    			displayPotentialUsers(data);
-	    		},
-				error: function() {
-					alert('error');
-				}
-			});
+			
+			if(ESGF.setting.currentGroupName == 'default') {
+				alert('You must select a group to edit user priviledges');
+			} else {
+				$.ajax({
+		    		url: groupinfo_url,
+		    		type: "GET",
+		    		data: query,
+		    		dataType: 'json',
+		    		success: function(data) {
+		    			displayPotentialUsers(data);
+		    		},
+					error: function() {
+						alert('error');
+					}
+				});
+			}
+			
 			
 		},
 		onClose: function() {
@@ -452,7 +463,6 @@ $(document).ready(function(){
 		
 	 */
 	function displayPotentialUsers(data) {
-
 		
 		var checkbox = '';
 		$('input#groupName').val(ESGF.setting.currentGroupName);
@@ -460,13 +470,15 @@ $(document).ready(function(){
 		
 		for(var i=0;i<data.users.allusers.user.length;i++) {
 			var userName = data.users.allusers.user[i].username;
-			//alert('userName: ' + userName);
-			if(isUserInGroup(data,userName)) {
-				checkbox = '<p><input style="margin-left:10px;margin-bottom:0px" type="checkbox" checked="yes" id="userChoices" name="' + userName + '" value="' + userName + '" /> ' + userName + '</p>';
-			} else {
-				checkbox = '<p><input style="margin-left:10px;margin-bottom:0px" type="checkbox" id="userChoices" name="' + userName + '" value="' + userName + '" /> ' + userName + '</p>';
+			if(userName != 'rootAdmin') {
+				if(isUserInGroup(data,userName)) {
+					checkbox = '<p><input style="margin-left:10px;margin-bottom:0px" type="checkbox" checked="yes" id="userChoices" name="' + userName + '" value="' + userName + '" /> ' + userName + '</p>';
+				} else {
+					checkbox = '<p><input style="margin-left:10px;margin-bottom:0px" type="checkbox" id="userChoices" name="' + userName + '" value="' + userName + '" /> ' + userName + '</p>';
+				}
+				$('#potential_users').append(checkbox);
 			}
-			$('#potential_users').append(checkbox);
+			
 		}
 	}
 	
@@ -490,7 +502,6 @@ $(document).ready(function(){
 				isUserInGroup = true;
 			}
 		}
-		
 		return isUserInGroup;
 	}
 	
@@ -499,27 +510,33 @@ $(document).ready(function(){
 	* Remove User
 	*/
 	$('input#delete_group-button').click(function(){
-		$('#new_group_form').hide();
-		//$('#user_info').hide();
-		$('#group_info').hide();
-
-		if (confirm("Are you sure you want to delete user " + ESGF.setting.currentGroupName + "?")) {
-		 
-			if(ESGF.setting.currentGroupName != '') {
-				var deletedUserInput = '<input type="hidden" name="'+ 'groupName' +'" value="' + ESGF.setting.currentGroupName + '" />';
-				var input = '<input type="hidden" name="'+ 'type' +'" value="delete" />' + deletedUserInput;
-				//send request
-				var formStr = '<form action="" method="post">' + input + '</form>';
-				
-				jQuery(formStr).appendTo('body').submit().remove();
-			}
-
-			//$('div.user_info_header').remove();
-			//$('div.user_info_content').remove();
-			//$('div.group_info_header').remove();
-			$('div.group_info_content').remove();
-			$('div.header_name').remove();
+		
+		if(ESGF.setting.currentGroupName == 'default') {
+			alert('You must select a group to delete');
+		} else {
+			$('#new_group_form').hide();
+			//$('#user_info').hide();
+			$('#group_info').hide();
+	
 			
+			if (confirm("Are you sure you want to delete user " + ESGF.setting.currentGroupName + "?")) {
+			 
+				if(ESGF.setting.currentGroupName != '') {
+					var deletedUserInput = '<input type="hidden" name="'+ 'groupName' +'" value="' + ESGF.setting.currentGroupName + '" />';
+					var input = '<input type="hidden" name="'+ 'type' +'" value="delete" />' + deletedUserInput;
+					//send request
+					var formStr = '<form action="" method="post">' + input + '</form>';
+					
+					jQuery(formStr).appendTo('body').submit().remove();
+				}
+	
+				//$('div.user_info_header').remove();
+				//$('div.user_info_content').remove();
+				//$('div.group_info_header').remove();
+				$('div.group_info_content').remove();
+				$('div.header_name').remove();
+				
+			}
 		}
 	});
 	

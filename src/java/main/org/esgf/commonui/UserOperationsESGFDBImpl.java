@@ -88,6 +88,7 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
      */
     @Override
     public void deleteUser(String userName) {
+        System.out.println("<><><><><>REMOVE USER: " + userName);
         UserInfo user = this.myUserInfoDAO.getUserById(userName);
         this.myUserInfoDAO.deleteUser(user);
     }
@@ -97,17 +98,12 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
         LOG.debug("In getUserObjectByUserName: " + username);
         User user = null;
         
-        System.out.println("\n\n\n\n\n\n\nHERE");
-        System.out.println(username);
-        
         
         UserInfo userInfo = this.myUserInfoDAO.getUserById(username);
         
         if(userInfo == null) {
             System.out.println("UserINFO is NULL!");
         }
-        
-        System.out.println("\n\n\n\n\n\n\nEND HERE");
         
         
         
@@ -313,26 +309,7 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
         return users;
     }
     
-    public static void main(String [] args) throws FileNotFoundException, IOException {
-        //UserOperationsInterface u = new UserOperationsESGFDBImpl();
-        //List<User> users = u.getAllUsers();
-        
-        //System.out.println(users);
-        ESGFProperties props = new ESGFProperties();
-        System.out.println(props.getAdminPassword());
-        /*
-        ESGFProperties props = new ESGFProperties();
-        UserInfoDAO uid = new UserInfoDAO(props);
-        
-        
-        for(int i=0;i<uid.getUserEntries().size();i++) {
-            String [] str = uid.getUserEntries().get(i);
-            LOG.debug("ADDING USER: |-> " + str[0]);
-            User user = u.getUserObjectFromUserName(str[0]);
-            users.add(user);
-        }
-        */
-    }
+    
     
     /*
      * (non-Javadoc)
@@ -371,9 +348,11 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
         
         if(user.isValid()) {
             if(user.getUserName().equals("rootAdmin")) {
+                System.out.println("adding user>>>" + userName);
                 this.myUserInfoDAO.addPermission(user, groupName, "super");
             }
             else {
+                System.out.println("adding user>>>" + userName);
                 this.myUserInfoDAO.addPermission(user, groupName, "default");
             }
         }
@@ -395,16 +374,64 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
     public void deleteUserFromGroup(String userName,String groupName) {
         UserInfo user = this.myUserInfoDAO.getUserById(userName);
         
-        if(user.isValid()) {
-            if(user.getUserName().equals("rootAdmin")) {
-                this.myUserInfoDAO.deletePermission(user, groupName, "super");
+        if(this.isInGroup(userName, groupName)) {
+            //this.myUserInfoDAO.deleteGroupFromUserPermissions(user,groupName);
+            
+            LOG.debug("DELETING USER: " + userName + " from group[->" + groupName + " isValud: " + user.isValid());
+            if(user.isValid()) {
+                if(user.getUserName().equals("rootAdmin")) {
+                    System.out.println("rootadmin[->");
+                    this.myUserInfoDAO.deleteGroupFromUserPermissions(user, groupName);
+                    //this.myUserInfoDAO.deletePermission(user, groupName, "super");
+                }
+                else {
+                    System.out.println("Standard[->");
+                    this.myUserInfoDAO.deleteGroupFromUserPermissions(user, groupName);
+                    //this.myUserInfoDAO.deletePermission(user, groupName, "default");
+                }
             }
-            else {
-                this.myUserInfoDAO.deletePermission(user, groupName, "default");
+            
+        }
+        
+        
+    }
+    
+    public boolean isInGroup(String userName,String groupName) {
+        boolean isInGroup = false;
+        
+        UserInfo user = this.myUserInfoDAO.getUserById(userName);
+        
+        Map<String,Set<String>> perms = user.getPermissions();
+        if(perms != null) {
+            System.out.println("size: " + perms.size());
+            for(int i=0;i<perms.size();i++)
+            {
+                for(String key : perms.keySet()) {
+                    System.out.println("key " + key);
+                    if(key.equals(groupName)) {
+                        isInGroup = true;
+                    }
+                }
             }
         }
+        
+        
+        
+        return isInGroup;
     }
-
+    
+    public static void main(String [] args) throws FileNotFoundException, IOException {
+        //UserOperationsInterface u = new UserOperationsESGFDBImpl();
+        UserOperationsESGFDBImpl u = new UserOperationsESGFDBImpl();
+        
+        //ESGFProperties props = new ESGFProperties();
+        //System.out.println(props.getAdminPassword());
+        boolean isInGroup = u.isInGroup("jfh","1");
+        System.out.println(isInGroup);
+    }
+    
+    
+    
     /*
      * (non-Javadoc)
      * @see org.esgf.commonui.UserOperationsInterface#getUserIdFromUserName(java.lang.String)

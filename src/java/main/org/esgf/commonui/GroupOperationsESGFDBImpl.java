@@ -10,26 +10,40 @@ import org.esgf.adminui.Group;
 
 import esg.common.util.ESGFProperties;
 import esg.node.security.GroupRoleDAO;
+import esg.node.security.UserInfoCredentialedDAO;
 
 public class GroupOperationsESGFDBImpl implements GroupOperationsInterface {
 
     private final static Logger LOG = Logger.getLogger(GroupOperationsESGFDBImpl.class);
     
     private GroupRoleDAO groupRoleDAO;
+    private String passwd;
+    private String root = "rootAdmin"; 
+    public UserInfoCredentialedDAO myUserInfoDAO;
     
     public GroupOperationsESGFDBImpl() {
         try {
-            groupRoleDAO = new GroupRoleDAO(new ESGFProperties());
+            ESGFProperties myESGFProperties = new ESGFProperties();
+            groupRoleDAO = new GroupRoleDAO(myESGFProperties);
+            this.passwd = myESGFProperties.getAdminPassword();
+            
+            setMyUserInfoDAO(new UserInfoCredentialedDAO(root,passwd,myESGFProperties));
         } catch(Exception e) {
             LOG.debug("Error in GroupOperationsESGFDBImpl Constructor");
         }
     }
+
+    public void setMyUserInfoDAO(UserInfoCredentialedDAO myUserInfoDAO) {
+        this.myUserInfoDAO = myUserInfoDAO;
+    }
+    
     
     /*
      * 
      */
     @Override
     public void addGroup(String groupName,String groupDescription) {
+        System.out.println("<><><>Adding group<><><>" + groupName);
         groupRoleDAO.addGroup(groupName,groupDescription);
     }
     
@@ -53,7 +67,7 @@ public class GroupOperationsESGFDBImpl implements GroupOperationsInterface {
     
     @Override
     public void deleteGroup(String groupName) {
-        System.out.println("Deleting groupName|-> " + groupName);
+        System.out.println("Deleting groupName|[-> " + groupName);
         groupRoleDAO.deleteGroup(groupName);
     }
     

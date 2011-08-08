@@ -295,7 +295,7 @@ public class ManageUsersController {
         LOG.debug("userName->"+userName);
         
         String userId = uoi.getUserIdFromUserName(userName);
-        if(userName.equalsIgnoreCase("rootAdmin")) {
+        if(!userName.equalsIgnoreCase("rootAdmin")) {
             uoi.deleteUser(userName);
         }
         

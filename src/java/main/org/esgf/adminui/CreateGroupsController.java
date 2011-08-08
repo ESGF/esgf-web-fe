@@ -181,6 +181,10 @@ public class CreateGroupsController {
             editGroup(request);
         }
         else if(type.equalsIgnoreCase("delete")) {
+            
+            //delete the rootAdmin user first
+            
+            
             deleteGroup(request);
         } else if(type.equalsIgnoreCase("editUsersInGroup")) {
             
@@ -205,31 +209,37 @@ public class CreateGroupsController {
                 }
             }
 
+
+            System.out.println("\n\n\n\n\n\n\n\n");
+            System.out.println("<><><>Checked\n");
+            System.out.println(checkedUsers);
+            System.out.println("\n\n\n\n\n\n\n\n");
             
             //next find the users that were excluded from the check list and delete them
             //i.e. delete whatever user is leftover
             for(int i=0;i<users.size();i++) {
                 User user = users.get(i);
                 boolean canDelete = true;
-                //System.out.println("user.getUserName() " + user.getUserName());
+                System.out.println("[->user.getUserName() " + user.getUserName());
                 for(int j=0;j<checkedUsers.size();j++) {
                     User checkedUser = checkedUsers.get(j);
-                    System.out.println("\tcheckedUser.getUserName() " + checkedUser.getUserName());
+                    System.out.println("\t[->checkedUser.getUserName() " + checkedUser.getUserName());
                     if(user == null) {
-                        System.out.println("\t\tuser is null");
+                        System.out.println("\t\t[->user is null");
                     }
                     if(checkedUser != null) {
-                        if(user.getUserName().equals("rootAdmin") && user.getUserName().equalsIgnoreCase(checkedUser.getUserName())) {
+                        if(user.getUserName().equalsIgnoreCase(checkedUser.getUserName())) {
                             canDelete = false;
                         }
                     }
                     
                 }
                 if(canDelete) {
-                    System.out.println("Deleting User->" + user.getUserName() + " from group " + groupName);
+                    System.out.println("[->Deleting User->" + user.getUserName() + " from group " + groupName);
                 
                     //delete the user from the group
-                    //uoi.deleteUserFromGroup(user.getUserName(), groupName);
+                    uoi.deleteUserFromGroup(user.getUserName(), groupName);
+                    
                 }
                 
                 
@@ -286,6 +296,9 @@ public class CreateGroupsController {
         String groupName = request.getParameter("groupName");
         
         String groupId = goi.getGroupIdFromGroupName(groupName);
+        
+        //delete rootAdmin user from group first
+        uoi.deleteUserFromGroup("rootAdmin", groupName);
         
         LOG.debug("Deleteing->" + groupId);
         goi.deleteGroup(groupName);

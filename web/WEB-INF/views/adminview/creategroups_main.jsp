@@ -467,17 +467,16 @@ $(document).ready(function(){
 		var checkbox = '';
 		$('input#groupName').val(ESGF.setting.currentGroupName);
 		
-		
 		for(var i=0;i<data.users.allusers.user.length;i++) {
 			var userName = data.users.allusers.user[i].username;
-			if(userName != 'rootAdmin') {
+			//if(userName != 'rootAdmin') {
 				if(isUserInGroup(data,userName)) {
 					checkbox = '<p><input style="margin-left:10px;margin-bottom:0px" type="checkbox" checked="yes" id="userChoices" name="' + userName + '" value="' + userName + '" /> ' + userName + '</p>';
 				} else {
 					checkbox = '<p><input style="margin-left:10px;margin-bottom:0px" type="checkbox" id="userChoices" name="' + userName + '" value="' + userName + '" /> ' + userName + '</p>';
 				}
 				$('#potential_users').append(checkbox);
-			}
+			//}
 			
 		}
 	}

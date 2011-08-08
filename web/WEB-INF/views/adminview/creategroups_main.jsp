@@ -326,7 +326,6 @@ $(document).ready(function(){
 		return group_info_content;
 	}
 	
-	
 	/*
 	* Add User
 	*/
@@ -430,7 +429,6 @@ $(document).ready(function(){
 			var query = { "groupName" : ESGF.setting.currentGroupName ,"type" : "getAllUsersInGroup" };
 			var groupinfo_url = '/esgf-web-fe/extractgroupdataproxy';
 			
-			
 			$.ajax({
 	    		url: groupinfo_url,
 	    		type: "GET",
@@ -455,6 +453,7 @@ $(document).ready(function(){
 	 */
 	function displayPotentialUsers(data) {
 
+		
 		var checkbox = '';
 		$('input#groupName').val(ESGF.setting.currentGroupName);
 		

@@ -31,9 +31,9 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
     public UserOperationsESGFDBImpl() throws FileNotFoundException, IOException {
 
         //get the password
-        PASSWORD_FILE = new File("/usr/local/.esg_pg_pass");
-        this.passwd = Utils.getPassword(PASSWORD_FILE);
-        
+        //PASSWORD_FILE = new File("/usr/local/.esg_pg_pass");
+        //this.passwd = Utils.getPassword(PASSWORD_FILE);
+        this.passwd = "mattryan12!";
         
         ESGFProperties myESGFProperties = new ESGFProperties();
         setMyUserInfoDAO(new UserInfoCredentialedDAO(root,passwd,myESGFProperties));
@@ -90,13 +90,27 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
     @Override
     public void deleteUser(String userName) {
         UserInfo user = this.myUserInfoDAO.getUserById(userName);
+        this.myUserInfoDAO.deleteUser(user);
     }
     
     @Override
     public User getUserObjectFromUserName(String username) {
+        LOG.debug("In getUserObjectByUserName: " + username);
         User user = null;
         
+        System.out.println("\n\n\n\n\n\n\nHERE");
+        System.out.println(username);
+        
+        
         UserInfo userInfo = this.myUserInfoDAO.getUserById(username);
+        
+        if(userInfo == null) {
+            System.out.println("UserINFO is NULL!");
+        }
+        
+        System.out.println("\n\n\n\n\n\n\nEND HERE");
+        
+        
         
         if(userInfo != null && userInfo.isValid()) {
             String openId = userInfo.getOpenid();
@@ -300,6 +314,25 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
         return users;
     }
     
+    public static void main(String [] args) throws FileNotFoundException, IOException {
+        UserOperationsInterface u = new UserOperationsESGFDBImpl();
+        List<User> users = u.getAllUsers();
+        
+        System.out.println(users);
+        /*
+        ESGFProperties props = new ESGFProperties();
+        UserInfoDAO uid = new UserInfoDAO(props);
+        
+        
+        for(int i=0;i<uid.getUserEntries().size();i++) {
+            String [] str = uid.getUserEntries().get(i);
+            LOG.debug("ADDING USER: |-> " + str[0]);
+            User user = u.getUserObjectFromUserName(str[0]);
+            users.add(user);
+        }
+        */
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.esgf.commonui.UserOperationsInterface#getAllUsers()
@@ -314,6 +347,7 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
             
             for(int i=0;i<uid.getUserEntries().size();i++) {
                 String [] str = uid.getUserEntries().get(i);
+                LOG.debug("ADDING USER: |-> " + str[0]);
                 User user = this.getUserObjectFromUserName(str[0]);
                 users.add(user);
             }

@@ -44,8 +44,10 @@ public class ExtractGroupInfoController {
     
     public ExtractGroupInfoController() throws FileNotFoundException, IOException {
         LOG.debug("IN CreateGroupsController Constructor");
-        goi = new GroupOperationsXMLImpl();
-        uoi = new UserOperationsXMLImpl();
+        //goi = new GroupOperationsXMLImpl();
+        //uoi = new UserOperationsXMLImpl();
+        goi = new GroupOperationsESGFDBImpl();
+        uoi = new UserOperationsESGFDBImpl();
     }
     
     /**
@@ -129,35 +131,50 @@ public class ExtractGroupInfoController {
      *
      */
     private String processGetAllUsersInGroupType(String groupName) throws IOException, JSONException, ParserConfigurationException, JDOMException {
-        LOG.debug("ExtractGroupInfoController processGetAllUsersInGroupType");
+        LOG.debug("ExtractGroupInfoController processGetAllUsersInGroupType|->" + groupName);
         String jsonContent = "jsonContent";
 
         String xmlOutput = "<users>";
-        
         xmlOutput += "<ingroup>";
 
+        System.out.println("1|->");
         List<User> users = uoi.getUsersFromGroup(groupName);//uoi.getAllUsers();
 
+        System.out.println("2|->");
         if(users != null) {
             for(int i=0;i<users.size();i++) {
                 User user = users.get(i);
                 xmlOutput += user.toXml();
             }
         }
-        
+
+        System.out.println("3->");
         xmlOutput += "</ingroup>";
         
         
         xmlOutput += "<allusers>";
         
         users = uoi.getAllUsers();//uoi.getAllUsers();
+        System.out.println("4|->");
         if(users != null) {
+            System.out.println("\t\tUSERS NOT NULL " + users.size());
+            
             for(int i=0;i<users.size();i++) {
+                System.out.println("\t\tuser " + i);
+                
                 User user = users.get(i);
-                xmlOutput += user.toXml();
+                if(user == null) {
+                    System.out.println("NULL");
+                } else {
+                    System.out.println("NOT NULL");
+                    xmlOutput += user.toXml();
+                }
+                System.out.println("\t\tuser " + i);
+                
             }
         }
-        
+
+        System.out.println("5|->");
         xmlOutput += "</allusers>";
         
         xmlOutput += "</users>";

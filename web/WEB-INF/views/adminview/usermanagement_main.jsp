@@ -334,7 +334,6 @@ $(document).ready(function(){
 	*/
 	function processUserContent(data) {
 		
-		
 		//get the userName from the returned jsonContent
 		var userName = data.userinfo.user.username;
 

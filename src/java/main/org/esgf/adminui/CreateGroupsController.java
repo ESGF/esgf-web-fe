@@ -82,6 +82,7 @@ import org.esgf.commonui.GroupOperationsInterface;
 //import org.esgf.commonui.UserOperations;
 import org.esgf.commonui.GroupOperationsESGFDBImpl;
 import org.esgf.commonui.GroupOperationsXMLImpl;
+import org.esgf.commonui.UserOperationsESGFDBImpl;
 import org.esgf.commonui.UserOperationsInterface;
 import org.esgf.commonui.UserOperationsXMLImpl;
 import org.esgf.commonui.Utils;
@@ -109,8 +110,10 @@ public class CreateGroupsController {
     
     public CreateGroupsController() throws FileNotFoundException, IOException {
         LOG.debug("IN CreateGroupsController Constructor");
-        goi = new GroupOperationsXMLImpl();
-        uoi = new UserOperationsXMLImpl();
+        //goi = new GroupOperationsXMLImpl();
+        //uoi = new UserOperationsXMLImpl();
+        goi = new GroupOperationsESGFDBImpl();
+        uoi = new UserOperationsESGFDBImpl();
     }
 
     /**
@@ -166,8 +169,9 @@ public class CreateGroupsController {
         
         String groupName = request.getParameter("groupName");
 
-        //LOG.debug("Type->" + type);
-        //LOG.debug("GroupName->" + groupName);
+        
+        LOG.debug("Type->" + type);
+        LOG.debug("GroupName|->" + groupName);
         
         //from the type perform the appropriate operation
         if(type.equalsIgnoreCase("add")) {
@@ -184,6 +188,10 @@ public class CreateGroupsController {
             Enumeration<String> paramEnum = request.getParameterNames();
             
             
+            LOG.debug("\n\n\n\n\n\n\n\nIN EDITUSERSINGROUP");
+            
+            
+
             List<User> users = uoi.getAllUsers();
             List<User> checkedUsers = new ArrayList<User>();
             
@@ -192,7 +200,8 @@ public class CreateGroupsController {
                 String postContent = (String) paramEnum.nextElement();
                 
                 String userName = request.getParameter(postContent);
-                
+
+                LOG.debug("USERNAME: " + userName);
                 if(!postContent.equals("groupName") && !postContent.equals("type")) {
 
                     //System.out.println("Adding User->" + userName + " from group " + groupName);
@@ -200,7 +209,8 @@ public class CreateGroupsController {
                     uoi.addUserToGroup(userName, groupName);
                 }
             }
-            
+
+            LOG.debug("\n\n\n\n\n\n\n\nIN EDITUSERSINGROUP");
             
             //next find the users that were excluded from the check list and delete them
             //i.e. delete whatever user is leftover
@@ -211,9 +221,13 @@ public class CreateGroupsController {
                 for(int j=0;j<checkedUsers.size();j++) {
                     User checkedUser = checkedUsers.get(j);
                     //System.out.println("\tcheckedUser.getUserName() " + checkedUser.getUserName());
-                    if(user.getUserName().equalsIgnoreCase(checkedUser.getUserName())) {
-                        canDelete = false;
+                    
+                    if(checkedUser != null) {
+                        if(user.getUserName().equalsIgnoreCase(checkedUser.getUserName())) {
+                            canDelete = false;
+                        }
                     }
+                    
                 }
                 if(canDelete) {
                     System.out.println("Deleting User->" + user.getUserName() + " from group " + groupName);
@@ -278,7 +292,7 @@ public class CreateGroupsController {
         String groupId = goi.getGroupIdFromGroupName(groupName);
         
         LOG.debug("Deleteing->" + groupId);
-        goi.deleteGroup(groupId);
+        goi.deleteGroup(groupName);
 
         LOG.debug("------End CreateGroupsController deleteUser------");
 

@@ -51,10 +51,10 @@ public class ExtractUserInfoController {
     
     public ExtractUserInfoController() throws FileNotFoundException, IOException {
         LOG.debug("IN ExtractUserInfoController Constructor");
-        //goi = new GroupOperationsESGFDBImpl();
-        //uoi = new UserOperationsESGFDBImpl();
-        goi = new GroupOperationsXMLImpl();
-        uoi = new UserOperationsXMLImpl();
+        goi = new GroupOperationsESGFDBImpl();
+        uoi = new UserOperationsESGFDBImpl();
+        //goi = new GroupOperationsXMLImpl();
+        //uoi = new UserOperationsXMLImpl();
     }
     
     
@@ -115,7 +115,7 @@ public class ExtractUserInfoController {
      *
      */
     private String processGetUserInfoType(String userName) {
-        LOG.debug("ExtractUserInfoController processGetUserInfoType");
+        LOG.debug("ExtractUserInfoController processGetUserInfoType|-->" + userName);
 
         
         String jsonContent = "";
@@ -131,7 +131,7 @@ public class ExtractUserInfoController {
             //goi.getGroupObjectFromGroupName(groupName)
             //List<Group> groups = goi.getGroupsFromUser(userId);
             
-            //if(groups != null) {
+            if(groups != null) {
                 xmlOutput += "<groups>";
                 
                 for(int i=0;i<groups.size();i++) {
@@ -139,7 +139,7 @@ public class ExtractUserInfoController {
                 }
                 xmlOutput += "</groups>";
                 
-            //}
+            }
             
             xmlOutput += "</userinfo>";
             
@@ -151,7 +151,7 @@ public class ExtractUserInfoController {
             e.printStackTrace();
         }
         
-        
+        LOG.debug("JSONCONTENT: " + jsonContent);
         LOG.debug("ExtractUserInfoController processGetUserInfoType");
 
         return jsonContent;

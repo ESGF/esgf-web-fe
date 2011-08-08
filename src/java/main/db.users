@@ -13,5 +13,4 @@
 		<state>user1_state</state>
 		<country>user1_country</country>
 	</user>
-	
-<user><id>user93</id><first>q</first><last>q</last><middle>N/A</middle><username>username92</username><email>q</email><organization>q</organization><city>q</city><state>N/A</state><country>q</country><openid>openid61</openid><dn>dn94</dn></user></users>
+</users>

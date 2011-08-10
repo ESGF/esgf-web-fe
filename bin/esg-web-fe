@@ -171,7 +171,9 @@ setup_web_fe() {
     chgrp -R ${tomcat_group} ${web_fe_app_home}
     popd >& /dev/null
     #----------------------------
-    
+
+    set_redirect ${web_fe_context_root}
+
     popd >& /dev/null
     write_web_fe_install_log
     checked_done 0

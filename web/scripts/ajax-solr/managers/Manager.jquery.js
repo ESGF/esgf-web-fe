@@ -68,7 +68,10 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   {
       executeRequest: function (servlet) {
           var self = this;
+          
+          //loads everything in the html5 'fq' store
           self.loadExistingQueries();
+          
           self.appendDistributedRequestHandler();
           //alert('this.store.string(): ' + this.store.string());
           if (this.proxyUrl) {
@@ -123,19 +126,22 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   		//add the type here 
         Manager.store.addByValue('fq','type:Dataset');
   	   	var fq = localStorage['fq'];
+  	   	
         if(fq == null) {
-      	  fq = 'type:Dataset' + ';';
+      	  	fq = 'type:Dataset' + ';';
       	  
-      	  localStorage['fq'] = fq;
-  	  	} else {
-  		  fq = 'type:Dataset' + ';';
-          localStorage['fq'] = fq;
-  	  	}
+      	  	localStorage['fq'] = fq;
+  	  	} 
+        if(fq == undefined) {
+        	fq = 'type:Dataset' + ';';
+        	  
+      	  	localStorage['fq'] = fq;
+        }
         
   		
   		if(ESGF.setting.storage) {
   			var fq = localStorage['fq'];
-  	  		
+
   	  		if(fq != undefined) {
   	  			var allFqs = fq.split(";");
   	  			for(var i=0;i<allFqs.length-1;i++)
@@ -154,5 +160,21 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   		LOG.debug('End in Manager.loadingExistingQueries');
   		
   		
-  	}
+  	},
+      
+    isDuplicate: function (fq,val) {
+      
+    		var flag = false;
+    		var allFqs = fq.split(";");
+    			//loop over all existing queries - note 'length-1' was used to ignore the trailing whitespace of the last split
+    	  		for(var i=0;i<allFqs.length-1;i++)
+    			{
+    				if(allFqs[i] == ('text:' + val)) {
+    					flag = true;
+    				}
+    			}
+    		return flag;
+    }
+  	
+      
 });

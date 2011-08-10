@@ -97,13 +97,9 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
     	 
       	 //alert('IN Manager appendDistribubtedRequestHandler...ESGF.setting.searchType: ' + ESGF.setting.searchType);
       	 if(ESGF.setting.searchType == 'Distributed') {
-      		//alert('adding distrib');
-         	 
-          	 Manager.store.addByValue('qt','/distrib');
+      		Manager.store.addByValue('qt','/distrib');
       	 }
       	 else {
-      		//alert('removing distrib');
-        	 
       		Manager.store.removeByValue('qt','/distrib');
       	 }
       	

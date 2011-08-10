@@ -1,6 +1,15 @@
 <%@ include file="/WEB-INF/views/search/_overlay.jsp" %>
 <%@ include file="/WEB-INF/views/search/_select_tbl.jsp" %>
 
+<style>
+.distribbutton {
+	font-size: 13px;
+	color: white;
+	border: 1px solid #9c9c9c;
+	background: #838943;
+	cursor: pointer;
+}
+</style>
 
 <div class="span-18 last" >
 		<div class="span-12">
@@ -13,13 +22,23 @@
 
 	    	<div id="temporal"><a href="<c:url value="/scripts/esgf/temporal_overlay.html" />" id="temporal" rel="#temporal_overlay" style="font-size:10px">Temporal Search</a></div>
 	    	<div id="geo"><a href="<c:url value="/scripts/esgf/geospatial_overlay.html" />" rel="#geospatial_overlay" style="font-size:10px" id="geo">Geospatial Search</a></div>
-	    	<div id="distributed"><a href="#" style="font-size:10px" id="distributed">Turn on Distributed Search</a></div>
-	    	
+	    	<!-- <div id="distributed"><a href="#" style="font-size:10px" id="distributed">Turn on Distributed Search</a></div>
+	    	 -->
+	    	 <div id="facet_browser_overlay"><a href="#" rel="#facet_overlay" style="font-size:10px" >Browse Categories</a></div>
 	    	<!-- <div><a href="#" style="font-size:10px">Advanced...&#9660;</a></div>  -->
 	    </div>
 	   	<div class="span-3 last">
 	    	<input id="search-button" type="submit" value="Search" />
 	    </div>
+	    <!--  
+	    <div class="span-18 last" style="margin-left:20px">
+	    
+	    	<div id="distributed"><a href="#" style="font-size:10px" id="distributed">Turn on Distributed Search</a></div>
+	    </div>
+	    -->
+		<div class="span-18 last"> 
+			<input class="distribbutton" id="distribbutton" type="submit" value="Turn on Distributed Search" style="margin-left:20px"/>
+		</div>
 </div>
 
 <div class="span-18 last" id="search-summary" style="margin-top:15px;">
@@ -103,6 +122,7 @@
       //scroll wheel for facet overlay 
         $(".scrollable").scrollable({ vertical: true, mousewheel: true });
 
+        /* OLD FACET OVERLAY
         // For the facet overlay 
         $("li#facet a[rel]").overlay({
         		 
@@ -133,7 +153,38 @@
         		}
         	
         });  
+		*/
+		
+     // For the facet overlay 
+        $("div#facet_browser_overlay a[rel]").overlay({
+        		 
+        		mask: {opacity: 0.5, color: '#000'},
+        		effect: 'apple',
+        		left: "30%",
+        		top: "2%",
+        		
+        		onBeforeLoad: function() {
+        		
+        			$('.apple_overlay').css({'width' : '700px'});
+        		},
 
+        		onLoad: function() {
+        			 //radio buttons for sorting facets 
+        		    $("#facetSort").buttonset();
+        			$(".overlay_header").show();
+        			$(".overlay_content").show();
+        			$(".overlay_footer").show();
+        			$(".overlay_border").show();
+        	},
+        	
+        	onClose: function() {
+        			$(".overlay_header").hide();
+        			$(".overlay_content").hide();
+        			$(".overlay_footer").hide();
+        			$(".overlay_border").hide();
+        		}
+        	
+        });  
          //event trigger for facet sorting buttons 
         $("input[name='sorter']").change(function() {
             if ($("input[name='sorter']:checked").val() == 'sortbyabc') {
@@ -165,7 +216,27 @@
         	}
         }); 
          
-         
+        $('input#distribbutton').click(function () {
+        	//alert($('a#distributed').html());
+        	//if($('a#distributed').html() == 'Turn off Distributed Search') {
+        	if(ESGF.setting.searchType == 'local') {
+        		//alert('change to distributed');
+        		//change the text to Distributed
+            	$('input#distribbutton').val('Turn off Distributed Search');
+            	//change the flag to Distributed
+            	ESGF.setting.searchType = 'Distributed';
+            	Manager.doRequest(0);
+        	} else {
+        		//alert('change to local');
+        		//change the text to Local
+            	$('input#distribbutton').val('Turn on Distributed Search');
+            	//change the flag to Local
+            	ESGF.setting.searchType = 'local';
+            	Manager.doRequest(0);
+        	}
+        	
+        	
+        });  
     });
 
 </script>

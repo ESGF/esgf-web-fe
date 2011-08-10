@@ -137,6 +137,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
 
             selected[evt.data.doc.id] = doc;
             if ( jQuery.trim(this.innerHTML) == "Add To Cart") {
+            	/*
                 var $dialog = $('<div></div>')
                     .html('Dataset <b>' + evt.data.doc.id + "</b> has been added to the selection")
                     .dialog({
@@ -145,9 +146,11 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                         modal: true,
                         hide: 'explode'
                     });
+                */
                 this.innerHTML="Remove From Cart";
 
             } else {
+            	/*
                 var $dialog = $('<div></div>')
                 .html('Dataset <b>' + evt.data.doc.id + "</b> has been removed to the selection")
                 .dialog({
@@ -156,6 +159,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                     modal: true,
                     hide: 'explode'
                 });
+                */
                 this.innerHTML ="Add To Cart";
                 delete selected[evt.data.doc.id];
 

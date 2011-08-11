@@ -37,7 +37,7 @@
 	    </div>
 	    -->
 		<div class="span-18 last"> 
-			<input class="distribbutton" id="distribbutton" type="submit" value="Turn on Distributed Search" style="margin-left:20px"/>
+			<input class="distribbutton1" id="distribbutton" type="submit" value="Turn on Distributed Search" style="margin-left:20px"/>
 		</div>
 </div>
 

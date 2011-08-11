@@ -66,13 +66,13 @@ public class CreateAccountController {
             String passwd = myESGFProperties.getAdminPassword();
             
             this.userInfoDAO = new UserInfoCredentialedDAO("rootAdmin", passwd, myESGFProperties);
-            this.groupRoleDAO = new GroupRoleDAO(props);
+            this.groupRoleDAO = new GroupRoleDAO(myESGFProperties);
             groupRoleDAO.addRole(ROLE_NAME);
         } catch(Exception e) {
             LOG.warn(e.getMessage());
         }
         
-        notifier = new AccountsEmailNotifier(props);
+        notifier = new AccountsEmailNotifier(myESGFProperties);
     }
     
     /**

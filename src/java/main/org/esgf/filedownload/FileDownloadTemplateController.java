@@ -101,7 +101,6 @@ public class FileDownloadTemplateController {
     //private final static String filePrefix="q=*%3A*&json.nl=map&fq=type%3AFile&rows=2000&fq=parent_id:";
     private final static String queryString ="q=*:*&rows=2000&fq=type:File&fq=parent_id:";
 
-
     //debug flag
     private final static boolean debugFlag = false;
 

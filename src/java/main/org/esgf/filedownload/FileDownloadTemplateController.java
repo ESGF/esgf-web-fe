@@ -60,6 +60,7 @@
 package org.esgf.filedownload;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -91,16 +92,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/solrfileproxy")
 public class FileDownloadTemplateController {
 
-    private static String solrURL="http://localhost:8983/solr/";
+    private static String solrURL="http://localhost:8983/solr/select?";
     private final static Logger LOG = Logger.getLogger(FileDownloadTemplateController.class);
 
     //right now the prefix for the solr query is hard coded
     //the max rows to be returned is best configurable or read from props file
-    private final static String ROWS="1000";
-    private final static String filePrefix="q=*%3A*&json.nl=map&fq=type%3AFile&rows="+ROWS+"&fq=parent_id:";
+
+    //private final static String filePrefix="q=*%3A*&json.nl=map&fq=type%3AFile&rows=2000&fq=parent_id:";
+    private final static String queryString ="q=*:*&rows=2000&fq=type:File&fq=parent_id:";
+
 
     //debug flag
     private final static boolean debugFlag = false;
+
 
     @RequestMapping(method=RequestMethod.GET)
     public @ResponseBody String doGet(HttpServletRequest request, HttpServletResponse response) throws JSONException {
@@ -219,11 +223,11 @@ public class FileDownloadTemplateController {
         //return jo.toString();
     }
 
-    private static String getResponseBody(String id) {
+    private static String getResponseBody(String id)  {
 
         String responseBody = null;
 
-        String newURL = filePrefix + id;
+
 
 
         // create an http client
@@ -231,11 +235,9 @@ public class FileDownloadTemplateController {
 
 
         //String urlString = solrURL + "select?" + queryString + "&wt=json";
-        String urlString = solrURL + "select?" + newURL + "&wt=json";
+        String urlString = solrURL + queryString + id + "&wt=json";
 
-        if(debugFlag) {
-            LOG.debug("urlString: " + urlString);
-        }
+        LOG.debug("urlString: " + urlString);
 
         GetMethod method = new GetMethod(urlString);
 

@@ -222,7 +222,7 @@ public class FileDownloadTemplateController {
         //return jo.toString();
     }
 
-    private static String getResponseBody(String id)  {
+    private String getResponseBody(String id)  {
 
         String responseBody = null;
 
@@ -266,13 +266,13 @@ public class FileDownloadTemplateController {
         }
 
         if(responseBody != null) {
-            LOG.debug("responseBody: " + responseBody.substring(0, 1000));
+            LOG.debug("responseBody: " + responseBody.substring(0, 300));
         }
 
         return responseBody;
     }
 
-    public static Element createFileElement(JSONObject docJSON) throws JSONException {
+    public Element createFileElement(JSONObject docJSON) throws JSONException {
         // create <file> element
         Element fileEl = new Element("file");
 

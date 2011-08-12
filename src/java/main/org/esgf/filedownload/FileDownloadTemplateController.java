@@ -99,7 +99,7 @@ public class FileDownloadTemplateController {
     //the max rows to be returned is best configurable or read from props file
 
     //private final static String filePrefix="q=*%3A*&json.nl=map&fq=type%3AFile&rows=2000&fq=parent_id:";
-    private final static String queryString ="q=*:*&rows=2000&fq=type:File&fq=parent_id:";
+    private final static String queryString ="q=*:*&json.nl=map&rows=2000&fq=type:File&fq=parent_id:";
 
     //debug flag
     private final static boolean debugFlag = false;
@@ -266,9 +266,7 @@ public class FileDownloadTemplateController {
         }
 
         if(responseBody != null) {
-            if(debugFlag) {
-                LOG.debug("responseBody: " + responseBody);
-            }
+            LOG.debug("responseBody: " + responseBody.substring(0, 300));
         }
 
         return responseBody;

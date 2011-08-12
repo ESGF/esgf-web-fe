@@ -28,19 +28,28 @@ public class Group implements Serializable{
         this.id = id;
     }
     public String getid() {
-        return id;
+        if(this.id != null)
+            return this.id;
+        else
+            return "N/A";
     }
     public void setname(String name) {
         this.name = name;
     }
     public String getname() {
-        return name;
+        if(this.name != null)
+            return this.name;
+        else
+            return "N/A";
     }
     public void setdescription(String description) {
         this.description = description;
     }
     public String getdescription() {
-        return description;
+        if(this.description != null)
+            return this.description;
+        else
+            return "N/A";
     }
     
     public String toString() {
@@ -61,11 +70,31 @@ public class Group implements Serializable{
         Element groupElement = new Element("group");
         
         Element groupIdEl = new Element("groupid");
-        groupIdEl.addContent(this.id);
+        if(this.id != null) {
+            groupIdEl.addContent(this.id);
+        }
+        else {
+            groupIdEl.addContent("N/A");
+        }
+        
+        
         Element groupNameEl = new Element("groupname");
-        groupNameEl.addContent(this.name);
+        if(this.name != null) {
+            groupNameEl.addContent(this.name);
+        }
+        else {
+            groupNameEl.addContent("N/A");
+        }
+        
+        
+        
         Element groupDescriptionEl = new Element("groupdescription");
-        groupDescriptionEl.addContent(this.description);
+        if(this.description != null) {
+            groupDescriptionEl.addContent(this.description);
+        }
+        else {
+            groupDescriptionEl.addContent("N/A");
+        }
         
         
         groupElement.addContent(groupIdEl);

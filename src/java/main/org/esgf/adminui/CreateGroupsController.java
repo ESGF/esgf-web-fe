@@ -69,6 +69,8 @@ package org.esgf.adminui;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +82,9 @@ import org.esgf.commonui.GroupOperationsInterface;
 //import org.esgf.commonui.UserOperations;
 import org.esgf.commonui.GroupOperationsESGFDBImpl;
 import org.esgf.commonui.GroupOperationsXMLImpl;
+import org.esgf.commonui.UserOperationsESGFDBImpl;
+import org.esgf.commonui.UserOperationsInterface;
+import org.esgf.commonui.UserOperationsXMLImpl;
 import org.esgf.commonui.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -100,12 +105,15 @@ public class CreateGroupsController {
     private final static Logger LOG = Logger.getLogger(CreateGroupsController.class);
 
     private GroupOperationsInterface goi;
+    private UserOperationsInterface uoi;
     
     
     public CreateGroupsController() throws FileNotFoundException, IOException {
         LOG.debug("IN CreateGroupsController Constructor");
         //goi = new GroupOperationsXMLImpl();
+        //uoi = new UserOperationsXMLImpl();
         goi = new GroupOperationsESGFDBImpl();
+        uoi = new UserOperationsESGFDBImpl();
     }
 
     /**
@@ -155,13 +163,15 @@ public class CreateGroupsController {
         
       //get the userId from the cookie
         String userId = Utils.getIdFromHeaderCookie(request);
-        LOG.debug("UserId Retrieved: " + userId);
         
         //get the type of operation from the request parameter (add, edit, delete)
         String type = Utils.getTypeFromQueryString(request);
         
+        String groupName = request.getParameter("groupName");
+
         
-        LOG.debug("TYPE->" + type);
+        LOG.debug("Type->" + type);
+        LOG.debug("GroupName|->" + groupName);
         
         //from the type perform the appropriate operation
         if(type.equalsIgnoreCase("add")) {
@@ -171,7 +181,71 @@ public class CreateGroupsController {
             editGroup(request);
         }
         else if(type.equalsIgnoreCase("delete")) {
+            
+            //delete the rootAdmin user first
+            
+            
             deleteGroup(request);
+        } else if(type.equalsIgnoreCase("editUsersInGroup")) {
+            
+            
+            Enumeration<String> paramEnum = request.getParameterNames();
+            
+            
+            List<User> users = uoi.getAllUsers();
+            List<User> checkedUsers = new ArrayList<User>();
+            
+            //first find the groups that were added
+            while(paramEnum.hasMoreElements()) { 
+                String postContent = (String) paramEnum.nextElement();
+                
+                String userName = request.getParameter(postContent);
+
+                if(!postContent.equals("groupName") && !postContent.equals("type")) {
+
+                    //System.out.println("Adding User->" + userName + " from group " + groupName);
+                    checkedUsers.add(uoi.getUserObjectFromUserName(userName));
+                    uoi.addUserToGroup(userName, groupName);
+                }
+            }
+
+
+            System.out.println("\n\n\n\n\n\n\n\n");
+            System.out.println("<><><>Checked\n");
+            System.out.println(checkedUsers);
+            System.out.println("\n\n\n\n\n\n\n\n");
+            
+            //next find the users that were excluded from the check list and delete them
+            //i.e. delete whatever user is leftover
+            for(int i=0;i<users.size();i++) {
+                User user = users.get(i);
+                boolean canDelete = true;
+                System.out.println("[->user.getUserName() " + user.getUserName());
+                for(int j=0;j<checkedUsers.size();j++) {
+                    User checkedUser = checkedUsers.get(j);
+                    System.out.println("\t[->checkedUser.getUserName() " + checkedUser.getUserName());
+                    if(user == null) {
+                        System.out.println("\t\t[->user is null");
+                    }
+                    if(checkedUser != null) {
+                        if(user.getUserName().equalsIgnoreCase(checkedUser.getUserName())) {
+                            canDelete = false;
+                        }
+                    }
+                    
+                }
+                if(canDelete) {
+                    System.out.println("[->Deleting User->" + user.getUserName() + " from group " + groupName);
+                
+                    //delete the user from the group
+                    uoi.deleteUserFromGroup(user.getUserName(), groupName);
+                    
+                }
+                
+                
+            }
+            
+            
         }
        
         Map<String,Object> model = getModel(request,CreateGroupsInput);
@@ -183,15 +257,11 @@ public class CreateGroupsController {
     }
     
     
-    
-
-    
     private void editGroup(final HttpServletRequest request) throws IOException {
         LOG.debug("------ManageUsersController editUser------");
         
         Utils.queryStringInfo(request);
         
-        LOG.debug("\n\n\n\nHERE");
         
         //groupId = goi.getGroupIdFromGroupName(request.getParameter("groupName"));
         
@@ -204,11 +274,15 @@ public class CreateGroupsController {
             groupDescription = "N/A";
         }
         
-        String groupId = goi.getGroupIdFromGroupName(groupName);//request.getParameter("id");
+        //String groupId = goi.getGroupIdFromGroupName(groupName);//request.getParameter("id");
+        /* NEED TO FIX THIS */
+        /*
+        Group group = goi.getGroupObjectFromGroupName(groupName);
+        String groupId = group.getid();
         
-        
+        LOG.debug("gId: " + groupId + " groupName: " + groupName + " groupDescription: " + groupDescription);
         goi.editGroup(groupId, groupName, groupDescription);
-        
+        */
         
         LOG.debug("------End CreateGroupsController editUser------");
     }
@@ -223,8 +297,11 @@ public class CreateGroupsController {
         
         String groupId = goi.getGroupIdFromGroupName(groupName);
         
+        //delete rootAdmin user from group first
+        uoi.deleteUserFromGroup("rootAdmin", groupName);
+        
         LOG.debug("Deleteing->" + groupId);
-        goi.deleteGroup(groupId);
+        goi.deleteGroup(groupName);
 
         LOG.debug("------End CreateGroupsController deleteUser------");
 
@@ -249,6 +326,11 @@ public class CreateGroupsController {
         goi.addGroup(groupName, groupDescription);
         
 
+        //must add the root user to the group
+        uoi.addUserToGroup("rootAdmin", groupName);
+        
+        
+        
         LOG.debug("------CreateGroupsController addUser------");
         
     }
@@ -275,6 +357,8 @@ public class CreateGroupsController {
             List<User> users = uoi.getAllUsers();
             User [] userArray = users.toArray(new User[users.size()]);
             */
+            
+            System.out.println("groupArr|->" + groupArray.length);
             // populate model
             model.put(CreateGroups_INPUT, ManageUsersInput);
             //LOG.debug("About to plug in USERS");

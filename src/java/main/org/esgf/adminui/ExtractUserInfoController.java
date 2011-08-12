@@ -53,6 +53,8 @@ public class ExtractUserInfoController {
         LOG.debug("IN ExtractUserInfoController Constructor");
         goi = new GroupOperationsESGFDBImpl();
         uoi = new UserOperationsESGFDBImpl();
+        //goi = new GroupOperationsXMLImpl();
+        //uoi = new UserOperationsXMLImpl();
     }
     
     
@@ -80,26 +82,10 @@ public class ExtractUserInfoController {
             jsonContent = processGetUserInfoType(userName);
             
         }
-        else if(type.equalsIgnoreCase("edit")) {
-            
-        }
-        else {
-            
-        }
 
-        LOG.debug("JsonContent: " + jsonContent);
+        //LOG.debug("JsonContent: " + jsonContent);
         return jsonContent;
-        /*
-        String type = request.getParameter("type");
-        LOG.debug("Type: " + type);
         
-        if(type.equalsIgnoreCase("edit")) {
-            return processEditType(request, response);
-        }
-        else {
-            return null;
-        }
-        */
     }
     
     /**
@@ -116,16 +102,8 @@ public class ExtractUserInfoController {
 
         String type = request.getParameter("type");
         
-            LOG.debug("Type: " + type);
+        LOG.debug("Type: " + type);
         
-        /*
-        if(type.equalsIgnoreCase("edit")) {
-            return processEditType(request, response);
-        }
-        else {
-            return null;
-        }
-        */
             
         return null;
     }
@@ -137,20 +115,22 @@ public class ExtractUserInfoController {
      *
      */
     private String processGetUserInfoType(String userName) {
-        LOG.debug("ExtractUserInfoController processGetUserInfoType");
+        LOG.debug("ExtractUserInfoController processGetUserInfoType|-->" + userName);
 
         
         String jsonContent = "";
         
         User user = uoi.getUserObjectFromUserName(userName);
-        //String xmlOutput = getXMLTupleOutputFromEdit(userName);
-        //String xmlOutput = user.toXml();
+        
+        System.out.println("user|-> " + userName);
         try {
             String xmlOutput = "<userinfo>";
             xmlOutput += user.toXml();
             
             String userId = (uoi.getUserObjectFromUserName(userName)).getUserId();
-            List<Group> groups = goi.getGroupsFromUser(userId);
+            List<Group> groups = uoi.getGroupsFromUser(userName);
+            //goi.getGroupObjectFromGroupName(groupName)
+            //List<Group> groups = goi.getGroupsFromUser(userId);
             
             if(groups != null) {
                 xmlOutput += "<groups>";
@@ -172,7 +152,7 @@ public class ExtractUserInfoController {
             e.printStackTrace();
         }
         
-        
+        LOG.debug("JSONCONTENT: " + jsonContent);
         LOG.debug("ExtractUserInfoController processGetUserInfoType");
 
         return jsonContent;

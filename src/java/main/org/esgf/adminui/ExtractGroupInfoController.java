@@ -44,35 +44,10 @@ public class ExtractGroupInfoController {
     
     public ExtractGroupInfoController() throws FileNotFoundException, IOException {
         LOG.debug("IN CreateGroupsController Constructor");
+        //goi = new GroupOperationsXMLImpl();
+        //uoi = new UserOperationsXMLImpl();
         goi = new GroupOperationsESGFDBImpl();
         uoi = new UserOperationsESGFDBImpl();
-    }
-    
-    
-    /**
-     * Note: GET and POST contain the same functionality.
-     *
-     * @param  request  HttpServletRequest object containing the query string
-     * @param  response  HttpServletResponse object containing the metadata in json format
-     * @throws JDOMException 
-     *
-     */
-    @RequestMapping(method=RequestMethod.GET)
-    public @ResponseBody String doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException, JDOMException {
-        LOG.debug("ExtractGroupInfoController doGet");
-
-        String type = request.getParameter("type");
-        LOG.debug("Type->" + type);
-        if(type.equalsIgnoreCase("edit")) {
-            return processEditType(request, response);
-        }
-        else if(type.equalsIgnoreCase("getGroupForUser")) {
-            return processgetGroupsForUserType(request, response);
-            
-        }
-        else {
-            return null;
-        }
     }
     
     /**
@@ -88,11 +63,19 @@ public class ExtractGroupInfoController {
         LOG.debug("ExtractGroupInfoController doPost");
 
         String type = request.getParameter("type");
+        
+        String groupName = request.getParameter("groupName");
         if(debugFlag)
             LOG.debug("Type: " + type);
         
         if(type.equalsIgnoreCase("edit")) {
             return processEditType(request, response);
+        }
+        else if(type.equalsIgnoreCase("getGroupInfo")) {
+            return processGetGroupInfoType(groupName);
+        }
+        else if(type.equalsIgnoreCase("getAllUsersInGroup")) {
+            return processGetAllUsersInGroupType(groupName);
         }
         else if(type.equalsIgnoreCase("getGroupForUser")) {
             return processgetGroupsForUserType(request, response);
@@ -102,6 +85,147 @@ public class ExtractGroupInfoController {
             return null;
         }
     }
+    
+    /**
+     * Note: GET and POST contain the same functionality.
+     *
+     * @param  request  HttpServletRequest object containing the query string
+     * @param  response  HttpServletResponse object containing the metadata in json format
+     * @throws JDOMException 
+     *
+     */
+    @RequestMapping(method=RequestMethod.GET)
+    public @ResponseBody String doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException, JDOMException {
+        LOG.debug("ExtractGroupInfoController doGet");
+
+        String type = request.getParameter("type");
+        
+        String groupName = request.getParameter("groupName");
+        
+        
+        LOG.debug("Type->" + type);
+        LOG.debug("groupName->" + groupName);
+        if(type.equalsIgnoreCase("edit")) {
+            return processEditType(request, response);
+        }
+        else if(type.equalsIgnoreCase("getGroupInfo")) {
+            return processGetGroupInfoType(groupName);
+        }
+        else if(type.equalsIgnoreCase("getAllUsersInGroup")) {
+            return processGetAllUsersInGroupType(groupName);
+        }
+        else if(type.equalsIgnoreCase("getGroupForUser")) {
+            return processgetGroupsForUserType(request, response);
+            
+        }
+        else {
+            return null;
+        }
+    }
+    
+    
+    /**
+     * @param  request  HttpServletRequest object containing the query string
+     * @param  response  HttpServletResponse object containing the metadata in json format
+     * @throws JDOMException 
+     *
+     */
+    private String processGetAllUsersInGroupType(String groupName) throws IOException, JSONException, ParserConfigurationException, JDOMException {
+        LOG.debug("ExtractGroupInfoController processGetAllUsersInGroupType|->" + groupName);
+        String jsonContent = "jsonContent";
+
+        String xmlOutput = "<users>";
+        xmlOutput += "<ingroup>";
+
+        System.out.println("1|->");
+        List<User> users = uoi.getUsersFromGroup(groupName);//uoi.getAllUsers();
+
+        System.out.println("2|->");
+        if(users != null) {
+            System.out.println("Users size: " + users.size());
+            for(int i=0;i<users.size();i++) {
+                User user = users.get(i);
+                xmlOutput += user.toXml();
+            }
+        }
+
+        System.out.println("3->");
+        xmlOutput += "</ingroup>";
+        
+        
+        xmlOutput += "<allusers>";
+        
+        users = uoi.getAllUsers();//uoi.getAllUsers();
+        System.out.println("4|->");
+        if(users != null) {
+            System.out.println("\t\tUSERS NOT NULL " + users.size());
+            
+            for(int i=0;i<users.size();i++) {
+                System.out.println("\t\tuser " + i);
+                
+                User user = users.get(i);
+                if(user == null) {
+                    System.out.println("NULL");
+                } else {
+                    System.out.println("NOT NULL");
+                    xmlOutput += user.toXml();
+                }
+                System.out.println("\t\tuser " + i);
+                
+            }
+        }
+
+        System.out.println("5|->");
+        xmlOutput += "</allusers>";
+        
+        xmlOutput += "</users>";
+        
+
+        JSONObject jo = XML.toJSONObject(xmlOutput);
+        jsonContent = jo.toString();
+        
+        //LOG.debug("JsonContent: " + jsonContent);
+        return jsonContent;
+    }
+    
+    
+    /**
+     * @param  request  HttpServletRequest object containing the query string
+     * @param  response  HttpServletResponse object containing the metadata in json format
+     * @throws JDOMException 
+     *
+     */
+    private String processGetGroupInfoType(String groupName) throws IOException, JSONException, ParserConfigurationException, JDOMException {
+        LOG.debug("ExtractGroupInfoController processGetGroupInfoType");
+        String jsonContent = "jsonContent";
+
+        String xmlOutput = "<groupinfo>";
+
+        
+        LOG.debug("\t\t\t\tHere" + groupName + "\n\n\n\n");
+        Group group = goi.getGroupObjectFromGroupName(groupName);
+        if(group == null) LOG.debug("null");
+        else
+            LOG.debug("group: " + group);
+        xmlOutput += group.toXml();
+        
+        List<User> users = uoi.getUsersFromGroup(groupName);
+        
+        for(int i=0;i<users.size();i++) {
+            User user = users.get(i);
+            xmlOutput += user.toXml();
+        }
+        
+        xmlOutput += "</groupinfo>";
+        
+        JSONObject jo = XML.toJSONObject(xmlOutput);
+        jsonContent = jo.toString();
+
+        //LOG.debug("JsonContent: " + jsonContent);
+        
+        return jsonContent;
+    }
+    
     
     /**
      * @param  request  HttpServletRequest object containing the query string
@@ -120,19 +244,19 @@ public class ExtractGroupInfoController {
         LOG.debug("userId->" + userId);
         
         
-        List<Group> groups = goi.getGroupsFromUser(userId);
-        LOG.debug(groups);
+        //List<Group> groups = goi.getGroupsFromUser(userId);
+        //LOG.debug(groups);
         
         String xmlOutput = "<groups>";
-        for(int i=0;i<groups.size();i++) {
-            Group group = (Group)groups.get(i);
-            xmlOutput += group.toXml();
-        }
+        //for(int i=0;i<groups.size();i++) {
+        //    Group group = (Group)groups.get(i);
+        //    xmlOutput += group.toXml();
+        //}
         xmlOutput += "</groups>";
         JSONObject jo = XML.toJSONObject(xmlOutput);
         jsonContent = jo.toString();
 
-        LOG.debug("JsonContent: " + jsonContent);
+        //LOG.debug("JsonContent: " + jsonContent);
         return jsonContent;
     }
     
@@ -150,24 +274,12 @@ public class ExtractGroupInfoController {
 
         String groupName = request.getParameter("id");
         
-        LOG.debug("\n\n\n\n\n\n\n" + groupName + "\n\n\n\n\n");
         
         
-        //if(debugFlag)
-            queryStringInfo(request);
+        //queryStringInfo(request);
         
-        /* Search through the data store to see if the id (username or openid) is there 
-         * If it is there, then make the appropriate updates,
-         * otherwise, just ignore
-         * 
-         * As of now, the returned data is in JSON format, so there needs to be some conversion between xml/db store to key/value json pairs
-         */
+        
         try {
-            //xml store version
-            //String xmlOutput = getXMLTupleOutputFromEdit(userName);
-            
-            
-            
             //db version
             //LOG.debug("GroupId->" + groupId);
             Group group = goi.getGroupObjectFromGroupName(groupName);
@@ -184,7 +296,7 @@ public class ExtractGroupInfoController {
             LOG.debug("Problem with conversion to json content in processEditType");
         }
         
-       LOG.debug("JsonContent: " + jsonContent);
+        //LOG.debug("JsonContent: " + jsonContent);
         
         return jsonContent;
     }

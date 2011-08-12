@@ -1,56 +1,6 @@
 <permissions>
 	<tuple>
-		<userid>user1_id</userid>
-		<groupid>group1_id</groupid>
-		<roleid>role4_id</roleid>
-	</tuple>
-	<tuple>
-		<userid>user2_id</userid>
-		<groupid>group1_id</groupid>
-		<roleid>role4_id</roleid>
-	</tuple>
-	<tuple>
-		<userid>user3_id</userid>
-		<groupid>group1_id</groupid>
-		<roleid>role4_id</roleid>
-	</tuple>
-	<tuple>
-		<userid>user4_id</userid>
-		<groupid>group1_id</groupid>
-		<roleid>role4_id</roleid>
-	</tuple>
-	<tuple>
-		<userid>user5_id</userid>
-		<groupid>group1_id</groupid>
-		<roleid>role4_id</roleid>
-	</tuple>
-	<tuple>
-		<userid>user6_id</userid>
-		<groupid>group1_id</groupid>
-		<roleid>role4_id</roleid>
-	</tuple>
-	<tuple>
-		<userid>user7_id</userid>
-		<groupid>group1_id</groupid>
-		<roleid>role4_id</roleid>
-	</tuple>
-	<tuple>
-		<userid>user8_id</userid>
-		<groupid>group1_id</groupid>
-		<roleid>role4_id</roleid>
-	</tuple>
-	<tuple>
-		<userid>user1_id</userid>
-		<groupid>group1_id</groupid>
-		<roleid>role4_id</roleid>
-	</tuple>
-	<tuple>
-		<userid>user8_id</userid>
-		<groupid>group2_id</groupid>
-		<roleid>role4_id</roleid>
-	</tuple>
-	<tuple>
-		<userid>user2_id</userid>
+		<userid>rootAdmin_id</userid>
 		<groupid>group2_id</groupid>
 		<roleid>role4_id</roleid>
 	</tuple>

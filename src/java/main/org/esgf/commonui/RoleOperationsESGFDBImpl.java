@@ -4,6 +4,7 @@ import org.esgf.adminui.Role;
 
 public class RoleOperationsESGFDBImpl implements RoleOperationsInterface {
 
+
     @Override
     public Role getRoleForUserInGroup(String userId, String groupId) {
         // TODO Auto-generated method stub

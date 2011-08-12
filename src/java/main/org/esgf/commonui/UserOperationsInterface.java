@@ -2,6 +2,7 @@ package org.esgf.commonui;
 
 import java.util.List;
 
+import org.esgf.adminui.Group;
 import org.esgf.adminui.User;
 
 public interface UserOperationsInterface {
@@ -31,9 +32,15 @@ public interface UserOperationsInterface {
     
     public String getUserIdFromOpenID(final String openId);
     
-    public List<User> getUsersFromGroup(final String groupId);
+    public List<User> getUsersFromGroup(final String groupName);
     
     public List<User> getAllUsers();
+
+    void addUserToGroup(String userName, String groupName);
+
+    void deleteUserFromGroup(String userName, String groupName);
+
+    List<Group> getGroupsFromUser(String userName);
     
     
 }

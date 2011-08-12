@@ -77,7 +77,12 @@ public class User implements Serializable{
     }
     
     public String getFirstName() {
-        return firstName;
+        if(this.firstName != null) {
+            return firstName;
+        }
+        else
+            return "N/A";
+        
     }
 
     public void setFirstName(String firstName) {
@@ -85,7 +90,10 @@ public class User implements Serializable{
     }
 
     public String getUserName() {
-        return userName;
+        if(this.userName != null)
+            return userName;
+        else
+            return "N/A";
     }
 
     public void setUserName(String userName) {
@@ -93,7 +101,10 @@ public class User implements Serializable{
     }
 
     public String getEmailAddress() {
-        return emailAddress;
+        if(this.emailAddress != null)
+            return emailAddress;
+        else
+            return "N/A";
     }
 
     public void setEmailAddress(String emailAddress) {
@@ -102,7 +113,10 @@ public class User implements Serializable{
 
     
     public String getOrganization() {
-        return organization;
+        if(this.organization != null)
+            return organization;
+        else
+            return "N/A";
     }
 
     public void setOrganization(String organization) {
@@ -110,7 +124,10 @@ public class User implements Serializable{
     }
 
     public String getCity() {
-        return city;
+        if(this.city != null)
+            return city;
+        else
+            return "N/A";
     }
 
     public void setCity(String city) {
@@ -118,7 +135,10 @@ public class User implements Serializable{
     }
 
     public String getState() {
-        return state;
+        if(this.state != null)
+            return state;
+        else
+            return "N/A";
     }
 
     public void setState(String state) {
@@ -126,7 +146,10 @@ public class User implements Serializable{
     }
 
     public String getCountry() {
-        return country;
+        if(this.country != null)
+            return country;
+        else
+            return "N/A";
     }
 
     public void setCountry(String country) {
@@ -134,7 +157,10 @@ public class User implements Serializable{
     }
 
     public String getOpenId() {
-        return openId;
+        if(this.openId != null)
+            return openId;
+        else
+            return "N/A";
     }
 
     public void setOpenId(String openId) {
@@ -142,7 +168,10 @@ public class User implements Serializable{
     }
 
     public String getDN() {
-        return DN;
+        if(this.DN != null)
+            return DN;
+        else
+            return "N/A";
     }
 
     public void setDN(String dN) {
@@ -155,7 +184,10 @@ public class User implements Serializable{
     }
 
     public String getLastName() {
-        return lastName;
+        if(this.lastName != null)
+            return lastName;
+        else
+            return "N/A";
     }
     
     public String toString() {
@@ -186,7 +218,10 @@ public class User implements Serializable{
 
 
     public String getMiddleName() {
-        return middleName;
+        if(this.middleName != null)
+            return middleName;
+        else
+            return "N/A";
     }
 
 
@@ -196,7 +231,10 @@ public class User implements Serializable{
 
 
     public String getUserId() {
-        return userId;
+        if(this.userId != null)
+            return userId;
+        else
+            return "N/A";
     }
    
     
@@ -205,30 +243,128 @@ public class User implements Serializable{
         
         Element userElement = new Element("user");
         
+        System.out.println("x");
+        
         Element userIdEl = new Element("id");
-        userIdEl.addContent(this.userId);
+        if(this.userId != null) {
+            userIdEl.addContent(this.userId);
+        }
+        else {
+            userIdEl.addContent("N/A");
+        }
+
+        System.out.println("x");
+        
         Element userfirstEl = new Element("first");
-        userfirstEl.addContent(this.firstName);
+        if(this.firstName != null) {
+            userfirstEl.addContent(this.firstName);
+        }
+        else {
+            userfirstEl.addContent("N/A");
+        }
+
+        System.out.println("x");
         Element userlastEl = new Element("last");
-        userlastEl.addContent(this.lastName);
+        if(this.lastName != null) {
+            userlastEl.addContent(this.lastName);
+        }
+        else {
+            userlastEl.addContent("N/A");
+        }
+        System.out.println("x");
+        
+        
         Element usermiddleEl = new Element("middle");
-        usermiddleEl.addContent(this.middleName);
+        if(this.middleName != null) {
+            usermiddleEl.addContent(this.middleName);
+        }
+        else {
+            usermiddleEl.addContent("N/A");
+        }
+
+        System.out.println("x");
         Element userNameEl = new Element("username");
-        userNameEl.addContent(this.userName);
+        if(this.userName != null) {
+            userNameEl.addContent(this.userName);
+        }
+        else {
+            userNameEl.addContent("N/A");
+        }
+
+        System.out.println("x");
+        
         Element emailEl = new Element("email");
-        emailEl.addContent(this.emailAddress);
+        if(this.emailAddress != null) {
+            emailEl.addContent(this.emailAddress);
+        }
+        else {
+            emailEl.addContent("N/A");
+        }
+
+        System.out.println("x");
+        
+        
         Element organizationEl = new Element("organization");
-        organizationEl.addContent(this.organization);
+        if(this.organization != null) {
+            organizationEl.addContent(this.organization);
+        }
+        else {
+            organizationEl.addContent("N/A");
+        }
+
+        System.out.println("x");
+        
         Element cityEl = new Element("city");
-        cityEl.addContent(this.city);
+        if(this.city != null) {
+            cityEl.addContent(this.city);
+        }
+        else {
+            cityEl.addContent("N/A");
+        }
+
+        System.out.println("x");
+        
+        
         Element stateEl = new Element("state");
-        stateEl.addContent(this.state);
+        if(this.state != null) {
+            stateEl.addContent(this.state);
+        }
+        else {
+            stateEl.addContent("N/A");
+        }
+
+        System.out.println("x");
+        
         Element countryEl = new Element("country");
-        countryEl.addContent(this.country);
+        if(this.country != null) {
+            countryEl.addContent(this.country);
+        }
+        else {
+            countryEl.addContent("N/A");
+        }
+
+        System.out.println("x");
+        
         Element openIdEl = new Element("openid");
-        openIdEl.addContent(this.openId);
+        if(this.openId != null) {
+            openIdEl.addContent(this.openId);
+        }
+        else {
+            openIdEl.addContent("N/A");
+        }
+
+        System.out.println("x");
+        
         Element dnEl = new Element("dn");
-        dnEl.addContent(this.DN);
+        if(this.DN != null) {
+            dnEl.addContent(this.DN);
+        }
+        else {
+            dnEl.addContent("N/A");
+        }
+
+        System.out.println("x");
+        
         
         userElement.addContent(userIdEl);
         userElement.addContent(userfirstEl);

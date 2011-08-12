@@ -100,6 +100,7 @@ public class ManageUsersController {
         LOG.debug("IN ManageUsersController Constructor");
         //declare a UserOperations "Object"
         uoi = new UserOperationsESGFDBImpl();
+        //uoi = new UserOperationsXMLImpl();
     }
 
     /**
@@ -281,9 +282,6 @@ public class ManageUsersController {
         uoi.editUser(userId,first,middle,last,email,userName,organization,city,state,country);
 
         
-        
-        
-        
         LOG.debug("------End ManageUsersController editUser------");
     }
     
@@ -294,12 +292,12 @@ public class ManageUsersController {
         
         String userName = request.getParameter("user");
         
-        LOG.debug("\n\n\n\n\n");
         LOG.debug("userName->"+userName);
-        LOG.debug("\n\n\n\n\n");
         
         String userId = uoi.getUserIdFromUserName(userName);
-        uoi.deleteUser(userName);
+        if(!userName.equalsIgnoreCase("rootAdmin")) {
+            uoi.deleteUser(userName);
+        }
         
         LOG.debug("------End ManageUsersController deleteUser------");
     }

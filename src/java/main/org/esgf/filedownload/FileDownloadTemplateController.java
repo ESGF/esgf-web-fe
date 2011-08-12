@@ -60,11 +60,8 @@
 package org.esgf.filedownload;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -73,8 +70,11 @@ import javax.xml.ws.http.HTTPException;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.URI;
+import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.log4j.Logger;
 import org.esgf.metadata.JSONArray;
 import org.esgf.metadata.JSONException;
@@ -93,14 +93,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/solrfileproxy")
 public class FileDownloadTemplateController {
 
-    private static String solrURL="http://localhost:8983/solr/select?";
+    private static String solrURL="http://localhost:8983/solr/select";
     private final static Logger LOG = Logger.getLogger(FileDownloadTemplateController.class);
 
     //right now the prefix for the solr query is hard coded
     //the max rows to be returned is best configurable or read from props file
 
     //private final static String filePrefix="q=*%3A*&json.nl=map&fq=type%3AFile&rows=2000&fq=parent_id:";
-    private final static String queryString ="q=*:*&json.nl=map&rows=2000&fq=type:File&fq=parent_id:";
+    private final static String queryString ="q=*:*&json.nl=map&start=0&rows=2000&fq=type:File&fq=parent_id:";
 
     //debug flag
     private final static boolean debugFlag = false;
@@ -170,7 +170,7 @@ public class FileDownloadTemplateController {
             for(int i=0;i<names.length;i++) {
 
                 id = names[i];
-                responseBody = getResponseBody(id).toString();
+                responseBody = getResponseBody(id);
                 try {
                     responseBodyJSON = new JSONObject(responseBody);
                 } catch(JSONException ex) {
@@ -228,24 +228,23 @@ public class FileDownloadTemplateController {
         //return jo.toString();
     }
 
-    private InputStream getResponseBody(String id)  {
+    private String getResponseBody(String id)  {
 
-        InputStream responseBody = null;
-
-
+        String responseBody = null;
 
 
         // create an http client
         HttpClient client = new HttpClient();
 
+        String combinedQueryStr = queryString + id + "&wt=json";
+        GetMethod method = new GetMethod(solrURL);
 
-        //String urlString = solrURL + "select?" + queryString + "&wt=json";
-        String urlString = solrURL + queryString + id + "&wt=json";
-
-        LOG.debug("urlString: " + urlString);
-
-        GetMethod method = new GetMethod(urlString);
-
+        try {
+            method.setQueryString(URIUtil.encodeQuery(combinedQueryStr));
+        } catch (URIException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
         method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
                 new DefaultHttpMethodRetryHandler(3, false));
         try {
@@ -253,14 +252,13 @@ public class FileDownloadTemplateController {
             int statusCode = client.executeMethod(method);
 
             if (statusCode != HttpStatus.SC_OK) {
-                if(debugFlag) {
                     LOG.error("Method failed: " + method.getStatusLine());
-                }
+
             }
 
             // read the response
-            responseBody = method.getResponseBodyAsStream();
-
+            responseBody = method.getResponseBodyAsString();
+            LOG.debug(responseBody);
         } catch (HTTPException e) {
             LOG.error("Fatal protocol violation");
             e.printStackTrace();

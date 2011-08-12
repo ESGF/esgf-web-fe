@@ -60,6 +60,7 @@
 package org.esgf.filedownload;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -169,7 +170,7 @@ public class FileDownloadTemplateController {
             for(int i=0;i<names.length;i++) {
 
                 id = names[i];
-                responseBody = getResponseBody(id);
+                responseBody = getResponseBody(id).toString();
                 try {
                     responseBodyJSON = new JSONObject(responseBody);
                 } catch(JSONException ex) {
@@ -227,9 +228,9 @@ public class FileDownloadTemplateController {
         //return jo.toString();
     }
 
-    private String getResponseBody(String id)  {
+    private InputStream getResponseBody(String id)  {
 
-        String responseBody = null;
+        InputStream responseBody = null;
 
 
 
@@ -258,7 +259,7 @@ public class FileDownloadTemplateController {
             }
 
             // read the response
-            responseBody = method.getResponseBodyAsString();
+            responseBody = method.getResponseBodyAsStream();
 
         } catch (HTTPException e) {
             LOG.error("Fatal protocol violation");
@@ -270,9 +271,6 @@ public class FileDownloadTemplateController {
             method.releaseConnection();
         }
 
-        if(responseBody != null) {
-            LOG.debug("responseBody: " + responseBody.substring(0, 300));
-        }
 
         return responseBody;
     }

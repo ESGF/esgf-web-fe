@@ -170,8 +170,13 @@ public class FileDownloadTemplateController {
 
                 id = names[i];
                 responseBody = getResponseBody(id);
-                responseBodyJSON = new JSONObject(responseBody);
-
+                try {
+                    responseBodyJSON = new JSONObject(responseBody);
+                } catch(JSONException ex) {
+                    LOG.debug(ex.getMessage());
+                    LOG.debug(responseBody);
+                    LOG.debug("responseBody string length:" + responseBody.length());
+                }
                 //get the different json texts here
                 JSONObject responseJSON = new JSONObject(responseBodyJSON.get("response").toString());
                 JSONArray docsJSON = responseJSON.getJSONArray("docs");

@@ -266,7 +266,7 @@ public class FileDownloadTemplateController {
         }
 
         if(responseBody != null) {
-            LOG.debug("responseBody: " + responseBody.substring(0, 300));
+            LOG.debug("responseBody: " + responseBody.substring(0, 1000));
         }
 
         return responseBody;

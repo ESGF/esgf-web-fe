@@ -59,7 +59,7 @@
 
 
 (function ($) {
-
+	
 	AjaxSolr.FacetSideBarWidget = AjaxSolr.AbstractFacetWidget.extend({
 	
 		
@@ -80,8 +80,7 @@
 		    	var facet_val_counts = new Array();
 		    	var facet_max_count = 0;
 		    	for(var facet_value in self.manager.response.facet_counts.facet_fields[facet]) {
-		    		
-		    		if(!isConstraint(facet)) {
+		    		if(facet == 'project') {
 		    			var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
 					    
 		    			if(count > facet_max_count) {
@@ -90,15 +89,18 @@
 		    		
 		    			facet_val_counts.push(count);
 		    			facet_val_arr.push(facet_value);
-		    			if(facet == 'instrument' && count > 24) {
-		    				//alert('after length ' + facet_val_arr.length);
+		    			
+		    			
+		    		}else if(!isConstraint(facet)) {
+		    			var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
+					    
+		    			if(count > facet_max_count) {
+		    				facet_max_count = count;
 		    			}
-		    			if (facet === 'project') {
-		    				//alert('facet_value: ' + facet_value);
-		    				var radix = 10;
-		    				//var count = parseInt(self.manager.response.facet_counts,radix);
-		    				//alert('facet_value: ' + facet_value + ' ' + count);
-		    			}
+		    		
+		    			facet_val_counts.push(count);
+		    			facet_val_arr.push(facet_value);
+		    			
 		    		} else if(matchesFacetValue(facet,facet_value)) {
 		    			var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
 					    
@@ -108,15 +110,6 @@
 		    		
 		    			facet_val_counts.push(count);
 		    			facet_val_arr.push(facet_value);
-		    			if(facet == 'instrument' && count > 24) {
-		    				//alert('after length ' + facet_val_arr.length);
-		    			}
-		    			if (facet === 'project') {
-		    				//alert('facet_value: ' + facet_value);
-		    				var radix = 10;
-		    				//var count = parseInt(self.manager.response.facet_counts,radix);
-		    				//alert('facet_value: ' + facet_value + ' ' + count);
-		    			}
 		    		}
 		    		
 		    		/*
@@ -206,18 +199,26 @@
 	function matchesFacetValue(facet,value) {
 		var matchesFacetValue = false;
 
-		var fq = Manager.store.get('fq');
 		
-		for(var i=0;i<fq.length;i++) {
-			var constraint = fq[i];
-			var facet_constraint = constraint['value'].split(":")[0];
-			if(facet == facet_constraint) {
-				var facet_value = constraint['value'].split(":")[1];
-				if(facet_value == value) {
-					matchesFacetValue = true;
+		//make sure project still displays all values
+		if(facet == 'project') {
+			matchesFacetValue = true;
+			
+		} else {
+			var fq = Manager.store.get('fq');
+			
+			for(var i=0;i<fq.length;i++) {
+				var constraint = fq[i];
+				var facet_constraint = constraint['value'].split(":")[0];
+				if(facet == facet_constraint) {
+					var facet_value = constraint['value'].split(":")[1];
+					if(facet_value == value) {
+						matchesFacetValue = true;
+					}
 				}
 			}
 		}
+
 		return matchesFacetValue;
 		
 	}

@@ -53,15 +53,36 @@
 
 /**
  *
- * @author John Harney (harneyjf@ornl.gov)
+ * @author John Harney (harneyjf@ornl.gov), Feiyi Wang (fwang2@ornl.gov)
  *
+ * Changelog:
+ *
+ * The query string is encoded through encoder instead of manual string
+ * The converted template will be:
+ *
+ * For debug only:
+ *
+ * The converted template:
+ *
+ * <response>
+ *    <doc>
+ *       <dataset_id> whatever </dataset_id>
+ *       <file>
+ *          <file_id> ... </file_id>
+ *          <size> ... </size>
+ *          ...
+ *       </file>
+ *
+ *       <file> .... </file>
+ *   </doc>
+ * </response>
  */
+
+
 
 package org.esgf.filedownload;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -70,7 +91,6 @@ import javax.xml.ws.http.HTTPException;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
@@ -101,9 +121,6 @@ public class FileDownloadTemplateController {
 
     //private final static String filePrefix="q=*%3A*&json.nl=map&fq=type%3AFile&rows=2000&fq=parent_id:";
     private final static String queryString ="q=*:*&json.nl=map&start=0&rows=2000&fq=type:File&fq=parent_id:";
-
-    //debug flag
-    private final static boolean debugFlag = false;
 
 
     @RequestMapping(method=RequestMethod.GET)
@@ -151,17 +168,18 @@ public class FileDownloadTemplateController {
     //<doc>
 
 
+
     private String convertTemplateFormat(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+
 
         String[] names = request.getParameterValues("id[]");
 
         String id = "";
-        String responseBody = "";
-        JSONObject responseBodyJSON = null;
         String xmlOutput = "";
 
         SAXBuilder builder = new SAXBuilder();
         Document document = null;
+
 
         document = new Document(new Element("response"));
         if(names != null) {
@@ -170,17 +188,13 @@ public class FileDownloadTemplateController {
             for(int i=0;i<names.length;i++) {
 
                 id = names[i];
-                responseBody = getResponseBody(id);
-                try {
-                    responseBodyJSON = new JSONObject(responseBody);
-                } catch(JSONException ex) {
-                    LOG.debug(ex.getMessage());
-                    LOG.debug(responseBody);
-                    LOG.debug("responseBody string length:" + responseBody.length());
-                }
-                //get the different json texts here
-                JSONObject responseJSON = new JSONObject(responseBodyJSON.get("response").toString());
-                JSONArray docsJSON = responseJSON.getJSONArray("docs");
+                String marker = "\"response\":";
+                String responseRawString = getResponseBody(id);
+                int start = responseRawString.lastIndexOf(marker) + marker.length();
+                int end = responseRawString.length();
+                String extractedString = responseRawString.substring(start, end);
+                JSONObject responseBody = new JSONObject(extractedString);
+                JSONArray docsJSON = responseBody.getJSONArray("docs");
 
                 try{
                 //  create <doc> element
@@ -213,17 +227,13 @@ public class FileDownloadTemplateController {
         XMLOutputter outputter = new XMLOutputter();
         xmlOutput = outputter.outputString(document.getRootElement());
 
-        if(debugFlag) {
-            LOG.debug("xmlOutput:\n " + xmlOutput);
-        }
+        LOG.debug("xmlOutput:\n " + xmlOutput);
 
 
         JSONObject returnJSON = XML.toJSONObject(xmlOutput);
 
         String jsonContent = returnJSON.toString();
-        if(debugFlag) {
-            LOG.debug("json: \n" + returnJSON.toString());
-        }
+        LOG.debug("json: \n" + returnJSON.toString());
         return jsonContent;
         //return jo.toString();
     }
@@ -237,6 +247,7 @@ public class FileDownloadTemplateController {
         HttpClient client = new HttpClient();
 
         String combinedQueryStr = queryString + id + "&wt=json";
+
         GetMethod method = new GetMethod(solrURL);
 
         try {

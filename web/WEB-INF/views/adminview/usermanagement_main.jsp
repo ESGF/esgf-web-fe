@@ -274,7 +274,7 @@ $(document).ready(function(){
 
 		//change the previously selected userName back to the previous background
 		//NOTE-> this background (ffffff) DOES NOT MATCH the main background
-		$('tr#' + ESGF.setting.currentUserName).css('background','#ffffff');
+		$('tr#' + ESGF.setting.currentUserName).css('background','#f9f6f1');
 		
 		//set the global current user name to the username selected
 		ESGF.setting.currentUserName = userName;

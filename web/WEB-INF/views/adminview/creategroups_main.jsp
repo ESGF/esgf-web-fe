@@ -169,7 +169,7 @@ $(document).ready(function(){
 		var groupName = $(this).attr("id");
 		
 
-		$('tr#' + ESGF.setting.currentGroupName).css('background','#ffffff');
+		$('tr#' + ESGF.setting.currentGroupName).css('background','#f9f6f1');
 		$(this).css('background','#FAECC8');
 		
 		//first we must hide/remove any information previously there

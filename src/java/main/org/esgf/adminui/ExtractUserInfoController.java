@@ -51,10 +51,10 @@ public class ExtractUserInfoController {
     
     public ExtractUserInfoController() throws FileNotFoundException, IOException {
         LOG.debug("IN ExtractUserInfoController Constructor");
-        goi = new GroupOperationsESGFDBImpl();
-        uoi = new UserOperationsESGFDBImpl();
-        //goi = new GroupOperationsXMLImpl();
-        //uoi = new UserOperationsXMLImpl();
+        //goi = new GroupOperationsESGFDBImpl();
+        //uoi = new UserOperationsESGFDBImpl();
+        goi = new GroupOperationsXMLImpl();
+        uoi = new UserOperationsXMLImpl();
     }
     
     
@@ -122,7 +122,6 @@ public class ExtractUserInfoController {
         
         User user = uoi.getUserObjectFromUserName(userName);
         
-        System.out.println("user|-> " + userName);
         try {
             String xmlOutput = "<userinfo>";
             xmlOutput += user.toXml();
@@ -134,7 +133,6 @@ public class ExtractUserInfoController {
             
             if(groups != null) {
                 xmlOutput += "<groups>";
-                
                 for(int i=0;i<groups.size();i++) {
                     xmlOutput += groups.get(i).toXml();
                 }
@@ -153,7 +151,6 @@ public class ExtractUserInfoController {
         }
         
         LOG.debug("JSONCONTENT: " + jsonContent);
-        LOG.debug("ExtractUserInfoController processGetUserInfoType");
 
         return jsonContent;
     }

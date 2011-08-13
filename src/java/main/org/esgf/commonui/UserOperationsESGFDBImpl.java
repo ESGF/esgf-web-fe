@@ -88,23 +88,24 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
      */
     @Override
     public void deleteUser(String userName) {
-        System.out.println("<><><><><>REMOVE USER: " + userName);
+        //System.out.println("<><><><><>REMOVE USER: " + userName);
         UserInfo user = this.myUserInfoDAO.getUserById(userName);
         this.myUserInfoDAO.deleteUser(user);
     }
     
     @Override
     public User getUserObjectFromUserName(String username) {
-        LOG.debug("In getUserObjectByUserName: " + username);
+        //LOG.debug("In getUserObjectByUserName: " + username);
         User user = null;
         
         
         UserInfo userInfo = this.myUserInfoDAO.getUserById(username);
         
+        /*
         if(userInfo == null) {
             System.out.println("UserINFO is NULL!");
         }
-        
+        */
         
         
         if(userInfo != null && userInfo.isValid()) {
@@ -325,7 +326,7 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
             
             for(int i=1;i<uid.getUserEntries().size();i++) {
                 String [] str = uid.getUserEntries().get(i);
-                LOG.debug("ADDING USER: |-> " + str[0]);
+                //LOG.debug("ADDING USER: |-> " + str[0]);
                 User user = this.getUserObjectFromUserName(str[0]);
                 users.add(user);
             }
@@ -348,11 +349,11 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
         
         if(user.isValid()) {
             if(user.getUserName().equals("rootAdmin")) {
-                System.out.println("adding user>>>" + userName);
+                //System.out.println("adding user>>>" + userName);
                 this.myUserInfoDAO.addPermission(user, groupName, "super");
             }
             else {
-                System.out.println("adding user>>>" + userName);
+                //System.out.println("adding user>>>" + userName);
                 this.myUserInfoDAO.addPermission(user, groupName, "default");
             }
         }
@@ -377,15 +378,15 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
         if(this.isInGroup(userName, groupName)) {
             //this.myUserInfoDAO.deleteGroupFromUserPermissions(user,groupName);
             
-            LOG.debug("DELETING USER: " + userName + " from group[->" + groupName + " isValud: " + user.isValid());
+            //LOG.debug("DELETING USER: " + userName + " from group[->" + groupName + " isValud: " + user.isValid());
             if(user.isValid()) {
                 if(user.getUserName().equals("rootAdmin")) {
-                    System.out.println("rootadmin[->");
+                    //System.out.println("rootadmin[->");
                     this.myUserInfoDAO.deleteGroupFromUserPermissions(user, groupName);
                     //this.myUserInfoDAO.deletePermission(user, groupName, "super");
                 }
                 else {
-                    System.out.println("Standard[->");
+                    //System.out.println("Standard[->");
                     this.myUserInfoDAO.deleteGroupFromUserPermissions(user, groupName);
                     //this.myUserInfoDAO.deletePermission(user, groupName, "default");
                 }
@@ -403,11 +404,11 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
         
         Map<String,Set<String>> perms = user.getPermissions();
         if(perms != null) {
-            System.out.println("size: " + perms.size());
+            //System.out.println("size: " + perms.size());
             for(int i=0;i<perms.size();i++)
             {
                 for(String key : perms.keySet()) {
-                    System.out.println("key " + key);
+                    //System.out.println("key " + key);
                     if(key.equals(groupName)) {
                         isInGroup = true;
                     }
@@ -427,7 +428,7 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
         //ESGFProperties props = new ESGFProperties();
         //System.out.println(props.getAdminPassword());
         boolean isInGroup = u.isInGroup("jfh","1");
-        System.out.println(isInGroup);
+        //System.out.println(isInGroup);
     }
     
     

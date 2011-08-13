@@ -54,7 +54,7 @@ public class ExtractRoleInfoController {
         //roi = new RoleOperationsESGFDBImpl();
         goi = new GroupOperationsXMLImpl();
         uoi = new UserOperationsXMLImpl();
-        roi = new RoleOperationsXMLImpl();
+        //roi = new RoleOperationsXMLImpl();
     }
     
     

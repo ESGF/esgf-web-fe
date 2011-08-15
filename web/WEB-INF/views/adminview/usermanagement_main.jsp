@@ -111,7 +111,7 @@
 							</table> 
 							
 							<!-- the add user, edit user, and delete user buttons -->
-							<div class="buttons" style="margin-bottom:40px;">
+							<div class="buttons" style="margin-bottom:40px;text-align:center">
 			    				<input class="adminbutton" id="add_user-button" type="submit" value="Add User" rel="#addUserForm" />
 			    				<input class="adminbutton" id="edit_user-button" type="submit" value="Edit User" rel="#addUserForm" />
 			    				<input class="adminbutton" id="delete_user-button" type="submit" value="Remove Selected User" />
@@ -204,7 +204,7 @@
 							    </table>
 							    <p>
 								  	<input type="hidden" name="type" id="type" value="add"/>
-						      		<input style="margin-left: 15px" class="adminbutton" type="submit" value="Submit">
+						      		<input style="margin-left: 15px;text-align:center" class="adminbutton" type="submit" value="Submit">
 						      	</p>
 						      	<p>
 						      		<div style="margin-left:15px;font-size:10px">* denotes required</div>

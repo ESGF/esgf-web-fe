@@ -72,7 +72,7 @@
   	    </table>
   
 	    <!-- the add user, edit user, and delete user buttons -->
-	    <div class="buttons" style="margin-bottom:40px;">
+	    <div class="buttons" style="margin-bottom:40px;text-align:center">
 			<input class="adminbutton" id="add_group-button" type="submit" value="Add Group" rel="#addGroupForm" />
 			<input class="adminbutton" id="edit_group-button" type="submit" value="Edit Group" rel="#addGroupForm" />
 			<!--  <input class="adminbutton" id="add_user_to_group-button" type="submit" value="Add User To Selected Group" rel="#addUserToGroupForm" /> -->
@@ -101,7 +101,7 @@
 				<p>
 					<input type="hidden" name="type" id="type" value="editUsersInGroup"/>
 					<input type="hidden" name="groupName" id="groupName" value=""/>
-				  	<input style="margin-left: 15px" class="adminbutton" type="submit" value="Submit">
+				  	<input id="edit_users_submit" style="margin-left: 200px;text-align:center;display:none" class="adminbutton" type="submit" value="Submit">
 		      	</p>
 			</form>
 		</div>
@@ -456,6 +456,8 @@ $(document).ready(function(){
 		},
 		onClose: function() {
 			$('#potential_users').empty();
+			$('#potential_users').hide();
+			$('#edit_users_submit').hide();
 		}
 	});
 	
@@ -479,6 +481,9 @@ $(document).ready(function(){
 			//}
 			
 		}
+		$('#potential_users').show();
+
+		$('#edit_users_submit').show();
 	}
 	
 	

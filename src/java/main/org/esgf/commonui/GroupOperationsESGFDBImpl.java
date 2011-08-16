@@ -43,7 +43,6 @@ public class GroupOperationsESGFDBImpl implements GroupOperationsInterface {
      */
     @Override
     public void addGroup(String groupName,String groupDescription) {
-        System.out.println("<><><>Adding group<><><>" + groupName);
         groupRoleDAO.addGroup(groupName,groupDescription);
     }
     
@@ -67,7 +66,6 @@ public class GroupOperationsESGFDBImpl implements GroupOperationsInterface {
     
     @Override
     public void deleteGroup(String groupName) {
-        System.out.println("Deleting groupName|[-> " + groupName);
         groupRoleDAO.deleteGroup(groupName);
     }
     
@@ -92,12 +90,8 @@ public class GroupOperationsESGFDBImpl implements GroupOperationsInterface {
     @Override
     public List<Group> getAllGroups() {
         List<Group> groups = new ArrayList<Group>();
-        System.out.println("GroupEntries|->" + groupRoleDAO.getGroupEntries().size());
+        //System.out.println("GroupEntries|->" + groupRoleDAO.getGroupEntries().size());
         for(int i=0;i<groupRoleDAO.getGroupEntries().size();i++) {
-            System.out.println("e0|-> " + groupRoleDAO.getGroupEntries().get(i)[0] +
-                               "e1|-> " + groupRoleDAO.getGroupEntries().get(i)[1] + 
-                               "e2|-> " + groupRoleDAO.getGroupEntries().get(i)[2] +
-                               "e3|-> " + groupRoleDAO.getGroupEntries().get(i)[3]);
             String groupCol = groupRoleDAO.getGroupEntries().get(i)[1];
             if(groupCol != null) {
                 Group group = new Group();

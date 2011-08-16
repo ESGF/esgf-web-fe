@@ -28,6 +28,7 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
     private final static String groups_file = "/home/John/clones/esgf-web-fe8-7/esgf-web-fe/src/java/main/db.groups";
     private final static String roles_file = "/home/John/clones/esgf-web-fe8-7/esgf-web-fe/src/java/main/db.roles";
     private final static String permissions_file = "/home/John/clones/esgf-web-fe8-7/esgf-web-fe/src/java/main/db.permissions";
+
     //private final static String password_file = "/usr/local/.esg_pg_pass";
     
     private String passwd;
@@ -256,7 +257,6 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
             {
                 Element userEl = (Element)users.get(i);
                 Element userIdEl = userEl.getChild("username");
-                System.out.println("\t\tuserId: " + userName + " " + " userIdTextNorm: " + userIdEl.getTextNormalize());
                 if(userIdEl.getTextNormalize().equals(userName)) {
                     rootNode.removeContent(userEl);
                 }
@@ -468,7 +468,7 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
             Element rootNode = permissions_document.getRootElement();
             List permissions = (List)rootNode.getChildren();
             
-            for(int i=0;i<permissions.size();i++)
+            for(int i=1;i<permissions.size();i++)
             {
                 Element tupleEl = (Element)permissions.get(i);
                 Element userIdEl = tupleEl.getChild("userid");
@@ -660,7 +660,6 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
         
         List<Group> groups = uo.getGroupsFromUser(userName);
         
-        System.out.println(groups);
     }
     
 
@@ -685,7 +684,7 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
             
             List permissions = (List)rootNode.getChildren();
             
-            for(int i=0;i<permissions.size();i++) {
+            for(int i=1;i<permissions.size();i++) {
                 Element tupleEl = (Element)permissions.get(i);
                 Element groupIdEl = tupleEl.getChild("groupid");
                 Element userIdEl = tupleEl.getChild("userid");
@@ -708,7 +707,6 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
             e.printStackTrace();
         }
         
-        System.out.println("GROUPS: " + groups);
         
         return groups;
     }

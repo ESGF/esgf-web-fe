@@ -9,9 +9,4 @@
 		<groupname>group2_name</groupname>
 		<groupdescription>group2_description</groupdescription>
 	</group>
-	<group>
-		<groupid>group3_id</groupid>
-		<groupname>group3_name</groupname>
-		<groupdescription>group3_description</groupdescription>
-	</group>
 </groups>

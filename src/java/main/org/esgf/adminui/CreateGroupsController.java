@@ -110,10 +110,10 @@ public class CreateGroupsController {
     
     public CreateGroupsController() throws FileNotFoundException, IOException {
         LOG.debug("IN CreateGroupsController Constructor");
-        //goi = new GroupOperationsXMLImpl();
-        //uoi = new UserOperationsXMLImpl();
-        goi = new GroupOperationsESGFDBImpl();
-        uoi = new UserOperationsESGFDBImpl();
+        goi = new GroupOperationsXMLImpl();
+        uoi = new UserOperationsXMLImpl();
+        //goi = new GroupOperationsESGFDBImpl();
+        //uoi = new UserOperationsESGFDBImpl();
     }
 
     /**
@@ -208,22 +208,14 @@ public class CreateGroupsController {
                     uoi.addUserToGroup(userName, groupName);
                 }
             }
-
-
-            System.out.println("\n\n\n\n\n\n\n\n");
-            System.out.println("<><><>Checked\n");
-            System.out.println(checkedUsers);
-            System.out.println("\n\n\n\n\n\n\n\n");
             
             //next find the users that were excluded from the check list and delete them
             //i.e. delete whatever user is leftover
             for(int i=0;i<users.size();i++) {
                 User user = users.get(i);
                 boolean canDelete = true;
-                System.out.println("[->user.getUserName() " + user.getUserName());
                 for(int j=0;j<checkedUsers.size();j++) {
                     User checkedUser = checkedUsers.get(j);
-                    System.out.println("\t[->checkedUser.getUserName() " + checkedUser.getUserName());
                     if(user == null) {
                         System.out.println("\t\t[->user is null");
                     }

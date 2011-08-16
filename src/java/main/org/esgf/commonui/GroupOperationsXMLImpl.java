@@ -26,11 +26,12 @@ import org.springframework.core.io.ClassPathResource;
 public class GroupOperationsXMLImpl implements GroupOperationsInterface {
     private final static Logger LOG = Logger.getLogger(GroupOperationsXMLImpl.class);
 
+    private static String xmlDir = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe-8-16\\esgf-web-fe\\src\\java\\main\\";
     
-    private final static String users_file = "/home/John/clones/esgf-web-fe8-7/esgf-web-fe/src/java/main/db.users";
-    private final static String groups_file = "/home/John/clones/esgf-web-fe8-7/esgf-web-fe/src/java/main/db.groups";
-    private final static String roles_file = "/home/John/clones/esgf-web-fe8-7/esgf-web-fe/src/java/main/db.roles";
-    private final static String permissions_file = "/home/John/clones/esgf-web-fe8-7/esgf-web-fe/src/java/main/db.permissions";
+    private final static String users_file = xmlDir + "db.users";
+    private final static String groups_file = xmlDir + "db.groups";
+    private final static String roles_file = xmlDir + "db.roles";
+    private final static String permissions_file = xmlDir + "db.permissions";
    
     
     private File USERS_FILE;

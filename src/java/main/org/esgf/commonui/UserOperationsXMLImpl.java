@@ -24,13 +24,13 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
     
     private final static Logger LOG = Logger.getLogger(UserOperationsXMLImpl.class);
 
-    private final static String users_file = "/home/John/clones/esgf-web-fe8-7/esgf-web-fe/src/java/main/db.users";
-    private final static String groups_file = "/home/John/clones/esgf-web-fe8-7/esgf-web-fe/src/java/main/db.groups";
-    private final static String roles_file = "/home/John/clones/esgf-web-fe8-7/esgf-web-fe/src/java/main/db.roles";
-    private final static String permissions_file = "/home/John/clones/esgf-web-fe8-7/esgf-web-fe/src/java/main/db.permissions";
-
-    //private final static String password_file = "/usr/local/.esg_pg_pass";
+    private static String xmlDir = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe-8-16\\esgf-web-fe\\src\\java\\main\\";
     
+    private final static String users_file = xmlDir + "db.users";
+    private final static String groups_file = xmlDir + "db.groups";
+    private final static String roles_file = xmlDir + "db.roles";
+    private final static String permissions_file = xmlDir + "db.permissions";
+   
     private String passwd;
     
     private File USERS_FILE;
@@ -462,13 +462,13 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
         
         SAXBuilder builder = new SAXBuilder();
         String xmlContent = "";
+        System.out.println("Perm size: " + groupName);
         try{
             Document permissions_document = (Document) builder.build(PERMISSIONS_FILE);
-            
+            System.out.println("After doc");
             Element rootNode = permissions_document.getRootElement();
             List permissions = (List)rootNode.getChildren();
-            
-            for(int i=1;i<permissions.size();i++)
+            for(int i=0;i<permissions.size();i++)
             {
                 Element tupleEl = (Element)permissions.get(i);
                 Element userIdEl = tupleEl.getChild("userid");
@@ -725,6 +725,7 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
             List users = (List)rootNode.getChildren();
             for(int i=0;i<users.size();i++)
             {
+                System.out.println("\t" + i);
                 Element userEl = (Element)users.get(i);
                 Element userIdEl = userEl.getChild("id");
                 Element userFirstEl = userEl.getChild("first");

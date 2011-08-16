@@ -1,11 +1,2 @@
 <permissions>
-	<tuple>
-		<userid>rootAdmin_id</userid>
-		<groupid>group2_id</groupid>
-		<roleid>role4_id</roleid>
-	</tuple>
-<<<<<<< HEAD
 </permissions>
-=======
-<tuple><groupid>group60200868_id</groupid><userid>rootAdmin_id</userid><roleid>role1_id</roleid></tuple></permissions>
->>>>>>> ORNL/adminui-noSpringSecurity

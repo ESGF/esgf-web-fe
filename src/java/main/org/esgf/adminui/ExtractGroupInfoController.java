@@ -44,8 +44,10 @@ public class ExtractGroupInfoController {
     
     public ExtractGroupInfoController() throws FileNotFoundException, IOException {
         LOG.debug("IN CreateGroupsController Constructor");
-        goi = new GroupOperationsESGFDBImpl();
-        uoi = new UserOperationsESGFDBImpl();
+        //goi = new GroupOperationsESGFDBImpl();
+        //uoi = new UserOperationsESGFDBImpl();
+        goi = new GroupOperationsXMLImpl();
+        uoi = new UserOperationsXMLImpl();
     }
     
     /**
@@ -135,45 +137,34 @@ public class ExtractGroupInfoController {
         String xmlOutput = "<users>";
         xmlOutput += "<ingroup>";
 
-        System.out.println("1|->");
         List<User> users = uoi.getUsersFromGroup(groupName);//uoi.getAllUsers();
 
-        System.out.println("2|->");
         if(users != null) {
-            System.out.println("Users size: " + users.size());
             for(int i=0;i<users.size();i++) {
                 User user = users.get(i);
                 xmlOutput += user.toXml();
             }
         }
 
-        System.out.println("3->");
         xmlOutput += "</ingroup>";
         
         
         xmlOutput += "<allusers>";
         
         users = uoi.getAllUsers();//uoi.getAllUsers();
-        System.out.println("4|->");
         if(users != null) {
-            System.out.println("\t\tUSERS NOT NULL " + users.size());
             
             for(int i=0;i<users.size();i++) {
-                System.out.println("\t\tuser " + i);
                 
                 User user = users.get(i);
                 if(user == null) {
-                    System.out.println("NULL");
                 } else {
-                    System.out.println("NOT NULL");
                     xmlOutput += user.toXml();
                 }
-                System.out.println("\t\tuser " + i);
                 
             }
         }
 
-        System.out.println("5|->");
         xmlOutput += "</allusers>";
         
         xmlOutput += "</users>";
@@ -199,8 +190,6 @@ public class ExtractGroupInfoController {
 
         String xmlOutput = "<groupinfo>";
 
-        
-        LOG.debug("\t\t\t\tHere" + groupName + "\n\n\n\n");
         Group group = goi.getGroupObjectFromGroupName(groupName);
         if(group == null) LOG.debug("null");
         else

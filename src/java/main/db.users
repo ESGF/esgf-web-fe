@@ -1,0 +1,16 @@
+<users>
+	<user>
+		<id>rootAdmin_id</id>
+		<first>user1_firstName</first>
+		<middle>user1_middleName</middle>
+		<last>user1_lastName</last>
+		<email>user1_email</email>
+		<username>rootAdmin</username>
+		<dn>user1_dn</dn>
+		<openid>user1_openid</openid>
+		<organization>user1_organization</organization>
+		<city>user1_city</city>
+		<state>user1_state</state>
+		<country>user1_country</country>
+	</user>
+</users>

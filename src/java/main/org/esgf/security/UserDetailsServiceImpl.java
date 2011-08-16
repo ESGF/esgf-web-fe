@@ -67,7 +67,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			}
 		}
 	    // FIXME
-        if (userName.toLowerCase().contains("root")) authorities.add( new GrantedAuthorityImpl(ADMIN_ROLE) );
+        if (userName.endsWith("/rootAdmin")) authorities.add( new GrantedAuthorityImpl(ADMIN_ROLE) );
 		return new User(userName, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
 		
 	}

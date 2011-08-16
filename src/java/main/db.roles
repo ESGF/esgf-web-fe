@@ -1,0 +1,22 @@
+<roles>
+	<role>
+		<roleid>role1_id</roleid>
+		<rolename>super</rolename>
+		<roledescription>Super User</roledescription>
+	</role>
+	<role>
+		<roleid>role2_id</roleid>
+		<rolename>admin</rolename>
+		<roledescription>Admin User</roledescription>
+	</role>
+	<role>
+		<roleid>role3_id</roleid>
+		<rolename>publisher</rolename>
+		<roledescription>Publisher User</roledescription>
+	</role>
+	<role>
+		<roleid>role4_id</roleid>
+		<rolename>standard</rolename>
+		<roledescription>Standard User</roledescription>
+	</role>
+</roles>

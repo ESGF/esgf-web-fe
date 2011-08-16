@@ -1,0 +1,7 @@
+<permissions>
+	<tuple>
+		<userid>rootAdmin_id</userid>
+		<groupid>group2_id</groupid>
+		<roleid>role4_id</roleid>
+	</tuple>
+</permissions>

@@ -217,7 +217,7 @@ public class FileDownloadTemplateController {
                     document.getRootElement().addContent(docEl);
                 }
                 catch(Exception e) {
-                    LOG.debug("\nJSON errors - investigate line 167\n");
+                    LOG.debug("\nJSON Error in converting template format \n");
                 }
 
             }
@@ -227,13 +227,13 @@ public class FileDownloadTemplateController {
         XMLOutputter outputter = new XMLOutputter();
         xmlOutput = outputter.outputString(document.getRootElement());
 
-        LOG.debug("xmlOutput:\n " + xmlOutput);
+        //LOG.debug("xmlOutput:\n " + xmlOutput);
 
 
         JSONObject returnJSON = XML.toJSONObject(xmlOutput);
 
         String jsonContent = returnJSON.toString();
-        LOG.debug("json: \n" + returnJSON.toString());
+        //LOG.debug("json: \n" + returnJSON.toString());
         return jsonContent;
         //return jo.toString();
     }
@@ -269,7 +269,7 @@ public class FileDownloadTemplateController {
 
             // read the response
             responseBody = method.getResponseBodyAsString();
-            LOG.debug(responseBody);
+            //LOG.debug(responseBody);
         } catch (HTTPException e) {
             LOG.error("Fatal protocol violation");
             e.printStackTrace();

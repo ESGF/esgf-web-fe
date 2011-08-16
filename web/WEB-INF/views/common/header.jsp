@@ -36,8 +36,8 @@
               	<c:otherwise>
                   		<!--  
               			-->
-              			<li> <a href="<c:url value='/adminview'/>" >Admin</a></li>
                 	<li> <a href="<c:url value='/j_spring_security_logout'/>" >Logout</a></li>
+              			<li> <a href="<c:url value='/adminview'/>" >Admin</a></li>
               	</c:otherwise>
           	</c:choose>                                      
            </ul>            

@@ -109,9 +109,9 @@
                          </div>
                          <div class="projectitembottom">
 	                         <ul>
-	                             <li>Getting Started Guide</li>
+	                             <!-- <li>Getting Started Guide</li>  -->
 	                             <li><a href='<c:url value="/createAccount"/>' >Create Account</a></li>
-	                             <li>Browse Catalogs</li> 
+	                             <!-- <li>Browse Catalogs</li>  -->
 	                             <li><a href='<c:url value="/live"/>'>Search for Data</a></li>
 	                         </ul>
                          </div>
@@ -127,8 +127,8 @@
                           </div>
                           <div class="projectitembottom">
 	                         <ul>
-	                             <li><a href='http://esg-test1.llnl.gov/esgf-web-fe/' >PCMDI Node</a></li>                             
-	                             <li><a href='http://esg-datanode.jpl.nasa.gov/esgf-web-fe/' >ORNL Node</a></li>
+	                             <li><a href='http://esgf-node3.llnl.gov/esgf-web-fe/' >PCMDI Node</a></li>                             
+	                             <li><a href='http://bones.ccs.ornl.gov/esgf-web-fe/' >ORNL Node</a></li>
 	                             <li><a href='http://esg-datanode.jpl.nasa.gov/esgf-web-fe/' >NASA-JPL Node</a></li>
 	                         </ul>
                           </div>

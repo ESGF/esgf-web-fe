@@ -6,14 +6,16 @@
 
 <script id="cartTemplate" type="text/x-jquery-tmpl">
 	<tr class="top_level_data_item" id="${$item.replacePeriods(dataset_id)}">
-		<td class="left_table_header"><input class="topLevel" type="checkbox" id="${dataset_id}" name="${dataset_id}" checked="true" /> Dataset: ${dataset_id} (${file.length} files)</td>
+		<td class="left_table_header"><input class="topLevel" type="checkbox" id="${dataset_id}" name="${dataset_id}" checked="true" /> Dataset: ${dataset_id} (${file.length-1} files)</td>
     	<td id="${dataset_id}" class="right_table_header"> <a href="#" class="showAllChildren">Expand</a> | <a href="#" class="wgetAllChildren"> WGET </a> | <a href="#" class="globusOnlineAllChildren">Globus Online</a> |  <a href="#" class="remove_dataset_from_datacart">Remove</a> </td>
     </tr>
 	{{each(i) file}}
+        {{if i != 0}}
         <tr class="rows_${$item.replacePeriods(dataset_id)}" style="display:none">
             <td class="left_download"> <div class="child" id="${file_id}"  title="${file_id}"> <input type="checkbox" id="${$item.replacePeriods(file_id)}" checked="true" value="${url}"/> ${$item.abbreviate(file_id)} </div></td>
         	<td class="right_download"> <a href="${url}">Download (${$item.sizeConversion(size)})</a> </td> 
 	   </tr>
+		{{/if}}
 	{{/each}}
 </script>
 

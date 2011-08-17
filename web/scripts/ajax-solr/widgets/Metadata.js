@@ -108,8 +108,6 @@
                 	//find the appropriate document in the solr index
                 	//note this HAS to be changed to a more efficient way to grab this data
                 	
-                	alert('self global Id');
-                	
                     var doc = self.findDoc(self.globalRecordId);
                 	
                     self.metadata_report(doc);

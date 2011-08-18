@@ -333,7 +333,7 @@ $(document).ready( function() {
         
 
         var url = '/esgf-web-fe/wgetproxy';
-        var security = 'extended';
+        var security = 'standard';
         queryString += '&security=' + security;
         
         //assemble the input fields with the query string

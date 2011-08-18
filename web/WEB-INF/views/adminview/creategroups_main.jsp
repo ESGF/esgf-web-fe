@@ -469,7 +469,6 @@ $(document).ready(function(){
 		
 		var checkbox = '';
 		$('input#groupName').val(ESGF.setting.currentGroupName);
-		alert(data.users.allusers.user.length);
 		for(var i=0;i<data.users.allusers.user.length;i++) {
 			var userName = data.users.allusers.user[i].username;
 			//if(userName != 'rootAdmin') {

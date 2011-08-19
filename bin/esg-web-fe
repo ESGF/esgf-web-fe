@@ -176,8 +176,14 @@ setup_web_fe() {
 
     popd >& /dev/null
     write_web_fe_install_log
+    post_web_fe_install
     checked_done 0
 
+}
+
+post_web_fe_install() {
+    echo -n "performing post install cleanup... "
+    ([ -d "${tomcat_install_dir}/work" ] && rm -rf ${tomcat_install_dir}/work) && echo "[OK]" || echo "[FAIL]"
 }
 
 write_web_fe_install_log() {

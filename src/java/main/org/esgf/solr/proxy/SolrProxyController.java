@@ -138,7 +138,7 @@ public class SolrProxyController {
         }
 
         LOG.debug("Solr URL = " + urlString);
-        LOG.debug("responseBody = " + responseBody);
+        //LOG.debug("responseBody = " + responseBody);
         return responseBody;
     }
 }

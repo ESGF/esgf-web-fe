@@ -1,10 +1,10 @@
 /*****************************************************************************
- * Copyright © 2011 , UT-Battelle, LLC All rights reserved
+ * Copyright ï¿½ 2011 , UT-Battelle, LLC All rights reserved
  *
  * OPEN SOURCE LICENSE
  *
  * Subject to the conditions of this License, UT-Battelle, LLC (the
- * ÒLicensorÓ) hereby grants to any person (the ÒLicenseeÓ) obtaining a copy
+ * ï¿½Licensorï¿½) hereby grants to any person (the ï¿½Licenseeï¿½) obtaining a copy
  * of this software and associated documentation files (the "Software"), a
  * perpetual, worldwide, non-exclusive, irrevocable copyright license to use,
  * copy, modify, merge, publish, distribute, and/or sublicense copies of the
@@ -14,7 +14,7 @@
  * grant, copyright and license notices, this list of conditions, and the
  * disclaimer listed below.  Changes or modifications to, or derivative works
  * of the Software must be noted with comments and the contributor and
- * organizationÕs name.  If the Software is protected by a proprietary
+ * organizationï¿½s name.  If the Software is protected by a proprietary
  * trademark owned by Licensor or the Department of Energy, then derivative
  * works of the Software may not be distributed using the trademark without
  * the prior written approval of the trademark owner.
@@ -27,7 +27,7 @@
  * acknowledgment:
  *
  *    "This product includes software produced by UT-Battelle, LLC under
- *    Contract No. DE-AC05-00OR22725 with the Department of Energy.Ó
+ *    Contract No. DE-AC05-00OR22725 with the Department of Energy.ï¿½
  *
  * 4. Licensee is authorized to commercialize its derivative works of the
  * Software.  All derivative works of the Software must include paragraphs 1,
@@ -67,31 +67,30 @@
  */
 package org.esgf.adminui;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.esgf.manager.InputManager;
-import org.esgf.manager.InputManagerImpl;
-import org.esgf.manager.OutputManager;
-import org.esgf.manager.OutputManagerImpl;
+import org.esgf.commonui.GroupOperationsInterface;
+//import org.esgf.commonui.UserOperations;
+import org.esgf.commonui.GroupOperationsESGFDBImpl;
+import org.esgf.commonui.GroupOperationsXMLImpl;
+import org.esgf.commonui.UserOperationsESGFDBImpl;
+import org.esgf.commonui.UserOperationsInterface;
+import org.esgf.commonui.UserOperationsXMLImpl;
+import org.esgf.commonui.Utils;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
-import esg.search.query.api.FacetProfile;
-import esg.search.query.api.SearchOutput;
-import esg.search.query.api.SearchService;
-import esg.search.query.impl.solr.SearchInputImpl;
 
 @Controller
 @RequestMapping(value="/creategroups")
@@ -101,18 +100,20 @@ public class CreateGroupsController {
     private final static String CreateGroups_MISC = "CreateGroups_misc";
     private final static String CreateGroups_INPUT = "CreateGroups_input";
     private final static String CreateGroups_MODEL = "CreateGroups_model";
+    private final static String CreateGroups_GROUP = "CreateGroups_group";
 
     private final static Logger LOG = Logger.getLogger(CreateGroupsController.class);
 
-    /**
-     * List of invalid text characters -
-     * anything that is not within square brackets.
-     */
-    private static Pattern pattern =
-        Pattern.compile(".*[^a-zA-Z0-9_\\-\\.\\@\\'\\:\\;\\,\\s/()].*");
-
-    public CreateGroupsController() {
+    private GroupOperationsInterface goi;
+    private UserOperationsInterface uoi;
+    
+    
+    public CreateGroupsController() throws FileNotFoundException, IOException {
         LOG.debug("IN CreateGroupsController Constructor");
+        //goi = new GroupOperationsXMLImpl();
+        //uoi = new UserOperationsXMLImpl();
+        goi = new GroupOperationsESGFDBImpl();
+        uoi = new UserOperationsESGFDBImpl();
     }
 
     /**
@@ -123,38 +124,244 @@ public class CreateGroupsController {
      * @param input
      * @param result
      * @return
+     * @throws IOException 
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
     @RequestMapping(method=RequestMethod.GET)
     public ModelAndView doGet(final HttpServletRequest request,
             final @ModelAttribute(CreateGroups_MISC) String CreateGroupsMisc,
-            final @ModelAttribute(CreateGroups_INPUT) String CreateGroupsInput) {
-        LOG.debug("In do get");
+            final @ModelAttribute(CreateGroups_INPUT) String CreateGroupsInput) throws IOException {
+        LOG.debug("------CreateGroupsController doGet------");
         
-        Map<String,Object> model = new HashMap<String,Object>();
+        
+        Map<String,Object> model = getModel(request,CreateGroupsInput);
+        
+        
+        LOG.debug("------End CreateGroupsController doGet------");
+        return new ModelAndView("creategroups", model);
+    }
+    
+    /**
+     * Method invoked in response to a GET request:
+     * -) if invoked directly, a new set of facets is retrieved (but no results)
+     * -) if invoked in response to a POST-REDIRECT,
+     * @param request
+     * @param input
+     * @param result
+     * @return
+     * @throws IOException 
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    @RequestMapping(method=RequestMethod.POST)
+    public ModelAndView doPost(final HttpServletRequest request,
+            final @ModelAttribute(CreateGroups_MISC) String CreateGroupsMisc,
+            final @ModelAttribute(CreateGroups_INPUT) String CreateGroupsInput) throws IOException {
+        LOG.debug("------CreateGroupsController doPost------");
+        
+        
+      //get the userId from the cookie
+        String userId = Utils.getIdFromHeaderCookie(request);
+        
+        //get the type of operation from the request parameter (add, edit, delete)
+        String type = Utils.getTypeFromQueryString(request);
+        
+        String groupName = request.getParameter("groupName");
 
         
+        LOG.debug("Type->" + type);
+        LOG.debug("GroupName|->" + groupName);
+        
+        //from the type perform the appropriate operation
+        if(type.equalsIgnoreCase("add")) {
+            addGroup(request);
+        }
+        else if(type.equalsIgnoreCase("edit")){
+            editGroup(request);
+        }
+        else if(type.equalsIgnoreCase("delete")) {
+            
+            //delete the rootAdmin user first
+            
+            
+            deleteGroup(request);
+        } else if(type.equalsIgnoreCase("editUsersInGroup")) {
+            
+            
+            Enumeration<String> paramEnum = request.getParameterNames();
+            
+            
+            List<User> users = uoi.getAllUsers();
+            List<User> checkedUsers = new ArrayList<User>();
+            
+            //first find the groups that were added
+            while(paramEnum.hasMoreElements()) { 
+                String postContent = (String) paramEnum.nextElement();
+                
+                String userName = request.getParameter(postContent);
+
+                if(!postContent.equals("groupName") && !postContent.equals("type")) {
+
+                    //System.out.println("Adding User->" + userName + " from group " + groupName);
+                    checkedUsers.add(uoi.getUserObjectFromUserName(userName));
+                    uoi.addUserToGroup(userName, groupName);
+                }
+            }
+            
+            //next find the users that were excluded from the check list and delete them
+            //i.e. delete whatever user is leftover
+            for(int i=0;i<users.size();i++) {
+                User user = users.get(i);
+                boolean canDelete = true;
+                for(int j=0;j<checkedUsers.size();j++) {
+                    User checkedUser = checkedUsers.get(j);
+                    if(user == null) {
+                        System.out.println("\t\t[->user is null");
+                    }
+                    if(checkedUser != null) {
+                        if(user.getUserName().equalsIgnoreCase(checkedUser.getUserName())) {
+                            canDelete = false;
+                        }
+                    }
+                    
+                }
+                if(canDelete) {
+                    System.out.println("[->Deleting User->" + user.getUserName() + " from group " + groupName);
+                
+                    //delete the user from the group
+                    uoi.deleteUserFromGroup(user.getUserName(), groupName);
+                    
+                }
+                
+                
+            }
+            
+            
+        }
+       
+        Map<String,Object> model = getModel(request,CreateGroupsInput);
+        
+        
+        LOG.debug("------End CreateGroupsController doPost------");
+        
+        return new ModelAndView("creategroups", model);
+    }
+    
+    
+    private void editGroup(final HttpServletRequest request) throws IOException {
+        LOG.debug("------ManageUsersController editUser------");
+        
+        Utils.queryStringInfo(request);
+        
+        
+        //groupId = goi.getGroupIdFromGroupName(request.getParameter("groupName"));
+        
+        String groupName = request.getParameter("groupName");
+        if(groupName == null || groupName.equals("")) {
+            groupName = "N/A";
+        }
+        String groupDescription = request.getParameter("groupDescription");
+        if(groupDescription == null || groupDescription.equals("")) {
+            groupDescription = "N/A";
+        }
+        
+        //String groupId = goi.getGroupIdFromGroupName(groupName);//request.getParameter("id");
+        /* NEED TO FIX THIS */
+        /*
+        Group group = goi.getGroupObjectFromGroupName(groupName);
+        String groupId = group.getid();
+        
+        LOG.debug("gId: " + groupId + " groupName: " + groupName + " groupDescription: " + groupDescription);
+        goi.editGroup(groupId, groupName, groupDescription);
+        */
+        
+        LOG.debug("------End CreateGroupsController editUser------");
+    }
+    
+    
+    
+    private void deleteGroup(final HttpServletRequest request) throws IOException {
+        LOG.debug("------CreateGroupsController deleteUser------");
+        
+        //Utils.queryStringInfo(request);
+        String groupName = request.getParameter("groupName");
+        
+        String groupId = goi.getGroupIdFromGroupName(groupName);
+        
+        //delete rootAdmin user from group first
+        uoi.deleteUserFromGroup("rootAdmin", groupName);
+        
+        LOG.debug("Deleteing->" + groupId);
+        goi.deleteGroup(groupName);
+
+        LOG.debug("------End CreateGroupsController deleteUser------");
+
+    }
+    
+    
+    
+    private void addGroup(final HttpServletRequest request) throws IOException {
+        LOG.debug("------CreateGroupsController addUser------");
+        
+        Utils.queryStringInfo(request);
+        
+        String groupName = request.getParameter("groupName");
+        if(groupName == null || groupName.equals("")) {
+            groupName = "N/A";
+        }
+        String groupDescription = request.getParameter("groupDescription");
+        if(groupDescription == null || groupDescription.equals("")) {
+            groupDescription = "N/A";
+        }
+
+        goi.addGroup(groupName, groupDescription);
+        
+
+        //must add the root user to the group
+        uoi.addUserToGroup("rootAdmin", groupName);
+        
+        
+        
+        LOG.debug("------CreateGroupsController addUser------");
+        
+    }
+    
+    
+    
+    
+    /* Helper function for extracting the model */
+    private Map<String,Object> getModel(final HttpServletRequest request,
+                                       final @ModelAttribute(CreateGroups_INPUT)  String ManageUsersInput) throws IOException {
+        LOG.debug("------CreateGroupsController getModel------");
+        Map<String,Object> model = new HashMap<String,Object>();
+        
         if (request.getParameter(CreateGroups_MODEL)!=null) {
-            LOG.debug("Not null");
             // retrieve model from session
             model = (Map<String,Object>)request.getSession().getAttribute(CreateGroups_MODEL);
 
         } else {
-            LOG.debug("null");
-            LOG.debug("CreateGroups Input: " + CreateGroupsInput);
-            LOG.debug("CreateGroups Misc: " + CreateGroupsMisc);
             
-
+            List<Group> groups = goi.getAllGroups();
+            //convert to user array so jsp doesn't complain
+            Group [] groupArray = groups.toArray(new Group[groups.size()]);
+            /*
+            List<User> users = uoi.getAllUsers();
+            User [] userArray = users.toArray(new User[users.size()]);
+            */
+            
+            System.out.println("groupArr|->" + groupArray.length);
             // populate model
-            model.put(CreateGroups_MISC, CreateGroupsMisc);
-            model.put(CreateGroups_INPUT, CreateGroupsInput);
-            
-
+            model.put(CreateGroups_INPUT, ManageUsersInput);
+            //LOG.debug("About to plug in USERS");
+            model.put(CreateGroups_GROUP, groupArray);
+            //LOG.debug("After plug in USERS");
             request.getSession().setAttribute(CreateGroups_MODEL, model);
             
         }
-        return new ModelAndView("creategroups", model);
+
+        LOG.debug("------End CreateGroupsController getModel------");
+        return model;
     }
     
     
@@ -167,9 +374,6 @@ public class CreateGroupsController {
     @ModelAttribute(CreateGroups_MISC)
     public String formCreateGroupsMiscObject(final HttpServletRequest request) throws Exception {
         LOG.debug("formCreateGroupsMiscObject");
-        
-        
-        
         return "CreateGroups_MISC here";
     }
     
@@ -182,10 +386,7 @@ public class CreateGroupsController {
      */
     @ModelAttribute(CreateGroups_INPUT)
     public String formCreateGroupsInputObject(final HttpServletRequest request) throws Exception {
-
         LOG.debug("formCreateGroupsInputObject called");
-
-
         return "CreateGroups_Table here";
 
     }

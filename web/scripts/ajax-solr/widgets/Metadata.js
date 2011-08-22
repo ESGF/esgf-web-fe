@@ -107,6 +107,7 @@
                 	
                 	//find the appropriate document in the solr index
                 	//note this HAS to be changed to a more efficient way to grab this data
+                	
                     var doc = self.findDoc(self.globalRecordId);
                 	
                     self.metadata_report(doc);
@@ -175,6 +176,10 @@
             //For solr output, all the metadata is included as they are stored in the index
             //However, there should be some controller that determines what storage device is being used
             //and returned in a specific format that the metadata summary template can read
+            
+            self.processMetadataRecord(doc);
+            
+            /*
             jQuery.ajax({
                 url: metatdata_url,
                 data: doc,
@@ -184,14 +189,14 @@
                 error: function() {alert("error http://localhost:8080/esgf-web-fe/metadataproxy");}
                 //dataType: 'json'
             }); 
-            
+            */
         },
         
         
         /*
          * Processes the metadata from both solr and the raw xml file
          */
-        processMetadataRecord: function(record,doc) {
+        processMetadataRecord: function(doc) {
         	//alert('process metadata record here for ' + doc.id);
 
             var self = this;
@@ -200,11 +205,11 @@
             
             //should probably use a closure here
             if(ESGF.setting.metadata_summary == 'html') {
-            	self.processUsingHtml(record,doc);
+            	self.processUsingHtml(doc);
             } else if(ESGF.setting.metadata_summary == 'oldhtml') {
-            	self.processUsingOldHtml(record,doc);
+            	self.processUsingOldHtml(doc);
             } else if(ESGF.setting.metadata_summary == 'oldhtml') {
-            	self.processUsingDropBox(record,doc);
+            	self.processUsingDropBox(doc);
             }
             
             //self.processUsingHtml(record,doc);  
@@ -215,7 +220,7 @@
         }, //end processMetadataRecord
         
         
-        processUsingHtml: function(record,doc) {
+        processUsingHtml: function(doc) {
         	
         	//add the title first 
     		$('div#metadata_summary_dataset').after('<div class="addedMetadataTitle">' + 'Dataset: ' + doc['title']);
@@ -296,7 +301,7 @@
         	*/
         },
         
-        processUsingOldHtml: function(record,doc) {
+        processUsingOldHtml: function(doc) {
         	var self = this;
         	
         	for (var property in doc) {
@@ -346,7 +351,7 @@
         },
                
         
-        processUsingDropBox: function(record,doc) {
+        processUsingDropBox: function(doc) {
         	alert('Drop Box');
         },
         

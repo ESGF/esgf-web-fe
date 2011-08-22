@@ -46,7 +46,8 @@
 	                <p/>
 	                <div align="center">Please enter your OpenID. You will be redirected to your registration web site to login.</div>
 	                <p/>
-                </c:when>
+	                <div align="center">Not a user? Register <a href='<c:url value="/createAccount"/>' >here</a>.</div>
+	            </c:when>
 
                 <c:otherwise>
 

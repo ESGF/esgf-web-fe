@@ -59,7 +59,7 @@
 
 
 (function ($) {
-
+	
 	AjaxSolr.FacetSideBarWidget = AjaxSolr.AbstractFacetWidget.extend({
 	
 		
@@ -72,25 +72,65 @@
 			
 			var facet_arr = new Array();
 			
+			
+			
 		    for (facet in self.manager.response.facet_counts.facet_fields) {
 		    	var facet_obj = new Object();
 		    	var facet_val_arr = new Array();
 		    	var facet_val_counts = new Array();
+		    	var facet_max_count = 0;
 		    	for(var facet_value in self.manager.response.facet_counts.facet_fields[facet]) {
-		    		var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
-				    facet_val_counts.push(count);
-		    		facet_val_arr.push(facet_value);
-		    		if (facet === 'project') {
-			    		//alert('facet_value: ' + facet_value);
-		    			var radix = 10;
-		    			//var count = parseInt(self.manager.response.facet_counts,radix);
-		    			//alert('facet_value: ' + facet_value + ' ' + count);
+		    		if(facet == 'project') {
+		    			var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
+					    
+		    			if(count > facet_max_count) {
+		    				facet_max_count = count;
+		    			}
+		    		
+		    			facet_val_counts.push(count);
+		    			facet_val_arr.push(facet_value);
+		    			
+		    			
+		    		}else if(!isConstraint(facet)) {
+		    			var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
+					    
+		    			if(count > facet_max_count) {
+		    				facet_max_count = count;
+		    			}
+		    		
+		    			facet_val_counts.push(count);
+		    			facet_val_arr.push(facet_value);
+		    			
+		    		} else if(matchesFacetValue(facet,facet_value)) {
+		    			var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
+					    
+		    			if(count > facet_max_count) {
+		    				facet_max_count = count;
+		    			}
+		    		
+		    			facet_val_counts.push(count);
+		    			facet_val_arr.push(facet_value);
 		    		}
+		    		
+		    		/*
+		    		if(isConstraint(facet)) {
+		    			alert(facet + ' has constraint');
+		    			
+		    			if(!matchesFacetValue(facet,facet_value)) {
+		    				//alert('value: ' + facet_value + ' doesn't match);
+		    			
+		    			}
+		    			
+		    			
+		    		} 
+		    		*/
+		    			
 		    		
 		    	}
 		    	facet_obj.Facet_name = facet;
 		    	facet_obj.Facet_values = facet_val_arr;
 		    	facet_obj.Facet_counts = facet_val_counts;
+		    	facet_obj.Facet_max_count = facet_max_count;
 		    	facet_arr.push(facet_obj);
 		    	
 	    	}
@@ -101,19 +141,23 @@
 
 	            $("#facetList").empty();
 		    	$( "#facetTemplate").tmpl(facet_arr, {
-					
+		    		replaceWhiteSpaces : function (word) {
+	                    return replaceWhiteSpace(word);
+	                }
 		        })
 		    	.appendTo("#facetList")
 		    	.find( "a.showFacetValues" ).click(function() {
 	                var selectedItem = $.tmplItem(this);
 	                for(var i = 0;i<selectedItem.data.Facet_values.length;i++) {
-	                    $('li#' + selectedItem.data.Facet_name + '_' + selectedItem.data.Facet_values[i].toString()).toggle();
+	                	var convertedStr = replaceWhiteSpace(selectedItem.data.Facet_values[i]);
+	                    $('li#' + selectedItem.data.Facet_name + '_' + selectedItem.data.Facet_values[i]).toggle();
 	                }
 	                
 		   		});
 		    }
 		    
 		    $('a.alink').click( function () {
+		    	
 				var facet_value = $(this).html();
 				
 				var facet = $(this).parent().parent().find('a.showFacetValues').html();
@@ -121,19 +165,19 @@
 				/* NEED TO COME BACK - IT ONLY MATCHES whitespace */
 				var index = facet_value.search(' ');
 				var trimmedFacetValue = facet_value.substr(0,index);
-				
-				Manager.store.addByValue('fq', facet + ':' + trimmedFacetValue );
+				index = facet.search(' ');
+				var trimmedFacet = facet.substr(0,index);
+				Manager.store.addByValue('fq', trimmedFacet + ':' + trimmedFacetValue );
 				if(ESGF.setting.storage) {
 					var fq = localStorage['fq'];
 		     	   	if(fq == null) {
-		     	   		fq = facet + ':' + trimmedFacetValue + ';';
+		     	   		fq = trimmedFacet + ':' + trimmedFacetValue + ';';
 		     	   		localStorage['fq'] = fq;
 		     	   	} else {
-			     		  fq += facet + ':' + trimmedFacetValue + ';';
+			     		  fq += trimmedFacet + ':' + trimmedFacetValue + ';';
 			              localStorage['fq'] = fq;
 			     	}
 				}
-				
 	     	   	Manager.doRequest(0);
 				
 			});
@@ -145,5 +189,53 @@
 	$(document).ready( function() {
 		$.fx.speeds._default = 1000;
 	});
+	
+	function replaceWhiteSpace(word) {
+		var convertedStr = word.split(' ').join('_'); 
+		return convertedStr;
+	}
+	
+	
+	function matchesFacetValue(facet,value) {
+		var matchesFacetValue = false;
+
+		
+		//make sure project still displays all values
+		if(facet == 'project') {
+			matchesFacetValue = true;
+			
+		} else {
+			var fq = Manager.store.get('fq');
+			
+			for(var i=0;i<fq.length;i++) {
+				var constraint = fq[i];
+				var facet_constraint = constraint['value'].split(":")[0];
+				if(facet == facet_constraint) {
+					var facet_value = constraint['value'].split(":")[1];
+					if(facet_value == value) {
+						matchesFacetValue = true;
+					}
+				}
+			}
+		}
+
+		return matchesFacetValue;
+		
+	}
+	
+	function isConstraint(facet) {
+		var isConstraint = false;
+		
+		var fq = Manager.store.get('fq');
+		
+		for(var i=0;i<fq.length;i++) {
+			var constraint = fq[i];
+			var facet_constraint = constraint['value'].split(":")[0];
+			if(facet == facet_constraint) {
+				isConstraint = true;
+			}
+		}
+		return isConstraint;
+	}
 	
 }(jQuery));

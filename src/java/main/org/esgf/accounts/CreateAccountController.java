@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import esg.common.util.ESGFProperties;
 import esg.node.security.ESGFDataAccessException;
 import esg.node.security.GroupRoleDAO;
 import esg.node.security.UserInfo;
@@ -58,15 +59,20 @@ public class CreateAccountController {
     
     @Autowired
     public CreateAccountController(final @Qualifier("esgfProperties") Properties props) {
+        ESGFProperties myESGFProperties = null;
+        
         try {
-            this.userInfoDAO = new UserInfoCredentialedDAO("rootAdmin", props.getProperty("security.admin.password"), props);
-            this.groupRoleDAO = new GroupRoleDAO(props);
+            myESGFProperties = new ESGFProperties();
+            String passwd = myESGFProperties.getAdminPassword();
+            
+            this.userInfoDAO = new UserInfoCredentialedDAO("rootAdmin", passwd, myESGFProperties);
+            this.groupRoleDAO = new GroupRoleDAO(myESGFProperties);
             groupRoleDAO.addRole(ROLE_NAME);
         } catch(Exception e) {
             LOG.warn(e.getMessage());
         }
         
-        notifier = new AccountsEmailNotifier(props);
+        notifier = new AccountsEmailNotifier(myESGFProperties);
     }
     
     /**

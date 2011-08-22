@@ -61,8 +61,6 @@
 
 (function ($) {
 
-    //alert('loading solr.theme.js document ready');
-
 
 AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
     var output = '';
@@ -82,7 +80,8 @@ AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
 
     output += '<div class="search-entry">';
       output += '<h4 class="desc">';
-      output += '<a href="#" style="text-decoration:none">';
+      //output += '<a href="#" style="text-decoration:none">';
+      output += '<span class="actionitem ai_meta"><a href="/esgf-web-fe/scripts/esgf/metadata_overlay_template.html" class="met" rel="#metadata_overlay"' + allStr + '>';
       output += doc.title + '</a>';
       output += '</h4>' ;
       output += '<p id="links_' + doc.id + '" class="links"></p>';
@@ -106,7 +105,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     var allStr = idStr + titleStr + urlStr + formatStr +  metadataURLStr;
 
     output += "Further options: ";
-    output += '<span class="actionitem ai_meta"><a href="/esgf-web-fe/scripts/esgf/metadata_overlay_template.html" class="met" rel="#metadata_overlay"' + allStr + '> Metadata Summary</a></span>';
+    //output += '<span class="actionitem ai_meta"><a href="/esgf-web-fe/scripts/esgf/metadata_overlay_template.html" class="met" rel="#metadata_overlay"' + allStr + '> Metadata Summary</a></span>';
     //output += '<span class="actionitem ai_meta"><a href="/esgf-web-fe/scripts/esgf/sample.html" class="met" rel="#metadata_overlay"' + allStr + '> Metadata Summary</a></span>';
     //output += '<span class="actionitem ai_meta"><a href="http://www.forbes.com/2009/02/11/cancer-cure-experimental-lifestyle-health_0212cancer.html" class="met" rel="#metadata_overlay"' + allStr + '> Metadata Summary</a></span>';
 
@@ -118,7 +117,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         LOG.debug("LAS service tag detected");
         var svcStr = doc.service[0].split("|");
         if (svcStr[0] == "LAS") {
-            output += '<span class="actionitem ai_las"><a href="' + svcStr[2] + '">Visualize and Analyze</a></span>';
+            output += '<span class="actionitem ai_las"><a href="' + svcStr[2] + '" target="_blank">Visualize and Analyze</a></span>';
         }
     }
 
@@ -138,6 +137,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
 
             selected[evt.data.doc.id] = doc;
             if ( jQuery.trim(this.innerHTML) == "Add To Cart") {
+            	/*
                 var $dialog = $('<div></div>')
                     .html('Dataset <b>' + evt.data.doc.id + "</b> has been added to the selection")
                     .dialog({
@@ -146,9 +146,11 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                         modal: true,
                         hide: 'explode'
                     });
+                */
                 this.innerHTML="Remove From Cart";
 
             } else {
+            	/*
                 var $dialog = $('<div></div>')
                 .html('Dataset <b>' + evt.data.doc.id + "</b> has been removed to the selection")
                 .dialog({
@@ -157,6 +159,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                     modal: true,
                     hide: 'explode'
                 });
+                */
                 this.innerHTML ="Add To Cart";
                 delete selected[evt.data.doc.id];
 

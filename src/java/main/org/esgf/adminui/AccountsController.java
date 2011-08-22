@@ -168,10 +168,10 @@ public class AccountsController {
         } 
         else {
             
-            User user = Utils.populateUserObjectFromIdXML(userId,new File(USERS_FILE));
+            //User user = Utils.populateUserObjectFromIdXML(userId,new File(USERS_FILE));
             
             // populate model with the UserInfo
-            model.put( ACCOUNTS_USERINFO, user);
+            //model.put( ACCOUNTS_USERINFO, user);
             model.put(ACCOUNTS_INPUT, accountsInput);
             
             //put the model in the session
@@ -220,10 +220,10 @@ public class AccountsController {
         } 
         else {
             
-            User user = Utils.populateUserObjectFromIdXML(userId,new File(USERS_FILE));
+            //User user = Utils.populateUserObjectFromIdXML(userId,new File(USERS_FILE));
             
             // populate model with the UserInfo
-            model.put( ACCOUNTS_USERINFO, user);
+            //model.put( ACCOUNTS_USERINFO, user);
             model.put(ACCOUNTS_INPUT, accountsInput);
             
             //put the model in the session

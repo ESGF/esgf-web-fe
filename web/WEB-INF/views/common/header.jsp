@@ -30,14 +30,16 @@
                -->      
            	<c:choose>
            		<c:when test="${principal=='anonymousUser'}">
+           			<!-- guest users -->
                 	<li> <a href="<c:url value='/login'/>" >Login</a></li>
-                	<li> <a href="<c:url value='/adminview'/>" >Admin</a></li>
               	</c:when>
               	<c:otherwise>
-                  		<!--  
-              			-->
-                	<li> <a href="<c:url value='/j_spring_security_logout'/>" >Logout</a></li>
+              		<!-- authenticated users -->
+                	<li><a href="<c:url value='/j_spring_security_logout'/>" >Logout</a></li>
+                	<!-- admin users -->
+                	<sec:authorize access="hasRole('ROLE_ADMIN')">
               			<li> <a href="<c:url value='/adminview'/>" >Admin</a></li>
+              		</sec:authorize>
               	</c:otherwise>
           	</c:choose>                                      
            </ul>            

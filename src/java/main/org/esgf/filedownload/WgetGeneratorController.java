@@ -160,7 +160,9 @@ public class WgetGeneratorController {
         //probably need to change the name "child urls" to something more relevant
         for(int i=0;i<request.getParameterValues("child_url").length;i++) {
           LOG.debug("CHILD_URL: " + request.getParameterValues("child_url")[i]);
-          wgetText += "\twget '" + request.getParameterValues("child_url")[i] + "'\n";
+          wgetText += "\twget " 
+                   + "--certificate ~/.esg/credentials.pem --private-key ~/.esg/credentials.pem "
+                   + "'" + request.getParameterValues("child_url")[i] + "'\n";
         }
         wgetText += "}\n";
         wgetText += "#\n# MAIN \n#\n";

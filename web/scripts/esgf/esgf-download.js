@@ -77,6 +77,7 @@ $(document).ready( function() {
     });
 
 	function createTemplate(arr) {
+		
 		var query_arr = new Array();
         //create a query string of just the dataset ids
     	for(var i=0;i<arr.length;i++) {
@@ -85,7 +86,8 @@ $(document).ready( function() {
         
     	var file_download_template_url = ESGF.search.fileDownloadTemplateProxyUrl;
         
-    	var query = { "id" : query_arr };
+    	//Not sure if we need the search type at this point, but I kept it in
+    	var query = { "id" : query_arr , "searchType" : ESGF.setting.searchType};
     	
     	if(query_arr.length != 0) {
     		$.ajax({

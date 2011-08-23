@@ -120,7 +120,7 @@ public class FileDownloadTemplateController {
     //the max rows to be returned is best configurable or read from props file
 
     //private final static String filePrefix="q=*%3A*&json.nl=map&fq=type%3AFile&rows=2000&fq=parent_id:";
-    private final static String queryString ="q=*:*&json.nl=map&start=0&rows=2000&fq=type:File&fq=parent_id:";
+    private static String queryString ="q=*:*&json.nl=map&start=0&rows=2000&fq=type:File&fq=parent_id:";
 
 
     @RequestMapping(method=RequestMethod.GET)
@@ -171,6 +171,13 @@ public class FileDownloadTemplateController {
 
     private String convertTemplateFormat(HttpServletRequest request, HttpServletResponse response) throws JSONException {
 
+        String searchType = request.getParameter("searchType");
+        //if(searchType.equalsIgnoreCase("Distributed")) {
+            queryString = "qt=/distrib&" + queryString;
+        //}
+        
+        LOG.debug("\n\n" + searchType + "\n\n");
+        
 
         String[] names = request.getParameterValues("id[]");
 
@@ -392,6 +399,8 @@ public class FileDownloadTemplateController {
             }
         }
 
+        
+        
         return jsonContent;
         
     }
@@ -406,6 +415,12 @@ public class FileDownloadTemplateController {
 
         String combinedQueryStr = queryString + id + "&wt=json";
 
+
+        LOG.debug("\n\n\n\n");
+        LOG.debug("QueryStr for files: " + combinedQueryStr);
+        LOG.debug("\n\n\n\n");
+        
+        
         GetMethod method = new GetMethod(solrURL);
 
         try {

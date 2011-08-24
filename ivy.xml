@@ -111,7 +111,7 @@
     <dependency org="postgresql" name="postgresql" rev="9.0-801.jdbc4" conf="base->default" />
     <dependency org="xerces" name="xercesImpl" rev="2.9.1" />
     
-    <dependency org="javax.mail" name="mail" rev="1.4.3"/>
+    <dependency org="javax.mail" name="mail" rev="1.4.3" transitive="false" conf="base->default" />
     
   </dependencies>
 </ivy-module>

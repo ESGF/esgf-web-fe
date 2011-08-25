@@ -107,14 +107,17 @@ ESGF.setting.storage = true;
 // flag for determining which metadata summary to display
 ESGF.setting.metadata_summary = 'html';
 
-//distributed search switch
-ESGF.setting.searchType = 'local';
+//distributed search switch - need to revisit this
+//ESGF.setting.searchType = 'local';
 
 //for admin's usermanagement interface - currentUserName
 ESGF.setting.currentUserName = 'default';
 
 //for admin's usermanagement interface - currentGroupName
 ESGF.setting.currentGroupName = 'default';
+
+//indication of datacart method (old vs new)
+ESGF.setting.dataCartVersion = 'v1';
 
 /**
  * Proxy for creating the template for file downloads.

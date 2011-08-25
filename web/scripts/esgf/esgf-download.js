@@ -180,6 +180,10 @@ $(document).ready( function() {
     	
     	
     	if(query_arr.length != 0) {
+    		//add a spin wheel to indicate that the system is processing
+        	$('tbody#datasetList').after('<img id="spinner" src="images/ajax-loader.gif" />');
+        	$('tbody#datasetList').after('<p id="waitWarn">Waiting for files...</p>');
+        	
     		$.ajax({
         		url: file_download_template_url,
         		global: false,
@@ -187,6 +191,10 @@ $(document).ready( function() {
         		data: query,
         		dataType: 'json',
         		success: function(data) {
+        			
+        			$('#waitWarn').remove();
+        			$('#spinner').remove();
+        	    	
         			showFileContentsV1(data);
         		}
         	});

@@ -14,6 +14,8 @@
         <ti:insertAttribute name="extrastyle" />
 
         <title> ESGF Portal</title>
+        
+        <link rel="alternate" type="application/rss+xml" title="ESGF Node RSS Feed" href="http://${pageContext.request.serverName}/esg-search/feed/datasets.rss">
 
     </head>
 

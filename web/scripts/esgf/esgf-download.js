@@ -71,12 +71,101 @@ $(document).ready( function() {
             //need a function that replaces periods in the name of the dataset (events in jquery cannot access elements that have these)
             
             if (arr != null || arr != undefined || arr.length == 0 || arr != '') {
-            	createTemplate(arr);
+            	if(ESGF.setting.dataCartVersion == 'v1') {
+            		createTemplateV1(arr);
+            	} else {
+            		createTemplateV2(arr);
+            	}
             }
         }
     });
+    
+    function createTemplateV2(arr) {
+    	
+    	
+    	var fileDownloadTemplate = arr;
+		
+		$( "#addedCartTemplate").tmpl(fileDownloadTemplate, {
+			replacePeriods : function (word) {
+                return replacePeriod(word);
+            },
+            abbreviate : function (word) {
+                return abbreviateWord(word);
+            },
+            addOne: function(num) {
+                return (num+1);
+            },
+            sizeConversion : function(size) {
+                return sizeConvert(size);
+            }
+			
+		})
+        .appendTo("#datasetList")
+        .find( "a.showAllFiles" ).click(function() {
+        	var selectedItem = $.tmplItem(this);
+        	
+        	var id = $(this).parent().attr("id").replace(/\./g,"_");
+        	
+        	var data = selectedItem['data'];
+        	
+        	var dataset_id = data.doc.id;
+        	
+        	
+        	//toggle checkbox
+        	$('input[name=' + dataset_id + ']').toggle();
+        	
+        	
+        	//alert('if the link says expand, get file info...if the link says collapse hide the file info');
+        	if(this.innerHTML === "Expand") {
+                
+    			//alert('Dataset has not been fetched yet, make the ajax call to the FileTemplateController and show the file rows');
+        			
+    			if (confirm("Fetching files for Dataset " + dataset_id + " may take a few seconds...Proceed?")) {
+    				
+    				var file_download_template_url = ESGF.search.fileDownloadTemplateProxyUrl;
+    		        
+    	        	
+    	        	$('tr#' + replacePeriod(dataset_id)).after('<img id="spinner" src="images/ajax-loader.gif" />');
+    	        	//$(this.target).html($('<img/>').attr('src', 'images/ajax-loader.gif'));
+    	        	
+    				
+    		    	var query = { "id" : dataset_id , "version" : ESGF.setting.dataCartVersion};
+    		    	
+		    		$.ajax({
+		        		url: file_download_template_url,
+		        		global: false,
+		        		type: "GET",
+		        		data: query,
+		        		dataType: 'json',
+		        		success: function(data) {
 
-	function createTemplate(arr) {
+		        			$('#spinner').remove();
+		        			showFileContentsV2(data);
+		        			
+		        		}
+		        	});
+    				
+    				
+            	    this.innerHTML="Collapse";
+    			}
+        		
+            } else {
+            	
+            	//delete ALL rows created in the data cart
+            	$('tr.rows_' + replacePeriod(dataset_id)).remove();
+            	
+                this.innerHTML="Expand";
+            }
+        	
+        });
+    	//addedCartTemplate
+    	
+    	
+    }
+
+    
+    
+    function createTemplateV1(arr) {
 		
 		var query_arr = new Array();
         //create a query string of just the dataset ids
@@ -87,7 +176,8 @@ $(document).ready( function() {
     	var file_download_template_url = ESGF.search.fileDownloadTemplateProxyUrl;
         
     	//Not sure if we need the search type at this point, but I kept it in
-    	var query = { "id" : query_arr , "searchType" : ESGF.setting.searchType};
+    	var query = { "id" : query_arr , "version" : ESGF.setting.dataCartVersion};
+    	
     	
     	if(query_arr.length != 0) {
     		$.ajax({
@@ -97,72 +187,18 @@ $(document).ready( function() {
         		data: query,
         		dataType: 'json',
         		success: function(data) {
-        			
-        			showCartContents(data);
-        			/*
-        			var fileDownloadTemplate = data.response.doc;
-        			
-        			$( "#cartTemplate").tmpl(fileDownloadTemplate, {
-        				
-        				replacePeriods : function (word) {
-                            return replacePeriod(word);
-                        },
-                        abbreviate : function (word) {
-                            var abbreviation = word;
-                            if(word.length > 25) {
-                                abbreviation = word.slice(0,10) + '...' + word.slice(word.length-11,word.length);
-                            }
-                            return abbreviation;
-                        },
-                        addOne: function(num) {
-                            return (num+1);
-                        },
-                        sizeConversion : function(size) {
-                            var convSize;
-                            if(size == null) {
-                                convSize = 'N/A';
-                            } else {
-                                var sizeFlt = parseFloat(size,10);
-                                if(sizeFlt > 1000000000) {
-                                    var num = 1000000000;
-                                    convSize = (sizeFlt / num).toFixed(2) + ' GB';
-                                } else if (sizeFlt > 1000000) {
-                                    var num = 1000000;
-                                    convSize = (sizeFlt / num).toFixed(2) + ' MB';
-                                } else {
-                                    var num = 1000;
-                                    convSize = (sizeFlt / num).toFixed(2) + ' KB';
-                                }
-                            }
-                            return convSize;
-                        }
-                    })
-                    .appendTo("#datasetList")
-                    .find( "a.showAllChildren" ).click(function() {
-                    	var selectedItem = $.tmplItem(this);
-                        var selectedDoc = selectedItem;
-                       
-                        var selectedDocId = selectedDoc.data.dataset_id;
-                        $('input[name=' + selectedDocId + ']').toggle();
-
-                        var id = $(this).parent().attr("id").replace(/\./g,"_");
-                        $('tr.rows_'+id).toggle();
-                        if(this.innerHTML === "Expand") {
-                            this.innerHTML="Collapse";
-                        } else {
-                            this.innerHTML="Expand";
-                        }
-                    });
-                    */
+        			showFileContentsV1(data);
         		}
         	});
     	}
     	
     	
 	}
-	
-	function showCartContents(data) {
+    
+
+    function showFileContentsV1(data) {
 		var fileDownloadTemplate = data.response.doc;
+		
 		
 		$( "#cartTemplate").tmpl(fileDownloadTemplate, {
 			
@@ -204,6 +240,7 @@ $(document).ready( function() {
         	var selectedItem = $.tmplItem(this);
             var selectedDoc = selectedItem;
            
+            
             var selectedDocId = selectedDoc.data.dataset_id;
             $('input[name=' + selectedDocId + ']').toggle();
 
@@ -214,8 +251,37 @@ $(document).ready( function() {
             } else {
                 this.innerHTML="Expand";
             }
+            
         });
+        
 	}
+    
+    
+    
+	function showFileContentsV2(data) {
+	
+		
+		//var files = data.response.doc;
+		
+		var dataset_id = replacePeriod(data.response.doc.dataset_id);
+		
+
+		var str = '';
+		
+		for(var i=1;i<data.response.doc.file.length;i++) {
+			var file = data.response.doc.file[i];
+			str = str + '<tr class="rows_' + dataset_id +'"><td class="left_download"><div class="child" id="' + file.file_id + '" title="' + file.file_id + '"> <input type="checkbox" id="' + abbreviateWord(file.file_id) + '" checked="true" value="' + file.url + '" />' + abbreviateWord(file.file_id) + '</div></td>';
+			str = str + '<td class="right_download"><a href="' + file.url + '"> Download</a></td></tr>';
+		}
+		
+		//add the content after the dataset title row
+		$('tr#' + dataset_id).after(str);
+		
+	}
+
+	
+	
+	
 
     /**
      * Event for checkbox file selection
@@ -241,24 +307,128 @@ $(document).ready( function() {
      */
     $('.remove_dataset_from_datacart').live ('click', function(e) {
     	
-    	//grab the dataset id from the template
-    	var selectedItem = $.tmplItem(this);
-    	var selectedDocId = selectedItem.data.dataset_id;
+    	if(ESGF.setting.dataCartVersion == 'v1') {
+    		//grab the dataset id from the template
+        	var selectedItem = $.tmplItem(this);
+        	var selectedDocId = selectedItem.data.dataset_id;
 
-    	//remove the dataset_id from the selected store
-    	delete ESGF.search.selected[selectedDocId];
-    	
-    	//remove the dataset and files visually
-    	//file rows in the template
-    	($('tr.rows_'+ replacePeriod(selectedDocId))).remove();
-    	//dataset rows in the template
-    	$('tr#' + replacePeriod(selectedDocId)).remove();
-    	
-    	//change from remove from cart to add to cart
-    	$('a#ai_select_'+ selectedDocId.replace(/\./g, "_")).html('Add To Cart');
+        	//remove the dataset_id from the selected store
+        	delete ESGF.search.selected[selectedDocId];
+        	
+        	//remove the dataset and files visually
+        	//file rows in the template
+        	($('tr.rows_'+ replacePeriod(selectedDocId))).remove();
+        	//dataset rows in the template
+        	$('tr#' + replacePeriod(selectedDocId)).remove();
+        	
+        	//change from remove from cart to add to cart
+        	$('a#ai_select_'+ selectedDocId.replace(/\./g, "_")).html('Add To Cart');
+        	
+    	} else {
+    		
+    		var selectedItem = $.tmplItem(this);
+        	
+        	var id = $(this).parent().attr("id").replace(/\./g,"_");
+        	
+        	var data = selectedItem['data'];
+        	
+        	var dataset_id = data.doc.id;
+        
+        	//remove the dataset_id from the selected store
+        	delete ESGF.search.selected[dataset_id];
+
+        	//remove the dataset and files visually
+        	//file rows in the template
+        	($('tr.rows_'+ replacePeriod(dataset_id))).remove();
+        	//dataset rows in the template
+        	$('tr#' + replacePeriod(dataset_id)).remove();
+        	
+        	//change from remove from cart to add to cart
+        	$('a#ai_select_'+ dataset_id.replace(/\./g, "_")).html('Add To Cart');
+    	}
     	
     });
     
+    
+    
+    
+    /**
+     * Click event for generating the wget script
+     * Submits a form with hidden values that calls the wget proxy class that returns the 
+     * wget script as content type text/x-sh.
+     * The form is deleted upon completion.
+     */
+    $(".wgetAllChildren").live ('click', function (e){
+
+    	if(ESGF.setting.dataCartVersion == 'v1') {
+    		//grab the dataset id from the template
+        	var selectedItem = $.tmplItem(this);
+        	var selectedDocId = selectedItem.data.dataset_id;
+
+        	//begin assembling queryString
+            var queryString = 'type=create&id=' + selectedDocId;
+        	
+            //gather the ids and the urls for download
+        	var ids   = new Array();
+            var values = new Array();
+            $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDocId)).find(':checkbox:checked').each( function(index) {
+                    if(this.id != selectedDocId) {
+                    ids.push(this.id);
+                    values.push(this.value);
+                   }
+        	});
+            
+            //assemble parameters of the queryString
+            for(var i=0;i<ids.length;i++) {
+            	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
+            }
+            
+
+            var url = '/esgf-web-fe/wgetproxy';
+            var security = 'standard';
+            queryString += '&security=' + security;
+            
+            //assemble the input fields with the query string
+            var input = '';
+            jQuery.each(queryString.split('&'), function(){
+                var pair = this.split('=');
+                input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
+            });
+            
+            //send request
+            jQuery('<form action="'+ url +'" method="post">'+input+'</form>')
+            .appendTo('body').submit().remove();
+    		
+    	}else {
+    		var selectedItem = $.tmplItem(this);
+        	
+        	var data = selectedItem['data'];
+        	
+        	var dataset_id = data.doc.id;
+        	
+        	alert(dataset_id);
+        	
+        	//begin assembling queryString
+            var queryString = 'type=create&id=' + dataset_id
+        	
+            //gather the ids and the urls for download
+        	var ids   = new Array();
+            var values = new Array();
+            alert($(this).parent().html());
+            $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(dataset_id)).find(':checkbox:checked').each( function(index) {
+            		alert('thisid: ' + this.id + ' dataset_id: ' + dataset_id);
+                    if(this.id != dataset_id) {
+                    ids.push(this.id);
+                    values.push(this.value);
+                   }
+        	});
+        	
+            alert(ids);
+    	}
+    	
+    });
+
+
     /**
      * Click event for launching globus online bulk data transfer
      */
@@ -301,57 +471,6 @@ $(document).ready( function() {
         
     });
     
-    
-    
-    /**
-     * Click event for generating the wget script
-     * Submits a form with hidden values that calls the wget proxy class that returns the 
-     * wget script as content type text/x-sh.
-     * The form is deleted upon completion.
-     */
-    $(".wgetAllChildren").live ('click', function (e){
-
-    	//grab the dataset id from the template
-    	var selectedItem = $.tmplItem(this);
-    	var selectedDocId = selectedItem.data.dataset_id;
-
-    	//begin assembling queryString
-        var queryString = 'type=create&id=' + selectedDocId;
-    	
-        //gather the ids and the urls for download
-    	var ids   = new Array();
-        var values = new Array();
-        $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDocId)).find(':checkbox:checked').each( function(index) {
-                if(this.id != selectedDocId) {
-                ids.push(this.id);
-                values.push(this.value);
-               }
-    	});
-        
-        //assemble parameters of the queryString
-        for(var i=0;i<ids.length;i++) {
-        	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
-        }
-        
-
-        var url = '/esgf-web-fe/wgetproxy';
-        var security = 'standard';
-        queryString += '&security=' + security;
-        
-        //assemble the input fields with the query string
-        var input = '';
-        jQuery.each(queryString.split('&'), function(){
-            var pair = this.split('=');
-            input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-        });
-        
-        //send request
-        jQuery('<form action="'+ url +'" method="post">'+input+'</form>')
-        .appendTo('body').submit().remove();
-        
-    });
-
-
 
     /*
      * This function is used primarily to avoid annoying errors that occur with strings that have periods in them
@@ -372,6 +491,93 @@ $(document).ready( function() {
         }
         alert(output);
     }
-
+    
+    
+    function abbreviateWord (word) {
+    	var abbreviation = word;
+        if(word.length > 25) {
+            abbreviation = word.slice(0,10) + '...' + word.slice(word.length-11,word.length);
+        }
+        return abbreviation;
+    }
+    
+    function sizeConvert(size) {
+    	var convSize;
+        if(size == null) {
+            convSize = 'N/A';
+        } else {
+            var sizeFlt = parseFloat(size,10);
+            if(sizeFlt > 1000000000) {
+                var num = 1000000000;
+                convSize = (sizeFlt / num).toFixed(2) + ' GB';
+            } else if (sizeFlt > 1000000) {
+                var num = 1000000;
+                convSize = (sizeFlt / num).toFixed(2) + ' MB';
+            } else {
+                var num = 1000;
+                convSize = (sizeFlt / num).toFixed(2) + ' KB';
+            }
+        }
+        return convSize;
+    }
+    
+    
 });
 
+
+
+/*  Old "Show Cart Contents"...take out when commit is ready
+var fileDownloadTemplate = data.response.doc;
+
+$( "#cartTemplate").tmpl(fileDownloadTemplate, {
+	
+	replacePeriods : function (word) {
+        return replacePeriod(word);
+    },
+    abbreviate : function (word) {
+        var abbreviation = word;
+        if(word.length > 25) {
+            abbreviation = word.slice(0,10) + '...' + word.slice(word.length-11,word.length);
+        }
+        return abbreviation;
+    },
+    addOne: function(num) {
+        return (num+1);
+    },
+    sizeConversion : function(size) {
+        var convSize;
+        if(size == null) {
+            convSize = 'N/A';
+        } else {
+            var sizeFlt = parseFloat(size,10);
+            if(sizeFlt > 1000000000) {
+                var num = 1000000000;
+                convSize = (sizeFlt / num).toFixed(2) + ' GB';
+            } else if (sizeFlt > 1000000) {
+                var num = 1000000;
+                convSize = (sizeFlt / num).toFixed(2) + ' MB';
+            } else {
+                var num = 1000;
+                convSize = (sizeFlt / num).toFixed(2) + ' KB';
+            }
+        }
+        return convSize;
+    }
+})
+.appendTo("#datasetList")
+.find( "a.showAllChildren" ).click(function() {
+	var selectedItem = $.tmplItem(this);
+    var selectedDoc = selectedItem;
+   
+    var selectedDocId = selectedDoc.data.dataset_id;
+    $('input[name=' + selectedDocId + ']').toggle();
+
+    var id = $(this).parent().attr("id").replace(/\./g,"_");
+    $('tr.rows_'+id).toggle();
+    if(this.innerHTML === "Expand") {
+        this.innerHTML="Collapse";
+    } else {
+        this.innerHTML="Expand";
+    }
+});
+*/

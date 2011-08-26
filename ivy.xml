@@ -50,7 +50,7 @@
       <exclude name="tiles-velocity" />
     </dependency>
     <dependency org="org.tuckey" name="urlrewritefilter" rev="3.1.0" transitive="false" conf="base->default" />
-    <dependency org="org.esgf" name="esg-search" rev="1.1.3" transitive="false" conf="base->default" />
+    <dependency org="org.esgf" name="esg-search" rev="1.4.0" transitive="false" conf="base->default" />
 
     <dependency org="commons-httpclient" name="commons-httpclient" rev="3.1" conf="base->default" />
     <dependency org="org.openid4java" name="openid4java" rev="0.9.6" conf="base->default">

@@ -4,7 +4,7 @@
   <property name="spring.version" value="3.0.5.RELEASE" />
   <property name="hibernate.version" value="3.6.1.Final" />
   <property name="ivy.esgf.devel.root.url" value="http://esgf.org/artifactory/esgf-repo-devel" override="false"/>
-  <property name="ivy.esgf.shared.root.url" value="http://esgf.org/artifactory/esgf-repo-shared" override="false"/>
+  <property name="ivy.esgf.shared.root.url" value="http://esgf.org/artifactory/esgf-repo-share" override="false"/>
   <property name="jboss.repo.url" value="https://repository.jboss.org/nexus/content/groups/public" override="false"/>
    
   	<resolvers>
@@ -16,7 +16,7 @@
             <artifact pattern="${ivy.esgf.devel.root.url}/[organisation]/[module]/[revision]/[artifact].[ext]" />
           </url>
 
-          <url name="esgf_repo_shared" checksums="md5">
+          <url name="esgf_repo_share" checksums="md5">
             <ivy pattern="${ivy.esgf.shared.root.url}/[organisation]/[module]/[revision]/ivy-[revision].xml" />
             <artifact pattern="${ivy.esgf.shared.root.url}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
             <artifact pattern="${ivy.esgf.shared.root.url}/[organisation]/[module]/[revision]/[artifact].[revision].[ext]" />
@@ -34,9 +34,9 @@
         <resolvers>
           <chain name="default" returnFirst="true">
             <resolver ref="esgf_repo_devel" />
+            <resolver ref="esgf_repo_share" />
             <resolver ref="public" />
             <resolver ref="jboss_repo" />
-            <resolver ref="esgf_repo_shared" />
           </chain>
         </resolvers>
         

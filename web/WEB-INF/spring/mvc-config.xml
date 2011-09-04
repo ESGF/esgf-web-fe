@@ -54,12 +54,15 @@
     <bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver"
           p:viewClass="org.springframework.web.servlet.view.tiles2.TilesView" />
 
-	<!-- Message resources -->
-	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
-		<property name="basename">
-			<value>messages</value>
-		</property>
-	</bean>
+     <!-- Message resources -->
+     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+              <property name="basenames">
+                 <list>
+                      <value>file:///esg/config/messages</value>
+                      <value>classpath:messages</value>
+                 </list>
+              </property>
+      </bean>
 
     <bean id="newsService" class="org.esgf.service.NewsServiceImpl">
     </bean>

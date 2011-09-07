@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.esgf.adminui.CreateGroupsController;
@@ -18,6 +20,8 @@ import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.springframework.core.io.ClassPathResource;
+
+import esg.node.security.UserInfo;
 
 
 public class UserOperationsXMLImpl implements UserOperationsInterface {
@@ -269,6 +273,20 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
             e.printStackTrace();    
         }
     }
+    
+    //TODO: LEB: this is not yet implemented for the test XML data store
+    @Override
+    public Map<String,Set<String>> getUserPermissionsFromOpenID(String openId) {
+        UserInfo userinfo = null; //this.myUserInfoDAO.getUserByOpenid(openId);
+        Map<String, Set<String>> userPerms = null;
+        if(userinfo != null & userinfo.isValid()) {
+            userPerms = userinfo.getPermissions();
+        }
+        
+        return userPerms;
+    }
+    
+
 
     @Override
     public User getUserObjectFromUserName(String userName) {

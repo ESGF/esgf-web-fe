@@ -22,9 +22,6 @@
                <li id="search"><a href="<c:url value='/live'/> ">Search</a></li>                
                <!-- <li id="facet"> <a href="#" rel="#facet_overlay">Browse</a></li>   -->  
                <!--  
-               <li id="accounts"><a href="<c:url value='/accountsview'/> ">Account</a></li>     
-               -->         
-               <!--  
                <li><a href="#">Analysis</a></li>
                <li><a href="#">Search Settings</a></li>  
                -->      
@@ -35,6 +32,7 @@
               	</c:when>
               	<c:otherwise>
               		<!-- authenticated users -->
+              		<li id="accounts"><a href="<c:url value='/accountsview'/> ">Account</a></li>     
                 	<li><a href="<c:url value='/j_spring_security_logout'/>" >Logout</a></li>
                 	<!-- admin users -->
                 	<sec:authorize access="hasRole('ROLE_ADMIN')">

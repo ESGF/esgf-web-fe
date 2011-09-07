@@ -1,6 +1,8 @@
 package org.esgf.commonui;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.esgf.adminui.Group;
 import org.esgf.adminui.User;
@@ -19,6 +21,7 @@ public interface UserOperationsInterface {
     //could be better to do this:
     //public void deleteUser(User user)
     
+    public Map<String,Set<String>> getUserPermissionsFromOpenID(String openId);
 
     public User getUserObjectFromUserName(final String userName);
 

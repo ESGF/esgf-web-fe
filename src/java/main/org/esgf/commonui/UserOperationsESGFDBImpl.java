@@ -92,14 +92,28 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
         this.myUserInfoDAO.deleteUser(user);
     }
     
+    /*
+     * 
+     */
+    @Override
+    public Map<String,Set<String>> getUserPermissionsFromOpenID(String openId) {
+        UserInfo userinfo = this.myUserInfoDAO.getUserByOpenid(openId);
+        Map<String, Set<String>> userPerms = null;
+        if(userinfo != null & userinfo.isValid()) {
+            userPerms = userinfo.getPermissions();
+        }
+        
+        return userPerms;
+    }
+    
+
+    
     @Override
     public User getUserObjectFromUserName(String username) {
         User user = null;
         
-        
         UserInfo userInfo = this.myUserInfoDAO.getUserById(username);
   
-        
         if(userInfo != null && userInfo.isValid()) {
             String openId = userInfo.getOpenid();
             

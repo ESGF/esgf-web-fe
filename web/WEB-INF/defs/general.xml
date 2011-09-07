@@ -114,7 +114,7 @@
     <!-- accounts template -->
     <definition name="accountsview" extends="account-layout">
         
-        <put-attribute name="main" value="/WEB-INF/views/accountsview/accounts_main.jsp" />
+        <put-attribute name="main" value="/WEB-INF/views/accountsview/accountscontent.jsp" />
     </definition>
 
 
@@ -163,7 +163,7 @@
     <!-- adminview template -->
     <definition name="accountsview" extends="account-layout">
         <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
-       <put-attribute name="main" value="/WEB-INF/views/accountsview/accountsview_main.jsp" />
+       <put-attribute name="main" value="/WEB-INF/views/accountsview/accountscontent.jsp" />
     </definition>
     
 <!--  end admin pages -->

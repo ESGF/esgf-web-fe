@@ -1,3 +1,4 @@
+<%@ include file="/WEB-INF/views/common/include.jsp" %>
 <style>
 .accountbutton {
 	font-size: 13px;
@@ -42,10 +43,6 @@
 				<td>${accounts_userinfo.emailAddress}</td> 
 			</tr>
 			<tr>
-				<td>Status</td>  
-				<td>${accounts_userinfo.status}</td> 
-			</tr>
-			<tr>
 				<td>Organization</td>  
 				<td>${accounts_userinfo.organization}</td> 
 			</tr>
@@ -69,12 +66,15 @@
 				<td>DN</td>  
 				<td>${accounts_userinfo.DN}</td> 
 			</tr>			
+		</thead>
 	</table>
 	<!-- the add user, edit user, and delete user buttons -->
+	<!--
 	<div class="buttons" style="margin-bottom:40px;">
 		<input class="accountbutton" id="edit_user-button" type="submit" value="Edit Information" />
 		<input class="accountbutton" id="delete_user-button" type="submit" value="Request Group Membership" />
 	</div>
+	 -->
 </div>
 <div class="prepend-1 span-9 append-1 last">
 <h3 style="text-align:center">Groups</h3>	
@@ -86,14 +86,22 @@
 				<th>Description</th>
 				<th>Role</th>
 			</tr>
-			<tr>
-				<td>g</td>
-				<td>d</td>  
-				<td>r</td>      	
-			</tr>
 		</thead>
+		<tbody>
+	        <c:set var="j" value="0"/>
+	        <c:forEach var="group" items="${accounts_groupinfo}">
+				 <tr class="group_rows" 
+				 	 id="${accounts_groupinfo[j].name}" 
+				 	 style="cursor:pointer">  
+	                <td>${accounts_groupinfo[j].name}</td>  
+	                <td>${accounts_groupinfo[j].description}</td> 
+	                <td>${accounts_roleinfo[j]}</td>  
+	            </tr> 
+	            <c:set var="j" value="${j+1}"/>
+			</c:forEach>
+		</tbody>
 	</table>
-	<hr>
+<!-- 
 <h5 style="text-align:center">Groups Administered</h5>						
 	<table id="groups__admin_table_id">  
 		<thead>
@@ -109,6 +117,7 @@
 			</tr>
 		</thead>
 	</table>
+-->
 </div>
  
 <script>

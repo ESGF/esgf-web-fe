@@ -1,10 +1,10 @@
 /*****************************************************************************
- * Copyright © 2011 , UT-Battelle, LLC All rights reserved
+ * Copyright ï¿½ 2011 , UT-Battelle, LLC All rights reserved
  *
  * OPEN SOURCE LICENSE
  *
  * Subject to the conditions of this License, UT-Battelle, LLC (the
- * ÒLicensorÓ) hereby grants to any person (the ÒLicenseeÓ) obtaining a copy
+ * ï¿½Licensorï¿½) hereby grants to any person (the ï¿½Licenseeï¿½) obtaining a copy
  * of this software and associated documentation files (the "Software"), a
  * perpetual, worldwide, non-exclusive, irrevocable copyright license to use,
  * copy, modify, merge, publish, distribute, and/or sublicense copies of the
@@ -14,7 +14,7 @@
  * grant, copyright and license notices, this list of conditions, and the
  * disclaimer listed below.  Changes or modifications to, or derivative works
  * of the Software must be noted with comments and the contributor and
- * organizationÕs name.  If the Software is protected by a proprietary
+ * organizationï¿½s name.  If the Software is protected by a proprietary
  * trademark owned by Licensor or the Department of Energy, then derivative
  * works of the Software may not be distributed using the trademark without
  * the prior written approval of the trademark owner.
@@ -27,7 +27,7 @@
  * acknowledgment:
  *
  *    "This product includes software produced by UT-Battelle, LLC under
- *    Contract No. DE-AC05-00OR22725 with the Department of Energy.Ó
+ *    Contract No. DE-AC05-00OR22725 with the Department of Energy.ï¿½
  *
  * 4. Licensee is authorized to commercialize its derivative works of the
  * Software.  All derivative works of the Software must include paragraphs 1,
@@ -67,12 +67,15 @@
 package org.esgf.adminui;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -95,11 +98,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import org.esgf.commonui.UserOperationsESGFDBImpl;
+import org.esgf.commonui.UserOperationsInterface;
 import org.esgf.commonui.Utils;
-import esg.search.query.api.FacetProfile;
-import esg.search.query.api.SearchOutput;
-import esg.search.query.api.SearchService;
-import esg.search.query.impl.solr.SearchInputImpl;
 
 @Controller
 @RequestMapping(value="/accountsview")
@@ -107,23 +108,28 @@ import esg.search.query.impl.solr.SearchInputImpl;
 public class AccountsController {
 
     private final static String ACCOUNTS_INPUT = "accounts_input";
-    private final static String ACCOUNTS_MODEL = "accounts_input";
     private final static String ACCOUNTS_USERINFO = "accounts_userinfo";
+    private final static String ACCOUNTS_GROUPINFO = "accounts_groupinfo";
+    private final static String ACCOUNTS_ROLEINFO = "accounts_roleinfo";
+    private final static String ACCOUNTS_MODEL = "accounts_model";
 
     private final static Logger LOG = Logger.getLogger(AccountsController.class);
+    private UserOperationsInterface uoi;
+    private String openId;
 
-    private final static String USERS_FILE = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\users.file";
+    //private final static String USERS_FILE = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\users.file";
 
     private final static boolean debugFlag = true;
-    /**
-     * List of invalid text characters -
-     * anything that is not within square brackets.
-     */
-    private static Pattern pattern =
-        Pattern.compile(".*[^a-zA-Z0-9_\\-\\.\\@\\'\\:\\;\\,\\s/()].*");
+    ///**
+    // * List of invalid text characters -
+    // * anything that is not within square brackets.
+    // */
+    //private static Pattern pattern =
+    //    Pattern.compile(".*[^a-zA-Z0-9_\\-\\.\\@\\'\\:\\;\\,\\s/()].*");
 
-    public AccountsController() {
+    public AccountsController() throws FileNotFoundException, IOException {
         LOG.debug("IN AccountsController Constructor");
+        uoi = new UserOperationsESGFDBImpl();
     }
 
     /**
@@ -138,7 +144,7 @@ public class AccountsController {
      * @throws JDOMException 
      * @throws Exception
      */
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
     @RequestMapping(method=RequestMethod.GET)
     public ModelAndView doGet(final HttpServletRequest request,
             final @ModelAttribute(ACCOUNTS_INPUT) String accountsInput) throws JDOMException, IOException {
@@ -146,41 +152,99 @@ public class AccountsController {
         LOG.debug("In do get");
 
         //get the userId from the cookie
-        String userId = Utils.getIdFromHeaderCookie(request);
+        openId = Utils.getIdFromHeaderCookie(request);
         if(debugFlag) {
-            LOG.debug("UserId Retrieved: " + userId);
+            LOG.debug("UserId Retrieved: " + openId);
         }
         
         //debug
-        if(userId.equals("https://pcmdi3.llnl.gov/esgcet/myopenid/jfharney")) {
-            userId = "user1_userName";
-        }
+        //if(userId.equals("https://pcmdi3.llnl.gov/esgcet/myopenid/jfharney")) {
+        //    userId = "user1_userName";
+        //}
         
         //initialize the model sent to the view
-        Map<String,Object> model = new HashMap<String,Object>();
+        Map<String,Object> model = getModel(request,accountsInput);
 
-        //make sure this is a "fresh" model
-        if (request.getParameter(ACCOUNTS_MODEL)!=null) {
-            LOG.debug("Not null");
-            // retrieve model from session
-            model = (Map<String,Object>)request.getSession().getAttribute(ACCOUNTS_MODEL);
+//        //make sure this is a "fresh" model
+//        if (request.getParameter(ACCOUNTS_INPUT)!=null) {
+//            LOG.debug("model not null");
+//            // retrieve model from session
+//            model = (Map<String,Object>)request.getSession().getAttribute(ACCOUNTS_MODEL);
+//
+//        } 
+//        else {
+//            LOG.debug("model is null");
+//            
+//            //User user = Utils.populateUserObjectFromIdXML(userId,new File(USERS_FILE));
+//            
+//            // populate model with the UserInfo
+//            //model.put( ACCOUNTS_USERINFO, user);
+//            LOG.debug("AccountsView Input: " + accountsInput);
+//            model.put(ACCOUNTS_INPUT, accountsInput);
+//            
+//            //put the model in the session
+//            request.getSession().setAttribute(ACCOUNTS_INPUT, model);
+//            LOG.debug("GotHere2");
+//            
+//        }
 
-        } 
-        else {
-            
-            //User user = Utils.populateUserObjectFromIdXML(userId,new File(USERS_FILE));
-            
-            // populate model with the UserInfo
-            //model.put( ACCOUNTS_USERINFO, user);
-            model.put(ACCOUNTS_INPUT, accountsInput);
-            
-            //put the model in the session
-            request.getSession().setAttribute(ACCOUNTS_MODEL, model);
-            
-        }
         return new ModelAndView("accountsview", model);
     }
     
+    /* Helper function for extracting the model */
+    private Map<String,Object> getModel(final HttpServletRequest request,
+                                       final @ModelAttribute(ACCOUNTS_INPUT)  String accountsInput) throws IOException {
+        LOG.debug("------AccountsController getModel------");
+        Map<String,Object> model = new HashMap<String,Object>();
+        
+        if (request.getParameter(ACCOUNTS_MODEL)!=null) {
+            // retrieve model from session
+            model = (Map<String,Object>)request.getSession().getAttribute(ACCOUNTS_MODEL);
+
+        } else {
+            
+            // get user info from DAO
+            User userInfo = uoi.getUserObjectFromUserOpenID(openId);
+            LOG.debug("userInfo:" + userInfo);
+
+            // get group info from DAO
+            List<Group> groups = uoi.getGroupsFromUser(userInfo.getUserName());
+            
+            // Get roles for each group as concatenated strings
+            List<String> roles = new ArrayList<String>();
+            Map<String,Set<String>> userperms = uoi.getUserPermissionsFromOpenID(openId);
+            LOG.debug("userperms = " + userperms);
+            
+            // TODO: this should be added to GroupOperationsESGFDBImpl or better yet, create a combined GroupRole (or Permissions) OperationsESGFDBImpl
+            for (Group g : groups) {
+                // iterate through role set
+                String roleNames = "";
+                Set<String> roleSet = userperms.get(g.getname());
+                
+                if (roleSet != null) {
+                    Iterator<String> it = userperms.get(g.getname()).iterator();
+                    while (it.hasNext()) {
+                        roleNames += it.next();
+                        if (it.hasNext()) roleNames += ", ";
+                    }
+                }
+                roles.add(roleNames);
+            }
+            
+            // populate model
+            model.put(ACCOUNTS_INPUT, accountsInput);
+            model.put(ACCOUNTS_USERINFO, userInfo);
+            Group [] groupArray = groups.toArray(new Group[groups.size()]);
+            model.put(ACCOUNTS_GROUPINFO, groupArray);
+            String [] roleArray = roles.toArray(new String[roles.size()]);
+            model.put(ACCOUNTS_ROLEINFO, roleArray);
+            request.getSession().setAttribute(ACCOUNTS_MODEL, model);
+            
+        }
+
+        LOG.debug("------End AccountsController getModel------");
+        return model;
+    }
     
     
     /**
@@ -196,7 +260,7 @@ public class AccountsController {
     @SuppressWarnings("unchecked")
     protected ModelAndView doPost(final HttpServletRequest request,
             final @ModelAttribute(ACCOUNTS_INPUT) String accountsInput) throws Exception {
-        LOG.debug("In do get");
+        LOG.debug("In do post");
 
         //get the userId from the cookie
         String userId = Utils.getIdFromHeaderCookie(request);

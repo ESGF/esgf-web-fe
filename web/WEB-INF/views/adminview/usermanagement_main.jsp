@@ -151,6 +151,14 @@
 									</tr>
 									<tr>
 										<td>
+											<div style="font-size:12px;font-weight:bold;margin-left:15px;">Middle Name</div>
+										</td>
+										<td>
+											<input type="text" class="text" name="middleName" id="form_middleName" value=""> 
+										</td>
+									</tr>
+									<tr>
+										<td>
 											<div style="font-size:12px;font-weight:bold;margin-left:15px;">Last Name *</div>
 										</td>
 										<td>
@@ -179,6 +187,14 @@
 										</td>
 										<td>
 											<input type="text" class="text" name="city" id="form_city" value=""> 
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div style="font-size:12px;font-weight:bold;margin-left:15px;">State</div>
+										</td>
+										<td>
+											<input type="text" class="text" name="state" id="form_state" value=""> 
 										</td>
 									</tr>
 									<tr>
@@ -624,17 +640,21 @@ $(document).ready(function(){
 	function fillFormContentForEdit(data) {
 
 		var firstName = data.userinfo.user.first;
+		var middleName = data.userinfo.user.middle;
 		var lastName = data.userinfo.user.last;
 		var email = data.userinfo.user.email;
 		var organization = data.userinfo.user.organization;
 		var city = data.userinfo.user.city;
+		var state = data.userinfo.user.state;
 		var country = data.userinfo.user.country;
 
 		$('input#form_firstName').val(firstName);
+		$('input#form_middleName').val(middleName);
 		$('input#form_lastName').val(lastName);
 		$('input#form_email').val(email);
 		$('input#form_organization').val(organization);
 		$('input#form_city').val(city);
+		$('input#form_state').val(state);
 		$('input#form_country').val(country);
 		
 		//Note there may be more values later, this is for demo purposes
@@ -687,6 +707,7 @@ $(document).ready(function(){
 	/*   Utility functions   */
 	function clearFormValues() {
 		$('input#form_firstName').val("");
+		$('input#form_middleName').val("");
 		$('input#form_lastName').val("");
 		$('input#form_userName').val("");
 		$('input#form_emailAddress').val("");

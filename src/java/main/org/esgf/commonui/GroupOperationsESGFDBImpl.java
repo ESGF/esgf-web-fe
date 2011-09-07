@@ -91,7 +91,7 @@ public class GroupOperationsESGFDBImpl implements GroupOperationsInterface {
     public List<Group> getAllGroups() {
         List<Group> groups = new ArrayList<Group>();
         //System.out.println("GroupEntries|->" + groupRoleDAO.getGroupEntries().size());
-        for(int i=0;i<groupRoleDAO.getGroupEntries().size();i++) {
+        for(int i=1;i<groupRoleDAO.getGroupEntries().size();i++) {
             String groupCol = groupRoleDAO.getGroupEntries().get(i)[1];
             if(groupCol != null) {
                 Group group = new Group();

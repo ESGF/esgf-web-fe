@@ -202,14 +202,14 @@
         	if(ESGF.setting.searchType == 'local') {
         		//alert('change to distributed');
         		//change the text to Distributed
-            	$('a#distributed').html('Turn off Distributed Search');
+            	$('a#distributed').html('Turn on Distributed Search');
             	//change the flag to Distributed
             	ESGF.setting.searchType = 'Distributed';
             	Manager.doRequest(0);
         	} else {
         		//alert('change to local');
         		//change the text to Local
-            	$('a#distributed').html('Turn on Distributed Search');
+            	$('a#distributed').html('Turn off Distributed Search');
             	//change the flag to Local
             	ESGF.setting.searchType = 'local';
             	Manager.doRequest(0);

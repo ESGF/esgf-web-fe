@@ -35,6 +35,10 @@
 				<td>${accounts_userinfo.firstName}</td> 
 			</tr>
 			<tr>
+				<td>Middle Name</td>  
+				<td>${accounts_userinfo.middleName}</td> 
+			</tr>
+			<tr>
 				<td>Last Name</td>  
 				<td>${accounts_userinfo.lastName}</td> 
 			</tr>

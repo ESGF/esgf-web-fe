@@ -249,7 +249,7 @@ public class ManageUsersController {
         if(first == null || first.equals("")) {
             first = "N/A";
         }
-        String middle = request.getParameter("middle");
+        String middle = request.getParameter("middleName");
         if(middle == null || middle.equals("")) {
             middle = "N/A";
         }

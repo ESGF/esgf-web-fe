@@ -22,7 +22,7 @@ import org.xml.sax.SAXException;
 
 
 /**
- * This class provide periodic node status update based on registry information
+ * This class provides node status update based on registry information
  *
  * @author Feiyi Wang
  *
@@ -33,12 +33,13 @@ public class NodeServiceImpl implements NodeService {
     private static String NODE_EXPR = "//registry:Node";
     private static String NODE_NAME = "hostname";
     private static String NODE_IP = "ip";
-
+    
+    private String regfile = "";
     private XPath xpath;
     private DocumentBuilder builder;
     private Document document;
 
-    public NodeServiceImpl() {
+    public NodeServiceImpl(String regfile) {
 
         xpath = XPathFactory.newInstance().newXPath();
         xpath.setNamespaceContext( new NamespaceContext() {
@@ -72,17 +73,19 @@ public class NodeServiceImpl implements NodeService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        this.regfile = regfile;
+        
     }
 
     /**
      * Analyze the document, retrieve and return the node list
      */
     @Override
-    public List<NodeStatus> getLiveNodeList(InputSource isource) {
+    public List<NodeStatus> getLiveNodeList() {
 
         NodeList nodeList = null;
-        List<NodeStatus> liveNodes = new ArrayList<NodeStatus>();
-
+        List<NodeStatus> liveNodes = new ArrayList<NodeStatus>();        
+        InputSource isource = new InputSource(regfile);
 
 
         try {
@@ -118,7 +121,7 @@ public class NodeServiceImpl implements NodeService {
 
     public static void main(String[] argv) throws Exception {
 
-        NodeService ns = new NodeServiceImpl();
-        printNodeList(ns.getLiveNodeList(new InputSource("file:///esg/config/registration.xml")));
+        NodeService ns = new NodeServiceImpl("file:///esg/config/registration.xml");
+        printNodeList(ns.getLiveNodeList());
     }
 }

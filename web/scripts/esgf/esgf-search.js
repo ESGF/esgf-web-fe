@@ -56,6 +56,23 @@
  */
 
 
+(function($){
+
+LOG.debug("Make ajax call to get active peers");
+
+$.ajax({
+    url: "peer/list",
+    dataType: 'json',
+    async: false,
+    success: function(data) {
+        ESGF.search.shards = data;
+    }
+
+});
+
+
+/*
+
 $.ajax({
         url: "setting/queryAnnotate",
         aync: false,
@@ -66,3 +83,7 @@ $.ajax({
         }
  });
 
+*/
+
+
+})(jQuery);

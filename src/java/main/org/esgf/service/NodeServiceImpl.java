@@ -13,6 +13,9 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import javax.xml.xpath.XPath;
 
+import org.esgf.web.NewsController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
@@ -33,6 +36,7 @@ public class NodeServiceImpl implements NodeService {
     private static String NODE_EXPR = "//registry:Node";
     private static String NODE_NAME = "hostname";
     private static String NODE_IP = "ip";
+    private final static Logger LOG = LoggerFactory.getLogger(NodeServiceImpl.class);
     
     private String regfile = "";
     private XPath xpath;
@@ -100,8 +104,9 @@ public class NodeServiceImpl implements NodeService {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.error("Input Source is not Valid, run empty list");
+            return liveNodes;
+            
         }
 
         for (int i = 0; i < nodeList.getLength(); i++) {

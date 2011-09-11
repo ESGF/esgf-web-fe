@@ -132,8 +132,8 @@
 	                             	<a href='http://esgf-node3.llnl.gov/esg-search/feed/datasets.rss'><img src='images/rss_icon.png'/ align="bottom"></a>
 	                             </li>                             
 	                             <li>
-	                             	<a href='http://bones.ccs.ornl.gov/esgf-web-fe/' >ORNL Node</a>
-	                             	<a href='http://bones.ccs.ornl.gov/esg-search/feed/datasets.rss'><img src='images/rss_icon.png'/ align="bottom"></a>
+	                             	<a href='http://esg-vm-demo02.ccs.ornl.gov/esgf-web-fe/' >ORNL Node</a>
+	                             	<a href='http://esg-vm-demo02.ccs.ornl.gov/esg-search/feed/datasets.rss'><img src='images/rss_icon.png'/ align="bottom"></a>
 	                             </li>
 	                             <li>
 	                             	<a href='http://esg-datanode.jpl.nasa.gov/esgf-web-fe/' >NASA-JPL Node</a>

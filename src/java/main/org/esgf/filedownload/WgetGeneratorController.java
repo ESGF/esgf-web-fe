@@ -129,7 +129,7 @@ public class WgetGeneratorController {
   private String headerString(String templateVersion) {
       String headerStr = "";
       
-      headerStr += "##############################################################################\n\n\n";
+      headerStr += "##############################################################################\n";
       headerStr += "# ESG Federation download script\n";
       headerStr += "#\n";
       headerStr += "# Template version: " + templateVersion + "\n";
@@ -250,9 +250,10 @@ public class WgetGeneratorController {
     queryStringInfo(request);
     
     // create content of the wget script
-    String wgetText = "#!/bin/sh\n";
+    String wgetText = "";
     
     if(security.equalsIgnoreCase("wgetv1")) {
+        wgetText = "#!/bin/sh\n";
         wgetText += "# ESG Federation download script\n";
         wgetText += "#\n";
         wgetText += "# Template version: 0.2\n";

@@ -120,8 +120,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
             	 shardsString = shardsString + ',';
         	 }
          }
-         shardsString = shardsString + ',bones.ccs.ornl.gov:8983/solr';
-         alert('shardsString: ' + shardsString);
+         shardsString = shardsString + ',esgf-node3.llnl.gov:8983/solr';
          
          if(ESGF.setting.searchType == 'Distributed') {
        		//Manager.store.addByValue('qt','/distrib');

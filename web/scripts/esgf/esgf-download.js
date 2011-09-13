@@ -126,8 +126,9 @@ $(document).ready( function() {
     	        	//$(this.target).html($('<img/>').attr('src', 'images/ajax-loader.gif'));
     	        	
     				
-    		    	var query = { "id" : dataset_id , "version" : ESGF.setting.dataCartVersion};
+    		    	var query = { "id" : dataset_id , "version" : ESGF.setting.dataCartVersion, "shards" : ESGF.search.shards };
     		    	
+    		    	alert('shardssssss: ');
 		    		$.ajax({
 		        		url: file_download_template_url,
 		        		global: false,
@@ -139,7 +140,11 @@ $(document).ready( function() {
 		        			$('#spinner').remove();
 		        			showFileContentsV2(data);
 		        			
-		        		}
+		        		},
+		    			error: function() {
+		    				alert("Error in file retrieval, try revising your datacart selections");
+		    				$('#spinner').remove();
+		    			}
 		        	});
     				
     				
@@ -173,7 +178,8 @@ $(document).ready( function() {
     	var file_download_template_url = ESGF.search.fileDownloadTemplateProxyUrl;
         
     	//Not sure if we need the search type at this point, but I kept it in
-    	var query = { "id" : query_arr , "version" : ESGF.setting.dataCartVersion};
+    	//var query = { "id" : query_arr , "version" : ESGF.setting.dataCartVersion};
+    	var query = { "id" : dataset_id , "version" : ESGF.setting.dataCartVersion, "shards" : ESGF.search.shards };
     	
     	
     	if(query_arr.length != 0) {

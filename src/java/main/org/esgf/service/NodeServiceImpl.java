@@ -126,7 +126,7 @@ public class NodeServiceImpl implements NodeService {
 
             // Hostname is optional though it should be mandatory
             if (hostname == null)
-                name = "";
+                name = ip;
             else
                 name = hostname.getNodeValue();
 

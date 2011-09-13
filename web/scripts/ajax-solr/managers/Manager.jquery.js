@@ -73,7 +73,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           self.loadExistingQueries();
           
           self.appendDistributedRequestHandler();
-          //alert('this.store.string(): ' + this.store.string());
+          
           if (this.proxyUrl) {
           // jQuery.post(this.proxyUrl, 
           // { query: "I am something" }, 
@@ -86,15 +86,19 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 	              success: function(data) {self.handleResponse(data);},
 	              error: function() {
 	            	  alert("There was an error in processing your query.  Try your search again.");
-	            	  /*
-	            	  Manager.store.remove('fq');
-	            	  ESGF.setting.searchType = 'local';	
 	            	  
-	            	  Manager.store.addByValue('fq','type:Dataset');
+	            	  //remove the existing parameter store
+	            	  Manager.store.remove('fq');
+	            	  
+	            	  //set the search back to local type
+	            	  ESGF.setting.searchType = 'local';
+	            	  
+	            	  //reset the localStorage to querying over the dataset type
 	            	  localStorage['fq'] = 'type:Dataset' + ';';
 	            	  
-	            	  location.replace("http://localhost/esgf-web-fe/live");
-	            	  */
+	            	  //reload the page
+	            	  window.location.reload();
+	            	  
 	              },
 	              dataType: 'json'
 	          });

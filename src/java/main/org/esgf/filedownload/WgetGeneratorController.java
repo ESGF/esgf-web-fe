@@ -162,9 +162,9 @@ public class WgetGeneratorController {
       //probably need to change the name "child urls" to something more relevant
       for(int i=0;i<files.length;i++) {
         LOG.debug("CHILD_URL: " + files[i]);
-        downloadFunctionStr += "\t((debug || dry_run)) && " +
-                               "wget \"$@\" --certificate ${esgf_cert} --private-key ${esgf_private} '" + files[i] + "'\n";
-        downloadFunctionStr += "\t((!dry_run)) && " +
+        downloadFunctionStr += "\t((debug || dry-run)) && " +
+                               "echo \"wget $@ --certificate ${esgf_cert} --private-key ${esgf_private} '" + files[i] + "'\"\n";
+        downloadFunctionStr += "\t((!dry-run)) && " +
                                "wget \"$@\" --certificate ${esgf_cert} --private-key ${esgf_private} '" + files[i] + "'\n";
         
       }
@@ -190,7 +190,7 @@ public class WgetGeneratorController {
       mainFunctionStr += "\t\tlocal unshift=0\n";
       mainFunctionStr += "\t\tcase ${1} in\n";
       mainFunctionStr += "\t\t\t--debug)\n \t\t\t\tdebug=1\n\t\t\t\t;;\n";
-      mainFunctionStr += "\t\t\t--dry_run)\n \t\t\t\tdry_run=1\n\t\t\t\t;;\n";
+      mainFunctionStr += "\t\t\t--dry-run)\n \t\t\t\tdry-run=1\n\t\t\t\t;;\n";
       mainFunctionStr += "\t\t\t--certificate)\n \t\t\t\tshift\n\t\t\t\tesgf_cert=${1}\n\t\t\t\t;;\n";
       mainFunctionStr += "\t\t\t--private-key)\n \t\t\t\tshift\n\t\t\t\tesgf_private=${1}\n\t\t\t\t;;\n";
       mainFunctionStr += "\t\t\t--output-file)\n " + 

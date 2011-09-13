@@ -113,6 +113,7 @@
 	                             <li><a href='<c:url value="/createAccount"/>' >Create Account</a></li>
 	                             <!-- <li>Browse Catalogs</li>  -->
 	                             <li><a href='<c:url value="/live"/>'>Search for Data</a></li>
+	                             <li><a href='http://rainbow.llnl.gov/dist/esg-myproxy-logon/MyProxyLogon.jnlp' >MyProxyLogon</a></li>
 	                         </ul>
                          </div>
                      </div>

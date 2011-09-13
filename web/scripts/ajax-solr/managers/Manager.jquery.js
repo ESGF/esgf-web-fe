@@ -72,13 +72,10 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           //loads everything in the html5 'fq' store
           self.loadExistingQueries();
           
+          //check to see if a distributed search is needed
           self.appendDistributedRequestHandler();
           
           if (this.proxyUrl) {
-          // jQuery.post(this.proxyUrl, 
-          // { query: "I am something" }, 
-          // function (data) { self.handleResponse(data); }, 
-          // 'json');
 	          jQuery.ajax({
 	              url: this.proxyUrl,
 	              data: this.store.string(),
@@ -112,13 +109,27 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   
       appendDistributedRequestHandler: function () {
 
-    	 //alert('searchtype: ' + ESGF.setting.searchType + ' localStorage: ' + localStorage['fq']);
-      	 //alert('IN Manager appendDistribubtedRequestHandler...ESGF.setting.searchType: ' + ESGF.setting.searchType);
-      	 if(ESGF.setting.searchType == 'Distributed') {
-      		Manager.store.addByValue('qt','/distrib');
+    	 var shardsString = ''; 
+    	  
+          //alert('ESGF.search.shards = ' + ESGF.search.shards);
+         for(var i=0;i<ESGF.search.shards.length;i++) {
+        	 var shards = ESGF.search.shards[i];
+
+    		 shardsString = shardsString + shards['nodeIp'] + ':8983/solr';
+        	 if(i != ESGF.search.shards.length-1) {
+            	 shardsString = shardsString + ',';
+        	 }
+         }
+         shardsString = shardsString + ',bones.ccs.ornl.gov:8983/solr';
+         alert('shardsString: ' + shardsString);
+         
+         if(ESGF.setting.searchType == 'Distributed') {
+       		//Manager.store.addByValue('qt','/distrib');
+       		Manager.store.addByValue('shards',shardsString);
       	 }
       	 else {
-      		Manager.store.removeByValue('qt','/distrib');
+       		//Manager.store.removeByValue('qt','/distrib');
+       		Manager.store.removeByValue('shards',shardsString);
       	 }
       	
       },

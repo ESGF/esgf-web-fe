@@ -163,9 +163,9 @@ public class WgetGeneratorController {
       for(int i=0;i<files.length;i++) {
         LOG.debug("CHILD_URL: " + files[i]);
         downloadFunctionStr += "\t((debug || dry_run)) && " +
-                               "echo \"wget $@ --certificate ${esgf_cert} --private-key ${esgf_private} '" + files[i] + "'\"\n";
+                               "wget \"$@\" --certificate ${esgf_cert} --private-key ${esgf_private} '" + files[i] + "'\n";
         downloadFunctionStr += "\t((!dry_run)) && " +
-                               "echo \"wget $@ --certificate ${esgf_cert} --private-key ${esgf_private} '" + files[i] + "'\"\n";
+                               "wget \"$@\" --certificate ${esgf_cert} --private-key ${esgf_private} '" + files[i] + "'\n";
         
       }
       
@@ -186,13 +186,13 @@ public class WgetGeneratorController {
       mainFunctionStr += "main() {\n";
       
       mainFunctionStr += "\tlocal command_args=()\n";
-      mainFunctionStr += "\twhile [-n \"${1}\" ]; do\n";
+      mainFunctionStr += "\twhile [ -n \"${1}\" ]; do\n";
       mainFunctionStr += "\t\tlocal unshift=0\n";
       mainFunctionStr += "\t\tcase ${1} in\n";
       mainFunctionStr += "\t\t\t--debug)\n \t\t\t\tdebug=1\n\t\t\t\t;;\n";
       mainFunctionStr += "\t\t\t--dry_run)\n \t\t\t\tdry_run=1\n\t\t\t\t;;\n";
-      mainFunctionStr += "\t\t\t--certificate)\n \t\t\t\tshift\n\t\t\t\tesgf_cert=${1}\n\t\t\t\t;;\";\n";
-      mainFunctionStr += "\t\t\t--private-key)\n \t\t\t\tshift\n\t\t\t\tesgf_private=${1}\n\t\t\t\t;;\";\n";
+      mainFunctionStr += "\t\t\t--certificate)\n \t\t\t\tshift\n\t\t\t\tesgf_cert=${1}\n\t\t\t\t;;\n";
+      mainFunctionStr += "\t\t\t--private-key)\n \t\t\t\tshift\n\t\t\t\tesgf_private=${1}\n\t\t\t\t;;\n";
       mainFunctionStr += "\t\t\t--output-file)\n " + 
                          "\t\t\t\t#Because args passed are applied to each individual\n" + 
                          "\t\t\t\t#download we don't want to support this option in\n" + 

@@ -145,8 +145,8 @@ public class WgetGeneratorController {
       String envVariablesStr = "";
       
       envVariablesStr += "esgf_download_script_version=\"0.0.1\"\n";
-      envVariablesStr += "esgf_cert=${esgf_cert:-\"~/.esg/credentials.pem\"}\n";
-      envVariablesStr += "esgf_private=${esgf_private:-\"~/.esg/credentials.pem\"}\n\n";
+      envVariablesStr += "esgf_cert=${esgf_cert:-\"${HOME}/.esg/credentials.pem\"}\n";
+      envVariablesStr += "esgf_private=${esgf_private:-\"${HOME}/.esg/credentials.pem\"}\n\n";
      
       
       return envVariablesStr;

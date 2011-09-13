@@ -76,6 +76,7 @@ esgf_web_fe_version=${esgf_web_fe_version:-"0.9.6"}
 install_prefix=${install_prefix:-"/usr/local"}
 workdir=${workdir:-${installer_home:-"/usr/local/src/esgf"}/workbench/esg}
 esg_root_dir=${esg_root_dir:-${ESGF_HOME:-"/esg"}}
+esg_config_dir=${esg_root_dir}/config
 install_manifest=${install_manifest:-"${esg_root_dir}/esgf-install-manifest"}
 #--------------
 
@@ -175,6 +176,21 @@ setup_web_fe() {
     set_redirect ${web_fe_context_root}
 
     popd >& /dev/null
+
+    #Set up the default content
+    local target_properties_file=${esg_config_dir}/messages.properties
+
+    if [ ! -e "${target_properties_file}" ] || ((force_install)) ; then
+        [ -e "${target_properties_file}" ] && cp ${target_properties_file} ${target_properties_file}.bak        
+        cp -v ${web_fe_app_home}/WEB-INF/classes/messages.properties ${esg_config_dir}
+        sed -i 's#^[ ]*\(esgf.datanode.name=\).*$#\1'${node_short_name}'#'   ${target_properties_file} && echo -n ":" || echo -n "8"
+        sed -i 's#^[ ]*\(esgf.homepage.institutionLogo=\).*$#\1'${institution_logo:-"/images/p2p_default_logo.png"}'#'   ${target_properties_file} && echo -n "-" || echo -n "."
+        sed -i 's#^[ ]*\(esgf.homepage.about=\).*$#\1Please Enter Information about your organization here#' ${target_properties_file} && echo -n ")" || echo -n "("
+    fi
+    
+    #always change the footer to match the current version
+    [ -e "${target_properties_file}" ] && sed -i 's#^[ ]*\(esgf.footer.version=\).*$#\1'${esgf_web_fe_version}'#' ${target_properties_file} && echo -n "." || echo -n "x"
+
     write_web_fe_install_log
     post_web_fe_install
     checked_done 0

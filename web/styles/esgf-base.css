@@ -279,7 +279,7 @@ body {
 .projectitem {
 	float: left;
 	width: 281px;	
-	height: 110px;
+	/* height: 110px; */
 	margin-left:10px;
 	margin-top:10px;
 }

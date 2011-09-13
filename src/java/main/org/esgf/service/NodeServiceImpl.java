@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -37,7 +38,7 @@ public class NodeServiceImpl implements NodeService {
     private static String NODE_NAME = "hostname";
     private static String NODE_IP = "ip";
     private final static Logger LOG = LoggerFactory.getLogger(NodeServiceImpl.class);
-    
+
     private String regfile = "";
     private XPath xpath;
     private DocumentBuilder builder;
@@ -78,7 +79,7 @@ public class NodeServiceImpl implements NodeService {
             e.printStackTrace();
         }
         this.regfile = regfile;
-        
+
     }
 
     /**
@@ -88,7 +89,7 @@ public class NodeServiceImpl implements NodeService {
     public List<NodeStatus> getLiveNodeList() {
 
         NodeList nodeList = null;
-        List<NodeStatus> liveNodes = new ArrayList<NodeStatus>();        
+        List<NodeStatus> liveNodes = new ArrayList<NodeStatus>();
         InputSource isource = new InputSource(regfile);
 
 
@@ -106,13 +107,29 @@ public class NodeServiceImpl implements NodeService {
         } catch (IOException e) {
             LOG.error("Input Source is not Valid, run empty list");
             return liveNodes;
-            
+
         }
 
         for (int i = 0; i < nodeList.getLength(); i++) {
             NamedNodeMap attrs = nodeList.item(i).getAttributes();
-            String name = attrs.getNamedItem(NODE_NAME).getNodeValue();
-            String ip = attrs.getNamedItem(NODE_IP).getNodeValue();
+
+            Node hostname, hostip;
+            String name, ip;
+
+            hostname = attrs.getNamedItem(NODE_NAME);
+            hostip = attrs.getNamedItem(NODE_IP);
+
+            // IP must be present, otherwise, we will not add it to live node list
+            if (hostip == null) continue;
+
+            ip = hostip.getNodeValue();
+
+            // Hostname is optional though it should be mandatory
+            if (hostname == null)
+                name = "";
+            else
+                name = hostname.getNodeValue();
+
             liveNodes.add(new NodeStatus(name, ip));
 
         }

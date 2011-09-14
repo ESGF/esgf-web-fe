@@ -161,7 +161,7 @@
                           </div>
                           <div class="projectitembottom">
 	                         <ul>
-	                             <li><a href='http://esg.llnl.gov/cdat/' >CDAT (Climate DAta Tools)</a></li>                             
+	                             <li><a href='http://esg.llnl.gov/cdat/' >CDAT (Climate Data Analysis Tools)</a></li>                             
 	                             <li><a href='http://cdx.jpl.nasa.gov/' >CDX (Climate Data Exchange)</a></li>
 	                             <li><a href='http://ferret.pmel.noaa.gov/LAS' >LAS (Live Access Server)</a></li>
 	                         </ul>

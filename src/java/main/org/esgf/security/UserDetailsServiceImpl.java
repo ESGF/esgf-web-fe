@@ -87,18 +87,23 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		
 		// loop over database permissions (lookup by openid)
 		final UserInfo user = userInfoDAO.getUserById(userName);
-		final Map<String, Set<String>> permissions = user.getPermissions();
-		for (final String group : permissions.keySet()) {
-		    for (final String role : permissions.get(group)) {
-		        String authority = "group_"+group+"_role_"+role;
-		        authorities.add( new GrantedAuthorityImpl(authority) );
-		        
-		        // translate ('wheel','super') -> 'ROLE_ADMIN'
-		        if (group.equals(ADMIN_GROUP) && role.equals(ADMIN_ROLE)) {
-		            authorities.add( new GrantedAuthorityImpl(ROLE_ADMIN) );
-		        }
-		        
-		    }
+		if (user.isValid()) {
+    		final Map<String, Set<String>> permissions = user.getPermissions();
+        	if (permissions!=null) {
+        		for (final String group : permissions.keySet()) {
+        		    if (permissions.get(group)!=null) {
+            		    for (final String role : permissions.get(group)) {
+            		        String authority = "group_"+group+"_role_"+role;
+            		        authorities.add( new GrantedAuthorityImpl(authority) );
+            		        
+            		        // translate ('wheel','super') -> 'ROLE_ADMIN'
+            		        if (group.equals(ADMIN_GROUP) && role.equals(ADMIN_ROLE)) {
+            		            authorities.add( new GrantedAuthorityImpl(ROLE_ADMIN) );
+            		        }
+            		    }
+        		    }
+        		}
+    		}
 		}
 		
 		return new User(userName, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);

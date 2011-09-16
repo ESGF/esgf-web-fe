@@ -19,9 +19,9 @@
 package org.esgf.security;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,21 +34,44 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import esg.common.util.ESGFProperties;
+import esg.node.security.UserInfo;
+import esg.node.security.UserInfoCredentialedDAO;
+
 /**
- * Sample implementation of Spring Security {@link UserDetailsService} that returns a user object populated with standard values obtained from the user's openid.
+ * Implementation of Spring Security {@link UserDetailsService} that returns a user object populated with the user permissions read from the database.
  * Each user, after authentication, is assigned at least the role "ROLE_USER".
- * Additionally, each user object can be assigned a set of granted authorities read from a user's map.
- * Warning: this class is provided only as a demo example, it should not be used in production.
+ * Additionally, the user permissions are read from the database and result in granted authorities of the form:
+ * "group_<group>_role_<role>".
+ * The special authority "group_wheel_role_super" is duplicated as "ROLE_ADMIN".
  */
 @Component("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
 	
-	private final static String DEFAULT_ROLE = "ROLE_USER";
-	private final static String ADMIN_ROLE = "ROLE_ADMIN";
+    // group, role used by UI
+	private final static String ROLE_USER = "ROLE_USER";
+	private final static String ROLE_ADMIN = "ROLE_ADMIN";
+	
+	// group, role stored in database
+	private final static String ADMIN_GROUP = "wheel";
+	private final static String ADMIN_ROLE = "super";
 	
 	private final Log LOG = LogFactory.getLog(this.getClass());
+		
+	private UserInfoCredentialedDAO userInfoDAO = null;
 	
-	private Map<String, List<String>> users = new HashMap<String, List<String>>();
+	// constructor initializes the DAO
+	public UserDetailsServiceImpl() {
+	    
+       try {
+           ESGFProperties myESGFProperties = new ESGFProperties();
+           String passwd = myESGFProperties.getAdminPassword(); 
+           this.userInfoDAO = new UserInfoCredentialedDAO("rootAdmin", passwd, myESGFProperties);
+        } catch(Exception e) {
+            LOG.warn(e.getMessage());
+        }
+	        
+	}
 	
 	public UserDetails loadUserByUsername(final String userName) throws UsernameNotFoundException, DataAccessException {
 		
@@ -60,20 +83,26 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		final boolean credentialsNonExpired = true;
 		final boolean accountNonLocked = true;
 		final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		authorities.add( new GrantedAuthorityImpl(DEFAULT_ROLE) );
-		if (users.containsKey(userName)) {
-			for (final String authority : users.get(userName)) {
-				authorities.add( new GrantedAuthorityImpl(authority) );
-			}
+		authorities.add( new GrantedAuthorityImpl(ROLE_USER) );
+		
+		// loop over database permissions (lookup by openid)
+		final UserInfo user = userInfoDAO.getUserById(userName);
+		final Map<String, Set<String>> permissions = user.getPermissions();
+		for (final String group : permissions.keySet()) {
+		    for (final String role : permissions.get(group)) {
+		        String authority = "group_"+group+"_role_"+role;
+		        authorities.add( new GrantedAuthorityImpl(authority) );
+		        
+		        // translate ('wheel','super') -> 'ROLE_ADMIN'
+		        if (group.equals(ADMIN_GROUP) && role.equals(ADMIN_ROLE)) {
+		            authorities.add( new GrantedAuthorityImpl(ROLE_ADMIN) );
+		        }
+		        
+		    }
 		}
-	    // FIXME
-        if (userName.endsWith("/rootAdmin")) authorities.add( new GrantedAuthorityImpl(ADMIN_ROLE) );
+		
 		return new User(userName, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
 		
-	}
-
-	public void setUsers(Map<String, List<String>> users) {
-		this.users = users;
 	}
 	
 }

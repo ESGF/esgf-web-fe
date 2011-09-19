@@ -83,6 +83,7 @@
 package org.esgf.filedownload;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -120,7 +121,7 @@ public class FileDownloadTemplateController {
     //the max rows to be returned is best configurable or read from props file
 
     //private final static String filePrefix="q=*%3A*&json.nl=map&fq=type%3AFile&rows=2000&fq=parent_id:";
-    private static String queryString ="q=*:*&json.nl=map&start=0&rows=300&fq=type:File&fq=parent_id:";
+    private static String queryString = "q=*:*&json.nl=map&start=0&rows=300&fq=type:File&fq=parent_id:";
 
 
     @RequestMapping(method=RequestMethod.GET)
@@ -128,6 +129,7 @@ public class FileDownloadTemplateController {
         LOG.debug("doGet");
         
         String responseStr = "";
+        
         
         if(request.getParameter("version").equalsIgnoreCase("v1")) {
             responseStr = convertTemplateFormatV1(request, response);
@@ -324,13 +326,43 @@ public class FileDownloadTemplateController {
     //<doc>
 
 
+    private void printShards(String [] shards) {
+        
+        if(shards != null) {
+            System.out.println("shards length");
+            for(int i=0;i<shards.length;i++) {
+                System.out.println("Shard: " + i + " " + shards[i]);
+            }
+        } else {
+            System.out.println("null shards");
+        }
+        
+        
+    }
 
+    private static void appendShardsToQueryString(String [] shards) {
+        String shardsString = "shards=";
+        for(int i=0;i<shards.length;i++) {
+            shardsString += shards[i] + ":8983/solr";
+            if(i < shards.length-1) {
+                shardsString += ',';
+            }
+            else {
+                shardsString += "&";
+            }
+        }
+        queryString = shardsString + queryString;
+        System.out.println("Query string: " + queryString);
+    }
+    
     private String convertTemplateFormatV1(HttpServletRequest request, HttpServletResponse response) throws JSONException {
 
-        //change query string to distributed query - temporary fix
-        queryString = "qt=/distrib&" + queryString;
         
-        
+        String [] shards = request.getParameterValues("shards[]");
+       
+        //attach active shards to the query string to be sent to solr
+        appendShardsToQueryString(shards);
+       
         String[] names = request.getParameterValues("id[]");
 
         String id = "";
@@ -344,7 +376,7 @@ public class FileDownloadTemplateController {
         document = new Document(new Element("response"));
         if(names != null) {
 
-          //traverse all the dataset ids given by the array
+            //traverse all the dataset ids given by the array
             for(int i=0;i<names.length;i++) {
 
                 id = names[i];
@@ -387,10 +419,6 @@ public class FileDownloadTemplateController {
                     JSONObject returnJSON = XML.toJSONObject(xmlOutput);
 
                     jsonContent = returnJSON.toString();
-
-                    //LOG.debug("json: \n" + returnJSON.toString());
-                    
-               
                 }
                 catch(Exception e) {
                     LOG.debug("\nJSON Error in converting template format \n");
@@ -399,8 +427,12 @@ public class FileDownloadTemplateController {
             }
         }
 
-        
-        
+
+        /*
+        System.out.println("\n\n\n\n");
+        System.out.println("jsonContent: " + jsonContent);
+        System.out.println("\n\n\n\n");
+        */
         return jsonContent;
         
     }
@@ -457,10 +489,17 @@ public class FileDownloadTemplateController {
         return fileEl;
     }
     
-    private String getResponseBody(String id)  {
+    
+    
+    /** getResponseBody(String id)
+     * This method extracts all file records for a given dataset id and assembles them in json format
+     * 
+     * @param id        Dataset Id
+     * @return          Solr response for all files given the dataset id
+     */
+    private static String getResponseBody(String id)  {
 
         String responseBody = null;
-
 
         // create an http client
         HttpClient client = new HttpClient();
@@ -500,6 +539,7 @@ public class FileDownloadTemplateController {
             method.releaseConnection();
         }
 
+        //System.out.println("Response Body: " + responseBody);
 
         return responseBody;
     }

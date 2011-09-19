@@ -111,23 +111,18 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 
     	 var shardsString = ''; 
     	  
-          //alert('ESGF.search.shards = ' + ESGF.search.shards);
          for(var i=0;i<ESGF.search.shards.length;i++) {
         	 var shards = ESGF.search.shards[i];
-
     		 shardsString = shardsString + shards['nodeIp'] + ':8983/solr';
         	 if(i != ESGF.search.shards.length-1) {
             	 shardsString = shardsString + ',';
         	 }
          }
-         shardsString = shardsString + ',esgf-node3.llnl.gov:8983/solr';
          
          if(ESGF.setting.searchType == 'Distributed') {
-       		//Manager.store.addByValue('qt','/distrib');
        		Manager.store.addByValue('shards',shardsString);
       	 }
       	 else {
-       		//Manager.store.removeByValue('qt','/distrib');
        		Manager.store.removeByValue('shards',shardsString);
       	 }
       	

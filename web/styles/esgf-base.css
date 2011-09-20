@@ -130,115 +130,19 @@ body {
 	
 }
 
-/* home page */
-.info {
-	/* height:460px; */
-	/* margin-left:13px; */
-	/* background:url(../images/info_bg.jpg) top left repeat-x; */
-	background: #ffffff;
-}
-
-/* headers for each of the 3 columns of the home page */
-.infotitle {
-	float:left;
-	height:40px;
-	background-color:#838943;
-}
-
-.infotitle h1 { 
-	font-size: 20px;
-	color:#FFF;
-	margin:8px 0px 0px 12px;
-	font-weight:normal;	
-}
 
 
-.infoheader {
-	float:left;
-	height:46px;
-	
-	border-bottom:2px solid #e8ddcf;
-}
-
-.infoheadericon {
-	float:left;
-	width:46px;
-	height:46px;
-	padding-left:10px;	
-}
-.infoheadertxt {
-	float:left;
-	height:46px;	
-}
-.infoheadertxt h1 {
-	font-size: 20px;
-	color:#7d5f45;
-	margin-top:5px;
-	font-weight:normal;	
-}
 
 
 
 /* end header info */
 
 
-/* padders for the 3 columns of home page */
-.infoinner {
-	padding-top:20px;
-	padding-left:20px;
-}
 
-.infoinner2 {
-	padding-top:20px;
-	padding-left:20px;
-}
 
-.infoinner3 {
-	padding-top:20px;
-	padding-left:13px;
-}
 
 /* end padders for the 3 columns of home page */
 
-
-/* infocontent styling */
-.infocontent {
-	float:left;
-	height:374px;
-}
-.infocontenttop {
-	float:left;
-	height:274px;	
-}
-.infocontent p {
-	font-size: 13px;
-	color:#7d5f45;	
-	font-weight:normal;
-	padding:10px 10px 10px 10px;
-	line-height:19px;	
-}
-.infocontent a {
-	color:#838943;
-}
-.infocontent ul {
-	/* margin:0px 0px 20px 35px; */
-}
-
-.infocontent li {
-	margin:0px 0px 0px 0px;
-	color:#7d5f45;	
-}
-
-.infocontent h3 {
-	font-size: 14px;
-	color:#7d5f45;	
-	font-weight:bold;
-	margin-top:10px;	
-	/*
-	margin-bottom:10px;	
-	padding-left:20px;
-	*/
-}
 
 /* search form on the home page */
 /*
@@ -275,50 +179,7 @@ body {
 */
 
 
-/* rightmost part of info page */
-.projectitem {
-	float: left;
-	width: 281px;	
-	/* height: 110px; */
-	margin-left:10px;
-	margin-top:10px;
-}
-.projectitemtop {
-	float: left;
-	width: 281px;	
-	height: 46px;
-}
-.projectitemicon {
-	float: left;
-	width: 46px;	
-	height: 46px;
-}
-.projectitemtitle {
-	float: left;
-	width: 235px;	
-	height: 46px;
-}
 
-.projectitemtitle h3 {
-	font-size: 14px;
-	color:#7d5f45;	
-	font-weight:bold;
-	margin-top:15px;
-	margin-left:10px;
-}
-.projectitembottom {
-	float: left;
-	width: 281px;	
-	height: 64px;
-}
-
-.projectitembottom p {
-	font-size: 13px;
-	color:#7d5f45;	
-	font-weight:normal;	
-	line-height:19px;	
-	
-}
 
 /* ESGF Live search */
 

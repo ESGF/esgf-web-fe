@@ -1,67 +1,26 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
-
-
+<%--
+Script information is in scripts/esgf/welcome.js
+Style information is in styles/welcomeview/welcome.css
+ --%>
 <ti:insertDefinition name="home-layout" >
 	
 	<ti:putAttribute name="main">
 		<!-- info -->
-		<div class="span-24 info last" style="min-height:500px;">
+		<div class="span-24 info last" >
 		
-			<!-- info left -->
-			<div class="span-7 infoinner">
+			<%-- 
+			<%@ include file="/WEB-INF/views/welcome/quick_search.jsp" %>
 			
-				<!-- info header -->
-				<div class="span-7 last infoheader">
-                    <div class="infoheadericon">
-                        <img src="images/image001.jpg" />
-                    </div>
-                    <div class="infoheadertxt">
-                            <h1>Quick Search</h1>
-                    </div>
-                </div>
-				<!-- info content -->
-                <div class="span-7 last infocontent">
-                	<h3>Keyword:</h3> 
-                	<div class="span-7 last">
-                	<!--  <form action="<c:url value="/live"/>" > -->
-                		<input id="home_query" name="text" type="text" value="" />
-	    				<input id="home_search-button" type="submit" value="Search" />
-                	
-                	<!--  </form> -->
-                	</div>
-					<div class="span-7 last">
-                             	&nbsp;
-                    </div>
-                	<!--  
-                	<div class="searchformcontainer">
-                		<form action="" class="searchform" method="get">   
-                			  <div class="search-field-left">
-                             	&nbsp;
-                           	</div>
-							<input type="text" class="search-field" value="test" />
-                          	<input name="submit" type="image" src="images/search_btn2.jpg" class="search-btn" value="search" />                                                
-                                                                                                                         
-                    	</form>
-                	</div>
-                    -->  
-                    <h3 id="navigate">Advanced Search (Category, Geospatial, Temporal, and more)... </h3>
-                    <!--  
-           			<ul>
-                         <li id="home_project"><a href='#' >Project</a></li>
-                         <li><a href="#" >Institute</a></li>
-                         <li><a href="#" >Model</a></li>
-                         <li><a href="#" >Experiment</a></li>
-                         <li><a href="#" >Frequency</a></li>
-                         <li><a href="#" >Product</a></li>
-                         <li><a href="#" >Realm</a></li>
-                         <li><a href="#" >Variable</a></li>
-                         <li><a href="#" >Ensemble</a></li>
-                    </ul> 
-                    -->      
-                </div>
-			</div>
 			
+			<!-- about info column -->
+			<%@ include file="/WEB-INF/views/welcome/about.jsp" %>
+			
+			
+			<!-- resource column -->
+			<%@ include file="/WEB-INF/views/welcome/resources.jsp" %>
+			--%>
 			<!-- info center -->
 			<div class="span-8 infoinner2">
 				<!-- info header -->
@@ -184,104 +143,4 @@
 	
 </ti:insertDefinition>
 
-<script type="text/javascript">
 
-    $(function(){
-    	
-    	function addTextToStorage(fq,val) {
-    		
-    		if(fq == undefined) {
-    			if(val == '') {
-  	  				fq += 'type:Dataset;text:' + '*;';
-  	  			} else {
-  	  				fq += 'type:Dataset;text:' + val + ';';
-  	  			}
-  	  			localStorage['fq'] = fq;
-    		} else if(fq == null) {
-    			if(val == '') {
-  	  				fq += 'type:Dataset;text:' + '*;';
-  	  			} else {
-  	  				fq += 'type:Dataset;text:' + val + ';';
-  	  			}
-  	  			localStorage['fq'] = fq;
-    		} else {
-    			var duplicateFlag = isDuplicate(fq,val);
-      	  		//first make sure this text does not duplicate a previous text
-      	  		if(!duplicateFlag) {
-      	  			if(val == '') {
-      	  				fq += 'text:' + '*;';
-      	  			} else {
-      	  				fq += 'text:' + val + ';';
-      	  			}
-      	  			localStorage['fq'] = fq;
-      	  		}
-    		}
-    	}
-    	
-    	/*
-    	 * Check for duplicate in the storage string (i.e. make sure a user doesn't query "temperature" twice)
-    	 */
-    	function isDuplicate(fq,val) {
-    		var isDuplicate = false;
-    		var allFqs = fq.split(";");
-  			//loop over all existing queries - note 'length-1' was used to ignore the trailing whitespace of the last split
-  	  		for(var i=0;i<allFqs.length-1;i++)
-  			{
-  				if(allFqs[i] == ('text:' + val)) {
-  					isDuplicate = true;
-  				}
-  			}
-    		return isDuplicate;
-    	}
-    	
-    	
-    	/* 
-    	 * Search button event places the text in html5 storage and navigates user to the live search page
-    	 */
-    	$('#home_search-button').click(function(){
-    		//alert($('input#home_query').val());
-    		var searchStr = $('input#home_query').val();
-    		
-    		if(ESGF.setting.storage) {
-    			//get the previous local storage
-    			var fq = localStorage['fq'];
-    			//call the add text to storage methods to make it part of the fq string
-    			addTextToStorage(fq,searchStr);
-    		}
-      	  	
-    		location.href='<c:url value="/live"/>';
-      	  	
-    	});
-    	
-    	
-    	
-    	$('#home_query').bind('keydown', function(e) {
-    		var searchStr = $('input#home_query').val();
-    		
-    		if (e.which === 13) {
-    			if(ESGF.setting.storage) {
-    	    		var fq = localStorage['fq'];
-    	    		addTextToStorage(fq,searchStr);
-    			}
-          	  	location.href='<c:url value="/live"/>';
-    		}
-    	});
-    	
-    	
-    	
-    	$('h3#navigate').hover(
-    		function () {
-        		$(this).css({'color':'blue','cursor':'pointer'});
-    		},
-    		function () {
-    			$(this).css({'color':'#7d5f45'});
-    		}
-    	);
-    	
-    	$('h3#navigate').live('click',function(){
-			location.href='<c:url value="/live"/>';
-    	});
-    });
-
-</script>
-  

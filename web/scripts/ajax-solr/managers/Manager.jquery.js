@@ -67,6 +67,8 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   /** @lends AjaxSolr.Manager.prototype */
   {
       executeRequest: function (servlet) {
+    	  
+    	  
           var self = this;
           
           //loads everything in the html5 'fq' store
@@ -93,6 +95,8 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 	            	  //reset the localStorage to querying over the dataset type
 	            	  localStorage['fq'] = 'type:Dataset' + ';';
 	            	  
+	            	  localStorage['distrib'] == 'local';
+	            		  
 	            	  //reload the page
 	            	  window.location.reload();
 	            	  
@@ -119,10 +123,11 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
         	 }
          }
          
-         if(ESGF.setting.searchType == 'Distributed') {
+         //if(ESGF.setting.searchType == 'Distributed') {
+
+ 		 if(localStorage['distrib'] == 'distributed') {
        		Manager.store.addByValue('shards',shardsString);
-      	 }
-      	 else {
+      	 } else {
        		Manager.store.removeByValue('shards',shardsString);
       	 }
       	

@@ -37,7 +37,7 @@
 	    </div>
 	    -->
 		<div class="span-18 last"> 
-			<input class="distribbutton1" id="distribbutton" type="submit" value="Turn on Distributed Search" style="margin-left:20px"/>
+			<input class="distribbutton1" id="distribbutton" type="submit" style="margin-left:20px"/>
 		</div>
 </div>
 
@@ -86,6 +86,44 @@
 <script type="text/javascript">
 
     $(function(){
+    	
+    	//if the distrib localstorage has not been defined
+    	//define it as local here
+    	if(localStorage['distrib'] == undefined) {
+    		localStorage['distrib'] = 'local';
+    	} 
+    	
+    	
+    	if(localStorage['distrib'] == 'local') {
+    		$('input#distribbutton').val('Turn on Distributed Search');
+    	} else {
+    		$('input#distribbutton').val('Turn off Distributed Search');
+    	}
+    	
+		$('input#distribbutton').live('click',function () {
+        	
+        
+        	//alert($('a#distributed').html());
+        	//if($('a#distributed').html() == 'Turn off Distributed Search') {
+        	if(localStorage['distrib'] == 'local') {
+        		//change the text to Distributed
+            	$('input#distribbutton').val('Turn off Distributed Search');
+            	//change the flag to Distributed
+            	ESGF.setting.searchType = 'Distributed';
+            	localStorage['distrib'] = 'distributed';
+            	Manager.doRequest(0);
+        	} else {
+        		//change the text to Local
+            	$('input#distribbutton').val('Turn on Distributed Search');
+            	//change the flag to Local
+            	ESGF.setting.searchType = 'local';
+            	localStorage['distrib'] = 'local';
+            	Manager.doRequest(0);
+        	}
+        	
+        	
+        });  
+    	
     	
     	
     	$('li#showConstraints').live('click',function () {
@@ -196,7 +234,13 @@
             }
         });
          
+         
+        /* 
         $('div#distributed').click(function () {
+        	
+        	
+        	
+        
         	//alert($('a#distributed').html());
         	//if($('a#distributed').html() == 'Turn off Distributed Search') {
         	if(ESGF.setting.searchType == 'local') {
@@ -215,28 +259,8 @@
             	Manager.doRequest(0);
         	}
         }); 
-         
-        $('input#distribbutton').click(function () {
-        	//alert($('a#distributed').html());
-        	//if($('a#distributed').html() == 'Turn off Distributed Search') {
-        	if(ESGF.setting.searchType == 'local') {
-        		//alert('change to distributed');
-        		//change the text to Distributed
-            	$('input#distribbutton').val('Turn off Distributed Search');
-            	//change the flag to Distributed
-            	ESGF.setting.searchType = 'Distributed';
-            	Manager.doRequest(0);
-        	} else {
-        		//alert('change to local');
-        		//change the text to Local
-            	$('input#distribbutton').val('Turn on Distributed Search');
-            	//change the flag to Local
-            	ESGF.setting.searchType = 'local';
-            	Manager.doRequest(0);
-        	}
-        	
-        	
-        });  
+         */
+        
     });
 
 </script>

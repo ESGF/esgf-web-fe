@@ -76,7 +76,7 @@
 	
 	/* close button positioned on upper right corner */
 	.simple_overlay .close {
-		background-image:url(../images/metadata_overlay/close.png); 
+		background-image:url(../../images/metadata_overlay/close.png); 
 		position:absolute;
 		right:-15px;
 		top:-15px;

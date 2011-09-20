@@ -1,6 +1,6 @@
 <div class="simple_overlay" id="addGroupForm"> 
 	<form id="new_group_form" action="" method="post" >
-		<h3 style="margin-top:10px;text-align:center;text-style:bold;font-style:italic" id="form_title">New Group Information</h3>
+		<h3 id="form_title">New Group Information</h3>
 		<table id="addgroup_table_id" class="addgroup_table">  
 			<tr>
 				<td>

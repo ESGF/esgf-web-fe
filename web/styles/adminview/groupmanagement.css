@@ -100,3 +100,10 @@
 		height:200px
 	}
 	
+	#form_title {
+		margin-top:10px;
+		text-align:center;
+		text-style:bold;
+		font-style:italic
+	}
+	

@@ -87,11 +87,24 @@
 
     $(function(){
     	
+    	//event is trigger on both logout and login links (for now)
+    	//there is a little disconnect with the header.jsp file so this can be seen as a temporary fix until a main page clean up is performed 
+    	$('li.resetLocalStorage').live('click', function() {
+    		localStorage['fq'] = '';
+      	  
+      	  	localStorage['distrib'] = '';
+    	});
+    	
+    	
     	//if the distrib localstorage has not been defined
     	//define it as local here
     	if(localStorage['distrib'] == undefined) {
     		localStorage['distrib'] = 'local';
-    	} 
+    	} else if(localStorage['distrib'] == null) {
+    		localStorage['distrib'] = 'local';
+    	} else if(localStorage['distrib'] == '') {
+    		localStorage['distrib'] = 'local';
+    	}
     	
     	
     	if(localStorage['distrib'] == 'local') {

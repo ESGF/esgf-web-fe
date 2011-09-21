@@ -154,12 +154,12 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   	   	
         if(fq == null) {
       	  	fq = 'type:Dataset' + ';';
-      	  
       	  	localStorage['fq'] = fq;
-  	  	} 
-        if(fq == undefined) {
+  	  	} else if(fq == undefined) {
         	fq = 'type:Dataset' + ';';
-        	  
+      	  	localStorage['fq'] = fq;
+        } else if(fq = '') {
+        	fq = 'type:Dataset' + ';';
       	  	localStorage['fq'] = fq;
         }
         

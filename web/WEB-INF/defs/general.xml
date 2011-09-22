@@ -168,7 +168,19 @@
     
 <!--  end admin pages -->
 
+<!-- go pages -->
 
+<!-- go page layout  -->
+    <definition name="go-layout" extends="base-layout">
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+       <put-attribute name="layoutType" type="string" value="usermanagement"/>
+    </definition>
+    
+    <!-- go template -->
+    <definition name="goformview" extends="go-layout">
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+       <put-attribute name="main" value="/WEB-INF/views/goformview/go_main.jsp" />
+    </definition>
 
 
 <!-- start obsolete ? -->

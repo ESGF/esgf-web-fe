@@ -79,7 +79,7 @@ AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
     var allStr = idStr + titleStr + urlStr + formatStr +  metadataURLStr; //+ descriptionStr + westDegreesStr + eastDegreesStr + northDegreesStr + southDegreesStr + datetime_startStr + datetime_stopStr;
 
     output += '<div class="search-entry">';
-      output += '<h4 class="desc">';
+      output += '<div style="font-size:15px font-style:bold" class="desc">';
       //output += '<a href="#" style="text-decoration:none">';
       output += '<span class="actionitem ai_meta"><a href="/esgf-web-fe/scripts/esgf/metadata_overlay_template.html" class="met" rel="#metadata_overlay"' + allStr + '>';
       output += doc.title + '</a>';
@@ -92,7 +92,7 @@ AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
 
 
 AjaxSolr.theme.prototype.actions = function (doc) {
-    var output = '<div class="actions">',
+    var output = '<div class="actions" style="font-size:12px">',
         selectID = '',
         selected = ESGF.search.selected,
         carts = [];

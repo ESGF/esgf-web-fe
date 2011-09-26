@@ -216,7 +216,7 @@ $(document).ready( function() {
             abbreviate : function (word) {
                 var abbreviation = word;
                 if(word.length > 50) {
-                    abbreviation = word.slice(0,20) + '...' + word.slice(word.length-21,word.length);
+                    abbreviation = word;//word.slice(0,20) + '...' + word.slice(word.length-21,word.length);
                 }
                 return abbreviation;
             },
@@ -454,8 +454,59 @@ $(document).ready( function() {
                 values.push(this.value);
                }
      	});
+
+        var globus_url = '/esgf-web-fe/goformview1';
         
+      //begin assembling queryString
+        var queryString = 'type=create&id=' + selectedDocId;
+
+
+        //assemble the input fields with the query string
+        for(var i=0;i<ids.length;i++) {
+        	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
+        }
+        var input = '';
+        jQuery.each(queryString.split('&'), function(){
+            var pair = this.split('=');
+            input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
+        });
+        //send request
+        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
+        .appendTo('body').submit().remove();
+        /*
+        $.ajax({
+    		url: globus_url,
+    		global: false,
+    		type: "POST",
+    		data: queryString,
+    		dataType: 'json',
+    		success: function(data) {
+    	  		LOG.debug('Globus Online transfer complete - initiate notification here...');
+    		},	
+        	error: function() {
+    	  		LOG.debug('go error');
+        	}
+        });
+        */
         
+        /*
+        var url = '/esgf-web-fe/wgetproxy';
+        var security = 'wgetv3';
+        queryString += '&security=' + security;
+        
+        //assemble the input fields with the query string
+        var input = '';
+        jQuery.each(queryString.split('&'), function(){
+            var pair = this.split('=');
+            input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
+        });
+        
+        //send request
+        jQuery('<form action="'+ url +'" method="post">'+input+'</form>')
+        .appendTo('body').submit().remove();
+        */
+        
+        /*
         //begin assembling queryString
         var queryString = 'type=create&id=' + selectedDocId;
 
@@ -464,7 +515,6 @@ $(document).ready( function() {
         	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
         }
         
-        var globus_url = '/esgf-web-fe/globusonlineproxy';
         
         $.ajax({
     		url: globus_url,
@@ -476,7 +526,7 @@ $(document).ready( function() {
     			alert('Globus Online transfer complete - initiate notification here...');
     		}	
         });
-        
+        */
     });
     
 

@@ -80,10 +80,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping(value="/goformview4")
-public class GOForm_View4Controller {
+public class GOFormView4Controller {
 
 
-    private final static Logger LOG = Logger.getLogger(GOForm_View2Controller.class);
+    private final static Logger LOG = Logger.getLogger(GOFormView2Controller.class);
 
     private final static String GOFORMVIEW_MODEL = "GoFormView_model";
     private final static String GOFORMVIEW_DATASET_NAME = "GoFormView_Dataset_Name";
@@ -92,7 +92,7 @@ public class GOForm_View4Controller {
     private final static String GOFORMVIEW_ERROR = "GoFormView_Error";
     
     
-    public GOForm_View4Controller() {
+    public GOFormView4Controller() {
         LOG.debug("IN GOFormController Constructor");
     }
 

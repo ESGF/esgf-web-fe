@@ -66,9 +66,11 @@
  */
 package org.esgf.globusonline;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -79,47 +81,86 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping(value="/goformview1")
-public class GOForm_View1Controller {
+@RequestMapping(value="/goformview2")
+public class GOFormView2Controller {
 
 
-    private final static Logger LOG = Logger.getLogger(GOForm_View1Controller.class);
+    private final static Logger LOG = Logger.getLogger(GOFormView2Controller.class);
 
     private final static String GOFORMVIEW_MODEL = "GoFormView_model";
     private final static String GOFORMVIEW_DATASET_NAME = "GoFormView_Dataset_Name";
     private final static String GOFORMVIEW_FILE_URLS = "GoFormView_File_Urls";
     private final static String GOFORMVIEW_FILE_NAMES = "GoFormView_File_Names";
+    private final static String GOFORMVIEW_ENDPOINTS = "GoFormView_Endpoints";
     
     
-    public GOForm_View1Controller() {
+    public GOFormView2Controller() {
     }
 
     @SuppressWarnings("unchecked")
     @RequestMapping(method=RequestMethod.POST)
     public ModelAndView doPost(final HttpServletRequest request) {
         
-        //grab the dataset name, file names and urls from the query string
+
+        /* Get the params from the form request */
         String dataset_name = request.getParameter("id");
         String [] file_names = request.getParameterValues("child_id");
         String [] file_urls = request.getParameterValues("child_url");
+        String goUserName = request.getParameter("goUserName");
+        String myProxyUserName = request.getParameter("myProxyUserName");
+        String myProxyUserPass = request.getParameter("myProxyUserPass");
+        String goEmail = request.getParameter("goEmail");
         
+        System.out.println("goUserName: " + goUserName + " " + "myProxyUserName: " + myProxyUserName + " " + "myProxyUserPass: " + myProxyUserPass + " goEmail: " + goEmail);
         
         
         Map<String,Object> model = new HashMap<String,Object>();
 
         if (request.getParameter(GOFORMVIEW_MODEL)!=null) {
-            //it should never come here...
+            
         }
         else {
             
-            //place the dataset name, file names and urls into the model
+
             model.put(GOFORMVIEW_FILE_URLS, file_urls);
             model.put(GOFORMVIEW_FILE_NAMES, file_names);
             model.put(GOFORMVIEW_DATASET_NAME, dataset_name);
             
+            //get the endpoints
+            String [] endPoints = getDestinationEndpoints(request);
+            model.put(GOFORMVIEW_ENDPOINTS, endPoints);
+            
         }
 
-        return new ModelAndView("goformview1", model);
+        
+        return new ModelAndView("goformview2", model);
+    }
+    
+    
+    /*
+     * Private method obtaining the destination endpoints given some openId (obtained from the cookie)
+     */
+    private String [] getDestinationEndpoints(final HttpServletRequest request) {
+        String [] endPoints;
+        
+        //get the openid here from the cookie
+        Cookie [] cookies = request.getCookies();
+        String openId = "";
+        for(int i=0;i<cookies.length;i++) {
+            if(cookies[i].getName().equals("esgf.idp.cookie")) {
+                openId = cookies[i].getValue();
+            }
+        }
+        
+        //use the openid to gather endpoints
+        //insert Globus Online code here
+        //CHANGEME - hard coded
+        endPoints = new String[3];
+        for(int i=0;i<endPoints.length;i++) {
+            endPoints[i] = "ep" + i;
+        }
+        
+        return endPoints;
     }
     
     

@@ -122,7 +122,6 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 				var value = $('input#query').val();
 				if(ESGF.setting.storage) {
 
-			        alert('value: ' + value);
 						var fq = localStorage['fq'];
 						if(fq == undefined) {
 					  		fq = 'text:' + value + ';';

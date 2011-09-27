@@ -109,17 +109,20 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 		
 		
 		$(this.target).find('input').bind('keydown', function(e) {
+			/*
 			if (self.requestSent === false && e.which == 13) {
 		        var value = $(this).val();
+		        alert('value: ' + value);
 		        if (value && self.add(value)) {
 		          self.manager.doRequest(0);
 		        }
 		      }
-			
+			*/
 			if(self.requestSent === false && e.which === 13) {
 				var value = $('input#query').val();
 				if(ESGF.setting.storage) {
-					
+
+			        alert('value: ' + value);
 						var fq = localStorage['fq'];
 						if(fq == undefined) {
 					  		fq = 'text:' + value + ';';

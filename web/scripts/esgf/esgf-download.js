@@ -222,7 +222,7 @@ $(document).ready( function() {
             abbreviate : function (word) {
                 var abbreviation = word;
                 if(word.length > 50) {
-                    abbreviation = word.slice(0,20) + '...' + word.slice(word.length-21,word.length);
+                    abbreviation = word;//word.slice(0,20) + '...' + word.slice(word.length-21,word.length);
                 }
                 return abbreviation;
             },

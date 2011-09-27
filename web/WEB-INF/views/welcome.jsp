@@ -129,8 +129,8 @@
                           <div class="projectitembottom">
 	                         <ul>
 	                             <li>
-	                             	<a href='http://esgf-node3.llnl.gov/esgf-web-fe/' >PCMDI Node</a>
-	                             	<a href='http://esgf-node3.llnl.gov/esg-search/feed/datasets.rss'><img src='images/rss_icon.png'/ align="bottom"></a>
+	                             	<a href='http://pcmdi9.llnl.gov/esgf-web-fe/' >PCMDI Node</a>
+	                             	<a href='http://pcmdi9.llnl.gov/esg-search/feed/datasets.rss'><img src='images/rss_icon.png'/ align="bottom"></a>
 	                             </li>                             
 	                             <li>
 	                             	<a href='http://esg-vm-demo02.ccs.ornl.gov/esgf-web-fe/' >ORNL Node</a>

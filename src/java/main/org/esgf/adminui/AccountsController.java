@@ -100,6 +100,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import org.esgf.commonui.UserOperationsESGFDBImpl;
 import org.esgf.commonui.UserOperationsInterface;
+import org.esgf.commonui.UserOperationsXMLImpl;
 import org.esgf.commonui.Utils;
 
 @Controller
@@ -130,6 +131,7 @@ public class AccountsController {
     public AccountsController() throws FileNotFoundException, IOException {
         LOG.debug("IN AccountsController Constructor");
         uoi = new UserOperationsESGFDBImpl();
+        //uoi = new UserOperationsXMLImpl();
     }
 
     /**

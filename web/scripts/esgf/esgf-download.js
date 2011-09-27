@@ -82,7 +82,6 @@ $(document).ready( function() {
     
     function createTemplateV2(arr) {
     	
-    	
     	var fileDownloadTemplate = arr;
 		
 		$( "#addedCartTemplate").tmpl(fileDownloadTemplate, {
@@ -115,11 +114,9 @@ $(document).ready( function() {
         	$('input[name=' + dataset_id + ']').toggle();
         	
         	
-        	//alert('if the link says expand, get file info...if the link says collapse hide the file info');
         	if(this.innerHTML === "Expand") {
                 
-    			//alert('Dataset has not been fetched yet, make the ajax call to the FileTemplateController and show the file rows');
-        			
+    				
     			if (confirm("Fetching files for Dataset " + dataset_id + " may take a few seconds...Proceed?")) {
     				
     				var file_download_template_url = ESGF.search.fileDownloadTemplateProxyUrl;
@@ -166,7 +163,7 @@ $(document).ready( function() {
     
     
     function createTemplateV1(arr) {
-		
+
 		var query_arr = new Array();
         //create a query string of just the dataset ids
     	for(var i=0;i<arr.length;i++) {
@@ -191,12 +188,21 @@ $(document).ready( function() {
         		data: query,
         		dataType: 'json',
         		success: function(data) {
-        			
         			$('#waitWarn').remove();
         			$('#spinner').remove();
         	    	
         			showFileContentsV1(data);
-        		}
+        		},
+    			error: function() {
+    				$('#waitWarn').remove();
+    				$('#spinner').remove();
+    				alert('There is a problem with one of your dataset selections.  Please contact your administrator.');
+        			
+                	//change from remove from cart to add to cart for all selected datasets
+        			for(var i=0;i<query_arr.length;i++) {
+                    	$('a#ai_select_'+ query_arr[i].replace(/\./g, "_")).html('Add To Cart');
+        			}
+    			}
         	});
     	}
     	
@@ -414,7 +420,6 @@ $(document).ready( function() {
         	
         	var dataset_id = data.doc.id;
         	
-        	alert(dataset_id);
         	
         	//begin assembling queryString
             var queryString = 'type=create&id=' + dataset_id
@@ -422,16 +427,13 @@ $(document).ready( function() {
             //gather the ids and the urls for download
         	var ids   = new Array();
             var values = new Array();
-            alert($(this).parent().html());
             $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(dataset_id)).find(':checkbox:checked').each( function(index) {
-            		alert('thisid: ' + this.id + ' dataset_id: ' + dataset_id);
-                    if(this.id != dataset_id) {
+            		if(this.id != dataset_id) {
                     ids.push(this.id);
                     values.push(this.value);
                    }
         	});
         	
-            alert(ids);
     	}
     	
     });

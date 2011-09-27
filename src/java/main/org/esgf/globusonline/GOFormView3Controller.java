@@ -90,24 +90,30 @@ public class GOFormView3Controller {
     private final static String GOFORMVIEW_FILE_URLS = "GoFormView_File_Urls";
     private final static String GOFORMVIEW_FILE_NAMES = "GoFormView_File_Names";
     private final static String GOFORMVIEW_ERROR = "GoFormView_Error";
-    
+    private final static String GOFORMVIEW_ENDPOINTINFOS = "GoFormView_EndpointInfos";
+    private final static String GOFORMVIEW_DEST_ENDPOINT = "GoFormView_DestEndpoint";
+    private final static String GOFORMVIEW_DEST_TARGET_PATH = "GoFormView_DestTargetPath";
+   
     public GOFormView3Controller() {
     }
 
     @RequestMapping(method=RequestMethod.POST)
-    public ModelAndView doPost(final HttpServletRequest request) {
-        
-
+    public ModelAndView doPost(final HttpServletRequest request)
+    {
         /* get model params here */
         String dataset_name = request.getParameter("id");
-        String [] file_names = request.getParameterValues("child_id");
-        String [] file_urls = request.getParameterValues("child_url");
-        
+        String[] file_names = request.getParameterValues("child_id");
+        String[] file_urls = request.getParameterValues("child_url");
+        String[] endpointInfos = request.getParameterValues("endpointinfos");
+
         /* get endpoint info here */
         String endpoint = request.getParameter("endpointdropdown");
         String target = request.getParameter("target");
-        
-        
+
+        LOG.debug("GOFormView3Controller: Got selected endpoint " + endpoint);
+        LOG.debug("GOFormView3Controller: Got selected target " + target);
+        LOG.debug("GOFormView3Controller: Got endpointInfos " + endpointInfos);
+
         Map<String,Object> model = new HashMap<String,Object>();
 
         if (request.getParameter(GOFORMVIEW_MODEL)!=null) {
@@ -116,11 +122,13 @@ public class GOFormView3Controller {
             
         }
         else {
-            System.out.println("Model is null");
             model.put(GOFORMVIEW_FILE_URLS, file_urls);
             model.put(GOFORMVIEW_FILE_NAMES, file_names);
             model.put(GOFORMVIEW_DATASET_NAME, dataset_name);
-            
+            model.put(GOFORMVIEW_DEST_ENDPOINT, endpoint);
+            model.put(GOFORMVIEW_DEST_TARGET_PATH, target);
+            model.put(GOFORMVIEW_ENDPOINTINFOS, endpointInfos);
+
         }
         
         String error = isErrorInGORequest();

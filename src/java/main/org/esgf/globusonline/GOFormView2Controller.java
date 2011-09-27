@@ -66,9 +66,25 @@
  */
 package org.esgf.globusonline;
 
+import java.net.URI;
+import java.net.URL;
+
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Vector;
+
+import org.openid4java.OpenIDException;
+import org.openid4java.util.HttpCache;
+import org.openid4java.util.HttpClientFactory;
+import org.openid4java.discovery.xrds.XrdsServiceEndpoint;
+import org.openid4java.discovery.yadis.YadisException;
+import org.openid4java.discovery.yadis.YadisResolver;
+import org.openid4java.discovery.yadis.YadisResult;
+
+import org.globusonline.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -92,15 +108,19 @@ public class GOFormView2Controller {
     private final static String GOFORMVIEW_FILE_URLS = "GoFormView_File_Urls";
     private final static String GOFORMVIEW_FILE_NAMES = "GoFormView_File_Names";
     private final static String GOFORMVIEW_ENDPOINTS = "GoFormView_Endpoints";
-    
+    private final static String GOFORMVIEW_ENDPOINTINFOS = "GoFormView_EndpointInfos";
+
+    // should be configurable?
+    private final static String CA_CERTIFICATE_FILE = "/etc/grid-security/certificates/97552d04.0";
     
     public GOFormView2Controller() {
     }
 
     @SuppressWarnings("unchecked")
     @RequestMapping(method=RequestMethod.POST)
-    public ModelAndView doPost(final HttpServletRequest request) {
-        
+    public ModelAndView doPost(final HttpServletRequest request)
+    {
+        Map<String,Object> model = new HashMap<String,Object>();
 
         /* Get the params from the form request */
         String dataset_name = request.getParameter("id");
@@ -110,59 +130,132 @@ public class GOFormView2Controller {
         String myProxyUserName = request.getParameter("myProxyUserName");
         String myProxyUserPass = request.getParameter("myProxyUserPass");
         String goEmail = request.getParameter("goEmail");
-        
-        System.out.println("goUserName: " + goUserName + " " + "myProxyUserName: " + myProxyUserName + " " + "myProxyUserPass: " + myProxyUserPass + " goEmail: " + goEmail);
-        
-        
-        Map<String,Object> model = new HashMap<String,Object>();
 
-        if (request.getParameter(GOFORMVIEW_MODEL)!=null) {
-            
-        }
-        else {
-            
+        LOG.debug("GOFormView2Controller: dataset_name = " + dataset_name);
+        LOG.debug("GOFormView2Controller: file_names = " + file_names);
+        LOG.debug("GOFormView2Controller: file_urls = " + file_urls);
 
-            model.put(GOFORMVIEW_FILE_URLS, file_urls);
-            model.put(GOFORMVIEW_FILE_NAMES, file_names);
-            model.put(GOFORMVIEW_DATASET_NAME, dataset_name);
-            
-            //get the endpoints
-            String [] endPoints = getDestinationEndpoints(request);
-            model.put(GOFORMVIEW_ENDPOINTS, endPoints);
-            
-        }
+        LOG.debug("goUserName: " + goUserName + " " + "myProxyUserName: " + myProxyUserName +
+                           " " + "myProxyUserPass: " + "*****" + " goEmail: " + goEmail);
 
-        
-        return new ModelAndView("goformview2", model);
-    }
-    
-    
-    /*
-     * Private method obtaining the destination endpoints given some openId (obtained from the cookie)
-     */
-    private String [] getDestinationEndpoints(final HttpServletRequest request) {
-        String [] endPoints;
-        
         //get the openid here from the cookie
         Cookie [] cookies = request.getCookies();
         String openId = "";
-        for(int i=0;i<cookies.length;i++) {
-            if(cookies[i].getName().equals("esgf.idp.cookie")) {
+        for(int i = 0; i < cookies.length; i++)
+        {
+            if (cookies[i].getName().equals("esgf.idp.cookie"))
+            {
                 openId = cookies[i].getValue();
             }
         }
+
+        LOG.debug("Got User OpenID: " + openId);
+        try
+        {
+            URI myproxyServerURI = this.resolveMyProxyViaOpenID(openId);
+            LOG.debug("Got MyProxy URI: " + myproxyServerURI);
         
-        //use the openid to gather endpoints
-        //insert Globus Online code here
-        //CHANGEME - hard coded
-        endPoints = new String[3];
-        for(int i=0;i<endPoints.length;i++) {
-            endPoints[i] = "ep" + i;
+            String myproxyServerStr = myproxyServerURI.getHost() + ":" + myproxyServerURI.getPort();
+            LOG.debug("Using MyProxy Server: " + myproxyServerStr);
+
+            LOG.debug("Initializing Globus Online Transfer object");
+            JGOTransfer transfer = new JGOTransfer(goUserName, myproxyServerStr, myProxyUserName, myProxyUserPass, CA_CERTIFICATE_FILE);
+            transfer.initialize();
+            LOG.debug("Globus Online Transfer object Initialize complete");
+
+            LOG.debug("About to retrieve available endpoints");
+            Vector<EndpointInfo> endpoints = transfer.listEndpoints();
+            LOG.debug("We pulled down " + endpoints.size() + " endpoints");
+
+            if (request.getParameter(GOFORMVIEW_MODEL)!=null) {
+            
+            }
+            else
+            {
+                LOG.debug("Placing all info in the model");
+                model.put(GOFORMVIEW_FILE_URLS, file_urls);
+                model.put(GOFORMVIEW_FILE_NAMES, file_names);
+                model.put(GOFORMVIEW_DATASET_NAME, dataset_name);
+
+                String[] endPointNames = getDestinationEndpointNames(endpoints);
+                String[] endPointInfos = constructEndpointInfos(endpoints); 
+
+                LOG.debug("Retrieved an array of " + endPointNames.length + " Endpoint names");
+                LOG.debug("Retrieved an array of " + endPointInfos.length + " EndpointInfo strings");
+
+                model.put(GOFORMVIEW_ENDPOINTS, endPointNames);
+                model.put(GOFORMVIEW_ENDPOINTINFOS, endPointInfos);
+
+                LOG.debug("All info placed in the model!");
+            }
         }
-        
-        return endPoints;
+        catch(Exception e)
+        {
+            LOG.error("Failed to initialize Globus Online: " + e);
+        }
+        return new ModelAndView("goformview2", model);
+    }
+
+    private URI resolveMyProxyViaOpenID(String openId)
+    {
+        URI result = null;
+        try
+        {
+            LOG.debug("Attempting to resolve MyProxy Server from OpenID: " + openId);
+
+            YadisResolver resolver = new YadisResolver();
+            Set<String> serviceTypes = new HashSet<String>();
+            serviceTypes.add("urn:esg:security:myproxy-service");
+
+            YadisResult yadisResult = resolver.discover(openId, 10, new HttpCache(), serviceTypes);
+            XrdsServiceEndpoint endpoint = (XrdsServiceEndpoint) yadisResult.getEndpoints().get(0);
+            result = new URI(endpoint.getUri());
+        }
+        catch(YadisException ye)
+        {
+            if (ye.getErrorCode() == OpenIDException.YADIS_INVALID_URL)
+            {
+                LOG.error("The OpenID URL provided is invalid.  Please make sure that you're " +
+                          "logged in as a valid Gateway user.");
+            }
+            else
+            {
+                LOG.error("A Yadis error occurred trying to resolve the specified OpenID. " +
+                          "Please make sure that you're logged in as a valid Gateway user.");
+            }
+        }
+        catch(Exception e)
+        {
+            LOG.error("OpenID Discovery error: " + e);
+        }
+        return result;
     }
     
-    
+    private String[] getDestinationEndpointNames(Vector<EndpointInfo> endpoints)
+    {
+        int numEndpoints = endpoints.size();
+        String [] endPointNames = new String[numEndpoints];
+
+        for(int i = 0; i < numEndpoints; i++)
+        {
+            endPointNames[i] = endpoints.get(i).getEPName();
+        }
+        return endPointNames;
+    }
+
+    private String[] constructEndpointInfos(Vector<EndpointInfo> endpoints)
+    {
+        int numEndpoints = endpoints.size();
+        String [] endPointNames = new String[numEndpoints];
+
+        for(int i = 0; i < numEndpoints; i++)
+        {
+            // we encode this in a string as follows
+            // EPNAME:HOSTS:MYPROXYSERVER:ISGLOBUSCONNECT
+            endPointNames[i] = endpoints.get(i).getEPName() + ":" + endpoints.get(i).getHosts() +
+                ":" + endpoints.get(i).getMyproxyServer() + ":" + endpoints.get(i).isGlobusConnect();
+        }
+        return endPointNames;
+    }
 }
 

@@ -5,6 +5,16 @@
 		<p>
 		DatasetName: ${GoFormView_Dataset_Name}
 		</p>
+
+		<hr />
+		<p>
+		Destination Endpoint: ${GoFormView_DestEndpoint}
+		</p>
+
+		<hr />
+		<p>
+		Destination Target Path: ${GoFormView_DestTargetPath}
+		</p>
 		
 		<hr />
 		<p>
@@ -28,4 +38,12 @@
         	
             <c:set var="j" value="${j+1}"/>
        	</c:forEach>
-       	
+<hr />
+<p>
+Endpoint Infos:
+<c:set var="j" value="0"/>
+<c:forEach var="group" items="${GoFormView_EndpointInfos}">
+	${GoFormView_EndpointInfos[j]}
+	<c:set var="j" value="${j+1}"/>
+</c:forEach>
+</p>

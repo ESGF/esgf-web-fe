@@ -18,6 +18,15 @@ Endpoints:
 	<c:set var="j" value="${j+1}"/>
 </c:forEach>
 </p>
+<hr />
+<p>
+Endpoint Infos:
+<c:set var="j" value="0"/>
+<c:forEach var="group" items="${GoFormView_EndpointInfos}">
+	${GoFormView_EndpointInfos[j]}
+	<c:set var="j" value="${j+1}"/>
+</c:forEach>
+</p>
 <hr />     	    						
 <p>
 File Names:

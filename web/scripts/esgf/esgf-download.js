@@ -214,7 +214,7 @@ $(document).ready( function() {
 		var fileDownloadTemplate = data.response.doc;
 		
 		
-		$( "#cartTemplate").tmpl(fileDownloadTemplate, {
+		$( "#cartTemplateStyled").tmpl(fileDownloadTemplate, {
 			
 			replacePeriods : function (word) {
                 return replacePeriod(word);

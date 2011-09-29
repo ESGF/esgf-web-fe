@@ -72,7 +72,7 @@
 	    <div id="search-results"> </div>
 	
 	    <div id="carts"> 
-	    <table>
+	    <table style="width:100%;table-layout: fixed">
 	    <tbody id="datasetList">
 	
 	    </tbody>

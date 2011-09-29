@@ -32,7 +32,7 @@
               	</c:when>
               	<c:otherwise>
               		<!-- authenticated users -->
-              		<li id="accounts"><a href="<c:url value='/accountsview'/> ">Account</a></li>     
+              		<li id="accounts"><a id="accountsAnchor" onclick="checkAccountsviewURL('${principal.username}')" href="<c:url value="/accountsview"/> ">Account</a></li>     
                 	<li><a href="<c:url value='/j_spring_security_logout'/>" >Logout</a></li>
                 	<!-- admin users -->
                 	<sec:authorize access="hasRole('ROLE_ADMIN')">
@@ -44,5 +44,39 @@
        </div>
    </div> 
 </div>
+
+<script type="text/javascript">
+function checkAccountsviewURL(openid)
+{
+	// get node name from openid (e.g. https://esgf-node3.llnl.gov/esfg-idp/openid/rootAdmin)
+	// look for first '/' following https://... so start looking at position 8
+	var dotIndex = openid.indexOf('.', 8);  // postion of first '.'
+	var slashIndex = openid.indexOf('/',8); // position of first '/'
+	var nodeName = openid.substr(8,dotIndex-8);
+	
+	// get hostname of this host
+	var host = document.location.hostname;
+	var dIndex = host.indexOf('.',0);
+	var hBaseName = host.substr(0,dIndex);
+	if (dIndex < 0) hBaseName = host;
+	
+	if (nodeName != hBaseName) {
+		var openIdLink = "http://" + openid.substr(8,slashIndex-8);
+		var msg = "You must logon to your openID node to view your account:\n"
+				  + openIdLink;
+		alert(msg);
+		// make Account keep us where we are
+		document.getElementById('accountsAnchor').href=document.URL;
+	}
+	
+	// TODO: When we can get cookies from redirected url, then can actually redirect as below:
+	// now build the accounts view url with substring from openid and '/esgf-web-fe/accountsview' 
+	//var url = openid.substr(0,slashIndex).concat('/esgf-web-fe/accountsview');
+	//document.getElementById('accountsAnchor').href=url;
+	
+}
+</script>		
+
+
 
 		    

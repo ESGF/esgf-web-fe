@@ -130,8 +130,8 @@ public class AccountsController {
 
     public AccountsController() throws FileNotFoundException, IOException {
         LOG.debug("IN AccountsController Constructor");
-        uoi = new UserOperationsESGFDBImpl();
-        //uoi = new UserOperationsXMLImpl();
+        //uoi = new UserOperationsESGFDBImpl();
+        uoi = new UserOperationsXMLImpl();
     }
 
     /**

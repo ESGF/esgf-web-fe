@@ -3,8 +3,7 @@
 
 <div class="span-24 info last" >
 	<div class="span-2"><p></p></div>
-	<div id="disclaimer" class="span-20" style="padding-top:10px">
-		
+	<div id="disclaimer" class="span-20" style="padding-top:10px;margin-bottom:5px;text-align:center">
 	</div>	
 	<div class="span-2 last" ><p></p></div>
 </div>
@@ -37,12 +36,11 @@
 $(function(){
 	if($.browser.msie) {
 		alert("ESGF currently does not support Microsoft Internet Explorer.  Please try the Mozilla Firefox, Apple Safari, or Google Chrome browser.");
-		var disclaimer = '<p style="color:red;font-weight:bold">' +
+		var disclaimer = '<p style="color:red;font-weight:bold;border-top:1px dashed #e8ddcf;margin-top:10px">' +
 						 'IMPORTANT: The ESGF P2P system interface may be viewed using the Mozilla Firefox, Google Chrome, or Apple Safari browsers. ' +
 						 'Support for the Microsoft Internet Explorer browser will be included in subsequent releases.' +
 						 '</p>';
 		$('div#disclaimer').append(disclaimer);
-		$('div#disclaimer').css('border-top', '1px dashed #e8ddcf');
 	}
 });
 

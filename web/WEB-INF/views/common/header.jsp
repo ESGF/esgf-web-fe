@@ -4,12 +4,12 @@
 
 <div class="span-24 last headertop" style="border-top: 3px solid #18638a;padding-top: 5px;padding-bottom: 5px">
 	<!-- <div class="span-24"></div> -->
-	<div class="span-19 prepend-1">
+	<div class="span-11 prepend-1">
 		<img src='<c:url value="/images/esgf.png"/>' height="92px" />
 	</div>
-	<div class="span-4 last">
+	<div class="span-12 last">
 		<c:set var="logo"><spring:message code="esgf.homepage.institutionLogo" /></c:set>
-		<img src='<c:url value="${logo}" />' style="padding-top:10px;" alt="institution" title="institution icon"/>
+		<img src='<c:url value="${logo}" />' style="padding-top:5px;margin-right:15px;float:right" alt="institution" title="institution icon"/>
 	</div>
 </div>
 <div class="span-24 last headerbottom" style="background-color:#18638a">

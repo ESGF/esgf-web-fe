@@ -194,6 +194,7 @@ public class AccountsController {
     }
     
     /* Helper function for extracting the model */
+    @SuppressWarnings("unchecked")
     private Map<String,Object> getModel(final HttpServletRequest request,
                                        final @ModelAttribute(ACCOUNTS_INPUT)  String accountsInput) throws IOException {
         LOG.debug("------AccountsController getModel------");

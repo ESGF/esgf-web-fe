@@ -296,6 +296,7 @@ public class ExtractGroupInfoController {
      * 
      * @param request
      */
+    @SuppressWarnings("unchecked")
     private void queryStringInfo(HttpServletRequest request) {
         LOG.debug("--------Query String Info--------");
         Enumeration<String> paramEnum = request.getParameterNames();

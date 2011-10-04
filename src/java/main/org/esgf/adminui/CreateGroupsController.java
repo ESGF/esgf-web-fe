@@ -331,6 +331,7 @@ public class CreateGroupsController {
     
     
     /* Helper function for extracting the model */
+    @SuppressWarnings("unchecked")
     private Map<String,Object> getModel(final HttpServletRequest request,
                                        final @ModelAttribute(CreateGroups_INPUT)  String ManageUsersInput) throws IOException {
         LOG.debug("------CreateGroupsController getModel------");

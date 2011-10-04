@@ -176,6 +176,7 @@ public class ManageUsersController {
 
     
     /* Helper function for extracting the model */
+    @SuppressWarnings("unchecked")
     private Map<String,Object> getModel(final HttpServletRequest request,
                                        final @ModelAttribute(ManageUsers_INPUT)  String ManageUsersInput) throws IOException {
         LOG.debug("------ManageUsersController getModel------");
@@ -210,6 +211,7 @@ public class ManageUsersController {
     /*
      * Helper method to formulate the model for the usermanagement view
      */
+    @SuppressWarnings("unchecked")
     private Map<String,Object> formModel(final HttpServletRequest request,final @ModelAttribute(ManageUsers_INPUT) String ManageUsersInput) throws IOException{
 
         LOG.debug("------ManageUsersController formModel------");

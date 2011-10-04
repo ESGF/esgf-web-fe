@@ -209,6 +209,7 @@ public class Utils {
     }
     
     //Used by ManageUsersController to obtain the "type"
+    @SuppressWarnings("unchecked")
     public static String getTypeFromQueryString(HttpServletRequest request) {
         LOG.debug("------Utils getTypeFromQueryString------");
         String type = "";
@@ -249,6 +250,7 @@ public class Utils {
      * 
      * @param request
      */
+    @SuppressWarnings("unchecked")
     public static void queryStringInfo(HttpServletRequest request) {
         LOG.debug("--------Utils Query String Info--------");
         Enumeration<String> paramEnum = request.getParameterNames();

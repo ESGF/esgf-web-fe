@@ -31,6 +31,7 @@ SOFTWARE.
  * @author JSON.org
  * @version 2010-12-24
  */
+@SuppressWarnings("unchecked")
 public class XMLTokener extends JSONTokener {
 
 

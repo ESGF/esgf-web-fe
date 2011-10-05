@@ -8,7 +8,27 @@
 
 		<hr />
 		<p>
-		Destination Endpoint: ${GoFormView_DestEndpoint}
+		GO Username: ${GoFormView_GOUsername}
+		</p>
+
+                <hr />
+                <p>
+                Source Myproxy Username: ${GoFormView_SrcMyproxyUser}
+                </p>
+
+                <hr />
+                <p>
+                Source Myproxy Password: *****
+                </p>
+
+		<hr />
+		<p>
+		User Certificate: ${GoFormView_UserCertificate}
+		</p>
+
+		<hr />
+		<p>
+		Destination Endpoint: ${GoFormView_DestEndpointInfo}
 		</p>
 
 		<hr />

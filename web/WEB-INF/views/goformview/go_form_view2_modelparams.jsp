@@ -11,6 +11,26 @@ DatasetName: ${GoFormView_Dataset_Name}
 
 <hr />
 <p>
+GO Username: ${GoFormView_GOUsername}
+</p>
+
+<hr />
+<p>
+Source Myproxy Username: ${GoFormView_SrcMyproxyUser}
+</p>
+
+<hr />
+<p>
+Source Myproxy Password: *****
+</p>
+
+<hr />
+<p>
+User Certificate: ${GoFormView_UserCertificate}
+</p>
+
+<hr />
+<p>
 Endpoints:
 <c:set var="j" value="0"/>
 <c:forEach var="group" items="${GoFormView_Endpoints}">

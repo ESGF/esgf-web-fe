@@ -71,6 +71,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.globusonline.*;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -83,55 +85,96 @@ import org.springframework.web.servlet.ModelAndView;
 public class GOFormView4Controller {
 
 
-    private final static Logger LOG = Logger.getLogger(GOFormView2Controller.class);
+    private final static Logger LOG = Logger.getLogger(GOFormView4Controller.class);
 
     private final static String GOFORMVIEW_MODEL = "GoFormView_model";
     private final static String GOFORMVIEW_DATASET_NAME = "GoFormView_Dataset_Name";
+    private final static String GOFORMVIEW_USER_CERTIFICATE = "GoFormView_UserCertificate";
     private final static String GOFORMVIEW_FILE_URLS = "GoFormView_File_Urls";
     private final static String GOFORMVIEW_FILE_NAMES = "GoFormView_File_Names";
     private final static String GOFORMVIEW_ERROR = "GoFormView_Error";
+    private final static String GOFORMVIEW_GO_USERNAME = "GoFormView_GOUsername";
+
+    // should be configurable?
+    private final static String CA_CERTIFICATE_FILE = "/etc/grid-security/certificates/97552d04.0";
     
-    
+
     public GOFormView4Controller() {
-        LOG.debug("IN GOFormController Constructor");
+        System.out.println("GO FORM VIEW 4");
     }
 
     @SuppressWarnings("unchecked")
     @RequestMapping(method=RequestMethod.POST)
-    public ModelAndView doPost(final HttpServletRequest request) {
-        
+    public ModelAndView doPost(final HttpServletRequest request)
+    {
         /* get model params here */
         String dataset_name = request.getParameter("id");
+        String userCertificate = request.getParameter("usercertificate");
         String [] file_names = request.getParameterValues("child_id");
         String [] file_urls = request.getParameterValues("child_url");
+        String goUserName = request.getParameter("gousername");
+        String target = request.getParameter("target");
+        String endpointInfo = request.getParameter("endpointinfo");
 
         //if this request comes via go form view 3, then obtain the request parameters for myproxy username
-        String myproxyUserName = null;
-        String myproxyUserPass = null;
-        
-        if(request.getParameter("myproxyUserName") != null && request.getParameter("myproxyUserPass") != null) {
-            myproxyUserName = request.getParameter("myproxyUserName");
-            myproxyUserPass= request.getParameter("myproxyUserPass");
+        String srcMyproxyUserName = request.getParameter("srcmyproxyuser");
+        String srcMyproxyUserPass = request.getParameter("srcmyproxypass");
+
+        String destMyproxyUserName = null;
+        String destMyproxyUserPass = null;
+
+        if ((request.getParameter("myproxyUserName") != null) && (request.getParameter("myproxyUserPass") != null))
+        {
+            destMyproxyUserName = request.getParameter("myproxyUserName");
+            destMyproxyUserPass= request.getParameter("myproxyUserPass");
         }
-        
-        
+        LOG.debug("GOFORMView4Controller got Certificate " + userCertificate);
+        LOG.debug("GOFORMView4Controller got Target " + target);
+        LOG.debug("GOFORMView4Controller got endpointInfo " + endpointInfo);
+        LOG.debug("GOFORMView4Controller got Src Myproxy User " + srcMyproxyUserName);
+        LOG.debug("GOFORMView4Controller got Src Myproxy Pass ******");
+        LOG.debug("GOFORMView4Controller got Dest Myproxy User " + destMyproxyUserName);
+        LOG.debug("GOFORMView4Controller got Dest Myproxy Pass ******");
+
         Map<String,Object> model = new HashMap<String,Object>();
 
-        if (request.getParameter(GOFORMVIEW_MODEL)!=null) {
-            System.out.println("NOT NULL");
-        }
-        else {
-            System.out.println("GO FORM VIEW 4");
-            model.put(GOFORMVIEW_FILE_URLS, file_urls);
-            model.put(GOFORMVIEW_FILE_NAMES, file_names);
-            model.put(GOFORMVIEW_DATASET_NAME, dataset_name);
+        JGOTransfer transfer = new JGOTransfer(goUserName, userCertificate, userCertificate, CA_CERTIFICATE_FILE);
+        transfer.setVerbose(true); // FIXME: For debugging
+        try
+        {
+            transfer.initialize();
 
-            String error = isErrorInGORequest();
+            // first activate the source endpoint (WE NEED TO DETERMINE WHAT THIS IS FIRST)
+            LOG.debug("Activating source endpoint esg#anl");
+            transfer.activateEndpoint("esg#anl", srcMyproxyUserName, srcMyproxyUserPass);
+
+            // second, activate the target endpoint
+            String[] endpointPieces = endpointInfo.split(":");
+            LOG.debug("Activating destination endpoint " + endpointPieces[0]);
+            transfer.activateEndpoint(endpointPieces[0], destMyproxyUserName, destMyproxyUserPass);
+
+            // transform all URLs here
+
+
+            // kick off the transfer here!
+
+            if (request.getParameter(GOFORMVIEW_MODEL)!=null) {
+                System.out.println("NOT NULL");
+            }
+            else
+            {
+                String error = isErrorInGORequest();
+                //model.put(GOFORMVIEW_ERROR, error);
+            }
+        }
+        catch(Exception e)
+        {
+            
+            String error = e.toString();
             model.put(GOFORMVIEW_ERROR, error);
+            LOG.error("Failed to initialize Globus Online: " + e);
         }
-
         return new ModelAndView("goformview4", model);
-        
     }
     
     

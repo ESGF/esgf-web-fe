@@ -90,10 +90,13 @@ public class GOFormView3Controller {
     private final static String GOFORMVIEW_FILE_URLS = "GoFormView_File_Urls";
     private final static String GOFORMVIEW_FILE_NAMES = "GoFormView_File_Names";
     private final static String GOFORMVIEW_ERROR = "GoFormView_Error";
-    private final static String GOFORMVIEW_ENDPOINTINFOS = "GoFormView_EndpointInfos";
-    private final static String GOFORMVIEW_DEST_ENDPOINT = "GoFormView_DestEndpoint";
     private final static String GOFORMVIEW_DEST_TARGET_PATH = "GoFormView_DestTargetPath";
-   
+    private final static String GOFORMVIEW_DEST_ENDPOINT_INFO = "GoFormView_DestEndpointInfo";
+    private final static String GOFORMVIEW_USER_CERTIFICATE = "GoFormView_UserCertificate";
+    private final static String GOFORMVIEW_GO_USERNAME = "GoFormView_GOUsername";
+    private final static String GOFORMVIEW_SRC_MYPROXY_USER = "GoFormView_SrcMyproxyUser";
+    private final static String GOFORMVIEW_SRC_MYPROXY_PASS = "GoFormView_SrcMyproxyPass";
+
     public GOFormView3Controller() {
     }
 
@@ -102,19 +105,41 @@ public class GOFormView3Controller {
     {
         /* get model params here */
         String dataset_name = request.getParameter("id");
+        String userCertificate = request.getParameter("usercertificate");
         String[] file_names = request.getParameterValues("child_id");
         String[] file_urls = request.getParameterValues("child_url");
         String[] endpointInfos = request.getParameterValues("endpointinfos");
 
         /* get endpoint info here */
+        String goUserName = request.getParameter("gousername");
         String endpoint = request.getParameter("endpointdropdown");
         String target = request.getParameter("target");
+        String myProxyUserName = request.getParameter("srcmyproxyuser");
+        String myProxyUserPass = request.getParameter("srcmyproxypass");
 
+        LOG.debug("GOFormView3Controller: Got GO Username " + goUserName);
+        LOG.debug("GOFormView3Controller: Got User Certificate " + userCertificate);
         LOG.debug("GOFormView3Controller: Got selected endpoint " + endpoint);
         LOG.debug("GOFormView3Controller: Got selected target " + target);
         LOG.debug("GOFormView3Controller: Got endpointInfos " + endpointInfos);
+        LOG.debug("GOFormView3Controller: Source MyProxy User  " + myProxyUserName);
+        LOG.debug("GOFormView3Controller: Source MyProxy Pass *****");
 
         Map<String,Object> model = new HashMap<String,Object>();
+
+        // find the endpointInfo line that matches the endpoint the user selected
+        int len = endpointInfos.length;
+        String endpointInfo = null;
+        String searchEndpoint = endpoint + ":";
+        for(int i = 0; i < len; i++)
+        {
+            if (endpointInfos[i].startsWith(searchEndpoint))
+            {
+                endpointInfo = endpointInfos[i];
+                break;
+            }
+        }
+        LOG.debug("User selected endpoint that has the info: " + endpointInfo);
 
         if (request.getParameter(GOFORMVIEW_MODEL)!=null) {
             //shouldn't ever come here
@@ -124,11 +149,13 @@ public class GOFormView3Controller {
         else {
             model.put(GOFORMVIEW_FILE_URLS, file_urls);
             model.put(GOFORMVIEW_FILE_NAMES, file_names);
+            model.put(GOFORMVIEW_USER_CERTIFICATE, userCertificate);
             model.put(GOFORMVIEW_DATASET_NAME, dataset_name);
-            model.put(GOFORMVIEW_DEST_ENDPOINT, endpoint);
             model.put(GOFORMVIEW_DEST_TARGET_PATH, target);
-            model.put(GOFORMVIEW_ENDPOINTINFOS, endpointInfos);
-
+            model.put(GOFORMVIEW_DEST_ENDPOINT_INFO, endpointInfo);
+            model.put(GOFORMVIEW_GO_USERNAME, goUserName);
+            model.put(GOFORMVIEW_SRC_MYPROXY_USER, myProxyUserName);
+            model.put(GOFORMVIEW_SRC_MYPROXY_PASS, myProxyUserPass);
         }
         
         String error = isErrorInGORequest();

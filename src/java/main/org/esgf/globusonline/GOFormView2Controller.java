@@ -105,10 +105,14 @@ public class GOFormView2Controller {
 
     private final static String GOFORMVIEW_MODEL = "GoFormView_model";
     private final static String GOFORMVIEW_DATASET_NAME = "GoFormView_Dataset_Name";
+    private final static String GOFORMVIEW_USER_CERTIFICATE = "GoFormView_UserCertificate";
+    private final static String GOFORMVIEW_GO_USERNAME = "GoFormView_GOUsername";
     private final static String GOFORMVIEW_FILE_URLS = "GoFormView_File_Urls";
     private final static String GOFORMVIEW_FILE_NAMES = "GoFormView_File_Names";
     private final static String GOFORMVIEW_ENDPOINTS = "GoFormView_Endpoints";
     private final static String GOFORMVIEW_ENDPOINTINFOS = "GoFormView_EndpointInfos";
+    private final static String GOFORMVIEW_SRC_MYPROXY_USER = "GoFormView_SrcMyproxyUser";
+    private final static String GOFORMVIEW_SRC_MYPROXY_PASS = "GoFormView_SrcMyproxyPass";
 
     // should be configurable?
     private final static String CA_CERTIFICATE_FILE = "/etc/grid-security/certificates/97552d04.0";
@@ -154,21 +158,34 @@ public class GOFormView2Controller {
         {
             URI myproxyServerURI = this.resolveMyProxyViaOpenID(openId);
             LOG.debug("Got MyProxy URI: " + myproxyServerURI);
-        
-            String myproxyServerStr = myproxyServerURI.getHost() + ":" + myproxyServerURI.getPort();
+
+            String mHost = myproxyServerURI.toString();
+            String mPort = "7512";
+            if (myproxyServerURI.getHost() != null)
+            {
+                mHost = myproxyServerURI.getHost();
+            }
+            if (myproxyServerURI.getPort() != -1)
+            {
+                mPort = new Integer(myproxyServerURI.getPort()).toString();
+            }
+            String myproxyServerStr = mHost + ":" + mPort;
             LOG.debug("Using MyProxy Server: " + myproxyServerStr);
 
             LOG.debug("Initializing Globus Online Transfer object");
             JGOTransfer transfer = new JGOTransfer(goUserName, myproxyServerStr, myProxyUserName, myProxyUserPass, CA_CERTIFICATE_FILE);
+            transfer.setVerbose(true);
             transfer.initialize();
             LOG.debug("Globus Online Transfer object Initialize complete");
+
+            String userCertificateFile = transfer.getUserCertificateFile();
 
             LOG.debug("About to retrieve available endpoints");
             Vector<EndpointInfo> endpoints = transfer.listEndpoints();
             LOG.debug("We pulled down " + endpoints.size() + " endpoints");
 
             if (request.getParameter(GOFORMVIEW_MODEL)!=null) {
-            
+
             }
             else
             {
@@ -176,6 +193,10 @@ public class GOFormView2Controller {
                 model.put(GOFORMVIEW_FILE_URLS, file_urls);
                 model.put(GOFORMVIEW_FILE_NAMES, file_names);
                 model.put(GOFORMVIEW_DATASET_NAME, dataset_name);
+                model.put(GOFORMVIEW_USER_CERTIFICATE, userCertificateFile);
+                model.put(GOFORMVIEW_GO_USERNAME, goUserName);
+                model.put(GOFORMVIEW_SRC_MYPROXY_USER, myProxyUserName);
+                model.put(GOFORMVIEW_SRC_MYPROXY_PASS, myProxyUserPass);
 
                 String[] endPointNames = getDestinationEndpointNames(endpoints);
                 String[] endPointInfos = constructEndpointInfos(endpoints); 
@@ -205,6 +226,9 @@ public class GOFormView2Controller {
 
             YadisResolver resolver = new YadisResolver();
             Set<String> serviceTypes = new HashSet<String>();
+            // service type for P2P OpenIDs
+            serviceTypes.add("esg:myproxy-service");
+            // service type for Gateway OpenIDs
             serviceTypes.add("urn:esg:security:myproxy-service");
 
             YadisResult yadisResult = resolver.discover(openId, 10, new HttpCache(), serviceTypes);

@@ -3,14 +3,40 @@
 <h3 style="" id="form_title">Model Params sent</h3>
 		<hr />
 		<p>
+		Error: ${GoFormView_Error}
+		</p>
+
+<!--
+		<hr />
+		<p>
 		DatasetName: ${GoFormView_Dataset_Name}
+		</p>
+
+		<hr />
+		<p>
+		GO Username: ${GoFormView_GOUsername}
 		</p>
 		
 		<hr />
 		<p>
-		Error: ${GoFormView_Error}
+		Destination Target Path: ${GoFormView_DestTargetPath}
 		</p>
-		
+
+		<hr />
+		<p>
+		Destination EndpointInfo: ${GoFormView_DestEndpointInfo}
+		</p>
+
+		<hr />
+		<p>
+		Myproxy Username: ${myproxyUserName}
+		</p>
+
+		<hr />
+		<p>
+		Myproxy Password: ${myproxyUserPass}
+		</p>
+
 		<hr />
 		<p>
 		File Names:
@@ -33,4 +59,4 @@
         	
             <c:set var="j" value="${j+1}"/>
        	</c:forEach>
-       	
+-->

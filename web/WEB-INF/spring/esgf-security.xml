@@ -54,9 +54,9 @@
     	                
 	    	<!-- example attributes retrieved by openid exchange - names must match the server aliases... -->
 	    	<security:attribute-exchange>
-	    		<security:openid-attribute name="email" type="http://axschema.org/contact/email" required="true"/>
-	    		<security:openid-attribute name="firstname" type="http://axschema.org/namePerson/first"/>
-	    		<security:openid-attribute name="lastname" type="http://axschema.org/namePerson/last" />
+            	<security:openid-attribute name="email" type="http://openid.net/schema/contact/internet/email" required="true" />
+            	<security:openid-attribute name="first" type="http://openid.net/schema/namePerson/first"/>
+                <security:openid-attribute name="last" type="http://openid.net/schema/namePerson/last" />
 	  		</security:attribute-exchange>
     	                       
     	</security:openid-login>

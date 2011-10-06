@@ -1221,6 +1221,7 @@ public class JSONObject {
      *
      * @return An iterator of the keys.
      */
+    @SuppressWarnings("unchecked")
     public Iterator sortedKeys() {
       return new TreeSet(this.map.keySet()).iterator();
     }

@@ -1,6 +1,7 @@
 
     
 $(function(){
+	
     	function addTextToStorage(fq,val) {
     		
     		if(fq == undefined) {
@@ -61,7 +62,7 @@ $(function(){
     			//call the add text to storage methods to make it part of the fq string
     			addTextToStorage(fq,searchStr);
     		}
-      	  	location.href=window.location+'/live';
+      	  	location.href=window.location+'live';
     	});
     	
     	

@@ -106,6 +106,9 @@ public class NodeServiceImpl implements NodeService {
             e.printStackTrace();
         } catch (IOException e) {
             LOG.error("Input Source is not Valid, run empty list");
+            liveNodes.add(new NodeStatus("localhost","127.0.0.1"));
+            printNodeList(liveNodes);
+            
             return liveNodes;
 
         }
@@ -130,9 +133,17 @@ public class NodeServiceImpl implements NodeService {
             else
                 name = hostname.getNodeValue();
 
-            liveNodes.add(new NodeStatus(name, ip));
+            //liveNodes.add(new NodeStatus(name, ip));
 
         }
+        
+        
+        liveNodes.add(new NodeStatus("localhost","127.0.0.1"));
+        printNodeList(liveNodes);
+        LOG.debug("\n\n\n\n\n\n");
+        System.out.println(liveNodes.get(0).getNodeIp());
+        LOG.debug("\n\n\n\n\n\n");
+        
         return liveNodes;
     }
 

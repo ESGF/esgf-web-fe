@@ -357,7 +357,63 @@ public class FileDownloadTemplateController {
     
     private String convertTemplateFormatV1(HttpServletRequest request, HttpServletResponse response) throws JSONException {
 
+        queryString = "qt=/distrib&" + queryString;
         
+        String [] names = request.getParameterValues("id[]");
+        
+        String id = "";
+        String xmlOutput = "";
+        
+        SAXBuilder builder = new SAXBuilder();
+        Document document = null;
+        
+        String jsonContent = null;
+        
+        document = new Document(new Element("response"));
+        if(names != null) {
+            //traverse all the dataset ids given by the array
+            for(int i=0;i<names.length;i++) {
+                id = names[i];
+                String marker = "\"response\":";
+                String responseRawString = getResponseBody(id);
+                int start = responseRawString.lastIndexOf(marker) + marker.length();
+                int end = responseRawString.length();
+                String extractedString = responseRawString.substring(start,end);
+                JSONObject responseBody = new JSONObject(extractedString);
+                JSONArray docsJSON = responseBody.getJSONArray("docs");
+                
+                try {
+                    JSONObject docJSON = new JSONObject(docsJSON.get(0).toString());
+                    //create <doc> element
+                    Element docEl = new Element("doc");
+                    //create doc/dataset_id element
+                    Element dataset_idEl = new Element("dataset_id");
+                    dataset_idEl.addContent(id);
+                    docEl.addContent(dataset_idEl);
+                    
+                    //insert initial file here
+                    //this is to combat the array vs json object problem
+                    Element fileEl = createInitialFileElement(docJSON);
+                    docEl.addContent(fileEl);
+                    
+                    for(int j=0;j<docsJSON.length();j++) {
+                        docJSON = new JSONObject(docsJSON.get(j).toString());
+                        fileEl = createFileElement(docJSON);
+                        docEl.addContent(fileEl);
+                    }
+                    document.getRootElement().addContent(docEl);
+                    
+                    XMLOutputter outputter = new XMLOutputter();
+                    xmlOutput = outputter.outputString(document.getRootElement());
+                    JSONObject returnJSON = XML.toJSONObject(xmlOutput);
+                    
+                    jsonContent = returnJSON.toString();
+                } catch(Exception e) {
+                    LOG.debug("\nJSON Error in converting template format \n");
+                }
+            }
+        }
+        /*
         String [] shards = request.getParameterValues("shards[]");
        
         //attach active shards to the query string to be sent to solr
@@ -426,13 +482,8 @@ public class FileDownloadTemplateController {
 
             }
         }
-
-
-        /*
-        System.out.println("\n\n\n\n");
-        System.out.println("jsonContent: " + jsonContent);
-        System.out.println("\n\n\n\n");
         */
+
         return jsonContent;
         
     }

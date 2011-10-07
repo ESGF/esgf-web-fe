@@ -113,6 +113,13 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   
       appendDistributedRequestHandler: function () {
 
+    	  
+    	  if(ESGF.setting.searchType == 'Distributed') {
+    		  Manager.store.addByValue('qt','/distrib');
+    	  } else {
+    		  Manager.store.removeByValue('qt','/distrib');
+    	  }
+    	 /*
     	 var shardsString = ''; 
     	  
          for(var i=0;i<ESGF.search.shards.length;i++) {
@@ -130,7 +137,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
       	 } else {
        		Manager.store.removeByValue('shards',shardsString);
       	 }
-      	
+      	 */
       },
       
       /**

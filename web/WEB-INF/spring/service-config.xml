@@ -17,7 +17,7 @@
      <bean id="esgfProperties" class="esg.common.util.ESGFProperties" />
 
     <bean id="nodeStatus" class="org.esgf.service.NodeServiceImpl">
-        <constructor-arg value="http://localhost/esgf-node-manager/registration.xml" />
+        <constructor-arg value="http://localhost/registration.xml" />
     </bean>
     
 </beans>

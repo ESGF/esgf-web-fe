@@ -57,7 +57,7 @@
  */
 
 $(document).ready( function() {
-
+	
 	/**
      * Event for tab selection (as of now, toggling between "Results" and "Datacart")
      */
@@ -172,6 +172,7 @@ $(document).ready( function() {
      */
     function createTemplateV1(arr) {
 
+    	
 		var query_arr = new Array();
         //create a query string of just the dataset ids
     	for(var i=0;i<arr.length;i++) {
@@ -179,10 +180,44 @@ $(document).ready( function() {
     	}
         
     	var file_download_template_url = ESGF.search.fileDownloadTemplateProxyUrl;
-        
+
     	//Not sure if we need the search type at this point, but I kept it in
-    	//var query = { "id" : query_arr , "version" : ESGF.setting.dataCartVersion};
-    	var query = { "id" : dataset_id , "version" : ESGF.setting.dataCartVersion, "shards" : ESGF.search.shards };
+    	var query = { "id" : query_arr , "version" : ESGF.setting.dataCartVersion};
+    	//var query = { "id" : dataset_id , "version" : ESGF.setting.dataCartVersion, "shards" : ESGF.search.shards };
+    	
+    	//only make the ajax call when there has been something added to the data cart
+    	if(query_arr.length != 0) {
+    		//show status spinning wheel
+    		addDataCartSpinWheel();
+    		$.ajax({
+        		url: ESGF.search.fileDownloadTemplateProxyUrl,
+        		global: false,
+        		type: "GET",
+        		data: query,
+        		dataType: 'json',
+        		success: function(data) {
+        			$('#waitWarn').remove();
+        			$('#spinner').remove();
+        			//remove the status spinning wheel
+        			removeDataCartSpinWheel();
+        	    	
+        			//show the contents of the data cart
+        			showFileContentsV1(data);
+        		},
+    			error: function() {
+    				$('#waitWarn').remove();
+    				$('#spinner').remove();
+    				alert('There is a problem with one of your dataset selections.  Please contact your administrator.');
+        			
+                	//change from remove from cart to add to cart for all selected datasets
+        			for(var i=0;i<query_arr.length;i++) {
+                    	$('a#ai_select_'+ query_arr[i].replace(/\./g, "_")).html('Add To Cart');
+        			}
+    			}
+        		
+        	});
+    	}
+    	/*
     	LOG.debug("---Template V1---");
 
     	//create an array of dataset id strings that have been selected for download
@@ -191,7 +226,8 @@ $(document).ready( function() {
     	LOG.debug("-datasetID " + query_arr);
     	LOG.debug("-version " + ESGF.setting.dataCartVersion);
     	LOG.debug("-shards " + ESGF.search.shards);
-    	
+
+    	alert('query_arr: ' + query_arr);
     	//create an array consisting of ip addresses of the active shards
     	var shardsArr = createShardsArr();
     	
@@ -232,17 +268,11 @@ $(document).ready( function() {
                     	$('a#ai_select_'+ query_arr[i].replace(/\./g, "_")).html('Add To Cart');
         			}
     			}
-        		/*
-        		//if there is a node down that hasn't been detected
-        		//in that case the user should be directed to refresh the page
-        		error: function() {
-        			alert('There was an error in downloading your datasets.  Please refresh the page and try your search again');
-        			//remove the status spinning wheel
-        			removeDataCartSpinWheel();
-        		}
-        		*/
+        		
         	});
+        
     	}
+    	*/
 	}
     
 

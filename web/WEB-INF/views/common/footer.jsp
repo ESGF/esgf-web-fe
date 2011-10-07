@@ -1,13 +1,21 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
-<%@ include file="/WEB-INF/views/search/script_search.jsp" %>
 
+  
+<div class="span-24 last" style="background: #ffffff;">
+	<div class="span-2"></div>
+	<div id="disclaimer" class="span-20" style="text-align:center"> 
+	</div>
+	<div class="span-2 last" ></div>
+</div>
+
+<!--  
 <div class="span-24 info last" >
 	<div class="span-2"></div>
 	<div id="disclaimer" class="span-20" style="text-align:center">
 	</div>	
 	<div class="span-2 last" ></div>
 </div>
-
+-->
 
 <div class="span-24 last footer">
 

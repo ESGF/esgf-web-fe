@@ -79,8 +79,3 @@ function checkAccountsviewURL(openid)
 }
 </script>		
 
-
-
-		    
-=======
->>>>>>> Login/Logout will trigger an emptying of the localStorage parameters (right now, distributed search and search constraints).  This is to ensure that users finished or begin a session with a clean slate of constraints.

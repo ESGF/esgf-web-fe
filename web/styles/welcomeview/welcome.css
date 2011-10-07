@@ -4,7 +4,7 @@
 	/* margin-left:13px; */
 	/* background:url(../images/info_bg.jpg) top left repeat-x; */
 	background: #ffffff;
-	min-height:500px;
+	min-height:250px;
 }
 
 /* headers for each of the 3 columns of the home page */
@@ -55,9 +55,11 @@
 
 
 /* infocontent styling */
+
+
 .infocontent {
 	float:left;
-	height:374px;
+	/* height:374px; */
 }
 .infocontenttop {
 	float:left;
@@ -74,7 +76,6 @@
 	color:#838943;
 }
 .infocontent ul {
-	/* margin:0px 0px 20px 35px; */
 }
 
 .infocontent li {
@@ -89,6 +90,8 @@
 	margin-top:10px;	
 }
 
+
+
 .infoinner2 {
 	padding-top:20px;
 	padding-left:20px;
@@ -98,13 +101,14 @@
 	padding-top:20px;
 	padding-left:13px;
 }
-
+/**/
 
 /* rightmost part of info page */
+	/* height: 110px; */
+	/*
 .projectitem {
 	float: left;
 	width: 281px;	
-	/* height: 110px; */
 	margin-left:10px;
 	margin-top:10px;
 }
@@ -143,3 +147,13 @@
 	font-weight:normal;	
 	line-height:19px;	
 }
+*/
+
+
+
+
+
+.browsersLink {
+	background: #ffffff;
+}
+

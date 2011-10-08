@@ -112,32 +112,16 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
       },
   
       appendDistributedRequestHandler: function () {
-
     	  
-    	  if(ESGF.setting.searchType == 'Distributed') {
-    		  Manager.store.addByValue('qt','/distrib');
-    	  } else {
-    		  Manager.store.removeByValue('qt','/distrib');
-    	  }
-    	 /*
-    	 var shardsString = ''; 
+    	  var self = this;
     	  
-         for(var i=0;i<ESGF.search.shards.length;i++) {
-        	 var shards = ESGF.search.shards[i];
-    		 shardsString = shardsString + shards['nodeIp'] + ':8983/solr';
-        	 if(i != ESGF.search.shards.length-1) {
-            	 shardsString = shardsString + ',';
-        	 }
-         }
-         
-         //if(ESGF.setting.searchType == 'Distributed') {
-
- 		 if(localStorage['distrib'] == 'distributed') {
-       		Manager.store.addByValue('shards',shardsString);
-      	 } else {
-       		Manager.store.removeByValue('shards',shardsString);
-      	 }
-      	 */
+    	  /*
+    	  self.getShardsFromSolrConfig();
+    	  */
+    	 
+    	  self.getShardsFromService();
+    	  
+      	 
       },
       
       /**
@@ -206,7 +190,34 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
     				}
     			}
     		return flag;
-    }
+    },
   	
-      
+    
+  	getShardsFromService: function () {
+  		var shardsString = ''; 
+  	  
+        for(var i=0;i<ESGF.search.shards.length;i++) {
+       	 var shards = ESGF.search.shards[i];
+   		 shardsString = shardsString + shards['nodeIp'] + ':8983/solr';
+       	 if(i != ESGF.search.shards.length-1) {
+           	 shardsString = shardsString + ',';
+       	 }
+        }
+        
+
+		 if(localStorage['distrib'] == 'distributed') {
+      		Manager.store.addByValue('shards',shardsString);
+     	 } else {
+      		Manager.store.removeByValue('shards',shardsString);
+     	 }
+  	},
+  	
+  	getShardsFromSolrConfig: function() {
+  		if(ESGF.setting.searchType == 'Distributed') {
+  			Manager.store.addByValue('qt','/distrib');
+  		} else {
+  			Manager.store.removeByValue('qt','/distrib');
+  		}
+  	}
+  	
 });

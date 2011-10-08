@@ -61,29 +61,13 @@
 /*
 LOG.debug("Make ajax call to get active peers");
 */
-//Getting 406 errors...commenting out for now
-/*
-$.ajax({
-	url: "peer/list",
-	dataType: 'json',
-	async: false,
-	success: function(data) {
-		
-	},
-	error: function() {
-		alert('error');
-	}
-});
-*/
+//Getting 406 errors from inside the lab...need to fix this at some point
 
-
-/*
 $.ajax({
     url: "peer/list",
     dataType: 'json',
     async: false,
     success: function(data) {
-    	alert('data: ' + data);
         ESGF.search.shards = data;
     },
 	error: function() {
@@ -91,7 +75,7 @@ $.ajax({
 	}
 
 });
-*/
+
 
 /*
 

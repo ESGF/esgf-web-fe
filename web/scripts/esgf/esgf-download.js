@@ -172,8 +172,14 @@ $(document).ready( function() {
      */
     function createTemplateV1(arr) {
 
+    	loadCartShardsFromService(arr);
     	
-		var query_arr = new Array();
+    	//loadCartShardsFromSolrConfig(arr);
+    	
+	}
+    
+    function loadCartShardsFromService(arr) {
+    	var query_arr = new Array();
         //create a query string of just the dataset ids
     	for(var i=0;i<arr.length;i++) {
     		query_arr.push(arr[i].doc.id);
@@ -217,7 +223,9 @@ $(document).ready( function() {
         		
         	});
     	}
-    	/*
+    }
+    
+    function loadCartShardsFromSolrConfig(arr) {
     	LOG.debug("---Template V1---");
 
     	//create an array of dataset id strings that have been selected for download
@@ -272,10 +280,8 @@ $(document).ready( function() {
         	});
         
     	}
-    	*/
-	}
+    }
     
-
     function showFileContentsV1(data) {
     	
     	

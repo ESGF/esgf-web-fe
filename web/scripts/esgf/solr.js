@@ -72,6 +72,10 @@
              id: 'distributedSearch'
            }));
          
+         Manager.addWidget(new AjaxSolr.DataCartWidget({
+             id: 'distributedSearch2'
+           }));
+         
          Manager.addWidget(new AjaxSolr.ResultWidget({
               id: 'result',
               target: '#search-results'

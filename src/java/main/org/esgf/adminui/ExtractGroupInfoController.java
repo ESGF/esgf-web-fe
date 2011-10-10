@@ -15,6 +15,7 @@ import org.esgf.commonui.GroupOperationsXMLImpl;
 import org.esgf.commonui.UserOperationsESGFDBImpl;
 import org.esgf.commonui.UserOperationsInterface;
 import org.esgf.commonui.UserOperationsXMLImpl;
+import org.esgf.commonui.Utils;
 import org.esgf.metadata.JSONException;
 import org.esgf.metadata.JSONObject;
 import org.esgf.metadata.XML;
@@ -44,10 +45,14 @@ public class ExtractGroupInfoController {
     
     public ExtractGroupInfoController() throws FileNotFoundException, IOException {
         LOG.debug("IN CreateGroupsController Constructor");
-        goi = new GroupOperationsESGFDBImpl();
-        uoi = new UserOperationsESGFDBImpl();
-        //goi = new GroupOperationsXMLImpl();
-        //uoi = new UserOperationsXMLImpl();
+        if(Utils.environmentSwitch) {
+            goi = new GroupOperationsESGFDBImpl();
+            uoi = new UserOperationsESGFDBImpl();
+        }
+        else {
+            goi = new GroupOperationsXMLImpl();
+            uoi = new UserOperationsXMLImpl();
+        }
     }
     
     /**

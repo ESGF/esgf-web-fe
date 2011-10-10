@@ -51,10 +51,14 @@ public class ExtractUserInfoController {
     
     public ExtractUserInfoController() throws FileNotFoundException, IOException {
         LOG.debug("IN ExtractUserInfoController Constructor");
-        goi = new GroupOperationsESGFDBImpl();
-        uoi = new UserOperationsESGFDBImpl();
-        //goi = new GroupOperationsXMLImpl();
-        //uoi = new UserOperationsXMLImpl();
+        if(Utils.environmentSwitch) {
+            goi = new GroupOperationsESGFDBImpl();
+            uoi = new UserOperationsESGFDBImpl();
+        }
+        else {
+            goi = new GroupOperationsXMLImpl();
+            uoi = new UserOperationsXMLImpl();
+        }
     }
     
     

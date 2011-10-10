@@ -45,7 +45,8 @@
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Metadata.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/FacetSidebar.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Annotator.js" />'> </script>
-
+	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/DistributedSearch.js" />'> </script>
+    
 
     <script type="text/javascript" src='<c:url value="/scripts/esgf/solr.theme.js" />'> </script>
 

@@ -65,12 +65,15 @@
 	
 	    <div id="search-results"> </div>
 	
+	 
 	    <div id="carts"> 
+	    <!-- 
 	    <table style="width:100%;table-layout: fixed">
 	    <tbody id="datasetList">
 	
 	    </tbody>
 	    </table>
+	    -->
 	    </div>
 	</div>
 </div>

@@ -121,8 +121,7 @@ public class FileDownloadTemplateController {
     //the max rows to be returned is best configurable or read from props file
 
     //private final static String filePrefix="q=*%3A*&json.nl=map&fq=type%3AFile&rows=2000&fq=parent_id:";
-    private static String queryString = "q=*:*&json.nl=map&start=0&rows=300&fq=type:File&fq=parent_id:";
-
+   
 
     @RequestMapping(method=RequestMethod.GET)
     public @ResponseBody String doGet(HttpServletRequest request, HttpServletResponse response) throws JSONException {
@@ -130,165 +129,15 @@ public class FileDownloadTemplateController {
         
         String responseStr = "";
         
-        
-        if(request.getParameter("version").equalsIgnoreCase("v1")) {
+        //if(request.getParameter("version").equalsIgnoreCase("v1")) {
             responseStr = convertTemplateFormatV1(request, response);
-        } else {
-            responseStr = convertTemplateFormatV2(request, response);
-        }
+        //} 
         
         
         return responseStr;
         
     }
 
-    /*
-     * For version v2, this method converts xml to json ready format for the front end to use
-     */
-
-    //responsebody looks like this
-    //  <responseHeader>
-    //  </responseHeader>
-    //  <response>
-    //   <doc>
-    //    <id>
-    //    <parent_id>
-    //    <service>
-    //    <title>
-    //    <size>
-    //   </doc>
-    //  </response>
-
-    //----->
-
-    //convert response body to the following format
-    //<doc>
-    //    <file*>
-    //      <file_id></file_id>
-    //      <file_size></file_size>
-    //      <file_url></file_url>
-    //      <services>
-    //        <service></service>
-    //        <service></service>
-    //      </services>
-    //    </file>
-    //<doc>
-
-    private String convertTemplateFormatV2(HttpServletRequest request, HttpServletResponse response) throws JSONException {
-
-        //add the distrib attribute to the query
-        //this will temporarily fix the error associated with viewing files with distributed search
-        queryString = "qt=/distrib&" + queryString;
-        
-        String shards = request.getParameter("shards");
-        
-
-        LOG.debug("\n\n\n\n\n\n");
-        
-        LOG.debug("Shards: " + shards);
-        
-        LOG.debug("\n\n\n\n\n\n");
-        
-        String xmlOutput = "";
-        SAXBuilder builder = new SAXBuilder();
-        Document document = null;
-
-        String jsonContent = null;
-        
-        String dataset_id = request.getParameter("id");
-        
-        String marker = "\"response\":";
-        //String responseRawString = getResponseBody(dataset_id);
-
-        document = new Document(new Element("response"));
-        
-        String responseBody = null;
-
-        HttpClient client = new HttpClient();
-
-        String combinedQueryStr = queryString + dataset_id + "&wt=json";
-
-        
-        GetMethod method = new GetMethod(solrURL);
-        try {
-            method.setQueryString(URIUtil.encodeQuery(combinedQueryStr));
-        } catch (URIException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        
-        method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
-                new DefaultHttpMethodRetryHandler(3, false));
-        try {
-            // execute the method
-            int statusCode = client.executeMethod(method);
-
-            if (statusCode != HttpStatus.SC_OK) {
-                    LOG.error("Method failed: " + method.getStatusLine());
-
-            }
-
-            // read the response
-            responseBody = method.getResponseBodyAsString();
-            //LOG.debug(responseBody);
-        } catch (HTTPException e) {
-            LOG.error("Fatal protocol violation");
-            e.printStackTrace();
-        } catch (IOException e) {
-            LOG.error("Fatal transport error");
-            e.printStackTrace();
-        } finally {
-            method.releaseConnection();
-        }
-        
-        //assemble the json string here
-        int start = responseBody.lastIndexOf(marker) + marker.length();
-        int end = responseBody.length();
-        String extractedString = responseBody.substring(start, end);
-        JSONObject jsonResponse = new JSONObject(extractedString);
-        JSONArray docsJSON = jsonResponse.getJSONArray("docs");
-        
-        try{
-            
-            JSONObject docJSON = new JSONObject(docsJSON.get(0).toString());
-            
-            //  create <doc> element
-            Element docEl = new Element("doc");
-
-            //  create doc/dataset_id element
-            Element dataset_idEl = new Element("dataset_id");
-            dataset_idEl.addContent(dataset_id);
-            docEl.addContent(dataset_idEl);
-            
-            //insert initial file here
-            //this is to combat the array vs. json object problem
-            Element fileEl = createInitialFileElement(docJSON);
-            docEl.addContent(fileEl);
-            
-
-            //  for each file found
-            for(int j=0;j<docsJSON.length();j++) {
-                docJSON = new JSONObject(docsJSON.get(j).toString());
-                fileEl = createFileElement(docJSON);
-                docEl.addContent(fileEl);
-            }
-            
-            document.getRootElement().addContent(docEl);
-            
-            XMLOutputter outputter = new XMLOutputter();
-            xmlOutput = outputter.outputString(document.getRootElement());
-
-            JSONObject returnJSON = XML.toJSONObject(xmlOutput);
-
-            jsonContent = returnJSON.toString();
-            
-        }catch(Exception e) {
-            System.out.println("\n\nerror in retrieve files\n\n");
-        }
-        
-        return jsonContent;
-    }
-    
     
     
     
@@ -341,6 +190,7 @@ public class FileDownloadTemplateController {
     }
 
     private static void appendShardsToQueryString(String [] shards) {
+        /*
         String shardsString = "shards=";
         for(int i=0;i<shards.length;i++) {
             shardsString += shards[i] + ":8983/solr";
@@ -353,11 +203,26 @@ public class FileDownloadTemplateController {
         }
         queryString = shardsString + queryString;
         System.out.println("Query string: " + queryString);
+        */
     }
     
     private String convertTemplateFormatV1(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        String queryString = "q=*:*&json.nl=map&start=0&rows=300&fq=type:File";
 
+        System.out.println("Adding a distrib");
         queryString = "qt=/distrib&" + queryString;
+        
+        
+        
+        String [] fqParams = request.getParameterValues("fq[]");
+        String qParam = request.getParameter("q");
+        
+        for(int i=0;i<fqParams.length;i++) {
+            String fqParam = fqParams[i];
+            queryString += "&fq=" + fqParam;
+            System.out.println("i : " + i + " " + fqParam);
+        }
+        
         
         String [] names = request.getParameterValues("id[]");
         
@@ -368,6 +233,9 @@ public class FileDownloadTemplateController {
         Document document = null;
         
         String jsonContent = null;
+
+        System.out.println("QUERYString: " + queryString + "\n\n\n\n");
+        
         
         document = new Document(new Element("response"));
         if(names != null) {
@@ -375,7 +243,7 @@ public class FileDownloadTemplateController {
             for(int i=0;i<names.length;i++) {
                 id = names[i];
                 String marker = "\"response\":";
-                String responseRawString = getResponseBody(id);
+                String responseRawString = getResponseBody(queryString,id);
                 int start = responseRawString.lastIndexOf(marker) + marker.length();
                 int end = responseRawString.length();
                 String extractedString = responseRawString.substring(start,end);
@@ -548,15 +416,16 @@ public class FileDownloadTemplateController {
      * @param id        Dataset Id
      * @return          Solr response for all files given the dataset id
      */
-    private static String getResponseBody(String id)  {
+    private static String getResponseBody(String queryString,String id)  {
 
         String responseBody = null;
 
         // create an http client
         HttpClient client = new HttpClient();
 
-        String combinedQueryStr = queryString + id + "&wt=json";
+        String combinedQueryStr = queryString + "&fq=parent_id:" + id + "&wt=json";
 
+        System.out.println("CombinedQueryString: " + combinedQueryStr + "\n\n\n\n");
         
         GetMethod method = new GetMethod(solrURL);
 
@@ -643,279 +512,155 @@ public class FileDownloadTemplateController {
 
         return fileEl;
     }
-
-}
-
-
-/* v1 if/else
-if(docsJSON.length() == 1) {
     
-    JSONObject docJSON = new JSONObject(docsJSON.get(0).toString());
-    
-    //  create <doc> element
-    Element docEl = new Element("doc");
+    /*
+     * For version v2, this method converts xml to json ready format for the front end to use
+     */
 
-    //  create doc/dataset_id element
-    Element dataset_idEl = new Element("dataset_id");
-    dataset_idEl.addContent(id);
-    docEl.addContent(dataset_idEl);
-    
-    
-  //insert initial file here
-    //this is to combat the array vs. json object problem
- Element fileEl = createInitialFileElement(docJSON);
- docEl.addContent(fileEl);
+    //responsebody looks like this
+    //  <responseHeader>
+    //  </responseHeader>
+    //  <response>
+    //   <doc>
+    //    <id>
+    //    <parent_id>
+    //    <service>
+    //    <title>
+    //    <size>
+    //   </doc>
+    //  </response>
 
-    
-//  for each file found
- for(int j=0;j<docsJSON.length();j++) {
-     docJSON = new JSONObject(docsJSON.get(j).toString());
-     fileEl = createFileElement(docJSON);
-     docEl.addContent(fileEl);
- }
-    
-    
- document.getRootElement().addContent(docEl);
-    
- XMLOutputter outputter = new XMLOutputter();
- xmlOutput = outputter.outputString(document.getRootElement());
+    //----->
 
- JSONObject returnJSON = XML.toJSONObject(xmlOutput);
+    //convert response body to the following format
+    //<doc>
+    //    <file*>
+    //      <file_id></file_id>
+    //      <file_size></file_size>
+    //      <file_url></file_url>
+    //      <services>
+    //        <service></service>
+    //        <service></service>
+    //      </services>
+    //    </file>
+    //<doc>
 
- jsonContent = returnJSON.toString();
+    private String convertTemplateFormatV2(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        String queryString = "q=*:*&json.nl=map&start=0&rows=300&fq=type:File";
 
- LOG.debug("json: \n" + returnJSON.toString());
- //assemble the json string by hand
-    
- //return null;
-}
-else {
-    
+        //add the distrib attribute to the query
+        //this will temporarily fix the error associated with viewing files with distributed search
+        queryString = "qt=/distrib&" + queryString;
+        
+        String shards = request.getParameter("shards");
+        
 
-    
-    JSONObject docJSON = new JSONObject(docsJSON.get(0).toString());
-    
-    //  create <doc> element
-        Element docEl = new Element("doc");
+        LOG.debug("\n\n\n\n\n\n");
+        
+        LOG.debug("Shards: " + shards);
+        
+        LOG.debug("\n\n\n\n\n\n");
+        
+        String xmlOutput = "";
+        SAXBuilder builder = new SAXBuilder();
+        Document document = null;
 
-    //  create doc/dataset_id element
-        Element dataset_idEl = new Element("dataset_id");
-        dataset_idEl.addContent(id);
-        docEl.addContent(dataset_idEl);
+        String jsonContent = null;
+        
+        String dataset_id = request.getParameter("id");
+        
+        String marker = "\"response\":";
+        //String responseRawString = getResponseBody(dataset_id);
 
-        LOG.debug("\n\n\nHEREn\n\n");
-        Element fileEl = createInitialFileElement(docJSON);
-        docEl.addContent(fileEl);
+        document = new Document(new Element("response"));
+        
+        String responseBody = null;
 
-    
-    
-    
-    
-    
+        HttpClient client = new HttpClient();
 
+        String combinedQueryStr = queryString + dataset_id + "&wt=json";
 
-//  for each file found
-    for(int j=0;j<docsJSON.length();j++) {
-        LOG.debug("j: " + j);
-        docJSON = new JSONObject(docsJSON.get(j).toString());
-        fileEl = createFileElement(docJSON);
-        docEl.addContent(fileEl);
-    
-    }
+        
+        GetMethod method = new GetMethod(solrURL);
+        try {
+            method.setQueryString(URIUtil.encodeQuery(combinedQueryStr));
+        } catch (URIException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        
+        method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
+                new DefaultHttpMethodRetryHandler(3, false));
+        try {
+            // execute the method
+            int statusCode = client.executeMethod(method);
 
-    
-    
+            if (statusCode != HttpStatus.SC_OK) {
+                    LOG.error("Method failed: " + method.getStatusLine());
 
+            }
 
-    document.getRootElement().addContent(docEl);
-    
-    XMLOutputter outputter = new XMLOutputter();
-    xmlOutput = outputter.outputString(document.getRootElement());
+            // read the response
+            responseBody = method.getResponseBodyAsString();
+            //LOG.debug(responseBody);
+        } catch (HTTPException e) {
+            LOG.error("Fatal protocol violation");
+            e.printStackTrace();
+        } catch (IOException e) {
+            LOG.error("Fatal transport error");
+            e.printStackTrace();
+        } finally {
+            method.releaseConnection();
+        }
+        
+        //assemble the json string here
+        int start = responseBody.lastIndexOf(marker) + marker.length();
+        int end = responseBody.length();
+        String extractedString = responseBody.substring(start, end);
+        JSONObject jsonResponse = new JSONObject(extractedString);
+        JSONArray docsJSON = jsonResponse.getJSONArray("docs");
+        
+        try{
+            
+            JSONObject docJSON = new JSONObject(docsJSON.get(0).toString());
+            
+            //  create <doc> element
+            Element docEl = new Element("doc");
 
-    //LOG.debug("xmlOutput:\n " + xmlOutput);
+            //  create doc/dataset_id element
+            Element dataset_idEl = new Element("dataset_id");
+            dataset_idEl.addContent(dataset_id);
+            docEl.addContent(dataset_idEl);
+            
+            //insert initial file here
+            //this is to combat the array vs. json object problem
+            Element fileEl = createInitialFileElement(docJSON);
+            docEl.addContent(fileEl);
+            
 
+            //  for each file found
+            for(int j=0;j<docsJSON.length();j++) {
+                docJSON = new JSONObject(docsJSON.get(j).toString());
+                fileEl = createFileElement(docJSON);
+                docEl.addContent(fileEl);
+            }
+            
+            document.getRootElement().addContent(docEl);
+            
+            XMLOutputter outputter = new XMLOutputter();
+            xmlOutput = outputter.outputString(document.getRootElement());
 
-    JSONObject returnJSON = XML.toJSONObject(xmlOutput);
+            JSONObject returnJSON = XML.toJSONObject(xmlOutput);
 
-    jsonContent = returnJSON.toString();
-    LOG.debug("json: \n" + returnJSON.toString());
-    
-    //return jo.toString();
-}
-*/
-
-/* v1 single
-// create <file> element
-Element fileEl = new Element("file");
-
-// create file/file_id element
-Element file_idEl = new Element("file_id");
-file_idEl.addContent("nully");
-fileEl.addContent(file_idEl);
-
-// create file/title element
-Element titleEl = new Element("title");
-titleEl.addContent(docJSON.get("title").toString());
-fileEl.addContent(titleEl);
-
-// create file/file_size element
-Element sizeEl = new Element("size");
-sizeEl.addContent(docJSON.get("size").toString());
-fileEl.addContent(sizeEl);
-
-// create file/url element
-Element urlEl = new Element("url");
-JSONArray urlsJSON = docJSON.getJSONArray("url");
-
-urlEl.addContent(urlsJSON.get(0).toString());
-fileEl.addContent(urlEl);
-
-
-// create file/services element
-Element servicesEl = new Element("services");
-
-JSONArray docserviceJSON = docJSON.getJSONArray("service");
-for(int k=0;k<docserviceJSON.length();k++) {
-   Element serviceEl = new Element("service");
-   String serviceStr = docserviceJSON.get(k).toString();
-   String [] serviceTokens = serviceStr.split("|");
-   //serviceEl.addContent(docsJSON.get(i).toString());
-   serviceEl.addContent(serviceTokens[2]);
-   //LOG.debug("service: " + serviceTokens[2]);
-   servicesEl.addContent(serviceEl);
-}
-fileEl.addContent(servicesEl);
-*/
-
-/* v1 multiple
-// create <file> element
-    Element fileEl = new Element("file");
-
-   // create file/file_id element
-   Element file_idEl = new Element("file_id");
-   file_idEl.addContent("nully");
-   fileEl.addContent(file_idEl);
-
-   // create file/title element
-   Element titleEl = new Element("title");
-   titleEl.addContent(docJSON.get("title").toString());
-   fileEl.addContent(titleEl);
-
-   // create file/file_size element
-   Element sizeEl = new Element("size");
-   sizeEl.addContent(docJSON.get("size").toString());
-   fileEl.addContent(sizeEl);
-
-   // create file/url element
-   Element urlEl = new Element("url");
-   JSONArray urlsJSON = docJSON.getJSONArray("url");
-
-   urlEl.addContent(urlsJSON.get(0).toString());
-   fileEl.addContent(urlEl);
-       
-
-   // create file/services element
-   Element servicesEl = new Element("services");
-
-   JSONArray docserviceJSON = docJSON.getJSONArray("service");
-   for(int k=0;k<docserviceJSON.length();k++) {
-       Element serviceEl = new Element("service");
-       String serviceStr = docserviceJSON.get(k).toString();
-       String [] serviceTokens = serviceStr.split("|");
-       //serviceEl.addContent(docsJSON.get(i).toString());
-       serviceEl.addContent(serviceTokens[2]);
-       //LOG.debug("service: " + serviceTokens[2]);
-       servicesEl.addContent(serviceEl);
-   }
-   fileEl.addContent(servicesEl);
-   */
-
-
-
-
-
-/* v2 if/else
-if(docsJSON.length() == 1) {
-
-    System.out.println("\n\n\nONLY ONE");
-    
-    JSONObject docJSON = new JSONObject(docsJSON.get(0).toString());
-    
-    //  create <doc> element
-    Element docEl = new Element("doc");
-
-    //  create doc/dataset_id element
-    Element dataset_idEl = new Element("dataset_id");
-    dataset_idEl.addContent(dataset_id);
-    docEl.addContent(dataset_idEl);
-    
-    
-    //insert initial file here
-    //this is to combat the array vs. json object problem
-    Element fileEl = createInitialFileElement(docJSON);
-    docEl.addContent(fileEl);
-    
-
-//  for each file found
-    for(int j=0;j<docsJSON.length();j++) {
-        docJSON = new JSONObject(docsJSON.get(j).toString());
-        fileEl = createFileElement(docJSON);
-        docEl.addContent(fileEl);
-    
+            jsonContent = returnJSON.toString();
+            
+        }catch(Exception e) {
+            System.out.println("\n\nerror in retrieve files\n\n");
+        }
+        
+        return jsonContent;
     }
     
-
-    document.getRootElement().addContent(docEl);
     
-    XMLOutputter outputter = new XMLOutputter();
-    xmlOutput = outputter.outputString(document.getRootElement());
 
-    JSONObject returnJSON = XML.toJSONObject(xmlOutput);
-
-    jsonContent = returnJSON.toString();
-    
-} else {
-
-    
-    
-    JSONObject docJSON = new JSONObject(docsJSON.get(0).toString());
-    
-    //  create <doc> element
-        Element docEl = new Element("doc");
-
-    //  create doc/dataset_id element
-        Element dataset_idEl = new Element("dataset_id");
-        dataset_idEl.addContent(dataset_id);
-        docEl.addContent(dataset_idEl);
-    
-    
-    
-    //insert initial file here
-    //this is to combat the array vs. json object problem
-    Element fileEl = createInitialFileElement(docJSON);
-    docEl.addContent(fileEl);
-       
-       
-    //  for each file found
-    for(int j=0;j<docsJSON.length();j++) {
-        docJSON = new JSONObject(docsJSON.get(j).toString());
-        fileEl = createFileElement(docJSON);
-        docEl.addContent(fileEl);
-    
-    }
-
-    document.getRootElement().addContent(docEl);
-
-    XMLOutputter outputter = new XMLOutputter();
-    xmlOutput = outputter.outputString(document.getRootElement());
-
-    //LOG.debug("xmlOutput:\n " + xmlOutput);
-
-
-    JSONObject returnJSON = XML.toJSONObject(xmlOutput);
-
-    jsonContent = returnJSON.toString();
-    
-    
 }
-*/

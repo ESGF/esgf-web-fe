@@ -67,18 +67,17 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   /** @lends AjaxSolr.Manager.prototype */
   {
       executeRequest: function (servlet) {
+    	  
+    	  
           var self = this;
           
           //loads everything in the html5 'fq' store
           self.loadExistingQueries();
           
+          //check to see if a distributed search is needed
           self.appendDistributedRequestHandler();
           
           if (this.proxyUrl) {
-          // jQuery.post(this.proxyUrl, 
-          // { query: "I am something" }, 
-          // function (data) { self.handleResponse(data); }, 
-          // 'json');
 	          jQuery.ajax({
 	              url: this.proxyUrl,
 	              data: this.store.string(),
@@ -96,6 +95,8 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 	            	  //reset the localStorage to querying over the dataset type
 	            	  localStorage['fq'] = 'type:Dataset' + ';';
 	            	  
+	            	  localStorage['distrib'] == 'local';
+	            		  
 	            	  //reload the page
 	            	  window.location.reload();
 	            	  
@@ -111,16 +112,16 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
       },
   
       appendDistributedRequestHandler: function () {
-
-    	 //alert('searchtype: ' + ESGF.setting.searchType + ' localStorage: ' + localStorage['fq']);
-      	 //alert('IN Manager appendDistribubtedRequestHandler...ESGF.setting.searchType: ' + ESGF.setting.searchType);
-      	 if(ESGF.setting.searchType == 'Distributed') {
-      		Manager.store.addByValue('qt','/distrib');
-      	 }
-      	 else {
-      		Manager.store.removeByValue('qt','/distrib');
-      	 }
-      	
+    	  
+    	  var self = this;
+    	  
+    	  /*
+    	  self.getShardsFromSolrConfig();
+    	  */
+    	 
+    	  self.getShardsFromService();
+    	  
+      	 
       },
       
       /**
@@ -144,12 +145,12 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   	   	
         if(fq == null) {
       	  	fq = 'type:Dataset' + ';';
-      	  
       	  	localStorage['fq'] = fq;
-  	  	} 
-        if(fq == undefined) {
+  	  	} else if(fq == undefined) {
         	fq = 'type:Dataset' + ';';
-        	  
+      	  	localStorage['fq'] = fq;
+        } else if(fq = '') {
+        	fq = 'type:Dataset' + ';';
       	  	localStorage['fq'] = fq;
         }
         
@@ -189,7 +190,34 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
     				}
     			}
     		return flag;
-    }
+    },
   	
-      
+    
+  	getShardsFromService: function () {
+  		var shardsString = ''; 
+  	  
+        for(var i=0;i<ESGF.search.shards.length;i++) {
+       	 var shards = ESGF.search.shards[i];
+   		 shardsString = shardsString + shards['nodeIp'] + ':8983/solr';
+       	 if(i != ESGF.search.shards.length-1) {
+           	 shardsString = shardsString + ',';
+       	 }
+        }
+        
+
+		 if(localStorage['distrib'] == 'distributed') {
+      		Manager.store.addByValue('shards',shardsString);
+     	 } else {
+      		Manager.store.removeByValue('shards',shardsString);
+     	 }
+  	},
+  	
+  	getShardsFromSolrConfig: function() {
+  		if(ESGF.setting.searchType == 'Distributed') {
+  			Manager.store.addByValue('qt','/distrib');
+  		} else {
+  			Manager.store.removeByValue('qt','/distrib');
+  		}
+  	}
+  	
 });

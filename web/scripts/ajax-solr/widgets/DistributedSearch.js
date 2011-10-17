@@ -51,18 +51,74 @@
  ******************************************************************************/
 
 /**
+ * Experimental Solr Front for ESG
  *
- * handle search, new file, meant to be place holder of all search script.
+ * fwang2@ornl.gov
+ * harneyjf@ornl.gov
  */
 
 
-$.ajax({
-        url: "setting/queryAnnotate",
-        aync: false,
-        dataType: 'json',
-        success: function(data) {
-            ESGF.setting["annotate"] = data;
-            LOG.debug("annotate:" + data);
-        }
- });
+(function ($) {
 
+AjaxSolr.DistributedSearchWidget = AjaxSolr.AbstractWidget.extend({
+	
+	init: function() {
+		//alert('distributed search init');
+	},
+	
+	beforeRequest: function () {
+		//alert('distributed search beforeRequest');
+	},
+	
+	afterRequest: function () {
+		var self = this;
+    
+		//alert('distributed search afterRequest');
+		
+		//if the distrib localstorage has not been defined
+    	//define it as local here
+    	if(localStorage['distrib'] == undefined) {
+    		localStorage['distrib'] = 'local';
+    	} else if(localStorage['distrib'] == null) {
+    		localStorage['distrib'] = 'local';
+    	} else if(localStorage['distrib'] == '') {
+    		localStorage['distrib'] = 'local';
+    	}
+		
+		if(localStorage['distrib'] == 'local') {
+    		$('input#distribbutton').val('Turn on Distributed Search');
+    	} else {
+    		$('input#distribbutton').val('Turn off Distributed Search');
+    	}
+		
+		
+		
+		$('input#distribbutton').live('click',function () {
+        	
+	        //alert('distrib button click');
+        	//alert($('a#distributed').html());
+        	//if($('a#distributed').html() == 'Turn off Distributed Search') {
+        	if(localStorage['distrib'] == 'local') {
+        		//change the text to Distributed
+            	$('input#distribbutton').val('Turn off Distributed Search');
+            	//change the flag to Distributed
+            	ESGF.setting.searchType = 'Distributed';
+            	localStorage['distrib'] = 'distributed';
+            	Manager.doRequest(0);
+        	} else {
+        		//change the text to Local
+            	$('input#distribbutton').val('Turn on Distributed Search');
+            	//change the flag to Local
+            	ESGF.setting.searchType = 'local';
+            	localStorage['distrib'] = 'local';
+            	Manager.doRequest(0);
+        	}
+        	
+        	
+        });  
+		
+	}
+
+});
+
+}(jQuery));

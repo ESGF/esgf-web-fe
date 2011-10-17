@@ -29,6 +29,8 @@ public class Utils {
     
     private final static Logger LOG = Logger.getLogger(Utils.class);
     
+    public final static boolean environmentSwitch = false;
+    
     public static String getPassword(File file) {
         String passwd = null;
         

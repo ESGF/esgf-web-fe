@@ -110,8 +110,27 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     //output += '<span class="actionitem ai_meta"><a href="http://www.forbes.com/2009/02/11/cancer-cure-experimental-lifestyle-health_0212cancer.html" class="met" rel="#metadata_overlay"' + allStr + '> Metadata Summary</a></span>';
 
     selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
-   // alert('selectID: ' + selectID);
-    output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Add To Cart</a></span>';
+    
+    if(ESGF.localStorage.search('dataCart',doc.id)) {
+    	output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Remove From Cart</a></span>';
+    } else {
+    	output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Add To Cart</a></span>';
+    }
+    
+    /*
+    
+   if(localStorage['dataCart'] != undefined) {
+	   if(localStorage['dataCart'].search(doc.id) == -1) {
+		   output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Add To Cart</a></span>';
+	   } else {
+		   
+		   output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Remove From Cart</a></span>';
+	   }
+   } else {
+	   output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Add To Cart</a></span>';
+   }
+   	*/
+   
 
     if (typeof doc.service != "undefined") {
         LOG.debug("LAS service tag detected");
@@ -131,12 +150,24 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     	
         var metadataFormat = doc.metadata_format;
 
+        
         //right now, we only support downloads through TDS
         //when we support others, this if guard will be removed
         if(metadataFormat === 'THREDDS') {
 
             selected[evt.data.doc.id] = doc;
             if ( jQuery.trim(this.innerHTML) == "Add To Cart") {
+            	ESGF.localStorage.put('dataCart',evt.data.doc.id,evt.data.doc.id);
+            	/*
+            	//add to super cookie
+            	if(localStorage['dataCart'] != undefined) {
+                	localStorage['dataCart'] = localStorage['dataCart'] + evt.data.doc.id + ';';
+            	} else {
+                	localStorage['dataCart'] = evt.data.doc.id + ';';
+            	}
+            	
+            	alert('localStorage: ' + localStorage['dataCart']);
+            	*/
             	/*
                 var $dialog = $('<div></div>')
                     .html('Dataset <b>' + evt.data.doc.id + "</b> has been added to the selection")
@@ -150,6 +181,17 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                 this.innerHTML="Remove From Cart";
 
             } else {
+            	ESGF.localStorage.remove('dataCart',evt.data.doc.id);
+            	//remove from super cookie
+            	/*
+            	if(localStorage['dataCart'] != undefined || localStorage['dataCart'] != null) {
+            		var dataCart = localStorage['dataCart'].replace((evt.data.doc.id+';'),"");
+              	  	localStorage['dataCart'] = dataCart;
+            	} else {
+            		alert('should never come here');
+            	}
+            	alert('localStorage: ' + localStorage['dataCart']);
+            	*/
             	/*
                 var $dialog = $('<div></div>')
                 .html('Dataset <b>' + evt.data.doc.id + "</b> has been removed to the selection")

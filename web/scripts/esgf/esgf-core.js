@@ -84,7 +84,7 @@ var esgf_core    = ESGF.namespace("ESGF.core");
 var esgf_search  = ESGF.namespace("ESGF.search");
 var esgf_setting = ESGF.namespace("ESGF.setting");
 var esgf_util    = ESGF.namespace("ESGF.util");
-
+var esgf_localStorage = ESGF.namespace("ESGF.localStorage");
 
 //define common logging
 
@@ -144,3 +144,8 @@ ESGF.util.toArray = function (obj) {
     }
     return arr;
 };
+
+
+
+
+

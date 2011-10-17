@@ -16,5 +16,9 @@
      <!-- <util:properties id="dbProperties" location="file:///esg/config/esgf-db.properties"/> -->
      <bean id="esgfProperties" class="esg.common.util.ESGFProperties" />
 
+    <bean id="nodeStatus" class="org.esgf.service.NodeServiceImpl">
+        <constructor-arg value="http://localhost/registration.xml" />
+    </bean>
+    
 </beans>
      

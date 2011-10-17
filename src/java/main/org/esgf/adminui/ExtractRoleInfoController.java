@@ -49,11 +49,15 @@ public class ExtractRoleInfoController {
     
     public ExtractRoleInfoController() throws FileNotFoundException, IOException {
         LOG.debug("IN ExtractRoleInfoController Constructor");
-        goi = new GroupOperationsESGFDBImpl();
-        uoi = new UserOperationsESGFDBImpl();
-        roi = new RoleOperationsESGFDBImpl();
-        //goi = new GroupOperationsXMLImpl();
-        //uoi = new UserOperationsXMLImpl();
+        if(Utils.environmentSwitch) {
+            goi = new GroupOperationsESGFDBImpl();
+            uoi = new UserOperationsESGFDBImpl();
+            roi = new RoleOperationsESGFDBImpl();
+        }
+        else {
+            goi = new GroupOperationsXMLImpl();
+            uoi = new UserOperationsXMLImpl();
+        }
     }
     
     

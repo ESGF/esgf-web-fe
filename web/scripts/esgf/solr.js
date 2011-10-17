@@ -68,6 +68,15 @@
                 metadataProxyUrl: '/esgf-web-fe/metadataproxy'
             });
 
+         Manager.addWidget(new AjaxSolr.DistributedSearchWidget({
+             id: 'distributedSearch'
+           }));
+         
+         Manager.addWidget(new AjaxSolr.DataCartWidget({
+             id: 'distributedSearch2',
+             target: '#carts'
+            	 
+           }));
          
          Manager.addWidget(new AjaxSolr.ResultWidget({
               id: 'result',

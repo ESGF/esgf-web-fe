@@ -57,28 +57,8 @@
  */
 
 $(document).ready( function() {
-
-	/**
-     * Event for tab selection (as of now, toggling between "Results" and "Datacart")
-     */
-    $('#myTabs').bind('tabsselect', function(event, ui) {
-        if (ui.index == 1) {
-            $("#datasetList").empty();
-            // selection tab
-            LOG.debug("Selection tab");
-            // convert object to array
-            var arr = ESGF.util.toArray(ESGF.search.selected);
-            //need a function that replaces periods in the name of the dataset (events in jquery cannot access elements that have these)
-            
-            if (arr != null || arr != undefined || arr.length == 0 || arr != '') {
-            	if(ESGF.setting.dataCartVersion == 'v1') {
-            		createTemplateV1(arr);
-            	} else {
-            		createTemplateV2(arr);
-            	}
-            }
-        }
-    });
+	
+	
     
     function createTemplateV2(arr) {
     	
@@ -126,8 +106,9 @@ $(document).ready( function() {
     	        	//$(this.target).html($('<img/>').attr('src', 'images/ajax-loader.gif'));
     	        	
     				
-    		    	var query = { "id" : dataset_id , "version" : ESGF.setting.dataCartVersion};
+    		    	var query = { "id" : dataset_id , "version" : ESGF.setting.dataCartVersion, "shards" : ESGF.search.shards };
     		    	
+    		    	alert('shardssssss: ');
 		    		$.ajax({
 		        		url: file_download_template_url,
 		        		global: false,
@@ -139,7 +120,11 @@ $(document).ready( function() {
 		        			$('#spinner').remove();
 		        			showFileContentsV2(data);
 		        			
-		        		}
+		        		},
+		    			error: function() {
+		    				alert("Error in file retrieval, try revising your datacart selections");
+		    				$('#spinner').remove();
+		    			}
 		        	});
     				
     				
@@ -162,27 +147,36 @@ $(document).ready( function() {
 
     
     
+    /*
+     * Create the template for the datacart
+     */
     function createTemplateV1(arr) {
 
-		var query_arr = new Array();
+    	loadCartShardsFromService(arr);
+    	
+    	//loadCartShardsFromSolrConfig(arr);
+    	
+	}
+    
+    function loadCartShardsFromService(arr) {
+    	var query_arr = new Array();
         //create a query string of just the dataset ids
     	for(var i=0;i<arr.length;i++) {
     		query_arr.push(arr[i].doc.id);
     	}
         
     	var file_download_template_url = ESGF.search.fileDownloadTemplateProxyUrl;
-        
+
     	//Not sure if we need the search type at this point, but I kept it in
     	var query = { "id" : query_arr , "version" : ESGF.setting.dataCartVersion};
+    	//var query = { "id" : dataset_id , "version" : ESGF.setting.dataCartVersion, "shards" : ESGF.search.shards };
     	
-    	
+    	//only make the ajax call when there has been something added to the data cart
     	if(query_arr.length != 0) {
-    		//add a spin wheel to indicate that the system is processing
-        	$('tbody#datasetList').after('<img id="spinner" src="images/ajax-loader.gif" />');
-        	$('tbody#datasetList').after('<p id="waitWarn">Waiting for files...</p>');
-        	
+    		//show status spinning wheel
+    		addDataCartSpinWheel();
     		$.ajax({
-        		url: file_download_template_url,
+        		url: ESGF.search.fileDownloadTemplateProxyUrl,
         		global: false,
         		type: "GET",
         		data: query,
@@ -190,7 +184,10 @@ $(document).ready( function() {
         		success: function(data) {
         			$('#waitWarn').remove();
         			$('#spinner').remove();
+        			//remove the status spinning wheel
+        			removeDataCartSpinWheel();
         	    	
+        			//show the contents of the data cart
         			showFileContentsV1(data);
         		},
     			error: function() {
@@ -203,14 +200,71 @@ $(document).ready( function() {
                     	$('a#ai_select_'+ query_arr[i].replace(/\./g, "_")).html('Add To Cart');
         			}
     			}
+        		
         	});
     	}
-    	
-    	
-	}
+    }
     
+    function loadCartShardsFromSolrConfig(arr) {
+    	LOG.debug("---Template V1---");
 
+    	//create an array of dataset id strings that have been selected for download
+		var query_arr = createQueryArr(arr);
+
+    	LOG.debug("-datasetID " + query_arr);
+    	LOG.debug("-version " + ESGF.setting.dataCartVersion);
+    	LOG.debug("-shards " + ESGF.search.shards);
+
+    	alert('query_arr: ' + query_arr);
+    	//create an array consisting of ip addresses of the active shards
+    	var shardsArr = createShardsArr();
+    	
+    	
+    	//append 3 parameteters to the ajax call
+    	//"id" - array of dataset ids that have been added to data cart
+    	//"version" - version of the type of datacart (NOTE: THIS MAY BE TAKEN OUT)
+    	//"shards" - array of ips that are the active shards in the configuration
+    	var query = { "id" : query_arr , "version" : ESGF.setting.dataCartVersion, "shards" : shardsArr };
+    	
+    	//only make the ajax call when there has been something added to the data cart
+    	if(query_arr.length != 0) {
+    		//show status spinning wheel
+    		addDataCartSpinWheel();
+    		
+        	$.ajax({
+        		url: ESGF.search.fileDownloadTemplateProxyUrl,
+        		global: false,
+        		type: "GET",
+        		data: query,
+        		dataType: 'json',
+        		success: function(data) {
+        			$('#waitWarn').remove();
+        			$('#spinner').remove();
+        			//remove the status spinning wheel
+        			removeDataCartSpinWheel();
+        	    	
+        			//show the contents of the data cart
+        			showFileContentsV1(data);
+        		},
+    			error: function() {
+    				$('#waitWarn').remove();
+    				$('#spinner').remove();
+    				alert('There is a problem with one of your dataset selections.  Please contact your administrator.');
+        			
+                	//change from remove from cart to add to cart for all selected datasets
+        			for(var i=0;i<query_arr.length;i++) {
+                    	$('a#ai_select_'+ query_arr[i].replace(/\./g, "_")).html('Add To Cart');
+        			}
+    			}
+        		
+        	});
+        
+    	}
+    }
+    
     function showFileContentsV1(data) {
+    	
+    	
 		var fileDownloadTemplate = data.response.doc;
 		
 		
@@ -268,13 +322,49 @@ $(document).ready( function() {
             
         });
         
+    	
+    	
 	}
     
+    //dynamically add spinning wheel to the datacart space
+    function addDataCartSpinWheel() {
+    	//add a spin wheel to indicate that the system is processing
+    	$('tbody#datasetList').after('<img id="spinner" src="images/ajax-loader.gif" />');
+    	$('tbody#datasetList').after('<p id="waitWarn">Waiting for files...</p>');
+    	
+    }
+
+    //dynamically remove spinning wheel to the datacart space
+    function removeDataCartSpinWheel() {
+    	$('#waitWarn').remove();
+		$('#spinner').remove();
+    }
+
     
+    //create an array of dataset id strings that have been selected for download
+    function createQueryArr(arr) {
+    	var query_arr = new Array();
+    	for(var i=0;i<arr.length;i++) {
+    		query_arr.push(arr[i].doc.id);
+    	}
+    	return query_arr;
+    }
+    
+    //create an array consisting of ip addresses of the active shards
+	function createShardsArr() {
+    	var shardsArr = new Array();
+    	for(var i=0;i<ESGF.search.shards.length;i++) {
+    		var shards = ESGF.search.shards[i];
+    		shardsArr.push(shards['nodeIp']);
+    	}
+    	return shardsArr;
+    }
+	
+	
     
 	function showFileContentsV2(data) {
 	
-		
+		/*
 		//var files = data.response.doc;
 		
 		var dataset_id = replacePeriod(data.response.doc.dataset_id);
@@ -290,7 +380,7 @@ $(document).ready( function() {
 		
 		//add the content after the dataset title row
 		$('tr#' + dataset_id).after(str);
-		
+		*/
 	}
 
 	
@@ -532,62 +622,97 @@ $(document).ready( function() {
     }
     
     
-});
-
-
-
-/*  Old "Show Cart Contents"...take out when commit is ready
-var fileDownloadTemplate = data.response.doc;
-
-$( "#cartTemplate").tmpl(fileDownloadTemplate, {
-	
-	replacePeriods : function (word) {
-        return replacePeriod(word);
-    },
-    abbreviate : function (word) {
-        var abbreviation = word;
-        if(word.length > 25) {
-            abbreviation = word.slice(0,10) + '...' + word.slice(word.length-11,word.length);
-        }
-        return abbreviation;
-    },
-    addOne: function(num) {
-        return (num+1);
-    },
-    sizeConversion : function(size) {
-        var convSize;
-        if(size == null) {
-            convSize = 'N/A';
-        } else {
-            var sizeFlt = parseFloat(size,10);
-            if(sizeFlt > 1000000000) {
-                var num = 1000000000;
-                convSize = (sizeFlt / num).toFixed(2) + ' GB';
-            } else if (sizeFlt > 1000000) {
-                var num = 1000000;
-                convSize = (sizeFlt / num).toFixed(2) + ' MB';
-            } else {
-                var num = 1000;
-                convSize = (sizeFlt / num).toFixed(2) + ' KB';
+function createTemplateV2(arr) {
+    	
+    	LOG.debug("---Template V2---");
+    	
+    	/*
+    	var fileDownloadTemplate = arr;
+		
+		$( "#addedCartTemplate").tmpl(fileDownloadTemplate, {
+			replacePeriods : function (word) {
+                return replacePeriod(word);
+            },
+            abbreviate : function (word) {
+                return abbreviateWord(word);
+            },
+            addOne: function(num) {
+                return (num+1);
+            },
+            sizeConversion : function(size) {
+                return sizeConvert(size);
             }
-        }
-        return convSize;
-    }
-})
-.appendTo("#datasetList")
-.find( "a.showAllChildren" ).click(function() {
-	var selectedItem = $.tmplItem(this);
-    var selectedDoc = selectedItem;
-   
-    var selectedDocId = selectedDoc.data.dataset_id;
-    $('input[name=' + selectedDocId + ']').toggle();
+			
+		})
+        .appendTo("#datasetList")
+        .find( "a.showAllFiles" ).click(function() {
+        	var selectedItem = $.tmplItem(this);
+        	
+        	var id = $(this).parent().attr("id").replace(/\./g,"_");
+        	
+        	var data = selectedItem['data'];
+        	
+        	var dataset_id = data.doc.id;
+        	
+        	
+        	//toggle checkbox
+        	$('input[name=' + dataset_id + ']').toggle();
+        	
+        	
+        	//alert('if the link says expand, get file info...if the link says collapse hide the file info');
+        	if(this.innerHTML === "Expand") {
+                
+    			//alert('Dataset has not been fetched yet, make the ajax call to the FileTemplateController and show the file rows');
+        			
+    			if (confirm("Fetching files for Dataset " + dataset_id + " may take a few seconds...Proceed?")) {
+    				
+    				var file_download_template_url = ESGF.search.fileDownloadTemplateProxyUrl;
+    		        
+    	        	
+    	        	$('tr#' + replacePeriod(dataset_id)).after('<img id="spinner" src="images/ajax-loader.gif" />');
+    	        	//$(this.target).html($('<img/>').attr('src', 'images/ajax-loader.gif'));
+    	        	
+    				
+    		    	var query = { "id" : dataset_id , "version" : ESGF.setting.dataCartVersion, "shards" : ESGF.search.shards };
+    		    	
+    		    	alert('shardssssss: ');
+		    		$.ajax({
+		        		url: file_download_template_url,
+		        		global: false,
+		        		type: "GET",
+		        		data: query,
+		        		dataType: 'json',
+		        		success: function(data) {
 
-    var id = $(this).parent().attr("id").replace(/\./g,"_");
-    $('tr.rows_'+id).toggle();
-    if(this.innerHTML === "Expand") {
-        this.innerHTML="Collapse";
-    } else {
-        this.innerHTML="Expand";
+		        			$('#spinner').remove();
+		        			showFileContentsV2(data);
+		        			
+		        		},
+		    			error: function() {
+		    				alert("Error in file retrieval, try revising your datacart selections");
+		    				$('#spinner').remove();
+		    			}
+		        	});
+    				
+    				
+            	    this.innerHTML="Collapse";
+    			}
+        		
+            } else {
+            	
+            	//delete ALL rows created in the data cart
+            	$('tr.rows_' + replacePeriod(dataset_id)).remove();
+            	
+                this.innerHTML="Expand";
+            }
+        	
+        });
+    	//addedCartTemplate
+    	
+    	*/
     }
+
+    
 });
-*/
+
+

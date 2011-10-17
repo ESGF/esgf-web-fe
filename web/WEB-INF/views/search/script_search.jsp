@@ -1,9 +1,7 @@
     <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery-1.4.2.min.js" /> '></script>
-    <!-- 
-    <script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-search-setting.js" />'> </script>
-    -->
+    <script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-search.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery-ui-1.8.12.custom.min.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/overlay.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/overlay.apple.js" /> '></script>
@@ -17,9 +15,9 @@
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.livequery.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.autocomplete.js" /> '></script>
 
-
+	<!--  
     <script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-download.js" /> '></script>
-
+	-->
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
     <script type="text/javascript" src='<c:url value="/scripts/esgf/solr.js" />'> </script>
@@ -47,7 +45,9 @@
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Metadata.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/FacetSidebar.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Annotator.js" />'> </script>
-
+	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/DistributedSearch.js" />'> </script>
+	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/DataCart.js" />'> </script>
+    
 
     <script type="text/javascript" src='<c:url value="/scripts/esgf/solr.theme.js" />'> </script>
 

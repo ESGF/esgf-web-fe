@@ -30,14 +30,8 @@
 	   	<div class="span-3 last">
 	    	<input id="search-button" type="submit" value="Search" />
 	    </div>
-	    <!--  
-	    <div class="span-18 last" style="margin-left:20px">
-	    
-	    	<div id="distributed"><a href="#" style="font-size:10px" id="distributed">Turn on Distributed Search</a></div>
-	    </div>
-	    -->
 		<div class="span-18 last"> 
-			<input class="distribbutton1" id="distribbutton" type="submit" value="Turn on Distributed Search" style="margin-left:20px"/>
+			<input class="distribbutton1" id="distribbutton" type="submit" style="margin-left:20px"/>
 		</div>
 </div>
 
@@ -71,12 +65,15 @@
 	
 	    <div id="search-results"> </div>
 	
+	 
 	    <div id="carts"> 
+	    <!-- 
 	    <table style="width:100%;table-layout: fixed">
 	    <tbody id="datasetList">
 	
 	    </tbody>
 	    </table>
+	    -->
 	    </div>
 	</div>
 </div>
@@ -86,6 +83,14 @@
 <script type="text/javascript">
 
     $(function(){
+    	
+    	//event is trigger on both logout and login links (for now)
+    	//there is a little disconnect with the header.jsp file so this can be seen as a temporary fix until a main page clean up is performed 
+    	$('li.resetLocalStorage').live('click', function() {
+    		localStorage['fq'] = '';
+      	  
+      	  	localStorage['distrib'] = '';
+    	});
     	
     	
     	$('li#showConstraints').live('click',function () {
@@ -122,40 +127,6 @@
       //scroll wheel for facet overlay 
         $(".scrollable").scrollable({ vertical: true, mousewheel: true });
 
-        /* OLD FACET OVERLAY
-        // For the facet overlay 
-        $("li#facet a[rel]").overlay({
-        		 
-        		mask: {opacity: 0.5, color: '#000'},
-        		effect: 'apple',
-        		left: "30%",
-        		top: "2%",
-        		
-        		onBeforeLoad: function() {
-        		
-        			$('.apple_overlay').css({'width' : '700px'});
-        		},
-
-        		onLoad: function() {
-        			 //radio buttons for sorting facets 
-        		    $("#facetSort").buttonset();
-        			$(".overlay_header").show();
-        			$(".overlay_content").show();
-        			$(".overlay_footer").show();
-        			$(".overlay_border").show();
-        	},
-        	
-        	onClose: function() {
-        			$(".overlay_header").hide();
-        			$(".overlay_content").hide();
-        			$(".overlay_footer").hide();
-        			$(".overlay_border").hide();
-        		}
-        	
-        });  
-		*/
-		
-     // For the facet overlay 
         $("div#facet_browser_overlay a[rel]").overlay({
         		 
         		mask: {opacity: 0.5, color: '#000'},
@@ -195,93 +166,9 @@
                 Manager.doRequest(0);
             }
         });
-         
-        $('div#distributed').click(function () {
-        	//alert($('a#distributed').html());
-        	//if($('a#distributed').html() == 'Turn off Distributed Search') {
-        	if(ESGF.setting.searchType == 'local') {
-        		//alert('change to distributed');
-        		//change the text to Distributed
-            	$('a#distributed').html('Turn on Distributed Search');
-            	//change the flag to Distributed
-            	ESGF.setting.searchType = 'Distributed';
-            	Manager.doRequest(0);
-        	} else {
-        		//alert('change to local');
-        		//change the text to Local
-            	$('a#distributed').html('Turn off Distributed Search');
-            	//change the flag to Local
-            	ESGF.setting.searchType = 'local';
-            	Manager.doRequest(0);
-        	}
-        }); 
-         
-        $('input#distribbutton').click(function () {
-        	//alert($('a#distributed').html());
-        	//if($('a#distributed').html() == 'Turn off Distributed Search') {
-        	if(ESGF.setting.searchType == 'local') {
-        		//alert('change to distributed');
-        		//change the text to Distributed
-            	$('input#distribbutton').val('Turn off Distributed Search');
-            	//change the flag to Distributed
-            	ESGF.setting.searchType = 'Distributed';
-            	Manager.doRequest(0);
-        	} else {
-        		//alert('change to local');
-        		//change the text to Local
-            	$('input#distribbutton').val('Turn on Distributed Search');
-            	//change the flag to Local
-            	ESGF.setting.searchType = 'local';
-            	Manager.doRequest(0);
-        	}
-        	
-        	
-        });  
+        
+        
     });
 
 </script>
 
-
-
-
-
-<!--  old options list -->
-<!--  
-<div class="span-18 last">
-	
-	<div class="span-16 prepend-1 append-1 last constraintsBox">
-		
-		<fieldset id="showConstraintsBox" style="display:none">
-      		<legend id="more_constraints">Advanced Search Options</legend>
-      		<div class="span-14 prepend-1 last">
-      			
-		    	<div style="float:left;padding-right:10px;cursor:pointer">
-		    		<input type="checkbox"> Observational 
-		    	</div>
-		    	<div style="float:left;padding-right:10px;;cursor:pointer">
-		    		<input type="checkbox"> Model 
-      			</div>
-      			
-      			 
-      			<div id="geo1" style="float:left;padding-right:10px;cursor:pointer">
-      				<input type="checkbox"><a href="<c:url value="/scripts/esgf/geospatial_overlay.html" />" rel="#geospatial_overlay" style="text-decoration:none;color:black" id="geo"> Geospatial</a>
-      			</div>
-      			
-		    	<div id="temporal" style="float:left;padding-right:10px;cursor:pointer">
-		    		<input type="checkbox">
-		    			<a href="#" rel="#temporal_overlay" style="text-decoration:none;color:black" id="temporal"> 
-		    				Temporal
-		    			</a> 
-		    	</div>
-		    	
-		    	
-		
-		    	
-      		</div>
-      		
-      	 
-      	</fieldset>
-	
-	</div>
-</div>
--->

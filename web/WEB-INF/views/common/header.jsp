@@ -28,12 +28,14 @@
            	<c:choose>
            		<c:when test="${principal=='anonymousUser'}">
            			<!-- guest users -->
-                	<li> <a href="<c:url value='/login'/>" >Login</a></li>
+                	<li class="resetLocalStorage"> <a href="<c:url value='/login'/>" >Login</a></li>
               	</c:when>
               	<c:otherwise>
               		<!-- authenticated users -->
               		<li id="accounts"><a id="accountsAnchor" onclick="checkAccountsviewURL('${principal.username}')" href="<c:url value="/accountsview"/> ">Account</a></li>     
                 	<li><a href="<c:url value='/j_spring_security_logout'/>" >Logout</a></li>
+              		<li id="accounts"><a href="<c:url value='/accountsview'/> ">Account</a></li>     
+                	<li class="resetLocalStorage"><a href="<c:url value='/j_spring_security_logout'/>" >Logout</a></li>
                 	<!-- admin users -->
                 	<sec:authorize access="hasRole('ROLE_ADMIN')">
               			<li> <a href="<c:url value='/adminview'/>" >Admin</a></li>
@@ -77,6 +79,3 @@ function checkAccountsviewURL(openid)
 }
 </script>		
 
-
-
-		    

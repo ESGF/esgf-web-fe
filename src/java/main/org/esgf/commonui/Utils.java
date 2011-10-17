@@ -29,7 +29,9 @@ public class Utils {
     
     private final static Logger LOG = Logger.getLogger(Utils.class);
     
-    public final static boolean environmentSwitch = false;
+    //switch used for development purposes 
+    //a "false" represents a disconnect from postgres
+    public final static boolean environmentSwitch = true;
     
     public static String getPassword(File file) {
         String passwd = null;

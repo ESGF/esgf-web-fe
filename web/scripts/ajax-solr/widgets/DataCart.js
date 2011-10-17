@@ -73,7 +73,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		$('.remove_dataset_from_datacart').die('click');
 
         $(this.target).html($('<img/>').attr('src', 'images/ajax-loader.gif'));
-		alert('before request');
 	},
 	
 	afterRequest: function () {
@@ -90,59 +89,19 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	     */
 	    $('#myTabs').live('tabsselect', function(event, ui) {
 	    	
-	    	
-	    	
 	        if (ui.index == 1) {
 	        	
-	        	alert('change the selected array here to the localStorage');
-		    	
-	        	var dataCart = localStorage['dataCart'];
-	        	var selected = dataCart.split(";");
-	        	var selected_arr = [];
-  	  			for(var i=0;i<selected.length-1;i++)
-  	  			{
-  	  				alert('selected: ' + i + ' ' + selected[i]);
-  	  				selected_arr.push(selected[i]);
-  	  			}
+	        	//grab all the keys from the datacart and place in an array
+	        	var selected_arr = ESGF.localStorage.toKeyArr('dataCart');
 	        	
-		    	alert('new array: ' + selected.length);
-		    	alert('this target: ' + $('#carts').html());
+
+	        	//empty the carts tab and append/initialize the datacart table 
 		    	$('#carts').empty();
 		    	$('#carts').append('<table style="width:100%;table-layout: fixed"><tbody id="datasetList"></tbody></table>');
 	            $("#datasetList").empty();
-		    	
-	            // selection tab
-	            LOG.debug("Selection tab");
-	            // convert object to array
-	            //var arr = ESGF.util.toArray(selected);
 	            
-	            alert('array: ' + selected_arr);
-	            
-	            if(selected_arr != undefined) {
-	            	if(ESGF.setting.dataCartVersion == 'v1') {
-		            	self.createTemplate(selected_arr);
-	            	}
-	            }
-	            
-		    	/*
-		        //add the table element
-		        $(this.target).append('<table style="width:100%;table-layout: fixed"><tbody id="datasetList"></tbody></table>');
-	            $("#datasetList").empty();
-	            // selection tab
-	            LOG.debug("Selection tab");
-	            // convert object to array
-	            var arr = ESGF.util.toArray(ESGF.search.selected);
-	            
-	            
-	            
-	            //need a function that replaces periods in the name of the dataset (events in jquery cannot access elements that have these)
-	            
-	            if(arr != null || arr != undefined || arr.length == 0 || arr != '') {
-	            	if(ESGF.setting.dataCartVersion == 'v1') {
-		            	self.createTemplate(arr);
-	            	}
-	            }
-	            */
+	            //create the template
+		        self.createTemplate(selected_arr);
 	        }
 	    });
 	    
@@ -211,36 +170,23 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	     * Click event for removing datasets from the data cart
 	     */
 	    $('.remove_dataset_from_datacart').live ('click', function(e) {
-	    	
-	    	
 	    	if(ESGF.setting.dataCartVersion == 'v1') {
-	    		//grab the dataset id from the template
-	        	var selectedItem = $.tmplItem(this);
+	    		var selectedItem = $.tmplItem(this);
 	        	var selectedDocId = selectedItem.data.dataset_id;
 
-	        	//remove the dataset_id from the selected store
-	        	delete ESGF.search.selected[selectedDocId];
-	        	
+	        	//remove the dataset from the localStorage
+	        	ESGF.localStorage.remove('dataCart',selectedDocId);
 	        	//remove the dataset and files visually
+	        	
 	        	//file rows in the template
 	        	($('tr.rows_'+ self.replacePeriod(selectedDocId))).remove();
 	        	//dataset rows in the template
 	        	$('tr#' + self.replacePeriod(selectedDocId)).remove();
-	        	
-	        	alert('selectedDocId ' + selectedDocId);
-	        	
-	        	//remove from super cookie
-            	if(localStorage['dataCart'] != undefined) {
-            		var dataCart = localStorage['dataCart'].replace((selectedDocId+';'),"");
-              	  	localStorage['dataCart'] = dataCart;
-            	} else {
-            		alert('should never come here');
-            	}
-            	
+
 	        	//change from remove from cart to add to cart
 	        	$('a#ai_select_'+ selectedDocId.replace(/\./g, "_")).html('Add To Cart');
-	        	
-	    	} 
+	    	}
+	    	
 	    	
 	    	
 	    });
@@ -250,10 +196,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	     */
 	    $(".topLevel").live('change', function() {
 	    	
-	    	
 	        LOG.debug("top level changed");
 
-	        
 	        var currentValue = $(this).attr('checked');
 
 	    	//grab the dataset id from the template
@@ -269,8 +213,14 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	    
 	},
 	
-	/*
+	/**
      * Create the template for the datacart
+     * For now there are two ways to create the template...
+     * 1) from the shards given from the registry service
+     * 2) from the shards given in the solr config file
+     * 
+     * 1) is preferred and 2) is legacy
+     * Each have been modularized
      */
     createTemplate: function(arr) {
 
@@ -282,34 +232,32 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	
 	},
 	
+	/**
+	 * This function creates the datacart template by loading shards from the service instead of the solrconfig
+	 * It is passed in the array of keys of all the datasets that have been selected
+	 */
 	loadCartShardsFromService: function (arr) {
 		
 		var self = this;
 		
-		
-		
-		/*
-		var query_arr = new Array();
-        //create a query string of just the dataset ids
-    	for(var i=0;i<arr.length;i++) {
-    		//query_arr.push(arr[i].doc.id);
-    		query_arr.push(arr[i]);
-    	}
-    	*/
-    	
     	
     	var file_download_template_url = ESGF.search.fileDownloadTemplateProxyUrl;
 
     	
+    	//get the 'q' parameter here
     	var qParam = Manager.store.get('q')['value'];
+    	
+    	//get the 'fq' parameter here
     	var fqParamArr = self.createFqParamArray();
     	
-    	
+    	/*
+    	 * Make an ajax call to the fileDownloadTemplate controller to extract the files for each of datasets given in the array of keys
+    	 */
     	//only make the ajax call when there has been something added to the data cart
-    	//if(query_arr.length != 0) {
     	if(arr.length != 0) {
     		var queryStr = { "id" : arr , "version" : ESGF.setting.dataCartVersion, "fq" : fqParamArr, "q" : qParam};
     		
+    		//add a spinning wheel to show user that progress is being made in finding the files
     		self.addDataCartSpinWheel();
 
     		
@@ -319,29 +267,29 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     			type: "GET",
     			data: queryStr,
     			dataType: 'json',
+    			/*
+    			 * Upon success remove the spinning wheel and show the contents given by solr
+    			 */
     			success: function(data) {
+    				
 	    			self.removeDataCartSpinWheel();
-        			//show the contents of the data cart
         			self.showFileContents(data);
-	    			//alert('success');
     			},
+    			/*
+    			 * Upon an error remove the spinning wheel and give an alert 
+    			 */
 	    		error: function() {
 	    			self.removeDataCartSpinWheel();
 	    			alert('There is a problem with one of your dataset selections.  Please contact your administrator.');
 	    			
 	            	//change from remove from cart to add to cart for all selected datasets
 	    			for(var i=0;i<query_arr.length;i++) {
-	                	$('a#ai_select_'+ query_arr[i].replace(/\./g, "_")).html('Add To Cart');
+	                	$('a#ai_select_'+ arr[i].replace(/\./g, "_")).html('Add To Cart');
 	    			}
 					
 				}
     		})
-    		
-    		
     	}
-    	
-    	
-    	
 	},
 	
 	createFqParamArray: function () {
@@ -377,9 +325,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	//"version" - version of the type of datacart (NOTE: THIS MAY BE TAKEN OUT)
     	//"shards" - array of ips that are the active shards in the configuration
     	var query = { "id" : query_arr , "version" : ESGF.setting.dataCartVersion, "shards" : shardsArr };
-    	
-    	
-    	alert('length: ' + query_arr.length);
     	
     	//only make the ajax call when there has been something added to the data cart
     	if(query_arr.length != 0) {
@@ -454,67 +399,70 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     
     showFileContents: function(data) {
     	
-    	LOG.debug("Showing file contents");
+    	LOG.debug("Showing file contents" + data);
     	
     	var self = this;
     	
-		var fileDownloadTemplate = data.response.doc;
-		
-		
-		$( "#cartTemplateStyled").tmpl(fileDownloadTemplate, {
-			
-			replacePeriods : function (word) {
-                return self.replacePeriod(word);
-            },
-            abbreviate : function (word) {
-                var abbreviation = word;
-                if(word.length > 50) {
-                    abbreviation = word;//word.slice(0,20) + '...' + word.slice(word.length-21,word.length);
-                }
-                return abbreviation;
-            },
-            addOne: function(num) {
-                return (num+1);
-            },
-            sizeConversion : function(size) {
-                var convSize;
-                if(size == null) {
-                    convSize = 'N/A';
-                } else {
-                    var sizeFlt = parseFloat(size,10);
-                    if(sizeFlt > 1000000000) {
-                        var num = 1000000000;
-                        convSize = (sizeFlt / num).toFixed(2) + ' GB';
-                    } else if (sizeFlt > 1000000) {
-                        var num = 1000000;
-                        convSize = (sizeFlt / num).toFixed(2) + ' MB';
-                    } else {
-                        var num = 1000;
-                        convSize = (sizeFlt / num).toFixed(2) + ' KB';
+    	if(data != null) {
+    		var fileDownloadTemplate = data.response.doc;
+    		
+    		LOG.debug("Before template");
+    		$( "#cartTemplateStyled").tmpl(fileDownloadTemplate, {
+    			
+    			replacePeriods : function (word) {
+                    return self.replacePeriod(word);
+                },
+                abbreviate : function (word) {
+                    var abbreviation = word;
+                    if(word.length > 50) {
+                        abbreviation = word;//word.slice(0,20) + '...' + word.slice(word.length-21,word.length);
                     }
+                    return abbreviation;
+                },
+                addOne: function(num) {
+                    return (num+1);
+                },
+                sizeConversion : function(size) {
+                    var convSize;
+                    if(size == null) {
+                        convSize = 'N/A';
+                    } else {
+                        var sizeFlt = parseFloat(size,10);
+                        if(sizeFlt > 1000000000) {
+                            var num = 1000000000;
+                            convSize = (sizeFlt / num).toFixed(2) + ' GB';
+                        } else if (sizeFlt > 1000000) {
+                            var num = 1000000;
+                            convSize = (sizeFlt / num).toFixed(2) + ' MB';
+                        } else {
+                            var num = 1000;
+                            convSize = (sizeFlt / num).toFixed(2) + ' KB';
+                        }
+                    }
+                    return convSize;
                 }
-                return convSize;
-            }
-        })
-        .appendTo("#datasetList")
-        .find( "a.showAllChildren" ).click(function() {
-        	var selectedItem = $.tmplItem(this);
-            var selectedDoc = selectedItem;
-           
-            
-            var selectedDocId = selectedDoc.data.dataset_id;
-            $('input[name=' + selectedDocId + ']').toggle();
+            })
+            .appendTo("#datasetList")
+            .find( "a.showAllChildren" ).click(function() {
+            	var selectedItem = $.tmplItem(this);
+                var selectedDoc = selectedItem;
+               
+                
+                var selectedDocId = selectedDoc.data.dataset_id;
+                $('input[name=' + selectedDocId + ']').toggle();
 
-            var id = $(this).parent().attr("id").replace(/\./g,"_");
-            $('tr.rows_'+id).toggle();
-            if(this.innerHTML === "Expand") {
-                this.innerHTML="Collapse";
-            } else {
-                this.innerHTML="Expand";
-            }
+                var id = $(this).parent().attr("id").replace(/\./g,"_");
+                $('tr.rows_'+id).toggle();
+                if(this.innerHTML === "Expand") {
+                    this.innerHTML="Collapse";
+                } else {
+                    this.innerHTML="Expand";
+                }
+                
+            });
             
-        });
-        
+    	}
+		
     	
     	
 	},
@@ -585,3 +533,53 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 });
 
 }(jQuery));
+
+
+
+/* old mytabs */
+/*
+var dataCart = localStorage['dataCart'];
+var selected = dataCart.split(";");
+var selected_arr = [];
+	for(var i=0;i<selected.length-1;i++)
+	{
+		alert('selected: ' + i + ' ' + selected[i]);
+		selected_arr.push(selected[i]);
+	}
+
+alert('new array: ' + selected.length);
+alert('this target: ' + $('#carts').html());
+$('#carts').empty();
+$('#carts').append('<table style="width:100%;table-layout: fixed"><tbody id="datasetList"></tbody></table>');
+$("#datasetList").empty();
+
+// selection tab
+LOG.debug("Selection tab");
+// convert object to array
+//var arr = ESGF.util.toArray(selected);
+
+alert('array: ' + selected_arr);
+
+if(selected_arr != undefined) {
+	if(ESGF.setting.dataCartVersion == 'v1') {
+    	self.createTemplate(selected_arr);
+	}
+}
+//add the table element
+$(this.target).append('<table style="width:100%;table-layout: fixed"><tbody id="datasetList"></tbody></table>');
+$("#datasetList").empty();
+// selection tab
+LOG.debug("Selection tab");
+// convert object to array
+var arr = ESGF.util.toArray(ESGF.search.selected);
+
+
+
+//need a function that replaces periods in the name of the dataset (events in jquery cannot access elements that have these)
+
+if(arr != null || arr != undefined || arr.length == 0 || arr != '') {
+	if(ESGF.setting.dataCartVersion == 'v1') {
+    	self.createTemplate(arr);
+	}
+}
+*/

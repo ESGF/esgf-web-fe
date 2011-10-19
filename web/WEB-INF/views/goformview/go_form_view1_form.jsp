@@ -1,9 +1,10 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
 <form id="new_user_form" action="goformview2" method="post" >
-	<h3 style="" id="form_title">Form 1 Info</h3>
-				
-	<table id="adduser_table_id" class="adduser_table" >  
+	<h3 style="" id="form_title">Globus Online Transfer: Step 1 of 3</h3>
+        <p>If you don't have a <a href="http://www.globusonline.org">Globus Online</a> account, you can sign-up
+	for one at <a href="https://www.globusonine.org/SignUp">https://www.globusonine.org/SignUp</a>. </p>
+	<table id="adduser_table_id" class="adduser_table" >
 		<tr id="userName_input">
 			<td>
 				<div class="adduser_properties" style="">Globus Online Username</div> 
@@ -12,9 +13,14 @@
 				<input type="text" class="text" id="goUserName" name="goUserName" value=""> 
 			</td>
 		</tr>
+                <tr>
+                        <td colspan="2">
+                        Please provide your MyProxy login information for the Source Endpoint: www.esg.anl.gov:7512
+                        </td>
+                </tr>
 		<tr>
 			<td>
-				<div class="adduser_properties" style="">MyProxy Source Username</div>
+				<div class="adduser_properties" style="">Source MyProxy Username</div>
 			</td>
 			<td>
 				<input type="text" class="text" name="myProxyUserName" id="myProxyUserName" value=""> 
@@ -22,7 +28,7 @@
 		</tr>
 		<tr>
 			<td>
-				<div class="adduser_properties" style="">MyProxy Source Password</div>
+				<div class="adduser_properties"	style="">Source MyProxy Password</div>
 			</td>
 			<td>
 				<input type="password" class="text" name="myProxyUserPass" id="myProxyUserPass" value=""> 

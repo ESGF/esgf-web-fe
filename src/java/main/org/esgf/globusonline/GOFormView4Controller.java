@@ -66,6 +66,7 @@
  */
 package org.esgf.globusonline;
 
+import java.util.Vector;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,6 +94,11 @@ public class GOFormView4Controller {
     private final static String GOFORMVIEW_FILE_URLS = "GoFormView_File_Urls";
     private final static String GOFORMVIEW_FILE_NAMES = "GoFormView_File_Names";
     private final static String GOFORMVIEW_ERROR = "GoFormView_Error";
+    private final static String GOFORMVIEW_ERROR_MSG = "GoFormView_ErrorMsg";
+    private final static String GOFORMVIEW_TRANSFER_INFO1 = "GoFormView_TransferInfo1";
+    private final static String GOFORMVIEW_TRANSFER_INFO2 = "GoFormView_TransferInfo2";
+    private final static String GOFORMVIEW_TRANSFER_INFO3 = "GoFormView_TransferInfo3";
+    private final static String GOFORMVIEW_TRANSFER_INFO4 = "GoFormView_TransferInfo4";
     private final static String GOFORMVIEW_GO_USERNAME = "GoFormView_GOUsername";
 
     // should be configurable?
@@ -154,24 +160,41 @@ public class GOFormView4Controller {
             transfer.activateEndpoint(endpointPieces[0], destMyproxyUserName, destMyproxyUserPass);
 
             // transform all URLs here
-
+            String newURL = null;
+            String[] pieces = null;
+            Vector<String> fileList = new Vector<String>();
+            for(String curURL : file_urls)
+            {
+                newURL = curURL.replace("http://esg.anl.gov/thredds/fileServer/",
+                                        "//");
+                LOG.debug("Transformed " + curURL + " into " + newURL);
+                fileList.add(newURL);
+            }
 
             // kick off the transfer here!
+            String taskID = transfer.transfer("esg#anl", endpointPieces[0], fileList);
+            String transferInfo1 = "The transfer has been accepted and a task has been " +
+                "created and queued for execution.";
+            String transferInfo2 = "Globus Online TaskID: " + taskID;
+            LOG.debug("Started Globus Online transfer with TaskID: " + taskID);
 
             if (request.getParameter(GOFORMVIEW_MODEL)!=null) {
                 System.out.println("NOT NULL");
             }
             else
             {
-                String error = isErrorInGORequest();
+                //String error = isErrorInGORequest();
                 //model.put(GOFORMVIEW_ERROR, error);
+                model.put(GOFORMVIEW_TRANSFER_INFO1, transferInfo1);
+                model.put(GOFORMVIEW_TRANSFER_INFO2, transferInfo2);
             }
         }
         catch(Exception e)
         {
             
             String error = e.toString();
-            model.put(GOFORMVIEW_ERROR, error);
+            model.put(GOFORMVIEW_ERROR, "error");
+            model.put(GOFORMVIEW_ERROR_MSG, error);
             LOG.error("Failed to initialize Globus Online: " + e);
         }
         return new ModelAndView("goformview4", model);

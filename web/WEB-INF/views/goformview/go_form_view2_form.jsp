@@ -1,6 +1,6 @@
 <form id="new_user_form" action="goformview3" method="post">
-		<h3 style="" id="form_title">Form 2 Info</h3>
-			
+		<h3 style="" id="form_title">Globus Online Transfer: Step 2 of 3</h3>
+                <p>Please choose where you'd like to move the data:</p>
 			<table>
 				
 				<tr id="">

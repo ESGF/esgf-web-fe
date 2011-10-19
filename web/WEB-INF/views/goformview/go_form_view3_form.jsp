@@ -1,12 +1,10 @@
-
-
 <form id="new_user_form" action="goformview4" method="post" >
-<h3 style="" id="form_title">Form 3 Info</h3>
+<h3 style="" id="form_title">Globus Online Transfer: Step 3 of 3</h3>
 
 <table id="adduser_table_id" class="adduser_table" >  
 	<tr id="userName_input">
 		<td>
-			<div class="adduser_properties" style="">MyProxy Target Username</div>
+			<div class="adduser_properties" style="">Target MyProxy Username</div>
 		</td>
 		<td>
 			<input type="text" class="text" name="myproxyUserName" id="myproxyUserPass" value=""> 
@@ -14,7 +12,7 @@
 	</tr>
 	<tr>
 		<td>
-			<div class="adduser_properties" style="">MyProxy Target Password</div>
+			<div class="adduser_properties" style="">Target MyProxy Password</div>
 		</td>
 		<td>
 			<input type="password" class="text" name="myproxyUserPass" id="myproxyUserPass" value=""> 

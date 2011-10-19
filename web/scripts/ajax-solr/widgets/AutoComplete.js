@@ -71,6 +71,11 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 			
 			if(value.length > 0) {
 				if(ESGF.setting.storage) {
+
+					ESGF.localStorage.put('esgf_fq','text:'+value,'text:'+value);
+					alert(ESGF.localStorage.get('esgf_fq','text:'+value));
+					ESGF.localStorage.remove('esgf_fq','text:'+value);
+					
 					var fq = localStorage['fq'];
 					if(fq == undefined) {
 						fq = fq + 'text:' + value + ';';
@@ -123,6 +128,11 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 				if(ESGF.setting.storage) {
 
 						var fq = localStorage['fq'];
+						
+						ESGF.localStorage.put('esgf_fq','text:'+value,'text:'+value);
+						alert(ESGF.localStorage.get('esgf_fq','text:'+value));
+						ESGF.localStorage.remove('esgf_fq','text:'+value);
+						
 						if(fq == undefined) {
 					  		fq = 'text:' + value + ';';
 					  		localStorage['fq'] = fq;

@@ -112,20 +112,6 @@
 		    			facet_val_arr.push(facet_value);
 		    		}
 		    		
-		    		/*
-		    		if(isConstraint(facet)) {
-		    			alert(facet + ' has constraint');
-		    			
-		    			if(!matchesFacetValue(facet,facet_value)) {
-		    				//alert('value: ' + facet_value + ' doesn't match);
-		    			
-		    			}
-		    			
-		    			
-		    		} 
-		    		*/
-		    			
-		    		
 		    	}
 		    	facet_obj.Facet_name = facet;
 		    	facet_obj.Facet_values = facet_val_arr;
@@ -168,6 +154,13 @@
 				index = facet.search(' ');
 				var trimmedFacet = facet.substr(0,index);
 				Manager.store.addByValue('fq', trimmedFacet + ':' + trimmedFacetValue );
+				
+				//add to esgf_fq localstore
+				var key = trimmedFacet + ':' + trimmedFacetValue;
+				var value = trimmedFacet + ':' + trimmedFacetValue;
+				ESGF.localStorage.put('esgf_fq', key, value);
+				
+				//add to the old localstore
 				if(ESGF.setting.storage) {
 					var fq = localStorage['fq'];
 		     	   	if(fq == null) {

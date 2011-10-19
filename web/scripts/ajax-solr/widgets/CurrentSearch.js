@@ -85,7 +85,6 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
                 }
             }
             links.push($('<a href="#"/>').text('(x) ' + fqString).click( //function () {
-            		
             	self.removeFacet(fq[i]))
             );
         }
@@ -94,15 +93,24 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
 
     if (links.length > 1) {
       links.unshift($('<a href="#"/>').text('remove all').click(function () {
-        self.manager.store.remove('fq');
+        
+    	  
+    	self.manager.store.remove('fq');
          //delete the localStorage
         if(ESGF.setting.storage) {
             delete localStorage['fq'];
         }
         
+        var esgf_fq = ESGF.localStorage.getAll('esgf_fq');
+        
+        for(var key in esgf_fq) {
+        	var value = esgf_fq[key];
+        	ESGF.localStorage.remove('esgf_fq',key,value);
+        }
+
+        
         var facet = null;
         self.removeGeospatialConstraints(facet);  
-        
         self.manager.doRequest(0);
         return false;
       }));
@@ -120,12 +128,15 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     return function () {
     	if(self.manager.store.removeByValue('fq',facet)) {
     		if(ESGF.setting.storage) {
+          	  	ESGF.localStorage.remove('esgf_fq', facet, facet);
+    			/*
     			var fq = localStorage['fq'].replace((facet+';'),"");
           	  	localStorage['fq'] = fq;
-          	  
+          	  	
           	  	if(fq == '') {
           		  delete localStorage['fq'];
           	  	} 
+          	  	*/
     		}
     		
     		self.manager.doRequest(0);

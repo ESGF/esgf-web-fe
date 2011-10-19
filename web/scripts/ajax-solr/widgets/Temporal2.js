@@ -137,6 +137,8 @@
 		   var datetime_start, datetime_startFQ,
            datetime_stop, datetime_stopFQ; 
         
+		   alert('here');
+		   
            //datetime_start
            if(dateFrom.value) {
                datetime_start = dateFrom.value + 'T00:00:00Z';
@@ -154,6 +156,11 @@
            Manager.store.addByValue('fq', datetime_startFQ );	
            Manager.store.addByValue('fq', datetime_stopFQ );	
 
+           //add the datetime start and stop parameters to esgf_fq localstorage
+           ESGF.localStorage.put('esgf_fq',datetime_startFQ,datetime_startFQ);
+           ESGF.localStorage.put('esgf_fq',datetime_stopFQ,datetime_stopFQ);
+           
+           /*
            if(ESGF.setting.storage) {
         	   var fq = localStorage['fq'];
                if(fq == null) {
@@ -165,7 +172,7 @@
                  	  localStorage['fq'] = fq;
          	  }
            }
-     	   
+     	   */
            
            Manager.doRequest(0);
 	  }//end executeDateQuery

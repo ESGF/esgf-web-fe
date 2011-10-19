@@ -147,6 +147,15 @@
             $(this.target).empty();
             
             if(ESGF.setting.storage) {
+            	
+            	//extract from localStorage
+            	var esgf_fq = ESGF.localStorage.getAll('esgf_fq');
+            	
+            	//loop through all the fqs
+            	for(var key in esgf_fq) {
+            		var value = esgf_fq[key];
+            	}
+            	
             	var fq = localStorage['fq'];
 
                 /* only display results if there is a search */

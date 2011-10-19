@@ -185,6 +185,9 @@
        
        
 	   executeDateQuery: function (dateFrom,dateTo){
+		   
+		   alert('here?');
+		   
 		   var datetime_start, datetime_startFQ,
            datetime_stop, datetime_stopFQ; 
         
@@ -202,9 +205,16 @@
            }
            datetime_startFQ = 'datetime_start:[' + datetime_start + ' TO *]';
            datetime_stopFQ = 'datetime_stop:[* TO ' + datetime_stop + ']';
+
            Manager.store.addByValue('fq', datetime_startFQ );	
            Manager.store.addByValue('fq', datetime_stopFQ );	
-
+           
+           alert('putting in time: ' + datetime_startFQ);
+           
+           //add the datetime start and stop parameters to esgf_fq localstorage
+           ESGF.localStorage.put('esgf_fq',datetime_startFQ,datetime_startFQ);
+           ESGF.localStorage.put('esgf_fq',datetime_stopFQ,datetime_stopFQ);
+           
            //alert('adding ' + datetime_startFQ  + '; ' + datetime_stopFQ  + '; to fq storage');
            
 

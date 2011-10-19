@@ -93,7 +93,11 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 	            	  ESGF.setting.searchType = 'local';
 	            	  
 	            	  //reset the localStorage to querying over the dataset type
+	            	  ESGF.localStorage.remove('esgf_fq');
+	            	  
+	            	  /*
 	            	  localStorage['fq'] = 'type:Dataset' + ';';
+	            	  */
 	            	  
 	            	  localStorage['distrib'] == 'local';
 	            		  
@@ -136,44 +140,25 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   		LOG.debug('In Manager.loadingExistingQueries');
   		var self = this;
   		
-  		//compare the parameter store with the local store
-  		//if the local store contains something that is not in the parameter store, then add to parameter store
-  		
-  		//add the type here 
-        Manager.store.addByValue('fq','type:Dataset');
-  	   	var fq = localStorage['fq'];
-  	   	
-        if(fq == null) {
-      	  	fq = 'type:Dataset' + ';';
-      	  	localStorage['fq'] = fq;
-  	  	} else if(fq == undefined) {
-        	fq = 'type:Dataset' + ';';
-      	  	localStorage['fq'] = fq;
-        } else if(fq = '') {
-        	fq = 'type:Dataset' + ';';
-      	  	localStorage['fq'] = fq;
-        }
-        
-  		
-  		if(ESGF.setting.storage) {
-  			var fq = localStorage['fq'];
 
-  	  		if(fq != undefined) {
-  	  			var allFqs = fq.split(";");
-  	  			for(var i=0;i<allFqs.length-1;i++)
-  	  			{
-  	  				if(self.store.string().search(escape(allFqs[i])) == -1) {
-  	  					Manager.store.addByValue('fq',allFqs[i]);
-  	  				}
-  	  			}
-  	  	  	}
-  	  		LOG.debug('\tlocalStorage: ' + fq);
-  		} 
-  		
-  		LOG.debug('\tparameter store: ' + Manager.store.values('fq'));
-  		
-  		
-  		LOG.debug('End in Manager.loadingExistingQueries');
+  		//put in the dataset type
+        ESGF.localStorage.put('esgf_fq','type:Dataset','type:Dataset');
+        Manager.store.addByValue('fq','type:Dataset');
+        
+        //get all of the fq parameters from the localstore
+        var esgf_fq = ESGF.localStorage.getAll('esgf_fq');
+        
+        ESGF.localStorage.printMap('esgf_fq');
+        
+        //add each constraint
+        for(var key in esgf_fq) {
+        	var value = esgf_fq[key];
+        	if(key != '') {
+        		Manager.store.addByValue('fq',value);
+        	} 
+		}
+        
+        
   		
   		
   	},
@@ -221,3 +206,67 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   	}
   	
 });
+
+
+/*
+	//compare the parameter store with the local store
+	//if the local store contains something that is not in the parameter store, then add to parameter store
+	
+	//add the type here 
+Manager.store.addByValue('fq','type:Dataset');
+ 	var fq = localStorage['fq'];
+
+ESGF.localStorage.put('esgf_fq','type:Dataset','type:Dataset');
+
+
+if(fq == null) {
+	  	fq = 'type:Dataset' + ';';
+	  	localStorage['fq'] = fq;
+	} else if(fq == undefined) {
+	fq = 'type:Dataset' + ';';
+	  	localStorage['fq'] = fq;
+} else if(fq = '') {
+	fq = 'type:Dataset' + ';';
+	  	localStorage['fq'] = fq;
+}
+
+
+alert('Manager: ' + ESGF.localStorage.get('esgf_fq','type:Dataset'));
+
+	
+	if(ESGF.setting.storage) {
+		var fq = localStorage['fq'];
+
+      //get all the fq parameters
+		var esgf_fq = ESGF.localStorage.getAll('esgf_fq');
+		
+		for(var key in esgf_fq) {
+			var value = esgf_fq[key];
+			alert('key: ' + key + ' value: ' + esgf_fq[key]);
+		}
+		
+		
+		//place them into the Manager store
+		
+		
+		if(fq != undefined) {
+			var allFqs = fq.split(";");
+			for(var i=0;i<allFqs.length-1;i++)
+			{
+				if(self.store.string().search(escape(allFqs[i])) == -1) {
+					Manager.store.addByValue('fq',allFqs[i]);
+				}
+			}
+	  	}
+		LOG.debug('\tlocalStorage: ' + fq);
+		
+		
+		
+		ESGF.localStorage.remove('esgf_fq','type:Dataset');
+	} 
+	
+	LOG.debug('\tparameter store: ' + Manager.store.values('fq'));
+	
+	
+	LOG.debug('End in Manager.loadingExistingQueries');
+	*/

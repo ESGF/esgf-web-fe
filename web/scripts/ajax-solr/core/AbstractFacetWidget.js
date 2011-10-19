@@ -107,7 +107,14 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
     var self = this;
     return function () {
       if (self.add(value)) {
+    	  var key = self.fq(value);
+    	  //for now duplicate val
+          ESGF.localStorage.put('esgf_fq',key,key);
+    	  
+    	  
     	  if(ESGF.setting.storage) {
+    		  
+    		  /*
     		  var fq = localStorage['fq'];
         	  if(fq == undefined) {
             	  fq = self.fq(value) + ';';
@@ -118,8 +125,9 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
                 	  localStorage['fq'] = fq;
         		  //}
         	  }
+        	  */
     	  }
-    	  
+    	  ESGF.localStorage.printMap('esgf_fq');
         self.manager.doRequest(0);
       }
       return false;

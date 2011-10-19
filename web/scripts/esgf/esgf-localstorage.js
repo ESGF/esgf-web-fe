@@ -84,6 +84,7 @@ ESGF.localStorage.remove = function(category, key, value) {
 		localStorage.setObject(category,{'' : ''});
 	}
 	var map = localStorage.getObject(category);
+
 	var canRemove = false;
 	for (var mapKey in map) {
 		if (key == mapKey) {
@@ -111,3 +112,12 @@ ESGF.localStorage.toKeyArr = function(category) {
 	}
 	return arr;
 };
+
+ESGF.localStorage.printMap = function(category) {
+	var map = ESGF.localStorage.getAll(category);
+	LOG.debug("*****Map of " + category + "****");
+	for(var key in map) {
+		LOG.debug("key: " + key + " -> " + map[key]);
+	}
+	LOG.debug("*****End Map of " + category + "****");
+} 

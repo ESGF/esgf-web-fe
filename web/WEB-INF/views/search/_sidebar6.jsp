@@ -3,16 +3,6 @@
 
 
 <div class="span-6 last">
-<!--  
-	<div class="l2contentleftbox">        
-		  
-		<div class="round-box">
-		    <div class="round-header round-top"> Current Selections</div> 
-		    <div id="current-selection" class="round-content"></div>
-		
-		</div> 
-	</div>      
--->
 	<div class="l2contentleftbox">
 		<ul class="ul_class">
 			<li class="li_class_title">
@@ -24,7 +14,10 @@
 	
 </div>
 
-
+<!-- In case I need to reset the localStorage (without clearing cookies  -->
+<div class="span-6 last" style="padding-bottom:10px;padding-left:10px">
+	<a href="#" class="reset"  style="display:none">Reset LocalStorage</a>
+</div>
 
 
 <div class="span-6 last" style="padding-bottom:10px">
@@ -45,3 +38,11 @@
 	</div>
 	
 </div>
+
+<script type="text/javascript">
+
+$(function(){
+
+});
+
+</script>

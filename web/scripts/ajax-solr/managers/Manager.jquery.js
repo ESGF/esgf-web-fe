@@ -206,6 +206,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   		}
   	}
   	
+  	
 });
 
 

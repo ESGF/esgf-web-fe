@@ -62,6 +62,7 @@
 (function ($) {
 
 
+
 AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
     var output = '';
 
@@ -117,20 +118,6 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     	output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Add To Cart</a></span>';
     }
     
-    /*
-    
-   if(localStorage['dataCart'] != undefined) {
-	   if(localStorage['dataCart'].search(doc.id) == -1) {
-		   output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Add To Cart</a></span>';
-	   } else {
-		   
-		   output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Remove From Cart</a></span>';
-	   }
-   } else {
-	   output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Add To Cart</a></span>';
-   }
-   	*/
-   
 
     if (typeof doc.service != "undefined") {
         LOG.debug("LAS service tag detected");
@@ -166,28 +153,8 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             	
                 var key = ESGF.localStorage.toString('esgf_fq');
                 var value = evt.data.doc.id;
-                alert('key: ' + key);
-            	alert('value: ' + value);
 
             	ESGF.localStorage.append('esgf_searchStates', key, value);
-            	
-            	ESGF.localStorage.printMap('esgf_searchStates');
-            	
-            	ESGF.localStorage.removeFromValue('esgf_searchStates', key, value);
-            	ESGF.localStorage.printMap('esgf_searchStates');
-            	
-            	ESGF.localStorage.remove('esgf_searchStates',key,value);
-            	
-            	/*
-            	var currentStates = '';
-            	alert(ESGF.localStorage.get('esgf_searchStates',key));
-            	
-            	ESGF.localStorage.put('esgf_searchStates', key, value);
-            	
-            	alert(ESGF.localStorage.get('esgf_searchStates',key));
-            	
-            	ESGF.localStorage.remove('esgf_searchStates', key, value);
-            	*/
             	
                 this.innerHTML="Remove From Cart";
 

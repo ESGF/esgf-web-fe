@@ -212,8 +212,15 @@
     }
 
     
-    
-
+    /*
+    $('a.reset').live('click',function() {
+		alert('clicked');
+		delete localStorage['esgf_fq'];
+		delete localStorage['esgf_searchStates'];
+		delete localStorage['dataCart'];
+		Manager.doRequest(0);
+	});
+	*/
 })(jQuery);
 
 

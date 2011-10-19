@@ -9,6 +9,11 @@ Storage.prototype.getObject = function(key,value) {
 }
 
 
+ESGF.localStorage.toString = function(category) {
+	var map = localStorage.getObject(category);
+	return JSON.stringify(map);
+}
+
 ESGF.localStorage.search = function(category, searchTerm) {
 	
 	if(localStorage[category] == undefined) {
@@ -96,6 +101,40 @@ ESGF.localStorage.remove = function(category, key, value) {
 		localStorage.setObject(category,map);
 	}
 };
+
+ESGF.localStorage.append = function(category, key, value) {
+	if(localStorage[category] == undefined) {
+		localStorage.setObject(category,{'' : ''});
+	}
+	var map = localStorage.getObject(category);
+	if(map[key] == undefined) {
+		map[key] = value;
+	} else {
+		var keyStr = map[key];
+		if(keyStr.search(value) != -1) {
+			keyStr = value + ';' + keyStr;
+			map[key] = keyStr;
+		}
+	}
+	localStorage.setObject(category,map);
+};
+
+ESGF.localStorage.removeFromValue = function(category, key, value) {
+	if(localStorage[category] != undefined) {
+		var map = localStorage.getObject(category);
+		if(map[key] == undefined) {
+			map[key] = value;
+		} else {
+			var keyStr = map[key];
+			if(keyStr.search(value) != -1) {
+				var newStr = keyStr.replace(value,"");
+				map[key] = newStr;
+			}
+		}
+		localStorage.setObject(category,map);
+	}
+}; 
+
 
 ESGF.localStorage.toKeyArr = function(category) {
 	if(localStorage[category] == undefined) {

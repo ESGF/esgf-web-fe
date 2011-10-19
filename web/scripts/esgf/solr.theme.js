@@ -157,51 +157,50 @@ AjaxSolr.theme.prototype.actions = function (doc) {
 
             selected[evt.data.doc.id] = doc;
             if ( jQuery.trim(this.innerHTML) == "Add To Cart") {
-            	ESGF.localStorage.put('dataCart',evt.data.doc.id,evt.data.doc.id);
-            	/*
-            	//add to super cookie
-            	if(localStorage['dataCart'] != undefined) {
-                	localStorage['dataCart'] = localStorage['dataCart'] + evt.data.doc.id + ';';
-            	} else {
-                	localStorage['dataCart'] = evt.data.doc.id + ';';
-            	}
             	
-            	alert('localStorage: ' + localStorage['dataCart']);
-            	*/
+            	//add to the datacart localstorage
+            	ESGF.localStorage.put('dataCart',evt.data.doc.id,evt.data.doc.id);
+
+            	
+            	//add to the datacart searchstates localstorage
+            	
+                var key = ESGF.localStorage.toString('esgf_fq');
+                var value = evt.data.doc.id;
+                alert('key: ' + key);
+            	alert('value: ' + value);
+
+            	ESGF.localStorage.append('esgf_searchStates', key, value);
+            	
+            	ESGF.localStorage.printMap('esgf_searchStates');
+            	
+            	ESGF.localStorage.removeFromValue('esgf_searchStates', key, value);
+            	ESGF.localStorage.printMap('esgf_searchStates');
+            	
+            	ESGF.localStorage.remove('esgf_searchStates',key,value);
+            	
             	/*
-                var $dialog = $('<div></div>')
-                    .html('Dataset <b>' + evt.data.doc.id + "</b> has been added to the selection")
-                    .dialog({
-                        autoOpen: true,
-                        show: 'blind',
-                        modal: true,
-                        hide: 'explode'
-                    });
-                */
+            	var currentStates = '';
+            	alert(ESGF.localStorage.get('esgf_searchStates',key));
+            	
+            	ESGF.localStorage.put('esgf_searchStates', key, value);
+            	
+            	alert(ESGF.localStorage.get('esgf_searchStates',key));
+            	
+            	ESGF.localStorage.remove('esgf_searchStates', key, value);
+            	*/
+            	
                 this.innerHTML="Remove From Cart";
 
             } else {
-            	ESGF.localStorage.remove('dataCart',evt.data.doc.id);
             	//remove from super cookie
-            	/*
-            	if(localStorage['dataCart'] != undefined || localStorage['dataCart'] != null) {
-            		var dataCart = localStorage['dataCart'].replace((evt.data.doc.id+';'),"");
-              	  	localStorage['dataCart'] = dataCart;
-            	} else {
-            		alert('should never come here');
-            	}
-            	alert('localStorage: ' + localStorage['dataCart']);
-            	*/
-            	/*
-                var $dialog = $('<div></div>')
-                .html('Dataset <b>' + evt.data.doc.id + "</b> has been removed to the selection")
-                .dialog({
-                    autoOpen: true,
-                    show: 'blind',
-                    modal: true,
-                    hide: 'explode'
-                });
-                */
+            	ESGF.localStorage.remove('dataCart',evt.data.doc.id);
+
+            	//remove from stateful super cookie
+                var key = ESGF.localStorage.toString('esgf_fq');
+                var value = evt.data.doc.id;
+            	ESGF.localStorage.removeFromValue('esgf_searchStates', key, value);
+            	
+            	
                 this.innerHTML ="Add To Cart";
                 delete selected[evt.data.doc.id];
 
@@ -331,92 +330,50 @@ AjaxSolr.theme.prototype.metadata = function(thisObject) {
     $('div#abstract_metadata').after('<div class="addedMetadata"><p>' + self.searchable_description + '</p></div>');
 
 
-
-
-
-            /*
-             *  searchable fields that are not displayed
-            //metadata_format
-            $('div#metadataformat_metadata').after('<div class="addedMetadata"><p>Format: ' + self.searchable_metadata_format + '</p></div>');
-
-            //metadata_url
-            $('div#metadataurl_metadata').after('<div class="addedMetadata"><p>URL: ' + self.searchable_metadata_url + '</p></div>');
-
-            //metadata_filename
-            $('div#metadatafilename_metadata').after('<div class="addedMetadata"><p>File name: ' + self.searchable_metadata_file_name + '</p></div>');
-
-            //file id
-            $('div#fileid_metadata').after('<div class="addedMetadata"><p>Data File Ids: ' + self.searchable_file_id + '</p></div>');
-
-            //file url
-            $('div#fileurl_metadata').after('<div class="addedMetadata"><p>Data File URLs: ' + self.searchable_file_url + '</p></div>');
-
-          //file size
-            $('div#filesize_metadata').after('<div class="addedMetadata"><p>Data File Size: ' + self.searchable_size + '</p></div>');
-
-            //data url
-            $('div#url_metadata').after('<div class="addedMetadata"><p>URL: ' + self.searchable_url + '</p></div>');
-
-            //data type
-            $('div#type_metadata').after('<div class="addedMetadata"><p>URL: ' + self.searchable_type + '</p></div>');
-
-          //data version
-            $('div#version_metadata').after('<div class="addedMetadata"><p>Version: ' + self.searchable_version + '</p></div>');
-
-            //data version
-            $('div#source_url_metadata').after('<div class="addedMetadata"><p>URL: ' + self.searchable_source_url+ '</p></div>');
-
-            //timestamp
-            $('div#timestamp_metadata').after('<div class="addedMetadata"><p>Timestamp: ' + self.searchable_timestamp + '</p></div>');
-
-            */
-
-
-
-
-    /*
-     * Solr faceted properties not displayed
-     */
-    /*
-    //instrument
-    $('div#facet_instrument_metadata').after('<div class="addedMetadata"><p>Data File URLs: ' + self.facet_instrument + '</p></div>');
-    //variable
-    $('div#facet_variable_metadata').after('<div class="addedMetadata"><p>Data File URLs: ' + self.facet_variable + '</p></div>');
-    //cf variable
-    $('div#facet_cfvariable_metadata').after('<div class="addedMetadata"><p>Data File URLs: ' + self.facet_cfvariable + '</p></div>');
-    //gcmd variable
-    $('div#facet_gcmdvariable_metadata').after('<div class="addedMetadata"><p>Data File URLs: ' + self.facet_gcmdvariable + '</p></div>');
-    */
-
-
-            /*
-            var keywordsText = '';
-
-            //add keywords to the page
-            if(self.keywords != null && self.keywords != '')
-            {
-                for(var i = 0;i<self.keywords.length;i++) {
-                    if(i == self.keywords.length-1) {
-                        keywordsText += self.keywords[i] + ' (' + self.keywords[i] + ')';
-                    }
-                    else {
-                        keywordsText += self.keywords[i] + ' (' + self.keywords[i] + '), ';
-                    }
-                }
-                $('div#keywords_metadata').after('<div class="addedMetadata"><p>' + keywordsText + '</p></div>');
-            }
-
-            //add investigators to the page
-            $('div#investigator_metadata').after('<div class="addedMetadata"><p>' + self.invesigators + '</p></div>');
-
-            //add contact information to the page
-            $('div#contact_metadata').after('<div class="addedMetadata"><p>' + self.contact + '</p></div>');
-
-            */
-
 };
 
 
 })(jQuery);
 
 
+/*
+//add to super cookie
+if(localStorage['dataCart'] != undefined) {
+	localStorage['dataCart'] = localStorage['dataCart'] + evt.data.doc.id + ';';
+} else {
+	localStorage['dataCart'] = evt.data.doc.id + ';';
+}
+
+alert('localStorage: ' + localStorage['dataCart']);
+*/
+/*
+var $dialog = $('<div></div>')
+    .html('Dataset <b>' + evt.data.doc.id + "</b> has been added to the selection")
+    .dialog({
+        autoOpen: true,
+        show: 'blind',
+        modal: true,
+        hide: 'explode'
+    });
+*/
+
+//remove from super cookie
+/*
+if(localStorage['dataCart'] != undefined || localStorage['dataCart'] != null) {
+	var dataCart = localStorage['dataCart'].replace((evt.data.doc.id+';'),"");
+	  	localStorage['dataCart'] = dataCart;
+} else {
+	alert('should never come here');
+}
+alert('localStorage: ' + localStorage['dataCart']);
+*/
+/*
+var $dialog = $('<div></div>')
+.html('Dataset <b>' + evt.data.doc.id + "</b> has been removed to the selection")
+.dialog({
+    autoOpen: true,
+    show: 'blind',
+    modal: true,
+    hide: 'explode'
+});
+*/

@@ -59,11 +59,16 @@
 
 
 (function ($) {
-
+/**
+ * 
+ */
 AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
 	
   floatPrecision: 2,	
 	
+  /**
+   * 
+   */
   afterRequest: function () {
     var self = this;
     var links = [];
@@ -72,9 +77,12 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     for (i = 0, l = fq.length; i < l; i++) {
         var fqString = fq[i];
         
+        //leave out the 'type:Dataset' constraint 
         if(fqString.search('Dataset') == -1) {
+        	
         	//check to see if this is a geospatial query (assuming 'east_degrees' is in every geo query)
             //if it is -> need to change the current selection string
+        	//this is mainly to make it human readable (as opposed to only solr readable)
             if(fqString.search('east_degrees') !== -1)
             {
                 if($("input[name='areaGroup']:checked").val() === 'circle') {
@@ -84,6 +92,8 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
                 	fqString = self.outputBoundingBoxString(fqString);
                 }
             }
+            
+            
             links.push($('<a href="#"/>').text('(x) ' + fqString).click( //function () {
             	self.removeFacet(fq[i]))
             );
@@ -94,26 +104,22 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     if (links.length > 1) {
       links.unshift($('<a href="#"/>').text('remove all').click(function () {
         
-    	  
+    	//remove everything from ajax-solr parameter store  
     	self.manager.store.remove('fq');
-         //delete the localStorage
-        if(ESGF.setting.storage) {
-            delete localStorage['fq'];
-        }
         
-        var esgf_fq = ESGF.localStorage.getAll('esgf_fq');
-        
+    	//remove everything from the localstorage store
+        var esgf_fq = ESGF.localStorage.getAll('esgf_fq');        
         for(var key in esgf_fq) {
         	var value = esgf_fq[key];
         	ESGF.localStorage.remove('esgf_fq',key,value);
         }
-
+        //var facet = null;
+        //self.removeGeospatialConstraints(facet);  
         
-        var facet = null;
-        self.removeGeospatialConstraints(facet);  
         self.manager.doRequest(0);
         return false;
       }));
+      
     }
     if (links.length) {
       AjaxSolr.theme('list_items', this.target, links);
@@ -123,22 +129,18 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     }
   },
 
+  /**
+   * 
+   * @param facet
+   * @returns {Function}
+   */
   removeFacet: function (facet) {
     var self = this;
     return function () {
     	if(self.manager.store.removeByValue('fq',facet)) {
     		if(ESGF.setting.storage) {
           	  	ESGF.localStorage.remove('esgf_fq', facet, facet);
-    			/*
-    			var fq = localStorage['fq'].replace((facet+';'),"");
-          	  	localStorage['fq'] = fq;
-          	  	
-          	  	if(fq == '') {
-          		  delete localStorage['fq'];
-          	  	} 
-          	  	*/
     		}
-    		
     		self.manager.doRequest(0);
         }
     }
@@ -146,10 +148,21 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     
   },
   
+  /**
+   * 
+   * @param fqString
+   * @returns {String}
+   */
   outputBoundingBoxString: function (fqString) {
 	  var self = this;
+
+	  var n = Manager.widgets['geo_browse'].boundingboxND;
+	  var s = Manager.widgets['geo_browse'].boundingboxSD;
+	  var e = Manager.widgets['geo_browse'].boundingboxED;
+	  var w = Manager.widgets['geo_browse'].boundingboxWD;
 	  
-	//if there is no OR, it is an enclosed search
+	  
+	  //if there is no OR, it is an enclosed search
 	  var newFqString = "";
 	  if(fqString.search('OR') === -1)
       {
@@ -160,35 +173,26 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     	  newFqString += 'overlaps '; 
       }
 	  newFqString += 'bounding (N,W,S,E):\n';
-	  //var printedND = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision);
 	  
-	  
-	  printedND = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision);
-	  printedSD = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxSD),self.floatPrecision);
-	  printedED = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxED),self.floatPrecision);
-	  printedWD = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxWD),self.floatPrecision);
+	  printedND = self.roundToPrecision(parseFloat(n),self.floatPrecision);
+	  printedSD = self.roundToPrecision(parseFloat(s),self.floatPrecision);
+	  printedED = self.roundToPrecision(parseFloat(e),self.floatPrecision);
+	  printedWD = self.roundToPrecision(parseFloat(w),self.floatPrecision);
   
 	  
-	  if(ESGF.setting.storage) {
-		  printedND = self.roundToPrecision(parseFloat(localStorage['ND']),self.floatPrecision);
-		  printedSD = self.roundToPrecision(parseFloat(localStorage['SD']),self.floatPrecision);
-		  printedED = self.roundToPrecision(parseFloat(localStorage['ED']),self.floatPrecision);
-		  printedWD = self.roundToPrecision(parseFloat(localStorage['WD']),self.floatPrecision);
-	  }
-	  
-	  /*
-	  var printedSD = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxSD),self.floatPrecision);
-	  var printedED = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxED),self.floatPrecision);
-	  var printedWD = self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxWD),self.floatPrecision);
-	  */
 	  newFqString += '(' + printedND + ',' + printedWD + ',' + printedSD + ',' + printedWD + ')';
 	  
 	  return newFqString;
   },
   
+  /**
+   * 
+   * @param fqString
+   * @returns
+   */
   outputCentroidString: function (fqString) {
 	  var self = this;
-	//if there is no OR, it is an enclosed search
+	  //if there is no OR, it is an enclosed search
       if(fqString.search('OR') === -1)
       {
           fqString = 'encloses centroid center(Lat,Long): (' + self.roundToPrecision(parseFloat(Manager.widgets['geo_browse'].boundingboxND),self.floatPrecision) + ',' +
@@ -203,19 +207,22 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
 	  return fqString;
   },
   
+  /**
+   * 
+   * @param inputNum
+   * @param desiredPrecision
+   * @returns {Number}
+   */
   roundToPrecision: function (inputNum,desiredPrecision) {
 	  var precisionGuide = Math.pow(10, desiredPrecision);
 	  return( Math.round(inputNum * precisionGuide) / precisionGuide );
   },
   
+  /**
+   * 
+   * @param facet
+   */
   removeGeospatialConstraints: function (facet) {
-	  if(ESGF.setting.storage) {
-		  delete localStorage['ED'];
-		  delete localStorage['WD'];
-		  delete localStorage['SD'];
-		  delete localStorage['ND'];
-	  }
-	  
 	  
 	  if(facet != null) {
 		  if(facet.search('east_degrees') !== -1 || facet == null) {
@@ -226,11 +233,15 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
 			        Manager.widgets['geo_browse'].boundingboxWD = null;
 			        Manager.widgets['geo_browse'].centroidRadius = null;
 			        Manager.widgets['geo_browse'].centroidCenter = null;  
-			       }
+		  }
 	  }
 	  
   },
   
+  /**
+   * 
+   * @param facet
+   */
   removeTemporalConstraints: function (facet) {
 	  
   }

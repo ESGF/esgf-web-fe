@@ -59,7 +59,7 @@
 
 
 (function ($) {
-    AjaxSolr.GeospatialSearchWidget = AjaxSolr.AbstractWidget.extend({
+    AjaxSolr.GeospatialSearchWidget = AjaxSolr.AbstractGeospatialWidget.extend({
         map: null,
         geocoder: null,
         infowindow: null,
@@ -77,6 +77,243 @@
         centroidCenter: 0,
         centroidRadius: 0,
         
+        /**
+         * 
+         */
+        beforeRequest: function () {
+    		
+        	//kill any live events that are associated with this widget
+        	$('#geospatial_marker_fieldset input[name="clear_markers"]').die('click');
+        	$("input[name='searchType']").die('change');
+        	$("#geospatial_location input[name='location']").die('keypress');
+        	$("input[name='areaGroup']").die('change');
+        	$('input[name="redraw_circle"]').die('click');
+        	$('button#submitGeo').die('click');
+        },
+        
+        
+        /**
+         * 
+         */
+        afterRequest: function () {
+        	
+    		
+            var self = this;
+            var i = null;
+            $("div#geo a[rel]").overlay({
+                mask: 'darkred',
+                effect: 'apple',
+        		left: "30%",
+        		top: "2%",
+                onBeforeLoad: function() {
+                    $('.apple_overlay').css({'width' : '660px'});
+                    var wrap = this.getOverlay().find(".contentWrap");
+                    wrap.load(this.getTrigger().attr("href"));
+                },
+                
+                onLoad: function() {
+                    
+                    //show the overlay
+                    self.showOverlay();
+                    
+                    //clear markers and the form for area choice
+                    self.clearMarkers();
+                    self.clearAreaChoice();
+                    
+                    //display a fresh map
+                    self.display_map();
+                    
+                    
+                    //events
+                    /*
+                    $("button#submitGeo").button({ });
+                    
+                    $('button#submitGeo').click( function(){
+                    	//alert('submitGeo');
+                    	//execute the geospatial query
+                        if($("input[name='searchType']:checked").val() !== null && $("input[name='areaGroup']:checked").val() !== null) {
+                            
+                        	//erase any previous geospatial request
+                            var fq = Manager.store.values('fq');
+                            for (i = 0, l = fq.length; i < l; i++) {
+                                //any previous filter query that contains 'east_degrees' can be assumed to be a geo search
+                                if(fq[i].search('east_degrees') !== -1) {
+                                    Manager.store.removeByValue('fq', fq[i]);
+                                }
+                            }
+
+                            self.executeGeospatialQuery();
+                            Manager.doRequest(0);					
+                        
+                        } else {
+                            alert('A Geospatial search type must be selected');
+                        }
+                    	
+                    	
+                    });
+                    
+                    //ensure that the radio buttons for encloses is checked by default	
+                    $("input[name='searchType']:first").attr('checked', true);
+                    
+                    //clear markers event
+                    $('#geospatial_marker_fieldset input[name="clear_markers"]').live('click',function(e) {
+                        self.clearMarkers();
+                        self.clearAreaChoice();
+                    });
+                    
+                    //this event will be taken out soon 
+                    //right now it acts as a guard so that the user cannot perform an overlaps query with a radius search (unimplemented)
+                    $("input[name='searchType']").live('change',function(e) {
+                        var searchType = $("input[name='searchType']").val();
+                    });
+                    
+                    //location text box event handler
+                    $("#geospatial_location input[name='location']").live('keypress',function(e) {
+                        if (e.keyCode === 13) {
+                            var address = $(this).val();
+                            self.getCoordinates(address);
+                            // clear the field
+                            $(this).val('');
+                            return false;
+                        }
+                    });
+                    
+                   
+                    $("input[name='areaGroup']").live('change',function(e) {
+                        if ($("input[name='areaGroup']:checked").val() === 'square') {
+                            if (self.num_of_markers < 2) {
+                                alert('Please define at least two markers');
+                                $(this).attr('checked', false);
+                                return false;
+                            }
+                            self.getBoundingBox();
+                        } else {
+                            if (self.num_of_markers !== 1) {
+                                alert("Please define ONE marker, center of interest!");
+                                $(this).attr('checked', false);
+                                return false;
+                            }
+                            if ($("#geospatial_circleInputs").is(":hidden")) {
+                                $("#geospatial_circleInputs").slideToggle('fast');
+                            }
+                            
+                            // put out something
+                            $("#geospatial_areaSelected").html('<p class="legend"> Center of Interest </p> + ' 
+                                + self.markerGroup[0].getPosition().toString());
+                            if ($("#areaSelected1").is(":hidden")) {
+                                $("#areaSelected1").slideToggle('fast');
+                            }
+                            self.redraw_circle();
+                        }		
+                    });
+                    $('input[name="redraw_circle"]').live('click',function(e) {
+                        self.redraw_circle();
+                    });
+                    */
+
+                    $("button#submitGeo").button({ });
+                    
+
+                    //ensure that the radio buttons for encloses is checked by default	
+                    $("input[name='searchType']:first").attr('checked', true);
+                },
+                
+                onClose: function() {
+                    //re-hide overlay
+                	self.hideOverlay();
+                }
+            }); 
+            
+    		
+            $('button#submitGeo').live('click', function(){
+            	
+            	//execute the geospatial query
+                if($("input[name='searchType']:checked").val() !== null && $("input[name='areaGroup']:checked").val() !== null) {
+                    
+                	//erase any previous geospatial request
+                    var fq = Manager.store.values('fq');
+                    for (i = 0, l = fq.length; i < l; i++) {
+                        //any previous filter query that contains 'east_degrees' can be assumed to be a geo search
+                        if(fq[i].search('east_degrees') !== -1) {
+                            Manager.store.removeByValue('fq', fq[i]);
+                        }
+                    }
+
+                    self.executeGeospatialQuery();
+                    Manager.doRequest(0);					
+                
+                } else {
+                    alert('A Geospatial search type must be selected');
+                }
+            	
+            	
+            });
+            
+            //clear markers event
+            $('#geospatial_marker_fieldset input[name="clear_markers"]').live('click',function(e) {
+                self.clearMarkers();
+                self.clearAreaChoice();
+            });
+            
+            //this event will be taken out soon 
+            //right now it acts as a guard so that the user cannot perform an overlaps query with a radius search (unimplemented)
+            $("input[name='searchType']").live('change',function(e) {
+                var searchType = $("input[name='searchType']").val();
+            });
+            
+            //location text box event handler
+            $("#geospatial_location input[name='location']").live('keypress',function(e) {
+                if (e.keyCode === 13) {
+                    var address = $(this).val();
+                    self.getCoordinates(address);
+                    // clear the field
+                    $(this).val('');
+                    return false;
+                }
+            });
+            
+            
+            $("input[name='areaGroup']").live('change',function(e) {
+                if ($("input[name='areaGroup']:checked").val() === 'square') {
+                    if (self.num_of_markers < 2) {
+                        alert('Please define at least two markers');
+                        $(this).attr('checked', false);
+                        return false;
+                    }
+                    self.getBoundingBox();
+                } else {
+                    if (self.num_of_markers !== 1) {
+                        alert("Please define ONE marker, center of interest!");
+                        $(this).attr('checked', false);
+                        return false;
+                    }
+                    if ($("#geospatial_circleInputs").is(":hidden")) {
+                        $("#geospatial_circleInputs").slideToggle('fast');
+                    }
+                    
+                    // put out something
+                    $("#geospatial_areaSelected").html('<p class="legend"> Center of Interest </p> + ' 
+                        + self.markerGroup[0].getPosition().toString());
+                    if ($("#areaSelected1").is(":hidden")) {
+                        $("#areaSelected1").slideToggle('fast');
+                    }
+                    self.redraw_circle();
+                }		
+            });
+            
+            $('input[name="redraw_circle"]').live('click',function(e) {
+                self.redraw_circle();
+            });
+            
+        },
+        
+        
+        
+        
+        
+        /**
+         * Clears all the markers off the google map
+         */
 	    clearMarkers: function () {
 		    var i = null;
 		    var self = this;
@@ -97,9 +334,19 @@
             $("#geospatial_areaSelected").html("");
             self.clearAreaChoice();
 	    },
+	    
+	    /**
+	     * Clears the radio buttons of the google map
+	     * 
+	     */
 	    clearAreaChoice: function() {
 		    $("input:radio").attr('checked', false);
 	    },
+	    
+	    /**
+	     * 
+	     * @param location
+	     */
         placeMarker: function(location) {
             var self = this;
             var marker = self.addMarker(location);
@@ -107,6 +354,10 @@
 		        self.appendMarker(marker,  self.num_of_markers);
 	        }
         },
+        
+        /**
+         * 
+         */
         display_map: function() {
 		    var self = this;
             var mapDiv = document.getElementById('geospatial_map_canvas');
@@ -135,8 +386,12 @@
                 self.placeMarker(e.latLng);
             });
         },
+        
+        /**
+         * 
+         * @param address
+         */
         getCoordinates: function(address) {
-            //alert('getCoordinates');
             var self = this;
             if (!self.geocoder) {
                 self.geocoder = new google.maps.Geocoder();
@@ -173,9 +428,14 @@
                 }
             });
         },
+        
+        /**
+         * 
+         * @param marker
+         * @param i
+         */
         appendMarker: function (marker, i) {
             var self = this;
-            //alert('appendMarker');
             var content = '[' + i + '] ' + 'lat ' + 
                 marker.getPosition().lat().toFixed(2) + ' , ' +
 		        'lon ' + 
@@ -185,6 +445,12 @@
                 $("#geospatial_markers").slideToggle('fast');
             }
        },
+       
+       /**
+        * 
+        * @param location
+        * @returns
+        */
        addMarker: function (location) {
             var self = this;
             if (self.num_of_markers < self.max_of_markers) {
@@ -214,6 +480,10 @@
                 return null;
             }
         },
+        
+        /**
+         * 
+         */
         getBoundingBox: function () {
             var self = this;
             var i = null;
@@ -236,16 +506,18 @@
                 $("#areaSelected1").slideToggle('fast');
             }
         },
+        
+        /**
+         * 
+         */
         draw_rect: function() {
             var self = this;
-            //alert('bounds: ' + self.bounds + ' ' + self.bounds.length);
             var ne = self.bounds.getNorthEast();
             var sw = self.bounds.getSouthWest();
             // need to double check on this
             var se = new google.maps.LatLng(sw.lat(), ne.lng());
             var nw = new google.maps.LatLng(ne.lat(), sw.lng());
             var points = [ne, se, sw, nw];
-            ///alert('ne: ' + ne + ' sw: ' + sw + ' nw: ' + nw + ' se: ' + se);
             self.poly = new google.maps.Polygon({
                 paths: points,
                 fillColor: "#0055ff",
@@ -255,6 +527,10 @@
             self.poly.setMap(self.map);
             self.map.fitBounds(self.bounds);	
         },
+        
+        /**
+         * 
+         */
         redraw_circle: function () {
             var self = this;
             //alert('redraw circle');
@@ -265,14 +541,19 @@
             quality = $("input[name='quality']").val();
             self.drawCircle(self.markerGroup[0], self.centroidRadius, quality);
         },
+        
+        /**
+         * 
+         * @param marker
+         * @param radius
+         * @param nodes
+         */
         drawCircle: function (marker, radius, nodes) {
-            //alert('drawCircle');
             var self = this;
             var i = null;
             self.centroidCenter = marker.getPosition();  
             var latConv = self.dist(self.centroidCenter, new google.maps.LatLng(self.centroidCenter.lat() + 0.1, self.centroidCenter.lng()))*10;
             var lngConv = self.dist(self.centroidCenter, new google.maps.LatLng(self.centroidCenter.lat(), self.centroidCenter.lng() + 0.1))*10;
-            //alert('latConv: ' + latConv + ' lngConv: ' + lngConv + ' radius/latConv: ' + radius/latConv * Math.cos(i * Math.PI/180));
             // loop
             var points = [];
             var step = parseInt(360/nodes,10) || 40;
@@ -299,9 +580,15 @@
             //since the circle can be resized, Im placing the call to this method here
             //setGeographicRadiusConstraint();
         },
+        
+        /**
+         * 
+         * @param p1
+         * @param p2
+         * @returns
+         */
         dist: function (p1, p2) {
             var self = this;
-            // alert(' In dist ' );
             var R = 6371; // earth's mean radius in km
             var dLat  = self.rad(p2.lat() - p1.lat());
             var dLong = self.rad(p2.lng() - p1.lng());
@@ -313,35 +600,39 @@
         },
         
 //need to space from here down        
-        
-    rad: function(x) {
-        return x*Math.PI/180;
-    },
+        /**
+         * 
+         */
+        rad: function(x) {
+        	return x*Math.PI/180;
+        },
     
     
-    
-    executeGeospatialQuery: function () {
+        /**
+         * 
+         */
+        executeGeospatialQuery: function () {
     	
-    	
-        var self = this;
-        //alert('executing geo spatial query');
-        var geoSearchType = $("input[name='searchType']:checked").val();
-        var geoShape = $("input[name='areaGroup']:checked").val();
-
-        if(geoSearchType === 'Encloses') {
-            self.encloses(geoShape);
-        }
-        else {
-            //alert('overlaps');
-            self.overlaps(geoShape);
-        }
+	        var self = this;
+	        var geoSearchType = $("input[name='searchType']:checked").val();
+	        var geoShape = $("input[name='areaGroup']:checked").val();
+	
+	        if(geoSearchType === 'Encloses') {
+	            self.encloses(geoShape);
+	        }
+	        else {
+	            self.overlaps(geoShape);
+	        }
         
 
-    },
+        },
     
     
     
-    
+    /**
+     * 
+     * @param geoSearchType
+     */
     encloses: function (geoSearchType) {
     	
         var self = this;
@@ -351,95 +642,53 @@
         var west_degrees, east_degrees, north_degrees, south_degrees,
         west_degreesFQ, east_degreesFQ, north_degreesFQ, south_degreesFQ; 
         
-        if(geoSearchType === 'circle') { // geosearch type is a circle
-            var theCenter = self.markerGroup[0];
-            self.centroidCenter = self.markerGroup[0].getPosition();
-            sw = self.cbounds.getSouthWest();
-            ne = self.cbounds.getNorthEast();
-            //this is the min long 
-            //west_degrees limit
-            self.boundingboxWD = sw.lng();
-            //this is the min lat
-            //south_degrees limit
-            self.boundingboxSD = sw.lat();
-            //this is the max long
-            //east_degrees limit
-            self.boundingboxED = ne.lng();
-            //this is the max lat
-            //north_degrees limit
-            self.boundingboxND = ne.lat();
-            
-            if(ESGF.setting.storage) {
-            	localStorage['WD'] = self.boundingboxWD;
-                localStorage['SD'] = self.boundingboxSD;
-                localStorage['ED'] = self.boundingboxED;
-                localStorage['ND'] = self.boundingboxND;
-            }
-            west_degrees = self.boundingboxWD;
-            east_degrees = self.boundingboxED;
-            south_degrees = self.boundingboxSD;
-            north_degrees = self.boundingboxND;
-            south_degreesFQ = 'south_degrees:[' + south_degrees + ' TO *]';
-            west_degreesFQ = 'west_degrees:[' + west_degrees + ' TO *]';
-            north_degreesFQ = 'north_degrees:[ * TO ' + north_degrees + ']';
-            east_degreesFQ = 'east_degrees:[ * TO ' + east_degrees + ']';
-            geoQueryString += '(' + south_degreesFQ + ' AND ' + west_degreesFQ + ' AND ' + north_degreesFQ + ' AND ' + east_degreesFQ + ')';
-            
-            
-            /*
+        // geosearch type is a circle
+        if(geoSearchType === 'circle') { 
+        	/*
              * Note that the code for bounding box and centroid are the same here
              * The reason is that centroid searches are trimmed after a solr query has been processed
              * It is actually handled in Results
              * This may be changed due to pagination issues
              */
-        }else { // geosearch type is a bounding box
-            sw = self.bounds.getSouthWest();
-            ne = self.bounds.getNorthEast();
-            //this is the min long 
+            self.centroidCenter = self.markerGroup[0].getPosition();
+        	//sw extreme point of the bounding box
+            sw = self.cbounds.getSouthWest();
+        	//ne extreme point of the bounding box
+            ne = self.cbounds.getNorthEast();
             //west_degrees limit
+            self.boundingboxWD = sw.lng();
+            //this is the min lat
+            //south_degrees limit
+            self.boundingboxSD = sw.lat();
+            //this is the max long
+            //east_degrees limit
+            self.boundingboxED = ne.lng();
+            //this is the max lat
+            //north_degrees limit
+            self.boundingboxND = ne.lat();
             
+            geoQueryString += self.getEnclosesBBQuery(self.boundingboxSD,self.boundingboxWD,self.boundingboxND,self.boundingboxED);
             
+        }else { // geosearch type is a bounding box
+        	
+        	//sw extreme point of the bounding box
+            sw = self.bounds.getSouthWest();
+            //ne extreme point of the bounding box
+            ne = self.bounds.getNorthEast();
 
+            //get the the extremes for each direction
             self.boundingboxWD = sw.lng();
             self.boundingboxSD = sw.lat();
             self.boundingboxED = ne.lng();
             self.boundingboxND = ne.lat();
+
+            geoQueryString += self.getEnclosesBBQuery(self.boundingboxSD,self.boundingboxWD,self.boundingboxND,self.boundingboxED);
             
-            if(ESGF.setting.storage) {
-            	localStorage['WD'] = self.boundingboxWD;
-                //this is the min lat
-                //south_degrees limit
-                localStorage['SD'] = self.boundingboxSD;
-                //this is the max long
-                //east_degrees limit
-                localStorage['ED'] = self.boundingboxED;
-                //this is the max lat
-                //north_degrees limit
-                localStorage['ND'] = self.boundingboxND;
-            }
-            
-            west_degrees = self.boundingboxWD;
-            east_degrees = self.boundingboxED;
-            south_degrees = self.boundingboxSD;
-            north_degrees = self.boundingboxND;
-            south_degreesFQ = 'south_degrees:[' + south_degrees + ' TO *]';
-            west_degreesFQ = 'west_degrees:[' + west_degrees + ' TO *]';
-            north_degreesFQ = 'north_degrees:[ * TO ' + north_degrees + ']';
-            east_degreesFQ = 'east_degrees:[ * TO ' + east_degrees + ']';
-            geoQueryString += '(' + south_degreesFQ + ' AND ' + west_degreesFQ + ' AND ' + north_degreesFQ + ' AND ' + east_degreesFQ + ')';
         }
+        
+        //attact the geo to the query string
         if(ESGF.setting.storage) {
         	ESGF.localStorage.put('esgf_fq', geoQueryString, geoQueryString);
-        	/*
-        	var fq = localStorage['fq'];
-            if(fq == undefined) {
-          	  fq = geoQueryString + ';';
-          	  localStorage['fq'] = fq;
-      	  	} else {
-          		  fq += geoQueryString + ';';
-              	  localStorage['fq'] = fq;
-      	  	}
-      	  	*/
         }
         
         
@@ -448,14 +697,23 @@
     },
     
     
+   
     
+    
+    
+    /**
+     * 
+     * @param geoSearchType
+     */
 	overlaps: function(geoSearchType) {
+		
         var self = this;
         
         geoQueryString = '';
         var sw = null;
         var ne = null;
-        if(geoSearchType === 'circle') { // geosearch type is a bounding box
+        if(geoSearchType === 'circle') { // geosearch type is a circle
+
             var theCenter = self.markerGroup[0];
             self.centroidCenter = self.markerGroup[0].getPosition();
             sw = self.cbounds.getSouthWest();
@@ -467,70 +725,12 @@
             self.boundingboxED = ne.lng();
             self.boundingboxND = ne.lat();
             
-            if(ESGF.setting.storage) {
-            	localStorage['WD'] = self.boundingboxWD;
-                //this is the min lat
-                //south_degrees limit
-                localStorage['SD'] = self.boundingboxSD;
-                //this is the max long
-                //east_degrees limit
-                localStorage['ED'] = self.boundingboxED;
-                //this is the max lat
-                //north_degrees limit
-                localStorage['ND'] = self.boundingboxND;
-            }
+            geoQueryString += self.getOverlapsBBQuery(self.boundingboxSD,self.boundingboxWD,self.boundingboxND,self.boundingboxED);
             
-            //case 1
-            //NE point in bounding box
-            geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
-		                 'north_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
-            geoQueryString += ' OR ';
-            //case 2
-            //SE point in bounding box
-            geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
-                'south_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
-            geoQueryString += ' OR ';
-            //case 3
-            //SW point in bounding box
-            geoQueryString += '(west_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
-                'south_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
-		    geoQueryString += ' OR ';		    
-            //case 4
-		    //NW point in bounding box
-            geoQueryString += '(west_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
-                'north_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
-            geoQueryString += ' OR ';
-            //case 5
-            //east degree in range and n & s are above and below respectively
-            geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
-                'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
-                'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
-            geoQueryString += ' OR ';
-            //case 6
-            //west degree in range and n & s are above and below respectively
-            geoQueryString += '(west_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
-                'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
-                'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
-            geoQueryString += ' OR ';
-            //case 7
-            //north degree in range and n & s are above and below respectively
-            geoQueryString += '(north_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '] AND ' +
-                'west_degrees:[ * TO ' + self.boundingboxWD + '] AND ' +
-                'east_degrees:[' + self.boundingboxED + ' TO ' + '* ])';
-            geoQueryString += ' OR ';
-            //case 8
-            //south degree in range and n & s are above and below respectively
-            geoQueryString += '(south_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
-                'west_degrees:[ * TO ' + self.boundingboxWD + '] AND ' +
-                'east_degrees:[' + self.boundingboxED + ' TO ' + '* ])';
-            geoQueryString += ' OR ';
-            //case 9
-            //data box > user defined bounding box              
-            geoQueryString += '(east_degrees:[' + self.boundingboxED + ' TO ' + ' *] AND ' +
-                'west_degrees:[ * TO ' + self.boundingboxWD + '] AND ' +
-                'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
-                'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
-        } else {
+            
+            
+        } else { // geosearch type is a bounding box
+
             sw = self.bounds.getSouthWest();
             ne = self.bounds.getNorthEast();
             //this is the min long 
@@ -545,203 +745,18 @@
             //this is the max lat
             //north_degrees limit
             self.boundingboxND = ne.lat();
+
+            geoQueryString += self.getOverlapsBBQuery(self.boundingboxSD,self.boundingboxWD,self.boundingboxND,self.boundingboxED);
             
-            if(ESGF.setting.storage) {
-            	localStorage['WD'] = self.boundingboxWD;
-                localStorage['SD'] = self.boundingboxSD;
-                localStorage['ED'] = self.boundingboxED;
-                localStorage['ND'] = self.boundingboxND;
-            }
-            
-            //case 1
-            //NE point in bounding box
-            geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
-                'north_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
-            geoQueryString += ' OR ';
-            //case 2
-            //SE point in bounding box
-            geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
-                'south_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
-            geoQueryString += ' OR ';
-            //case 3
-            //SW point in bounding box
-            geoQueryString += '(west_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
-                'south_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
-            geoQueryString += ' OR ';
-            //case 4
-            //NW point in bounding box
-            geoQueryString += '(west_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
-                'north_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
-            geoQueryString += ' OR ';
-            //case 5
-            //east degree in range and n & s are above and below respectively
-            geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
-                'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
-                'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
-            geoQueryString += ' OR ';
-            //case 6
-            //west degree in range and n & s are above and below respectively
-            geoQueryString += '(west_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
-                'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
-                'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
-            geoQueryString += ' OR ';
-            //case 7
-            //north degree in range and n & s are above and below respectively
-            geoQueryString += '(north_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '] AND ' +
-                'west_degrees:[ * TO ' + self.boundingboxWD + '] AND ' +
-                'east_degrees:[' + self.boundingboxED + ' TO ' + '* ])';
-            geoQueryString += ' OR ';
-            //case 8
-            //south degree in range and n & s are above and below respectively
-            geoQueryString += '(south_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
-                'west_degrees:[ * TO ' + self.boundingboxWD + '] AND ' +
-                'east_degrees:[' + self.boundingboxED + ' TO ' + '* ])';
-            geoQueryString += ' OR ';
-            //case 9
-            //data box > user defined bounding box              
-            geoQueryString += '(east_degrees:[' + self.boundingboxED + ' TO ' + ' *] AND ' +
-                'west_degrees:[ * TO ' + self.boundingboxWD + '] AND ' +
-                'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
-                'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
         }
         
-        /*
-        if(ESGF.setting.storage) {
-        	var fq = localStorage['fq'];
-            
-            if(fq == undefined) {
-          	  fq = geoQueryString + ';';
-          	  localStorage['fq'] = fq;
-      	  	} else {
-      		  //if(fq.search(self.fq(value)) != -1) {
-          		  fq += geoQueryString + ';';
-              	  localStorage['fq'] = fq;
-      		  //}
-      	  	}
-        }
-        */
         if(ESGF.setting.storage) {
         	ESGF.localStorage.put('esgf_fq', geoQueryString, geoQueryString);
         }
         
+        //add the geo string to the querystring
         Manager.store.addByValue('fq',geoQueryString);
-    },
-    afterRequest: function () {
-    	
-		
-        var self = this;
-        var i = null;
-        $("div#geo a[rel]").overlay({
-            mask: 'darkred',
-            effect: 'apple',
-    		left: "30%",
-    		top: "2%",
-            onBeforeLoad: function() {
-                $('.apple_overlay').css({'width' : '660px'});
-                var wrap = this.getOverlay().find(".contentWrap");
-                wrap.load(this.getTrigger().attr("href"));
-            },
-            onLoad: function() {
-
-        		
-                $("button#submitGeo").button({ });
-                $(".overlay_header").show();
-                $(".overlay_content").show();
-                $(".overlay_footer").show();
-                $(".overlay_border").show();
-                self.clearMarkers();
-                self.clearAreaChoice();
-                self.display_map();
-                
-                $('button#submitGeo').click( function(){
-                	//alert('submitGeo');
-                	//execute the geospatial query
-                    if($("input[name='searchType']:checked").val() !== null && $("input[name='areaGroup']:checked").val() !== null) {
-                        
-                    	//erase any previous geospatial request
-                        var fq = Manager.store.values('fq');
-                        for (i = 0, l = fq.length; i < l; i++) {
-                            //any previous filter query that contains 'east_degrees' can be assumed to be a geo search
-                            if(fq[i].search('east_degrees') !== -1) {
-                                Manager.store.removeByValue('fq', fq[i]);
-                            }
-                        }
-
-                        self.executeGeospatialQuery();
-                        Manager.doRequest(0);					
-                    
-                    } else {
-                        alert('A Geospatial search type must be selected');
-                    }
-                	
-                	
-                });
-                
-                //ensure that the radio buttons for encloses is checked by default	
-                $("input[name='searchType']:first").attr('checked', true);
-                $('#geospatial_marker_fieldset input[name="clear_markers"]').live('click',function(e) {
-                    self.clearMarkers();
-                    self.clearAreaChoice();
-                });
-                //this event will be taken out soon 
-                //right now it acts as a guard so that the user cannot perform and overlaps query with a radius search (unimplemented)
-                $("input[name='searchType']").live('change',function(e) {
-                    var searchType = $("input[name='searchType']").val();
-                });
-                $("#geospatial_location input[name='location']").live('keypress',function(e) {
-                    if (e.keyCode === 13) {
-                        var address = $(this).val();
-                        self.getCoordinates(address);
-                        // clear the field
-                        $(this).val('');
-                        return false;
-                    }
-                });
-                $("input[name='areaGroup']").live('change',function(e) {
-                    if ($("input[name='areaGroup']:checked").val() === 'square') {
-                        if (self.num_of_markers < 2) {
-                            //jMsg("warn", "Please define at least two markers!", 5000);
-                            alert('Please define at least two markers');
-                            $(this).attr('checked', false);
-                            return false;
-                        }
-                        self.getBoundingBox();
-                    } else {
-                        if (self.num_of_markers !== 1) {
-                            alert("Please define ONE marker, center of interest!");
-                            $(this).attr('checked', false);
-                            return false;
-                        }
-                        if ($("#geospatial_circleInputs").is(":hidden")) {
-                            $("#geospatial_circleInputs").slideToggle('fast');
-                        }
-                        // put out something
-                        $("#geospatial_areaSelected").html('<p class="legend"> Center of Interest </p> + ' 
-                            + self.markerGroup[0].getPosition().toString());
-                        if ($("#areaSelected1").is(":hidden")) {
-                            $("#areaSelected1").slideToggle('fast');
-                        }
-                        self.redraw_circle();
-                    }		
-                });
-                $('input[name="redraw_circle"]').live('click',function(e) {
-                    self.redraw_circle();
-                });
-                
-
-            },
-            onClose: function() {
-                $(".overlay_header").hide();
-                $(".overlay_content").hide();
-			    $(".overlay_footer").hide();
-			    $(".overlay_border").hide();
-            }
-        }); 
-        
-		
     }
-    
-    
     
     
 });
@@ -749,3 +764,244 @@
 
     
 }(jQuery));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+if(ESGF.setting.storage) {
+	localStorage['WD'] = self.boundingboxWD;
+    //this is the min lat
+    //south_degrees limit
+    localStorage['SD'] = self.boundingboxSD;
+    //this is the max long
+    //east_degrees limit
+    localStorage['ED'] = self.boundingboxED;
+    //this is the max lat
+    //north_degrees limit
+    localStorage['ND'] = self.boundingboxND;
+}
+
+
+//case 1
+//NE point in bounding box
+geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+             'north_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
+geoQueryString += ' OR ';
+//case 2
+//SE point in bounding box
+geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+    'south_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
+geoQueryString += ' OR ';
+//case 3
+//SW point in bounding box
+geoQueryString += '(west_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+    'south_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
+geoQueryString += ' OR ';		    
+//case 4
+//NW point in bounding box
+geoQueryString += '(west_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+    'north_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
+geoQueryString += ' OR ';
+//case 5
+//east degree in range and n & s are above and below respectively
+geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+    'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
+    'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
+geoQueryString += ' OR ';
+//case 6
+//west degree in range and n & s are above and below respectively
+geoQueryString += '(west_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+    'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
+    'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
+geoQueryString += ' OR ';
+//case 7
+//north degree in range and n & s are above and below respectively
+geoQueryString += '(north_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '] AND ' +
+    'west_degrees:[ * TO ' + self.boundingboxWD + '] AND ' +
+    'east_degrees:[' + self.boundingboxED + ' TO ' + '* ])';
+geoQueryString += ' OR ';
+//case 8
+//south degree in range and n & s are above and below respectively
+geoQueryString += '(south_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+    'west_degrees:[ * TO ' + self.boundingboxWD + '] AND ' +
+    'east_degrees:[' + self.boundingboxED + ' TO ' + '* ])';
+geoQueryString += ' OR ';
+//case 9
+//data box > user defined bounding box              
+geoQueryString += '(east_degrees:[' + self.boundingboxED + ' TO ' + ' *] AND ' +
+    'west_degrees:[ * TO ' + self.boundingboxWD + '] AND ' +
+    'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
+    'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
+*/
+
+
+
+/* old encloses bounding box
+//this is the min long 
+//west_degrees limit
+
+
+
+
+if(ESGF.setting.storage) {
+	localStorage['WD'] = self.boundingboxWD;
+    //this is the min lat
+    //south_degrees limit
+    localStorage['SD'] = self.boundingboxSD;
+    //this is the max long
+    //east_degrees limit
+    localStorage['ED'] = self.boundingboxED;
+    //this is the max lat
+    //north_degrees limit
+    localStorage['ND'] = self.boundingboxND;
+}
+
+west_degrees = self.boundingboxWD;
+east_degrees = self.boundingboxED;
+south_degrees = self.boundingboxSD;
+north_degrees = self.boundingboxND;
+south_degreesFQ = 'south_degrees:[' + south_degrees + ' TO *]';
+west_degreesFQ = 'west_degrees:[' + west_degrees + ' TO *]';
+north_degreesFQ = 'north_degrees:[ * TO ' + north_degrees + ']';
+east_degreesFQ = 'east_degrees:[ * TO ' + east_degrees + ']';
+geoQueryString += '(' + south_degreesFQ + ' AND ' + west_degreesFQ + ' AND ' + north_degreesFQ + ' AND ' + east_degreesFQ + ')';
+*/
+
+
+/*
+//convert to solr range
+south_degreesFQ = 'south_degrees:[' + boundingboxSD + ' TO *]';
+west_degreesFQ = 'west_degrees:[' + self.boundingboxWD + ' TO *]';
+north_degreesFQ = 'north_degrees:[ * TO ' + self.boundingboxND + ']';
+east_degreesFQ = 'east_degrees:[ * TO ' + self.boundingboxED + ']';
+
+//place in solr formatted query string
+geoQueryString += '(' + south_degreesFQ + ' AND ' + west_degreesFQ + ' AND ' + north_degreesFQ + ' AND ' + east_degreesFQ + ')';
+*/
+
+
+/* old encloses circle
+var theCenter = self.markerGroup[0];
+self.centroidCenter = self.markerGroup[0].getPosition();
+sw = self.cbounds.getSouthWest();
+ne = self.cbounds.getNorthEast();
+//this is the min long 
+//west_degrees limit
+self.boundingboxWD = sw.lng();
+//this is the min lat
+//south_degrees limit
+self.boundingboxSD = sw.lat();
+//this is the max long
+//east_degrees limit
+self.boundingboxED = ne.lng();
+//this is the max lat
+//north_degrees limit
+self.boundingboxND = ne.lat();
+
+if(ESGF.setting.storage) {
+	localStorage['WD'] = self.boundingboxWD;
+    localStorage['SD'] = self.boundingboxSD;
+    localStorage['ED'] = self.boundingboxED;
+    localStorage['ND'] = self.boundingboxND;
+}
+west_degrees = self.boundingboxWD;
+east_degrees = self.boundingboxED;
+south_degrees = self.boundingboxSD;
+north_degrees = self.boundingboxND;
+south_degreesFQ = 'south_degrees:[' + south_degrees + ' TO *]';
+west_degreesFQ = 'west_degrees:[' + west_degrees + ' TO *]';
+north_degreesFQ = 'north_degrees:[ * TO ' + north_degrees + ']';
+east_degreesFQ = 'east_degrees:[ * TO ' + east_degrees + ']';
+geoQueryString += '(' + south_degreesFQ + ' AND ' + west_degreesFQ + ' AND ' + north_degreesFQ + ' AND ' + east_degreesFQ + ')';
+*/
+
+
+/*
+//convert to solr range
+south_degreesFQ = 'south_degrees:[' + boundingboxSD + ' TO *]';
+west_degreesFQ = 'west_degrees:[' + self.boundingboxWD + ' TO *]';
+north_degreesFQ = 'north_degrees:[ * TO ' + self.boundingboxND + ']';
+east_degreesFQ = 'east_degrees:[ * TO ' + self.boundingboxED + ']';
+
+//place in solr formatted query string
+geoQueryString += '(' + south_degreesFQ + ' AND ' + west_degreesFQ + ' AND ' + north_degreesFQ + ' AND ' + east_degreesFQ + ')';
+*/
+
+/*
+if(ESGF.setting.storage) {
+	localStorage['WD'] = self.boundingboxWD;
+    localStorage['SD'] = self.boundingboxSD;
+    localStorage['ED'] = self.boundingboxED;
+    localStorage['ND'] = self.boundingboxND;
+}
+
+//case 1
+//NE point in bounding box
+geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+    'north_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
+geoQueryString += ' OR ';
+//case 2
+//SE point in bounding box
+geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+    'south_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
+geoQueryString += ' OR ';
+//case 3
+//SW point in bounding box
+geoQueryString += '(west_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+    'south_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
+geoQueryString += ' OR ';
+//case 4
+//NW point in bounding box
+geoQueryString += '(west_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+    'north_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '])';
+geoQueryString += ' OR ';
+//case 5
+//east degree in range and n & s are above and below respectively
+geoQueryString += '(east_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+    'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
+    'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
+geoQueryString += ' OR ';
+//case 6
+//west degree in range and n & s are above and below respectively
+geoQueryString += '(west_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+    'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
+    'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
+geoQueryString += ' OR ';
+//case 7
+//north degree in range and n & s are above and below respectively
+geoQueryString += '(north_degrees:[' + self.boundingboxSD + ' TO ' + self.boundingboxND + '] AND ' +
+    'west_degrees:[ * TO ' + self.boundingboxWD + '] AND ' +
+    'east_degrees:[' + self.boundingboxED + ' TO ' + '* ])';
+geoQueryString += ' OR ';
+//case 8
+//south degree in range and n & s are above and below respectively
+geoQueryString += '(south_degrees:[' + self.boundingboxWD + ' TO ' + self.boundingboxED + '] AND ' +
+    'west_degrees:[ * TO ' + self.boundingboxWD + '] AND ' +
+    'east_degrees:[' + self.boundingboxED + ' TO ' + '* ])';
+geoQueryString += ' OR ';
+//case 9
+//data box > user defined bounding box              
+geoQueryString += '(east_degrees:[' + self.boundingboxED + ' TO ' + ' *] AND ' +
+    'west_degrees:[ * TO ' + self.boundingboxWD + '] AND ' +
+    'south_degrees:[ * TO ' + self.boundingboxSD + '] AND ' +
+    'north_degrees:[' + self.boundingboxND + ' TO ' + '* ])';
+*/

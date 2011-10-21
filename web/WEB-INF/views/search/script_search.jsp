@@ -28,6 +28,8 @@
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/core/ParameterStore.js" />'></script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/core/AbstractWidget.js" />'></script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/core/AbstractFacetWidget.js" />'></script>
+    <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/core/AbstractOverlayWidget.js" />'></script>
+    <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/core/AbstractGeospatialWidget.js" />'></script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/helpers/jquery/ajaxsolr.theme.js" />'></script>
 
 

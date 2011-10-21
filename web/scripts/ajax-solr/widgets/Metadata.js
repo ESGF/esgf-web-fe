@@ -58,36 +58,31 @@
  */
 
 (function ($) {
-    AjaxSolr.MetadataWidget = AjaxSolr.AbstractWidget.extend({
+    AjaxSolr.MetadataWidget = AjaxSolr.AbstractOverlayWidget.extend({
     	
-    	/*
-    	 * Need these properties to extract the metadata file from the system
-    	 */
+    	/** 
+    	   * The Id of the dataset for which the metadata report represents
+    	   * 
+    	   * @field 
+    	   * @public
+    	   * @type String
+    	   */
         globalRecordId: '',
-	    metadatafileformat: '',
-	    metadatafilename: '',
 	    
-	    /* 
-	     * All metadata params should be stored in ONE structure (an array?)
-	     */
-        metadataArray: null,
-    	
-    	
-        
-    	/*
-    	 * Event listener
-    	 */
+        /**
+         * All events regarding the metadata display are placed here.
+         *
+         * <p>This method is executed after the Solr response is received.</p>
+         */
     	afterRequest: function () {
             var self = this;
             //need to attempt to phase this function out
             $("a.met").click(function () {
                 self.globalRecordId = $(this).parent().find("a").attr("id");
-                self.metadatafileformat = $(this).parent().find("a").attr("format");
-                self.metadatafilename = $(this).parent().find("a").attr("metadata_url");
-                //alert($(this).parent().find("a").attr("href"));
+                
             });
+            
             $(".ai_meta a[rel]").overlay({
-                //mask: 'darkred',
                 mask: {opacity: 0.5, color: '#000'},
                 effect: 'apple',
                 top: '2%',
@@ -96,309 +91,45 @@
                 	
                 	LOG.debug("In Metadata - onBeforeLoad");
                 	
+                	//style the apple overlay to a bigger width and height
                     $('.apple_overlay').css({'width' : '750px'},{'height':'700px'});
+                    
+                    //install the trigger
                     var wrap = this.getOverlay().find(".contentWrap");
 				    wrap.load(this.getTrigger().attr("href"));
 				    
                 	
                 },//end onBeforeLoad
+                
                 onLoad: function() {
                 	LOG.debug("In Metadata - onLoad");
                 	
                 	//find the appropriate document in the solr index
                 	//note this HAS to be changed to a more efficient way to grab this data
-                	
                     var doc = self.findDoc(self.globalRecordId);
                 	
                     self.metadata_report(doc);
                     
-
-                    $(".overlay_header").show();
-                    $(".overlay_header_buttons").hide(); 
-                    $(".overlay_content").show();
-                    $(".overlay_footer").show();
-                    $(".overlay_border").show();
+                    self.showOverlay();
                     
                     
-                	/*
-                    $(".scrollable").scrollable({ vertical: true, mousewheel: true });	
-                    
-
-                    //find the appropriate document in the solr index
-                    var doc = self.findDoc(self.globalRecordId);
-                    
-                    //generate the metadata report
-                    //self.metadata_report(doc);
-                    
-                    //show the overlay
-                    $(".overlay_header").show();
-                    $(".overlay_header_buttons").hide(); 
-                    $(".overlay_content").show();
-                    $(".overlay_footer").show();
-                    $(".overlay_border").show();
-                    */
                 },//end onLoad
                 onClose: function() {
                 	LOG.debug("In Metadata - on close");
-
-                    $(".overlay_header").hide();
-                    $(".overlay_content").hide();
-                    $(".overlay_header_buttons").hide();    
-                    $(".overlay_footer").hide();
-                    $(".overlay_border").hide();
+                	
+                	self.hideOverlay();
                 	
                 	//rehide the overlay
-                    $(".overlay_header").hide();
-                    $(".overlay_content").hide();
-                    $(".overlay_header_buttons").hide();    
-                    $(".overlay_footer").hide();
-                    $(".overlay_border").hide();
-                    
+                    self.hideOverlay();
                 }//end onClose
             });
         },
         
-        
-        /*
-         * Function metadata_report takes a metadata document, extracts relevant metadata and places them in a templating structure for the summary
+        /**
+         * method that finds a doc based on an id
+         *
+         * <p>very slow linear search - need a better way to do this</p>
          */
-        metadata_report: function(doc) {
-            var self = this;
-            
-            var metatdata_url = '/esgf-web-fe/metadataproxy';
-            
-            //We need another separate controller for getting the metadata for tds?
-            	
-            if(self.metadatafileformat == 'THREDDS') {
-            	//metatdata_url = 'http://localhost:8080/esgf-web-fe/threddsproxy';
-            }
-            
-            //For solr output, all the metadata is included as they are stored in the index
-            //However, there should be some controller that determines what storage device is being used
-            //and returned in a specific format that the metadata summary template can read
-            
-            self.processMetadataRecord(doc);
-            
-            /*
-            jQuery.ajax({
-                url: metatdata_url,
-                data: doc,
-                type: 'GET',
-                //on success process the metadata record
-                success: function(record) {self.processMetadataRecord(record,doc);},
-                error: function() {alert("error http://localhost:8080/esgf-web-fe/metadataproxy");}
-                //dataType: 'json'
-            }); 
-            */
-        },
-        
-        
-        /*
-         * Processes the metadata from both solr and the raw xml file
-         */
-        processMetadataRecord: function(doc) {
-        	//alert('process metadata record here for ' + doc.id);
-
-            var self = this;
-            $('.addedMetadata').remove();
-            $('.addedMetadataTitle').remove();
-            
-            //should probably use a closure here
-            if(ESGF.setting.metadata_summary == 'html') {
-            	self.processUsingHtml(doc);
-            } else if(ESGF.setting.metadata_summary == 'oldhtml') {
-            	self.processUsingOldHtml(doc);
-            } else if(ESGF.setting.metadata_summary == 'oldhtml') {
-            	self.processUsingDropBox(doc);
-            }
-            
-            //self.processUsingHtml(record,doc);  
-            
-            
-            
-            
-        }, //end processMetadataRecord
-        
-        
-        processUsingHtml: function(doc) {
-        	
-        	//add the title first 
-    		$('div#metadata_summary_dataset').after('<div class="addedMetadataTitle">' + 'Dataset: ' + doc['title']);
-        	var degreeCount = 0;
-        	var self = this;
-        	
-    		for (var property in doc) {
-        		
-        		//only do this if it is NOT the title 
-        		if(property != 'title') {
-        			var field = doc[property];
-
-            		$('.m_items').append('<div class="m_item" id="' + property + '"></div>');
-            		
-            		/*
-            		 * Property output
-            		 */
-            		//special case for variables
-            		if(property != 'text') {//don't want to display random text in report
-	            		if(property == 'variable') {
-	                		$('#'+property).append('<div class="leftsd">' + property + '(s):</div>');
-	            		} else if (property.search("degrees") == -1) {
-	                		$('#'+property).append('<div class="leftsd">' + property + ':</div>');
-	            		}	
-            		}
-            		
-            		/*
-            		 * Property value output
-            		 */
-            		//if the value is a "geo" property, it must be handled differently
-            		if(property.search("degrees") != -1) {
-            			degreeCount = degreeCount + 1;
-            			if(degreeCount == 4) {
-            				//alert('wd: ' + doc['west_degrees'] + ' ed: ' + ' sd: ' + ' nd: ');
-            				$('#'+property).append('<div class="leftsd">' + 'Geospatial Information' + ':</div>');
-            				
-            				var str = '<span style="padding-bottom:10px;font-weight:bold">Bounding Coordinates</span><br /><span style="padding-right:50px;">West degree: ' + doc['west_degrees'] + ' &deg;</span>  East degree: ' + doc['east_degrees'] +  
-            				          ' &deg;<br /><span style="padding-right:50px;">South degree: ' + doc['south_degrees'] +  ' &deg;</span>North degree: ' + doc['north_degrees'] + ' &deg;';
-            				
-            				$('#'+property).append('<div class="rightsd">' + str + '<div id="geo_map">' + 'map her' + '</div></div>');
-            				
-            				self.display_meta_map(doc['north_degrees'], doc['south_degrees'], doc['west_degrees'], doc['east_degrees']);
-            				
-            			}
-            			
-            			
-            		} else if (property != 'text'){ //don't want to display random text
-            			//if the value is an array it must be handled differently, as browser will view it as one giant string
-                		if(field instanceof Array)  {
-                			var str = '';
-                			for(var i=0;i<field.length;i++) {
-                				if(field.length > 1 && i < field.length-1) {
-                    				str += field[i] + ', ';
-                				} else {
-                					str += field[i];
-                				}
-                			}
-                    		$('#'+property).append('<div class="rightsd">' + str + '</div>');
-                		} else {
-                			$('#'+property).append('<div class="rightsd">' + field + '</div>');
-                    		
-                		}
-            		}
-            		
-            		
-            		
-        		}
-        		
-        		
-        	}
-    		
-    		//add border
-    		$('.overlay_footer').before('<div class="overlay_border"></div>');
-    		
-    		//add button
-    		/*
-    		$('.overlay_footer').append('<span class="box2 border2"><div style="float:left"><img src="images/shopping-cart.png" style="width:20px;height:20px;margin-top:6px;padding-right:3px;"/></div><div style="margin-top:6px;margin-left:3px;">ADD TO CART</div></span>');
-        	*/
-        },
-        
-        processUsingOldHtml: function(doc) {
-        	var self = this;
-        	
-        	for (var property in doc) {
-            	//alert('property: ' + property + " val: " + doc[property]);
-                //output += property + ': ' + doc[property]+'; ';
-              
-                //title
-            	if(property == 'title') { 
-            		$('div#metadata_summary_dataset').after('<div class="addedMetadataTitle">' + 'Dataset: ' + doc['title']);
-            	}
-            	
-            	//project(s)
-            	if(property == 'project') {
-            	    $('div#projects_metadata').after('<div class="addedMetadata"><p>' + doc['project'] + '</p></div>');
-            	}
-            	
-            	//temporal
-            	if(property == 'datetime_start') {
-            		//temporal
-                    $('div#time_metadata').after('<div class="addedMetadata"><p>Begin: ' + doc.datetime_start + ' End: ' + doc.datetime_stop + '</p></div>');
-
-            	}
-            	
-            	//geospatial
-            	if(property == 'east_degrees') {
-            		//temporal
-                    $('div#geospatial_metadata').after('<div class="addedMetadata"><p>' + 'coordinates (N,W,S,E):<br />(' + doc.north_degrees + ',' + doc.west_degrees + ',' + doc.south_degrees + ',' + doc.east_degrees + ')</p></div>');
-                    
-                    self.display_meta_map(doc.north_degrees, doc.south_degrees, doc.west_degrees, doc.east_degrees);
-            	}
-            	
-            	//keywords
-            	if(property == 'misc_keywords') {
-                    $('div#keywords_metadata').after('<div class="addedMetadata"><p>' + doc.misc_keywords + '</p></div>');
-            	}
-            	
-            	//description
-            	if(property == 'description') {
-                    //abstract/description
-                    $('div#abstract_metadata').after('<div class="addedMetadata"><p>' + doc.description + '</p></div>');
-
-            	}
-            	
-            }
-        	
-        	
-        },
-               
-        
-        processUsingDropBox: function(doc) {
-        	alert('Drop Box');
-        },
-        
-        /*
-         * Helper methods for bulk array processing (similar to map reduce)
-         */
-        forEach: function(arrFields, action) {
-        	for(var i=0;i<arrFields.length;i++) {
-            	action(arrFields[i]);
-        	}
-        },
-        
-        map: function(func, array, doc) {
-        	var self = this;
-        	var result = [];
-        	self.forEach(array, function(element){
-        		result.push(func(element,doc,self));
-        	});
-        	return result;
-        },
-        
-        createResultingStringArrayForSolrFields: function(element,doc,self) {
-        	var found = false;
-        	for(var att in doc) {
-        		if(att == element.slice(11)) {
-        			found = true;
-        			//alert('element: ' + element + ' found' + ' replace ' + self[element] + ' with: ' + doc[att]);
-        			self[element] = doc[att];
-        		}
-        	}
-        	if(!found) {
-        		self[element] = 'N/A';
-        	} 
-        	
-        	
-        },
-        
-        
-        
-        
-   
-        
-        //method that finds a doc based on an id
-        //very slow linear search - need a better way to do this
-        //
-        //The better way is to identify the id of the click event
-        //Will do this later
         findDoc: function (docId) {
         	for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
                 var doc = this.manager.response.response.docs[i];
@@ -411,17 +142,155 @@
         },
         
         
+        
+        
+        /**
+         * Function metadata_report takes a metadata document, extracts relevant metadata and places them in a templating structure for the summary
+         * 
+         * <p></p>
+         */
+        metadata_report: function(doc) {
+            var self = this;
+            
+            //For solr output, all the metadata is included as they are stored in the index
+            //However, there should be some controller that determines what storage device is being used
+            //and returned in a specific format that the metadata summary template can read
+            
+            self.processMetadataRecord(doc);
+            
+        },
+        
+        
+        /**
+         * Processes the metadata record
+         * 
+         * 
+         */
+        processMetadataRecord: function(doc) {
+            var self = this;
+            $('.addedMetadata').remove();
+            $('.addedMetadataTitle').remove();
+            
+            //should probably use a closure here
+         	self.processHtml(doc);
+            
+            
+        }, //end processMetadataRecord
+        
+        
+        /**
+         * Processes the metadata record as html (helper method)
+         * 
+         * 
+         */
+        processHtml: function(doc) {
+        	
+        	//add the title first 
+    		$('div#metadata_summary_dataset').after('<div class="addedMetadataTitle">' + 'Dataset: ' + doc['title']);
+        	var degreeCount = 0;
+        	var self = this;
+        	
+    		for (var property in doc) {
+        		
+        		//only do this if it is NOT the title 
+        		if(property != 'title') {
+        			
+        			var field = doc[property];
+            		
+        			$('.m_items').append('<div class="m_item" id="' + property + '"></div>');
+            		
+            		/*
+            		 * Property output
+            		 */
+            		//special case for variables
+            		if(property != 'text') {//don't want to display random text in report
+            			self.processMetadataVariables(property);
+            		}
+            		
+            		
+            		/*
+            		 * Property value output
+            		 */
+            		//if the value is a "geo" property, it must be handled differently
+            		if(property.search("degrees") != -1) {
+            			degreeCount = degreeCount + 1;
+            			
+            			//degree count of 4 means that we can place the 
+            			if(degreeCount == 4) {
+            				
+            				self.processMetadataGeo(property,field,doc);
+            				
+            				
+            				
+            			}
+            		} else if (property != 'text'){ //don't want to display random text
+            			
+            			//if the value is an array it must be handled differently, as browser will view it as one giant string
+            			//otherwise, just display the field on the right side
+                		if(field instanceof Array)  {
+                			self.processMetadataArrays(property,field);
+                		} else {
+                			$('#'+property).append('<div class="rightsd">' + field + '</div>');
+                    		
+                		}
+            		}
+            		
+        		}//end if property != title
+        	}
+    		
+    		//add border
+    		$('.overlay_footer').before('<div class="overlay_border"></div>');
+    		
+    		
+        },
+        
+        
+        /**
+         * 
+         * 
+         * 
+         */
+        processMetadataArrays: function (property,field) {
+        	var str = '';
+			for(var i=0;i<field.length;i++) {
+				if(field.length > 1 && i < field.length-1) {
+    				str += field[i] + ', ';
+				} else {
+					str += field[i];
+				}
+			}
+    		$('#'+property).append('<div class="rightsd">' + str + '</div>');
+        },
+        
+        processMetadataVariables: function(property) {
+        	if(property == 'variable') {
+        		$('#'+property).append('<div class="leftsd">' + property + '(s):</div>');
+    		} else if (property.search("degrees") == -1) {
+        		$('#'+property).append('<div class="leftsd">' + property + ':</div>');
+    		}
+        },
+        
+        
+        processMetadataGeo: function (property,field,doc) {
+        	/*
+        	$('#'+property).append('<div class="leftsd">' + 'Geospatial Information' + ':</div>');
+			
+			var str = '<span style="padding-bottom:10px;font-weight:bold">Bounding Coordinates</span><br /><span style="padding-right:50px;">West degree: ' + doc['west_degrees'] + ' &deg;</span>  East degree: ' + doc['east_degrees'] +  
+			          ' &deg;<br /><span style="padding-right:50px;">South degree: ' + doc['south_degrees'] +  ' &deg;</span>North degree: ' + doc['north_degrees'] + ' &deg;';
+			
+			$('#'+property).append('<div class="rightsd">' + str + '<div id="geo_map">' + 'map her' + '</div></div>');
+			
+			self.display_meta_map(doc['north_degrees'], doc['south_degrees'], doc['west_degrees'], doc['east_degrees']);
+			*/
+        },
+        
+   
+        
         display_meta_map: function (north_degrees, south_degrees, west_degrees, east_degrees) {
             var self = this;
             var i = null;
             var bounds = new google.maps.LatLngBounds();
             var paths = [ ];
-            /*
-            var ne = new google.maps.LatLng(self.searchable_north_degrees,self.searchable_east_degrees);
-            var nw = new google.maps.LatLng(self.searchable_north_degrees,self.searchable_west_degrees);
-            var se = new google.maps.LatLng(self.searchable_south_degrees,self.searchable_east_degrees);
-            var sw = new google.maps.LatLng(self.searchable_south_degrees,self.searchable_west_degrees);
-            */
             var ne = new google.maps.LatLng(north_degrees,east_degrees);
             var nw = new google.maps.LatLng(north_degrees,west_degrees);
             var se = new google.maps.LatLng(south_degrees,east_degrees);
@@ -459,259 +328,3 @@
 
 
 
-
-
-/*
-processCAS: function(record) {
-	var self = this;
-    
-	 //
-     //Need to grab the content from the xml/controller/RESTservice here
-     //
-  
-
-    //write all the params to HTML
-    AjaxSolr.theme('metadata',self);
-},
-*/
-
-
-/*
-processFGDC: function(record) {
-	var self = this;
-    
-	 
-     * Need to grab the content from the xml/controller/RESTservice here
-     
-  
-    //write all the params to HTML
-    AjaxSolr.theme('metadata',self);
-},
-*/
-
-
-
-/*
-processOAI: function(record) {
-    var self = this;
-    
-    //
-   // Need to grab the content from the xml/controller/RESTservice here
-    //
-  
-    
-    //
-    //Temporary adjustments of params
-    //
-    //
-    var i = null;
-    self.title = record.record.metadata.DIF.Entry_Title;
-    // Projects 
-    //note i need to change the "0" index and place the correct information 
-    //projects_metadata -> (record)/record[0]/metadata/DIF/Project[0]
-    //var projects = record.record[0].metadata.DIF.Project;
-    self.projects = record.record.metadata.DIF.Project;
-    // Investigators 
-    self.invesigators = record.record.metadata.DIF.Personnel[0].Last_Name;
-    // Contact Info 
-    self.contact = record.record.metadata.DIF.Personnel[0].Contact_Address;
-    // Temporal Info 
-    self.startTime = record.record.metadata.DIF.Temporal_Coverage.Start_Date;
-    self.stopTime = record.record.metadata.DIF.Temporal_Coverage.Stop_Date;
-    // Geo Info 
-    var east_degreesText = record.record.metadata.DIF.Spatial_Coverage.Easternmost_Longitude;
-    self.east_degrees = parseFloat(record.record.metadata.DIF.Spatial_Coverage.Easternmost_Longitude);
-    var west_degreesText = record.record.metadata.DIF.Spatial_Coverage.Westernmost_Longitude;
-    self.west_degrees = parseFloat(record.record.metadata.DIF.Spatial_Coverage.Westernmost_Longitude);
-    var north_degreesText = record.record.metadata.DIF.Spatial_Coverage.Northernmost_Latitude;
-    self.north_degrees = parseFloat(record.record.metadata.DIF.Spatial_Coverage.Northernmost_Latitude);
-    var south_degreesText = record.record.metadata.DIF.Spatial_Coverage.Southernmost_Latitude;
-    self.south_degrees = parseFloat(record.record.metadata.DIF.Spatial_Coverage.Southernmost_Latitude);
-    //alert(self.north_degrees + " " + self.south_degrees + " " + self.east_degrees + " " + self.west_degrees);
-    // Abstract 
-    self.description = record.record.metadata.DIF.Summary;
-    // Keywords 
-    self.keywords = record.record.metadata.DIF.Keyword;
-    //add projects to the page
-    var projectsText = '';
-    for(i = 0;i<self.projects.length;i++) {
-        if(i === self.projects.length-1) {
-            projectsText += self.projects[i].Long_Name + ' (' + self.projects[i].Short_Name + ')';
-        }
-        else {
-            projectsText += self.projects[i].Long_Name + ' (' + self.projects[i].Short_Name + '), ';
-        }
-    }
-    
-    
-    
-    $('div#projects_metadata').after('<div class="addedMetadata">' + projectsText + '</div>');
-    //self.writeToHTML();
-    
-    
-    //write all the params to HTML
-    AjaxSolr.theme('metadata',self);
-    
-    
-}, //end processOAI
-*/
-
-
-/*
-processTHREDDS: function(record) {
-	var self = this;
-    
-	 
-     * Need to grab the content from the xml/controller/RESTservice here
-     
-  
-    AjaxSolr.theme('metadata',self);
-},//end processTHREDDS
-*/
-
-
-/* old process metadata record logic
-
-
-//remove all previously "added metadata" and its title ahead of time 
-
-
-var searchable_arr = new Array();
-var facet_arr = new Array();
-var miscellaneous_arr = new Array();
-for(att in self){
-	if(self[att] == 'searchable') {
-		searchable_arr.push(att);
-    } else if(self[att] == 'facet') {
-        facet_arr.push(att);
-    }
-}
-
-//
-// Need to grab the searchable content from solr here
-//
-//loop over the searchable array getting either a 'N/A' string or the actual string
-self.map(self.createResultingStringArrayForSolrFields, searchable_arr, doc);
-
-
-//
- // Need to grab the facetable content from solr here
- //
-self.map(self.createResultingStringArrayForSolrFields, facet_arr, doc);
-
-
-//branch logic depending on the metadata file format
-if(self.metadatafileformat === 'OAI') {
-    self.processOAI(record);
-}
-else if(self.metadatafileformat === 'FGDC') {
-    self.processFGDC(record);
-}
-else if(self.metadatafileformat === 'CAS') {
-    self.processCAS(record);
-}
-else{ //thredds
-    self.processTHREDDS(record);
-}
-*/
-
-
-
-/*
- * Solr searchable properties
- */
-/*
-searchable_id: 'searchable',
-searchable_title: 'searchable',
-searchable_description: 'searchable',
-searchable_datetime_start: 'searchable',
-searchable_datetime_stop: 'searchable',
-searchable_north_degrees: 'searchable',
-searchable_east_degrees: 'searchable',
-searchable_south_degrees: 'searchable',
-searchable_west_degrees: 'searchable',
-searchable_url: 'searchable',
-searchable_type: 'searchable',
-searchable_version: 'searchable',
-searchable_source_url: 'searchable',
-searchable_timestamp: 'searchable',
-searchable_metadata_format: 'searchable',
-searchable_metadata_url: 'searchable',
-searchable_metadata_file_name: 'searchable',
-searchable_file_id: 'searchable',
-searchable_file_url: 'searchable',
-searchable_size: 'searchable',
-
-
- * Solr faceted properties
- 
-
-facet_project: 'facet',
-facet_instrument: 'facet',
-facet_variable: 'facet',
-facet_cf_variable: 'facet',
-facet_gcmd_variable: 'facet',
-
-
-
- * Misc properties - properties directly from the metadata file
- 
-
-misc_level: 'Misc',
-misc_frequency: 'Misc',
-misc_mission: 'Misc',
-misc_product: 'Misc',
-misc_realm: 'Misc',
-misc_keywords: 'Misc',
-misc_investigators: 'Misc',
-misc_contactinfo: 'Misc',
-
-
-
- * Reinitialize params
- * This is a necessary evil - I need to change the logic behind this ASAP
- 
-initializeMetadataParams: function () {
-	
-	
-	var self = this;
-	self.searchable_id = 'searchable';
-	self.searchable_title = 'searchable';
-	self.searchable_description = 'searchable';
-	self.searchable_datetime_start = 'searchable';
-	self.searchable_datetime_stop = 'searchable';
-	self.searchable_north_degrees = 'searchable';
-	self.searchable_east_degrees = 'searchable';
-	self.searchable_south_degrees = 'searchable';
-	self.searchable_west_degrees = 'searchable';
-	
-	self.searchable_url = 'searchable';
-	self.searchable_type = 'searchable';
-	self.searchable_version = 'searchable';
-	self.searchable_source_url = 'searchable';
-	self.searchable_timestamp = 'searchable';
-	self.searchable_metadata_format = 'searchable';
-	self.searchable_metadata_url = 'searchable';
-	self.searchable_metadata_file_name = 'searchable';
-	self.searchable_file_id = 'searchable';
-	self.searchable_file_url = 'searchable';
-	self.searchable_size = 'searchable';
-	
-	
-	self.facet_project = 'facet';
-	self.facet_instrument = 'facet';
-	self.facet_variable = 'facet';
-	self.facet_cf_variable = 'facet';
-	self.facet_gcmd_variable = 'facet';
-	
-	self.misc_level = 'N/A';
-	self.misc_frequency = 'N/A';
-	self.misc_mission = 'N/A';
-	self.misc_product = 'N/A';
-	self.misc_realm = 'N/A';
-	self.misc_keywords = 'N/A';
-	self.misc_investigators = 'N/A';
-	self.misc_contactinfo = 'N/A';
-	
-},
-*/

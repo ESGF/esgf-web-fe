@@ -28,6 +28,13 @@ Style information is in styles/welcomeview/welcome.css
 			<div class="span-2 last"><p></p></div>
 		</div>
 		
+		<div class="span-24 info last" >
+			<div class="span-2"><p></p></div>
+			<div id="disclaimer" class="span-20" style="text-align:center"><p></p>
+			</div>	
+			<div class="span-2 last" ><p></p></div>
+		</div>
+		
 	</ti:putAttribute>
 	
 </ti:insertDefinition>

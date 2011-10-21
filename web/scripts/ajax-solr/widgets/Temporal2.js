@@ -160,19 +160,6 @@
            ESGF.localStorage.put('esgf_fq',datetime_startFQ,datetime_startFQ);
            ESGF.localStorage.put('esgf_fq',datetime_stopFQ,datetime_stopFQ);
            
-           /*
-           if(ESGF.setting.storage) {
-        	   var fq = localStorage['fq'];
-               if(fq == null) {
-             	  fq = datetime_startFQ + ';' + datetime_stopFQ + ';';
-             	  
-             	  localStorage['fq'] = fq;
-         	  } else {
-         		  fq += datetime_startFQ + ';'  + datetime_stopFQ + ';';
-                 	  localStorage['fq'] = fq;
-         	  }
-           }
-     	   */
            
            Manager.doRequest(0);
 	  }//end executeDateQuery

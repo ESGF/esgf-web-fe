@@ -9,7 +9,6 @@ body {
 	font-family:Arial, Helvetica, sans-serif;	
 	font-size:13px;
 	background-color:#f9f6f1;
-	/*background-color:#FFFFFF;*/
 }
 
 
@@ -19,23 +18,12 @@ body {
 	padding-left: 5px;
 }
 
-/* This is the repeating image 
-	The size must be changed*/
-/*
-.contentwrapmid {
-	float:left;
-	width:1010px; 
-	background:url(../images/wrapmid.jpg) top left repeat-y;
-}
-*/
-
 
 /* header and navigation bar */
 .headertop {
 	/* background:url(../images/header_bg.jpg) top left repeat-x; */
 	
 	 background: #FFFFFF; 
-	/* height:92px;*/
 }
 
 .headerbottom {
@@ -126,9 +114,6 @@ body {
 }
 /* end footer */
 
-.searchBorder {
-	
-}
 
 
 
@@ -136,47 +121,6 @@ body {
 
 
 /* end header info */
-
-
-
-
-
-/* end padders for the 3 columns of home page */
-
-
-/* search form on the home page */
-/*
-.searchformcontainer {
-	float: left;
-	height:35px;
-	margin:10px 10px 5px 10px; 	
-}
-
-.search-field {
-	float: left;
-	background-color:#FFFFFF;
-	background: url(../images/search_bg.jpg) top left;
-	height: 35px;
-	line-height:35px;
-	background: url(../images/search_bg.jpg) top left; 
-	width: 204px;
-	line-height:35px;
-	font-size: 13px;	
-	color: #333333;
-	margin: 0px;
-	padding: 0px 0px 0px 0px;
-	border: none;
-}
-
-.searchform {
-	float: left;
-}
-.search-btn {
-	float: left;
-	width: 52px;	
-	height: 35px;
-}
-*/
 
 
 
@@ -289,13 +233,6 @@ body {
 	border: 1px solid #9c9c9c;
 	background: #838943;
 	cursor: pointer;
-	/*
-	padding-top: 5px;
-	padding-bottom: 5px;
-	padding-left: 15px;
-	padding-right: 15px;
-	cursor: pointer;
-	*/
 }
 
 

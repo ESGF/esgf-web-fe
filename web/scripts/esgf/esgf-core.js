@@ -104,9 +104,6 @@ ESGF.search.selected = ESGF.search.selected || {};
 // flag for using html5 localStorage
 ESGF.setting.storage = true;
 
-// flag for determining which metadata summary to display
-ESGF.setting.metadata_summary = 'html';
-
 //distributed search switch - need to revisit this
 ESGF.setting.searchType = 'local';
 

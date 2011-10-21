@@ -82,7 +82,7 @@ AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
     output += '<div class="search-entry">';
       output += '<div style="font-size:14px;font-style:bold" class="desc">';//'<h4 class="desc">';
       //output += '<a href="#" style="text-decoration:none">';
-      output += '<span class="actionitem ai_meta"><a href="/esgf-web-fe/scripts/esgf/metadata_overlay_template.html" class="met" rel="#metadata_overlay"' + allStr + '>';
+      output += '<span class="actionitem ai_meta"><a href="/esgf-web-fe/scripts/esgf/overlays/metadata_overlay.html" class="met" rel="#metadata_overlay"' + allStr + '>';
       output += doc.title + '</a>';
       output += '</div>' ;
       output += '<p id="links_' + doc.id + '" class="links"></p>';

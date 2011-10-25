@@ -66,88 +66,48 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 		var self = this;
 		
 		$('#search-button').live('click',function(){
-			//var value = $(this).val();
 			var value = $('input#query').val();
-			
-			if(value.length > 0) {
-				if(ESGF.setting.storage) {
 
-					ESGF.localStorage.put('esgf_fq','text:'+value,'text:'+value);
-					alert(ESGF.localStorage.get('esgf_fq','text:'+value));
-					ESGF.localStorage.remove('esgf_fq','text:'+value);
-					
-					var fq = localStorage['fq'];
-					if(fq == undefined) {
-						fq = fq + 'text:' + value + ';';
-						localStorage['fq'] = fq;
-					} else {
-						fq = fq + 'text:' + value + ';';
-						localStorage['fq'] = fq;
-					}
-				}
+			if(value.length > 0) {
+				var multiString = value.split('\+');
 				
-				if(value && self.add(value)) {
-					self.manager.doRequest(0);
-				} 
-			} 
-			
-			/*
-			if(ESGF.setting.storage) {
-				var fq = localStorage['fq'];
-				if(fq == undefined) {
-			  		fq = 'text:' + value + ';';
-			  		localStorage['fq'] = fq;
-			  	} else {
-			  		fq += 'text:' + value + ';';
-			  		localStorage['fq'] = fq;
-			  	}
+				for(var i=0;i<multiString.length;i++) {
+					self.add(multiString[i]);
+					
+					// If the field value has a space or a colon in it, wrap it in quotes,
+				    // unless it is a range query.
+				    if (multiString[i].match(/[ :]/) && !multiString[i].match(/[\[\{]\S+ TO \S+[\]\}]/)) {
+				    	multiString[i] = '"' + multiString[i] + '"';
+				    }
+					ESGF.localStorage.put('esgf_fq','text:'+multiString[i],'text:'+multiString[i]);
+				}
+
+				self.manager.doRequest(0);
 			}
-			alert('LOCALSTORAGE: ' + localStorage['fq']);
-			if (value && self.add(value)) {
-		        self.manager.doRequest(0);
-		      }
-		      
-		    */
-			
 			
 		});
 		
 		
 		$(this.target).find('input').bind('keydown', function(e) {
-			/*
-			if (self.requestSent === false && e.which == 13) {
-		        var value = $(this).val();
-		        alert('value: ' + value);
-		        if (value && self.add(value)) {
-		          self.manager.doRequest(0);
-		        }
-		      }
-			*/
 			if(self.requestSent === false && e.which === 13) {
 				var value = $('input#query').val();
-				if(ESGF.setting.storage) {
-
-						var fq = localStorage['fq'];
+				if(value.length > 0) {
+					var multiString = value.split('\+');
+					
+					for(var i=0;i<multiString.length;i++) {
+						self.add(multiString[i]);
 						
-						ESGF.localStorage.put('esgf_fq','text:'+value,'text:'+value);
-						alert(ESGF.localStorage.get('esgf_fq','text:'+value));
-						ESGF.localStorage.remove('esgf_fq','text:'+value);
-						
-						if(fq == undefined) {
-					  		fq = 'text:' + value + ';';
-					  		localStorage['fq'] = fq;
-					  	} else {
-					  		fq += 'text:' + value + ';';
-					  		localStorage['fq'] = fq;
-					  	}
+						// If the field value has a space or a colon in it, wrap it in quotes,
+					    // unless it is a range query.
+					    if (multiString[i].match(/[ :]/) && !multiString[i].match(/[\[\{]\S+ TO \S+[\]\}]/)) {
+					    	multiString[i] = '"' + multiString[i] + '"';
+					    }
+						ESGF.localStorage.put('esgf_fq','text:'+multiString[i],'text:'+multiString[i]);
 					}
-				  
-				  if(value && self.add(value)) {
-					  self.manager.doRequest(0);
-				  }
+					
+					self.manager.doRequest(0);
+				}
 			}
-			
-			
 		});
 		
 		
@@ -159,10 +119,10 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 	  
 	  var self = this;
 	  
+	  
 	  var list = [];
 	  for (var i=0;i<this.fields.length;i++) {
 		  var field = this.fields[i];
-		  
 		  for(var facet in this.manager.response.facet_counts.facet_fields[field]) {
 			  list.push({
 				  field: field,
@@ -173,27 +133,29 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 	  }
 	  
 	  this.requestSent = false;
+	  
+	  /* disable autocomplete for now
+	   * 
 	  $(this.target).find('input').autocomplete(list, {
 		  formatItem: function (facet) {
 			  return facet.text;
 		  }
 	  }).result(function(e, facet) {
 		  self.requestSent = true;
+		  alert('result');
 		  if(self.manager.store.addByValue('fq',facet.field + ':' + facet.value)){
-			  if(ESGF.setting.storage) {
-					var fq = localStorage['fq'];
-					if(fq == undefined) {
-				  		fq = facet.field + ':' + facet.value + ';';
-				  		localStorage['fq'] = fq;
-				  	} else {
-				  		fq += facet.field + ':' + facet.value + ';';
-				  		localStorage['fq'] = fq;
-				  	}
-				}
+			  
+
+				alert('localstorage: ' + ESGF.localStorage.toString('esgf_fq'));
+
+				ESGF.localStorage.put('esgf_fq','text:'+value,'text:'+value);
+				
+				
+				alert('localstorage: ' + ESGF.localStorage.toString('esgf_fq'));
 			  self.manager.doRequest(0);
 		  }
 	  });
-	  
+	  */
 	  
 	
   }

@@ -83,6 +83,8 @@
 package org.esgf.filedownload;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -120,7 +122,7 @@ public class FileDownloadTemplateController {
     //the max rows to be returned is best configurable or read from props file
 
     //private final static String filePrefix="q=*%3A*&json.nl=map&fq=type%3AFile&rows=2000&fq=parent_id:";
-    private static String queryString ="q=*:*&json.nl=map&start=0&rows=300&fq=type:File&fq=parent_id:";
+    private static String queryString ="q=*:*&json.nl=map&start=0&rows=300&fq=type:File&fq=dataset_id:";
 
 
     @RequestMapping(method=RequestMethod.GET)
@@ -131,9 +133,7 @@ public class FileDownloadTemplateController {
         
         if(request.getParameter("version").equalsIgnoreCase("v1")) {
             responseStr = convertTemplateFormatV1(request, response);
-        } else {
-            responseStr = convertTemplateFormatV2(request, response);
-        }
+        } 
         
         
         return responseStr;
@@ -172,6 +172,7 @@ public class FileDownloadTemplateController {
     //    </file>
     //<doc>
 
+    /*
     private String convertTemplateFormatV2(HttpServletRequest request, HttpServletResponse response) throws JSONException {
 
         //add the distrib attribute to the query
@@ -220,7 +221,6 @@ public class FileDownloadTemplateController {
 
             // read the response
             responseBody = method.getResponseBodyAsString();
-            //LOG.debug(responseBody);
         } catch (HTTPException e) {
             LOG.error("Fatal protocol violation");
             e.printStackTrace();
@@ -278,7 +278,7 @@ public class FileDownloadTemplateController {
         
         return jsonContent;
     }
-    
+    */
     
     
     
@@ -349,27 +349,48 @@ public class FileDownloadTemplateController {
                 JSONArray docsJSON = responseBody.getJSONArray("docs");
 
                 try{
-                    
+
+
                     JSONObject docJSON = new JSONObject(docsJSON.get(0).toString());
-                    
+                    //LOG.debug("Creating response doc");
+
                     //  create <doc> element
                     Element docEl = new Element("doc");
-
+                    
                     //  create doc/dataset_id element
                     Element dataset_idEl = new Element("dataset_id");
                     dataset_idEl.addContent(id);
                     docEl.addContent(dataset_idEl);
+
+                    //LOG.debug("added id: " + id);
                     
                     //insert initial file here
                     //this is to combat the array vs. json object problem
                     Element fileEl = createInitialFileElement(docJSON);
                     docEl.addContent(fileEl);
+
+                    //LOG.debug("added initial file: ");
                     
+                    //go through all the files
                     for(int j=0;j<docsJSON.length();j++) {
                         docJSON = new JSONObject(docsJSON.get(j).toString());
                         fileEl = createFileElement(docJSON);
                         docEl.addContent(fileEl);
+                        //LOG.debug("added another file: ");
                     }
+                    
+                    boolean containsGridFTP = containsGridFTP(docEl);
+                    
+                    
+                    //  create doc/dataset_id element
+                    Element gridFTPEl = new Element("GridFTP");
+                    if(containsGridFTP) {
+                        gridFTPEl.addContent("true");
+                    } else {
+                        gridFTPEl.addContent("false");
+                    }
+                    
+                    docEl.addContent(gridFTPEl);
                     
                     document.getRootElement().addContent(docEl);
                     
@@ -380,8 +401,7 @@ public class FileDownloadTemplateController {
 
                     jsonContent = returnJSON.toString();
 
-                    //LOG.debug("json: \n" + returnJSON.toString());
-                    
+                   
                
                 }
                 catch(Exception e) {
@@ -396,8 +416,65 @@ public class FileDownloadTemplateController {
         return jsonContent;
         
     }
-
     
+    /*
+     * Need to finish implementation
+     */
+    private static boolean containsGridFTP(Element element) {
+        boolean containsGridFTP = false;
+        
+        
+        Iterator itr = (element.getChildren()).iterator();
+        while(itr.hasNext()) {
+          Element fileEl = (Element)itr.next();
+          //iterate over files
+          if(fileEl.getName().equals("file")) {
+              Iterator itrFile = (fileEl.getChildren()).iterator();
+              //iterate over file characteristics
+              while(itrFile.hasNext()) {
+                  Element itrFileCharacteristics = (Element)itrFile.next();
+                  if(itrFileCharacteristics.getName().equals("services")) {
+                      Iterator itrServices = (itrFileCharacteristics.getChildren()).iterator();
+                      while(itrServices.hasNext()) {
+                          Element serviceEl = (Element)itrServices.next();
+                          if(serviceEl.getText().equals("GridFTP")) {
+                              containsGridFTP = true;
+                          }
+                      }
+                      
+                  }
+              }
+          }
+        }
+        return containsGridFTP;
+    }
+
+    /*
+     * <file>
+     *   <fileid></fileid>
+     *   <title></title>
+     *   <size></size>
+     *   <urls>
+     *     <url></url>
+     *     <url></url>
+     *     ...
+     *     <url></url>
+     *   </urls>
+     *   <mimes>
+     *     <mime></mime>
+     *     <mime></mime>
+     *     ...
+     *     <mime></mime>
+     *   </mimes>
+     *   <services>
+     *     <service></service>
+     *     <service></service>
+     *     ...
+     *     <service></service>  
+     *   </services>
+     *   
+     * </file>
+     */
     private static Element createInitialFileElement(JSONObject docJSON) {
         Element fileEl = new Element("file");
 
@@ -419,31 +496,38 @@ public class FileDownloadTemplateController {
            sizeEl.addContent(docJSON.get("size").toString());
            fileEl.addContent(sizeEl);
 
-           // create file/url element
+           
+           Element urlsEl = new Element("urls");
+           Element servicesEl = new Element("services");           
+           Element mimesEl = new Element("mimes");
+
+           //first part is the url
+           String url = "null_url";
            Element urlEl = new Element("url");
-           JSONArray urlsJSON = docJSON.getJSONArray("url");
-
-           urlEl.addContent("nully");
-           fileEl.addContent(urlEl);
-
-
-           // create file/services element
-           Element servicesEl = new Element("services");
-
-           JSONArray docserviceJSON = docJSON.getJSONArray("service");
-           for(int k=0;k<docserviceJSON.length();k++) {
-               Element serviceEl = new Element("service");
-               String serviceStr = docserviceJSON.get(k).toString();
-               String [] serviceTokens = serviceStr.split("|");
-               //serviceEl.addContent(docsJSON.get(i).toString());
-               serviceEl.addContent(serviceTokens[2]);
-               //LOG.debug("service: " + serviceTokens[2]);
-               servicesEl.addContent(serviceEl);
-           }
+           urlEl.addContent(url);
+           
+           //second part is the mime
+           String mime = "null_mime";
+           Element mimeEl = new Element("mime");
+           mimeEl.addContent(mime);
+           
+           //third part is the service type
+           String service = "null_service";
+           Element serviceEl = new Element("service");
+           serviceEl.addContent(service);
+           
+           urlsEl.addContent(urlEl);
+           mimesEl.addContent(mimeEl);
+           servicesEl.addContent(serviceEl);
+           
+           fileEl.addContent(urlsEl);
+           fileEl.addContent(mimesEl);
            fileEl.addContent(servicesEl);
-       
+           
+           //LOG.debug("First FileEl: " + fileElementToString(fileEl,2));
+           
         } catch(Exception e) {
-            
+            e.printStackTrace();
         }
         
         return fileEl;
@@ -452,7 +536,6 @@ public class FileDownloadTemplateController {
     private String getResponseBody(String id)  {
 
         String responseBody = null;
-
 
         // create an http client
         HttpClient client = new HttpClient();
@@ -499,324 +582,112 @@ public class FileDownloadTemplateController {
     
     
     
-    
-    public Element createFileElement(JSONObject docJSON) throws JSONException {
+    /*
+     * <file>
+     *   <fileid></fileid>
+     *   <title></title>
+     *   <size></size>
+     *   <urls>
+     *     <url></url>
+     *     <url></url>
+     *     ...
+     *     <url></url>
+     *   </urls>
+     *   <mimes>
+     *     <mime></mime>
+     *     <mime></mime>
+     *     ...
+     *     <mime></mime>
+     *   </mimes>
+     *   <services>
+     *     <service></service>
+     *     <service></service>
+     *     ...
+     *     <service></service>  
+     *   </services>
+     *   
+     * </file>
+     */
+    public Element createFileElement(JSONObject docJSON){
+        //LOG.debug("In create file element");
+        
         // create <file> element
         Element fileEl = new Element("file");
 
         // create file/file_id element
         Element file_idEl = new Element("file_id");
-        file_idEl.addContent(docJSON.get("id").toString());
-        fileEl.addContent(file_idEl);
+        try {
+            file_idEl.addContent(docJSON.get("id").toString());
+            
+            fileEl.addContent(file_idEl);
 
-        // create file/title element
-        Element titleEl = new Element("title");
-        titleEl.addContent(docJSON.get("title").toString());
-        fileEl.addContent(titleEl);
+            // create file/title element
+            Element titleEl = new Element("title");
+            titleEl.addContent(docJSON.get("title").toString());
+            fileEl.addContent(titleEl);
 
-        // create file/file_size element
-        Element sizeEl = new Element("size");
-        sizeEl.addContent(docJSON.get("size").toString());
-        fileEl.addContent(sizeEl);
-
-        // create file/url element
-        Element urlEl = new Element("url");
-        JSONArray urlsJSON = docJSON.getJSONArray("url");
-
-        urlEl.addContent(urlsJSON.get(0).toString());
-        fileEl.addContent(urlEl);
+            // create file/file_size element
+            Element sizeEl = new Element("size");
+            sizeEl.addContent(docJSON.get("size").toString());
+            fileEl.addContent(sizeEl);
 
 
-        // create file/services element
-        Element servicesEl = new Element("services");
+            //LOG.debug("Before urls");
+            
+            // create file/url element
+            Element urlsEl = new Element("urls");
 
-        JSONArray docsJSON = docJSON.getJSONArray("service");
-        for(int i=0;i<docsJSON.length();i++) {
-            Element serviceEl = new Element("service");
-            String serviceStr = docsJSON.get(i).toString();
-            String [] serviceTokens = serviceStr.split("|");
-            //serviceEl.addContent(docsJSON.get(i).toString());
-            serviceEl.addContent(serviceTokens[2]);
-            //LOG.debug("service: " + serviceTokens[2]);
-            servicesEl.addContent(serviceEl);
+            Element servicesEl = new Element("services");           
+            
+            Element mimesEl = new Element("mimes");
+
+            JSONArray urlsJSON = (JSONArray)docJSON.getJSONArray("url");
+            
+            for(int i=0;i<urlsJSON.length();i++) {
+                String urlStr = urlsJSON.get(i).toString();
+
+                //LOG.debug("i: " + i + " " + urlStr + " " + urlStr.split("\\|").length);
+                
+                String [] urlStrTokens = urlStr.split("\\|");
+                
+                
+                //first part is the url
+                String url = urlStrTokens[0];
+                Element urlEl = new Element("url");
+                urlEl.addContent(url);
+                
+                
+                //second part is the mime
+                String mime = urlStrTokens[1];
+                Element mimeEl = new Element("mime");
+                mimeEl.addContent(mime);
+                
+                //third part is the service type
+                String service = urlStrTokens[2];
+                Element serviceEl = new Element("service");
+                serviceEl.addContent(service);
+                
+
+                urlsEl.addContent(urlEl);
+                mimesEl.addContent(mimeEl);
+                servicesEl.addContent(serviceEl);
+                
+            }
+            fileEl.addContent(urlsEl);
+            fileEl.addContent(mimesEl);
+            fileEl.addContent(servicesEl);
+            
+            
+            
+            
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-        fileEl.addContent(servicesEl);
-
+        
         return fileEl;
     }
 
 }
 
 
-/* v1 if/else
-if(docsJSON.length() == 1) {
-    
-    JSONObject docJSON = new JSONObject(docsJSON.get(0).toString());
-    
-    //  create <doc> element
-    Element docEl = new Element("doc");
-
-    //  create doc/dataset_id element
-    Element dataset_idEl = new Element("dataset_id");
-    dataset_idEl.addContent(id);
-    docEl.addContent(dataset_idEl);
-    
-    
-  //insert initial file here
-    //this is to combat the array vs. json object problem
- Element fileEl = createInitialFileElement(docJSON);
- docEl.addContent(fileEl);
-
-    
-//  for each file found
- for(int j=0;j<docsJSON.length();j++) {
-     docJSON = new JSONObject(docsJSON.get(j).toString());
-     fileEl = createFileElement(docJSON);
-     docEl.addContent(fileEl);
- }
-    
-    
- document.getRootElement().addContent(docEl);
-    
- XMLOutputter outputter = new XMLOutputter();
- xmlOutput = outputter.outputString(document.getRootElement());
-
- JSONObject returnJSON = XML.toJSONObject(xmlOutput);
-
- jsonContent = returnJSON.toString();
-
- LOG.debug("json: \n" + returnJSON.toString());
- //assemble the json string by hand
-    
- //return null;
-}
-else {
-    
-
-    
-    JSONObject docJSON = new JSONObject(docsJSON.get(0).toString());
-    
-    //  create <doc> element
-        Element docEl = new Element("doc");
-
-    //  create doc/dataset_id element
-        Element dataset_idEl = new Element("dataset_id");
-        dataset_idEl.addContent(id);
-        docEl.addContent(dataset_idEl);
-
-        LOG.debug("\n\n\nHEREn\n\n");
-        Element fileEl = createInitialFileElement(docJSON);
-        docEl.addContent(fileEl);
-
-    
-    
-    
-    
-    
-
-
-//  for each file found
-    for(int j=0;j<docsJSON.length();j++) {
-        LOG.debug("j: " + j);
-        docJSON = new JSONObject(docsJSON.get(j).toString());
-        fileEl = createFileElement(docJSON);
-        docEl.addContent(fileEl);
-    
-    }
-
-    
-    
-
-
-    document.getRootElement().addContent(docEl);
-    
-    XMLOutputter outputter = new XMLOutputter();
-    xmlOutput = outputter.outputString(document.getRootElement());
-
-    //LOG.debug("xmlOutput:\n " + xmlOutput);
-
-
-    JSONObject returnJSON = XML.toJSONObject(xmlOutput);
-
-    jsonContent = returnJSON.toString();
-    LOG.debug("json: \n" + returnJSON.toString());
-    
-    //return jo.toString();
-}
-*/
-
-/* v1 single
-// create <file> element
-Element fileEl = new Element("file");
-
-// create file/file_id element
-Element file_idEl = new Element("file_id");
-file_idEl.addContent("nully");
-fileEl.addContent(file_idEl);
-
-// create file/title element
-Element titleEl = new Element("title");
-titleEl.addContent(docJSON.get("title").toString());
-fileEl.addContent(titleEl);
-
-// create file/file_size element
-Element sizeEl = new Element("size");
-sizeEl.addContent(docJSON.get("size").toString());
-fileEl.addContent(sizeEl);
-
-// create file/url element
-Element urlEl = new Element("url");
-JSONArray urlsJSON = docJSON.getJSONArray("url");
-
-urlEl.addContent(urlsJSON.get(0).toString());
-fileEl.addContent(urlEl);
-
-
-// create file/services element
-Element servicesEl = new Element("services");
-
-JSONArray docserviceJSON = docJSON.getJSONArray("service");
-for(int k=0;k<docserviceJSON.length();k++) {
-   Element serviceEl = new Element("service");
-   String serviceStr = docserviceJSON.get(k).toString();
-   String [] serviceTokens = serviceStr.split("|");
-   //serviceEl.addContent(docsJSON.get(i).toString());
-   serviceEl.addContent(serviceTokens[2]);
-   //LOG.debug("service: " + serviceTokens[2]);
-   servicesEl.addContent(serviceEl);
-}
-fileEl.addContent(servicesEl);
-*/
-
-/* v1 multiple
-// create <file> element
-    Element fileEl = new Element("file");
-
-   // create file/file_id element
-   Element file_idEl = new Element("file_id");
-   file_idEl.addContent("nully");
-   fileEl.addContent(file_idEl);
-
-   // create file/title element
-   Element titleEl = new Element("title");
-   titleEl.addContent(docJSON.get("title").toString());
-   fileEl.addContent(titleEl);
-
-   // create file/file_size element
-   Element sizeEl = new Element("size");
-   sizeEl.addContent(docJSON.get("size").toString());
-   fileEl.addContent(sizeEl);
-
-   // create file/url element
-   Element urlEl = new Element("url");
-   JSONArray urlsJSON = docJSON.getJSONArray("url");
-
-   urlEl.addContent(urlsJSON.get(0).toString());
-   fileEl.addContent(urlEl);
-       
-
-   // create file/services element
-   Element servicesEl = new Element("services");
-
-   JSONArray docserviceJSON = docJSON.getJSONArray("service");
-   for(int k=0;k<docserviceJSON.length();k++) {
-       Element serviceEl = new Element("service");
-       String serviceStr = docserviceJSON.get(k).toString();
-       String [] serviceTokens = serviceStr.split("|");
-       //serviceEl.addContent(docsJSON.get(i).toString());
-       serviceEl.addContent(serviceTokens[2]);
-       //LOG.debug("service: " + serviceTokens[2]);
-       servicesEl.addContent(serviceEl);
-   }
-   fileEl.addContent(servicesEl);
-   */
-
-
-
-
-
-/* v2 if/else
-if(docsJSON.length() == 1) {
-
-    System.out.println("\n\n\nONLY ONE");
-    
-    JSONObject docJSON = new JSONObject(docsJSON.get(0).toString());
-    
-    //  create <doc> element
-    Element docEl = new Element("doc");
-
-    //  create doc/dataset_id element
-    Element dataset_idEl = new Element("dataset_id");
-    dataset_idEl.addContent(dataset_id);
-    docEl.addContent(dataset_idEl);
-    
-    
-    //insert initial file here
-    //this is to combat the array vs. json object problem
-    Element fileEl = createInitialFileElement(docJSON);
-    docEl.addContent(fileEl);
-    
-
-//  for each file found
-    for(int j=0;j<docsJSON.length();j++) {
-        docJSON = new JSONObject(docsJSON.get(j).toString());
-        fileEl = createFileElement(docJSON);
-        docEl.addContent(fileEl);
-    
-    }
-    
-
-    document.getRootElement().addContent(docEl);
-    
-    XMLOutputter outputter = new XMLOutputter();
-    xmlOutput = outputter.outputString(document.getRootElement());
-
-    JSONObject returnJSON = XML.toJSONObject(xmlOutput);
-
-    jsonContent = returnJSON.toString();
-    
-} else {
-
-    
-    
-    JSONObject docJSON = new JSONObject(docsJSON.get(0).toString());
-    
-    //  create <doc> element
-        Element docEl = new Element("doc");
-
-    //  create doc/dataset_id element
-        Element dataset_idEl = new Element("dataset_id");
-        dataset_idEl.addContent(dataset_id);
-        docEl.addContent(dataset_idEl);
-    
-    
-    
-    //insert initial file here
-    //this is to combat the array vs. json object problem
-    Element fileEl = createInitialFileElement(docJSON);
-    docEl.addContent(fileEl);
-       
-       
-    //  for each file found
-    for(int j=0;j<docsJSON.length();j++) {
-        docJSON = new JSONObject(docsJSON.get(j).toString());
-        fileEl = createFileElement(docJSON);
-        docEl.addContent(fileEl);
-    
-    }
-
-    document.getRootElement().addContent(docEl);
-
-    XMLOutputter outputter = new XMLOutputter();
-    xmlOutput = outputter.outputString(document.getRootElement());
-
-    //LOG.debug("xmlOutput:\n " + xmlOutput);
-
-
-    JSONObject returnJSON = XML.toJSONObject(xmlOutput);
-
-    jsonContent = returnJSON.toString();
-    
-    
-}
-*/

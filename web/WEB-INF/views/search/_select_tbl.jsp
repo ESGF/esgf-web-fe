@@ -3,24 +3,81 @@
 
 <script id="addedCartTemplate" type="text/x-jquery-tmpl">
 	<tr class="top_level_data_item" id="${$item.replacePeriods(doc.id)}">
-		<td class="left_table_header"><input class="topLevel" type="checkbox" id="${doc.id}" name="${doc.id}" checked="true" />Dataset:  ${doc.id}</td>
-		<td id="${doc.id}" class="right_table_header">  <a href="#" class="showAllFiles">Expand</a> |  <a href="#" class="wgetAllChildren"> WGET </a> | <%-- <a href="#" class="globusOnlineAllChildren">Globus Online</a> | --%> <a href="#" class="remove_dataset_from_datacart">Remove</a> </td>
+		<td class="left_table_header">
+			<input class="topLevel" type="checkbox" id="${doc.id}" name="${doc.id}" checked="true" />Dataset:  ${doc.id}
+		</td>
+		<td id="${doc.id}" class="right_table_header">  
+			<a href="#" class="showAllFiles">Expand</a> |  
+			<a href="#" class="wgetAllChildren"> WGET </a> | 
+			<%-- <a href="#" class="globusOnlineAllChildren">Globus Online</a> | --%> <a href="#" class="remove_dataset_from_datacart">Remove</a> </td>
     </tr>
 </script>
 
 <script id="cartTemplate" type="text/x-jquery-tmpl">
 	<tr class="top_level_data_item" id="${$item.replacePeriods(dataset_id)}">
-		<td class="left_table_header"><input class="topLevel" type="checkbox" id="${dataset_id}" name="${dataset_id}" checked="true" /> Dataset: ${dataset_id} (${file.length-1} files)</td>
-    	<td id="${dataset_id}" class="right_table_header" > <a href="#" class="showAllChildren" style="float:right">Expand</a> <span style="float:right;margin-left:5px;margin-right:5px"> | </span> <a href="#" class="wgetAllChildren" style="float:right;"> WGET </a> <span style="float:right;margin-left:5px;margin-right:5px"> | </span> <a href="#" class="globusOnlineAllChildren" style="float:right" >Globus Online</a> <span style="float:right;margin-left:5px;margin-right:5px"> | </span> <a href="#" class="remove_dataset_from_datacart" style="float:right">Remove</a> </td>
+		<td class="left_table_header">
+			<input class="topLevel" type="checkbox" id="${dataset_id}" name="${dataset_id}" checked="true" /> Dataset: ${dataset_id} (${file.length-1} files)</td>
+    	<td id="${dataset_id}" class="right_table_header" > 
+			<a href="#" class="showAllChildren" style="float:right">Expand</a> 
+			<span style="float:right;margin-left:5px;margin-right:5px"> | </span> 
+			<a href="#" class="wgetAllChildren" style="float:right;"> WGET </a> 
+			<span style="float:right;margin-left:5px;margin-right:5px"> | </span> 
+			{{if GridFTP == true}}
+				<a href="#" class="globusOnlineAllChildren" style="float:right" >Globus Online</a> 
+				<span style="float:right;margin-left:5px;margin-right:5px"> | </span>
+			{{/if}} 
+			<a href="#" class="remove_dataset_from_datacart" style="float:right">Remove</a> 
+		</td>
     </tr>
+
+
 	{{each(i) file}}
         {{if i != 0}}
+				
+				{{each(j) urls.url}}
+					
+					{{if services.service[j] == 'HTTPServer'}}
+						<tr class="rows_${$item.replacePeriods(dataset_id)}_http">
+							<td class="left_download">
+								<div class="child" id="${file_id}" title="${file_id}" ><input type="checkbox" id="${$item.replacePeriods(file_id)}" checked="true" value="${url}"/>${$item.abbreviate(file_id)} (Size: ${$item.sizeConversion(size)})</div>
+							</td>
+							<td class="right_download">
+								<a href="${urls.url[j]}">Download (HTTP)</a> |
+							</td>
+						</tr>
+					{{/if}}
+					{{if services.service[j] == 'OPENDAP'}}
+						<tr class="rows_${$item.replacePeriods(dataset_id)}_opendap">
+							<td class="left_download">
+								<div class="child" id="${file_id}" title="${file_id}" ><input type="checkbox" id="${$item.replacePeriods(file_id)}" checked="true" value="${url}"/>${$item.abbreviate(file_id)} (Size: ${$item.sizeConversion(size)})</div>
+							</td>
+							<td class="right_download">
+								<a href="#">Download (OPENDAP)</a> |
+							</td>
+						</tr>
+					{{/if}}
+					{{if services.service[j] == 'GridFTP'}}
+						<tr class="rows_${$item.replacePeriods(dataset_id)}_gridftp">
+							<td class="left_download">
+								<div class="child" id="${file_id}" title="${file_id}" ><input type="checkbox" id="${$item.replacePeriods(file_id)}" checked="true" value="${urls.url[j]}"/>${$item.abbreviate(file_id)} (Size: ${$item.sizeConversion(size)})</div>
+							</td>
+							<td class="right_download">
+								<a class="go_individual_gridftp" href="#" id="${urls.url[j]}" >Download (GridFTP)</a> |
+							</td>
+						</tr>
+					{{/if}}
+					</td>
+					</tr>
+            	{{/each}}
+		<%--
         <tr class="rows_${$item.replacePeriods(dataset_id)}" style="display:none">
             <td class="left_download"> <div class="child" id="${file_id}"  title="${file_id}"> <input type="checkbox" id="${$item.replacePeriods(file_id)}" checked="true" value="${url}"/> ${$item.abbreviate(file_id)} </div></td>
         	<td class="right_download"> <a href="${url}">Download (${$item.sizeConversion(size)})</a> </td> 
 	   </tr>
+	   --%>
 		{{/if}}
 	{{/each}}
+
 </script>
 
 <script id="cartTemplate1" type="text/x-jquery-tmpl">

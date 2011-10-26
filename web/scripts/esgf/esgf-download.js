@@ -106,6 +106,7 @@ $(document).ready( function() {
         	
         	var id = $(this).parent().attr("id").replace(/\./g,"_");
         	
+        	
         	var data = selectedItem['data'];
         	
         	var dataset_id = data.doc.id;
@@ -178,7 +179,7 @@ $(document).ready( function() {
     	//Not sure if we need the search type at this point, but I kept it in
     	var query = { "id" : query_arr , "version" : ESGF.setting.dataCartVersion};
     	
-    	
+
     	if(query_arr.length != 0) {
     		//add a spin wheel to indicate that the system is processing
         	$('tbody#datasetList').after('<img id="spinner" src="images/ajax-loader.gif" />');
@@ -194,7 +195,7 @@ $(document).ready( function() {
         			
         			$('#waitWarn').remove();
         			$('#spinner').remove();
-        	    	
+
         			showFileContentsV1(data);
         		}
         	});
@@ -206,7 +207,6 @@ $(document).ready( function() {
 
     function showFileContentsV1(data) {
 		var fileDownloadTemplate = data.response.doc;
-		
 		
 		$( "#cartTemplate").tmpl(fileDownloadTemplate, {
 			
@@ -247,11 +247,13 @@ $(document).ready( function() {
         .find( "a.showAllChildren" ).click(function() {
         	var selectedItem = $.tmplItem(this);
             var selectedDoc = selectedItem;
-           
+
             
             var selectedDocId = selectedDoc.data.dataset_id;
             $('input[name=' + selectedDocId + ']').toggle();
 
+    		//alert('response selected doc: ' + selectedDoc.data.dataset_id);
+    		
             var id = $(this).parent().attr("id").replace(/\./g,"_");
             $('tr.rows_'+id).toggle();
             if(this.innerHTML === "Expand") {
@@ -436,25 +438,63 @@ $(document).ready( function() {
     	
     });
 
+    $('.go_individual_gridftp').live('click',function(e) {
+    	
+    	var id = $(this).parent().parent().find('div').attr('id');
+    	var value = $(this).parent().find('a').attr('id');
+    	var selectedDocId = $(this).parent().parent().parent().find('tr').attr('id');
+    	
+    	
+    	//gather the ids and the urls for download
+    	var ids   = new Array();
+        var values = new Array();
+        ids.push(id);
+        values.push(value);
+        
+        var globus_url = '/esgf-web-fe/goformview1';
+        
+        //begin assembling queryString
+        var queryString = 'type=create&id=' + selectedDocId;
 
+
+        //assemble the input fields with the query string
+        for(var i=0;i<ids.length;i++) {
+        	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
+        }
+        var input = '';
+        jQuery.each(queryString.split('&'), function(){
+          var pair = this.split('=');
+          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
+        });
+        //send request
+        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
+        .appendTo('body').submit().remove();
+        /**/
+        
+    });
+    
     /**
      * Click event for launching globus online bulk data transfer
      */
     $(".globusOnlineAllChildren").live('click',function(e){
+    	
     	//grab the dataset id from the template
     	var selectedItem = $.tmplItem(this);
     	var selectedDocId = selectedItem.data.dataset_id;
 
+    	
     	//gather the ids and the urls for download
     	var ids   = new Array();
         var values = new Array();
-        $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDocId)).find(':checkbox:checked').each( function(index) {
-                if(this.id != selectedDocId) {
+        var rowsStr = 'tr.rows_'+ replacePeriod(selectedDocId)+'_gridftp';
+        $(this).parent().parent().parent().find(rowsStr).find(':checkbox:checked').each( function(index) {
+                //alert(this.id + ' value: ' + this.value);
+        		if(this.id != selectedDocId) {
                 ids.push(this.id);
                 values.push(this.value);
                }
      	});
-
+        
         var globus_url = '/esgf-web-fe/goformview1';
         
       //begin assembling queryString
@@ -473,60 +513,8 @@ $(document).ready( function() {
         //send request
         jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
         .appendTo('body').submit().remove();
-        /*
-        $.ajax({
-    		url: globus_url,
-    		global: false,
-    		type: "POST",
-    		data: queryString,
-    		dataType: 'json',
-    		success: function(data) {
-    	  		LOG.debug('Globus Online transfer complete - initiate notification here...');
-    		},	
-        	error: function() {
-    	  		LOG.debug('go error');
-        	}
-        });
-        */
+        /**/
         
-        /*
-        var url = '/esgf-web-fe/wgetproxy';
-        var security = 'wgetv3';
-        queryString += '&security=' + security;
-        
-        //assemble the input fields with the query string
-        var input = '';
-        jQuery.each(queryString.split('&'), function(){
-            var pair = this.split('=');
-            input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-        });
-        
-        //send request
-        jQuery('<form action="'+ url +'" method="post">'+input+'</form>')
-        .appendTo('body').submit().remove();
-        */
-        
-        /*
-        //begin assembling queryString
-        var queryString = 'type=create&id=' + selectedDocId;
-
-        //assemble the input fields with the query string
-        for(var i=0;i<ids.length;i++) {
-        	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
-        }
-        
-        
-        $.ajax({
-    		url: globus_url,
-    		global: false,
-    		type: "POST",
-    		data: queryString,
-    		dataType: 'json',
-    		success: function(data) {
-    			alert('Globus Online transfer complete - initiate notification here...');
-    		}	
-        });
-        */
     });
     
 
@@ -637,5 +625,66 @@ $( "#cartTemplate").tmpl(fileDownloadTemplate, {
     } else {
         this.innerHTML="Expand";
     }
+});
+*/
+
+
+
+
+
+/* Old globus online code */
+
+/*
+$.ajax({
+	url: globus_url,
+	global: false,
+	type: "POST",
+	data: queryString,
+	dataType: 'json',
+	success: function(data) {
+  		LOG.debug('Globus Online transfer complete - initiate notification here...');
+	},	
+	error: function() {
+  		LOG.debug('go error');
+	}
+});
+*/
+
+/*
+var url = '/esgf-web-fe/wgetproxy';
+var security = 'wgetv3';
+queryString += '&security=' + security;
+
+//assemble the input fields with the query string
+var input = '';
+jQuery.each(queryString.split('&'), function(){
+    var pair = this.split('=');
+    input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
+});
+
+//send request
+jQuery('<form action="'+ url +'" method="post">'+input+'</form>')
+.appendTo('body').submit().remove();
+*/
+
+/*
+//begin assembling queryString
+var queryString = 'type=create&id=' + selectedDocId;
+
+//assemble the input fields with the query string
+for(var i=0;i<ids.length;i++) {
+	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
+}
+
+
+$.ajax({
+	url: globus_url,
+	global: false,
+	type: "POST",
+	data: queryString,
+	dataType: 'json',
+	success: function(data) {
+		alert('Globus Online transfer complete - initiate notification here...');
+	}	
 });
 */

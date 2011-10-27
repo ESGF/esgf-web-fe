@@ -94,6 +94,7 @@ public class GOFormView3Controller {
     private final static String GOFORMVIEW_DEST_ENDPOINT_INFO = "GoFormView_DestEndpointInfo";
     private final static String GOFORMVIEW_USER_CERTIFICATE = "GoFormView_UserCertificate";
     private final static String GOFORMVIEW_GO_USERNAME = "GoFormView_GOUsername";
+    private final static String GOFORMVIEW_GO_CONNECT = "GoFormView_GOConnect";
     private final static String GOFORMVIEW_SRC_MYPROXY_USER = "GoFormView_SrcMyproxyUser";
     private final static String GOFORMVIEW_SRC_MYPROXY_PASS = "GoFormView_SrcMyproxyPass";
 
@@ -147,6 +148,11 @@ public class GOFormView3Controller {
             
         }
         else {
+            if (endpointInfo.endsWith("true"))
+            {
+                LOG.debug("GlobusConnect Endpoint detected");
+                model.put(GOFORMVIEW_GO_CONNECT, "true");
+            }
             model.put(GOFORMVIEW_FILE_URLS, file_urls);
             model.put(GOFORMVIEW_FILE_NAMES, file_names);
             model.put(GOFORMVIEW_USER_CERTIFICATE, userCertificate);

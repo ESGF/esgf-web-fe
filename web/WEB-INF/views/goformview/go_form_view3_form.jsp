@@ -1,6 +1,14 @@
 <form id="new_user_form" action="goformview4" method="post" >
 <h3 style="" id="form_title">Globus Online Transfer: Step 3 of 3</h3>
 
+<c:choose>
+<c:when test='${GoFormView_GOConnect=="true"}' >
+The endpoint that you've selected is a Globus Connect Endpoint that
+does not require activation credentials.<br><br>
+Please click Next to continue.
+	</c:when>
+	<c:otherwise>
+
 <table id="adduser_table_id" class="adduser_table" >  
 	<tr id="userName_input">
 		<td>
@@ -19,6 +27,8 @@
 		</td>
 	</tr>
    </table>
+	</c:otherwise>
+</c:choose>
    	
    <p>
    		<%-- Input params to go_form4 

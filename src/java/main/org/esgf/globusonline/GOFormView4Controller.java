@@ -167,12 +167,23 @@ public class GOFormView4Controller {
             transfer.activateEndpoint(goSourceEndpoint, srcMyproxyUserName, srcMyproxyUserPass);
             errorStatus.append("Source Endpoint activated properly!<br>");
 
-            // second, activate the target endpoint
+            // second, activate the target endpoint (if not GlobusConnect)
             String[] endpointPieces = endpointInfo.split(":");
-            LOG.debug("Activating destination endpoint " + endpointPieces[0]);
-            errorStatus.append("Attempting to activate Destination Endpoint " + endpointPieces[0] + " ...<br>");
-            transfer.activateEndpoint(endpointPieces[0], destMyproxyUserName, destMyproxyUserPass);
-            errorStatus.append("Destination Endpoint activated properly!<br>");
+            if (endpointInfo.endsWith("true"))
+            {
+                LOG.debug("Detected Globus Connect target endpoint");
+                errorStatus.append("Detected Globus Connect target endpoint.<br>");
+                errorStatus.append("Attempting to activate Destination Endpoint " + endpointPieces[0] + " ...<br>");
+                transfer.activateEndpoint(endpointPieces[0]);
+                errorStatus.append("Destination Endpoint activated properly!<br>");
+            }
+            else
+            {
+                LOG.debug("Activating destination endpoint " + endpointPieces[0]);
+                errorStatus.append("Attempting to activate Destination Endpoint " + endpointPieces[0] + " ...<br>");
+                transfer.activateEndpoint(endpointPieces[0], destMyproxyUserName, destMyproxyUserPass);
+                errorStatus.append("Destination Endpoint activated properly!<br>");
+            }
 
             // transform all URLs here
             String newURL = null;

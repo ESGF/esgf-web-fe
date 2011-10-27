@@ -124,36 +124,102 @@ public class FileDownloadTemplateController {
 
     @RequestMapping(method=RequestMethod.GET)
     public @ResponseBody String doGet(HttpServletRequest request, HttpServletResponse response) throws JSONException {
-        LOG.debug("doGet");
+        System.out.println("doGet");
         
+        /*
         String responseStr = convertTemplateFormat(request, response);
         return responseStr;
+        */
         
+        return getDataCart(request);
     }
     
     
-    private String preassembleQueryString(HttpServletRequest request) {
-        String queryString = "q=*:*&json.nl=map&start=0&rows=300&fq=type:File";
-
-        queryString = "qt=/distrib&" + queryString;
+    private String getDataCart(HttpServletRequest request) {
+        System.out.println("getDataCart");
         
-        if(datasetFilterFlag) {
-          //get the 'fq' params from the servlet query string here
-            String [] fqParams = request.getParameterValues("fq[]");
+        String queryString = preassembleQueryString(request);
+        System.out.println("QueryString: " + queryString);
+        
+        //get the ids from the servlet querystring here
+        //note: these represent the 'keys' in the localStorage['dataCart'] map
+        String [] names = request.getParameterValues("id[]");
+        
+        Document document = null;
+        
+        String jsonContent = null;
+
+        document = new Document(new Element("response"));
+        
+        if(names != null) {
+            for(int i=0;i<names.length;i++) {
+                System.out.println("\tid: " + i + " " + names[i]);
+                String dataset_id = names[i];
+                
+                //get files for each data set in a jsonarray
+                JSONArray jsonArrayResponseDocs = getJSONArrayForDatasetid(queryString,dataset_id);
             
-            //get the 'q' param from the servlet query string here
-            String qParam = request.getParameter("q");
-            
-            //append the 'fq' params to the query string
-            for(int i=0;i<fqParams.length;i++) {
-                String fqParam = fqParams[i];
-                queryString += "&fq=" + fqParam;
             }
+        
         }
         
+        System.out.println("end getDataCart");
         
-        return queryString;
+        return "String";
     }
+    
+    /**
+     * creates json array of file entries for a given dataset
+     */
+    JSONArray getJSONArrayForDatasetid(String queryString,String dataset_id) {
+        String marker = "\"response\":";
+        
+        //get the json response for all files associated with dataset_id 
+        String responseRawString = getResponseBody(queryString,dataset_id);
+        
+        //just get the important part of the response (i.e. leave off the header and the facet info)
+        int start = responseRawString.lastIndexOf(marker) + marker.length();
+        int end = responseRawString.length();
+        String extractedString = responseRawString.substring(start,end);
+        
+        
+        JSONObject jsonResponse = null;
+        JSONArray jsonArrayResponseDocs = null;
+        
+        try {
+            jsonResponse = new JSONObject(extractedString);
+            jsonArrayResponseDocs = jsonResponse.getJSONArray("docs");
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return jsonArrayResponseDocs;
+    }
+    
+    /**
+     * creates json array of file entries for a given dataset
+     */
+    JSONArray getJSONArrayForDatasetID(String queryString,String id) {
+        String marker = "\"response\":";
+        String responseRawString = getResponseBody(queryString,id);
+        int start = responseRawString.lastIndexOf(marker) + marker.length();
+        int end = responseRawString.length();
+        String extractedString = responseRawString.substring(start,end);
+        JSONObject responseBody = null;
+        JSONArray docsJSON = null;
+        try {
+            responseBody = new JSONObject(extractedString);
+            docsJSON = responseBody.getJSONArray("docs");
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return docsJSON;
+    }
+    
+    
     
     /*
      * Conversion
@@ -254,27 +320,7 @@ public class FileDownloadTemplateController {
         
     }
     
-    /**
-     * creates json array of file entries for a given dataset
-     */
-    JSONArray getJSONArrayForDatasetID(String queryString,String id) {
-        String marker = "\"response\":";
-        String responseRawString = getResponseBody(queryString,id);
-        int start = responseRawString.lastIndexOf(marker) + marker.length();
-        int end = responseRawString.length();
-        String extractedString = responseRawString.substring(start,end);
-        JSONObject responseBody = null;
-        JSONArray docsJSON = null;
-        try {
-            responseBody = new JSONObject(extractedString);
-            docsJSON = responseBody.getJSONArray("docs");
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
-        return docsJSON;
-    }
+    
     
 
     String convertXMLDocToJSON(Document document) {
@@ -347,57 +393,7 @@ public class FileDownloadTemplateController {
     
     
     
-    /** getResponseBody(String id)
-     * This method extracts all file records for a given dataset id and assembles them in json format
-     * 
-     * @param id        Dataset Id
-     * @return          Solr response for all files given the dataset id
-     */
-    private static String getResponseBody(String queryString,String id)  {
-
-        String responseBody = null;
-
-        // create an http client
-        HttpClient client = new HttpClient();
-
-        String combinedQueryStr = queryString + "&fq=parent_id:" + id + "&wt=json";
-
-        GetMethod method = new GetMethod(solrURL);
-
-        try {
-            method.setQueryString(URIUtil.encodeQuery(combinedQueryStr));
-        } catch (URIException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
-                new DefaultHttpMethodRetryHandler(3, false));
-        try {
-            // execute the method
-            int statusCode = client.executeMethod(method);
-
-            if (statusCode != HttpStatus.SC_OK) {
-                    LOG.error("Method failed: " + method.getStatusLine());
-
-            }
-
-            // read the response
-            responseBody = method.getResponseBodyAsString();
-            //LOG.debug(responseBody);
-        } catch (HTTPException e) {
-            LOG.error("Fatal protocol violation");
-            e.printStackTrace();
-        } catch (IOException e) {
-            LOG.error("Fatal transport error");
-            e.printStackTrace();
-        } finally {
-            method.releaseConnection();
-        }
-
-        //System.out.println("Response Body: " + responseBody);
-
-        return responseBody;
-    }
+   
 
     
     
@@ -594,6 +590,88 @@ public class FileDownloadTemplateController {
         }
         
         return jsonContent;
+    }
+    
+
+    /** getResponseBody(String id)
+     * This method extracts all file records for a given dataset id and assembles them in json format
+     * 
+     * @param id        Dataset Id
+     * @return          Solr response for all files given the dataset id
+     */
+    private static String getResponseBody(String queryString,String dataset_id)  {
+
+        String responseBody = null;
+
+        // create an http client
+        HttpClient client = new HttpClient();
+
+        //attact the dataset id to the query string
+        String combinedQueryStr = queryString + "&fq=dataset_id:" + dataset_id + "&wt=json";
+        
+        GetMethod method = new GetMethod(solrURL);
+
+        try {
+            method.setQueryString(URIUtil.encodeQuery(combinedQueryStr));
+        } catch (URIException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        
+        
+        method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
+                new DefaultHttpMethodRetryHandler(3, false));
+        try {
+            // execute the method
+            int statusCode = client.executeMethod(method);
+
+            if (statusCode != HttpStatus.SC_OK) {
+                    LOG.error("Method failed: " + method.getStatusLine());
+
+            }
+
+            // read the response
+            responseBody = method.getResponseBodyAsString();
+            //LOG.debug(responseBody);
+        } catch (HTTPException e) {
+            LOG.error("Fatal protocol violation");
+            e.printStackTrace();
+        } catch (IOException e) {
+            LOG.error("Fatal transport error");
+            e.printStackTrace();
+        } finally {
+            method.releaseConnection();
+        }
+
+        //System.out.println("Response Body: " + responseBody);
+        
+        
+        return responseBody;
+    }
+    
+    
+    
+    private String preassembleQueryString(HttpServletRequest request) {
+        String queryString = "q=*:*&json.nl=map&start=0&rows=300&fq=type:File";
+
+        queryString = "qt=/distrib&" + queryString;
+        
+        if(datasetFilterFlag) {
+          //get the 'fq' params from the servlet query string here
+            String [] fqParams = request.getParameterValues("fq[]");
+            
+            //get the 'q' param from the servlet query string here
+            String qParam = request.getParameter("q");
+            
+            //append the 'fq' params to the query string
+            for(int i=0;i<fqParams.length;i++) {
+                String fqParam = fqParams[i];
+                queryString += "&fq=" + fqParam;
+            }
+        }
+        
+        
+        return queryString;
     }
     
 

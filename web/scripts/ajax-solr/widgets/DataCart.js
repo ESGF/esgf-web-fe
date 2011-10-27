@@ -239,20 +239,68 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	loadCartShardsFromService: function (arr) {
 		
 		var self = this;
-		
-    	
-    	var file_download_template_url = ESGF.search.fileDownloadTemplateProxyUrl;
 
-    	
     	//get the 'q' parameter here
     	var qParam = Manager.store.get('q')['value'];
     	
     	//get the 'fq' parameter here
     	var fqParamArr = self.createFqParamArray();
+		
+    	// Make an ajax call to the fileDownloadTemplate controller to extract the files for each of datasets given in the array of keys //
+    	 
+     	//only make the ajax call when there has been something added to the data cart
+    	if(arr.length != 0) {
+    		//setup the query string
+    		var queryStr = { "id" : arr , "version" : ESGF.setting.dataCartVersion, "fq" : fqParamArr, "q" : qParam};
+    		
+    		//add a spinning wheel to show user that progress is being made in finding the files
+    		self.addDataCartSpinWheel();
+
+    		alert('here');
+    		$.ajax({
+    			url: '/esgf-web-fe/solrfileproxy',
+    			global: false,
+    			type: "GET",
+    			data: queryStr,
+    			dataType: 'json',
+    			
+    			//Upon success remove the spinning wheel and show the contents given by solr
+    			 
+    			success: function(data) {
+    				
+    				alert('success');
+	    			self.removeDataCartSpinWheel();
+	    			/*
+	    			 self.showFileContents(data); 
+	    			 */
+    			},
+    			
+    			//Upon an error remove the spinning wheel and give an alert 
+    			 
+	    		error: function() {
+	    			self.removeDataCartSpinWheel();
+	    			alert('There is a problem with one of your dataset selections.  Please contact your administrator.');
+	    			
+	    			/*
+	            	//change from remove from cart to add to cart for all selected datasets
+	    			for(var i=0;i<query_arr.length;i++) {
+	                	$('a#ai_select_'+ arr[i].replace(/\./g, "_")).html('Add To Cart');
+	    			}
+					*/
+				}
+    		})
+    		
+    	}
+    	
     	
     	/*
+    	var file_download_template_url = ESGF.search.fileDownloadTemplateProxyUrl;
+
+    	
+    	
+    	
     	 * Make an ajax call to the fileDownloadTemplate controller to extract the files for each of datasets given in the array of keys
-    	 */
+    	 
     	//only make the ajax call when there has been something added to the data cart
     	if(arr.length != 0) {
     		var queryStr = { "id" : arr , "version" : ESGF.setting.dataCartVersion, "fq" : fqParamArr, "q" : qParam};
@@ -267,17 +315,17 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     			type: "GET",
     			data: queryStr,
     			dataType: 'json',
-    			/*
+    			
     			 * Upon success remove the spinning wheel and show the contents given by solr
-    			 */
+    			 
     			success: function(data) {
     				
 	    			self.removeDataCartSpinWheel();
         			self.showFileContents(data);
     			},
-    			/*
+    			
     			 * Upon an error remove the spinning wheel and give an alert 
-    			 */
+    			 
 	    		error: function() {
 	    			self.removeDataCartSpinWheel();
 	    			alert('There is a problem with one of your dataset selections.  Please contact your administrator.');
@@ -290,6 +338,9 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 				}
     		})
     	}
+    	*/
+    	
+    	
 	},
 	
 	createFqParamArray: function () {

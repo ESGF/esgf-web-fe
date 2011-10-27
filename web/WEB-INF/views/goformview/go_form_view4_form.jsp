@@ -2,8 +2,8 @@
 
 <c:choose>
 <c:when test='${GoFormView_Error=="error"}' >
-	There was an error in your request.  Please try your  <a href="<c:url value="/live"/>">download</a> request again. 
-        <c:out value="${GoFormView_ErrorMsg}" />
+	There was an error in your request.  Please try your  <a href="<c:url value="/live"/>">download</a> request again.<br><br>
+        <c:out value="${GoFormView_ErrorMsg}" escapeXml="false"/>
 	</c:when>
 	<c:otherwise>
 	Your Globus Online Transfer has been started!

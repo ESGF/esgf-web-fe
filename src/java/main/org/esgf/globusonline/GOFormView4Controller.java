@@ -74,6 +74,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.globusonline.*;
 
+import esg.common.util.ESGFProperties;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -129,6 +131,7 @@ public class GOFormView4Controller {
         String destMyproxyUserName = null;
         String destMyproxyUserPass = null;
 
+        StringBuffer errorStatus = new StringBuffer("Steps leading up to the error are shown below:<br><br>");
         if ((request.getParameter("myproxyUserName") != null) && (request.getParameter("myproxyUserPass") != null))
         {
             destMyproxyUserName = request.getParameter("myproxyUserName");
@@ -145,19 +148,31 @@ public class GOFormView4Controller {
         Map<String,Object> model = new HashMap<String,Object>();
 
         JGOTransfer transfer = new JGOTransfer(goUserName, userCertificate, userCertificate, CA_CERTIFICATE_FILE);
-        transfer.setVerbose(true); // FIXME: For debugging
+        //transfer.setVerbose(true); // FIXME: For debugging
         try
         {
             transfer.initialize();
 
+            ESGFProperties esgfProperties = new ESGFProperties();
+            String goSourceEndpoint = esgfProperties.getProperty("gridftp.globusonline.endpoint");
+            LOG.debug("GOT SOURCE ENDPOINT: " + goSourceEndpoint);
+
+            errorStatus.append("Source endpoint resolved as \"");
+            errorStatus.append(goSourceEndpoint);
+            errorStatus.append("\".<br>");
+
             // first activate the source endpoint (WE NEED TO DETERMINE WHAT THIS IS FIRST)
-            LOG.debug("Activating source endpoint esg#anl");
-            transfer.activateEndpoint("esg#anl", srcMyproxyUserName, srcMyproxyUserPass);
+            LOG.debug("Activating source endpoint " + goSourceEndpoint);
+            errorStatus.append("Attempting to activate Source Endpoint " + goSourceEndpoint + " ...<br>");
+            transfer.activateEndpoint(goSourceEndpoint, srcMyproxyUserName, srcMyproxyUserPass);
+            errorStatus.append("Source Endpoint activated properly!<br>");
 
             // second, activate the target endpoint
             String[] endpointPieces = endpointInfo.split(":");
             LOG.debug("Activating destination endpoint " + endpointPieces[0]);
+            errorStatus.append("Attempting to activate Destination Endpoint " + endpointPieces[0] + " ...<br>");
             transfer.activateEndpoint(endpointPieces[0], destMyproxyUserName, destMyproxyUserPass);
+            errorStatus.append("Destination Endpoint activated properly!<br>");
 
             // transform all URLs here
             String newURL = null;
@@ -165,14 +180,19 @@ public class GOFormView4Controller {
             Vector<String> fileList = new Vector<String>();
             for(String curURL : file_urls)
             {
-                newURL = curURL.replace("http://esg.anl.gov/thredds/fileServer/",
-                                        "//");
-                LOG.debug("Transformed " + curURL + " into " + newURL);
+                // ESG URLs are of the form "gsiftp://host//file-part.
+                // we only want the file part in this file list (i.e. //file-part).
+                pieces = curURL.split("//");
+                newURL = "//" + pieces[2];
+
+                //LOG.debug("Transformed " + curURL + " into " + newURL);
                 fileList.add(newURL);
             }
 
             // kick off the transfer here!
-            String taskID = transfer.transfer("esg#anl", endpointPieces[0], fileList);
+            errorStatus.append("Attempting to start Globus Online Transfer ...<br>");
+            String taskID = transfer.transfer(goSourceEndpoint, endpointPieces[0], fileList, target);
+            errorStatus.append("Globus Online Transfer got TaskID " + taskID + ".<br>");
             String transferInfo1 = "The transfer has been accepted and a task has been " +
                 "created and queued for execution.";
             String transferInfo2 = "Globus Online TaskID: " + taskID;
@@ -183,16 +203,13 @@ public class GOFormView4Controller {
             }
             else
             {
-                //String error = isErrorInGORequest();
-                //model.put(GOFORMVIEW_ERROR, error);
                 model.put(GOFORMVIEW_TRANSFER_INFO1, transferInfo1);
                 model.put(GOFORMVIEW_TRANSFER_INFO2, transferInfo2);
             }
         }
         catch(Exception e)
         {
-            
-            String error = e.toString();
+            String error = errorStatus.toString() + "<br><b>Main Error:</b><br><br>" + e.toString();
             model.put(GOFORMVIEW_ERROR, "error");
             model.put(GOFORMVIEW_ERROR_MSG, error);
             LOG.error("Failed to initialize Globus Online: " + e);

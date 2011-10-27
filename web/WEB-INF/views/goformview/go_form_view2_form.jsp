@@ -25,6 +25,14 @@
 						<input type="text" class="text" id="target" name="target" value=""> 
 					</td>
 				</tr>
+                                <tr id="">
+                                        <td></td>
+                                        <td>*nix: /tmp/ (leading slash
+					indicates an absolute path, omitting it
+					is relative to home
+					directory)<br>Windows: temp\
+                                        </td>
+                                            
 			</table>
 			<p>
 			<%-- Input params to go_form3 

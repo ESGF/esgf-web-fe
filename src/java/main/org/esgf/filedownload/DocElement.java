@@ -10,11 +10,15 @@ import org.jdom.output.XMLOutputter;
 public class DocElement {
     
     private String dataset_id;
+    private int count;
     private List<FileElement> fileElements;
     
     public DocElement() {
         this.dataset_id = new String("");
         this.fileElements = new ArrayList<FileElement>();
+        FileElement blankElement = new FileElement();
+        this.fileElements.add(blankElement);
+        this.setCount(0);
     }
     
     
@@ -34,7 +38,11 @@ public class DocElement {
 
 
     public void setFileElements(List<FileElement> fileElements) {
-        this.fileElements = fileElements;
+        List<FileElement> newFileElements = new ArrayList<FileElement>();
+        FileElement blankElement = new FileElement();
+        newFileElements.add(blankElement);
+        newFileElements.addAll(fileElements);
+        this.fileElements = newFileElements;
     }
 
     public String toString() {
@@ -51,10 +59,14 @@ public class DocElement {
     
     public Element toElement() {
         Element docEl = new Element("doc");
-        
+
         Element datasetidEl = new Element("datasetId");
         datasetidEl.addContent(this.dataset_id);
         docEl.addContent(datasetidEl);
+        
+        Element countEl = new Element("count");
+        countEl.addContent(Integer.toString(count));
+        docEl.addContent(countEl);
         
         for(int i=0;i<this.fileElements.size();i++) {
             Element fileEl = this.fileElements.get(i).toElement();
@@ -132,6 +144,16 @@ public class DocElement {
         System.out.println(de.toXML());
         
         
+    }
+
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+
+    public int getCount() {
+        return count;
     }
     
 

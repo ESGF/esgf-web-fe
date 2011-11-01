@@ -83,7 +83,9 @@
 package org.esgf.filedownload;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -145,6 +147,11 @@ public class FileDownloadTemplateController {
         //note: these represent the 'keys' in the localStorage['dataCart'] map
         String [] names = request.getParameterValues("id[]");
         
+        String showAll = request.getParameter("showAll");
+        
+        System.out.println("ShowAll: " + showAll);
+        
+        
         Document document = null;
         
         String jsonContent = null;
@@ -152,21 +159,151 @@ public class FileDownloadTemplateController {
         document = new Document(new Element("response"));
         
         if(names != null) {
+            List<DocElement> docElements = new ArrayList<DocElement>();
+            
             for(int i=0;i<names.length;i++) {
                 System.out.println("\tid: " + i + " " + names[i]);
                 String dataset_id = names[i];
                 
                 //get files for each data set in a jsonarray
                 JSONArray jsonArrayResponseDocs = getJSONArrayForDatasetid(queryString,dataset_id);
-            
+                
+                try {
+                    
+                    //create doc element
+                    DocElement docElement = new DocElement();
+                    
+                    //add the dataset id
+                    docElement.setDataset_id(dataset_id);
+                    
+                    List<FileElement> fileElements = new ArrayList<FileElement>();
+                    
+                    //insert initial file here
+                    FileElement initialFileElement = createInitialFileElement1();
+                    
+                    //add all other file elements
+                    for(int j=0;j<jsonArrayResponseDocs.length();j++) {
+                        JSONObject docJSON = new JSONObject(jsonArrayResponseDocs.get(j).toString());
+                        FileElement fileElement = createFileElement1(docJSON);
+                        fileElements.add(fileElement);
+                    }
+                    
+                    docElement.setCount(jsonArrayResponseDocs.length());
+                    
+                    docElement.setFileElements(fileElements);
+                    
+                    docElements.add(docElement);
+                    
+                    
+                    
+                    
+                    
+                    //System.out.println("\nJSONCONTENT\n" + jsonContent);
+                    
+                    
+                    
+                } catch(Exception e) {
+                    System.out.println("JSON ERROR");
+                    e.printStackTrace();
+                }
             }
+            
+            
+            String xmlStr = "";
+            for(int i=0;i<docElements.size();i++) {
+                xmlStr += docElements.get(i).toXML();
+            }
+            
+            JSONObject returnJSON = null;
+            try {
+                returnJSON = XML.toJSONObject(xmlStr);
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            
+            
+            jsonContent = returnJSON.toString();
         
         }
         
         System.out.println("end getDataCart");
         
-        return "String";
+        
+        return jsonContent;
     }
+    
+    
+    private static FileElement createInitialFileElement1() {
+        
+        FileElement fileElement = new FileElement();
+        
+        //put "dummy" values in the file element
+        fileElement.setFileId("fileId");
+        fileElement.setHasGrid("hasGrid");
+        fileElement.setHasHttp("hasHttp");
+        fileElement.setSize("size");
+        fileElement.setTitle("title");
+        fileElement.setMimesElement(new MIMESElement());
+        fileElement.setServicesElement(new ServicesElement());
+        fileElement.setUrlsElement(new URLSElement());
+        
+        
+        return fileElement;
+    }
+    
+    public FileElement createFileElement1(JSONObject docJSON) throws JSONException {
+        
+        FileElement fileElement = new FileElement();
+        
+        String fileId = docJSON.get("id").toString();
+        fileElement.setFileId(fileId);
+        
+        String title = docJSON.get("title").toString();
+        fileElement.setTitle(title);
+        
+        String size = docJSON.get("size").toString();
+        fileElement.setSize(size);
+
+        String hasGrid = "false";
+        fileElement.setHasGrid(hasGrid);
+        
+        String hasHttp = "false";
+        fileElement.setHasGrid(hasHttp);
+        
+        
+        URLSElement urlsElement = new URLSElement();
+        MIMESElement mimesElement = new MIMESElement();
+        ServicesElement servicesElement = new ServicesElement();
+        
+        
+        JSONArray urlsJSON = (JSONArray)docJSON.getJSONArray("url");
+        for(int i=0;i<urlsJSON.length();i++) {
+            String urlStr = urlsJSON.get(i).toString();
+            
+            String [] urlStrTokens = urlStr.split("\\|");
+            
+            String url = urlStrTokens[0];
+            urlsElement.addURL(url);
+            
+            String mime = urlStrTokens[1];
+            mimesElement.addMIME(mime);
+            
+            String service = urlStrTokens[2];
+            servicesElement.addService(service);
+            
+        }
+        
+        fileElement.setUrlsElement(urlsElement);
+        fileElement.setMimesElement(mimesElement);
+        fileElement.setServicesElement(servicesElement);
+        
+        return fileElement;
+    }
+    
+    
+    
+    
     
     /**
      * creates json array of file entries for a given dataset
@@ -656,19 +793,25 @@ public class FileDownloadTemplateController {
 
         queryString = "qt=/distrib&" + queryString;
         
-        if(datasetFilterFlag) {
+        System.out.println("ShowAll: " + request.getParameter("showAll"));
+        
+        if(request.getParameter("showAll").equals("false")) {
           //get the 'fq' params from the servlet query string here
             String [] fqParams = request.getParameterValues("fq[]");
             
             //get the 'q' param from the servlet query string here
             String qParam = request.getParameter("q");
             
-            //append the 'fq' params to the query string
-            for(int i=0;i<fqParams.length;i++) {
-                String fqParam = fqParams[i];
-                queryString += "&fq=" + fqParam;
+            if(fqParams != null) {
+              //append the 'fq' params to the query string
+                for(int i=0;i<fqParams.length;i++) {
+                    String fqParam = fqParams[i];
+                    queryString += "&fq=" + fqParam;
+                }
             }
+            
         }
+        System.out.println("queryString: " + queryString);
         
         
         return queryString;

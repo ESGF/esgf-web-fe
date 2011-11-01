@@ -21,9 +21,9 @@ public class FileElement {
     
     public FileElement() {
 
-        this.fileId = new String("");
-        this.title = new String("");
-        this.size = new String("");
+        this.fileId = new String("fileId");
+        this.title = new String("title");
+        this.size = new String("size");
         this.hasGrid = new String("false");
         this.hasHttp = new String("false");
         

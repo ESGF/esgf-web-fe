@@ -13,6 +13,7 @@ public class ServicesElement {
     
     public ServicesElement() {
         services = new ArrayList<String>();
+        services.add("service");
     }
 
     public void setService(List<String> services) {

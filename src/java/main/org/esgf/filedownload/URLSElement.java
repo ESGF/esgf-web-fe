@@ -13,6 +13,7 @@ public class URLSElement {
     
     public URLSElement() {
         urls = new ArrayList<String>();
+        urls.add("url");
     }
 
     public void setURL(List<String> services) {

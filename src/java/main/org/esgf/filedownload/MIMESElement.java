@@ -13,6 +13,7 @@ public class MIMESElement {
     
     public MIMESElement() {
         mimes = new ArrayList<String>();
+        mimes.add("mime");
     }
 
     public void setMIME(List<String> services) {

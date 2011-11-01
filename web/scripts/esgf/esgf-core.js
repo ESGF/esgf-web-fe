@@ -116,6 +116,10 @@ ESGF.setting.currentGroupName = 'default';
 //indication of datacart method (old vs new)
 ESGF.setting.dataCartVersion = 'v1';
 
+
+//need a variable representing the current state of the datacart
+ESGF.setting.showAllContents = 'true';
+
 /**
  * Proxy for creating the template for file downloads.
  *

@@ -77,6 +77,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           //check to see if a distributed search is needed
           self.appendDistributedRequestHandler();
           
+          LOG.debug('store string: ' + this.store.string());
           
           if (this.proxyUrl) {
 	          jQuery.ajax({

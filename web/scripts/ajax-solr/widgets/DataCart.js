@@ -64,13 +64,18 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	
 	init: function() {
 		//alert('distributed search init');
+		
 	},
 	
 	beforeRequest: function () {
+		
+		//alert('before request');
+		
 		//kill any live events that are associated with this widget
 		$('#myTabs').die('tabsselect');
 		$(".wgetAllChildren").die('click');
 		$('.remove_dataset_from_datacart').die('click');
+
 
         $(this.target).html($('<img/>').attr('src', 'images/ajax-loader.gif'));
 	},
@@ -83,28 +88,69 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
         
 		var self = this;
     
+		//alert('after request');
+		
+		//getter
+		var selected = $( "#myTabs" ).tabs( "option", "selected" );
+		
+		//alert('selected ' + selected);
+		
+		//grab all the keys from the datacart and place in an array
+    	var selected_arr = ESGF.localStorage.toKeyArr('dataCart');
+    	
+    	
+    	//empty the carts tab and append/initialize the datacart table 
+    	$('#carts').empty();
+    	
+    	$('#carts').append('<div id="radio" style="margin-bottom:30px;display:none"><input type="radio" id="datacart_filter1" name="datacart_filter" value="all" /> Show all files <input type="radio" id="datacart_filter2" name="datacart_filter" value="filtered" /> Filter over search constraints </div>');
+    	
+    	if(ESGF.setting.showAllContents == 'true') {
+    		$("input[id='datacart_filter2']").attr("checked","false");
+    		$("input[id='datacart_filter1']").attr("checked","true");
+    	} else {
+    		$("input[id='datacart_filter1']").attr("checked","false");
+    		$("input[id='datacart_filter2']").attr("checked","true");
+    	}
+    	
+    	if(selected_arr.length > 0) {
+    		$('div#radio').show();
+    	}
+    	
+		
+    	$('#carts').append('<table style="width:100%;table-layout: fixed"><tbody id="datasetList"></tbody></table>');
+        $("#datasetList").empty();
+		
+		//create the template
+        self.createTemplate(selected_arr);
 		
 		/**
 	     * Event for tab selection (as of now, toggling between "Results" and "Datacart")
 	     */
-	    $('#myTabs').live('tabsselect', function(event, ui) {
-	    	
-	        if (ui.index == 1) {
-	        	
-	        	//grab all the keys from the datacart and place in an array
-	        	var selected_arr = ESGF.localStorage.toKeyArr('dataCart');
-	        	
+		$('#myTabs').live('tabsselect', function(event, ui) {
+			if (ui.index == 1) {
+				
+				//alert('show the data cart here');
+				Manager.doRequest(0);
+				//$('input#datacart_filter').attr('checked','true');
+			}
+			
+			
+			
+		});
+		
+		//event in case the radio buttons change
+		$("input[name='datacart_filter']").change(	function() { 
+			
+				if($("input[id='datacart_filter2']").attr("checked")) { 
+					ESGF.setting.showAllContents = 'false';
+				} else {
+					ESGF.setting.showAllContents = 'true';
+				}
 
-	        	//empty the carts tab and append/initialize the datacart table 
-		    	$('#carts').empty();
-		    	$('#carts').append('<table style="width:100%;table-layout: fixed"><tbody id="datasetList"></tbody></table>');
-	            $("#datasetList").empty();
-	            
-	            //create the template
-		        self.createTemplate(selected_arr);
-	        }
-	    });
-	    
+				Manager.doRequest(0);
+				
+		});
+		
 	    
 	    /**
 	     * Click event for generating the wget script
@@ -114,7 +160,9 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	     */
 	    $(".wgetAllChildren").live ('click', function (e){
 	    	
+	    	alert('wget');
 	    	
+	    	/*
 	    	if(ESGF.setting.dataCartVersion == 'v1') {
 	    		//grab the dataset id from the template
 	        	var selectedItem = $.tmplItem(this);
@@ -162,7 +210,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	            .appendTo('body').submit().remove();
 	    		
 	    	}
-	    	
+	    	*/
 	    });
 	    
 	    
@@ -170,26 +218,20 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	     * Click event for removing datasets from the data cart
 	     */
 	    $('.remove_dataset_from_datacart').live ('click', function(e) {
-	    	if(ESGF.setting.dataCartVersion == 'v1') {
-	    		var selectedItem = $.tmplItem(this);
-	        	var selectedDocId = selectedItem.data.dataset_id;
+	    	
+	    	var selectedItem = $.tmplItem(this);
+        	var selectedDocId = selectedItem.data.datasetId;
 
-	        	//remove the dataset from the localStorage
-	        	ESGF.localStorage.remove('dataCart',selectedDocId);
-	        	//remove the dataset and files visually
-	        	
-	        	//file rows in the template
-	        	($('tr.rows_'+ self.replacePeriod(selectedDocId))).remove();
-	        	//dataset rows in the template
-	        	$('tr#' + self.replacePeriod(selectedDocId)).remove();
-
-	        	//change from remove from cart to add to cart
-	        	$('a#ai_select_'+ selectedDocId.replace(/\./g, "_")).html('Add To Cart');
-	    	}
-	    	
-	    	
-	    	
+        	//remove the dataset from the localStorage
+        	ESGF.localStorage.remove('dataCart',selectedDocId);
+        	
+        	Manager.doRequest(0);
+        	
+        	//change from remove from cart to add to cart
+        	$('a#ai_select_'+ selectedDocId.replace(/\./g, "_")).html('Add To Cart');
+        	
 	    });
+	    
 	    
 	    /**
 	     * Event for checkbox file selection
@@ -248,15 +290,15 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		
     	// Make an ajax call to the fileDownloadTemplate controller to extract the files for each of datasets given in the array of keys //
     	 
+    	
      	//only make the ajax call when there has been something added to the data cart
     	if(arr.length != 0) {
     		//setup the query string
-    		var queryStr = { "id" : arr , "version" : ESGF.setting.dataCartVersion, "fq" : fqParamArr, "q" : qParam};
+    		var queryStr = { "id" : arr , "version" : ESGF.setting.dataCartVersion, "fq" : fqParamArr, "q" : qParam, "showAll" : ESGF.setting.showAllContents};
     		
     		//add a spinning wheel to show user that progress is being made in finding the files
     		self.addDataCartSpinWheel();
 
-    		alert('here');
     		$.ajax({
     			url: '/esgf-web-fe/solrfileproxy',
     			global: false,
@@ -268,11 +310,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     			 
     			success: function(data) {
     				
-    				alert('success');
 	    			self.removeDataCartSpinWheel();
-	    			/*
-	    			 self.showFileContents(data); 
-	    			 */
+	    			self.showFileContents(data); 
     			},
     			
     			//Upon an error remove the spinning wheel and give an alert 
@@ -452,11 +491,117 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	
     	LOG.debug("Showing file contents" + data);
     	
+    	
     	var self = this;
     	
     	if(data != null) {
-    		var fileDownloadTemplate = data.response.doc;
     		
+    		
+    		var fileDownloadTemplate = data.doc;
+    		
+    		for(var i in fileDownloadTemplate) {
+    			
+    			if(i == 'file') {
+    				var file = fileDownloadTemplate[i];
+    				for(var j=0;j<file.length;j++) {
+    					//alert(j + file[j].services.service[1]);
+    				}
+    			}
+    		}
+    		
+    		
+    		LOG.debug("Before template");
+    		
+    		$( "#cartTemplateStyledNew").tmpl(data.doc, {
+    			
+    			replacePeriods : function (word) {
+                    return self.replacePeriod(word);
+                },
+                abbreviate : function (word) {
+                    var abbreviation = word;
+                    if(word.length > 50) {
+                        abbreviation = word;//word.slice(0,20) + '...' + word.slice(word.length-21,word.length);
+                    }
+                    return abbreviation;
+                },
+                addOne: function(num) {
+                    return (num+1);
+                },
+                sizeConversion : function(size) {
+                    var convSize;
+                    if(size == null) {
+                        convSize = 'N/A';
+                    } else {
+                        var sizeFlt = parseFloat(size,10);
+                        if(sizeFlt > 1000000000) {
+                            var num = 1000000000;
+                            convSize = (sizeFlt / num).toFixed(2) + ' GB';
+                        } else if (sizeFlt > 1000000) {
+                            var num = 1000000;
+                            convSize = (sizeFlt / num).toFixed(2) + ' MB';
+                        } else {
+                            var num = 1000;
+                            convSize = (sizeFlt / num).toFixed(2) + ' KB';
+                        }
+                    }
+                    return convSize;
+                }
+            })
+            .appendTo("#datasetList")
+            .find( "a.showAllChildren" ).click(function() {
+            	
+            	if(this.innerHTML === "Expand") {
+                    this.innerHTML="Collapse";
+                } else {
+                    this.innerHTML="Expand";
+                }
+            	
+            	
+            	var selectedItem = $.tmplItem(this);
+                var selectedDoc = selectedItem;
+
+            	var selectedDocId = selectedItem.data.datasetId;
+            	
+            	var id = $(this).parent().parent().parent().html();
+            	
+                //$('input[name=' + selectedDocId + ']').toggle();
+                
+                //$(this).parent().parent().parent().find('tr.rows_'+selectedDocId).toggle();
+                //$('tr.rows_'+selectedDocId).toggle();
+                
+            	$('tr.rows_'+self.replacePeriod(selectedDocId)).toggle();
+                
+            	
+            	
+            	
+            	
+                /*
+                var id = $(this).parent().attr("id").replace(/\./g,"_");
+            	
+                $('tr.rows_'+id).toggle();
+                if(this.innerHTML === "Expand") {
+                    this.innerHTML="Collapse";
+                } else {
+                    this.innerHTML="Expand";
+                }
+                */
+                
+                /*
+                var selectedDocId = selectedDoc.data.dataset_id;
+                $('input[name=' + selectedDocId + ']').toggle();
+
+                var id = $(this).parent().attr("id").replace(/\./g,"_");
+                $('tr.rows_'+id).toggle();
+                if(this.innerHTML === "Expand") {
+                    this.innerHTML="Collapse";
+                } else {
+                    this.innerHTML="Expand";
+                }
+                */
+            });
+    		
+    		
+    		/*
     		LOG.debug("Before template");
     		$( "#cartTemplateStyled").tmpl(fileDownloadTemplate, {
     			
@@ -511,7 +656,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
                 }
                 
             });
-            
+            */
     	}
 		
     	
@@ -633,4 +778,29 @@ if(arr != null || arr != undefined || arr.length == 0 || arr != '') {
     	self.createTemplate(arr);
 	}
 }
+*/
+
+
+
+/* old live select of tabs
+$('#myTabs').live('tabsselect', function(event, ui) {
+
+	alert('did i come here?');
+	
+    if (ui.index == 1) {
+    	
+    	//grab all the keys from the datacart and place in an array
+    	var selected_arr = ESGF.localStorage.toKeyArr('dataCart');
+    	
+
+    	//empty the carts tab and append/initialize the datacart table 
+    	$('#carts').empty();
+    	$('#carts').append('<table style="width:100%;table-layout: fixed"><tbody id="datasetList"></tbody></table>');
+        $("#datasetList").empty();
+        
+        //create the template
+        self.createTemplate(selected_arr);
+    }
+    
+});
 */

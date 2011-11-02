@@ -229,6 +229,7 @@ public class FileDownloadTemplateController {
         
         System.out.println("end getDataCart");
         
+        System.out.println("response: " + jsonContent);
         
         return jsonContent;
     }

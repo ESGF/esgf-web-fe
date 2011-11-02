@@ -30,8 +30,10 @@
 		<td style="width: 40px;"><input class="topLevel" type="checkbox" id="${datasetId}" name="${datasetId}" checked="true" /> </td>
 		<td style="width: 375px;font-size:13px"><div style="word-wrap: break-word;font-weight:bold">${datasetId} (${count} files)</div></td>
 		<td style="font-size:13px;float:right" id="${datasetId}"> 
+			{{if count > 0}}
 			<a href="#" class="showAllChildren">Expand</a> | 
 			<a href="#" class="wgetAllChildren"> WGET </a> |  
+			{{/if}}
 			<a href="#" class="remove_dataset_from_datacart">Remove</a> 
 		</td>
 	</tr>
@@ -39,7 +41,7 @@
 		<td></td>
 	</tr>
    		{{each(i) file}}
-        	{{if i != 0}}
+        	{{if i > 1}}
 				<tr class="rows_${$item.replacePeriods(datasetId)}" style="display:none">
 					<td style="width: 40px;"><input type="checkbox" id="${$item.replacePeriods(fileId)}" checked="true" value="${urls.url[1]}"/></td>
 					<td style="width: 425px;padding-left:10px;font-size:11px;"><div style="word-wrap: break-word;"> ${$item.abbreviate(fileId)} (${$item.sizeConversion(size)})</div></td>

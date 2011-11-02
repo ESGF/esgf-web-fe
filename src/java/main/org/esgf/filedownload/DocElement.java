@@ -18,6 +18,7 @@ public class DocElement {
         this.fileElements = new ArrayList<FileElement>();
         FileElement blankElement = new FileElement();
         this.fileElements.add(blankElement);
+        this.fileElements.add(blankElement);
         this.setCount(0);
     }
     
@@ -40,6 +41,7 @@ public class DocElement {
     public void setFileElements(List<FileElement> fileElements) {
         List<FileElement> newFileElements = new ArrayList<FileElement>();
         FileElement blankElement = new FileElement();
+        newFileElements.add(blankElement);
         newFileElements.add(blankElement);
         newFileElements.addAll(fileElements);
         this.fileElements = newFileElements;

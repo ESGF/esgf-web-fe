@@ -75,7 +75,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		$('#myTabs').die('tabsselect');
 		$(".wgetAllChildren").die('click');
 		$('.remove_dataset_from_datacart').die('click');
-
+		$("input#uber_script").die('click');
 
         $(this.target).html($('<img/>').attr('src', 'images/ajax-loader.gif'));
 	},
@@ -102,8 +102,27 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	//empty the carts tab and append/initialize the datacart table 
     	$('#carts').empty();
     	
-    	var optionsStr = '';
-    	optionsStr = '<div id="radio" style="margin-bottom:30px;display:none"><input type="radio" id="datacart_filter1" name="datacart_filter" value="all" /> Show all files <input type="radio" id="datacart_filter2" name="datacart_filter" value="filtered" /> Filter over search constraints </div>';
+    	//this string represents the options for the data cart
+    	//as of now, the options are:
+    	// - radio box that the user chooses to show files
+    	// - the "uber" script option
+    	var optionsStr = '<div id="radio" style="margin-bottom:30px;display:none">' + 
+    				 	 '<table>' +
+    				 	 '<tr>' +
+    				 	 '<td>' +
+    				 	 '<input type="radio" id="datacart_filter1" name="datacart_filter" value="all" /> ' +
+    				 	 'Show all files ' +
+    				 	 '</td>' +
+    				 	 '<td>' +
+    				 	 '<input type="radio" id="datacart_filter2" name="datacart_filter" value="filtered" /> ' +
+    				 	 'Filter over search constraints ' +
+    				 	 '</td>' +
+    				 	 '<td>' +
+    				 	 '<input id="uber_script" type="submit" value="Download All Selected" /> ' +
+    				 	 '</td>' +
+    				 	 '</tr>' +
+    				 	 '</table>' +
+    				 	 '</div>';
     	
     	$('#carts').append(optionsStr);
     	
@@ -152,6 +171,62 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 
 				Manager.doRequest(0);
 				
+		});
+		
+		//event for the uber script
+		$("input#uber_script").live('click', function() {
+
+	        	//begin assembling queryString
+	            var queryString = 'type=create&id=' + 'AllScripts';
+	            
+				//need to grab all of the datasets
+				//grab all the keys from the datacart and place in an array
+		    	var selected_arr = ESGF.localStorage.toKeyArr('dataCart');
+				
+		    	
+		    	//gather the ids and the urls for download
+	        	var ids   = new Array();
+	            var values = new Array();
+		    	
+		    	for(var i=0;i<selected_arr.length;i++) {
+		    		var selectedDocId = selected_arr[i];
+		    		var datasetId = self.replacePeriod(selected_arr[i]);
+		    		
+		    		//alert('selected_arr: ' + i + ' ' + selected_arr[i]);
+		    		$(this).parent().parent().parent().parent().parent().parent().find('tr.rows_'+ datasetId).find(':checkbox:checked').each( function(index) {
+		    			//alert(this.id);
+		    			
+		                if(this.id != selectedDocId) {
+		                	ids.push(this.id);
+		                	values.push(this.value);
+		                }
+		               
+		            });
+		    		
+		    	}
+		    	
+		    	//assemble parameters of the queryString
+	            for(var i=0;i<ids.length;i++) {
+	            	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
+	            }
+	            
+	            var url = '/esgf-web-fe/wgetproxy';
+	            //var security = 'wgetv3';
+	            //queryString += '&security=' + security;
+	            
+	            //assemble the input fields with the query string
+	            var input = '';
+	            jQuery.each(queryString.split('&'), function(){
+	                var pair = this.split('=');
+	                input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
+	            });
+	            
+	            //send request
+	            jQuery('<form action="'+ url +'" method="post">'+input+'</form>')
+	            .appendTo('body').submit().remove();
+	            
+		    	
+				//alert($(this).parent().parent().parent().parent().parent().parent().html());
 		});
 		
 	    

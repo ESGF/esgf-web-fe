@@ -41,8 +41,8 @@
    		{{each(i) file}}
         	{{if i != 0}}
 				<tr class="rows_${$item.replacePeriods(datasetId)}" style="display:none">
-					<td style="width: 40px;"><input type="checkbox" id="${$item.replacePeriods(fileId)}" checked="true" value="${urls.url[0]}"/></td>
-					<td style="width: 425px;padding-left:10px;font-size:11px;"><div style="word-wrap: break-word;">${$item.abbreviate(fileId)} (${$item.sizeConversion(size)})</div></td>
+					<td style="width: 40px;"><input type="checkbox" id="${$item.replacePeriods(fileId)}" checked="true" value="${urls.url[1]}"/></td>
+					<td style="width: 425px;padding-left:10px;font-size:11px;"><div style="word-wrap: break-word;"> ${$item.abbreviate(fileId)} (${$item.sizeConversion(size)})</div></td>
 					{{each(j) urls.url}}
 						{{if services.service[j] == 'HTTPServer'}}
 							<td style="float:right;font-size:11px;"><div style="word-wrap: break-word;vertical-align:middle"><a href="${urls.url[j]}">HTTPS </a></div></td>

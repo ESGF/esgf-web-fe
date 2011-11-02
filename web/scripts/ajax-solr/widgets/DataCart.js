@@ -102,8 +102,12 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	//empty the carts tab and append/initialize the datacart table 
     	$('#carts').empty();
     	
-    	$('#carts').append('<div id="radio" style="margin-bottom:30px;display:none"><input type="radio" id="datacart_filter1" name="datacart_filter" value="all" /> Show all files <input type="radio" id="datacart_filter2" name="datacart_filter" value="filtered" /> Filter over search constraints </div>');
+    	var optionsStr = '';
+    	optionsStr = '<div id="radio" style="margin-bottom:30px;display:none"><input type="radio" id="datacart_filter1" name="datacart_filter" value="all" /> Show all files <input type="radio" id="datacart_filter2" name="datacart_filter" value="filtered" /> Filter over search constraints </div>';
     	
+    	$('#carts').append(optionsStr);
+    	
+    	//toggle the "checked" attribute of the showAllContents radio button
     	if(ESGF.setting.showAllContents == 'true') {
     		$("input[id='datacart_filter2']").attr("checked","false");
     		$("input[id='datacart_filter1']").attr("checked","true");
@@ -112,11 +116,12 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     		$("input[id='datacart_filter2']").attr("checked","true");
     	}
     	
+    	//if there are no items in the datacart don't show the radio buttons
     	if(selected_arr.length > 0) {
     		$('div#radio').show();
     	}
     	
-		
+		//create the listings in the data cart
     	$('#carts').append('<table style="width:100%;table-layout: fixed"><tbody id="datasetList"></tbody></table>');
         $("#datasetList").empty();
 		
@@ -133,8 +138,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 				Manager.doRequest(0);
 				//$('input#datacart_filter').attr('checked','true');
 			}
-			
-			
 			
 		});
 		
@@ -160,57 +163,47 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	     */
 	    $(".wgetAllChildren").live ('click', function (e){
 	    	
-	    	alert('wget');
+	    	//grab the dataset id from the template
+        	var selectedItem = $.tmplItem(this);
+        	var selectedDocId = selectedItem.data.datasetId;
+
+        	//begin assembling queryString
+            var queryString = 'type=create&id=' + selectedDocId;
+        	
+
+            //gather the ids and the urls for download
+        	var ids   = new Array();
+            var values = new Array();
+            
+            var dataset = self.replacePeriod(selectedDocId);
+            
+            $(this).parent().parent().parent().find('tr.rows_'+ dataset).find(':checkbox:checked').each( function(index) {
+                if(this.id != selectedDocId) {
+                ids.push(this.id);
+                values.push(this.value);
+               }
+            });
+            
+            //assemble parameters of the queryString
+            for(var i=0;i<ids.length;i++) {
+            	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
+            }
+            
+            var url = '/esgf-web-fe/wgetproxy';
+            //var security = 'wgetv3';
+            //queryString += '&security=' + security;
+            
+            //assemble the input fields with the query string
+            var input = '';
+            jQuery.each(queryString.split('&'), function(){
+                var pair = this.split('=');
+                input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
+            });
+            
+            //send request
+            jQuery('<form action="'+ url +'" method="post">'+input+'</form>')
+            .appendTo('body').submit().remove();
 	    	
-	    	/*
-	    	if(ESGF.setting.dataCartVersion == 'v1') {
-	    		//grab the dataset id from the template
-	        	var selectedItem = $.tmplItem(this);
-	        	var selectedDocId = selectedItem.data.dataset_id;
-
-	        	//begin assembling queryString
-	            var queryString = 'type=create&id=' + selectedDocId;
-	        	
-	            
-	            
-	            //gather the ids and the urls for download
-	        	var ids   = new Array();
-	            var values = new Array();
-	            
-	            var dataset = self.replacePeriod(selectedDocId);
-	            
-	            
-	            $(this).parent().parent().parent().find('tr.rows_'+ dataset).find(':checkbox:checked').each( function(index) {
-                    if(this.id != selectedDocId) {
-                    ids.push(this.id);
-                    values.push(this.value);
-                   }
-	            });
-	            
-	            
-	            //assemble parameters of the queryString
-	            for(var i=0;i<ids.length;i++) {
-	            	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
-	            }
-	            
-
-	            var url = '/esgf-web-fe/wgetproxy';
-	            var security = 'wgetv3';
-	            queryString += '&security=' + security;
-	            
-	            //assemble the input fields with the query string
-	            var input = '';
-	            jQuery.each(queryString.split('&'), function(){
-	                var pair = this.split('=');
-	                input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-	            });
-	            
-	            //send request
-	            jQuery('<form action="'+ url +'" method="post">'+input+'</form>')
-	            .appendTo('body').submit().remove();
-	    		
-	    	}
-	    	*/
 	    });
 	    
 	    

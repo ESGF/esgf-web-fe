@@ -4,7 +4,7 @@
 	<ul class="ul_class" >
 		
 		<li class="li_facet_class">
-	   			<a class="showFacetValues">${Facet_name} (${Facet_max_count})</a>
+	   			<a class="showFacetValues">${Facet_name} </a>
 		</li>
 
 		{{each Facet_values}}

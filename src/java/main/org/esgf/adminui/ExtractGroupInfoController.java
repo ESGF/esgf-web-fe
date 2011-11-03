@@ -45,6 +45,7 @@ public class ExtractGroupInfoController {
     
     public ExtractGroupInfoController() throws FileNotFoundException, IOException {
         LOG.debug("IN CreateGroupsController Constructor");
+<<<<<<< HEAD
         if(Utils.environmentSwitch) {
             goi = new GroupOperationsESGFDBImpl();
             uoi = new UserOperationsESGFDBImpl();
@@ -53,6 +54,12 @@ public class ExtractGroupInfoController {
             goi = new GroupOperationsXMLImpl();
             uoi = new UserOperationsXMLImpl();
         }
+=======
+        //goi = new GroupOperationsESGFDBImpl();
+        //uoi = new UserOperationsESGFDBImpl();
+        goi = new GroupOperationsXMLImpl();
+        uoi = new UserOperationsXMLImpl();
+>>>>>>> a9c4fa851e22121904f6860b1c37456ba2455b67
     }
     
     /**

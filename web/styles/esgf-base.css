@@ -413,19 +413,24 @@ font-size: 180%;
 
 /*
 .left_table_header {
-	width: 55%;
+	/* width: 55%; */
 	font-size: 12px;
 }
 .right_table_header {
 	font-size: 12px;
+	width:300px;
 	float:right;
 }
 
 
 .left_download {
-	width: 50%;
+	/* width: 50%; */
 	font-size: 8pt;	
 	padding-left:20px;
+	/* padding-left:20px; */
+	/*
+	border: 2px solid #666;
+	*/
 }
 */
 

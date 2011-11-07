@@ -14,6 +14,7 @@ public class FileElement {
     private String size;
     private String hasGrid;
     private String hasHttp;
+    private String hasOpenDap;
     
     private ServicesElement servicesElement;
     private URLSElement urlsElement;
@@ -26,6 +27,7 @@ public class FileElement {
         this.size = new String("size");
         this.hasGrid = new String("false");
         this.hasHttp = new String("false");
+        this.hasOpenDap = new String("false");
         
         this.mimesElement = new MIMESElement();
         this.urlsElement = new URLSElement();
@@ -68,6 +70,18 @@ public class FileElement {
         return servicesElement;
     }
     public void setServicesElement(ServicesElement servicesElement) {
+        List<String> services = servicesElement.getServices();
+        for(int i=0;i<services.size();i++) {
+            //System.out.println("Setting service: " + services.get(i));
+            String service = services.get(i);
+            if(service.contains("HTTPS")) {
+                this.hasHttp = new String("true");
+            } else if(service.contains("OpenDAP")) {
+                this.setHasOpenDap(new String("true"));
+            } else if(service.contains("GridFTP")) {
+                this.hasGrid = new String("true");
+            }
+        }
         this.servicesElement = servicesElement;
     }
     public URLSElement getUrlsElement() {
@@ -84,6 +98,13 @@ public class FileElement {
     }
     
     public void addService(String service) {
+        if(service.contains("HTTPS")) {
+            this.hasHttp = new String("true");
+        } else if(service.contains("OpenDAP")) {
+            this.setHasOpenDap(new String("true"));
+        } else if(service.contains("GridFTP")) {
+            this.hasGrid = new String("true");
+        }
         this.servicesElement.addService(service);
     }
     
@@ -217,6 +238,16 @@ public class FileElement {
         fe.removeMIME("mime1");
         
         System.out.println(fe.toXML());
+    }
+
+
+    public void setHasOpenDap(String hasOpenDap) {
+        this.hasOpenDap = hasOpenDap;
+    }
+
+
+    public String getHasOpenDap() {
+        return hasOpenDap;
     }
     
     

@@ -11,6 +11,10 @@ public class DocElement {
     
     private String dataset_id;
     private int count;
+    
+    private String hasHttp;
+    private String hasOpenDap;
+    private String hasGridFTP;
     private List<FileElement> fileElements;
     
     public DocElement() {
@@ -20,6 +24,9 @@ public class DocElement {
         this.fileElements.add(blankElement);
         this.fileElements.add(blankElement);
         this.setCount(0);
+        this.setHasGridFTP("0");
+        this.setHasHttp("0");
+        this.setHasOpenDap("0");
     }
     
     
@@ -46,6 +53,38 @@ public class DocElement {
         newFileElements.addAll(fileElements);
         this.fileElements = newFileElements;
     }
+    
+
+    public String getHasHttp() {
+        return hasHttp;
+    }
+
+
+    public void setHasHttp(String hasHttp) {
+        this.hasHttp = hasHttp;
+    }
+
+
+    public String getHasOpenDap() {
+        return hasOpenDap;
+    }
+
+
+    public void setHasOpenDap(String hasOpenDap) {
+        this.hasOpenDap = hasOpenDap;
+    }
+
+
+    public String getHasGridFTP() {
+        return hasGridFTP;
+    }
+
+
+    public void setHasGridFTP(String hasGridFTP) {
+        this.hasGridFTP = hasGridFTP;
+    }
+
+
 
     public String toString() {
         String str = "doc\n";
@@ -71,12 +110,36 @@ public class DocElement {
         docEl.addContent(countEl);
         
         for(int i=0;i<this.fileElements.size();i++) {
+            FileElement fe = this.fileElements.get(i);
             Element fileEl = this.fileElements.get(i).toElement();
+            if(fe.getHasHttp().equals("true")) {
+                this.hasHttp = new String("1");
+            } 
+            if(fe.getHasOpenDap().equals("true")) {
+                this.hasOpenDap = new String("1");
+            } 
+            if(fe.getHasGrid().equals("true")) {
+                this.hasGridFTP = new String("1");
+            }
             docEl.addContent(fileEl);
         }
+
+        Element hasHttpEl = new Element("hasHttp");
+        hasHttpEl.addContent(this.hasHttp);
+        docEl.addContent(hasHttpEl);
+
+        Element hasOpenDapEl = new Element("hasOpenDap");
+        hasOpenDapEl.addContent(this.hasOpenDap);
+        docEl.addContent(hasOpenDapEl);
+
+        Element hasGridFTPEl = new Element("hasGridFTP");
+        hasGridFTPEl.addContent(this.hasGridFTP);
+        docEl.addContent(hasGridFTPEl);
         
         return docEl;
     }
+    
+   
     
     public String toXML() {
         String xml = "";
@@ -131,10 +194,10 @@ public class DocElement {
         String size = "size1";
         fe.setSize(size);
         
-        String hasGrid = "true";
+        String hasGrid = "1";
         fe.setHasGrid(hasGrid);
         
-        String hasHttp = "true";
+        String hasHttp = "1";
         fe.setHasHttp(hasHttp);
 
         listFe.add(fe);

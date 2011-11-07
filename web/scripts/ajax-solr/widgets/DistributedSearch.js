@@ -67,7 +67,7 @@ AjaxSolr.DistributedSearchWidget = AjaxSolr.AbstractWidget.extend({
 	},
 	
 	beforeRequest: function () {
-		//alert('distributed search beforeRequest');
+		$("input#distribbutton").die('click');
 	},
 	
 	afterRequest: function () {

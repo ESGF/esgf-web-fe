@@ -52,6 +52,7 @@
 
 package org.esgf.pspace;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -64,12 +65,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
  *
  */
 @Controller
-@RequestMapping(value="/p/{project}")
 public class ProjectSpaceController {
-     
-    @RequestMapping(method=RequestMethod.GET)
+    
+    private static final logger = Logger.getLogger(ProjectSpaceController.class)
+    
+    @Autowired
+    private ProjectService ps;
+    
+    @RequestMapping(value="/p/{project}", method=RequestMethod.GET)
     public void showProject() {
-        
+       
     }
 
+    
 }

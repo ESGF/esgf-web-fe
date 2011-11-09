@@ -84,14 +84,15 @@ public class ProjectSpaceController {
             logger.warn("Project [{}] can't be found", project);
             return "pspace/error";
         }
-        return null;
+        return "pspace/home";
         
     }
 
     private boolean exists(String project) {
        List<String> plist = ps.retrieveFacets("project");
+       
        for (String s: plist) {
-           String[] p = s.split("|");
+           String[] p = s.split("\\|");
            if (p[0].trim().equalsIgnoreCase(project))
                return true;
        }

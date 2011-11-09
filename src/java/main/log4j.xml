@@ -43,11 +43,7 @@
     </logger>
 
     <logger name="org.esgf">
-        <level value="error" />
-    </logger>
-    
-    <logger name="esg">
-        <level value="error" />
+        <level value="debug" />
     </logger>
         
 	<!-- Root Logger -->

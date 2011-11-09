@@ -52,8 +52,13 @@
 
 package org.esgf.pspace;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -67,15 +72,31 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class ProjectSpaceController {
     
-    private static final logger = Logger.getLogger(ProjectSpaceController.class)
+    private static final Logger logger = LoggerFactory.getLogger(ProjectSpaceController.class);
     
     @Autowired
     private ProjectService ps;
     
     @RequestMapping(value="/p/{project}", method=RequestMethod.GET)
-    public void showProject() {
-       
+    public String showProject(@PathVariable String project) {
+        
+        if (!exists(project)) {
+            logger.warn("Project [{}] can't be found", project);
+            return "pspace/error";
+        }
+        return null;
+        
     }
 
+    private boolean exists(String project) {
+       List<String> plist = ps.retrieveFacets("project");
+       for (String s: plist) {
+           String[] p = s.split("|");
+           if (p[0].trim().equalsIgnoreCase(project))
+               return true;
+       }
+       
+       return false;
+    }
     
 }

@@ -119,6 +119,11 @@ public class WgetGeneratorController {
     // The file name is the id of the dataset + ".sh"
     String filename = request.getParameter("id") + ".sh";
     
+    // Get the constraints
+    String constraints = request.getParameter("constraints");
+    
+    System.out.println("constraints: " + constraints);
+    
     // An array of file names 
     String [] files = request.getParameterValues("child_url");
     
@@ -126,7 +131,7 @@ public class WgetGeneratorController {
     //queryStringInfo(request);
     
     // create content of the wget script
-    String wgetText = writeDatasetScript(files);
+    String wgetText = writeDatasetScript(constraints,files);
     
     // write it to the bash file
     writeBash(wgetText,filename,response);
@@ -135,13 +140,15 @@ public class WgetGeneratorController {
 
   } 
   
-  private static String writeDatasetScript(String [] files) {
+  private static String writeDatasetScript(String constraints,String [] files) {
       String wgetText = "";
       
       wgetText += "#!/bin/bash\n\n";
       
       //add the header
       wgetText += headerString("0.2");
+      
+      wgetText += writeConstraints(constraints);
           
       //add the environment variables
       wgetText += envVariablesString();
@@ -157,6 +164,20 @@ public class WgetGeneratorController {
       wgetText += "exit 0\n"; 
       
       return wgetText;
+  }
+  
+  private static String writeConstraints(String constraints) {
+      String constraintStr = "";
+      
+      constraints = constraints.replace("'type:Dataset',", "");
+      
+      constraintStr += "\n------------------\n\n";
+      constraintStr += "Search Constraints\n";
+      constraintStr += "\t" + constraints + "\n";
+      constraintStr += "\n------------------\n\n\n";
+      
+      
+      return constraintStr;
   }
   
   private static void writeBash(String wgetText,String filename,HttpServletResponse response) {

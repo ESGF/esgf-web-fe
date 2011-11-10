@@ -65,7 +65,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	searchConstraints: null,
 	
 	init: function() {
-		//alert('distributed search init');
 		
 	},
 	
@@ -88,7 +87,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	
 	afterRequest: function () {
 		
-
+		
         $(this.target).empty();
 
 		var self = this;
@@ -130,11 +129,11 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	
     	//toggle the "checked" attribute of the showAllContents radio button
     	if(ESGF.setting.showAllContents == 'true') {
-    		$("input[id='datacart_filter_filtered']").attr("checked","false");
+    		$("input[id='datacart_filtered']").attr("checked","false");
     		$("input[id='datacart_filter_all']").attr("checked","true");
     	} else {
     		$("input[id='datacart_filter_all']").attr("checked","false");
-    		$("input[id='datacart_filter_filtered']").attr("checked","true");
+    		$("input[id='datacart_filtered']").attr("checked","true");
     	}
     	
     	//if there are no items in the datacart don't show the radio buttons
@@ -156,7 +155,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			if (ui.index == 1) {
 				
 				Manager.doRequest(0);
-				//$('input#datacart_filter').attr('checked','true');
 			}
 			
 		});
@@ -164,7 +162,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		//event in case the radio buttons change
 		$("input[name='datacart_filter']").change(	function() { 
 			
-				if($("input[id='datacart_filter_filtered']").attr("checked")) { 
+			
+				if($("input[id='datacart_filtered']").attr("checked")) { 
 					ESGF.setting.showAllContents = 'false';
 				} else {
 					ESGF.setting.showAllContents = 'true';

@@ -10,7 +10,7 @@
 	<link rel="stylesheet/less" href="<c:url value='/styles/bootstrap/lib/bootstrap.less'> </c:url>" />
 	
 	<script src="<c:url value='/scripts/less/less-1.1.3.min.js'> </c:url>"> </script>
-
+	<script src="<c:url value='http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js'></c:url>"></script>
 
 	<style type="text/css">
 	/* Overide some defaults */
@@ -27,7 +27,7 @@
 		<div class="page-header">
 		<div class="row">
 			<div class="span8">	<h1>Project Space 
-			<small>for xxx </small> </h1></div>
+			<small>for <c:out value="${project}" /></small> </h1></div>
 			<div class="span8"> <img src="<c:url value='/images/ornl_logo.png'> </c:url>" />
 			</div>
 		</div>
@@ -37,16 +37,28 @@
 		</div>
 		
 		<div class="content">
-		
+
+			<div id="readme"></div>		
 		
 		</div>
 		
-		
       	<footer>
-        <p>&copy; Oak Ridge National Laboratory 2011</p>
+        	<p>&copy; Oak Ridge National Laboratory 2011</p>
       	</footer>
 
     </div> <!-- /container -->
     
+    <script type="text/javascript">
+    	var pathname = window.location.pathname;
+    	var split = pathname.split('/');
+		var project = split[split.length-1]; 
+		$.ajax({
+			url:  project + "/readme",
+			dataType: 'html',
+			success: function( data ) {
+				$('div#readme').html(data);
+			}
+		})
+    </script>
 </body>
 </html>

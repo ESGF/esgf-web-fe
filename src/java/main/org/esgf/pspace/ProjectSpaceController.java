@@ -52,15 +52,15 @@
 
 package org.esgf.pspace;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * The project space controller facilitate presentation of 
@@ -77,27 +77,46 @@ public class ProjectSpaceController {
     @Autowired
     private ProjectService ps;
     
+    /**
+     * display project space page.
+     * 
+     * Note that we can issue two requests here, which is sub-optimal.
+     * 
+     * 
+     * @param project
+     * @param model
+     * @return
+     */
+    
     @RequestMapping(value="/p/{project}", method=RequestMethod.GET)
-    public String showProject(@PathVariable String project) {
+    public String showProject(@PathVariable String project, Model model) {
         
-        if (!exists(project)) {
+        if (!ps.existsProject(project)) {
             logger.warn("Project [{}] can't be found", project);
             return "pspace/error";
         }
+        
+        // TODO: for text output only
+        // String readme = ps.retrieveReadme(project); 
+        // model.addAttribute("readme", readme);
+        model.addAttribute("project", project);
+        
         return "pspace/home";
         
     }
 
-    private boolean exists(String project) {
-       List<String> plist = ps.retrieveFacets("project");
-       
-       for (String s: plist) {
-           String[] p = s.split("\\|");
-           if (p[0].trim().equalsIgnoreCase(project))
-               return true;
-       }
-       
-       return false;
+    /**
+     * Return just the content of the readme
+     * 
+     * @param project
+     * @return
+     */
+    
+    @RequestMapping(value="/p/{project}/readme", method=RequestMethod.GET)
+    public @ResponseBody String getReadme(@PathVariable String project) {
+        return ps.retrieveReadme(project);
     }
+    
+
     
 }

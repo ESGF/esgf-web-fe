@@ -137,10 +137,54 @@ public class ProjectService {
         
         return aList;
     }
-     
+    
+    /**
+     * 
+     * Given a project String, return the readme content as a String.
+     * It is assumed and expected that only one such project meta doc
+     * will be found and processed.
+     * 
+     * @param project
+     * @return
+     */
+    public String retrieveReadme(String project) {
+        Source source = new RestTemplate().getForObject(
+                baseSolr + "q=*:*&fq=type:project.meta&fq=id:{project}.meta", Source.class, project);
+        
+        assert source != null;
+        
+        List<String> aList = xpathTemplate.evaluate("//doc/arr[@name='readme.content']/str",
+                source, new NodeMapper<String>() {
+                @Override
+                public String mapNode(Node node, int i) throws DOMException {
+                    Element intNode = (Element) node;
+                    return intNode.getTextContent();
+                }
+        });
+        
+        assert ! aList.isEmpty();
+        
+        return aList.get(0);
+    }
+    
+    public boolean existsProject(String project) {
+        List<String> plist = retrieveFacets("project");
+        
+        for (String s: plist) {
+            String[] p = s.split("\\|");
+            if (p[0].trim().equalsIgnoreCase(project))
+                return true;
+        }
+        
+        return false;
+     }
+    
     public static void main(String[] argv) {
         ProjectService ps = new ProjectService();
         List<String> aList  = ps.retrieveFacets("project");
         System.out.println(aList);
+        
+        System.out.println(ps.retrieveReadme("c-lamp"));
+        
     }
 }

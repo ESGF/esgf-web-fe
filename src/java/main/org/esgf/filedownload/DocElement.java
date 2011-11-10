@@ -7,9 +7,9 @@ import org.esgf.metadata.JSONArray;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 
-public class DocElement {
+public class DocElement implements DataCartElement {
     
-    private String dataset_id;
+    private String datasetId;
     private int count;
     
     private String hasHttp;
@@ -18,7 +18,7 @@ public class DocElement {
     private List<FileElement> fileElements;
     
     public DocElement() {
-        this.dataset_id = new String("");
+        this.datasetId = new String("");
         this.fileElements = new ArrayList<FileElement>();
         FileElement blankElement = new FileElement();
         this.fileElements.add(blankElement);
@@ -30,13 +30,14 @@ public class DocElement {
     }
     
     
-    public String getDataset_id() {
-        return dataset_id;
+    public String getDatasetId() {
+        return datasetId;
     }
 
 
-    public void setDataset_id(String dataset_id) {
-        this.dataset_id = dataset_id;
+    public void setDatasetId(String datasetId) {
+        if(datasetId != null)
+            this.datasetId = datasetId;
     }
 
 
@@ -46,22 +47,25 @@ public class DocElement {
 
 
     public void setFileElements(List<FileElement> fileElements) {
-        List<FileElement> newFileElements = new ArrayList<FileElement>();
-        FileElement blankElement = new FileElement();
-        newFileElements.add(blankElement);
-        newFileElements.add(blankElement);
-        newFileElements.addAll(fileElements);
-        this.fileElements = newFileElements;
+        if(fileElements != null) {
+            List<FileElement> newFileElements = new ArrayList<FileElement>();
+            FileElement blankElement = new FileElement();
+            newFileElements.add(blankElement);
+            newFileElements.add(blankElement);
+            newFileElements.addAll(fileElements);
+            this.count = fileElements.size();
+            this.fileElements = newFileElements;
+        }
     }
     
-
     public String getHasHttp() {
         return hasHttp;
     }
 
 
     public void setHasHttp(String hasHttp) {
-        this.hasHttp = hasHttp;
+        if(hasHttp != null)
+            this.hasHttp = hasHttp;
     }
 
 
@@ -71,7 +75,8 @@ public class DocElement {
 
 
     public void setHasOpenDap(String hasOpenDap) {
-        this.hasOpenDap = hasOpenDap;
+        if(hasOpenDap != null)
+            this.hasOpenDap = hasOpenDap;
     }
 
 
@@ -81,15 +86,103 @@ public class DocElement {
 
 
     public void setHasGridFTP(String hasGridFTP) {
-        this.hasGridFTP = hasGridFTP;
+        if(hasGridFTP != null)
+            this.hasGridFTP = hasGridFTP;
     }
 
+
+    public void addFileElement(FileElement fileElement) {
+        if(fileElement != null) {
+            this.fileElements.add(fileElement);
+            this.count++;
+        }
+    }
+    
+    public void removeFileElement(String fileId) {
+        if(fileId != null) {
+            for(int i=0;i<this.fileElements.size();i++) {
+                FileElement fe = this.fileElements.get(i);
+                if(fe.getFileId().equals(fileId)) {
+                    this.count--;
+                    this.fileElements.remove(i);
+                }
+            }
+        }
+    }
+
+    public void addMIMEElement(String fileId,String mime) {
+        if(fileId != null && mime != null) {
+            for(int i=0;i<this.fileElements.size();i++) {
+                FileElement fe = this.fileElements.get(i);
+                if(fe.getFileId().equals(fileId)) {
+                    fe.addMIME(mime);
+                }
+            }
+        }
+        
+    }
+    
+    public void removeMIMEElement(String fileId,String mime) {
+        if(fileId != null && mime != null) {
+            for(int i=0;i<this.fileElements.size();i++) {
+                FileElement fe = this.fileElements.get(i);
+                if(fe.getFileId().equals(fileId)) {
+                    fe.removeMIME(mime);
+                }
+            }
+        }
+    }
+    
+    public void addServiceElement(String fileId,String service) {
+        if(fileId != null && service != null) {
+            for(int i=0;i<this.fileElements.size();i++) {
+                FileElement fe = this.fileElements.get(i);
+                if(fe.getFileId().equals(fileId)) {
+                    fe.addService(service);
+                }
+            }
+        }
+    }
+    
+    public void removeServiceElement(String fileId,String service) {
+        if(fileId != null && service != null) {
+            for(int i=0;i<this.fileElements.size();i++) {
+                FileElement fe = this.fileElements.get(i);
+                if(fe.getFileId().equals(fileId)) {
+                    fe.removeService(service);
+                }
+            }
+        }
+    }
+    
+    public void addURLElement(String fileId, String url) {
+        if(fileId != null && url != null) {
+            for(int i=0;i<this.fileElements.size();i++) {
+                FileElement fe = this.fileElements.get(i);
+                if(fe.getFileId().equals(fileId)) {
+                    fe.addURL(url);
+                }
+            }
+        }
+    }
+    
+    public void removeURLElement(String fileId,String url) {
+        if(fileId != null && url != null) {
+            for(int i=0;i<this.fileElements.size();i++) {
+                FileElement fe = this.fileElements.get(i);
+                if(fe.getFileId().equals(fileId)) {
+                    fe.removeURL(url);
+                }
+            }
+        }
+    }
+    
 
 
     public String toString() {
         String str = "doc\n";
         
-        str += "\tDataset_id: " + this.dataset_id + "\n";
+        str += "\tdatasetId: " + this.datasetId + "\n";
         
         for(int i=0;i<fileElements.size();i++) {
             str += "\tFILE: " + i + " \n\t-----\n" + fileElements.get(i).toString() + "\n";
@@ -102,7 +195,7 @@ public class DocElement {
         Element docEl = new Element("doc");
 
         Element datasetidEl = new Element("datasetId");
-        datasetidEl.addContent(this.dataset_id);
+        datasetidEl.addContent(this.datasetId);
         docEl.addContent(datasetidEl);
         
         Element countEl = new Element("count");
@@ -156,8 +249,8 @@ public class DocElement {
         
         DocElement de = new DocElement();
         
-        String dataset_id = "dataset_id1";
-        de.setDataset_id(dataset_id);
+        String datasetId = "datasetId1";
+        de.setDatasetId(datasetId);
         
         List<FileElement> listFe = new ArrayList<FileElement>();
         

@@ -7,40 +7,74 @@ import org.esgf.metadata.JSONArray;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 
-public class MIMESElement {
+/** Description of MyClass 
+*
+* @author John Harney
+* @version Bedford-Stuyvesant
+* 
+*/
+public class MIMESElement implements DataCartElement {
     
+    /** listing of mime types associated with the file */
     private List<String> mimes;
     
+    /**
+     * DOCUMENT ME!
+     */
     public MIMESElement() {
         mimes = new ArrayList<String>();
         mimes.add("mime");
     }
 
-    public void setMIME(List<String> services) {
-        this.mimes = mimes;
+    /**
+     * DOCUMENT ME!
+     * @param mimes
+     */
+    public void setMIME(List<String> mimes) {
+        if(mimes != null) {
+            this.mimes = mimes;
+        }
     }
 
+    /**
+     * DOCUMENT ME!
+     * @return Returns the listing of mime types for this file
+     */
     public List<String> getMIMES() {
         return mimes;
     }
     
-
+    /**
+     * DOCUMENT ME!
+     * @param mime
+     * @return Returns true if there was a mime type removed, false otherwise
+     */
     public boolean removeMIME(String mime) {
         boolean removed = false;
-        for(int i=0;i<mimes.size();i++) {
-            if(mimes.get(i).equals(mime)) {
-                mimes.remove(i);
-                removed = true;
+        if(mime != null) {
+            for(int i=0;i<mimes.size();i++) {
+                if(mimes.get(i).equals(mime)) {
+                    mimes.remove(i);
+                    removed = true;
+                }
             }
         }
+        
         return removed;
     }
     
+    /**
+     * DOCUMENT ME!
+     * @param mime
+     */
     public void addMIME(String mime) {
-        mimes.add(mime);
+        if(mime != null)
+            mimes.add(mime);
     }
     
-    
+    /**
+     * DOCUMENT ME!
+     */
     public String toXML() {
         String xml = "";
         
@@ -52,6 +86,9 @@ public class MIMESElement {
         return xml;
     }
     
+    /**
+     * DOCUMENT ME!
+     */
     public Element toElement() {
         Element mimesEl = new Element("mimes");
         
@@ -64,6 +101,9 @@ public class MIMESElement {
         return mimesEl;
     }
     
+    /**
+     * DOCUMENT ME!
+     */
     public String toString() {
         String str = "mimes\n";
         

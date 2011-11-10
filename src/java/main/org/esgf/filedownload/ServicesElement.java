@@ -7,7 +7,7 @@ import org.esgf.metadata.JSONArray;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 
-public class ServicesElement {
+public class ServicesElement implements DataCartElement {
     
     private List<String> services;
     

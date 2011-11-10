@@ -7,7 +7,7 @@ import org.esgf.metadata.JSONArray;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 
-public class URLSElement {
+public class URLSElement implements DataCartElement {
     
     private List<String> urls;
     
@@ -16,8 +16,9 @@ public class URLSElement {
         urls.add("url");
     }
 
-    public void setURL(List<String> services) {
-        this.urls = urls;
+    public void setURL(List<String> urls) {
+        if(urls != null)
+            this.urls = urls;
     }
 
     public List<String> getURLS() {
@@ -27,17 +28,21 @@ public class URLSElement {
 
     public boolean removeURL(String url) {
         boolean removed = false;
-        for(int i=0;i<urls.size();i++) {
-            if(urls.get(i).equals(url)) {
-                urls.remove(i);
-                removed = true;
+        if(url != null) {
+            for(int i=0;i<urls.size();i++) {
+                if(urls.get(i).equals(url)) {
+                    urls.remove(i);
+                    removed = true;
+                }
             }
         }
+        
         return removed;
     }
     
     public void addURL(String URL) {
-        urls.add(URL);
+        if(URL != null) 
+            urls.add(URL);
     }
     
     

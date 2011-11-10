@@ -216,7 +216,7 @@ public class FileDownloadTemplateController {
                     DocElement docElement = new DocElement();
                     
                     //add the dataset id
-                    docElement.setDataset_id(dataset_id);
+                    docElement.setDatasetId(dataset_id);
                     
                     List<FileElement> fileElements = new ArrayList<FileElement>();
                     

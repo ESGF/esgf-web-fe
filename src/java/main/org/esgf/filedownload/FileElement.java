@@ -7,7 +7,7 @@ import org.esgf.metadata.JSONArray;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 
-public class FileElement {
+public class FileElement implements DataCartElement {
     
     private String fileId;
     private String title;
@@ -40,40 +40,75 @@ public class FileElement {
         return fileId;
     }
     public void setFileId(String fileId) {
-        this.fileId = fileId;
+        if(fileId != null)
+            this.fileId = fileId;
     }
     public String getTitle() {
         return title;
     }
     public void setTitle(String title) {
-        this.title = title;
+        if(title != null)
+            this.title = title;
     }
     public String getSize() {
         return size;
     }
     public void setSize(String size) {
-        this.size = size;
+        if(size != null)
+            this.size = size;
     }
     public String getHasGrid() {
         return hasGrid;
     }
     public void setHasGrid(String hasGrid) {
-        this.hasGrid = hasGrid;
+        if(hasGrid != null)
+            this.hasGrid = hasGrid;
     }
     public String getHasHttp() {
         return hasHttp;
     }
     public void setHasHttp(String hasHttp) {
-        this.hasHttp = hasHttp;
+        if(hasHttp != null)
+            this.hasHttp = hasHttp;
     }
     public ServicesElement getServicesElement() {
         return servicesElement;
     }
     public void setServicesElement(ServicesElement servicesElement) {
-        List<String> services = servicesElement.getServices();
-        for(int i=0;i<services.size();i++) {
-            //System.out.println("Setting service: " + services.get(i));
-            String service = services.get(i);
+        if(servicesElement != null) {
+            List<String> services = servicesElement.getServices();
+            for(int i=0;i<services.size();i++) {
+                //System.out.println("Setting service: " + services.get(i));
+                String service = services.get(i);
+                if(service.contains("HTTPS")) {
+                    this.hasHttp = new String("true");
+                } else if(service.contains("OpenDAP")) {
+                    this.setHasOpenDap(new String("true"));
+                } else if(service.contains("GridFTP")) {
+                    this.hasGrid = new String("true");
+                }
+            }
+            this.servicesElement = servicesElement;
+        }
+        
+    }
+    public URLSElement getUrlsElement() {
+        return urlsElement;
+    }
+    public void setUrlsElement(URLSElement urlsElement) {
+        if(urlsElement != null)
+            this.urlsElement = urlsElement;
+    }
+    public MIMESElement getMimesElement() {
+        return mimesElement;
+    }
+    public void setMimesElement(MIMESElement mimesElement) {
+        if(mimesElement != null)
+            this.mimesElement = mimesElement;
+    }
+    
+    public void addService(String service) {
+        if(service != null) {
             if(service.contains("HTTPS")) {
                 this.hasHttp = new String("true");
             } else if(service.contains("OpenDAP")) {
@@ -81,53 +116,42 @@ public class FileElement {
             } else if(service.contains("GridFTP")) {
                 this.hasGrid = new String("true");
             }
+            this.servicesElement.addService(service);
         }
-        this.servicesElement = servicesElement;
-    }
-    public URLSElement getUrlsElement() {
-        return urlsElement;
-    }
-    public void setUrlsElement(URLSElement urlsElement) {
-        this.urlsElement = urlsElement;
-    }
-    public MIMESElement getMimesElement() {
-        return mimesElement;
-    }
-    public void setMimesElement(MIMESElement mimesElement) {
-        this.mimesElement = mimesElement;
-    }
-    
-    public void addService(String service) {
-        if(service.contains("HTTPS")) {
-            this.hasHttp = new String("true");
-        } else if(service.contains("OpenDAP")) {
-            this.setHasOpenDap(new String("true"));
-        } else if(service.contains("GridFTP")) {
-            this.hasGrid = new String("true");
-        }
-        this.servicesElement.addService(service);
+        
     }
     
     public boolean removeService(String service) {
-        return this.servicesElement.removeService(service);
+        if(service != null)
+            return this.servicesElement.removeService(service);
+        else 
+            return false;
     }
     
     
     public void addMIME(String mime) {
-        this.mimesElement.addMIME(mime);
+        if(mime != null)
+            this.mimesElement.addMIME(mime);
     }
     
     public boolean removeMIME(String mime) {
-        return this.mimesElement.removeMIME(mime);
+        if(mime != null)
+            return this.mimesElement.removeMIME(mime);
+        else
+            return false;
     }
     
     
     public void addURL(String url) {
-        this.urlsElement.addURL(url);
+        if(url != null)
+            this.urlsElement.addURL(url);
     }
     
     public boolean removeURL(String url) {
-        return this.urlsElement.removeURL(url);
+        if(url != null)
+            return this.urlsElement.removeURL(url);
+        else
+            return false;
     }
     
     public Element toElement() {

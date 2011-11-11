@@ -66,9 +66,14 @@
  */
 package org.esgf.globusonline;
 
+import java.net.URI;
+import java.net.URL;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -89,8 +94,8 @@ public class GOFormView1Controller {
     private final static String GOFORMVIEW_DATASET_NAME = "GoFormView_Dataset_Name";
     private final static String GOFORMVIEW_FILE_URLS = "GoFormView_File_Urls";
     private final static String GOFORMVIEW_FILE_NAMES = "GoFormView_File_Names";
-    
-    
+    private final static String GOFORMVIEW_MYPROXY_SERVER = "GoFormView_Myproxy_Server";
+
     public GOFormView1Controller() {
         System.out.println("In GOFormView1Controller");
     }
@@ -98,7 +103,6 @@ public class GOFormView1Controller {
     @SuppressWarnings("unchecked")
     @RequestMapping(method=RequestMethod.POST)
     public ModelAndView doPost(final HttpServletRequest request) {
-        System.out.println("AM I POSTING???");
         
         //grab the dataset name, file names and urls from the query string
         String dataset_name = request.getParameter("id");
@@ -111,12 +115,50 @@ public class GOFormView1Controller {
         
         Map<String,Object> model = new HashMap<String,Object>();
 
+        String myproxyServerStr = null;
+
+        //get the openid here from the cookie
+        Cookie [] cookies = request.getCookies();
+        String openId = "";
+        for(int i = 0; i < cookies.length; i++)
+        {
+            if (cookies[i].getName().equals("esgf.idp.cookie"))
+            {
+                openId = cookies[i].getValue();
+            }
+        }
+
+        LOG.debug("Got User OpenID: " + openId);
+        try
+        {
+            URI myproxyServerURI = Utils.resolveMyProxyViaOpenID(openId);
+            LOG.debug("Got MyProxy URI: " + myproxyServerURI);
+
+            String mHost = myproxyServerURI.toString();
+            String mPort = "7512";
+            if (myproxyServerURI.getHost() != null)
+            {
+                mHost = myproxyServerURI.getHost();
+            }
+            if (myproxyServerURI.getPort() != -1)
+            {
+                mPort = new Integer(myproxyServerURI.getPort()).toString();
+            }
+            myproxyServerStr = mHost + ":" + mPort;
+            LOG.debug("Using MyProxy Server: " + myproxyServerStr);
+        }
+        catch(Exception e)
+        {
+            LOG.error("Failed to resolve OpenID: " + e);
+        }
+
         if (request.getParameter(GOFORMVIEW_MODEL)!=null) {
             //it should never come here...
         }
         else {
             
             //place the dataset name, file names and urls into the model
+            model.put(GOFORMVIEW_MYPROXY_SERVER, myproxyServerStr);
             model.put(GOFORMVIEW_FILE_URLS, file_urls);
             model.put(GOFORMVIEW_FILE_NAMES, file_names);
             model.put(GOFORMVIEW_DATASET_NAME, dataset_name);

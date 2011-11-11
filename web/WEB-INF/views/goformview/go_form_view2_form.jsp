@@ -1,3 +1,11 @@
+<c:choose>
+<c:when test='${GoFormView_Error=="error"}' >
+	<strong>Error: Globus Online could not be initialized.</strong>
+<br><br>Please press back to correct the error, or try your  <a href="<c:url value="/live"/>">download</a> request again.
+<br><br>
+        <c:out value="${GoFormView_ErrorMsg}" escapeXml="false"/>
+	</c:when>
+	<c:otherwise>
 <form id="new_user_form" action="goformview3" method="post">
 		<h3 style="" id="form_title">Globus Online Transfer: Step 2 of 3</h3>
                 <p>Please choose where you'd like to move the data:</p>
@@ -57,3 +65,5 @@
 	      		<input style="" class="adminbutton" type="submit" value="next">
 	      	</p>
 		</form>
+	</c:otherwise>
+</c:choose>

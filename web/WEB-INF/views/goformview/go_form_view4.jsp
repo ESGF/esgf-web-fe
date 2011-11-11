@@ -32,13 +32,9 @@
 	Globus Online Data Transfer
 	</h2>
 	
-	<div class="prepend-1 span-14 append-1" style="border-right:1px solid #000000;">
+	<div class="prepend-1 span-24 append-1">
 		<%@ include file="/WEB-INF/views/goformview/go_form_view4_form.jsp" %>
-	</div>	
-	<div class="span-7 last">
-		<%@ include file="/WEB-INF/views/goformview/go_form_view4_modelparams.jsp" %>
 	</div>
-					
 </div>
 
 <!-- scratch space for any additional scripts

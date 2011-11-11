@@ -76,14 +76,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Vector;
 
-import org.openid4java.OpenIDException;
-import org.openid4java.util.HttpCache;
-import org.openid4java.util.HttpClientFactory;
-import org.openid4java.discovery.xrds.XrdsServiceEndpoint;
-import org.openid4java.discovery.yadis.YadisException;
-import org.openid4java.discovery.yadis.YadisResolver;
-import org.openid4java.discovery.yadis.YadisResult;
-
 import org.globusonline.*;
 
 import javax.servlet.http.Cookie;
@@ -111,6 +103,8 @@ public class GOFormView2Controller {
     private final static String GOFORMVIEW_FILE_NAMES = "GoFormView_File_Names";
     private final static String GOFORMVIEW_ENDPOINTS = "GoFormView_Endpoints";
     private final static String GOFORMVIEW_ENDPOINTINFOS = "GoFormView_EndpointInfos";
+    private final static String GOFORMVIEW_ERROR = "GoFormView_Error";
+    private final static String GOFORMVIEW_ERROR_MSG = "GoFormView_ErrorMsg";
     private final static String GOFORMVIEW_SRC_MYPROXY_USER = "GoFormView_SrcMyproxyUser";
     private final static String GOFORMVIEW_SRC_MYPROXY_PASS = "GoFormView_SrcMyproxyPass";
 
@@ -142,6 +136,13 @@ public class GOFormView2Controller {
         LOG.debug("goUserName: " + goUserName + " " + "myProxyUserName: " + myProxyUserName +
                            " " + "myProxyUserPass: " + "*****" + " goEmail: " + goEmail);
 
+        StringBuffer errorStatus = new StringBuffer("Steps leading up to the error are shown below:<br><br>");
+        errorStatus.append("Globus Online Username entered: ");
+        errorStatus.append(goUserName);
+        errorStatus.append("<br>MyProxy Username entered: ");
+        errorStatus.append(myProxyUserName);
+        errorStatus.append("<br>");
+
         //get the openid here from the cookie
         Cookie [] cookies = request.getCookies();
         String openId = "";
@@ -153,10 +154,14 @@ public class GOFormView2Controller {
             }
         }
 
+        errorStatus.append("Retrieved OpenID: ");
+        errorStatus.append(openId);
+        errorStatus.append("<br>");
+
         LOG.debug("Got User OpenID: " + openId);
         try
         {
-            URI myproxyServerURI = this.resolveMyProxyViaOpenID(openId);
+            URI myproxyServerURI = Utils.resolveMyProxyViaOpenID(openId);
             LOG.debug("Got MyProxy URI: " + myproxyServerURI);
 
             String mHost = myproxyServerURI.toString();
@@ -172,17 +177,24 @@ public class GOFormView2Controller {
             String myproxyServerStr = mHost + ":" + mPort;
             LOG.debug("Using MyProxy Server: " + myproxyServerStr);
 
+            errorStatus.append("Resolved MyProxy Server: ");
+            errorStatus.append(myproxyServerStr);
+            errorStatus.append("<br>");
+
             LOG.debug("Initializing Globus Online Transfer object");
             JGOTransfer transfer = new JGOTransfer(goUserName, myproxyServerStr, myProxyUserName, myProxyUserPass, CA_CERTIFICATE_FILE);
-            transfer.setVerbose(true);
+            //transfer.setVerbose(true);
             transfer.initialize();
             LOG.debug("Globus Online Transfer object Initialize complete");
+
+            errorStatus.append("Globus Online Transfer object Initialize complete<br>");
 
             String userCertificateFile = transfer.getUserCertificateFile();
 
             LOG.debug("About to retrieve available endpoints");
             Vector<EndpointInfo> endpoints = transfer.listEndpoints();
             LOG.debug("We pulled down " + endpoints.size() + " endpoints");
+            errorStatus.append("Endpoints retrieved<br>");
 
             if (request.getParameter(GOFORMVIEW_MODEL)!=null) {
 
@@ -212,49 +224,14 @@ public class GOFormView2Controller {
         }
         catch(Exception e)
         {
+            String error = errorStatus.toString() + "<br><b>Main Error:</b><br><br>" + e.toString();
+            model.put(GOFORMVIEW_ERROR, "error");
+            model.put(GOFORMVIEW_ERROR_MSG, error);
             LOG.error("Failed to initialize Globus Online: " + e);
         }
         return new ModelAndView("goformview2", model);
     }
 
-    private URI resolveMyProxyViaOpenID(String openId)
-    {
-        URI result = null;
-        try
-        {
-            LOG.debug("Attempting to resolve MyProxy Server from OpenID: " + openId);
-
-            YadisResolver resolver = new YadisResolver();
-            Set<String> serviceTypes = new HashSet<String>();
-            // service type for P2P OpenIDs
-            serviceTypes.add("esg:myproxy-service");
-            // service type for Gateway OpenIDs
-            serviceTypes.add("urn:esg:security:myproxy-service");
-
-            YadisResult yadisResult = resolver.discover(openId, 10, new HttpCache(), serviceTypes);
-            XrdsServiceEndpoint endpoint = (XrdsServiceEndpoint) yadisResult.getEndpoints().get(0);
-            result = new URI(endpoint.getUri());
-        }
-        catch(YadisException ye)
-        {
-            if (ye.getErrorCode() == OpenIDException.YADIS_INVALID_URL)
-            {
-                LOG.error("The OpenID URL provided is invalid.  Please make sure that you're " +
-                          "logged in as a valid Gateway user.");
-            }
-            else
-            {
-                LOG.error("A Yadis error occurred trying to resolve the specified OpenID. " +
-                          "Please make sure that you're logged in as a valid Gateway user.");
-            }
-        }
-        catch(Exception e)
-        {
-            LOG.error("OpenID Discovery error: " + e);
-        }
-        return result;
-    }
-    
     private String[] getDestinationEndpointNames(Vector<EndpointInfo> endpoints)
     {
         int numEndpoints = endpoints.size();

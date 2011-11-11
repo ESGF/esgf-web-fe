@@ -96,10 +96,18 @@ public class ProjectSpaceController {
             return "pspace/error";
         }
         
+        String numDataset = ps.retrieveNumOfDataset(project);
+        String numFile = ps.retrieveNumOfFile(project);
+        String totalSize = ps.retrieveTotalSize(project);
+        
         // TODO: for text output only
         // String readme = ps.retrieveReadme(project); 
         // model.addAttribute("readme", readme);
+        
         model.addAttribute("project", project);
+        model.addAttribute("numDataset", numDataset);
+        model.addAttribute("numFile", numFile);
+        model.addAttribute("totalSize", totalSize);
         
         return "pspace/home";
         

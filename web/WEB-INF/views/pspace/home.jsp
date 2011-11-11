@@ -7,13 +7,41 @@
 <html>
 <head>
 
+	<!--  
+    <link href="<c:url value='http://fonts.googleapis.com/css?family=Droid+Sans:400'></c:url>" 
+    	rel='stylesheet' type='text/css' />
+
+    <link href="<c:url value='http://fonts.googleapis.com/css?family=Convergence'></c:url>" 
+    	rel='stylesheet' type='text/css' />
+
+	-->
+	
+    <link href="<c:url value='http://fonts.googleapis.com/css?family=Petrona'></c:url>" 
+    	rel='stylesheet' type='text/css' />
+
+    
 	<link rel="stylesheet/less" href="<c:url value='/styles/bootstrap/lib/bootstrap.less'> </c:url>" />
 	
 	<script src="<c:url value='/scripts/less/less-1.1.3.min.js'> </c:url>"> </script>
 	<script src="<c:url value='http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js'></c:url>"></script>
 
 	<style type="text/css">
-	/* Overide some defaults */
+	h1, h2, h3, h4 {
+	
+		/* font-family: 'Droid Sans', sans-serif; */
+		font-family: 'Petrona', serif;
+	}
+	
+	h1#title {
+		padding-top: 25px;
+		position: relative;
+		bottom: 0; 
+	}
+	
+	img {
+		float:right;
+		padding-top: 1em;
+	}
 	</style>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Project Home</title>
@@ -26,15 +54,33 @@
     <div class="container">
 		<div class="page-header">
 		<div class="row">
-			<div class="span8">	<h1>Project Space 
-			<small>for <c:out value="${project}" /></small> </h1></div>
+			<div class="span8">	<h1 id="title">Project Space 
+			<small>for <c:out value="${project}" /></small></h1></div>
 			<div class="span8"> <img src="<c:url value='/images/ornl_logo.png'> </c:url>" />
 			</div>
 		</div>
 		</div>
 
-		<div class="sidebar">
+		<div class="row">
+		
+			<div class="span-one-third">
+			<h3>Project Stats</h3>
+				<ul>
+					<li> Total number of datasets:
+					<li> Total number of files:
+					<li> Total data size:
+					<li> Last update on the project:
+				</ul>
+			</div>
+			
+			<div class="span-one-third">
+			<h3> Dataset Attributes</h3>
+			     <ul>
+			     </ul>			
+			</div>
 		</div>
+		
+		<hr/>
 		
 		<div class="content">
 

@@ -52,6 +52,7 @@
 
 package org.esgf.pspace;
 
+import java.text.NumberFormat;
 import java.util.List;
 import javax.xml.transform.Source;
 
@@ -139,6 +140,79 @@ public class ProjectService {
     }
     
     /**
+     * Extract numFound from Solr Response
+     * 
+     * @param source
+     * @return
+     */
+    private List<String> extractNumFound(Source source) {
+        // select all <int> elements, and map each element to a String object 
+        List<String> aList = xpathTemplate.evaluate("//result[@name='response']", source, 
+                new NodeMapper<String>() {
+                
+                @Override
+                public String mapNode(Node node, int i) throws DOMException {
+                    Element intNode = (Element) node;
+                    return intNode.getAttribute("numFound");
+                 
+            }
+            
+        });
+        return aList;
+    }
+    
+    
+    
+    
+    /**
+     * 
+     * Extract number of dasetset contained within a project
+     * 
+     * <result name="response" numFound="28" ... </result>
+     * 
+     * 
+     * @param project
+     * @return
+     */
+    public String retrieveNumOfDataset(String project) {
+        Source source = new RestTemplate().getForObject(
+                baseSolr + "q=*:*&fq=type:Dataset&fq=project:{project}&rows=0", Source.class, project);
+        
+        assert source != null;
+        
+        List<String> aList = extractNumFound(source);
+        
+        assert (aList != null) && (! aList.isEmpty());
+        
+        return aList.get(0);
+    }
+
+    /**
+     * 
+     * Extract number of files contained within a project
+     * 
+     * <result name="response" numFound="28" ... </result>
+     * 
+     * 
+     * @param project
+     * @return
+     */
+    public String retrieveNumOfFile(String project) {
+        Source source = new RestTemplate().getForObject(
+                baseSolr + "q=*:*&fq=type:File&fq=project:{project}&rows=0", Source.class, project);
+        
+        assert source != null;
+        
+        List<String> aList = extractNumFound(source);
+        
+        assert (aList != null) && (! aList.isEmpty());
+        
+        return aList.get(0);
+    }
+
+    
+    
+    /**
      * 
      * Given a project String, return the readme content as a String.
      * It is assumed and expected that only one such project meta doc
@@ -166,7 +240,63 @@ public class ProjectService {
         
         return aList.get(0);
     }
+
+    private String formatSize(long longSize, int decimalPos)
+    {
+       NumberFormat fmt = NumberFormat.getNumberInstance();
+       if (decimalPos >= 0)
+       {
+          fmt.setMaximumFractionDigits(decimalPos);
+       }
+       final double size = longSize;
+       double val = size / (1024 * 1024);
+       if (val > 1)
+       {
+          return fmt.format(val).concat(" MB");
+       }
+       val = size / 1024;
+       if (val > 10)
+       {
+          return fmt.format(val).concat(" KB");
+       }
+       return fmt.format(val).concat(" bytes");
+    }
     
+    
+    /**
+     * Retrieve total data size published under a given project
+     * 
+     * This implementation assumes that a dataset level "size" is tallyed.
+     * 
+     * @param project
+     * @return
+     */
+    public String retrieveTotalSize(String project) {
+        String numOfRows = retrieveNumOfDataset(project);
+        
+        Source source = new RestTemplate().getForObject(
+                baseSolr + "q=*:*&fq=type:Dataset&fq=project:{project}&rows={numOfRows}", 
+                Source.class, project, numOfRows);
+        
+        assert source != null;
+
+        List<String> aList = xpathTemplate.evaluate("//doc/arr[@name='size']/str",
+                source, new NodeMapper<String>() {
+                @Override
+                public String mapNode(Node node, int i) throws DOMException {
+                    Element intNode = (Element) node;
+                    return intNode.getTextContent();
+                }
+        });
+        
+        long totalSize = 0L;
+        
+        for (String s : aList) {
+            totalSize += Long.parseLong(s);
+        }
+        
+        return formatSize(totalSize, 2);
+    }
     public boolean existsProject(String project) {
         List<String> plist = retrieveFacets("project");
         
@@ -184,7 +314,9 @@ public class ProjectService {
         List<String> aList  = ps.retrieveFacets("project");
         System.out.println(aList);
         
-        System.out.println(ps.retrieveReadme("c-lamp"));
+        System.out.println(ps.retrieveNumOfDataset("c-lamp"));
+        //System.out.println(ps.retrieveReadme("c-lamp"));
+        System.out.println(ps.retrieveNumOfFile("c-lamp"));
         
     }
 }

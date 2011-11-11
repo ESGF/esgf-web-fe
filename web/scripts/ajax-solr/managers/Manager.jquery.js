@@ -147,6 +147,11 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
         ESGF.localStorage.put('esgf_fq','type:Dataset','type:Dataset');
         Manager.store.addByValue('fq','type:Dataset');
         
+
+  		//put in the replica type (which for results is "false")
+        ESGF.localStorage.put('esgf_fq','replica:false','replica:false');
+        Manager.store.addByValue('fq','replica:false');
+        
         //get all of the fq parameters from the localstore
         var esgf_fq = ESGF.localStorage.getAll('esgf_fq');
         

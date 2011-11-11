@@ -319,7 +319,9 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	    });
 	    
 	    
-	    
+	    /**
+	     * Grabs individual files and sends that information to the Globus Online view
+	     */
 	    $('.go_individual_gridftp').live('click',function(e) {
 	    	
 	    	var selectedDocId = $(this).parent().parent().parent().parent().find('input').attr('id');//.parent().find('tr').attr('id');
@@ -431,10 +433,12 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     createTemplate: function(arr) {
 
     	var self = this;
-    	
-    	self.loadCartShardsFromService(arr);
-    	
-    	//loadCartShardsFromSolrConfig(arr);
+
+  	  	if(ESGF.setting.getShards == 'service') {
+  	  		self.loadCartShardsFromService(arr);
+  	  	} else {
+  	    	self.loadCartShardsFromSolrConfig(arr);
+  	  	}
     	
 	},
 	
@@ -453,8 +457,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	var fqParamArr = self.createFqParamArray();
 		
     	// Make an ajax call to the fileDownloadTemplate controller to extract the files for each of datasets given in the array of keys //
-    	 
-    	
      	//only make the ajax call when there has been something added to the data cart
     	if(arr.length != 0) {
     		//setup the query string

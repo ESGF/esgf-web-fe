@@ -80,6 +80,7 @@ public class FacetFileController {
 
     //Name and location of the file (In this case, the base package location)
     private final static String FACET_FILE = "facets.properties";
+    private final static String FACET_LABEL_FILE = "longnames.properties";
     
     /**
      * This method gives a response to a request (called by esgf-web-fe/web/scripts/esgf/solr.js) for the facets defined in the file facets.properties.  
@@ -94,8 +95,8 @@ public class FacetFileController {
     @RequestMapping(method=RequestMethod.GET)
     public @ResponseBody String doGet() throws IOException, ParserConfigurationException, JSONException {
       
-        final File file = new ClassPathResource(FACET_FILE).getFile();
-      
+        //final File file = new ClassPathResource(FACET_FILE).getFile();
+        final File file = new ClassPathResource(FACET_LABEL_FILE).getFile();
         String [] tokens = parseFacets(file);
         JSONArray facet_arrJSON = new JSONArray(tokens);
   

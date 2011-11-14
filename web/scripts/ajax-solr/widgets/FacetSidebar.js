@@ -65,16 +65,18 @@
 		
 		afterRequest: function () {
 		
+			
 
             
 			var self = this;
 			var facet = '';
 			
+			
 			var facet_arr = new Array();
 			
 			
-			
 		    for (facet in self.manager.response.facet_counts.facet_fields) {
+		    	var label = findFacetLabel(facet,self.nameMap);
 		    	var facet_obj = new Object();
 		    	var facet_val_arr = new Array();
 		    	var facet_val_counts = new Array();
@@ -114,6 +116,7 @@
 		    		
 		    	}
 		    	facet_obj.Facet_name = facet;
+		    	facet_obj.Facet_label = label;
 		    	facet_obj.Facet_values = facet_val_arr;
 		    	facet_obj.Facet_counts = facet_val_counts;
 		    	facet_obj.Facet_max_count = facet_max_count;
@@ -188,6 +191,17 @@
 		return convertedStr;
 	}
 	
+	function findFacetLabel(facet,fields) {
+		var label = '';
+		for(var i=0;i<fields.length;i++) {
+			var map = fields[i].split(":");
+			var shortName = map[0];
+			var longName = map[1];
+			if(facet == shortName)
+				label = longName;
+		}
+		return label;
+	}
 	
 	function matchesFacetValue(facet,value) {
 		var matchesFacetValue = false;

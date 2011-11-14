@@ -189,6 +189,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   	},
   	
   	getShardsFromSolrConfig: function() {
+
   		if(ESGF.setting.searchType == 'Distributed') {
   			Manager.store.addByValue('qt','/distrib');
   		} else {

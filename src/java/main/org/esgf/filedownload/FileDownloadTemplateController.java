@@ -184,15 +184,16 @@ public class FileDownloadTemplateController {
     
     
     private String getDataCart(HttpServletRequest request) {
+
         
         String queryString = preassembleQueryString(request);
-        //System.out.println("QueryString: " + queryString);
         
         //get the ids from the servlet querystring here
         //note: these represent the 'keys' in the localStorage['dataCart'] map
         String [] names = request.getParameterValues("id[]");
         
         String showAll = request.getParameter("showAll");
+        
         
         Document document = null;
         
@@ -204,7 +205,6 @@ public class FileDownloadTemplateController {
             List<DocElement> docElements = new ArrayList<DocElement>();
             
             for(int i=0;i<names.length;i++) {
-                System.out.println("\tid: " + i + " " + names[i]);
                 String dataset_id = names[i];
                 
                 //get files for each data set in a jsonarray
@@ -261,7 +261,6 @@ public class FileDownloadTemplateController {
             jsonContent = returnJSON.toString();
         
         }
-        //System.out.println("response: " + jsonContent);
         
         return jsonContent;
     }
@@ -463,9 +462,14 @@ public class FileDownloadTemplateController {
     
     
     private String preassembleQueryString(HttpServletRequest request) {
-        String queryString = "q=*:*&json.nl=map&start=0&rows=" + MAX_ROWS + "300&fq=type:File";
+        String queryString = "q=*:*&json.nl=map&start=0&rows=" + MAX_ROWS + "&fq=type:File";
 
-        queryString = "qt=/distrib&" + queryString;
+        
+        if(request.getParameter("shardType").equals("solrconfig")) {
+            queryString = "qt=/distrib&" + queryString;
+        } else {
+            queryString = "shards=" + request.getParameter("shardsString") + "&" + queryString;
+        }
         
         if(request.getParameter("showAll").equals("false")) {
           //get the 'fq' params from the servlet query string here

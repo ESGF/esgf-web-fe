@@ -121,7 +121,7 @@ ESGF.setting.dataCartVersion = 'v1';
 ESGF.setting.showAllContents = 'true';
 
 //need a variable representing the manner in which to get the sharding information
-ESGF.setting.getShards = 'service';
+ESGF.setting.getShards = 'solrconfig';
 
 /**
  * Proxy for creating the template for file downloads.

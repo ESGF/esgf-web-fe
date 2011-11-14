@@ -450,53 +450,71 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		
 		var self = this;
 
+		var shardsString = ''; 
+		for(var i=0;i<ESGF.search.shards.length;i++) {
+	       	 var shards = ESGF.search.shards[i];
+	   		 shardsString = shardsString + shards['nodeIp'] + ':8983/solr';
+	       	 if(i != ESGF.search.shards.length-1) {
+	           	 shardsString = shardsString + ',';
+	       	 }
+	        }
+		var shardType = 'service';
+		
+
     	//get the 'q' parameter here
     	var qParam = Manager.store.get('q')['value'];
     	
     	//get the 'fq' parameter here
     	var fqParamArr = self.createFqParamArray();
 		
-    	// Make an ajax call to the fileDownloadTemplate controller to extract the files for each of datasets given in the array of keys //
-     	//only make the ajax call when there has been something added to the data cart
-    	if(arr.length != 0) {
-    		//setup the query string
-    		var queryStr = { "id" : arr , "version" : ESGF.setting.dataCartVersion, "fq" : fqParamArr, "q" : qParam, "showAll" : ESGF.setting.showAllContents};
-    		
-    		//add a spinning wheel to show user that progress is being made in finding the files
-    		self.addDataCartSpinWheel();
-
-    		$.ajax({
-    			url: '/esgf-web-fe/solrfileproxy',
-    			global: false,
-    			type: "GET",
-    			data: queryStr,
-    			dataType: 'json',
-    			
-    			//Upon success remove the spinning wheel and show the contents given by solr
-    			 
-    			success: function(data) {
-    				
-	    			self.removeDataCartSpinWheel();
-	    			self.showFileContents(data); 
-    			},
-    			
-    			//Upon an error remove the spinning wheel and give an alert 
-    			 
-	    		error: function() {
-	    			self.removeDataCartSpinWheel();
-	    			alert('There is a problem with one of your dataset selections.  Please contact your administrator.');
-	    			
-	            	//change from remove from cart to add to cart for all selected datasets
-	    			for(var i=0;i<query_arr.length;i++) {
-	                	$('a#ai_select_'+ arr[i].replace(/\./g, "_")).html('Add To Cart');
-	    			}
-				}
-    		});
-    		
-    	}
+		
+		//setup the query string
+		var queryStr = { "id" : arr , "shardType" : ESGF.setting.getShards, "shardsString" : shardsString, "fq" : fqParamArr, "q" : qParam, "showAll" : ESGF.setting.showAllContents};
+		
+    	self.getDataCart(queryStr);
     	
     	
 	},
+	
+	
+	getDataCart: function(queryStr) {
+
+		var self = this;
+		
+		
+		//add a spinning wheel to show user that progress is being made in finding the files
+		self.addDataCartSpinWheel();
+
+		$.ajax({
+			url: '/esgf-web-fe/solrfileproxy',
+			global: false,
+			type: "GET",
+			data: queryStr,
+			dataType: 'json',
+			
+			//Upon success remove the spinning wheel and show the contents given by solr
+			 
+			success: function(data) {
+				
+    			self.removeDataCartSpinWheel();
+    			self.showFileContents(data); 
+			},
+			
+			//Upon an error remove the spinning wheel and give an alert 
+			 
+    		error: function() {
+    			self.removeDataCartSpinWheel();
+    			alert('There is a problem with one of your dataset selections.  Please contact your administrator.');
+    			
+            	//change from remove from cart to add to cart for all selected datasets
+    			for(var i=0;i<query_arr.length;i++) {
+                	$('a#ai_select_'+ arr[i].replace(/\./g, "_")).html('Add To Cart');
+    			}
+			}
+		});
+		
+	},
+	
 	
 	createFqParamArray: function () {
 		var fqParamArr = new Array();
@@ -515,57 +533,35 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	
 	
 	loadCartShardsFromSolrConfig: function(arr) {
-		//create an array of dataset id strings that have been selected for download
-		var query_arr = createQueryArr(arr);
 
-    	LOG.debug("-datasetID " + query_arr);
-    	LOG.debug("-version " + ESGF.setting.dataCartVersion);
-    	LOG.debug("-shards " + ESGF.search.shards);
+		var self = this;
+		
 
-    	//create an array consisting of ip addresses of the active shards
-    	var shardsArr = createShardsArr();
+  		var shardsString = ''; 
+		for(var i=0;i<ESGF.search.shards.length;i++) {
+	       	 var shards = ESGF.search.shards[i];
+	   		 shardsString = shardsString + shards['nodeIp'] + ':8983/solr';
+	       	 if(i != ESGF.search.shards.length-1) {
+	           	 shardsString = shardsString + ',';
+	       	 }
+	        }
+		var shardType = 'service';
+		
+
+    	//get the 'q' parameter here
+    	var qParam = Manager.store.get('q')['value'];
     	
+    	//get the 'fq' parameter here
+    	var fqParamArr = self.createFqParamArray();
+		
+		
+		//setup the query string
+		var queryStr = { "id" : arr , "shardType" : ESGF.setting.getShards, "shardsString" : shardsString, "fq" : fqParamArr, "q" : qParam, "showAll" : ESGF.setting.showAllContents};
+		
+    	self.getDataCart(queryStr);
     	
-    	//append 3 parameteters to the ajax call
-    	//"id" - array of dataset ids that have been added to data cart
-    	//"version" - version of the type of datacart (NOTE: THIS MAY BE TAKEN OUT)
-    	//"shards" - array of ips that are the active shards in the configuration
-    	var query = { "id" : query_arr , "shards" : shardsArr };
-    	
-    	//only make the ajax call when there has been something added to the data cart
-    	if(query_arr.length != 0) {
-    		//show status spinning wheel
-    		addDataCartSpinWheel();
-    		
-        	$.ajax({
-        		url: ESGF.search.fileDownloadTemplateProxyUrl,
-        		global: false,
-        		type: "GET",
-        		data: query,
-        		dataType: 'json',
-        		success: function(data) {
-        			$('#waitWarn').remove();
-        			$('#spinner').remove();
-        			//remove the status spinning wheel
-        			removeDataCartSpinWheel();
-        	    	
-        			//show the contents of the data cart
-        			showFileContentsV1(data);
-        		},
-    			error: function() {
-    				$('#waitWarn').remove();
-    				$('#spinner').remove();
-    				alert('There is a problem with one of your dataset selections.  Please contact your administrator.');
-        			
-                	//change from remove from cart to add to cart for all selected datasets
-        			for(var i=0;i<query_arr.length;i++) {
-                    	$('a#ai_select_'+ query_arr[i].replace(/\./g, "_")).html('Add To Cart');
-        			}
-    			}
-        		
-        	});
-        
-    	}
+		
+		
 	},
 	
 	
@@ -614,8 +610,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     		
     		
     		var fileDownloadTemplate = data.doc;
-    		
-    		
     		
     		
     		$( "#cartTemplateStyledNew").tmpl(fileDownloadTemplate, {
@@ -772,3 +766,94 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 }(jQuery));
 
 
+/*
+//get the 'q' parameter here
+var qParam = Manager.store.get('q')['value'];
+
+//get the 'fq' parameter here
+var fqParamArr = self.createFqParamArray();
+
+alert('fqParamArr: ' + fqParamArr);
+
+// Make an ajax call to the fileDownloadTemplate controller to extract the files for each of datasets given in the array of keys //
+	//only make the ajax call when there has been something added to the data cart
+if(arr.length != 0) {
+	//setup the query string
+	//setup the query string
+	var queryStr = { "id" : arr , "shardType" : "solrconfig", "shardsString" : shardsString, "fq" : fqParamArr, "q" : qParam, "showAll" : ESGF.setting.showAllContents};
+	
+	//add a spinning wheel to show user that progress is being made in finding the files
+	self.addDataCartSpinWheel();
+
+	$.ajax({
+		url: '/esgf-web-fe/solrfileproxy',
+		global: false,
+		type: "GET",
+		data: queryStr,
+		dataType: 'json',
+		
+		//Upon success remove the spinning wheel and show the contents given by solr
+		 
+		success: function(data) {
+			
+			self.removeDataCartSpinWheel();
+			self.showFileContents(data); 
+		},
+		
+		//Upon an error remove the spinning wheel and give an alert 
+		 
+		error: function() {
+			self.removeDataCartSpinWheel();
+			alert('There is a problem with one of your dataset selections.  Please contact your administrator.');
+			
+        	//change from remove from cart to add to cart for all selected datasets
+			for(var i=0;i<query_arr.length;i++) {
+            	$('a#ai_select_'+ arr[i].replace(/\./g, "_")).html('Add To Cart');
+			}
+		}
+	});
+}
+*/
+
+
+
+/*
+// Make an ajax call to the fileDownloadTemplate controller to extract the files for each of datasets given in the array of keys //
+	//only make the ajax call when there has been something added to the data cart
+if(arr.length != 0) {
+	//setup the query string
+	var queryStr = { "id" : arr , "shardType" : "service", "shardsString" : shardsString, "fq" : fqParamArr, "q" : qParam, "showAll" : ESGF.setting.showAllContents};
+	
+	//add a spinning wheel to show user that progress is being made in finding the files
+	self.addDataCartSpinWheel();
+
+	$.ajax({
+		url: '/esgf-web-fe/solrfileproxy',
+		global: false,
+		type: "GET",
+		data: queryStr,
+		dataType: 'json',
+		
+		//Upon success remove the spinning wheel and show the contents given by solr
+		 
+		success: function(data) {
+			
+			self.removeDataCartSpinWheel();
+			self.showFileContents(data); 
+		},
+		
+		//Upon an error remove the spinning wheel and give an alert 
+		 
+		error: function() {
+			self.removeDataCartSpinWheel();
+			alert('There is a problem with one of your dataset selections.  Please contact your administrator.');
+			
+        	//change from remove from cart to add to cart for all selected datasets
+			for(var i=0;i<query_arr.length;i++) {
+            	$('a#ai_select_'+ arr[i].replace(/\./g, "_")).html('Add To Cart');
+			}
+		}
+	});
+	
+}
+*/

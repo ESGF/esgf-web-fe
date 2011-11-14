@@ -4,27 +4,18 @@
 
     <ti:putAttribute name="extrascript">
 
-        <script type="text/javascript" src="http://view.jquery.com/trunk/plugins/autocomplete/lib/jquery.js"></script>
-        <script type='text/javascript' src='http://view.jquery.com/trunk/plugins/autocomplete/lib/jquery.bgiframe.min.js'></script>
-        <script type='text/javascript' src='.http://view.jquery.com/trunk/plugins/autocomplete/lib/jquery.ajaxQueue.js'></script>
-        <script type='text/javascript' src='http://view.jquery.com/trunk/plugins/autocomplete/lib/thickbox-compressed.js'></script>
-        <script type='text/javascript' src='http://view.jquery.com/trunk/plugins/autocomplete/jquery.autocomplete.js'></script>
+		<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+	  	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+	  	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
         <%@ include file="createAccountData.jsp" %>
-
         <script type='text/javascript' src='./createAccountData.js'></script>
 
         <script>
               $(document).ready(function() {
-                $("#state").autocomplete(states);
-                $("#country").autocomplete(countries);
+                $("input#state").autocomplete({ source: states});
+                $("input#country").autocomplete({source: countries});
               });
-          </script>
-          
-          <script>
-          	$(document).ready(function() {
-          		$("#uuid").val('<c:out value="${user.uuid}"/>');
-          	});
           </script>
 
     </ti:putAttribute>
@@ -129,7 +120,7 @@
 
 					<!-- no-spam fields -->
 					<form:hidden path="blank"/>
-					<input type="hidden" name="uuid" value="" id="uuid" />
+					<input type="hidden" name="uuid" value="<c:out value="${user.uuid}"/>" id="uuid" />
 					
                     <input type="submit" value="Submit" class="button"/>
 

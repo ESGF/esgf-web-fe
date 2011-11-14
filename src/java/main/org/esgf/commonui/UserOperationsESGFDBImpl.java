@@ -396,7 +396,7 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
             }
             else {
                 //System.out.println("adding user>>>" + userName);
-                this.myUserInfoDAO.addPermission(user, groupName, "default");
+                this.myUserInfoDAO.addPermission(user, groupName, "user");
             }
         }
     }

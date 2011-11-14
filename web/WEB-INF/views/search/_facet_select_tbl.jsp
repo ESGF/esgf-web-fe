@@ -4,7 +4,7 @@
 	<ul class="ul_class" >
 		
 		<li class="li_facet_class">
-	   			<a class="showFacetValues">${Facet_name} </a>
+	   			<a class="showFacetValues">${Facet_label} </a>
 		</li>
 
 		{{each Facet_values}}

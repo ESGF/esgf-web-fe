@@ -96,6 +96,9 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 	            	  //reset the localStorage to querying over the dataset type
 	            	  ESGF.localStorage.remove('esgf_fq');
 	            	  
+	            	  //reset the contents of the datacart
+	            	  ESGF.localStorage.remove('dataCart');
+	            	  
 	            	  //reset the distributed search flag to local
 	            	  localStorage['distrib'] == 'local';
 	            		  
@@ -200,20 +203,3 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   	
 });
 
-
-
-/*
-isDuplicate: function (fq,val) {
-  
-		var flag = false;
-		var allFqs = fq.split(";");
-			//loop over all existing queries - note 'length-1' was used to ignore the trailing whitespace of the last split
-	  		for(var i=0;i<allFqs.length-1;i++)
-			{
-				if(allFqs[i] == ('text:' + val)) {
-					flag = true;
-				}
-			}
-		return flag;
-},
-	*/

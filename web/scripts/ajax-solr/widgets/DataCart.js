@@ -545,25 +545,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		$('#spinner').remove();
     },
     
-  //create an array of dataset id strings that have been selected for download
-    createQueryArr: function(arr) {
-    	var query_arr = new Array();
-    	for(var i=0;i<arr.length;i++) {
-    		query_arr.push(arr[i].doc.id);
-    	}
-    	return query_arr;
-    },
-    
-    //create an array consisting of ip addresses of the active shards
-    createShardsArr: function() {
-    	var shardsArr = new Array();
-    	for(var i=0;i<ESGF.search.shards.length;i++) {
-    		var shards = ESGF.search.shards[i];
-    		shardsArr.push(shards['nodeIp']);
-    	}
-    	return shardsArr;
-    },
-    
+   
+   
     
     showFileContents: function(data) {
     	
@@ -594,23 +577,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
                     return (num+1);
                 },
                 sizeConversion : function(size) {
-                    var convSize;
-                    if(size == null) {
-                        convSize = 'N/A';
-                    } else {
-                        var sizeFlt = parseFloat(size,10);
-                        if(sizeFlt > 1000000000) {
-                            var num = 1000000000;
-                            convSize = (sizeFlt / num).toFixed(2) + ' GB';
-                        } else if (sizeFlt > 1000000) {
-                            var num = 1000000;
-                            convSize = (sizeFlt / num).toFixed(2) + ' MB';
-                        } else {
-                            var num = 1000;
-                            convSize = (sizeFlt / num).toFixed(2) + ' KB';
-                        }
-                    }
-                    return convSize;
+                	return self.sizeConvert(size);
                 }
             })
             .appendTo("#datasetList")
@@ -637,12 +604,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     		
     	}
 		
-    	
-    	
 	},
-	
-	
-	
 	
 	
 	/* Utility functions */
@@ -707,4 +669,3 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 });
 
 }(jQuery));
-

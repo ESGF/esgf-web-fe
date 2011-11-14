@@ -82,7 +82,6 @@ public class NodeStatusController {
     @RequestMapping(value="peer/list", method=RequestMethod.GET,
             headers={"Accept=text/xml, application/json"})
     public @ResponseBody List<NodeStatus> getActiveNodes() {
-        System.out.println("gettingActiveNodes");
         return nodeService.getLiveNodeList();
         
     }

@@ -70,15 +70,15 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
    * 
    */
   afterRequest: function () {
+	  
     var self = this;
     var links = [];
     var i = null;
     var fq = this.manager.store.values('fq');
     for (i = 0, l = fq.length; i < l; i++) {
         var fqString = fq[i];
-        
         //leave out the 'type:Dataset' constraint 
-        if(fqString.search('Dataset') == -1) {
+        if(fqString.search('Dataset') == -1 && fqString.search('replica:false')) {
         	
         	//check to see if this is a geospatial query (assuming 'east_degrees' is in every geo query)
             //if it is -> need to change the current selection string

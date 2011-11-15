@@ -182,7 +182,9 @@ public class GOFormView2Controller {
             errorStatus.append("<br>");
 
             LOG.debug("Initializing Globus Online Transfer object");
-            JGOTransfer transfer = new JGOTransfer(goUserName, myproxyServerStr, myProxyUserName, myProxyUserPass, CA_CERTIFICATE_FILE);
+            JGOTransfer transfer = new JGOTransfer(
+                goUserName, myproxyServerStr, myProxyUserName,
+                myProxyUserPass, CA_CERTIFICATE_FILE);
             //transfer.setVerbose(true);
             transfer.initialize();
             LOG.debug("Globus Online Transfer object Initialize complete");
@@ -190,6 +192,7 @@ public class GOFormView2Controller {
             errorStatus.append("Globus Online Transfer object Initialize complete<br>");
 
             String userCertificateFile = transfer.getUserCertificateFile();
+            LOG.debug("Retrieved user credential file: " + userCertificateFile);
 
             LOG.debug("About to retrieve available endpoints");
             Vector<EndpointInfo> endpoints = transfer.listEndpoints();
@@ -252,9 +255,9 @@ public class GOFormView2Controller {
         for(int i = 0; i < numEndpoints; i++)
         {
             // we encode this in a string as follows
-            // EPNAME:HOSTS:MYPROXYSERVER:ISGLOBUSCONNECT
-            endPointNames[i] = endpoints.get(i).getEPName() + ":" + endpoints.get(i).getHosts() +
-                ":" + endpoints.get(i).getMyproxyServer() + ":" + endpoints.get(i).isGlobusConnect();
+            // EPNAME^^HOSTS^^MYPROXYSERVER^^ISGLOBUSCONNECT
+            endPointNames[i] = endpoints.get(i).getEPName() + "^^" + endpoints.get(i).getHosts() +
+                "^^" + endpoints.get(i).getMyproxyServer() + "^^" + endpoints.get(i).isGlobusConnect();
         }
         return endPointNames;
     }

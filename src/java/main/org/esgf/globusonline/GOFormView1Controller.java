@@ -108,10 +108,6 @@ public class GOFormView1Controller {
         String dataset_name = request.getParameter("id");
         String [] file_names = request.getParameterValues("child_id");
         String [] file_urls = request.getParameterValues("child_url");
-
-        System.out.println("GOFormView1Controller: dataset_name = " + dataset_name);
-        System.out.println("GOFormView1Controller file_names = " + file_names);
-        System.out.println("GOFormView1Controller file_urls = " + file_urls);
         
         Map<String,Object> model = new HashMap<String,Object>();
 
@@ -167,7 +163,5 @@ public class GOFormView1Controller {
 
         return new ModelAndView("goformview1", model);
     }
-    
-    
 }
 

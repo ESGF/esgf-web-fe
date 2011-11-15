@@ -97,6 +97,7 @@ public class GOFormView3Controller {
     private final static String GOFORMVIEW_GO_CONNECT = "GoFormView_GOConnect";
     private final static String GOFORMVIEW_SRC_MYPROXY_USER = "GoFormView_SrcMyproxyUser";
     private final static String GOFORMVIEW_SRC_MYPROXY_PASS = "GoFormView_SrcMyproxyPass";
+    private final static String GOFORMVIEW_DEST_MYPROXY_SERVER = "GoFormView_DestMyproxyServer";
 
     public GOFormView3Controller() {
     }
@@ -131,7 +132,7 @@ public class GOFormView3Controller {
         // find the endpointInfo line that matches the endpoint the user selected
         int len = endpointInfos.length;
         String endpointInfo = null;
-        String searchEndpoint = endpoint + ":";
+        String searchEndpoint = endpoint + "^^";
         for(int i = 0; i < len; i++)
         {
             if (endpointInfos[i].startsWith(searchEndpoint))
@@ -140,19 +141,29 @@ public class GOFormView3Controller {
                 break;
             }
         }
+        System.out.println("User selected endpoint that has the info: " + endpointInfo);
         LOG.debug("User selected endpoint that has the info: " + endpointInfo);
+
+        String destMyProxyServer = null;
+        boolean isGlobusConnect = endpointInfo.endsWith("true");
+
+        if (isGlobusConnect == false)
+        {
+            String[] pieces = endpointInfo.split("\\^\\^");
+            destMyProxyServer = pieces[2];
+        }
 
         if (request.getParameter(GOFORMVIEW_MODEL)!=null) {
             //shouldn't ever come here
-            
-            
         }
-        else {
-            if (endpointInfo.endsWith("true"))
+        else
+        {
+            if (isGlobusConnect == true)
             {
                 LOG.debug("GlobusConnect Endpoint detected");
                 model.put(GOFORMVIEW_GO_CONNECT, "true");
             }
+            model.put(GOFORMVIEW_DEST_MYPROXY_SERVER, destMyProxyServer);
             model.put(GOFORMVIEW_FILE_URLS, file_urls);
             model.put(GOFORMVIEW_FILE_NAMES, file_names);
             model.put(GOFORMVIEW_USER_CERTIFICATE, userCertificate);
@@ -163,49 +174,22 @@ public class GOFormView3Controller {
             model.put(GOFORMVIEW_SRC_MYPROXY_USER, myProxyUserName);
             model.put(GOFORMVIEW_SRC_MYPROXY_PASS, myProxyUserPass);
         }
-        
-        String error = isErrorInGORequest();
-        model.put(GOFORMVIEW_ERROR, error);
 
+        // NOTE: We have the ability to skip this page if target is
+        // Globus Connect rather than using the above method that
+        // displays text.  This method should override the above
+        // safely.
+        //
         //if myproxy is required then navigate to the myproxy prompt page
-        if(myProxyRequired(request)) {
+        if (isGlobusConnect == false)
+        {
             return new ModelAndView("goformview3", model);
         } 
         //otherwise go to the confirmation page
-        else {
+        else
+        {
             return new ModelAndView("goformview4", model);
         }
     }
-    
-    /*
-     * This method determines if there is an error in processing request
-     * If there is an error, it simply returns a string "error", which points it to the appropriate view on go_form_view4.jsp
-     * otherwise it returns "non-error"
-     * NOTE: I know this probably should return a boolean, but maybe a string message should accompany why or why not there is an error
-     * That is a GO design decision
-     * 
-     */
-    private String isErrorInGORequest() {
-        //change me
-        
-        return "error";
-    }
-    
-    
-    /*
-     * Method determines if myproxy is required...needs implementation
-     */
-    private boolean myProxyRequired(final HttpServletRequest request) {
-        boolean myProxyRequired = true;
-        
-        String myProxyUserName = request.getParameter("myproxyUserName");
-        if(myProxyUserName != null) {
-            myProxyRequired = false; 
-        } 
-        
-        return myProxyRequired;
-    }
-    
-    
 }
 

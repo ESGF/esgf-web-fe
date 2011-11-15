@@ -68,7 +68,6 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   {
       executeRequest: function (servlet) {
     	  
-    	  
           var self = this;
           
           //loads everything in the html5 'fq' store
@@ -77,6 +76,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           //check to see if a distributed search is needed
           self.appendDistributedRequestHandler();
           
+          LOG.debug('store string: ' + this.store.string());
           
           if (this.proxyUrl) {
 	          jQuery.ajax({
@@ -94,14 +94,11 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 	            	  ESGF.setting.searchType = 'local';
 	            	  
 	            	  //reset the localStorage to querying over the dataset type
-	            	  ESGF.localStorage.remove('esgf_fq');
+	            	  ESGF.localStorage.removeAll('esgf_fq');
 	            	  
-	            	  /*
-	            	  localStorage['fq'] = 'type:Dataset' + ';';
-	            	  */
-	            	  
+	            	  //reset the distributed search flag to local
 	            	  localStorage['distrib'] == 'local';
-	            		  
+	            		
 	            	  //reload the page
 	            	  window.location.reload();
 	            	  
@@ -116,21 +113,22 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           }
       },
   
+      /**
+       * 
+       */
       appendDistributedRequestHandler: function () {
     	  
     	  var self = this;
     	  
-    	  /*
-    	  self.getShardsFromSolrConfig();
-    	  */
-    	 
-    	  self.getShardsFromService();
-    	  
-      	 
+    	  if(ESGF.setting.getShards == 'service') {
+        	  self.getShardsFromService();
+    	  } else {
+        	  self.getShardsFromSolrConfig();
+    	  }
       },
       
       /**
-       * This property (private) loads any existing constraint from the local store into the search
+       * This property (private) loads any existing constraint from the localStorage into the search
        * application.
        *
        * @field
@@ -145,6 +143,11 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   		//put in the dataset type
         ESGF.localStorage.put('esgf_fq','type:Dataset','type:Dataset');
         Manager.store.addByValue('fq','type:Dataset');
+        
+
+  		//put in the replica type (which for results is "false")
+        ESGF.localStorage.put('esgf_fq','replica:false','replica:false');
+        Manager.store.addByValue('fq','replica:false');
         
         //get all of the fq parameters from the localstore
         var esgf_fq = ESGF.localStorage.getAll('esgf_fq');
@@ -164,19 +167,6 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   		
   	},
       
-    isDuplicate: function (fq,val) {
-      
-    		var flag = false;
-    		var allFqs = fq.split(";");
-    			//loop over all existing queries - note 'length-1' was used to ignore the trailing whitespace of the last split
-    	  		for(var i=0;i<allFqs.length-1;i++)
-    			{
-    				if(allFqs[i] == ('text:' + val)) {
-    					flag = true;
-    				}
-    			}
-    		return flag;
-    },
   	
     
   	getShardsFromService: function () {
@@ -199,6 +189,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   	},
   	
   	getShardsFromSolrConfig: function() {
+
   		if(ESGF.setting.searchType == 'Distributed') {
   			Manager.store.addByValue('qt','/distrib');
   		} else {
@@ -209,66 +200,3 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   	
 });
 
-
-/*
-	//compare the parameter store with the local store
-	//if the local store contains something that is not in the parameter store, then add to parameter store
-	
-	//add the type here 
-Manager.store.addByValue('fq','type:Dataset');
- 	var fq = localStorage['fq'];
-
-ESGF.localStorage.put('esgf_fq','type:Dataset','type:Dataset');
-
-
-if(fq == null) {
-	  	fq = 'type:Dataset' + ';';
-	  	localStorage['fq'] = fq;
-	} else if(fq == undefined) {
-	fq = 'type:Dataset' + ';';
-	  	localStorage['fq'] = fq;
-} else if(fq = '') {
-	fq = 'type:Dataset' + ';';
-	  	localStorage['fq'] = fq;
-}
-
-
-alert('Manager: ' + ESGF.localStorage.get('esgf_fq','type:Dataset'));
-
-	
-	if(ESGF.setting.storage) {
-		var fq = localStorage['fq'];
-
-      //get all the fq parameters
-		var esgf_fq = ESGF.localStorage.getAll('esgf_fq');
-		
-		for(var key in esgf_fq) {
-			var value = esgf_fq[key];
-			alert('key: ' + key + ' value: ' + esgf_fq[key]);
-		}
-		
-		
-		//place them into the Manager store
-		
-		
-		if(fq != undefined) {
-			var allFqs = fq.split(";");
-			for(var i=0;i<allFqs.length-1;i++)
-			{
-				if(self.store.string().search(escape(allFqs[i])) == -1) {
-					Manager.store.addByValue('fq',allFqs[i]);
-				}
-			}
-	  	}
-		LOG.debug('\tlocalStorage: ' + fq);
-		
-		
-		
-		ESGF.localStorage.remove('esgf_fq','type:Dataset');
-	} 
-	
-	LOG.debug('\tparameter store: ' + Manager.store.values('fq'));
-	
-	
-	LOG.debug('End in Manager.loadingExistingQueries');
-	*/

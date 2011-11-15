@@ -80,7 +80,9 @@ AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
     var allStr = idStr + titleStr + urlStr + formatStr +  metadataURLStr; //+ descriptionStr + westDegreesStr + eastDegreesStr + northDegreesStr + southDegreesStr + datetime_startStr + datetime_stopStr;
 
     output += '<div class="search-entry">';
+
       output += '<div style="font-size:14px;font-style:bold" class="desc">';//'<h4 class="desc">';
+
       //output += '<a href="#" style="text-decoration:none">';
       output += '<span class="actionitem ai_meta"><a href="/esgf-web-fe/scripts/esgf/overlays/metadata_overlay.html" class="met" rel="#metadata_overlay"' + allStr + '>';
       output += doc.title + '</a>';
@@ -106,10 +108,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     var allStr = idStr + titleStr + urlStr + formatStr +  metadataURLStr;
 
     output += "Further options: ";
-    //output += '<span class="actionitem ai_meta"><a href="/esgf-web-fe/scripts/esgf/metadata_overlay_template.html" class="met" rel="#metadata_overlay"' + allStr + '> Metadata Summary</a></span>';
-    //output += '<span class="actionitem ai_meta"><a href="/esgf-web-fe/scripts/esgf/sample.html" class="met" rel="#metadata_overlay"' + allStr + '> Metadata Summary</a></span>';
-    //output += '<span class="actionitem ai_meta"><a href="http://www.forbes.com/2009/02/11/cancer-cure-experimental-lifestyle-health_0212cancer.html" class="met" rel="#metadata_overlay"' + allStr + '> Metadata Summary</a></span>';
-
+    
     selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
     
     if(ESGF.localStorage.search('dataCart',doc.id)) {
@@ -118,15 +117,20 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     	output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Add To Cart</a></span>';
     }
     
-
-    if (typeof doc.service != "undefined") {
-        LOG.debug("LAS service tag detected");
-        var svcStr = doc.service[0].split("|");
-        if (svcStr[0] == "LAS") {
-            output += '<span class="actionitem ai_las"><a href="' + svcStr[2] + '" target="_blank">Visualize and Analyze</a></span>';
-        }
+    if(doc.url instanceof Array) {
+    	for(var i=0;i<doc.url.length;i++) {
+    		var url = doc.url[i];
+    		if(url.search("LAS") > -1) {
+    	    	var tuple = url.split("\|");
+        	    output += '<span class="actionitem ai_las"><a href="' + tuple[0] + '" target="_blank">Visualize and Analyze</a></span>';
+    	    } else if(url.search("OPENDAP") > -1) {
+    	    	var tuple = url.split("\|");
+        	    output += '<span class="actionitem ai_las"><a href="' + tuple[0] + '" target="_blank">OPENDAP</a></span>';
+    		}
+    	}
     }
-
+   
+    
     if (ESGF.setting.annotate === true) {
 
         output += '<span class="actionitem"><a class="annotate" href="/esgf-web-fe/scripts/esgf/annotation_overlay.html" rel="#annotator_overlay"> Annotate</a></span>';
@@ -259,12 +263,9 @@ AjaxSolr.theme.prototype.facet_content = function(stopValue,objectedItems,thisOb
     return $facet_content;
 };
 
-
+/*
 AjaxSolr.theme.prototype.metadata = function(thisObject) {
     var self = thisObject;
-    /*
-     * Searchable solr fields
-     */
 
     //alert('writing title: ' + self.searchable_title);
     //title
@@ -298,49 +299,8 @@ AjaxSolr.theme.prototype.metadata = function(thisObject) {
 
 
 };
-
+*/
 
 })(jQuery);
 
 
-/*
-//add to super cookie
-if(localStorage['dataCart'] != undefined) {
-	localStorage['dataCart'] = localStorage['dataCart'] + evt.data.doc.id + ';';
-} else {
-	localStorage['dataCart'] = evt.data.doc.id + ';';
-}
-
-alert('localStorage: ' + localStorage['dataCart']);
-*/
-/*
-var $dialog = $('<div></div>')
-    .html('Dataset <b>' + evt.data.doc.id + "</b> has been added to the selection")
-    .dialog({
-        autoOpen: true,
-        show: 'blind',
-        modal: true,
-        hide: 'explode'
-    });
-*/
-
-//remove from super cookie
-/*
-if(localStorage['dataCart'] != undefined || localStorage['dataCart'] != null) {
-	var dataCart = localStorage['dataCart'].replace((evt.data.doc.id+';'),"");
-	  	localStorage['dataCart'] = dataCart;
-} else {
-	alert('should never come here');
-}
-alert('localStorage: ' + localStorage['dataCart']);
-*/
-/*
-var $dialog = $('<div></div>')
-.html('Dataset <b>' + evt.data.doc.id + "</b> has been removed to the selection")
-.dialog({
-    autoOpen: true,
-    show: 'blind',
-    modal: true,
-    hide: 'explode'
-});
-*/

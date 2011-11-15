@@ -18,6 +18,16 @@
 
   <dependencies>
 
+
+    <dependency org="globus" name="cog-jglobus" rev="1.8.0"/>
+    <dependency org="globus" name="JGOClient" rev="1.0"/>
+    <dependency org="cryptix" name="cryptix-base" rev="1.0"/>
+    <dependency org="cryptix" name="cryptix" rev="3.2"/>
+    <dependency org="cryptix" name="cryptix-asn1" rev="1.0"/>
+    <dependency org="jce-jdk13" name="jce-jdk13" rev="1.3.1"/>
+    <dependency org="claymoresystems" name="puretls" rev="1.0"/>
+
+
     <dependency org="com.sun.xml.bind" name="jaxb-xjc" rev="2.2" conf="base->default" />
     <dependency org="log4j" name="log4j" rev="1.2.14" conf="base->default">
       <exclude org="com.sun.jdmk"/>
@@ -33,7 +43,7 @@
     <dependency org="org.springframework" name="spring-webmvc" rev="${spring.version}" transitive="true" conf="base->default" />
     <dependency org="org.springframework" name="spring-tx" rev="${spring.version}" transitive="true" conf="base->default" />
     <dependency org="org.springframework" name="spring-aspects" rev="${spring.version}" transitive="true" conf="base->default" />
-
+	<dependency org="org.springframework" name="spring-mock" rev="2.0-m5" />
 
     <dependency org="org.springframework.security" name="spring-security-core" rev="${spring.version}" conf="base->default" />
     <dependency org="org.springframework.security" name="spring-security-config" rev="${spring.version}" conf="base->default" />

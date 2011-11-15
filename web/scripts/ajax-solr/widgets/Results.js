@@ -142,6 +142,7 @@
         },
 
         afterRequest: function () {
+        	
 	        var i = null;
 	        var self = this;
             $(this.target).empty();
@@ -160,7 +161,7 @@
 
                 /* only display results if there is a search */
             	/* for now that means the localStorage ONLY has type:Dataset; */
-            	if(Manager.store.values('fq') != 'type:Dataset') {	
+            	if(Manager.store.values('fq') != 'type:Dataset,replica:false') {	
                 	//alert ('i should not display this if ' + fq);
                 	for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
                         var doc = this.manager.response.response.docs[i];

@@ -185,16 +185,16 @@ public class NodeServiceImpl implements NodeService {
             else
                 name = hostname.getNodeValue();
 
-            //liveNodes.add(new NodeStatus(name, ip));
+            liveNodes.add(new NodeStatus(name, ip));
 
         }
         
         
-        liveNodes.add(new NodeStatus("localhost","127.0.0.1"));
-        printNodeList(liveNodes);
-        LOG.debug("\n\n\n\n\n\n");
-        System.out.println(liveNodes.get(0).getNodeIp());
-        LOG.debug("\n\n\n\n\n\n");
+        //liveNodes.add(new NodeStatus("localhost","127.0.0.1"));
+        //printNodeList(liveNodes);
+        //LOG.debug("\n\n\n\n\n\n");
+        //System.out.println(liveNodes.get(0).getNodeIp());
+        //LOG.debug("\n\n\n\n\n\n");
         
         return liveNodes;
     }

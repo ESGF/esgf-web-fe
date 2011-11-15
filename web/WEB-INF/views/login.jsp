@@ -1,10 +1,16 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
+
+
 <ti:insertDefinition name="main-layout" >
 
     <ti:putAttribute name="extrastyle">
         <link rel="stylesheet" href='<c:url value="/styles/security.css" />' type="text/css">
     </ti:putAttribute>
+
+	<ti:putAttribute name="extrascript"  value="/WEB-INF/views/login/script_search.jsp" >
+	</ti:putAttribute>
+        
 
     <ti:putAttribute name="main">
         <div class="prepend-4 span-16">

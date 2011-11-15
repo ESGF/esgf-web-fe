@@ -85,25 +85,7 @@ public class WgetGeneratorController {
   
   private final static Logger LOG = Logger.getLogger(WgetGeneratorController.class);
 
-  /**
-   * 
-   * @param request
-   * @param response
-   * @throws IOException
-   * @throws JSONException
-   * @throws ParserConfigurationException
-   * @Deprecated
-   */
-  @RequestMapping(method=RequestMethod.GET)
-  public @ResponseBody void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ParserConfigurationException {
-    
-    LOG.debug("doGet wgetproxy");
-    createWGET(request, response);
-    
-  } //end doGet
 
-  
-  
   /** doPost(HttpServletRequest request, HttpServletResponse response) 
    * The wget file is primarily created through the post method
    * 
@@ -125,8 +107,95 @@ public class WgetGeneratorController {
     
   } //end doPost
 
+  /** createWGET(HttpServletRequest request, HttpServletResponse response)
+   * 
+   * 
+   * @param request passed from the doPost method
+   * @param response x-sh response type 
+   */
+  private void createWGET(HttpServletRequest request, HttpServletResponse response) throws IOException, ParserConfigurationException {
+    
+    // Create the file name
+    // The file name is the id of the dataset + ".sh"
+    String filename = request.getParameter("id") + ".sh";
+    
+    // Get the constraints
+    String constraints = request.getParameter("constraints");
+    
+    System.out.println("constraints: " + constraints);
+    
+    // An array of file names 
+    String [] files = request.getParameterValues("child_url");
+    
+    LOG.debug("filename = " + filename);
+    //queryStringInfo(request);
+    
+    // create content of the wget script
+    String wgetText = writeDatasetScript(constraints,files);
+    
+    // write it to the bash file
+    writeBash(wgetText,filename,response);
+
+    LOG.debug("Finishing writing wget stream");
+
+  } 
   
-  private String headerString(String templateVersion) {
+  private static String writeDatasetScript(String constraints,String [] files) {
+      String wgetText = "";
+      
+      wgetText += "#!/bin/bash\n\n";
+      
+      //add the header
+      wgetText += headerString("0.2");
+      
+      wgetText += writeConstraints(constraints);
+          
+      //add the environment variables
+      wgetText += envVariablesString();
+          
+      //add the download function
+      wgetText += downloadFunctionString(files);
+
+      wgetText += "#\n# MAIN \n#\n";
+          
+      //add the main function
+      wgetText += mainFunctionString();
+
+      wgetText += "exit 0\n"; 
+      
+      return wgetText;
+  }
+  
+  private static String writeConstraints(String constraints) {
+      String constraintStr = "";
+      
+      constraints = constraints.replace("'type:Dataset',", "");
+      
+      constraintStr += "\n------------------\n\n";
+      constraintStr += "Search Constraints\n";
+      constraintStr += "\t" + constraints + "\n";
+      constraintStr += "\n------------------\n\n\n";
+      
+      
+      return constraintStr;
+  }
+  
+  private static void writeBash(String wgetText,String filename,HttpServletResponse response) {
+      try {
+          //attach the sh file extension to the response
+          response.setContentType("text/x-sh");
+          response.addHeader("Content-Disposition", "attachment; filename=" + filename );
+          response.setContentLength((int) wgetText.length());
+         
+          PrintWriter out = response.getWriter();
+          out.print(wgetText);
+      } catch(Exception e) {
+          e.printStackTrace();
+      }
+  }
+  
+  
+  private static String headerString(String templateVersion) {
       String headerStr = "";
       
       headerStr += "##############################################################################\n";
@@ -160,18 +229,17 @@ public class WgetGeneratorController {
       //add the "child urls" to the wget script
       //the child_urls are the files that were selected in the datacart
       //probably need to change the name "child urls" to something more relevant
-      for(int i=0;i<files.length;i++) {
-        LOG.debug("CHILD_URL: " + files[i]);
-        downloadFunctionStr += "\t((debug || dry_run)) && " +
-                               "echo \"wget $@ --certificate ${esgf_cert} --private-key ${esgf_private} '" + files[i] + "'\"\n";
-        downloadFunctionStr += "\t((!dry_run)) && " +
-                               "wget \"$@\" --certificate ${esgf_cert} --private-key ${esgf_private} '" + files[i] + "'\n";
-        
+      if(files != null) {
+          for(int i=0;i<files.length;i++) {
+              LOG.debug("CHILD_URL: " + files[i]);
+              downloadFunctionStr += "\t((debug || dry_run)) && " +
+                                     "echo \"wget $@ --certificate ${esgf_cert} --private-key ${esgf_private} '" + files[i] + "'\"\n";
+              downloadFunctionStr += "\t((!dry_run)) && " +
+                                     "wget \"$@\" --certificate ${esgf_cert} --private-key ${esgf_private} '" + files[i] + "'\n";
+              
+            }
+            downloadFunctionStr += "}\n";
       }
-      
-      downloadFunctionStr += "}\n";
-     
-      
       return downloadFunctionStr;
   }
   
@@ -232,97 +300,11 @@ public class WgetGeneratorController {
   }
   
   
-  /** createWGET(HttpServletRequest request, HttpServletResponse response)
-   * 
-   * 
-   * @param request passed from the doPost method
-   * @param response x-sh response type 
-   */
-  private void createWGET(HttpServletRequest request, HttpServletResponse response) throws IOException, ParserConfigurationException {
-    
-    // Create the file name
-    // The file name is the id of the dataset + ".sh"
-    String filename = request.getParameter("id") + ".sh";
-    String security = request.getParameter("security");
-    
-    LOG.debug("filename = " + filename);
-    LOG.debug("security->" + security);
-    queryStringInfo(request);
-    
-    // create content of the wget script
-    String wgetText = "";
-    
-    if(security.equalsIgnoreCase("wgetv1")) {
-        wgetText = "#!/bin/sh\n";
-        wgetText += "# ESG Federation download script\n";
-        wgetText += "#\n";
-        wgetText += "# Template version: 0.2\n";
-        wgetText += "# Generated by the all new ESGF Gateway\n";
-        wgetText += "#";
-        wgetText += "##############################################################################\n\n\n";
-        wgetText += "download() {\n";
-
-        //add the "child urls" to the wget script
-        //the child_urls are the files that were selected in the datacart
-        //probably need to change the name "child urls" to something more relevant
-        for(int i=0;i<request.getParameterValues("child_url").length;i++) {
-          LOG.debug("CHILD_URL: " + request.getParameterValues("child_url")[i]);
-          wgetText += "\twget " 
-                   + "--certificate ~/.esg/credentials.pem --private-key ~/.esg/credentials.pem "
-                   + "'" + request.getParameterValues("child_url")[i] + "'\n";
-        }
-        wgetText += "}\n";
-        wgetText += "#\n# MAIN \n#\n";
-        wgetText += "download\n";
-
-        
-    } else if(security.equalsIgnoreCase("wgetv2")){
-        
-        wgetText += this.ftlScript();
-        
-
-    }
-    else if(security.equalsIgnoreCase("wgetv3")) {
-        wgetText += "#!/bin/bash\n\n";
-        
-        //add the header
-        wgetText += this.headerString("0.2");
-        
-        //add the environment variables
-        wgetText += envVariablesString();
-        
-        //add the download function
-        wgetText += downloadFunctionString(request.getParameterValues("child_url"));
-
-        wgetText += "#\n# MAIN \n#\n";
-        
-        //add the main function
-        wgetText += mainFunctionString();
-
-
-        wgetText += "exit 0\n";
-        
-    }
-    
-    		
-    
-    //attach the sh file extension to the response
-    response.setContentType("text/x-sh");
-    response.addHeader("Content-Disposition", "attachment; filename=" + filename );
-    response.setContentLength((int) wgetText.length());
-   
-    PrintWriter out = response.getWriter();
-    out.print(wgetText);
-
-    LOG.debug("Finishing writing wget stream");
-
-  } 
   
   
   
   //experimental script
   private String ftlScript() {
-    // TODO Auto-generated method stub
       String ftlText = "";
       
       
@@ -564,13 +546,22 @@ public class WgetGeneratorController {
     LOG.debug("\tType");
     LOG.debug("\t\t" + request.getParameterValues("type")[0]);
     LOG.debug("\tChild urls");
-    for(int i=0;i<request.getParameterValues("child_url").length;i++) {
-      LOG.debug("\t\t" + request.getParameterValues("child_url")[i]);
+    if(request.getParameterValues("child_url") != null) {
+        for(int i=0;i<request.getParameterValues("child_url").length;i++) {
+            LOG.debug("\t\t" + request.getParameterValues("child_url")[i]);
+          }
+    } else {
+        LOG.debug("There are no child urls");
     }
     LOG.debug("\tChild ids");
-    for(int i=0;i<request.getParameterValues("child_id").length;i++) {
-      LOG.debug("\t\t" + request.getParameterValues("child_id")[i]);
+    if(request.getParameterValues("child_id") != null) {
+        for(int i=0;i<request.getParameterValues("child_id").length;i++) {
+            LOG.debug("\t\t" + request.getParameterValues("child_id")[i]);
+        }
+    } else {
+        LOG.debug("There are no child ids");
     }
+    
     
   } //end queryStringInfo
 

@@ -1,0 +1,46 @@
+<doc>
+	<dataset_id></dataset_id>
+	<count>0</count>
+	<hasHttp>0</hasHttp>
+	<hasGridFTP>0</hasGridFTP>
+	<hasOpenDap>0</hasOpenDap>
+	<file>
+		<fileId>fileId</fileId>
+		<title>title</title>
+		<size>size</size>
+		<hasGrid>false</hasGrid>
+		<hasHttp>false</hasHttp>
+		<services>
+			<service>service</service>
+			<service>service2</service>
+		</services>
+		<urls>
+			<url>url</url>
+			<url>url2</url>
+		</urls>
+		<mimes>
+			<mime>mime</mime>
+			<mime>mime2</mime>
+		</mimes>
+	</file>
+	<file>
+		<fileId>fileId2</fileId>
+		<title>title2</title>
+		<size>size2</size>
+		<hasGrid>false</hasGrid>
+		<hasHttp>false</hasHttp>
+		<services>
+			<service>service</service>
+			<service>service2</service>
+		</services>
+		<urls>
+			<url>url</url>
+			<url>url2</url>
+		</urls>
+		<mimes>
+			<mime>mime</mime>
+			<mime>mime2</mime>
+		</mimes>
+	</file>
+</doc>
+

@@ -123,17 +123,33 @@
 
     function processWidgets(fields) {
     	
+    	LOG.debug("Fields: " + fields);
+    	
+    	var shortNameArr = new Array();
+    	
+    	for(var i=0;i<fields.length;i++) {
+    		var fullField = fields[i];
+    		var mappingStr = fullField.split(":");
+    		var shortName = mappingStr[0];
+    		shortNameArr.push(shortName);
+    	}
+
+    	
     	//Register widgets for facet browser
     	//Also, add those facets to the overlay defined in esgf-web-fe/web/WEB-INF/views/search/_overlay.jsp
         for (var i = 0, l = fields.length; i < l; i++) {
             Manager.addWidget(new AjaxSolr.FacetBrowserWidget({
-              id: fields[i],
-              target: '#' + fields[i],
-              field: fields[i]
+              id: shortNameArr[i],
+              target: '#' + shortNameArr[i],
+              field: shortNameArr[i]
             }));
-            var facet_div = '<div class="facet_item"><div id="' + fields[i] + '"></div></div>';
+            var facet_div = '<div class="facet_item"><div id="' + shortNameArr[i] + '"></div></div>';
             $('div.facet_items').append(facet_div);
         }
+        
+        
+        
+        
         
         //Register the current search widget.
         //This widget is responsible for displaying the current search constraints
@@ -170,9 +186,12 @@
                id: 'metadata-browse'
              }));
         
+        
+        
         //Register the facet sidebar widget.
         //This widget is responsible for the facet accordion style sidebar
         Manager.addWidget(new AjaxSolr.FacetSideBarWidget({
+        	nameMap: fields,
             id: 'facet-sidebar'
           }));
 
@@ -184,7 +203,7 @@
         
         var params = {
                  'facet': true,
-                 'facet.field': fields,
+                 'facet.field': shortNameArr,//fields,
                  'facet.limit': 20,
                  'facet.mincount': 1,
                  'f.topics.facet.limit': 50,
@@ -194,7 +213,8 @@
         for (var name in params) {
            if(name == 'facet.field') {
                for(var i=0;i<fields.length;i++) {
-                   Manager.store.addByValue(name,fields[i]);
+                   //Manager.store.addByValue(name,fields[i]);
+            	   Manager.store.addByValue(name,shortNameArr[i]);
                }
            }
            else {
@@ -209,18 +229,10 @@
 
 
         Manager.doRequest();
+        
     }
 
     
-    /*
-    $('a.reset').live('click',function() {
-		alert('clicked');
-		delete localStorage['esgf_fq'];
-		delete localStorage['esgf_searchStates'];
-		delete localStorage['dataCart'];
-		Manager.doRequest(0);
-	});
-	*/
 })(jQuery);
 
 

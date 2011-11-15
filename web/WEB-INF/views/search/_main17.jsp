@@ -86,9 +86,12 @@
     	//event is trigger on both logout and login links (for now)
     	//there is a little disconnect with the header.jsp file so this can be seen as a temporary fix until a main page clean up is performed 
     	$('li.resetLocalStorage').live('click', function() {
-    		localStorage['fq'] = '';
+    		//reset the localStorage to querying over the dataset type
+      	  	ESGF.localStorage.removeAll('esgf_fq');
       	  
-      	  	localStorage['distrib'] = '';
+      	  	//reset the contents of the datacart
+      	  	ESGF.localStorage.removeAll('dataCart');
+      	  	
     	});
     	
     	

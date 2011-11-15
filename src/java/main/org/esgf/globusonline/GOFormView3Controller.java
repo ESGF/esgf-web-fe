@@ -179,17 +179,18 @@ public class GOFormView3Controller {
         // Globus Connect rather than using the above method that
         // displays text.  This method should override the above
         // safely.
+        // NOT READY JUST YET: always go to step 3 for now
         //
         //if myproxy is required then navigate to the myproxy prompt page
-        if (isGlobusConnect == false)
-        {
-            return new ModelAndView("goformview3", model);
-        } 
+//         if (isGlobusConnect == false)
+//         {
+        return new ModelAndView("goformview3", model);
+//         } 
         //otherwise go to the confirmation page
-        else
-        {
-            return new ModelAndView("goformview4", model);
-        }
+//         else
+//         {
+//             return new ModelAndView("goformview4", model);
+//         }
     }
 }
 

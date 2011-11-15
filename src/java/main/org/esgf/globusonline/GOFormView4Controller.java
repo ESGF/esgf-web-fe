@@ -200,9 +200,6 @@ public class GOFormView4Controller {
                 fileList.add(newURL);
             }
 
-            // FIXME: remove
-            System.out.println("DEBUG: errorStatus: " + errorStatus);
-
             // kick off the transfer here!
             errorStatus.append("Attempting to start Globus Online Transfer ...<br>");
             String taskID = transfer.transfer(goSourceEndpoint, endpointPieces[0], fileList, target);

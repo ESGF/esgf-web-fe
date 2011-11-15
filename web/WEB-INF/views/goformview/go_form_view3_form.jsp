@@ -4,7 +4,7 @@
 <c:choose>
 <c:when test='${GoFormView_GOConnect=="true"}' >
 The endpoint that you've selected is a Globus Connect Endpoint that
-does not require activation credentials.<br><br>
+does not require activation.<br><br>
 Please click Next to continue.
 	</c:when>
 	<c:otherwise>

@@ -101,7 +101,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 	            	  
 	            	  //reset the distributed search flag to local
 	            	  localStorage['distrib'] == 'local';
-	            		  
+	            		
 	            	  //reload the page
 	            	  window.location.reload();
 	            	  

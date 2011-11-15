@@ -62,21 +62,20 @@
 	
 	AjaxSolr.FacetSideBarWidget = AjaxSolr.AbstractFacetWidget.extend({
 	
+		mapping: null,
 		
 		afterRequest: function () {
 		
-			
-
-            
 			var self = this;
 			var facet = '';
 			
+			self.mapping = self.nameMap;
 			
 			var facet_arr = new Array();
 			
-			
 		    for (facet in self.manager.response.facet_counts.facet_fields) {
-		    	var label = findFacetLabel(facet,self.nameMap);
+
+		    	var label = self.findLabelFromFacet(facet);
 		    	var facet_obj = new Object();
 		    	var facet_val_arr = new Array();
 		    	var facet_val_counts = new Array();
@@ -146,31 +145,37 @@
 		    }
 		    
 		    $('a.alink').click( function () {
+		    	alert('click');
 		    	
 				var facet_value = $(this).html();
 				
-				var facet = $(this).parent().parent().find('a.showFacetValues').html();
+				//gets the long name...have to extract the short name for search
+				var label = $(this).parent().parent().find('a.showFacetValues').html();
+				
+				var facet = self.findFacetFromLabel(label);
+				
 				
 				/* NEED TO COME BACK - IT ONLY MATCHES whitespace */
+				
 				var index = facet_value.search(' ');
-				var trimmedFacetValue = facet_value.substr(0,index);
-				index = facet.search(' ');
-				var trimmedFacet = facet.substr(0,index);
-				Manager.store.addByValue('fq', trimmedFacet + ':' + trimmedFacetValue );
+				var facetValue = facet_value.substr(0,index);
+				
+				Manager.store.addByValue('fq', facet + ':' + facetValue );
+				
 				
 				//add to esgf_fq localstore
-				var key = trimmedFacet + ':' + trimmedFacetValue;
-				var value = trimmedFacet + ':' + trimmedFacetValue;
+				var key = facet + ':' + facetValue;
+				var value = facet + ':' + facetValue;
 				ESGF.localStorage.put('esgf_fq', key, value);
 				
 				//add to the old localstore
 				if(ESGF.setting.storage) {
 					var fq = localStorage['fq'];
 		     	   	if(fq == null) {
-		     	   		fq = trimmedFacet + ':' + trimmedFacetValue + ';';
+		     	   		fq = facet + ':' + facetValue + ';';
 		     	   		localStorage['fq'] = fq;
 		     	   	} else {
-			     		  fq += trimmedFacet + ':' + trimmedFacetValue + ';';
+			     		  fq += facet + ':' + facetValue + ';';
 			              localStorage['fq'] = fq;
 			     	}
 				}
@@ -178,6 +183,36 @@
 				
 			});
 	    	
+		},
+	
+		findLabelFromFacet: function(facet) {
+			var self = this;
+			var label = '';
+			for(var i=0;i<self.mapping.length;i++) {
+				var map = self.mapping[i].split(":");
+				var shortName = map[0];
+				var longName = map[1];
+				if(facet == shortName)
+					label = longName;
+			}
+			return label;
+		},
+		
+		findFacetFromLabel: function(label) {
+			var self = this;
+			var facet = '';
+			for(var i=0;i<self.mapping.length;i++) {
+				var map = self.mapping[i].split(":");
+				var shortName = map[0];
+				var longName = map[1];
+				//alert('label: ' + label + ' s: ' + shortName + ' l: ' + longName + ' ' + label.length + ' ' + longName.length + (label.replace(' ','') == longName));
+				//there is an extra whitespace in label, so trim it out
+				label = label.replace(' ','');
+				if(label == longName) {
+					facet = shortName;
+				}
+			}
+			return facet;
 		}
 	
 	});
@@ -191,17 +226,6 @@
 		return convertedStr;
 	}
 	
-	function findFacetLabel(facet,fields) {
-		var label = '';
-		for(var i=0;i<fields.length;i++) {
-			var map = fields[i].split(":");
-			var shortName = map[0];
-			var longName = map[1];
-			if(facet == shortName)
-				label = longName;
-		}
-		return label;
-	}
 	
 	function matchesFacetValue(facet,value) {
 		var matchesFacetValue = false;

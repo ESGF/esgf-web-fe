@@ -84,6 +84,13 @@ ESGF.localStorage.update = function(category, key, value) {
 	}
 };
 
+ESGF.localStorage.removeAll = function(category) {
+	if(localStorage[category] == undefined) {
+		localStorage.setObject(category,{'' : ''});
+	}
+	delete localStorage[category];
+};
+
 ESGF.localStorage.remove = function(category, key, value) {
 	if(localStorage[category] == undefined) {
 		localStorage.setObject(category,{'' : ''});

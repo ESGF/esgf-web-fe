@@ -145,8 +145,6 @@
 		    }
 		    
 		    $('a.alink').click( function () {
-		    	alert('click');
-		    	
 				var facet_value = $(this).html();
 				
 				//gets the long name...have to extract the short name for search

@@ -153,7 +153,6 @@
 				var facet = self.findFacetFromLabel(label);
 				
 				
-				/* NEED TO COME BACK - IT ONLY MATCHES whitespace */
 				
 				var index = facet_value.search(' ');
 				var facetValue = facet_value.substr(0,index);
@@ -203,12 +202,18 @@
 				var map = self.mapping[i].split(":");
 				var shortName = map[0];
 				var longName = map[1];
-				//alert('label: ' + label + ' s: ' + shortName + ' l: ' + longName + ' ' + label.length + ' ' + longName.length + (label.replace(' ','') == longName));
+				
 				//there is an extra whitespace in label, so trim it out
 				label = label.replace(' ','');
+				longName = longName.replace(' ','');
+				
+				//used for debugging
+				//alert('label: ' + label + ' s: ' + shortName + ' l: ' + longName + ' lengthLBL: ' + label.length + ' lengthLN: ' + longName.length);
+				
 				if(label == longName) {
 					facet = shortName;
 				}
+				
 			}
 			return facet;
 		}

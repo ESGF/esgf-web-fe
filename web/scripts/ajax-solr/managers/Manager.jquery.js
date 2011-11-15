@@ -94,10 +94,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 	            	  ESGF.setting.searchType = 'local';
 	            	  
 	            	  //reset the localStorage to querying over the dataset type
-	            	  ESGF.localStorage.remove('esgf_fq');
-	            	  
-	            	  //reset the contents of the datacart
-	            	  ESGF.localStorage.remove('dataCart');
+	            	  ESGF.localStorage.removeAll('esgf_fq');
 	            	  
 	            	  //reset the distributed search flag to local
 	            	  localStorage['distrib'] == 'local';

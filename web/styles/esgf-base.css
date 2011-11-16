@@ -872,3 +872,14 @@ legend#more_constraints{
 
 
 /* end fourth list option */
+
+.error-box {
+    /*background: #e5ecf9;*/
+    background: #f4f379;
+    margin: 0px;
+    padding: 5px;
+    border: 1px solid #417690;
+    font-weight: bold;
+    text-align: center;
+    color: #FF0000;
+}

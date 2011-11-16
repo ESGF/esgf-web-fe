@@ -49,6 +49,14 @@
    </div> 
 </div>
 
+<!-- display warning if JavaScript is not enabled -->
+<noscript>
+	<div class="span-24 last">
+		<div class="error-box">Warning: please enable JavaScript in your browser preferences, otherwise this site will not work properly.</div>
+	</div>
+</noscript>
+
+
 <script type="text/javascript">
 function checkAccountsviewURL(openid)
 {

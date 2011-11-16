@@ -122,7 +122,7 @@ public class WgetGeneratorController {
     // Get the constraints
     String constraints = request.getParameter("constraints");
     
-    System.out.println("constraints: " + constraints);
+    //System.out.println("constraints: " + constraints);
     
     // An array of file names 
     String [] files = request.getParameterValues("child_url");
@@ -171,10 +171,10 @@ public class WgetGeneratorController {
       
       constraints = constraints.replace("'type:Dataset',", "");
       
-      constraintStr += "\n------------------\n\n";
-      constraintStr += "Search Constraints\n";
-      constraintStr += "\t" + constraints + "\n";
-      constraintStr += "\n------------------\n\n\n";
+      constraintStr += "\n#------------------\n\n";
+      constraintStr += "#Search Constraints\n";
+      constraintStr += "#\t" + constraints + "\n";
+      constraintStr += "\n#------------------\n\n\n";
       
       
       return constraintStr;

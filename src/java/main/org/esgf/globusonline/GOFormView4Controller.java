@@ -107,8 +107,8 @@ public class GOFormView4Controller {
     private final static String CA_CERTIFICATE_FILE = "/etc/grid-security/certificates/97552d04.0";
     
 
-    public GOFormView4Controller() {
-        System.out.println("GO FORM VIEW 4");
+    public GOFormView4Controller()
+    {
     }
 
     @SuppressWarnings("unchecked")
@@ -148,7 +148,7 @@ public class GOFormView4Controller {
         Map<String,Object> model = new HashMap<String,Object>();
 
         JGOTransfer transfer = new JGOTransfer(goUserName, userCertificate, userCertificate, CA_CERTIFICATE_FILE);
-        //transfer.setVerbose(true); // FIXME: For debugging
+        //transfer.setVerbose(true);
         try
         {
             transfer.initialize();
@@ -161,14 +161,14 @@ public class GOFormView4Controller {
             errorStatus.append(goSourceEndpoint);
             errorStatus.append("\".<br>");
 
-            // first activate the source endpoint (WE NEED TO DETERMINE WHAT THIS IS FIRST)
+            // first activate the source endpoint
             LOG.debug("Activating source endpoint " + goSourceEndpoint);
             errorStatus.append("Attempting to activate Source Endpoint " + goSourceEndpoint + " ...<br>");
             transfer.activateEndpoint(goSourceEndpoint, srcMyproxyUserName, srcMyproxyUserPass);
             errorStatus.append("Source Endpoint activated properly!<br>");
 
             // second, activate the target endpoint (if not GlobusConnect)
-            String[] endpointPieces = endpointInfo.split(":");
+            String[] endpointPieces = endpointInfo.split("\\^\\^");
             if (endpointInfo.endsWith("true"))
             {
                 LOG.debug("Detected Globus Connect target endpoint");
@@ -203,19 +203,28 @@ public class GOFormView4Controller {
             // kick off the transfer here!
             errorStatus.append("Attempting to start Globus Online Transfer ...<br>");
             String taskID = transfer.transfer(goSourceEndpoint, endpointPieces[0], fileList, target);
-            errorStatus.append("Globus Online Transfer got TaskID " + taskID + ".<br>");
-            String transferInfo1 = "The transfer has been accepted and a task has been " +
-                "created and queued for execution.";
-            String transferInfo2 = "Globus Online TaskID: " + taskID;
-            LOG.debug("Started Globus Online transfer with TaskID: " + taskID);
+            if (taskID != null)
+            {
+                errorStatus.append("Globus Online Transfer got TaskID " + taskID + ".<br>");
+                String transferInfo1 = "The transfer has been accepted and a task has been " +
+                    "created and queued for execution.";
+                String transferInfo2 = "Globus Online TaskID: " + taskID;
+                LOG.debug("Started Globus Online transfer with TaskID: " + taskID);
 
-            if (request.getParameter(GOFORMVIEW_MODEL)!=null) {
-                System.out.println("NOT NULL");
+                if (request.getParameter(GOFORMVIEW_MODEL)!=null) {
+                }
+                else
+                {
+                    model.put(GOFORMVIEW_TRANSFER_INFO1, transferInfo1);
+                    model.put(GOFORMVIEW_TRANSFER_INFO2, transferInfo2);
+                }
             }
             else
             {
-                model.put(GOFORMVIEW_TRANSFER_INFO1, transferInfo1);
-                model.put(GOFORMVIEW_TRANSFER_INFO2, transferInfo2);
+                String error = errorStatus.toString() + "<br><b>Main Error:</b><br><br>Transfer failed";
+                model.put(GOFORMVIEW_ERROR, "error");
+                model.put(GOFORMVIEW_ERROR_MSG, error);
+                LOG.error("Failed to initiate Globus Online transfer.");
             }
         }
         catch(Exception e)
@@ -227,21 +236,5 @@ public class GOFormView4Controller {
         }
         return new ModelAndView("goformview4", model);
     }
-    
-    
-    /*
-     * This method determines if there is an error in processing request
-     * If there is an error, it simply returns a string "error", which points it to the appropriate view on go_form_view4.jsp
-     * otherwise it returns "non-error"
-     * NOTE: I know this probably should return a boolean, but maybe a string message should accompany why or why not there is an error
-     * That is a GO design decision
-     * 
-     */
-    private String isErrorInGORequest() {
-        //change me
-        
-        return "error";
-    }
-    
 }
 

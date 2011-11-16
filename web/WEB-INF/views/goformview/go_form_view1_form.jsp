@@ -15,7 +15,8 @@
 		</tr>
                 <tr>
                         <td colspan="2">
-                        Please provide your MyProxy login information for the Source Endpoint: www.esg.anl.gov:7512
+                        Please provide your MyProxy login information
+	for the Source Endpoint: <c:out value="${GoFormView_Myproxy_Server}" escapeXml="false"/>
                         </td>
                 </tr>
 		<tr>
@@ -35,10 +36,11 @@
 			</td>
 		</tr>
     </table>
+<!--
     <p>
     <input type="checkbox" name="goEmail" value="goEmail" /> Email when transfer starts<br />
     </p>
-    
+-->    
     <p>
       	<%-- Input params to go_form2 
       	goUserName -> Globus Online User Name

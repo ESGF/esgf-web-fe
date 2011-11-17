@@ -17,7 +17,7 @@
 		
 		<%@ include file="/WEB-INF/views/welcome/instructions.jsp" %>
 		
-		<%@ include file="/WEB-INF/views/welcome/tools.jsp" %>
+		<%@ include file="/WEB-INF/views/welcome/nodes.jsp" %>
 
 	</div>
             	

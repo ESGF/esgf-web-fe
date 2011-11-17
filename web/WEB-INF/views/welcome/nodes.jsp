@@ -1,15 +1,17 @@
 <!-- file containing list of ESGF nodes -->
 
-<div class="span-7 last">
-	<div class="span-7 last infoheader">
-		<div class="infoheadericon">
-           	<img src="images/image005.jpg"/>
-       	</div>
-       	<div class="infoheadertxt">
-        	<h1 style="padding:10px;">ESGF Peer Nodes</h1>
-       	</div>
+<div class="span-7 last infocontent projectitem">
+	<div class="span-7 last">
+		<div class="projectitemtop" style="margin-top:10px;margin-left:10px;margin-bottom:20px">
+			<div class="projectitemicon" style="float:left">
+				<a href="#"><img src="images/image005.jpg" /></a>
+			</div>
+			<div class="projectitemtitle" style="float:left;margin-left:10px">
+				<h3>ESGF Peer Nodes</h3>
+			</div>
+		</div>
 	</div>
-	<div class="span-7 last infocontent">
+	<div class="span-7 last" style="padding:5px;">
 		<div class="projectitembottom">
 			<ul>
 		        <li>

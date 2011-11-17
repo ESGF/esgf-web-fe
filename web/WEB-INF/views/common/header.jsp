@@ -19,8 +19,8 @@
     
            <ul>                    
                <li><a href="<c:url value='/'/> ">Home</a></li>
-               <li id="search"><a href="<c:url value='/live'/> ">Search</a></li>                
-               <!-- <li id="facet"> <a href="#" rel="#facet_overlay">Browse</a></li>   -->  
+               <li id="search"><a href="<c:url value='/live'/>">Search</a></li>                
+               <li id="tools"> <a href="<c:url value='/tools/tools.htm'/>">Tools</a></li>  
                <!--  
                <li><a href="#">Analysis</a></li>
                <li><a href="#">Search Settings</a></li>  

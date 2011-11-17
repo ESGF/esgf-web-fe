@@ -1,25 +1,24 @@
-<!-- file containing home page quick links -->
+<!--  file containing listing of analysis and visualization tools -->
 
 <div class="span-7 last infocontent projectitem">
-
 	<div class="span-7 last">
 		<div class="projectitemtop" style="margin-top:10px;margin-left:10px;margin-bottom:20px">
 			<div class="projectitemicon" style="float:left">
 				<a href="#"><img src="images/image004.jpg" /></a>
 			</div>
 			<div class="projectitemtitle" style="float:left;margin-left:10px">
-				<h3 style="font-size:14px;color:#7d5f45;font-weight:bold;">Quick Links</h3>
+				<h3>Instructions</h3>
 			</div>
 		</div>
 	</div>
 	<div class="span-7 last" style="padding:5px;">
 		<div class="projectitembottom">
 			<ul>
-				<li><a href='<c:url value="/createAccount"/>' >Create Account</a></li>
-				<li><a href='http://rainbow.llnl.gov/dist/esg-myproxy-logon/MyProxyLogon.jnlp' >MyProxyLogon</a></li>
-				<li><a href='http://${pageContext.request.serverName}/esg-search/wget'>Wget Script Generator</a></li>
+				<li><a href='http://www.esgf.org/wiki/ESGF_User_Guide' >ESGF User Guide</a></li>                             
+				<li><a href='http://www.esgf.org/wiki/ESGF_scripting' >Wget Scripting</a></li>
+				<li><a href='http://www.esgf.org/wiki/ESGF_GO' >Using Globus Online</a></li>
+				<li><a href='http://www.esgf.org/wiki/ESGF_RSS' >Subscribing to RSS Notification</a></li>
 			</ul>
 		</div>
 	</div>
-	
 </div>

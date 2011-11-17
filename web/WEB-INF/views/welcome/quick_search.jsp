@@ -20,4 +20,4 @@
 		</div>
 		<h3 id="navigate">Advanced Search (Category, Geospatial, Temporal, and more)... </h3>
 	</div>
-   </div>
+</div>

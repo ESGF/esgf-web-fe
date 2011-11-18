@@ -18,6 +18,8 @@
 				<li><a href='<c:url value="/createAccount"/>' >Create Account</a></li>
 				<li><a href='http://rainbow.llnl.gov/dist/esg-myproxy-logon/MyProxyLogon.jnlp' >MyProxyLogon</a></li>
 				<li><a href='http://${pageContext.request.serverName}/esg-search/wget'>Wget Script Generator</a></li>
+				<li><a href='http://${pageContext.request.serverName}/esg-search/feed/nodes.rss'>ESGF aggregated RSS feed</a>
+				    <a href='http://${pageContext.request.serverName}/esg-search/feed/nodes.rss'><img src='images/rss_icon.png'/ align="bottom"></a></li>
 			</ul>
 		</div>
 	</div>

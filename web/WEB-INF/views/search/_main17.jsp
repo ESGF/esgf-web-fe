@@ -37,9 +37,11 @@
 
 <div class="span-18 last" id="search-summary" style="margin-top:15px;">
 		
+		    	  
 		    <div class="span-7" id="search-speed">
-		    	<div id="search-help" style="margin-left:15px;">(press ESC to close suggestions)</div>
+		    	<!--<div id="search-help" style="margin-left:15px;">(press ESC to close suggestions)</div>-->
 		    </div>
+		    
 		
 		    <div id="page-navigation" class="span-11 last">
 		      <ul id="pager"></ul>

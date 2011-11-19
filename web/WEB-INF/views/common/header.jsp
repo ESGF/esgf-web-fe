@@ -19,8 +19,8 @@
     
            <ul>                    
                <li><a href="<c:url value='/'/> ">Home</a></li>
-               <li id="search"><a href="<c:url value='/live'/> ">Search</a></li>                
-               <!-- <li id="facet"> <a href="#" rel="#facet_overlay">Browse</a></li>   -->  
+               <li id="search"><a href="<c:url value='/live'/>">Search</a></li>                
+               <li id="tools"> <a href="<c:url value='/tools/tools.htm'/>">Tools</a></li>  
                <!--  
                <li><a href="#">Analysis</a></li>
                <li><a href="#">Search Settings</a></li>  
@@ -48,6 +48,14 @@
        </div>
    </div> 
 </div>
+
+<!-- display warning if JavaScript is not enabled -->
+<noscript>
+	<div class="span-24 last">
+		<div class="error-box">Warning: please enable JavaScript in your browser preferences, otherwise this site will not work properly.</div>
+	</div>
+</noscript>
+
 
 <script type="text/javascript">
 function checkAccountsviewURL(openid)

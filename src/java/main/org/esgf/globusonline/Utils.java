@@ -38,7 +38,7 @@ import org.openid4java.discovery.yadis.YadisException;
 import org.openid4java.discovery.yadis.YadisResolver;
 import org.openid4java.discovery.yadis.YadisResult;
 
-
+@SuppressWarnings("unchecked")
 public class Utils {
     
     private final static Logger LOG = Logger.getLogger(Utils.class);

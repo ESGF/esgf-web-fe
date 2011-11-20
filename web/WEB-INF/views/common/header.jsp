@@ -39,6 +39,7 @@
                 	<li class="resetLocalStorage"><a href="<c:url value='/j_spring_security_logout'/>" >Logout</a></li>
                 	-->
                 	<!-- admin users -->
+			<li id="dashboard"><a href="dashboard.jsp"/>Dashboard</a></li>
                 	<sec:authorize access="hasRole('ROLE_ADMIN')">
               			<li> <a href="<c:url value='/adminview'/>" >Admin</a></li>
               		</sec:authorize>

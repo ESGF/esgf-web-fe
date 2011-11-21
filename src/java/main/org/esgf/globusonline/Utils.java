@@ -10,6 +10,11 @@ import java.io.Writer;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.HashSet;
+
+import java.net.URI;
+import java.net.URL;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +30,15 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.springframework.ui.Model;
 
+import org.openid4java.OpenIDException;
+import org.openid4java.util.HttpCache;
+import org.openid4java.util.HttpClientFactory;
+import org.openid4java.discovery.xrds.XrdsServiceEndpoint;
+import org.openid4java.discovery.yadis.YadisException;
+import org.openid4java.discovery.yadis.YadisResolver;
+import org.openid4java.discovery.yadis.YadisResult;
+
+@SuppressWarnings("unchecked")
 public class Utils {
     
     private final static Logger LOG = Logger.getLogger(Utils.class);
@@ -278,5 +292,41 @@ public class Utils {
         LOG.debug("--------End Utils printElementContents--------");
     }
     
-    
+    public static URI resolveMyProxyViaOpenID(String openId)
+    {
+        URI result = null;
+        try
+        {
+            LOG.debug("Attempting to resolve MyProxy Server from OpenID: " + openId);
+
+            YadisResolver resolver = new YadisResolver();
+            Set<String> serviceTypes = new HashSet<String>();
+            // service type for P2P OpenIDs
+            serviceTypes.add("esg:myproxy-service");
+            // service type for Gateway OpenIDs
+            serviceTypes.add("urn:esg:security:myproxy-service");
+
+            YadisResult yadisResult = resolver.discover(openId, 10, new HttpCache(), serviceTypes);
+            XrdsServiceEndpoint endpoint = (XrdsServiceEndpoint) yadisResult.getEndpoints().get(0);
+            result = new URI(endpoint.getUri());
+        }
+        catch(YadisException ye)
+        {
+            if (ye.getErrorCode() == OpenIDException.YADIS_INVALID_URL)
+            {
+                LOG.error("The OpenID URL provided is invalid.  Please make sure that you're " +
+                          "logged in as a valid Gateway user.");
+            }
+            else
+            {
+                LOG.error("A Yadis error occurred trying to resolve the specified OpenID. " +
+                          "Please make sure that you're logged in as a valid Gateway user.");
+            }
+        }
+        catch(Exception e)
+        {
+            LOG.error("OpenID Discovery error: " + e);
+        }
+        return result;
+    }
 }

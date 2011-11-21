@@ -4,12 +4,18 @@
 <c:choose>
 <c:when test='${GoFormView_GOConnect=="true"}' >
 The endpoint that you've selected is a Globus Connect Endpoint that
-does not require activation credentials.<br><br>
+does not require activation.<br><br>
 Please click Next to continue.
 	</c:when>
 	<c:otherwise>
 
 <table id="adduser_table_id" class="adduser_table" >  
+        <tr>
+          <td colspan="2">
+          Please provide your MyProxy login information
+	  for the Target Endpoint: <c:out value="${GoFormView_DestMyproxyServer}" escapeXml="false"/>
+          </td>
+        </tr>
 	<tr id="userName_input">
 		<td>
 			<div class="adduser_properties" style="">Target MyProxy Username</div>

@@ -15,7 +15,7 @@
 
         <title> ESGF Portal</title>
         
-        <link rel="alternate" type="application/rss+xml" title="ESGF Node RSS Feed" href="http://${pageContext.request.serverName}/esg-search/feed/datasets.rss" />
+        <link rel="alternate" type="application/rss+xml" title="ESGF RSS Feed" href="http://${pageContext.request.serverName}/esg-search/feed/nodes.rss" />
 
     </head>
 

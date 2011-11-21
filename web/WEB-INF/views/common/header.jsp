@@ -21,10 +21,6 @@
                <li><a href="<c:url value='/'/> ">Home</a></li>
                <li id="search"><a href="<c:url value='/live'/>">Search</a></li>                
                <li id="tools"> <a href="<c:url value='/tools/tools.htm'/>">Tools</a></li>  
-               <!--  
-               <li><a href="#">Analysis</a></li>
-               <li><a href="#">Search Settings</a></li>  
-               -->      
            	<c:choose>
            		<c:when test="${principal=='anonymousUser'}">
            			<!-- guest users -->
@@ -33,7 +29,6 @@
               	<c:otherwise>
               		<!-- authenticated users -->
               		<li id="accounts"><a id="accountsAnchor" onclick="checkAccountsviewURL('${principal.username}')" href="<c:url value="/accountsview"/> ">Account</a></li>     
-                	<li class="resetLocalStorage"><a href="<c:url value='/j_spring_security_logout'/>" >Logout</a></li>
                 	<!--  
               		<li id="accounts"><a href="<c:url value='/accountsview'/> ">Account</a></li>     
                 	<li class="resetLocalStorage"><a href="<c:url value='/j_spring_security_logout'/>" >Logout</a></li>
@@ -42,6 +37,8 @@
                 	<sec:authorize access="hasRole('ROLE_ADMIN')">
               			<li> <a href="<c:url value='/adminview'/>" >Admin</a></li>
               		</sec:authorize>
+              		<li class="resetLocalStorage"><a href="<c:url value='/j_spring_security_logout'/>" >Logout</a></li>
+                	
               	</c:otherwise>
           	</c:choose>                                      
            </ul>            

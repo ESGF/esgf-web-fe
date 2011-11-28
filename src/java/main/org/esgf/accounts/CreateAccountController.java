@@ -42,7 +42,7 @@ public class CreateAccountController {
     public final static String PAR_URL = "url";
     public final static String PAR_DATE = "date";
     
-    private final static String ROLE_NAME = "User";
+    private final static String ROLE_NAME = "user";
     
     // session attribute to prevent automatic submission by robots
     private final static String SESSION_ATTRIBUTE = "UUID";

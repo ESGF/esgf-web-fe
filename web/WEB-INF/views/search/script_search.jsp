@@ -90,16 +90,16 @@
                 };
 
                 // Renders a CIM instance based upon type and name.
-                var render = function(cim_type, name) {
+                var render = function(project, cim_type, name) {
                     var options = viewerOptions[cim_type.toUpperCase()]();
-                    viewer.renderFromName('cmip5', cim_type, name, options);
+                    viewer.renderFromName(project, cim_type, name, options);
                 };
 
                 // Event handler for document ready event.
                 $jq(document).ready(function() {
                     // Model metadata selectors.
                     $jq('.cim-model').live('click', function() {
-                        render('model', $jq(this).text());
+                        render('cmip5', 'model', $jq(this).text());
                     });
                     
                 });

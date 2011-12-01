@@ -130,6 +130,8 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     	}
     }
    
+    output += '<span class="__actionitem__"> <a class="cim-model" href="#" id="">CIM Metadata</a></span>';
+   
     
     if (ESGF.setting.annotate === true) {
 

@@ -1,7 +1,8 @@
     <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
-    <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery-1.4.2.min.js" /> '></script>
+    <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery-1.4.4.min.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-search.js" />'> </script>
+    <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/underscore-min.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery-ui-1.8.12.custom.min.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/overlay.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/overlay.apple.js" /> '></script>
@@ -54,4 +55,53 @@
     <script type="text/javascript" src='<c:url value="/scripts/esgf/solr.theme.js" />'> </script>
 
 
+	<script type="text/javascript" src='<c:url value="/scripts/cim/cim-viewer-core.js" />'> </script>
+	<script type="text/javascript" src='<c:url value="/scripts/cim/cim-viewer-renderer.js" />'> </script>
+	<script type="text/javascript" src='<c:url value="/scripts/cim/cim-services-proxy.js" />'> </script>
 
+<script type="text/javascript">
+            (function () {
+            	
+            	
+                // CIM viewer.
+                var viewer = cim.viewer;
+
+                // CIM viewer options by cim document type.
+                var viewerOptions = {
+                    'MODEL' : function() {
+                        var result = viewer.options.forModel.defaults;
+                        return result;
+                    },
+
+                    'DATAOBJECT' : function() {
+                        var result = viewer.options.forDataObject.defaults;
+                        return result;
+                    },
+
+                    'EXPERIMENT' : function() {
+                        var result = viewer.options.forExperiment.defaults;
+                        return result;
+                    },
+                    
+                    'SIMULATION' : function() {
+                        var result = viewer.options.forSimulation.defaults;
+                        return result;
+                    }
+                };
+
+                // Renders a CIM instance based upon type and name.
+                var render = function(cim_type, name) {
+                    var options = viewerOptions[cim_type.toUpperCase()]();
+                    viewer.renderFromName('cmip5', cim_type, name, options);
+                };
+
+                // Event handler for document ready event.
+                $jq(document).ready(function() {
+                    // Model metadata selectors.
+                    $jq('.cim-model').live('click', function() {
+                        render('model', $jq(this).text());
+                    });
+                    
+                });
+            }());
+        </script>

@@ -137,8 +137,6 @@
 		   var datetime_start, datetime_startFQ,
            datetime_stop, datetime_stopFQ; 
         
-		   alert('here');
-		   
            //datetime_start
            if(dateFrom.value) {
                datetime_start = dateFrom.value + 'T00:00:00Z';

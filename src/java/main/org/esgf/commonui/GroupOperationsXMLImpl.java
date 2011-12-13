@@ -1,26 +1,14 @@
 package org.esgf.commonui;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.esgf.adminui.Group;
-import org.esgf.adminui.User;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
-import org.springframework.core.io.ClassPathResource;
 
 
 public class GroupOperationsXMLImpl implements GroupOperationsInterface {

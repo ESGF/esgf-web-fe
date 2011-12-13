@@ -62,15 +62,20 @@
 
 AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	
+	/**
+	 * 
+	 */
 	searchConstraints: null,
 	
+	/**
+	 * An array of dataset ids selected by the user in the data cart
+	 */
 	selected_arr: null,
 	
 	
-	init: function() {
-		
-	},
-	
+	/**
+	 * DOCUMENT ME
+	 */
 	beforeRequest: function () {
 		var self = this;
 
@@ -85,9 +90,13 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		$("input#uber_script").die('click');
 		$('.go_individual_gridftp').die('click');
 		
+		//add the spinning wheel in case there is a delay in loading the items in the data cart
         $(this.target).html($('<img/>').attr('src', 'images/ajax-loader.gif'));
 	},
 	
+	/**
+	 * DOCUMENT ME
+	 */
 	afterRequest: function () {
 		
 		//empty the tab
@@ -128,6 +137,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     				 	 '</table>' +
     				 	 '</div>';
     	
+    	//add the options to the page
     	$('#carts').append(optionsStr);
     	
     	//toggle the "checked" attribute of the showAllContents radio button
@@ -144,30 +154,34 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     		$('div#radio').show();
     	}
     	
-		//create the listings in the data cart
+		//initialize the contents in the data cart
     	$('#carts').append('<table style="width:100%;table-layout: fixed"><tbody id="datasetList"></tbody></table>');
         $("#datasetList").empty();
 		
-        
         
 		//create the data cart template
         self.createTemplate(self.selected_arr);
 		
         
-        /* events */
+        
+        /* live datacart events */
         
 		/**
 	     * Event for tab selection (as of now, toggling between "Results" and "Datacart")
+	     * If this is done, then a request should be sent to the manager
 	     */
 		$('#myTabs').live('tabsselect', function(event, ui) {
 			if (ui.index == 1) {
-				
 				Manager.doRequest(0);
 			}
 			
 		});
 		
-		//event in case the radio buttons change
+		/**
+		 * When a user selects a new radio button the global variable "showAllContents" should be changed
+		 * (true if all files selected, false if filtered selected)
+		 */
+		//
 		$("input[name='datacart_filter']").change(	function() { 
 			
 			
@@ -181,7 +195,19 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 				
 		});
 		
-		//event for the uber script
+		
+		/**
+		 * DOCUMENT ME
+		 * When the user clicks "Download All Files", this method is executed
+		 * 
+		 * A query string is assembled using the file ids and the search constraints (if 'filtered' is selected)
+		 * 
+		 * The string is then executed as a form action and sent to the wget api.  Example:
+		 * 
+		 * esg-search/wget/?project=cmip5
+		 * 
+		 * Would get all files that have been placed in the data cart bucketed in the project cmip5 
+		 */
 		$("input#uber_script").live('click', function() {
 
 			LOG.debug("Uber script: " + JSON.stringify(self.searchConstraints));
@@ -189,7 +215,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			var sentConstraints = new Array();
 
 			var queryString = '/esg-search/wget/?';
-			
 			
 			//if the show all contents is the filter...then add the search constraints to the wget
             if(ESGF.setting.showAllContents == 'false') {
@@ -200,34 +225,29 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 					if(self.searchConstraints[i].search('replica') == -1 && 
 					   self.searchConstraints[i].search('type') == -1) {
 					   
+					   //FIXME
 					   //replace the : with =
 					   var constraint = self.searchConstraints[i].replace(':','=');
-					   if(i < (self.searchConstraints.length - 1)) {
-						   queryString += constraint + '&';
-					   } else {
-						   queryString += constraint + '&';
-					   }
+					   queryString += constraint + '&';
+					   
 					}
 				}
 			
             }
             
-            //gather the ids and the urls for download
+            //gather the file_ids
         	var file_ids   = new Array();
             
-            
+            //iterate over the selected array of datasets in the data cart
             for(var i=0;i<self.selected_arr.length;i++) {
             	var selectedDocId = self.selected_arr[i];
             	var datasetId = self.replacePeriod(self.selected_arr[i]);
             	
+            	
+            	//grab the ids from the elements in the jquery template
+            	//FIXME: need clearer representation of these ids
             	$(this).parent().parent().parent().parent().parent().parent().find('tr.rows_'+ datasetId).find(':checkbox:checked').each( function(index) {
             		
-            		/*
-                    if(this.id != selectedDocId) {
-                    	ids.push(this.id);
-                    	//values.push(this.value);
-                    }
-                   */
             		var file_id = this.id;
                 	
                 	//strip "[" and "]"
@@ -240,6 +260,9 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
                 });
             	
             }
+            
+            //iterate over the file_ids and add to query string
+            //this can probably be collapsed into the loop above
             for(var i=0;i<file_ids.length;i++) {
 				var file_id = file_ids[i];
 				if(i < (file_ids.length-1)) {
@@ -250,20 +273,19 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			}
             
             
-            //send request
+            //send request using a dynamically generated form with the query string as the action
+            //the method should be post because the query string may be long
             jQuery('<form action="'+ queryString +'" method="post" >'+ '' +'</form>')
             .appendTo('body').submit().remove();
 			
 			
-	            
 		});
 		
 	    
 	    /**
-	     * Click event for generating the wget script
-	     * Submits a form with hidden values that calls the wget proxy class that returns the 
-	     * wget script as content type text/x-sh.
-	     * The form is deleted upon completion.
+	     * Click event for generating the wget script for individual datasets
+	     * 
+	     * Similar to the uber script above
 	     */
 	    $(".wgetAllChildren").live ('click', function (e){
 	    	
@@ -273,7 +295,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
         	
         	//gather the ids and the urls for download
         	var file_ids   = new Array();
-            var values = new Array();
             
             var dataset = self.replacePeriod(selectedDocId);
             
@@ -308,17 +329,11 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     				   constraintCount = constraintCount + 1;
     				   //replace the : with =
     				   var constraint = self.searchConstraints[i].replace(':','=');
-    				   if(i < (self.searchConstraints.length - 1)) {
-    					   queryString += constraint + '&';
-    				   } else {
-    					   queryString += constraint + '&';
-    				   }
+    				   queryString += constraint + '&';
+    				   
     				}
     			}
             }
-			
-			
-			
 			
 			for(var i=0;i<file_ids.length;i++) {
 				var file_id = file_ids[i];
@@ -394,15 +409,13 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	    
 	    
 	    
-	    /* globus online events */
-	    
 	    
 	    /**
 	     * Grabs individual files and sends that information to the Globus Online view
 	     */
 	    $('.go_individual_gridftp').live('click',function(e) {
 	    	
-	    	var selectedDocId = $(this).parent().parent().parent().parent().find('input').attr('id');//.parent().find('tr').attr('id');
+	    	var selectedDocId = $(this).parent().parent().parent().parent().find('input').attr('id');
 	    	
 	    	//gather the ids and the urls for download
 	    	var ids   = new Array();
@@ -506,22 +519,15 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
      * 
      * 
      * 
-     * 
-     * Legacy:
-     * For now there are two ways to create the template...
-     * 1) from the shards given from the registry service
-     * 2) from the shards given in the solr config file
-     * 
-     * 1) is preferred and 2) is legacy
-     * Each have been modularized
      */
     createTemplate: function() {
 
     	var self = this;
 
 
+    	//FIXME: Is the q parameter needed?
     	//get the 'q' parameter here
-    	var qParam = Manager.store.get('q')['value'];
+    	//var qParam = Manager.store.get('q')['value'];
     	
     	//get the 'fq' parameter here
     	var fqParamArr = self.createFqParamArray();
@@ -578,6 +584,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	 * This function creates the datacart template by loading shards from the service instead of the solrconfig
 	 * It is passed in the array of keys of all the datasets that have been selected
 	 */
+	
 	getDataCart: function(queryStr) {
 
 		var self = this;
@@ -631,16 +638,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	createFqParamArray: function () {
 		var fqParamArr = new Array();
     	
-		/*
-    	var fqParams = Manager.store.get('fq');
-    	for(var i=0;i<fqParams.length;i++){
-    		var fqParam = fqParams[i];
-    		if( fqParam['value'] != 'type:Dataset') {
-    			fqParamArr.push(fqParam['value']);
-    		}
-    		
-    	}
-    	*/
+		
 		
     	fqParams = ESGF.localStorage.getAll('esgf_queryString');
     	for(var key in fqParams) {
@@ -669,7 +667,10 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     
    
    
-    
+    /**
+     * DOCUMENT ME
+     * @param data
+     */
     showFileContents: function(data) {
     	
     	LOG.debug("Showing file contents" + data);
@@ -729,10 +730,13 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	},
 	
 	
-	/* Utility functions */
 	
 	
-	 /*
+	
+	/* Utility functions for the jquery template */
+	
+	
+	 /**
      * This function is used primarily to avoid annoying errors that occur with strings that have periods in them
      */
     replacePeriod: function (word)
@@ -742,7 +746,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     },
 	
 
-    /*
+    /**
      * This function prints contents of an object
      */
     printObject: function (object) {
@@ -753,7 +757,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
         alert(output);
     },
     
-    /*
+    /**
      * This function abbreviates long strings
      */
     abbreviateWord: function(word) {
@@ -764,7 +768,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
         return abbreviation;
     },
     
-    /*
+    /**
      * This function converts file sizes to a string representing its size in bytes
      */
     sizeConvert: function (size) {
@@ -792,104 +796,3 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 
 }(jQuery));
 
-
-/*
-	if(ESGF.setting.getShards == 'service') {
-		self.loadCartShardsFromService(arr);
-	} else {
-  	self.loadCartShardsFromSolrConfig(arr);
-	}
-	*/
-
-
-
-/* OLD WGET Gen
-//begin assembling queryString
-var queryString = 'type=create&id=' + selectedDocId;
-
-
-//gather the ids and the urls for download
-var ids   = new Array();
-var values = new Array();
-
-var dataset = self.replacePeriod(selectedDocId);
-
-$(this).parent().parent().parent().find('tr.rows_'+ dataset).find(':checkbox:checked').each( function(index) {
-    if(this.id != selectedDocId) {
-    ids.push(this.id);
-    values.push(this.value);
-   }
-});
-
-//assemble parameters of the queryString
-for(var i=0;i<ids.length;i++) {
-	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
-}
-
-var url = '/esgf-web-fe/wgetproxy';
-
-//assemble the input fields with the query string
-var input = '';
-jQuery.each(queryString.split('&'), function(){
-    var pair = this.split('=');
-    input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-});
-
-//add the search constraints
-input+= '<input type="hidden" name="constraints" value="' + (JSON.stringify(self.searchConstraints)).replace(/\"/gi,'\'') + '" />';
-
-//send request
-jQuery('<form action="'+ url +'" method="post">'+input+'</form>')
-.appendTo('body').submit().remove();
-*/
-
-
-/* OLD UBER SCRIPT
-//begin assembling queryString
-var queryString = 'type=create&id=' + 'AllScripts';
-
-//need to grab all of the datasets
-//grab all the keys from the datacart and place in an array
-//var selected_arr = ESGF.localStorage.toKeyArr('dataCart');
-
-
-//gather the ids and the urls for download
-var ids   = new Array();
-var values = new Array();
-
-for(var i=0;i<self.selected_arr.length;i++) {
-	var selectedDocId = self.selected_arr[i];
-	var datasetId = self.replacePeriod(self.selected_arr[i]);
-	
-	$(this).parent().parent().parent().parent().parent().parent().find('tr.rows_'+ datasetId).find(':checkbox:checked').each( function(index) {
-		
-        if(this.id != selectedDocId) {
-        	ids.push(this.id);
-        	values.push(this.value);
-        }
-       
-    });
-	
-}
-
-//assemble parameters of the queryString
-for(var i=0;i<ids.length;i++) {
-	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
-}
-
-var url = '/esgf-web-fe/wgetproxy';
-//assemble the input fields with the query string
-var input = '';
-jQuery.each(queryString.split('&'), function(){
-    var pair = this.split('=');
-    input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-});
-
-//add the search constraints
-input+= '<input type="hidden" name="constraints" value="' + (JSON.stringify(self.searchConstraints)).replace(/\"/gi,'\'') + '" />';
-
-//send request
-jQuery('<form action="'+ url +'" method="post">'+input+'</form>')
-.appendTo('body').submit().remove();
-
-*/

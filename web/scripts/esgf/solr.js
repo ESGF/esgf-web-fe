@@ -200,7 +200,7 @@
         Manager.init();
         Manager.store.addByValue('q','*:*');
 
-        
+        /*
         var params = {
                  'facet': true,
                  'facet.field': shortNameArr,//fields,
@@ -210,21 +210,30 @@
                  'json.nl': 'map'
                };
 
+    	var fieldsStr = 'facets=';
         for (var name in params) {
-           if(name == 'facet.field') {
+        	if(name == 'facet.field') {
                for(var i=0;i<fields.length;i++) {
                    //Manager.store.addByValue(name,fields[i]);
-            	   Manager.store.addByValue(name,shortNameArr[i]);
+            	   //Manager.store.addByValue(name,shortNameArr[i]);
+            		   if(i<(fields.length-1)) {
+                		   fieldsStr += shortNameArr[i] + ',';
+                	   } else {
+                		   fieldsStr += shortNameArr[i];
+                	   }
+            	   
                }
-           }
-           else {
-               Manager.store.addByValue(name, params[name]);
-           }
+        	}
+        	else {
+               //Manager.store.addByValue(name, params[name]);
+        	}
+
+        	
         }
 
         
-        
-        
+    	ESGF.localStorage.put('esgf_queryString',fieldsStr,fieldsStr);
+        */
         
 
 

@@ -150,10 +150,13 @@ AjaxSolr.AbstractManager = AjaxSolr.Class.extend(
    * @param {String} [servlet] The Solr servlet to send the request to.
    */
   doRequest: function (start, servlet) {
+
 	var widgetId = null;  
     if (this.initialized === false) {
       this.init();
     }
+
+  	
     // Allow non-pagination widgets to reset the offset parameter.
     if (start !== undefined) {
       this.store.get('start').val(start);
@@ -162,7 +165,10 @@ AjaxSolr.AbstractManager = AjaxSolr.Class.extend(
       servlet = this.servlet;
     }
 
+
+  	
     this.store.save();
+    
 
     for (widgetId in this.widgets) {
         if(this.widgets.hasOwnProperty(widgetId)) {
@@ -170,6 +176,7 @@ AjaxSolr.AbstractManager = AjaxSolr.Class.extend(
         }
     }
 
+  	
     this.executeRequest(servlet);
   },
 

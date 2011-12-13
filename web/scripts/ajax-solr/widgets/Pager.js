@@ -326,6 +326,9 @@ AjaxSolr.PagerWidget = AjaxSolr.AbstractWidget.extend(
         			  this.renderLinks(this.windowedLinks());
         			  this.renderHeader(perPage, offset, total);
         	    }
+        	    
+        	    
+        	    
     	    }
     	    
 	  

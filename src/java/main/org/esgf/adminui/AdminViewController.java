@@ -75,10 +75,6 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.esgf.manager.InputManager;
-import org.esgf.manager.InputManagerImpl;
-import org.esgf.manager.OutputManager;
-import org.esgf.manager.OutputManagerImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

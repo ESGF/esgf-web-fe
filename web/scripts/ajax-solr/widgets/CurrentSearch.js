@@ -107,14 +107,17 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     	//remove everything from ajax-solr parameter store  
     	self.manager.store.remove('fq');
         
-    	//remove everything from the localstorage store
+    	//remove everything from the localstorage esgf_fq store
         var esgf_fq = ESGF.localStorage.getAll('esgf_fq');        
         for(var key in esgf_fq) {
-        	var value = esgf_fq[key];
-        	ESGF.localStorage.remove('esgf_fq',key,value);
+        	ESGF.localStorage.remove('esgf_fq',key);
         }
-        //var facet = null;
-        //self.removeGeospatialConstraints(facet);  
+
+    	//remove everything from the localstorage esgf_queryString store
+        var esgf_queryString = ESGF.localStorage.getAll('esgf_queryString');  
+        for(var key in esgf_queryString) {
+        	ESGF.localStorage.remove('esgf_queryString',key);
+        }
         
         self.manager.doRequest(0);
         return false;
@@ -139,7 +142,8 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     return function () {
     	if(self.manager.store.removeByValue('fq',facet)) {
     		if(ESGF.setting.storage) {
-          	  	ESGF.localStorage.remove('esgf_fq', facet, facet);
+          	  	ESGF.localStorage.remove('esgf_fq', facet);
+          	  	ESGF.localStorage.remove('esgf_queryString', facet);
     		}
     		self.manager.doRequest(0);
         }

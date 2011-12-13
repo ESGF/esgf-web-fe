@@ -80,6 +80,7 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 				    	multiString[i] = '"' + multiString[i] + '"';
 				    }
 					ESGF.localStorage.put('esgf_fq','text:'+multiString[i],'text:'+multiString[i]);
+					ESGF.localStorage.put('esgf_queryString','text:'+multiString[i],'query='+multiString[i]);
 				}
 
 				self.manager.doRequest(0);
@@ -103,6 +104,9 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 					    	multiString[i] = '"' + multiString[i] + '"';
 					    }
 						ESGF.localStorage.put('esgf_fq','text:'+multiString[i],'text:'+multiString[i]);
+						
+						ESGF.localStorage.put('esgf_queryString','text:'+multiString[i],'query='+multiString[i]);
+						
 					}
 					
 					self.manager.doRequest(0);

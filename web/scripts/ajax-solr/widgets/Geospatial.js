@@ -124,93 +124,7 @@
                     self.display_map();
                     
                     
-                    //events
-                    /*
-                    $("button#submitGeo").button({ });
                     
-                    $('button#submitGeo').click( function(){
-                    	//alert('submitGeo');
-                    	//execute the geospatial query
-                        if($("input[name='searchType']:checked").val() !== null && $("input[name='areaGroup']:checked").val() !== null) {
-                            
-                        	//erase any previous geospatial request
-                            var fq = Manager.store.values('fq');
-                            for (i = 0, l = fq.length; i < l; i++) {
-                                //any previous filter query that contains 'east_degrees' can be assumed to be a geo search
-                                if(fq[i].search('east_degrees') !== -1) {
-                                    Manager.store.removeByValue('fq', fq[i]);
-                                }
-                            }
-
-                            self.executeGeospatialQuery();
-                            Manager.doRequest(0);					
-                        
-                        } else {
-                            alert('A Geospatial search type must be selected');
-                        }
-                    	
-                    	
-                    });
-                    
-                    //ensure that the radio buttons for encloses is checked by default	
-                    $("input[name='searchType']:first").attr('checked', true);
-                    
-                    //clear markers event
-                    $('#geospatial_marker_fieldset input[name="clear_markers"]').live('click',function(e) {
-                        self.clearMarkers();
-                        self.clearAreaChoice();
-                    });
-                    
-                    //this event will be taken out soon 
-                    //right now it acts as a guard so that the user cannot perform an overlaps query with a radius search (unimplemented)
-                    $("input[name='searchType']").live('change',function(e) {
-                        var searchType = $("input[name='searchType']").val();
-                    });
-                    
-                    //location text box event handler
-                    $("#geospatial_location input[name='location']").live('keypress',function(e) {
-                        if (e.keyCode === 13) {
-                            var address = $(this).val();
-                            self.getCoordinates(address);
-                            // clear the field
-                            $(this).val('');
-                            return false;
-                        }
-                    });
-                    
-                   
-                    $("input[name='areaGroup']").live('change',function(e) {
-                        if ($("input[name='areaGroup']:checked").val() === 'square') {
-                            if (self.num_of_markers < 2) {
-                                alert('Please define at least two markers');
-                                $(this).attr('checked', false);
-                                return false;
-                            }
-                            self.getBoundingBox();
-                        } else {
-                            if (self.num_of_markers !== 1) {
-                                alert("Please define ONE marker, center of interest!");
-                                $(this).attr('checked', false);
-                                return false;
-                            }
-                            if ($("#geospatial_circleInputs").is(":hidden")) {
-                                $("#geospatial_circleInputs").slideToggle('fast');
-                            }
-                            
-                            // put out something
-                            $("#geospatial_areaSelected").html('<p class="legend"> Center of Interest </p> + ' 
-                                + self.markerGroup[0].getPosition().toString());
-                            if ($("#areaSelected1").is(":hidden")) {
-                                $("#areaSelected1").slideToggle('fast');
-                            }
-                            self.redraw_circle();
-                        }		
-                    });
-                    $('input[name="redraw_circle"]').live('click',function(e) {
-                        self.redraw_circle();
-                    });
-                    */
-
                     $("button#submitGeo").button({ });
                     
 
@@ -682,7 +596,11 @@
             self.boundingboxED = ne.lng();
             self.boundingboxND = ne.lat();
 
+            var searchAPIQueryStr = 'bbox=[' + self.boundingboxWD + ',' + self.boundingboxSD + ',' + self.boundingboxED + ',' + self.boundingboxND + ']'; 
+            
             geoQueryString += self.getEnclosesBBQuery(self.boundingboxSD,self.boundingboxWD,self.boundingboxND,self.boundingboxED);
+            
+            ESGF.localStorage.put('esgf_queryString',geoQueryString,searchAPIQueryStr);
             
         }
         
@@ -749,7 +667,7 @@
             geoQueryString += self.getOverlapsBBQuery(self.boundingboxSD,self.boundingboxWD,self.boundingboxND,self.boundingboxED);
             
         }
-        
+
         if(ESGF.setting.storage) {
         	ESGF.localStorage.put('esgf_fq', geoQueryString, geoQueryString);
         }
@@ -764,3 +682,91 @@
 
     
 }(jQuery));
+
+
+//events
+/*
+$("button#submitGeo").button({ });
+
+$('button#submitGeo').click( function(){
+	//alert('submitGeo');
+	//execute the geospatial query
+    if($("input[name='searchType']:checked").val() !== null && $("input[name='areaGroup']:checked").val() !== null) {
+        
+    	//erase any previous geospatial request
+        var fq = Manager.store.values('fq');
+        for (i = 0, l = fq.length; i < l; i++) {
+            //any previous filter query that contains 'east_degrees' can be assumed to be a geo search
+            if(fq[i].search('east_degrees') !== -1) {
+                Manager.store.removeByValue('fq', fq[i]);
+            }
+        }
+
+        self.executeGeospatialQuery();
+        Manager.doRequest(0);					
+    
+    } else {
+        alert('A Geospatial search type must be selected');
+    }
+	
+	
+});
+
+//ensure that the radio buttons for encloses is checked by default	
+$("input[name='searchType']:first").attr('checked', true);
+
+//clear markers event
+$('#geospatial_marker_fieldset input[name="clear_markers"]').live('click',function(e) {
+    self.clearMarkers();
+    self.clearAreaChoice();
+});
+
+//this event will be taken out soon 
+//right now it acts as a guard so that the user cannot perform an overlaps query with a radius search (unimplemented)
+$("input[name='searchType']").live('change',function(e) {
+    var searchType = $("input[name='searchType']").val();
+});
+
+//location text box event handler
+$("#geospatial_location input[name='location']").live('keypress',function(e) {
+    if (e.keyCode === 13) {
+        var address = $(this).val();
+        self.getCoordinates(address);
+        // clear the field
+        $(this).val('');
+        return false;
+    }
+});
+
+
+$("input[name='areaGroup']").live('change',function(e) {
+    if ($("input[name='areaGroup']:checked").val() === 'square') {
+        if (self.num_of_markers < 2) {
+            alert('Please define at least two markers');
+            $(this).attr('checked', false);
+            return false;
+        }
+        self.getBoundingBox();
+    } else {
+        if (self.num_of_markers !== 1) {
+            alert("Please define ONE marker, center of interest!");
+            $(this).attr('checked', false);
+            return false;
+        }
+        if ($("#geospatial_circleInputs").is(":hidden")) {
+            $("#geospatial_circleInputs").slideToggle('fast');
+        }
+        
+        // put out something
+        $("#geospatial_areaSelected").html('<p class="legend"> Center of Interest </p> + ' 
+            + self.markerGroup[0].getPosition().toString());
+        if ($("#areaSelected1").is(":hidden")) {
+            $("#areaSelected1").slideToggle('fast');
+        }
+        self.redraw_circle();
+    }		
+});
+$('input[name="redraw_circle"]').live('click',function(e) {
+    self.redraw_circle();
+});
+*/

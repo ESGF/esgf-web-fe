@@ -160,7 +160,7 @@
             	var fq = localStorage['fq'];
 
                 /* only display results if there is a search */
-            	/* for now that means the localStorage ONLY has type:Dataset; */
+            	/* for now that means the localStorage ONLY has type:Dataset;,replica:false */
             	if(Manager.store.values('fq') != 'type:Dataset,replica:false') {	
                 	//alert ('i should not display this if ' + fq);
                 	for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {

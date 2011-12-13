@@ -69,63 +69,79 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
       executeRequest: function (servlet) {
     	  
           var self = this;
-          
+
+		  
           //loads everything in the html5 'fq' store
           self.loadExistingQueries();
           
-          //check to see if a distributed search is needed
-          self.appendDistributedRequestHandler();
+          var sidebarWidget = Manager.widgets['facet-sidebar'];
           
-          LOG.debug('store string: ' + this.store.string());
+          var namesArr = new Array();
+
+          for(var key in sidebarWidget) {
+        	  if(key == 'nameMap') {
+        		  var nameMap = sidebarWidget[key];
+            	  for(var i=0;i<nameMap.length;i++) {
+            		  var shortName = nameMap[i].split(':')[0];
+            		  namesArr.push(shortName);
+            	  }
+        	  }
+          }
           
-          if (this.proxyUrl) {
-	          jQuery.ajax({
-	              url: this.proxyUrl,
-	              data: this.store.string(),
-	              type: 'GET',
-	              success: function(data) {self.handleResponse(data);},
-	              error: function() {
-	            	  alert("There was an error in processing your query.  Try your search again.");
-	            	  
-	            	  //remove the existing parameter store
-	            	  Manager.store.remove('fq');
-	            	  
-	            	  //set the search back to local type
-	            	  ESGF.setting.searchType = 'local';
-	            	  
-	            	  //reset the localStorage to querying over the dataset type
-	            	  ESGF.localStorage.removeAll('esgf_fq');
-	            	  
-	            	  //reset the distributed search flag to local
-	            	  localStorage['distrib'] == 'local';
-	            		
-	            	  //reload the page
-	            	  window.location.reload();
-	            	  
-	              },
-	              dataType: 'json'
-	          });
-          }
-          else {
-	          jQuery.getJSON(this.solrUrl + servlet + 
-	              '?' + this.store.string() + '&wt=json&json.wrf=?', 
-	              {}, function (data) { self.handleResponse(data); });
-          }
+          //assemble the querystring here
+          var queryString = '/esg-search/search?';
+          //assemble the format parameter
+          queryString += self.loadFormat('json');
+          //assemble the facet names
+          queryString += self.loadFacetNames(namesArr);
+          //assemble the search constraints
+          queryString += self.loadSearchConstraints();
+
+          LOG.debug("Manager's querystring: " + queryString);
+          
+          
+          /**
+           * Ajax call to the search API
+           */
+          jQuery.ajax({
+        	  url: queryString,
+        	  type: 'GET',
+        	  success: function(data) {      
+        		  self.handleResponse(data);
+        	  },
+        	  error: function() {
+        		  alert("There was an error in processing your query.  Try your search again.");
+            	  
+            	  //remove the existing parameter store
+            	  Manager.store.remove('fq');
+            	  
+            	  //reset the localStorage for search constraints
+            	  ESGF.localStorage.removeAll('esgf_fq');
+            	  
+            	  //reset the localStorage esgf_queryString map
+            	  ESGF.localStorage.removeAll('esgf_queryString');
+            	  
+            	  
+            	  //legacy
+            	  //reset the distributed search flag to local
+            	  //localStorage['distrib'] == 'local';
+
+            	  //legacy
+            	  //set the search back to local type
+            	  //ESGF.setting.searchType = 'local';
+            	  
+            	  //reload the page
+            	  window.location.reload();
+        	  }
+          });
+          
+          
+          
+          
+          
+          
       },
   
-      /**
-       * 
-       */
-      appendDistributedRequestHandler: function () {
-    	  
-    	  var self = this;
-    	  
-    	  if(ESGF.setting.getShards == 'service') {
-        	  self.getShardsFromService();
-    	  } else {
-        	  self.getShardsFromSolrConfig();
-    	  }
-      },
       
       /**
        * This property (private) loads any existing constraint from the localStorage into the search
@@ -139,21 +155,33 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   		LOG.debug('In Manager.loadingExistingQueries');
   		var self = this;
   		
-
+  		
+  		//for direct requests to solr
   		//put in the dataset type
         ESGF.localStorage.put('esgf_fq','type:Dataset','type:Dataset');
         Manager.store.addByValue('fq','type:Dataset');
         
-
   		//put in the replica type (which for results is "false")
         ESGF.localStorage.put('esgf_fq','replica:false','replica:false');
         Manager.store.addByValue('fq','replica:false');
         
+        
+        //for search API
+  		//put in the dataset type
+        ESGF.localStorage.put('esgf_queryString','type:Dataset','type=Dataset');
+  		//put in the replica type (which for results is "false")
+        ESGF.localStorage.put('esgf_queryString','replica:false','replica=false');
+        
+        
+        var searchQuery = ESGF.localStorage.toString('esgf_queryString');
+        //ESGF.localStorage.printMap('esgf_queryString');
+        
+        
         //get all of the fq parameters from the localstore
         var esgf_fq = ESGF.localStorage.getAll('esgf_fq');
         
-        ESGF.localStorage.printMap('esgf_fq');
-        
+        //FIXME: May have to take this out
+        //legacy
         //add each constraint
         for(var key in esgf_fq) {
         	var value = esgf_fq[key];
@@ -162,41 +190,163 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
         	} 
 		}
         
-        
   		
-  		
+  	},
+  	
+  	/**
+  	 * DOCUMENT ME
+  	 * @param format
+  	 * @returns {String}
+  	 */
+  	loadFormat: function(format) {
+  		return 'format=application%2Fsolr%2B' + format + '&';
   	},
       
-  	
-    
-  	getShardsFromService: function () {
-  		var shardsString = ''; 
-  	  
-        for(var i=0;i<ESGF.search.shards.length;i++) {
-       	 var shards = ESGF.search.shards[i];
-   		 shardsString = shardsString + shards['nodeIp'] + ':8983/solr';
-       	 if(i != ESGF.search.shards.length-1) {
-           	 shardsString = shardsString + ',';
-       	 }
-        }
-        
-
-		 if(localStorage['distrib'] == 'distributed') {
-      		Manager.store.addByValue('shards',shardsString);
-     	 } else {
-      		Manager.store.removeByValue('shards',shardsString);
-     	 }
+  	/**
+  	 * DOCUMENT ME
+  	 * @param namesArr
+  	 * @returns {String}
+  	 */
+  	loadFacetNames: function(namesArr) {
+  		var facetNames = 'facets=';
+  		
+  		for(var i=0;i<namesArr.length;i++) {
+  			if(i < (namesArr.length-1)) {
+  				facetNames += namesArr[i] + ',';
+  			} else {
+  				facetNames += namesArr[i];
+  			}
+  		}
+  		facetNames += '&';
+  		return facetNames;
   	},
   	
-  	getShardsFromSolrConfig: function() {
-
-  		if(ESGF.setting.searchType == 'Distributed') {
-  			Manager.store.addByValue('qt','/distrib');
-  		} else {
-  			Manager.store.removeByValue('qt','/distrib');
-  		}
+  	/**
+  	 * DOCUMENT ME
+  	 * @returns {String}
+  	 */
+  	loadSearchConstraints: function() {
+  		var searchConstraints = '';
+  		
+  		var searchStringMap = ESGF.localStorage.getAll('esgf_queryString');
+        
+        for(var key in searchStringMap) {
+      	  value = searchStringMap[key];
+      	  searchConstraints += value +'&';
+        }
+        return searchConstraints;
   	}
-  	
+    
   	
 });
 
+/* direct communication with solr */
+/*
+if (this.proxyUrl) {
+    jQuery.ajax({
+        url: this.proxyUrl,
+        data: this.store.string(),
+        type: 'GET',
+        success: function(data) {self.handleResponse(data);},
+        error: function() {
+      	  alert("There was an error in processing your query.  Try your search again.");
+      	  
+      	  //remove the existing parameter store
+      	  Manager.store.remove('fq');
+      	  
+      	  //set the search back to local type
+      	  ESGF.setting.searchType = 'local';
+      	  
+      	  //reset the localStorage to querying over the dataset type
+      	  ESGF.localStorage.removeAll('esgf_fq');
+      	  
+      	  //reset the localStorage esgf_queryString map
+      	  ESGF.localStorage.removeAll('esgf_queryString');
+      	  
+      	  //reset the distributed search flag to local
+      	  localStorage['distrib'] == 'local';
+      		
+      	  //reload the page
+      	  window.location.reload();
+      	  
+        },
+        dataType: 'json'
+    });
+}
+else {
+    jQuery.getJSON(this.solrUrl + servlet + 
+        '?' + this.store.string() + '&wt=json&json.wrf=?', 
+        {}, function (data) { self.handleResponse(data); });
+}
+*/
+
+
+/**
+ * 
+ */
+/*
+appendDistributedRequestHandler: function () {
+	  
+	  var self = this;
+	  
+	  if(ESGF.setting.getShards == 'service') {
+  	  self.getShardsFromService();
+	  } else {
+  	  self.getShardsFromSolrConfig();
+	  }
+},
+*/
+
+
+/*
+	getShardsFromService: function () {
+		var shardsString = ''; 
+	  
+    for(var i=0;i<ESGF.search.shards.length;i++) {
+   	 var shards = ESGF.search.shards[i];
+		 shardsString = shardsString + shards['nodeIp'] + ':8983/solr';
+   	 if(i != ESGF.search.shards.length-1) {
+       	 shardsString = shardsString + ',';
+   	 }
+    }
+    
+
+	 if(localStorage['distrib'] == 'distributed') {
+  		Manager.store.addByValue('shards',shardsString);
+ 	 } else {
+  		Manager.store.removeByValue('shards',shardsString);
+ 	 }
+	},
+	
+	getShardsFromSolrConfig: function() {
+
+		if(ESGF.setting.searchType == 'Distributed') {
+			Manager.store.addByValue('qt','/distrib');
+		} else {
+			Manager.store.removeByValue('qt','/distrib');
+		}
+	}
+	*/
+
+//alert(AjaxSolr.FacetSideBarWidget.fields);
+//for(var i in AjaxSolr.FacetSideBarWidget) {
+//	  alert('i: ' + i + ' ' + AjaxSolr.FacetSideBarWidget[i]);
+//}
+
+//check to see if a distributed search is needed
+//self.appendDistributedRequestHandler();
+
+//LOG.debug('store string: ' + this.store.string());
+
+
+
+/* communication with the search API */
+
+//assemble the search api query string here
+/*
+var searchStringMap = ESGF.localStorage.getAll('esgf_queryString');
+for(var key in searchStringMap) {
+	  value = searchStringMap[key];
+	  queryString += value +'&';
+}
+*/

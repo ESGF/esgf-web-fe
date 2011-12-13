@@ -1,25 +1,17 @@
 package org.esgf.commonui;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.esgf.adminui.CreateGroupsController;
 import org.esgf.adminui.Group;
 import org.esgf.adminui.User;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
-import org.springframework.core.io.ClassPathResource;
 
 import esg.node.security.UserInfo;
 

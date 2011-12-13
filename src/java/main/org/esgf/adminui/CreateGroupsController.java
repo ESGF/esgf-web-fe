@@ -79,7 +79,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.esgf.commonui.GroupOperationsInterface;
-//import org.esgf.commonui.UserOperations;
 import org.esgf.commonui.GroupOperationsESGFDBImpl;
 import org.esgf.commonui.GroupOperationsXMLImpl;
 import org.esgf.commonui.UserOperationsESGFDBImpl;

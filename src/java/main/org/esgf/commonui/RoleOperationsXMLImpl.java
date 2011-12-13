@@ -7,7 +7,6 @@ import org.esgf.adminui.Role;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
-import org.springframework.core.io.ClassPathResource;
 
 public class RoleOperationsXMLImpl implements RoleOperationsInterface {
 

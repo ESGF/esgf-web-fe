@@ -75,10 +75,13 @@ AjaxSolr.DistributedSearchWidget = AjaxSolr.AbstractWidget.extend({
     
 		//alert('distributed search afterRequest');
 		
+		
+		
 		//if the distrib localstorage has not been defined
     	//define it as local here
     	if(localStorage['distrib'] == undefined) {
     		localStorage['distrib'] = 'local';
+    		
     	} else if(localStorage['distrib'] == null) {
     		localStorage['distrib'] = 'local';
     	} else if(localStorage['distrib'] == '') {
@@ -92,9 +95,37 @@ AjaxSolr.DistributedSearchWidget = AjaxSolr.AbstractWidget.extend({
     	}
 		
 		
+		//need to introduce the esg search api here
+		var distrib = ESGF.localStorage.get('esgf_queryString','distrib');
+		//alert('distrib ' + distrib);
+		if(distrib == undefined) {
+			ESGF.localStorage.put('esgf_queryString','distrib','distrib=false');
+		}
+		
+		//alert(ESGF.localStorage.get('esgf_queryString','distrib'));
+		if(ESGF.localStorage.get('esgf_queryString','distrib') == 'distrib=false') {
+			//alert('change button message to turn on distributed search');
+		} else {
+			//alert('change button message to turn off distributed search');
+		}
+		
 		
 		$('input#distribbutton').live('click',function () {
         	
+			//for the search api
+        	var distrib = ESGF.localStorage.get('esgf_queryString','distrib');
+    		//alert('distrib ' + distrib);
+    		
+    		if(ESGF.localStorage.get('esgf_queryString','distrib') == 'distrib=false') {
+    			ESGF.localStorage.update('esgf_queryString','distrib','distrib=true');
+    			
+    			//alert('change button message to turn on distributed search');
+    		} else {
+    			ESGF.localStorage.update('esgf_queryString','distrib','distrib=false');
+    			
+    			//alert('change button message to turn off distributed search');
+    		}
+			
 	        //alert('distrib button click');
         	//alert($('a#distributed').html());
         	//if($('a#distributed').html() == 'Turn off Distributed Search') {
@@ -113,6 +144,8 @@ AjaxSolr.DistributedSearchWidget = AjaxSolr.AbstractWidget.extend({
             	localStorage['distrib'] = 'local';
             	Manager.doRequest(0);
         	}
+        	
+        	
         	
         	
         });  

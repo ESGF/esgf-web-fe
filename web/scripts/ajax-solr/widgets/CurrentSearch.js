@@ -67,7 +67,7 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
   floatPrecision: 2,	
 	
   /**
-   * 
+   * DOCUMENT ME
    */
   afterRequest: function () {
 	  

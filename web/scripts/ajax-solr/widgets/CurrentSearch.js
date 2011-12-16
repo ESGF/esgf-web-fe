@@ -74,33 +74,49 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     var self = this;
     var links = [];
     var i = null;
-    var fq = this.manager.store.values('fq');
-    for (i = 0, l = fq.length; i < l; i++) {
-        var fqString = fq[i];
-        //leave out the 'type:Dataset' constraint 
-        if(fqString.search('Dataset') == -1 && fqString.search('replica:false')) {
-        	
-        	//check to see if this is a geospatial query (assuming 'east_degrees' is in every geo query)
-            //if it is -> need to change the current selection string
-        	//this is mainly to make it human readable (as opposed to only solr readable)
-            if(fqString.search('east_degrees') !== -1)
-            {
-                if($("input[name='areaGroup']:checked").val() === 'circle') {
-                	fqString = self.outputCentroidString(fqString);
-                }
-                else {
-                	fqString = self.outputBoundingBoxString(fqString);
-                }
-            }
-            
-            
-            links.push($('<a href="#"/>').text('(x) ' + fqString).click( //function () {
-            	self.removeFacet(fq[i]))
-            );
-        }
-        
+    
+    var esgf_q = ESGF.localStorage.getAll('esgf_queryString');
+    for(var k in esgf_q) {
+    	
+    	if(k != '' && k != ' ') {
+        	this.manager.store.addByValue('fq',k);
+    	}
+    	
     }
 
+    var fq = this.manager.store.values('fq');
+    
+    for (i = 0, l = fq.length; i < l; i++) {
+        var fqString = fq[i];
+        
+        if(fqString != "" && fqString != " ") {
+        	//leave out the 'type:Dataset' constraint 
+            if(fqString.search('Dataset') == -1 && fqString.search('replica:false') == -1 && fqString.search('distrib') == -1) {
+            	
+            	//check to see if this is a geospatial query (assuming 'east_degrees' is in every geo query)
+                //if it is -> need to change the current selection string
+            	//this is mainly to make it human readable (as opposed to only solr readable)
+                if(fqString.search('east_degrees') !== -1)
+                {
+                    if($("input[name='areaGroup']:checked").val() === 'circle') {
+                    	fqString = self.outputCentroidString(fqString);
+                    }
+                    else {
+                    	fqString = self.outputBoundingBoxString(fqString);
+                    }
+                }
+                
+                
+                links.push($('<a href="#"/>').text('(x) ' + fqString).click( //function () {
+                	self.removeFacet(fq[i]))
+                );
+            }
+        }
+        
+        
+    }
+	
+    
     if (links.length > 1) {
       links.unshift($('<a href="#"/>').text('remove all').click(function () {
         

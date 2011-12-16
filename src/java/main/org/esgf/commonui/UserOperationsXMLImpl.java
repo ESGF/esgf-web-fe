@@ -41,7 +41,7 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
         ROLES_FILE = new File("");
         PERMISSIONS_FILE = new File("");
         PASSWORD_FILE = new File("");
-        
+
         try {
             File dir1 = new File(".");
             USERS_FILE = new File(users_file); //new ClassPathResource("db.users").getFile();

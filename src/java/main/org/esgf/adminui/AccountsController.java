@@ -116,13 +116,17 @@ public class AccountsController {
     //    Pattern.compile(".*[^a-zA-Z0-9_\\-\\.\\@\\'\\:\\;\\,\\s/()].*");
 
     public AccountsController() throws FileNotFoundException, IOException {
+        //System.out.println("In accounts controller");
         LOG.debug("IN AccountsController Constructor");
         if(Utils.environmentSwitch) {
+            //System.out.println("In accounts controller db");
             uoi = new UserOperationsESGFDBImpl();
         }
         else {
+            //System.out.println("In accounts controller xml");
             uoi = new UserOperationsXMLImpl();
         }
+        //System.out.println("End accounts controller");
     }
 
     /**

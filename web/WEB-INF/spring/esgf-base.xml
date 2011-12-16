@@ -27,6 +27,7 @@
          Spring's generic DataAccessException hierarchy -->
     <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
 
+
     <import resource="esgf-security.xml" />
     <import resource="esgf-datasource.xml" />
     <import resource="esgf-jpa.xml"/>

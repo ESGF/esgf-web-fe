@@ -215,19 +215,23 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			var sentConstraints = new Array();
 
 			var queryString = '/esg-search/wget/?';
-			
 			//if the show all contents is the filter...then add the search constraints to the wget
             if(ESGF.setting.showAllContents == 'false') {
             
 				// traverse through the constraints and add to the querystring
 				//for(var i in self.searchConstraints) {
 				for(var i=0;i<self.searchConstraints.length;i++) {
+
 					if(self.searchConstraints[i].search('replica') == -1 && 
 					   self.searchConstraints[i].search('type') == -1) {
 					   
 					   //FIXME
 					   //replace the : with =
 					   var constraint = self.searchConstraints[i].replace(':','=');
+					   
+					   //replace 'text' with 'query' for free text searches
+					   constraint = constraint.replace('text','query');
+					   
 					   queryString += constraint + '&';
 					   
 					}
@@ -271,7 +275,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 					queryString += 'file_id=' + file_id;
 				}
 			}
-            
             
             //send request using a dynamically generated form with the query string as the action
             //the method should be post because the query string may be long
@@ -327,8 +330,12 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     				if(self.searchConstraints[i].search('replica') == -1 && 
     				   self.searchConstraints[i].search('type') == -1) {
     				   constraintCount = constraintCount + 1;
+    				   
     				   //replace the : with =
     				   var constraint = self.searchConstraints[i].replace(':','=');
+    				   
+					   //replace 'text' with 'query' for free text searches
+					   constraint = constraint.replace('text','query');
     				   queryString += constraint + '&';
     				   
     				}
@@ -347,8 +354,13 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
             
             LOG.debug(queryString);
             
+            
+            //alert('rewrite: ' + self.rewriteTextQuery(queryString));
+            
+            
+            
             //send request
-            jQuery('<form action="'+ queryString +'" method="post">'+ '' +'</form>')
+            jQuery('<form action="'+ self.rewriteTextQuery(queryString) +'" method="post">'+ '' +'</form>')
             .appendTo('body').submit().remove();
         	
 	    	
@@ -510,7 +522,45 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	    
 	},
 	
-	
+	rewriteTextQuery: function(queryString) {
+    	var newQueryString = '';
+
+    	//alert('oldQueryString ' + queryString);
+    	
+    	var root = queryString.split('?')[0];
+    	
+    	
+    	
+    	var paramArr = (queryString.split('?')[1]).split('&');
+    	
+    	newQueryString = root + '?';
+    	
+    	var fullText = '';
+    	for(var i=0;i<paramArr.length;i++) {
+    		var constraint = paramArr[i];
+    		if(constraint != '' && constraint != ' ') {
+    			//alert('constraint: ' + constraint);
+        		if(constraint.search('query=') > -1) {
+            		var queryClause = constraint.split('=');
+            		//alert('queryClause: ' + queryClause[1]);
+            		//alert('constraint: ' + constraint + ' queryClause: ' + queryClause);
+            		//fullText += queryClause + ' ';
+            		fullText = fullText + queryClause[1] + ' ';
+        		} else {
+        			newQueryString += '&' + constraint;
+        		}
+    		}
+    		
+    	}
+    	
+    	if(fullText != '') {
+        	newQueryString += '&' + 'query=' + fullText;
+    	}
+    	
+    	//alert('new query string: ' + newQueryString + ' fulltext: ' + fullText);
+    	
+    	return newQueryString;
+    },
 	
 	/**
      * Create the template for the datacart
@@ -589,6 +639,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 
 		var self = this;
 		
+    	
 		
 		//add a spinning wheel to show user that progress is being made in finding the files
 		self.addDataCartSpinWheel();

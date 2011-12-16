@@ -97,16 +97,20 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           //assemble the search constraints
           queryString += self.loadSearchConstraints();
 
-          LOG.debug("Manager's querystring: " + queryString);
           
+          
+          var revisedQueryString = self.rewriteTextQuery(queryString);
+
+          LOG.debug("Manager's querystring: " + revisedQueryString);
+          //alert('queryString: ' + revisedQueryString);
           
           /**
            * Ajax call to the search API
            */
           jQuery.ajax({
-        	  url: queryString,
+        	  url: revisedQueryString,
         	  type: 'GET',
-        	  success: function(data) {      
+        	  success: function(data) {     
         		  self.handleResponse(data);
         	  },
         	  error: function() {
@@ -235,7 +239,41 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
       	  searchConstraints += value +'&';
         }
         return searchConstraints;
-  	}
-    
+  	},
+  	
+  	/**
+  	 * DOCUMENT ME
+  	 */
+    rewriteTextQuery: function(queryString) {
+    	var newQueryString = '';
+    	
+    	var paramArr = queryString.split('&');
+    	
+    	newQueryString = paramArr[0];
+    	
+    	var fullText = '';
+    	for(var i=1;i<paramArr.length;i++) {
+    		var constraint = paramArr[i];
+    		if(constraint != '' && constraint != ' ') {
+        		if(constraint.search('query=') > -1) {
+            		var queryClause = constraint.split('=');
+            		//alert('queryClause: ' + queryClause[1]);
+            		//alert('constraint: ' + constraint + ' queryClause: ' + queryClause);
+            		//fullText += queryClause + ' ';
+            		fullText = fullText + queryClause[1] + ' ';
+        		} else {
+        			newQueryString += '&' + constraint;
+        		}
+    		}
+    		
+    	}
+    	if(fullText != '') {
+        	newQueryString += '&' + 'query=' + fullText;
+    	}
+    	
+    	//alert('new query string: ' + newQueryString + ' fulltext: ' + fullText);
+    	
+    	return newQueryString;
+    }
   	
 });

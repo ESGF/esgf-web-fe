@@ -94,7 +94,6 @@ public class GOFormView1Controller {
     private final static String GOFORMVIEW_MYPROXY_SERVER = "GoFormView_Myproxy_Server";
 
     public GOFormView1Controller() {
-        System.out.println("In GOFormView1Controller");
     }
 
     @SuppressWarnings("unchecked")

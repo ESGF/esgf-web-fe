@@ -163,7 +163,7 @@ public class FileDownloadTemplateController {
     
     private static String solrURL="http://localhost:8983/solr/select";
     
-    private static String searchAPIURL = "http://localhost/esg-search/search";
+    private static String searchAPIURL = "http://localhost/esg-search/search?";
     
     private final static Logger LOG = Logger.getLogger(FileDownloadTemplateController.class);
 
@@ -305,7 +305,7 @@ public class FileDownloadTemplateController {
                 String queryString = preassembleQueryStringUsingSearchAPI(request);
             
                 String dataset_id = names[i];
-                System.out.println("dataset_id: " + i + " " + dataset_id);
+                //System.out.println("dataset_id: " + i + " " + dataset_id);
                 
                 //get the json representation for each dataset
                 JSONArray jsonArrayResponseDocs = getJSONArrayUsingSearchAPI(queryString,dataset_id);
@@ -400,7 +400,7 @@ public class FileDownloadTemplateController {
             jsonArrayResponseDocs = jsonResponse.getJSONArray("docs");
         } catch (JSONException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         
         return jsonArrayResponseDocs;
@@ -482,13 +482,13 @@ public class FileDownloadTemplateController {
         method = new GetMethod(searchAPIURL);
         
         //add distributed search to the query string
-        queryString += "&distrib=true";
+        queryString += "&distrib=false";
         
         //add the dataset to the query string
         queryString += "&dataset_id=" + dataset_id;//replica=false";//"&dataset_id=" + "a";//dataset_id;
         
-        System.out.println("QueryString: " + queryString);
-        
+        //System.out.println("QueryString: " + queryString);
+        //System.out.println("S Q: " + searchAPIURL + queryString);
         
         method.setQueryString(queryString);
         
@@ -516,9 +516,9 @@ public class FileDownloadTemplateController {
             method.releaseConnection();
         }
 
-        System.out.println("-----RESPONSEBODY-----");
-        System.out.println(responseBody.substring(0, 700));
-        System.out.println("-----END RESPONSEBODY-----");
+        //System.out.println("-----RESPONSEBODY-----");
+        //System.out.println(responseBody.substring(0, 700));
+        //System.out.println("-----END RESPONSEBODY-----");
         
         return responseBody;
     }
@@ -530,7 +530,7 @@ public class FileDownloadTemplateController {
      */
     private String getDataCart(HttpServletRequest request) {
 
-        System.out.println("in getDataCart");
+       // System.out.println("in getDataCart");
         
         //org.esgf.commonui.Utils.queryStringInfo(request);
         
@@ -542,7 +542,7 @@ public class FileDownloadTemplateController {
         String [] names = request.getParameterValues("id[]");
         
         if(names == null) {
-            System.out.println("names is null");
+            //System.out.println("names is null");
         }
         
         String showAll = request.getParameter("showAll");
@@ -571,7 +571,7 @@ public class FileDownloadTemplateController {
                     //add the dataset id
                     docElement.setDatasetId(dataset_id);
                     
-                    System.out.println("dataset_id: " + dataset_id);
+                    //System.out.println("dataset_id: " + dataset_id);
                     
                     List<FileElement> fileElements = new ArrayList<FileElement>();
                     
@@ -637,7 +637,7 @@ public class FileDownloadTemplateController {
         String marker = "\"response\":";
         
 
-        System.out.println("In getJSONArrayForDatasetid");
+        //System.out.println("In getJSONArrayForDatasetid");
         
         //get the json response for all files associated with dataset_id 
         String responseRawString = getResponseBody(queryString,dataset_id);
@@ -742,7 +742,7 @@ public class FileDownloadTemplateController {
      */
     JSONArray getJSONArrayForDatasetID(String queryString,String id) {
         
-        System.out.println("In getJSONArrayForDatasetID");
+        //System.out.println("In getJSONArrayForDatasetID");
         
         String marker = "\"response\":";
         String responseRawString = getResponseBody(queryString,id);
@@ -809,7 +809,7 @@ public class FileDownloadTemplateController {
     
     private static String getResponseBody(String queryString,String dataset_id)  {
 
-        System.out.println("In getResponseBody");
+        //System.out.println("In getResponseBody");
         
         String responseBody = null;
 
@@ -872,27 +872,41 @@ public class FileDownloadTemplateController {
         
         if(request.getParameter("showAll").equals("false")) {
             
-            System.out.println("Showall is false");
+            //System.out.println("Showall is false");
           //get the 'fq' params from the servlet query string here
             String [] fqParams = request.getParameterValues("fq[]");
             
             //get the 'q' param from the servlet query string here
             //String qParam = request.getParameter("q");
-            
+            String fullText = "";
             if(fqParams != null) {
-                System.out.println("fqParams is not null");
+                //System.out.println("fqParams is not null");
               //append the 'fq' params to the query string
                 for(int i=0;i<fqParams.length;i++) {
                     String fqParam = fqParams[i];
                     System.out.println("fqParam: " + fqParam);
-                    queryString += "&" + fqParam;
+                    if(!fqParam.equals("") && !fqParam.equals(" ")) {
+                        System.out.println("\tfqParam not <space>");
+                        if(!fqParam.contains("query")) {
+                            queryString += "&" + fqParam;
+                        } else {
+                            //System.out.println("")
+                            String [] clause = fqParam.split("=");
+                            fullText += clause[1] + "%20";
+                        }
+                    }
+                }
+                if(!fullText.equals("") && !fullText.equals(" ")) {
+                    //System.out.println("FULLTEXT: " + fullText);
+                    queryString += "&query=" + fullText;//fullText.substring(0,fullText.length());
+                
                 }
             } else {
-                System.out.println("fqParams is null");
+                //System.out.println("fqParams is null");
             }
         }
         
-        System.out.println("QUERYSTRING: " + queryString);
+        System.out.println("\n\nQUERYSTRING: " + queryString + "\n\n");
         
         return queryString;
     }
@@ -904,7 +918,7 @@ public class FileDownloadTemplateController {
      */
     private static String preassembleQueryString(HttpServletRequest request) {
         
-        System.out.println("\tin preassembleQueryString");
+        //System.out.println("\tin preassembleQueryString");
         
         String queryString = "";
         
@@ -943,126 +957,3 @@ public class FileDownloadTemplateController {
 
 }
 
-
-
-/*
-System.out.println("Start out with " + searchAPIURL);
-
-System.out.println("Call preassembleQueryString");
-//String queryString = preassembleQueryString(mockRequest);
-//System.out.println(queryString);
-
-
-
-//get the ids from the servlet querystring here
-//these ids represent the dataset ids to be accessed in the datacart
-String [] names = mockRequest.getParameterValues("id");
-
-
-Document document = null;
-String jsonContent = null;
-
-document = new Document(new Element("response"));
-
-//only do anything if there is stuff in the datacart
-if(names != null) {
-    
-    //create a new list of docElements
-    List<DocElement> docElements = new ArrayList<DocElement>();
-    
-    //iterate over the list of datasets in the id request paraemter
-    for(int i=0;i<names.length;i++) {
-        
-        String queryString = preassembleQueryString(mockRequest);
-        
-        
-        String dataset_id = names[i];
-        System.out.println("dataset_id: " + i + " " + dataset_id);
-        
-        //get the json representation for each dataset
-        //JSONArray jsonArrayResponseDocs = getJSONArrayForDatasetid(queryString,dataset_id);
-        
-        String marker = "\"response\":";
-        
-        //get the json response for all files associated with dataset_id 
-        //String responseRawString = getResponseBody(queryString,dataset_id);
-        
-        
-        String responseBody = null;
-
-        // create an http client
-        HttpClient client = new HttpClient();
-
-        //attact the dataset id to the query string
-        GetMethod method = null;
-        
-        method = new GetMethod(searchAPIURL);
-        
-        //add the dataset to the query string
-        queryString += "&dataset_id=" + dataset_id;//replica=false";//"&dataset_id=" + "a";//dataset_id;
-        
-        System.out.println("QueryString: " + queryString);
-        
-        
-        method.setQueryString(queryString);
-        
-        method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
-                new DefaultHttpMethodRetryHandler(3, false));
-        
-        try {
-            // execute the method
-            int statusCode = client.executeMethod(method);
-
-            if (statusCode != HttpStatus.SC_OK) {
-                    LOG.error("Method failed: " + method.getStatusLine());
-
-            }
-
-            // read the response
-            responseBody = method.getResponseBodyAsString();
-        } catch (HTTPException e) {
-            LOG.error("Fatal protocol violation");
-            e.printStackTrace();
-        } catch (IOException e) {
-            LOG.error("Fatal transport error");
-            e.printStackTrace();
-        } finally {
-            method.releaseConnection();
-        }
-
-        System.out.println("-----RESPONSEBODY-----");
-        System.out.println(responseBody.substring(0, 700));
-        System.out.println("-----END RESPONSEBODY-----");
-        
-        String responseRawString = responseBody;
-        
-        
-        //just get the important part of the response (i.e. leave off the header and the facet info)
-        int start = responseRawString.lastIndexOf(marker) + marker.length();
-        int end = responseRawString.length();
-        String extractedString = responseRawString.substring(start,end);
-
-        JSONObject jsonResponse = null;
-        JSONArray jsonArrayResponseDocs = null;
-        
-        //convert extracted string into json array
-        try {
-            jsonResponse = new JSONObject(extractedString);
-            jsonArrayResponseDocs = jsonResponse.getJSONArray("docs");
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
-        
-        
-        
-        
-        
-        
-    }
-    
-} else {
-    
-}
-*/

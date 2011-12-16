@@ -30,9 +30,11 @@
 	    	<!-- <div><a href="#" style="font-size:10px">Advanced...&#9660;</a></div>  -->
 	    </div>
 	   	
+	   	  
 		<div class="span-18 last"> 
 			<input class="distribbutton1" id="distribbutton" type="submit" style="margin-left:20px"/>
 		</div>
+		
 </div>
 
 <div class="span-18 last" id="search-summary" style="margin-top:15px;">
@@ -93,6 +95,10 @@
       	  
       	  	//reset the contents of the datacart
       	  	ESGF.localStorage.removeAll('dataCart');
+      	  	
+
+      	  	//reset the contents of the datacart
+      	  	ESGF.localStorage.removeAll('esgf_queryString');
       	  	
     	});
     	

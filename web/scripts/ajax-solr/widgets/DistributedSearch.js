@@ -101,8 +101,8 @@ AjaxSolr.DistributedSearchWidget = AjaxSolr.AbstractWidget.extend({
 		var distrib = ESGF.localStorage.get('esgf_queryString','distrib');
 		//alert('distrib ' + distrib);
 		if(distrib == undefined) {
-			ESGF.localStorage.put('esgf_queryString','distrib','distrib=false');
-		}
+			ESGF.localStorage.put('esgf_queryString','distrib','distrib=true');
+		} 
 		
 		//put a value on the button
 		if(ESGF.localStorage.get('esgf_queryString','distrib') == 'distrib=false') {

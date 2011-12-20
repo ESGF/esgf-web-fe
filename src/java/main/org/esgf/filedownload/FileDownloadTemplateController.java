@@ -482,12 +482,12 @@ public class FileDownloadTemplateController {
         method = new GetMethod(searchAPIURL);
         
         //add distributed search to the query string
-        queryString += "&distrib=false";
+        //queryString += "&distrib=false";
         
         //add the dataset to the query string
         queryString += "&dataset_id=" + dataset_id;//replica=false";//"&dataset_id=" + "a";//dataset_id;
         
-        //System.out.println("QueryString: " + queryString);
+        System.out.println("\n\nResponse Body QueryString: " + queryString + "\n\n");
         //System.out.println("S Q: " + searchAPIURL + queryString);
         
         method.setQueryString(queryString);
@@ -906,7 +906,7 @@ public class FileDownloadTemplateController {
             }
         }
         
-        System.out.println("\n\nQUERYSTRING: " + queryString + "\n\n");
+        //System.out.println("\n\nQUERYSTRING: " + queryString + "\n\n");
         
         return queryString;
     }

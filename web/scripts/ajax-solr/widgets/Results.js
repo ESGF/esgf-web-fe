@@ -147,22 +147,36 @@
 	        var self = this;
             $(this.target).empty();
             
+            
             if(ESGF.setting.storage) {
             	
             	//extract from localStorage
             	var esgf_fq = ESGF.localStorage.getAll('esgf_fq');
+            	
+            	var searchConstraint = '';
             	
             	//loop through all the fqs
             	for(var key in esgf_fq) {
             		var value = esgf_fq[key];
             	}
             	
+            	var esgf_queryString = ESGF.localStorage.getAll('esgf_queryString');
+            	for(var key in esgf_queryString) {
+            		if(key != '' && key != ' ') {
+            			searchConstraint += key + ',';
+            		}
+            		//alert('key: ' + key + ' value: ' + esgf_queryString[key]);
+            	}
+            	
+            	
             	var fq = localStorage['fq'];
 
+            	
                 /* only display results if there is a search */
-            	/* for now that means the localStorage ONLY has type:Dataset; */
-            	if(Manager.store.values('fq') != 'type:Dataset,replica:false') {	
-                	//alert ('i should not display this if ' + fq);
+            	/* for now that means the localStorage ONLY has type:Dataset;,replica:false */
+            	//if(Manager.store.values('fq') != 'type:Dataset,replica:false') {	
+                if(searchConstraint != 'type:Dataset,replica:false,distrib,') {
+        			//alert ('i should not display this if ' + fq);
                 	for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
                         var doc = this.manager.response.response.docs[i];
                     		if(self.postSolrProcessing(doc)) {
@@ -174,7 +188,7 @@
                                     AjaxSolr.theme('actions', doc)));
                             } 
                         }
-                }
+                } 
             } else {
             	if(this.manager.store.values('fq') != 0)
             		for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {

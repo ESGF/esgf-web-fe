@@ -75,10 +75,15 @@ AjaxSolr.DistributedSearchWidget = AjaxSolr.AbstractWidget.extend({
     
 		//alert('distributed search afterRequest');
 		
+		
+		
 		//if the distrib localstorage has not been defined
     	//define it as local here
+		
+		/*
     	if(localStorage['distrib'] == undefined) {
     		localStorage['distrib'] = 'local';
+    		
     	} else if(localStorage['distrib'] == null) {
     		localStorage['distrib'] = 'local';
     	} else if(localStorage['distrib'] == '') {
@@ -90,29 +95,76 @@ AjaxSolr.DistributedSearchWidget = AjaxSolr.AbstractWidget.extend({
     	} else {
     		$('input#distribbutton').val('Turn off Distributed Search');
     	}
+		*/
 		
+		//need to introduce the esg search api here
+		var distrib = ESGF.localStorage.get('esgf_queryString','distrib');
+		//alert('distrib ' + distrib);
+		if(distrib == undefined) {
+			ESGF.localStorage.put('esgf_queryString','distrib','distrib=true');
+		} 
+		
+		//put a value on the button
+		if(ESGF.localStorage.get('esgf_queryString','distrib') == 'distrib=false') {
+			$('input#distribbutton').val('Turn on Distributed Search');
+		} else {
+			$('input#distribbutton').val('Turn off Distributed Search');
+		}
+		
+		
+		//alert(ESGF.localStorage.get('esgf_queryString','distrib'));
+		if(ESGF.localStorage.get('esgf_queryString','distrib') == 'distrib=false') {
+			//alert('change button message to turn on distributed search');
+		} else {
+			//alert('change button message to turn off distributed search');
+		}
 		
 		
 		$('input#distribbutton').live('click',function () {
         	
+			//for the search api
+        	var distrib = ESGF.localStorage.get('esgf_queryString','distrib');
+    		//alert('distrib ' + distrib);
+    		
+    		if(ESGF.localStorage.get('esgf_queryString','distrib') == 'distrib=false') {
+    			ESGF.localStorage.update('esgf_queryString','distrib','distrib=true');
+    			$('input#distribbutton').val('Turn off Distributed Search');
+    			//alert('change button message to turn on distributed search');
+            	Manager.doRequest(0);
+    		} else {
+    			ESGF.localStorage.update('esgf_queryString','distrib','distrib=false');
+    			$('input#distribbutton').val('Turn on Distributed Search');
+    			//alert('change button message to turn off distributed search');
+            	Manager.doRequest(0);
+    		}
+			
+    		/*
 	        //alert('distrib button click');
         	//alert($('a#distributed').html());
         	//if($('a#distributed').html() == 'Turn off Distributed Search') {
         	if(localStorage['distrib'] == 'local') {
         		//change the text to Distributed
             	$('input#distribbutton').val('Turn off Distributed Search');
+            	
+            	
             	//change the flag to Distributed
             	ESGF.setting.searchType = 'Distributed';
             	localStorage['distrib'] = 'distributed';
+            	
             	Manager.doRequest(0);
         	} else {
         		//change the text to Local
             	$('input#distribbutton').val('Turn on Distributed Search');
+            	
             	//change the flag to Local
             	ESGF.setting.searchType = 'local';
             	localStorage['distrib'] = 'local';
+            	
+            	
             	Manager.doRequest(0);
         	}
+        	*/
+        	
         	
         	
         });  

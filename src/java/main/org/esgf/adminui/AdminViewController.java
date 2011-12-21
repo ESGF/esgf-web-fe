@@ -66,31 +66,18 @@
  */
 package org.esgf.adminui;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.esgf.manager.InputManager;
-import org.esgf.manager.InputManagerImpl;
-import org.esgf.manager.OutputManager;
-import org.esgf.manager.OutputManagerImpl;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
-import esg.search.query.api.FacetProfile;
-import esg.search.query.api.SearchOutput;
-import esg.search.query.api.SearchService;
-import esg.search.query.impl.solr.SearchInputImpl;
 
 @Controller
 @RequestMapping(value="/adminview")

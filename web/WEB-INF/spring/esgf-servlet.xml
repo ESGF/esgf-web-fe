@@ -26,9 +26,11 @@
         <property name="maxUploadSize" value="100000"/>
     </bean>
  
-
+ 
     <import resource="mvc-config.xml" />
+    <!-- 
     <import resource="facet-config.xml" />
+   -->
     <import resource="service-config.xml" />
-
+ 
 </beans>

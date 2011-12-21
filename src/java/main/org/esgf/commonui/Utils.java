@@ -5,7 +5,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Writer;
 import java.util.Enumeration;
 import java.util.List;
@@ -15,15 +14,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.esgf.adminui.AccountsController;
-import org.esgf.adminui.User;
 import org.jdom.Document;
 import org.jdom.Element;
 
-import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
-import org.springframework.ui.Model;
 
 public class Utils {
     

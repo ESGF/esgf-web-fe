@@ -318,14 +318,34 @@ AjaxSolr.PagerWidget = AjaxSolr.AbstractWidget.extend(
     	    //erase BOTH the pagination and the "extra display"
     	    $(this.target).empty();
     	    $('#pager-header').empty();
-      
+    	    
+    	    var searchConstraint = '';
+        	
     	    if(ESGF.setting.storage) {
     	    	//only if there is a query should the pagination be displayed
         	    //if (fq != undefined) {
-        	    if(Manager.store.values('fq') != 'type:Dataset,replica:false') {	
+    	    	var esgf_queryString = ESGF.localStorage.getAll('esgf_queryString');
+            	for(var key in esgf_queryString) {
+            		if(key != '' && key != ' ') {
+            			searchConstraint += key + ',';
+            		}
+            		//alert('key: ' + key + ' value: ' + esgf_queryString[key]);
+            	}
+            	
+            	
+            	var fq = localStorage['fq'];
+
+            	
+            	/* for now that means the localStorage ONLY has type:Dataset;,replica:false */
+            	//if(Manager.store.values('fq') != 'type:Dataset,replica:false') {	
+                if(searchConstraint != 'type:Dataset,replica:false,distrib,') {
+    	    	//if(Manager.store.values('fq') != 'type:Dataset,replica:false') {	
         			  this.renderLinks(this.windowedLinks());
         			  this.renderHeader(perPage, offset, total);
         	    }
+        	    
+        	    
+        	    
     	    }
     	    
 	  

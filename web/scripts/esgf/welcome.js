@@ -2,34 +2,38 @@
     
 $(function(){
 	
-    	function addTextToStorage(fq,val) {
+    	function addTextToStorage(esgf_fq,val) {
     		
-    		if(fq == undefined) {
-    			if(val == '') {
-  	  				fq += 'type:Dataset;text:' + '*;';
-  	  			} else {
-  	  				fq += 'type:Dataset;text:' + val + ';';
-  	  			}
-  	  			localStorage['fq'] = fq;
-    		} else if(fq == null) {
-    			if(val == '') {
-  	  				fq += 'type:Dataset;text:' + '*;';
-  	  			} else {
-  	  				fq += 'type:Dataset;text:' + val + ';';
-  	  			}
-  	  			localStorage['fq'] = fq;
+    		//put dataset type
+    		ESGF.localStorage.put('esgf_fq','type:Dataset','type:Dataset');
+    		
+    		//put replica type
+    		ESGF.localStorage.put('esgf_fq','replica:false','replica:false');
+
+            //for search API
+      		//put in the dataset type
+            ESGF.localStorage.put('esgf_queryString','type:Dataset','type=Dataset');
+      		//put in the replica type (which for results is "false")
+            ESGF.localStorage.put('esgf_queryString','replica:false','replica=false');
+            
+            
+            
+            /*
+    		//put text 
+    		if(val == '') {
+    			ESGF.localStorage.put('esgf_fq','text:' + '*','text:' + '*');
     		} else {
-    			var duplicateFlag = isDuplicate(fq,val);
-      	  		//first make sure this text does not duplicate a previous text
-      	  		if(!duplicateFlag) {
-      	  			if(val == '') {
-      	  				fq += 'text:' + '*;';
-      	  			} else {
-      	  				fq += 'text:' + val + ';';
-      	  			}
-      	  			localStorage['fq'] = fq;
-      	  		}
+        		ESGF.localStorage.put('esgf_fq','text:' + val,'text:' + val);
     		}
+    		*/
+            
+    		//for search API
+    		if(val == '') {
+    			ESGF.localStorage.put('esgf_queryString','text:' + '*','query=' + '*');
+    		} else {
+        		ESGF.localStorage.put('esgf_queryString','text:' + val,'query=' + val);
+    		}
+    		
     	}
     	
     	/*
@@ -53,14 +57,21 @@ $(function(){
     	 * Search button event places the text in html5 storage and navigates user to the live search page
     	 */
     	$('#home_search-button').click(function(){
-    		//alert($('input#home_query').val());
     		var searchStr = $('input#home_query').val();
     		
     		if(ESGF.setting.storage) {
     			//get the previous local storage
-    			var fq = localStorage['fq'];
+    			//var fq = localStorage['fq'];
+
+    	        //get all of the fq parameters from the localstore
+    	        var esgf_fq = ESGF.localStorage.getAll('esgf_fq');
+    	        
+
+    	        ESGF.localStorage.printMap('esgf_fq');
+    			
+    			
     			//call the add text to storage methods to make it part of the fq string
-    			addTextToStorage(fq,searchStr);
+    			addTextToStorage(esgf_fq,searchStr);
     		}
       	  	location.href=window.location+'live';
     	});
@@ -75,7 +86,7 @@ $(function(){
     	    		var fq = localStorage['fq'];
     	    		addTextToStorage(fq,searchStr);
     			}
-          	  	location.href=window.location+'/live';
+          	  	location.href=window.location+'live';
     		}
     	});
     	

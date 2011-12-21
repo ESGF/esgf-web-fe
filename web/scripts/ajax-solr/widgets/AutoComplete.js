@@ -65,6 +65,9 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 	init: function() {
 		var self = this;
 		
+		/**
+		 * DOCUMENT ME
+		 */
 		$('#search-button').live('click',function(){
 			var value = $('input#query').val();
 
@@ -80,6 +83,7 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 				    	multiString[i] = '"' + multiString[i] + '"';
 				    }
 					ESGF.localStorage.put('esgf_fq','text:'+multiString[i],'text:'+multiString[i]);
+					ESGF.localStorage.put('esgf_queryString','text:'+multiString[i],'query='+multiString[i]);
 				}
 
 				self.manager.doRequest(0);
@@ -88,6 +92,9 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 		});
 		
 		
+		/**
+		 * DOCUMENT ME
+		 */
 		$(this.target).find('input').bind('keydown', function(e) {
 			if(self.requestSent === false && e.which === 13) {
 				var value = $('input#query').val();
@@ -103,6 +110,9 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 					    	multiString[i] = '"' + multiString[i] + '"';
 					    }
 						ESGF.localStorage.put('esgf_fq','text:'+multiString[i],'text:'+multiString[i]);
+						
+						ESGF.localStorage.put('esgf_queryString','text:'+multiString[i],'query='+multiString[i]);
+						
 					}
 					
 					self.manager.doRequest(0);
@@ -113,6 +123,9 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 		
 	},
 
+	/**
+	 * DOCUMENT ME
+	 */
   afterRequest: function () {
 	  
 	  $(this.target).find('input').val('');

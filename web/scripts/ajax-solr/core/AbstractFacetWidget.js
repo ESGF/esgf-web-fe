@@ -108,10 +108,16 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
     return function () {
       if (self.add(value)) {
     	  var key = self.fq(value);
+    	  
+    	  
     	  //for now duplicate val
           ESGF.localStorage.put('esgf_fq',key,key);
     	  
     	  
+          //add key= category:value value= category=value to the esgf_queryString map
+          ESGF.localStorage.put('esgf_queryString',key,key.replace(":", "="));
+          
+          
     	  if(ESGF.setting.storage) {
     		  
     		  /*
@@ -170,23 +176,33 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
 	var numFields = 0;
 	var facet = null;
 	
-	for (facet in self.manager.response.facet_counts.facet_fields[self.field]) {
-		if(self.manager.response.facet_counts.facet_fields[self.field].hasOwnProperty(facet)) {
-		    numFields += 1;
+
+	numFields += self.manager.response.facet_counts.facet_fields[self.field].length;
+	
+	if(self.manager.response.facet_counts.facet_fields[self.field] != undefined) {
+		for(var i=0;i<self.manager.response.facet_counts.facet_fields[self.field].length;i++) {
+			var facet_value = self.manager.response.facet_counts.facet_fields[self.field][i];
+    		i = i + 1;
+    		var count = self.manager.response.facet_counts.facet_fields[self.field][i];
+    		
 		}
 	}
 
 	var maxCount = 0;
 	var objectedItems = [];
-	for (facet in self.manager.response.facet_counts.facet_fields[self.field]) {
-		if(self.manager.response.facet_counts.facet_fields[self.field].hasOwnProperty(facet)) {
-		    var radix = 10;
-		    var count = parseInt(self.manager.response.facet_counts.facet_fields[self.field][facet],radix);
-		    if (count > maxCount) {
-			    maxCount = count;
-		    }
-			objectedItems.push({ facet: facet, count: count });
-		}
+	
+	for(var i=0;i<self.manager.response.facet_counts.facet_fields[self.field].length;i++) {
+		
+		var facet = self.manager.response.facet_counts.facet_fields[self.field][i];
+		i = i+1;
+		var radix = 10;
+	    var count = parseInt(self.manager.response.facet_counts.facet_fields[self.field][i],radix);
+
+		
+	    if(count > maxCount) {
+	    	maxCount = count;
+	    }
+	    objectedItems.push({facet:facet, count: count});
 	}
 	
 	objectedItems.sort(function (a, b) {
@@ -195,7 +211,7 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
 		} else {
 			return a.facet.value < b.facet.value ? -1 : 1;
 		}
-	});
+	});	
 	
 	var divFieldID = 'facet_value_' + self.field;
 	var stopValue = objectedItems.length;
@@ -214,6 +230,7 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
 		$('div#'+divFieldID).append('</div>');
 		$('div#'+divFieldID).append(AjaxSolr.theme('facet_content',stopValue,objectedItems,self));
 	}
+	
 	
   },
   
@@ -247,3 +264,50 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
     return (exclude ? '-' : '') + this.field + ':' + value;
   }
 });
+
+/*old
+for (facet in self.manager.response.facet_counts.facet_fields[self.field]) {
+	if(self.manager.response.facet_counts.facet_fields[self.field].hasOwnProperty(facet)) {
+	    numFields += 1;
+	}
+}
+
+var maxCount = 0;
+var objectedItems = [];
+for (facet in self.manager.response.facet_counts.facet_fields[self.field]) {
+	if(self.manager.response.facet_counts.facet_fields[self.field].hasOwnProperty(facet)) {
+	    var radix = 10;
+	    var count = parseInt(self.manager.response.facet_counts.facet_fields[self.field][facet],radix);
+	    if (count > maxCount) {
+		    maxCount = count;
+	    }
+		objectedItems.push({ facet: facet, count: count });
+	}
+}
+
+objectedItems.sort(function (a, b) {
+	if(Manager.sortType === 'sortbycount') {
+		return a.count > b.count ? -1 : 1;
+	} else {
+		return a.facet.value < b.facet.value ? -1 : 1;
+	}
+});
+
+var divFieldID = 'facet_value_' + self.field;
+var stopValue = objectedItems.length;
+if(objectedItems.length > (self.startingValue + self.incrementValue)) {
+	stopValue = (self.startingValue + self.incrementValue);
+}
+$(self.target).append('<div id="' + divFieldID + '"></div>');
+if(numFields > 0) {
+	$('div#'+divFieldID).append('<div>');
+	if(self.startingValue > 0){
+		$('div#'+divFieldID).append(AjaxSolr.theme('prevLink',stopValue,objectedItems,divFieldID,self));
+	}
+	if(stopValue === (this.startingValue + this.incrementValue)) {
+		$('div#'+divFieldID).append(AjaxSolr.theme('nextLink',divFieldID,self));
+	}
+	$('div#'+divFieldID).append('</div>');
+	$('div#'+divFieldID).append(AjaxSolr.theme('facet_content',stopValue,objectedItems,self));
+}
+*/

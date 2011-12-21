@@ -67,13 +67,9 @@
 package org.esgf.globusonline;
 
 import java.net.URI;
-import java.net.URL;
 
-import java.util.Enumeration;
 import java.util.Map;
-import java.util.Set;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Vector;
 
 import org.globusonline.*;
@@ -83,7 +79,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;

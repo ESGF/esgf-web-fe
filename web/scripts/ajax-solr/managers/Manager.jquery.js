@@ -121,9 +121,12 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
             	  
             	  //reset the localStorage for search constraints
             	  ESGF.localStorage.removeAll('esgf_fq');
-            	  
+
             	  //reset the localStorage esgf_queryString map
             	  ESGF.localStorage.removeAll('esgf_queryString');
+            	  
+            	  //reset the localStorage dataCart map
+            	  ESGF.localStorage.removeAll('dataCart');
             	  
             	  
             	  //legacy

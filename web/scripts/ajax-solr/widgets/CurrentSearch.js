@@ -76,8 +76,12 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     var i = null;
     
     var esgf_q = ESGF.localStorage.getAll('esgf_queryString');
+    
+  //remove everything from ajax-solr parameter store  
+	self.manager.store.remove('fq');
+    
     for(var k in esgf_q) {
-    	
+    	//alert('k ' + k);
     	if(k != '' && k != ' ') {
         	this.manager.store.addByValue('fq',k);
     	}
@@ -88,7 +92,7 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     
     for (i = 0, l = fq.length; i < l; i++) {
         var fqString = fq[i];
-        
+        //alert('fqString: ' + fqString);
         if(fqString != "" && fqString != " ") {
         	//leave out the 'type:Dataset' constraint 
             if(fqString.search('Dataset') == -1 && fqString.search('replica:false') == -1 && fqString.search('distrib') == -1) {

@@ -73,9 +73,7 @@
 			
 			var facet_arr = new Array();
 			
-			
 		    for (facet in self.manager.response.facet_counts.facet_fields) {
-
 		    	var label = self.findLabelFromFacet(facet);
 		    	var facet_obj = new Object();
 		    	var facet_val_arr = new Array();
@@ -87,7 +85,6 @@
 		    		var facet_value = self.manager.response.facet_counts.facet_fields[facet][i];
 		    		i = i + 1;
 		    		var count = self.manager.response.facet_counts.facet_fields[facet][i];
-		    		
 		    		
 		    		if(facet == 'project'){
 		    			if(count > facet_max_count) {
@@ -106,8 +103,9 @@
 		    			facet_val_arr.push(facet_value);
 		    		
 		    		} else if(matchesFacetValue(facet,facet_value)) {
-		    			var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
-					    
+		    			//var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
+		    			var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][1]);
+		    			
 		    			if(count > facet_max_count) {
 		    				facet_max_count = count;
 		    			}

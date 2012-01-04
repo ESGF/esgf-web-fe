@@ -28,6 +28,7 @@
 	    	 -->
 	    	 <div id="facet_browser_overlay"><a href="#" rel="#facet_overlay" style="font-size:10px" >Browse Categories</a></div>
 	    	<!-- <div><a href="#" style="font-size:10px">Advanced...&#9660;</a></div>  -->
+	    	<div id="search_help"><a href="http://www.esgf.org/wiki/ESGF_Web_Search_User_Guide" style="font-size:10px" >Search Help</a></div>
 	    </div>
 	   	
 	   	  

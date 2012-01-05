@@ -172,6 +172,9 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
         ESGF.localStorage.put('esgf_fq','replica:false','replica:false');
         Manager.store.addByValue('fq','replica:false');
         
+        if(ESGF.localStorage.get('esgf_queryString', 'offset') == undefined) {
+  		  ESGF.localStorage.put('esgf_queryString', 'offset', 'offset=' + 0);
+  	  	} 
         
         //for search API
   		//put in the dataset type
@@ -179,6 +182,9 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   		//put in the replica type (which for results is "false")
         ESGF.localStorage.put('esgf_queryString','replica:false','replica=false');
         
+        //if(ESGF.localStorage.get('esgf_queryString', 'offset') == undefined) {
+		//  ESGF.localStorage.put('esgf_queryString', 'offset', 'offset=' + 0);
+	    //}
         
         var searchQuery = ESGF.localStorage.toString('esgf_queryString');
         //ESGF.localStorage.printMap('esgf_queryString');

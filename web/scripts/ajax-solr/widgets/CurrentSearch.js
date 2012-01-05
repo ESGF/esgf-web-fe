@@ -95,7 +95,7 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
         //alert('fqString: ' + fqString);
         if(fqString != "" && fqString != " ") {
         	//leave out the 'type:Dataset' constraint 
-            if(fqString.search('Dataset') == -1 && fqString.search('replica:false') == -1 && fqString.search('distrib') == -1) {
+            if(fqString.search('Dataset') == -1 && fqString.search('replica:false') == -1 && fqString.search('distrib') == -1 && fqString.search('offset') == -1) {
             	
             	//check to see if this is a geospatial query (assuming 'east_degrees' is in every geo query)
                 //if it is -> need to change the current selection string

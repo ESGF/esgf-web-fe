@@ -237,8 +237,25 @@ AjaxSolr.PagerWidget = AjaxSolr.AbstractWidget.extend(
    * @returns {Function} The click handler for the page link.
    */
   clickHandler: function (page) {
-    var self = this;
-    return function () {
+	  var self = this;
+	  //alert('click handler page ' + page + ' ' + ((page - 1) * (self.manager.response.responseHeader.params && self.manager.response.responseHeader.params.rows || 10)));
+	    
+	  
+	  
+	  //alert('previous offset: ' + ESGF.localStorage.get('esgf_queryString', 'offset') + ' for page: ' + page + ' offset: ' + offset);
+	  var offset = ((page - 1) * (self.manager.response.responseHeader.params && self.manager.response.responseHeader.params.rows || 10));
+	  
+	  
+	      return function () {
+	    	  
+	    	  
+	    	  
+	    	  if(ESGF.localStorage.get('esgf_queryString', 'offset') == undefined) {
+	    		  ESGF.localStorage.put('esgf_queryString', 'offset', 'offset=' + 0);
+	    	  } else {
+	    		  ESGF.localStorage.update('esgf_queryString', 'offset', 'offset=' + offset);
+	    	  }
+	    	  
       self.manager.store.get('start').val((page - 1) * (self.manager.response.responseHeader.params && self.manager.response.responseHeader.params.rows || 10));
       self.manager.doRequest();
       return false;
@@ -299,22 +316,25 @@ AjaxSolr.PagerWidget = AjaxSolr.AbstractWidget.extend(
   },
 
   afterRequest: function () {
-	  
+	  /*
 	  if(ESGF.setting.storage) {
 		  var fq = localStorage['fq'];
 	  }
-      
-			   
+      */
+			//alert('offset stuff: ' + this.manager.response.responseHeader.params.start + ' ' + this.manager.response.responseHeader.params + ' ' + (this.manager.response.responseHeader.params && this.manager.response.responseHeader.params.start || 0));   
 	    	var perPage = parseInt(this.manager.response.responseHeader.params && this.manager.response.responseHeader.params.rows || 10);
     	    var offset = parseInt(this.manager.response.responseHeader.params && this.manager.response.responseHeader.params.start || 0);
     	    var total = parseInt(this.manager.response.response.numFound);
 
+    	    
     	    // Normalize the offset to a multiple of perPage.
     	    offset = offset - offset % perPage;
 
     	    this.currentPage = Math.ceil((offset + 1) / perPage);
     	    this.totalPages = Math.ceil(total / perPage);
-
+    	    
+    	    //alert('perPage: ' + perPage + ' offset: ' + offset + ' total: ' + total + ' currentPage: ' + this.currentPage + ' totalPages: ' + this.totalPages);
+    	    
     	    //erase BOTH the pagination and the "extra display"
     	    $(this.target).empty();
     	    $('#pager-header').empty();
@@ -335,13 +355,18 @@ AjaxSolr.PagerWidget = AjaxSolr.AbstractWidget.extend(
             	
             	var fq = localStorage['fq'];
 
+            	//alert('searchConstraint: ' + searchConstraint + ' ' + (searchConstraint != 'type:Dataset,replica:false,distrib,'));
             	
             	/* for now that means the localStorage ONLY has type:Dataset;,replica:false */
             	//if(Manager.store.values('fq') != 'type:Dataset,replica:false') {	
-                if(searchConstraint != 'type:Dataset,replica:false,distrib,') {
+            	
+            	//alert(this.windowedLinks());
+            	//alert('searchConstraint: ' + searchConstraint + ' ' + (searchConstraint != 'offset,type:Dataset,replica:false,distrib,'));
+                if(searchConstraint != 'offset,type:Dataset,replica:false,distrib,') {
     	    	//if(Manager.store.values('fq') != 'type:Dataset,replica:false') {	
-        			  this.renderLinks(this.windowedLinks());
-        			  this.renderHeader(perPage, offset, total);
+                	//alert('rendering...');
+                	this.renderLinks(this.windowedLinks());
+        			this.renderHeader(perPage, offset, total);
         	    }
         	    
         	    

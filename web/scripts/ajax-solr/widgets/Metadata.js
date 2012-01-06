@@ -193,7 +193,8 @@
     		for (var property in doc) {
         		
         		//only do this if it is NOT the title 
-        		if(property != 'title') {
+    			//also exclude the CF_VARIABLE
+        		if(property != 'title' && property != 'cf_standard_name') {
         			
         			var field = doc[property];
             		

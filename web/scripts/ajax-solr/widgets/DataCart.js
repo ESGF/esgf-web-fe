@@ -88,6 +88,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		$(".globusOnlineAllChildren").die('click');
 		$('.remove_dataset_from_datacart').die('click');
 		$("input#uber_script").die('click');
+		$("input#remove_all").die('click');
 		$('.go_individual_gridftp').die('click');
 		
 		//add the spinning wheel in case there is a delay in loading the items in the data cart
@@ -131,7 +132,10 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     				 	 'Filter over search constraints ' +
     				 	 '</td>' +
     				 	 '<td>' +
-    				 	 '<input id="uber_script" type="submit" value="Download All Selected" /> ' +
+    				 	 '<input id="remove_all" type="submit" value="Remove All" /> ' +
+    				 	 '</td>' +
+    				 	 '<td>' +
+    				 	 '<input id="uber_script" type="submit" value="WGET All Selected" /> ' +
     				 	 '</td>' +
     				 	 '</tr>' +
     				 	 '</table>' +
@@ -195,6 +199,39 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 				
 		});
 		
+		$("input#remove_all").live('click', function() {
+			
+			for(var i=0;i<self.selected_arr.length;i++) {
+				var selectedDocId = self.selected_arr[i];
+
+	        	//remove the dataset from the localStorage
+	        	ESGF.localStorage.remove('dataCart',selectedDocId);
+
+	        	//change from remove from cart to add to cart
+	        	$('a#ai_select_'+ selectedDocId.replace(/\./g, "_")).html('Add To Cart');
+	        	
+	        	
+			}    
+
+        	//re-issue request to search api
+        	Manager.doRequest(0);
+			
+			/*
+			var selectedItem = $.tmplItem(this);
+	    	
+	    	//get the selected id
+        	var selectedDocId = selectedItem.data.datasetId;
+
+        	//remove the dataset from the localStorage
+        	ESGF.localStorage.remove('dataCart',selectedDocId);
+
+        	//change from remove from cart to add to cart
+        	$('a#ai_select_'+ selectedDocId.replace(/\./g, "_")).html('Add To Cart');
+        	
+        	//re-issue request to search api
+        	Manager.doRequest(0);
+			*/
+		});
 		
 		/**
 		 * DOCUMENT ME
@@ -392,6 +429,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	     */
 	    $(".topLevel").live('change', function() {
 	    	
+	    	
 	        LOG.debug("top level changed");
 
 	        var currentValue = $(this).attr('checked');
@@ -399,10 +437,11 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	    	//grab the dataset id from the template
 	    	var selectedItem = $.tmplItem(this);
 	    	var selectedDocId = selectedItem.data.dataset_id;
-
+	    	/*
 	        $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDocId)).find(':checkbox').each( function(index) {
 	                    $(this).attr('checked', currentValue);
 	        });
+	        */
 	        
 	    });
 	    

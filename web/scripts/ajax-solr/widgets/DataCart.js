@@ -217,7 +217,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			var queryString = '/esg-search/wget/?';
 			//if the show all contents is the filter...then add the search constraints to the wget
             if(ESGF.setting.showAllContents == 'false') {
-            
+            	
 				// traverse through the constraints and add to the querystring
 				//for(var i in self.searchConstraints) {
 				for(var i=0;i<self.searchConstraints.length;i++) {
@@ -265,21 +265,22 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
             	
             }
             
+            
+            
+            
+            var form = '<form action="'+ queryString +'" method="post" >';
+            
             //iterate over the file_ids and add to query string
             //this can probably be collapsed into the loop above
             for(var i=0;i<file_ids.length;i++) {
 				var file_id = file_ids[i];
-				if(i < (file_ids.length-1)) {
-					queryString += 'file_id=' + file_id + '&'; 
-				} else {
-					queryString += 'file_id=' + file_id;
-				}
+				form += '<input type="hidden" name="file_id" value="' + file_id + '">';
 			}
-            
+            form += '</form>';
             //send request using a dynamically generated form with the query string as the action
             //the method should be post because the query string may be long
-            jQuery('<form action="'+ queryString +'" method="post" >'+ '' +'</form>')
-            .appendTo('body').submit().remove();
+            //jQuery('<form action="'+ queryString +'" method="post" >'+ '' +'</form>')
+            jQuery(form).appendTo('body').submit().remove();
 			
 			
 		});
@@ -342,27 +343,21 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     			}
             }
 			
-			for(var i=0;i<file_ids.length;i++) {
+            
+            var form = '<form action="'+ queryString +'" method="post" >';
+            
+            //iterate over the file_ids and add to query string
+            //this can probably be collapsed into the loop above
+            for(var i=0;i<file_ids.length;i++) {
 				var file_id = file_ids[i];
-				if(i < (file_ids.length-1)) {
-					queryString += 'file_id=' + file_id + '&'; 
-				} else {
-					queryString += 'file_id=' + file_id;
-				}
+				form += '<input type="hidden" name="file_id" value="' + file_id + '">';
 			}
-			
+            form += '</form>';
+            //send request using a dynamically generated form with the query string as the action
+            //the method should be post because the query string may be long
+            //jQuery('<form action="'+ queryString +'" method="post" >'+ '' +'</form>')
+            jQuery(form).appendTo('body').submit().remove();
             
-            LOG.debug(queryString);
-            
-            
-            //alert('rewrite: ' + self.rewriteTextQuery(queryString));
-            
-            
-            
-            //send request
-            jQuery('<form action="'+ self.rewriteTextQuery(queryString) +'" method="post">'+ '' +'</form>')
-            .appendTo('body').submit().remove();
-        	
 	    	
 	    });
 	    
@@ -847,3 +842,15 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 
 }(jQuery));
 
+/*
+//iterate over the file_ids and add to query string
+//this can probably be collapsed into the loop above
+for(var i=0;i<file_ids.length;i++) {
+	var file_id = file_ids[i];
+	if(i < (file_ids.length-1)) {
+		queryString += 'file_id=' + file_id + '&'; 
+	} else {
+		queryString += 'file_id=' + file_id;
+	}
+}
+*/

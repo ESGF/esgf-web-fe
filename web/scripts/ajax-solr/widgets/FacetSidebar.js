@@ -133,7 +133,20 @@
 		    	$( "#facetTemplate").tmpl(facet_arr, {
 		    		replaceWhiteSpaces : function (word) {
 	                    return replaceWhiteSpace(word);
-	                }
+	                },
+		    		truncate : function( value,numChars ) {
+		    			
+		    			value = replaceUnderscores(value);
+		    			//return (this.data + separator);
+		    			var returnedValue = '';
+		    			//if(value.length > numChars) {
+		    			//	returnedValue = value.substr(0,numChars) + ' ... ';
+		    			//} else {
+		    				returnedValue = value;
+		    			//}
+		    			
+		    			return returnedValue;
+		    		}
 		        })
 		    	.appendTo("#facetList")
 		    	.find( "a.showFacetValues" ).click(function() {
@@ -235,6 +248,10 @@
 		return convertedStr;
 	}
 	
+	function replaceUnderscores(word) {
+		var convertedStr = word.split('_').join(' '); 
+		return convertedStr;
+	}
 	
 	function matchesFacetValue(facet,value) {
 		var matchesFacetValue = false;
@@ -277,6 +294,8 @@
 		}
 		return isConstraint;
 	}
+	
+	
 	
 }(jQuery));
 

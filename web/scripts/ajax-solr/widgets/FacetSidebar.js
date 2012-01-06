@@ -163,7 +163,7 @@
 				var facet_value = $(this).html();
 				
 				//gets the long name...have to extract the short name for search
-				var label = $(this).parent().parent().find('a.showFacetValues').html();
+				var label = $(this).parent().parent().parent().find('a.showFacetValues').html();
 				
 				var facet = self.findFacetFromLabel(label);
 				

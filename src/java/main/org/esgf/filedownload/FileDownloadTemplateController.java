@@ -83,6 +83,7 @@ package org.esgf.filedownload;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -163,7 +164,7 @@ public class FileDownloadTemplateController {
     
     private static String solrURL="http://localhost:8983/solr/select";
     
-    private static String searchAPIURL = "http://localhost/esg-search/search?";
+    private static String searchAPIURL = "http://localhost:8081/esg-search/search?";
     
     private final static Logger LOG = Logger.getLogger(FileDownloadTemplateController.class);
 
@@ -210,16 +211,44 @@ public class FileDownloadTemplateController {
     public @ResponseBody String doGet(HttpServletRequest request) throws JSONException {
         System.out.println("In doGet");
         
-        return getDataCartUsingSearchAPI(request);
-        /*
-        if(!this.useSearchAPI) {
-            return getDataCart(request);
-        } else {
-            return getDataCartUsingSearchAPI(request);
-        }
-        */
+        long beginTime = System.nanoTime();
+        
+        String dataCartContents = getDataCartUsingSearchAPI(request);
+
+        long endTime = System.nanoTime();
+        
+        System.out.println("--TIME MEASUREMENT FOR LOADING DATACART--");
+        
+        //System.out.println("\tStart: " + beginTime);
+        
+        //System.out.println("\tEnd: " + endTime);
+
+        System.out.println("\tTotal Time: " + ((int)(endTime - beginTime)) + "ns");
+        
+        System.out.println("-----------------------------------------");
+        
+        return dataCartContents;
+        
     }
     
+    /**
+     * queryStringInfo(HttpServletRequest request)
+     * Private method that prints out the contents of the request.  Used mainly for debugging.
+     * 
+     * @param request
+     */
+    @SuppressWarnings("unchecked")
+    public static void queryStringInfo(HttpServletRequest request) {
+        System.out.println("--------Utils Query String Info--------");
+        Enumeration<String> paramEnum = request.getParameterNames();
+        
+        while(paramEnum.hasMoreElements()) { 
+            String postContent = (String) paramEnum.nextElement();
+            System.out.println(postContent+"-->"); 
+            System.out.println(request.getParameter(postContent));
+        }
+        System.out.println("--------End Utils Query String Info--------");
+    }
     
     /**
      * function getDataCartUsingSearchAPI gets a list of parameters from the request object and returns 
@@ -294,15 +323,26 @@ public class FileDownloadTemplateController {
         String [] names = request.getParameterValues("id[]");
         
         
+        String peer = request.getParameter("peer");
+        
         //only do anything if there is stuff in the datacart
         if(names != null) {
+            
+            String [] peers = peer.split(";");
+            
+            /*
+            for(int i=0;i<peers.length;i++) {
+                System.out.println("\n\nName: " + names[i] + " PEER: " + peers[i] + "\n");
+            }
+            */
+            
           //create a new list of docElements
             List<DocElement> docElements = new ArrayList<DocElement>();
             
             //iterate over the list of datasets in the id request paraemter
             for(int i=0;i<names.length;i++) {
                 
-                String queryString = preassembleQueryStringUsingSearchAPI(request);
+                String queryString = preassembleQueryStringUsingSearchAPI(request,peers[i]);
             
                 String dataset_id = names[i];
                 //System.out.println("dataset_id: " + i + " " + dataset_id);
@@ -382,6 +422,9 @@ public class FileDownloadTemplateController {
     private static JSONArray getJSONArrayUsingSearchAPI(String queryString,String dataset_id) {
     
         String marker = "\"response\":";
+        
+        System.out.println("\n\n\nQUERY STRING: " + queryString + "\n\n\n");
+        
         
         //get the json response for all files associated with dataset_id 
         String responseRawString = getResponseBodyUsingSearchAPI(queryString,dataset_id);
@@ -488,7 +531,6 @@ public class FileDownloadTemplateController {
         queryString += "&dataset_id=" + dataset_id;//replica=false";//"&dataset_id=" + "a";//dataset_id;
         
         System.out.println("\n\nResponse Body QueryString: " + queryString + "\n\n");
-        //System.out.println("S Q: " + searchAPIURL + queryString);
         
         method.setQueryString(queryString);
         
@@ -541,9 +583,7 @@ public class FileDownloadTemplateController {
         //note: these represent the 'keys' in the localStorage['dataCart'] map
         String [] names = request.getParameterValues("id[]");
         
-        if(names == null) {
-            //System.out.println("names is null");
-        }
+       
         
         String showAll = request.getParameter("showAll");
         
@@ -863,12 +903,18 @@ public class FileDownloadTemplateController {
      * @param request
      * @return
      */
-    private static String preassembleQueryStringUsingSearchAPI(HttpServletRequest request) {
+    private static String preassembleQueryStringUsingSearchAPI(HttpServletRequest request,String indexPeer) {
         
         String queryString = "";
         
         queryString += "format=application%2Fsolr%2Bjson";
         queryString += "&type=File";
+        
+        //System.out.println("INDEX PEER: " + indexPeer);
+        
+        if(!indexPeer.equals("undefined")) {
+            queryString += "&shards=" + indexPeer + ":8983/solr";
+        }
         
         if(request.getParameter("showAll").equals("false")) {
             
@@ -884,9 +930,9 @@ public class FileDownloadTemplateController {
               //append the 'fq' params to the query string
                 for(int i=0;i<fqParams.length;i++) {
                     String fqParam = fqParams[i];
-                    System.out.println("fqParam: " + fqParam);
+                    //System.out.println("fqParam: " + fqParam);
                     if(!fqParam.equals("") && !fqParam.equals(" ")) {
-                        System.out.println("\tfqParam not <space>");
+                        //System.out.println("\tfqParam not <space>");
                         if(!fqParam.contains("query")) {
                             queryString += "&" + fqParam;
                         } else {

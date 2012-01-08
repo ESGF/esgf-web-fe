@@ -150,8 +150,11 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             if ( jQuery.trim(this.innerHTML) == "Add To Cart") {
             	
             	//add to the datacart localstorage
-            	ESGF.localStorage.put('dataCart',evt.data.doc.id,evt.data.doc.id);
-
+            	if(evt.data.doc['esgf.index.peer'] != undefined) {
+                	ESGF.localStorage.put('dataCart',evt.data.doc.id,evt.data.doc['esgf.index.peer']);
+            	} else {
+                	ESGF.localStorage.put('dataCart',evt.data.doc.id,'undefined');
+            	}
             	
             	//add to the datacart searchstates localstorage
             	

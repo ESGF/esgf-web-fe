@@ -113,6 +113,9 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
     	
     	
+    	
+    	
+    	
     	//empty the carts tab and append/initialize the datacart table 
     	$('#carts').empty();
     	
@@ -606,6 +609,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
      */
     createTemplate: function() {
 
+    	
     	var self = this;
 
 
@@ -616,6 +620,19 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	//get the 'fq' parameter here
     	var fqParamArr = self.createFqParamArray();
 		
+    	//get the index peers
+    	var peerArr = '';
+    	for(var i=0;i<self.selected_arr.length;i++) {
+    		var id = self.selected_arr[i];
+    		var peer = ESGF.localStorage.get('dataCart',id);
+    		if(i != 0) {
+        		peerArr += ';' + peer;
+    		} else {
+    			peerArr += peer;
+    		}
+    		//alert('id: ' + id + ' peer: ' + peer);
+    	}
+    	
     	
 		//setup the query string
     	//we only send three parameters:
@@ -623,7 +640,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	//* showAll (ESGF.setting.showAllContents) - a boolean filter for file display (if true, files are filtered over the search constraints)
     	//* fq (fqParamArr) - an array of search constraints
 		//var queryStr = { "id" : arr , "shardType" : ESGF.setting.getShards, "shardsString" : shardsString, "fq" : fqParamArr, "q" : qParam, "showAll" : ESGF.setting.showAllContents};
-		var queryStr = {"id" : self.selected_arr, "showAll" : ESGF.setting.showAllContents, "fq" : fqParamArr}
+		var queryStr = {"id" : self.selected_arr, "peer" : peerArr, "showAll" : ESGF.setting.showAllContents, "fq" : fqParamArr}
 		
 		//issue a query to the getDataCart
     	self.getDataCart(queryStr);
@@ -653,7 +670,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			//Upon an error remove the spinning wheel and give an alert 
     		error: function() {
     			self.removeDataCartSpinWheel();
-    			alert('There is a problem with one of your dataset selections.  Please contact your administrator.');
+    			alert('There is a problem with one of your dataset selections.  Please contact your administrators.');
     			
             	//change from remove from cart to add to cart for all selected datasets
     			for(var i=0;i<query_arr.length;i++) {
@@ -678,6 +695,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		//add a spinning wheel to show user that progress is being made in finding the files
 		self.addDataCartSpinWheel();
 
+		//alert('queryStr: ' + queryStr.peer);
 		
 		$.ajax({
 			url: '/esgf-web-fe/solrfileproxy',
@@ -698,10 +716,12 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			 
     		error: function() {
     			self.removeDataCartSpinWheel();
-    			alert('There is a problem with one of your dataset selections.  Please contact your administrator.');
+    			alert('There is a problem with one of your dataset selections.  Please contact your administratorss.');
     			
             	//change from remove from cart to add to cart for all selected datasets
-    			for(var i=0;i<query_arr.length;i++) {
+    			
+    			for(var i=0;i<self.selected_arr.length;i++) {
+    			//for(var i=0;i<query_arr.length;i++) {
                 	$('a#ai_select_'+ arr[i].replace(/\./g, "_")).html('Add To Cart');
     			}
 			}

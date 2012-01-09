@@ -94,7 +94,7 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 				for(var key in queryStringMap) {
 					var keyStr = key;
 					if(keyStr.search('text') > -1) {
-						alert('remove ' + key + ' ' + queryStringMap[key]);
+						//alert('remove ' + key + ' ' + queryStringMap[key]);
 						ESGF.localStorage.remove('esgf_queryString',keyStr);
 					}
 				}
@@ -102,7 +102,7 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 				ESGF.localStorage.put('esgf_queryString','text:'+value,'query='+value);
 				var mapStr = ESGF.localStorage.toString('esgf_queryString');
 				
-				alert(mapStr);
+				//alert(mapStr);
 				self.manager.doRequest(0);
 			}
 			
@@ -140,7 +140,7 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 					for(var key in queryStringMap) {
 						var keyStr = key;
 						if(keyStr.search('text') > -1) {
-							alert('remove ' + keyStr + ' ' + queryStringMap[key]);
+							//alert('remove ' + keyStr + ' ' + queryStringMap[key]);
 							ESGF.localStorage.remove('esgf_queryString',keyStr);
 						}
 					}
@@ -150,7 +150,7 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 					ESGF.localStorage.put('esgf_queryString','text:'+value,'query='+value);
 					var mapStr = ESGF.localStorage.toString('esgf_queryString');
 					
-					alert(mapStr);
+					//alert(mapStr);
 					
 					self.manager.doRequest(0);
 				}

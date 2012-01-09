@@ -81,7 +81,6 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
 	self.manager.store.remove('fq');
     
     for(var k in esgf_q) {
-    	//alert('k ' + k);
     	if(k != '' && k != ' ') {
         	this.manager.store.addByValue('fq',k);
     	}

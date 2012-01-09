@@ -96,7 +96,11 @@ public class SolrProxyController {
 
 
     private String relay(HttpServletRequest request, HttpServletResponse response) {
-
+        System.out.println("--TIME MEASUREMENT FOR LOADING RESULTS--");
+        
+        long beginTime = System.nanoTime();
+        
+        
         String queryString = request.getQueryString();
         LOG.debug("queryString=" + queryString);
         String requestUri = request.getRequestURI();
@@ -139,6 +143,13 @@ public class SolrProxyController {
 
         LOG.debug("Solr URL = " + urlString);
         //LOG.debug("responseBody = " + responseBody);
+        
+        long endTime = System.nanoTime();
+        
+        System.out.println("\tTotal Time: " + ((int)(endTime - beginTime)) + "ns");
+        
+        System.out.println("-----------------------------------------");
+        
         return responseBody;
     }
 }

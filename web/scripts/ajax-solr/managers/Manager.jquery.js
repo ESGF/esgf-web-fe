@@ -96,7 +96,11 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           queryString += self.loadFacetNames(namesArr);
           //assemble the search constraints
           queryString += self.loadSearchConstraints();
-
+          
+          
+          //for local development
+          //queryString += '&shards=dev.esg.anl.gov:8983/solr,localhost:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,pcmdi9.llnl.gov:8983/solr';
+          
           
           
           var revisedQueryString = self.rewriteTextQuery(queryString);

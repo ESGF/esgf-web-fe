@@ -90,6 +90,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		$("input#uber_script").die('click');
 		$("input#remove_all").die('click');
 		$('.go_individual_gridftp').die('click');
+		$(".topLevel").die('change');
+		$(".fileLevel").die('change');
 		
 		//add the spinning wheel in case there is a delay in loading the items in the data cart
         $(this.target).html($('<img/>').attr('src', 'images/ajax-loader.gif'));
@@ -423,7 +425,29 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
         	
 	    });
 	    
-	    
+	    /**
+	     * Event for checkbox file selection
+	     * NOTE: THIS NEEDS TO BE FIXED
+	     */
+	    $(".fileLevel").live('change', function() {
+	    	/*
+	    	var self = this;
+	    	var currentValue = $(this).attr('checked');
+			//if it is already checked, then uncheck both this and the topLevel 
+	    	if(!currentValue) {
+	    		alert('find element: ' + $(this).parent().parent().parent().html());
+	    		var selectedItem = $.tmplItem(this);
+		    	var selectedDocId = selectedItem.data.datasetId;
+		    	
+		    	alert('selectedItem: ' + selectedItem + ' selectedDocId: ' + selectedDocId);
+		    	$(this).parent().parent().parent().find('input').removeAttr('checked');//attr('checked','false');
+            	
+		    	//$(this).parent().parent().parent().find('input').attr('checked','false');
+		    } else {
+	    		alert('currently checked');
+	    	}
+	    	*/
+	    });
 	    
 	    
 	    /**
@@ -431,21 +455,47 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	     * NOTE: THIS NEEDS TO BE FIXED
 	     */
 	    $(".topLevel").live('change', function() {
+	    	    	
+	    	//alert('top level changed');
+	    	
+	    	var self = this;
+	    	
+	    	var currentValue = $(this).attr('checked');
+
+	    	
+	    	if(currentValue) {
+	    		var selectedItem = $.tmplItem(this);
+		    	var selectedDocId = selectedItem.data.datasetId;
+		    	
+		    	var rowsId = selectedDocId.replace(/\./g,"_")
+		    	//$(this).parent().parent().parent().find('tr.rows_'+ self.replacePeriod(selectedDocId)).each( function(index) {
+                $(this).parent().parent().parent().find('tr.rows_'+ rowsId).each( function(index) {
+                	
+                	var isChecked = $(this).find('input').attr('checked');
+                	
+                	if(!isChecked) {
+                    	$(this).find('input').attr('checked','true');
+                	}
+                	
+		        });
+	    	} else {
+	    		
+	    		var selectedItem = $.tmplItem(this);
+		    	var selectedDocId = selectedItem.data.datasetId;
+		    	
+		    	var rowsId = selectedDocId.replace(/\./g,"_")
+		    	
+		    	$(this).parent().parent().parent().find('tr.rows_'+ rowsId).each( function(index) {
+                	
+                	var isChecked = $(this).find('input').attr('checked');
+                	
+                	if(isChecked) {
+                    	$(this).find('input').removeAttr('checked');//attr('checked','false');
+                    }
+		        });
+	    	}
 	    	
 	    	
-	        LOG.debug("top level changed");
-
-	        var currentValue = $(this).attr('checked');
-
-	    	//grab the dataset id from the template
-	    	var selectedItem = $.tmplItem(this);
-	    	var selectedDocId = selectedItem.data.dataset_id;
-	    	/*
-	        $(this).parent().parent().parent().find('tr.rows_'+ replacePeriod(selectedDocId)).find(':checkbox').each( function(index) {
-	                    $(this).attr('checked', currentValue);
-	        });
-	        */
-	        
 	    });
 	    
 	    

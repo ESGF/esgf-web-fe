@@ -26,7 +26,7 @@
 </script>
 
 <script id="cartTemplateStyledNew" type="text/x-jquery-tmpl">
-	<tr class="top_level_data_item ${$item.replacePeriods(datasetId)}" id="${$item.replacePeriods(datasetId)}" >
+	<tr style="margin-top:50px;" class="top_level_data_item ${$item.replacePeriods(datasetId)}" id="${$item.replacePeriods(datasetId)}" >
 		<td style="width: 40px;"><input class="topLevel" type="checkbox" id="${datasetId}" name="${datasetId}" checked="true" /> </td>
 		<td style="width: 300px;font-size:13px"><div style="word-wrap: break-word;font-weight:bold">${datasetId} (${count} files)</div></td>
 		<td style="font-size:13px;float:right" id="${datasetId}"> 
@@ -48,7 +48,7 @@
    		{{each(i) file}}
         	{{if i > 1}}
 				<tr class="rows_${$item.replacePeriods(datasetId)}" style="display:none">
-					<td style="width: 40px;"><input type="checkbox" class="fileId" id="${fileId}" checked="true" value="${urls.url[1]}"/></td>
+					<td style="width: 40px;"><input style="margin-left: 10px;" class="fileLevel" type="checkbox" class="fileId" id="${fileId}" checked="true" value="${urls.url[1]}"/></td>
 					<td style="width: 425px;padding-left:10px;font-size:11px;"><div style="word-wrap: break-word;"> ${$item.abbreviate(fileId)} (${$item.sizeConversion(size)})</div></td>
 					{{each(j) urls.url}}
 						{{if services.service[j] == 'HTTPServer'}}
@@ -64,8 +64,15 @@
 				</tr>		
 			{{/if}}
 		{{/each}}
-		
-
+	<tr>
+		<td></td>
+	</tr>	
+	<tr>
+		<td></td>
+	</tr>
+	<tr>
+		<td></td>
+	</tr>
 </script>
 
 <%-- 

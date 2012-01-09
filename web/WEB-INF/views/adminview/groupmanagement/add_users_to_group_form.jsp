@@ -1,7 +1,7 @@
 <div class="simple_overlay" id="addUsersToGroups">
 	<form id="add_group_form" action="" method="post" >
 		<h3 id="add_group_form_title">Add Users To Group</h3>
-		<div id="potential_users"></div>
+		<div id="potential_users" style="max-height: 400px; overflow-y: auto"></div>
 		<p>
 			<input type="hidden" name="type" id="type" value="editUsersInGroup"/>
 			<input type="hidden" name="groupName" id="groupName" value=""/>

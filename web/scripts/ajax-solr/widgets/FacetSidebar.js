@@ -91,6 +91,7 @@
 		    				facet_max_count = count;
 		    			}
 		    		
+		    			
 		    			facet_val_counts.push(count);
 		    			facet_val_arr.push(facet_value);
 		    		} else if(!isConstraint(facet)) {
@@ -118,6 +119,8 @@
 		    	
 		    	facet_obj.Facet_name = facet;
 		    	facet_obj.Facet_label = label;
+		    	
+		    	
 		    	facet_obj.Facet_values = facet_val_arr;
 		    	facet_obj.Facet_counts = facet_val_counts;
 		    	facet_obj.Facet_max_count = facet_max_count;
@@ -142,7 +145,7 @@
 		    			//if(value.length > numChars) {
 		    			//	returnedValue = value.substr(0,numChars) + ' ... ';
 		    			//} else {
-		    				returnedValue = value;
+		    			returnedValue = value;
 		    			//}
 		    			
 		    			return returnedValue;
@@ -151,10 +154,19 @@
 		    	.appendTo("#facetList")
 		    	.find( "a.showFacetValues" ).click(function() {
 	                var selectedItem = $.tmplItem(this);
+	                
+	                
+	                /*
 	                for(var i = 0;i<selectedItem.data.Facet_values.length;i++) {
 	                	var convertedStr = replaceWhiteSpace(selectedItem.data.Facet_values[i]);
-	                    $('li#' + selectedItem.data.Facet_name + '_' + selectedItem.data.Facet_values[i]).toggle();
+		                
+	                    //$('li#' + selectedItem.data.Facet_name + '_' + selectedItem.data.Facet_values[i]).toggle();
+		                //$('li.' + selectedItem.data.Facet_name).toggle();
+		                
 	                }
+	                */
+	                
+	                $('li.' + selectedItem.data.Facet_name).toggle();
 	                
 		   		});
 		    }

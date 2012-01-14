@@ -119,17 +119,40 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     
     if(doc.url instanceof Array) {
     	for(var i=0;i<doc.url.length;i++) {
+    		
     		var url = doc.url[i];
+    		
+    		//alert('url: ' + url);
     		if(url.search("LAS") > -1) {
     	    	var tuple = url.split("\|");
         	    output += '<span class="actionitem ai_las"><a href="' + tuple[0] + '" target="_blank">Visualize and Analyze</a></span>';
     	    } else if(url.search("OPENDAP") > -1) {
     	    	var tuple = url.split("\|");
         	    output += '<span class="actionitem ai_las"><a href="' + tuple[0] + '" target="_blank">OPENDAP</a></span>';
-    		}
+    		} 
     	}
     }
-   
+    
+    if(doc.xlink != undefined) {
+        var techNote = doc.xlink;
+        
+        for (var i=0;i<techNote.length;i++) {
+        	//url.length - 1 => "Technical Note"
+        	//url.length - 2 => <type of technical note>
+        	//url.length - 3 => <physical url of technical note>
+        	
+        	var url = techNote[i].split("|");
+        	
+    	    output += '<span class="actionitem ai_las"><a href="' + url[url.length-3] + '" target="_blank">' + url[url.length-2] + '</a></span>';
+        } 
+        
+        /*
+        if(doc.xlink.search("Technical Note") > -1) {
+	    	var tuple = url.split("\|");
+    	    output += '<span class="actionitem ai_las"><a href="' + '#' + '" target="_blank">Technical Note</a></span>';
+		}
+		*/
+    }
     
     if (ESGF.setting.annotate === true) {
 

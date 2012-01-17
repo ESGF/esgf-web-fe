@@ -100,7 +100,8 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           
           //for local development
           //queryString += '&shards=dev.esg.anl.gov:8983/solr,localhost:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,pcmdi9.llnl.gov:8983/solr';
-          
+          //queryString += '&shards=dev.esg.anl.gov:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,localhost:8983/solr';
+          queryString += '&shards=localhost:8983/solr';
           
           
           var revisedQueryString = self.rewriteTextQuery(queryString);
@@ -274,6 +275,18 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
             		//alert('constraint: ' + constraint + ' queryClause: ' + queryClause);
             		//fullText += queryClause + ' ';
             		fullText = fullText + queryClause[1] + ' ';
+        		} 
+        		//process the offset/pagination
+        		else if(constraint.search('offset=') > -1) {
+        			//alert('offset: ' + constraint + ' ESGF.setting.paginationOn: ' + ESGF.setting.paginationOn);
+        			if(ESGF.setting.paginationOn == 'false') {
+        				//alert('use offset = 0')
+        				newQueryString += '&' + 'offset=0';
+        			} else {
+        				//alert('use the standard offset and set paginationOn to false');
+            			ESGF.setting.paginationOn = 'false';
+            			newQueryString += '&' + constraint;
+        			}
         		} else {
         			newQueryString += '&' + constraint;
         		}

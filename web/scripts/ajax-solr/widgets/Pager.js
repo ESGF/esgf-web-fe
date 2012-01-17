@@ -240,25 +240,22 @@ AjaxSolr.PagerWidget = AjaxSolr.AbstractWidget.extend(
 	  var self = this;
 	  //alert('click handler page ' + page + ' ' + ((page - 1) * (self.manager.response.responseHeader.params && self.manager.response.responseHeader.params.rows || 10)));
 	    
-	  
-	  
 	  //alert('previous offset: ' + ESGF.localStorage.get('esgf_queryString', 'offset') + ' for page: ' + page + ' offset: ' + offset);
 	  var offset = ((page - 1) * (self.manager.response.responseHeader.params && self.manager.response.responseHeader.params.rows || 10));
 	  
 	  
-	      return function () {
-	    	  
-	    	  
-	    	  
-	    	  if(ESGF.localStorage.get('esgf_queryString', 'offset') == undefined) {
-	    		  ESGF.localStorage.put('esgf_queryString', 'offset', 'offset=' + 0);
-	    	  } else {
-	    		  ESGF.localStorage.update('esgf_queryString', 'offset', 'offset=' + offset);
-	    	  }
-	    	  
-      self.manager.store.get('start').val((page - 1) * (self.manager.response.responseHeader.params && self.manager.response.responseHeader.params.rows || 10));
-      self.manager.doRequest();
-      return false;
+	return function () {
+
+		ESGF.setting.paginationOn = 'true';	
+		
+		if(ESGF.localStorage.get('esgf_queryString', 'offset') == undefined) {
+			ESGF.localStorage.put('esgf_queryString', 'offset', 'offset=' + 0);
+	    } else {
+	    	ESGF.localStorage.update('esgf_queryString', 'offset', 'offset=' + offset);
+	    }
+		self.manager.store.get('start').val((page - 1) * (self.manager.response.responseHeader.params && self.manager.response.responseHeader.params.rows || 10));
+		self.manager.doRequest();
+		return false;
     }
   },
 

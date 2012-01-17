@@ -172,12 +172,53 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             selected[evt.data.doc.id] = doc;
             if ( jQuery.trim(this.innerHTML) == "Add To Cart") {
             	
-            	//add to the datacart localstorage
-            	if(evt.data.doc['esgf.index.peer'] != undefined) {
-                	ESGF.localStorage.put('dataCart',evt.data.doc.id,evt.data.doc['esgf.index.peer']);
+            	//alert('adding to cart');
+            	if(evt.data.doc['xlink'] != undefined) {
+            		//alert('xlink defined');
+            		//alert(evt.data.doc['xlink']);
+            		//add to the datacart localstorage
+                	if(evt.data.doc['esgf.index.peer'] != undefined) {
+                		
+                		var datasetInfo = {'peer' : evt.data.doc['esgf.index.peer'] , 'xlink' : evt.data.doc['xlink']};
+                		
+                    	ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
+                	
+                	
+                	} else {
+                    
+                		//alert('peer should be undefined');
+                		
+                		var datasetInfo = {'peer' : 'undefined' , 'xlink' : evt.data.doc['xlink']};
+                		
+                		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
+                	
+                	
+                	}
+            		
             	} else {
-                	ESGF.localStorage.put('dataCart',evt.data.doc.id,'undefined');
+            		//alert('xlink undefined');
+            	
+            		//add to the datacart localstorage
+                	if(evt.data.doc['esgf.index.peer'] != undefined) {
+                    
+                		var datasetInfo = {'peer' : evt.data.doc['esgf.index.peer'] , 'xlink' : 'undefined' };
+                		
+                		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
+                	
+                	
+                	} else {
+                		//alert('peer should be undefined');
+                		var datasetInfo = {'peer' : 'undefined' , 'xlink' : 'undefined' };
+                		
+                		
+                		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
+                	
+                	
+                	}
+            	
             	}
+            	
+            	
             	
             	//add to the datacart searchstates localstorage
             	

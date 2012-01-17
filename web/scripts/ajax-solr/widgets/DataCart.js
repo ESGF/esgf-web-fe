@@ -90,6 +90,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		$("input#uber_script").die('click');
 		$("input#remove_all").die('click');
 		$('.go_individual_gridftp').die('click');
+		$('.technotes').die('click');
 		$(".topLevel").die('change');
 		$(".fileLevel").die('change');
 		
@@ -168,6 +169,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
         $("#datasetList").empty();
 		
         
+        
 		//create the data cart template
         self.createTemplate(self.selected_arr);
 		
@@ -181,10 +183,35 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	     */
 		$('#myTabs').live('tabsselect', function(event, ui) {
 			if (ui.index == 1) {
+				//leave the pagination on
+				ESGF.setting.paginationOn = 'true';	
+				//alert('setting paginationOn to true');
+				
 				Manager.doRequest(0);
 			}
 			
 		});
+		
+		 
+	    $('.technotes').live('click',function(){
+	    	var self = this;
+	    	
+	    	var selectedItem = $.tmplItem(this);
+	    	
+	    	//get the selected id
+        	var datasetId = selectedItem.data.datasetId;
+
+	    	if(this.innerHTML === "Show Technotes") {
+                this.innerHTML="Hide Technotes";
+            } else {
+                this.innerHTML="Show Technotes";
+            }
+	    	
+	    	var newWord = datasetId.replace(/\./g,"_");
+	        var newNewWord = newWord.replace(":","_");
+	        
+	    	$('tr.rows_'+ newNewWord + '_technotes').toggle();
+	    });
 		
 		/**
 		 * When a user selects a new radio button the global variable "showAllContents" should be changed
@@ -548,8 +575,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	        
 	        
 	    });
-	    
-	    
+	   
 	    
 	    /**
 	     * Click event for launching globus online bulk data transfer
@@ -608,6 +634,9 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	    });
 	    
 	},
+
+    
+    
 	
 	rewriteTextQuery: function(queryString) {
     	var newQueryString = '';
@@ -670,6 +699,34 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	//get the 'fq' parameter here
     	var fqParamArr = self.createFqParamArray();
 		
+    	
+
+    	var peerArr = '';
+    	var technoteArr = '';
+    	
+    	for(var i=0;i<self.selected_arr.length;i++) {
+    		var id = self.selected_arr[i];
+    		var datasetInfo = ESGF.localStorage.get('dataCart',id);
+    		
+    		var peer = datasetInfo.peer;
+    		if(i != 0) {
+        		peerArr += ';' + peer;
+    		} else {
+    			peerArr += peer;
+    		}
+    		
+    		var xlink = datasetInfo.xlink;
+    		if(i != 0) {
+        		technoteArr += ';' + xlink;
+    		} else {
+    			technoteArr += xlink;
+    		}
+    	}
+    	
+    	//alert('peerArr: ' + peerArr);
+    	//alert('technoteArr: ' + technoteArr + ' ' + technoteArr.length);
+    	
+    	/*
     	//get the index peers
     	var peerArr = '';
     	for(var i=0;i<self.selected_arr.length;i++) {
@@ -684,13 +741,27 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	}
     	
     	
+    	
+    	*/
+    	
+    	
+    	LOG.debug("BEGIN DATACART CONTENTS");
+    	LOG.debug("ID: " + self.selected_arr);
+    	LOG.debug("PEER: " + peerArr);
+    	LOG.debug("TECHNOTE: " + technoteArr);
+    	LOG.debug("SHOWALL: " + ESGF.setting.showAllContents);
+    	LOG.debug("FQ: " + fqParamArr + " " + fqParamArr.length);
+    	
+    	LOG.debug("END DATACART CONTENTS");
+    	
+    	
 		//setup the query string
     	//we only send three parameters:
     	//* id (self.selected_arr) - an arry of datasets that have been selected for the datacart to display
     	//* showAll (ESGF.setting.showAllContents) - a boolean filter for file display (if true, files are filtered over the search constraints)
     	//* fq (fqParamArr) - an array of search constraints
 		//var queryStr = { "id" : arr , "shardType" : ESGF.setting.getShards, "shardsString" : shardsString, "fq" : fqParamArr, "q" : qParam, "showAll" : ESGF.setting.showAllContents};
-		var queryStr = {"id" : self.selected_arr, "peer" : peerArr, "showAll" : ESGF.setting.showAllContents, "fq" : fqParamArr}
+		var queryStr = {"id" : self.selected_arr, "peer" : peerArr, "technotes" : technoteArr, "showAll" : ESGF.setting.showAllContents, "fq" : fqParamArr};
 		
 		//issue a query to the getDataCart
     	self.getDataCart(queryStr);
@@ -835,6 +906,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	
     	if(data != null) {
     		
+    		//alert('showing');
     		
     		var fileDownloadTemplate = data.doc;
     		
@@ -876,7 +948,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
             	var id = $(this).parent().parent().parent().html();
                 
             	$('tr.rows_'+self.replacePeriod(selectedDocId)).toggle();
-                
+            	
             	
             });
     		
@@ -897,7 +969,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     replacePeriod: function (word)
     {
         var newWord = word.replace(/\./g,"_");
-        return newWord;
+        var newNewWord = newWord.replace(":","_");
+        return newNewWord;
     },
 	
 

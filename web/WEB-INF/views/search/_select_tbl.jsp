@@ -45,11 +45,25 @@
 	<tr>
 		<td></td>
 	</tr>
+{{if technotes.technotes.technote.length > 2}}
+	<tr >
+		<td></td><td style="cursor:pointer"><a href="#" class="technotes">Show Technotes</a></td>
+	</tr>
+	{{each(k) technotes.technotes.technote}}
+		{{if technotes.technotes.technote[k].name != 'technoteName'}}
+			<tr class="rows_${$item.replacePeriods(datasetId)}_technotes" style="display:none">
+				<td></td><td><a style="margin-left:20px" href="${technotes.technotes.technote[k].location}" target="_blank" >${technotes.technotes.technote[k].name}</a> </td>
+			</tr>
+		{{/if}}
+	{{/each}}
+{{/if}}
    		{{each(i) file}}
         	{{if i > 1}}
 				<tr class="rows_${$item.replacePeriods(datasetId)}" style="display:none">
 					<td style="width: 40px;"><input style="margin-left: 10px;" class="fileLevel" type="checkbox" class="fileId" id="${fileId}" checked="true" value="${urls.url[1]}"/></td>
-					<td style="width: 425px;padding-left:10px;font-size:11px;"><div style="word-wrap: break-word;"> ${$item.abbreviate(fileId)} (${$item.sizeConversion(size)})</div></td>
+
+					<td style="width: 325px;padding-left:10px;font-size:11px;"><div style="word-wrap: break-word;"> ${$item.abbreviate(fileId)} (${$item.sizeConversion(size)}) </div></td>
+
 					{{each(j) urls.url}}
 						{{if services.service[j] == 'HTTPServer'}}
 							<td id="${$item.replacePeriods(datasetId)}_http" style="float:right;font-size:11px;"><div id="${urls.url[j]}" style="word-wrap: break-word;vertical-align:middle"><a href="${urls.url[j]}">HTTP </a></div></td>
@@ -61,6 +75,11 @@
 							<td id="${$item.replacePeriods(datasetId)}_openid" style="float:right;font-size:11px;"><div id="${urls.url[j]}" style="word-wrap: break-word;vertical-align:middle"><a href="${urls.url[j]}">OPENDAP </a></div></td>
 	   					{{/if}}
 					{{/each}}
+					{{if technotes.technote.length > 2}}
+						<td id="${$item.replacePeriods(datasetId)}_openid" style="float:right;font-size:11px;"><div id="d" style="word-wrap: break-word;vertical-align:middle"><a href="${technotes.technote[2].location}" title="${technotes.technote[2].name}" target="_blank">TECHNOTE </a></div></td>
+	   				{{/if}}	
+
+					
 				</tr>		
 			{{/if}}
 		{{/each}}

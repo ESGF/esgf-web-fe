@@ -16,6 +16,9 @@ public class DocElement implements DataCartElement {
     private String hasOpenDap;
     private String hasGridFTP;
     private List<FileElement> fileElements;
+
+
+    private TechnotesElement technotesElement;
     
     public DocElement() {
         this.datasetId = new String("");
@@ -23,12 +26,24 @@ public class DocElement implements DataCartElement {
         FileElement blankElement = new FileElement();
         this.fileElements.add(blankElement);
         this.fileElements.add(blankElement);
+        this.technotesElement = new TechnotesElement();
         this.setCount(0);
         this.setHasGridFTP("0");
         this.setHasHttp("0");
         this.setHasOpenDap("0");
+        
+        
     }
     
+
+    public TechnotesElement getTechnotesElement() {
+        return technotesElement;
+    }
+
+
+    public void setTechnotesElement(TechnotesElement technotesElement) {
+        this.technotesElement = technotesElement;
+    }
     
     public String getDatasetId() {
         return datasetId;
@@ -94,7 +109,6 @@ public class DocElement implements DataCartElement {
     public void addFileElement(FileElement fileElement) {
         if(fileElement != null) {
             this.fileElements.add(fileElement);
-            this.count++;
         }
     }
     
@@ -155,6 +169,19 @@ public class DocElement implements DataCartElement {
         }
     }
     
+
+    public void addTechnote(TechnoteElement te) {
+        if(te != null) {
+            this.technotesElement.addTechnoteElement(te);
+        }
+    }
+    
+    public void removeTechnote(TechnoteElement te) {
+        if(te != null) {
+            this.technotesElement.removeTechnoteElement(te);
+        }
+    }
+    
     public void addURLElement(String fileId, String url) {
         if(fileId != null && url != null) {
             for(int i=0;i<this.fileElements.size();i++) {
@@ -201,7 +228,7 @@ public class DocElement implements DataCartElement {
         Element countEl = new Element("count");
         countEl.addContent(Integer.toString(count));
         docEl.addContent(countEl);
-        
+
         for(int i=0;i<this.fileElements.size();i++) {
             FileElement fe = this.fileElements.get(i);
             Element fileEl = this.fileElements.get(i).toElement();
@@ -214,6 +241,7 @@ public class DocElement implements DataCartElement {
             if(fe.getHasGrid().equals("true")) {
                 this.hasGridFTP = new String("1");
             }
+
             docEl.addContent(fileEl);
         }
 
@@ -229,14 +257,20 @@ public class DocElement implements DataCartElement {
         hasGridFTPEl.addContent(this.hasGridFTP);
         docEl.addContent(hasGridFTPEl);
         
+        System.out.println("\n\n\nADDING TECHNOTES\n\n\n");
+        Element technotesEl = new Element("technotes");
+        technotesEl.addContent(this.technotesElement.toElement());
+        docEl.addContent(technotesEl);
+        
         return docEl;
     }
     
    
     
+    
     public String toXML() {
         String xml = "";
-        
+
         Element docElement = this.toElement();
 
         XMLOutputter outputter = new XMLOutputter();
@@ -247,59 +281,7 @@ public class DocElement implements DataCartElement {
     
     public static void main(String [] args) {
         
-        DocElement de = new DocElement();
-        
-        String datasetId = "datasetId1";
-        de.setDatasetId(datasetId);
-        
-        List<FileElement> listFe = new ArrayList<FileElement>();
-        
-        
-        FileElement fe = new FileElement();
-        
-        ServicesElement se = new ServicesElement();
-        String service = "service1";
-        se.addService(service);
-        service = "service2";
-        se.addService(service);
-        fe.setServicesElement(se);
-        
-        URLSElement ue = new URLSElement();
-        String url = "url1";
-        ue.addURL(url);
-        url = "url2";
-        ue.addURL(url);
-        fe.setUrlsElement(ue);
-
-        MIMESElement me = new MIMESElement();
-        String mime = "mime1";
-        me.addMIME(mime);
-        mime = "mime2";
-        me.addMIME(mime);
-        fe.setMimesElement(me);
-        
-        String fileId = "fileId1";
-        fe.setFileId(fileId);
-        
-        String title = "title1";
-        fe.setTitle(title);
-        
-        String size = "size1";
-        fe.setSize(size);
-        
-        String hasGrid = "1";
-        fe.setHasGrid(hasGrid);
-        
-        String hasHttp = "1";
-        fe.setHasHttp(hasHttp);
-
-        listFe.add(fe);
-        
-        de.setFileElements(listFe);
-        
-        System.out.println(de);
-        listFe.add(fe);
-        System.out.println(de.toXML());
+       
         
         
     }

@@ -240,6 +240,8 @@ AjaxSolr.PagerWidget = AjaxSolr.AbstractWidget.extend(
 	  var self = this;
 	  //alert('click handler page ' + page + ' ' + ((page - 1) * (self.manager.response.responseHeader.params && self.manager.response.responseHeader.params.rows || 10)));
 	    
+	 
+	  
 	  //alert('previous offset: ' + ESGF.localStorage.get('esgf_queryString', 'offset') + ' for page: ' + page + ' offset: ' + offset);
 	  var offset = ((page - 1) * (self.manager.response.responseHeader.params && self.manager.response.responseHeader.params.rows || 10));
 	  
@@ -247,7 +249,6 @@ AjaxSolr.PagerWidget = AjaxSolr.AbstractWidget.extend(
 	return function () {
 
 		ESGF.setting.paginationOn = 'true';	
-		
 		if(ESGF.localStorage.get('esgf_queryString', 'offset') == undefined) {
 			ESGF.localStorage.put('esgf_queryString', 'offset', 'offset=' + 0);
 	    } else {

@@ -185,7 +185,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			if (ui.index == 1) {
 				//leave the pagination on
 				ESGF.setting.paginationOn = 'true';	
-				//alert('setting paginationOn to true');
+				
 				
 				Manager.doRequest(0);
 			}
@@ -346,6 +346,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 				form += '<input type="hidden" name="file_id" value="' + file_id + '">';
 			}
             form += '</form>';
+            
+            
             //send request using a dynamically generated form with the query string as the action
             //the method should be post because the query string may be long
             //jQuery('<form action="'+ queryString +'" method="post" >'+ '' +'</form>')

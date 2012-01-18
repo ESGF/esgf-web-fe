@@ -177,9 +177,9 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             		//alert('xlink defined');
             		//alert(evt.data.doc['xlink']);
             		//add to the datacart localstorage
-                	if(evt.data.doc['esgf.index.peer'] != undefined) {
+                	if(evt.data.doc['index_peer'] != undefined) {
                 		
-                		var datasetInfo = {'peer' : evt.data.doc['esgf.index.peer'] , 'xlink' : evt.data.doc['xlink']};
+                		var datasetInfo = {'peer' : evt.data.doc['index_peer'] , 'xlink' : evt.data.doc['xlink']};
                 		
                     	ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
                 	
@@ -199,9 +199,9 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             		//alert('xlink undefined');
             	
             		//add to the datacart localstorage
-                	if(evt.data.doc['esgf.index.peer'] != undefined) {
+                	if(evt.data.doc['index_peer'] != undefined) {
                     
-                		var datasetInfo = {'peer' : evt.data.doc['esgf.index.peer'] , 'xlink' : 'undefined' };
+                		var datasetInfo = {'peer' : evt.data.doc['index_peer'] , 'xlink' : 'undefined' };
                 		
                 		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
                 	

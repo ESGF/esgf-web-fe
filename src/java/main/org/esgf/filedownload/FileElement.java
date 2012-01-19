@@ -58,6 +58,7 @@ public class FileElement implements DataCartElement {
                     //System.out.println("key: " + key + " value: " + value);
                     //set the fileid
                     if(key.equals("id")) {
+                        System.out.println("id value: " + value);
                         this.fileId = value;
                     } 
                     //set the file size element

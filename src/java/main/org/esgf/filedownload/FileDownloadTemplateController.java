@@ -82,6 +82,10 @@
 package org.esgf.filedownload;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -115,7 +119,7 @@ public class FileDownloadTemplateController {
     
     private static String solrURL="http://localhost:8983/solr/select";
     
-    private static String searchAPIURL = "http://localhost/esg-search/search?";
+    private static String searchAPIURL = "http://localhost:8081/esg-search/search?";
     
     private final static Logger LOG = Logger.getLogger(FileDownloadTemplateController.class);
 
@@ -126,8 +130,8 @@ public class FileDownloadTemplateController {
     private final static boolean doGetDebug = false;
     private final static boolean clockDebug = false;
     private final static boolean preAssembleQueryStringDebug = false;
-    private final static boolean getDocElementDebug = true;
-    private static final boolean getFileElementsDebug = true;
+    private final static boolean getDocElementDebug = false;
+    private static final boolean getFileElementsDebug = false;
     private static final boolean querySolrForFilesDebug = false;
     private static final boolean solrResponseDebug = false;
     private static final boolean solrResponseToJSONDebug = false;
@@ -265,7 +269,6 @@ public class FileDownloadTemplateController {
         
         String jsonContent = "";
         
-        System.out.println("End json");
         
         //create xml and convert to JSON
         //***UPDATE ME WITH A PROPER MARSHALLER!!!!***
@@ -460,7 +463,6 @@ public class FileDownloadTemplateController {
         //convert to JSON array
         JSONArray files = solrResponseToJSON(solrResponse);
 
-        System.out.println("\n\n\n\nFILES LENGTH: " + files.length() + "\n\n\n");
         for(int j=0;j<files.length();j++) {
             
             try {
@@ -477,7 +479,6 @@ public class FileDownloadTemplateController {
             }
         }
 
-        System.out.println("\n\n\n\nFILES LENGTH: " + fileElements.size() + "\n\n\n");
         
         if(getFileElementsDebug) {
             System.out.println("---End Get File Elements---");
@@ -538,17 +539,29 @@ public class FileDownloadTemplateController {
         //attact the dataset id to the query string
         GetMethod method = new GetMethod(searchAPIURL);
         
+        //dataset_id = dataset_id.replace("|", "%7C");
+        if(querySolrForFilesDebug) {
+            System.out.println("\n\n\tQueryString issued to solr (before encoding) -> " + (queryString+"&dataset_id=" + dataset_id));
+        }
+        
         //add the dataset to the query string
-        queryString += "&dataset_id=" + dataset_id;
+        try {
+            queryString += "&dataset_id=" + URLEncoder.encode(dataset_id,"UTF-8").toString();
+        } catch (UnsupportedEncodingException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        
+        if(querySolrForFilesDebug) {
+            System.out.println("\tQueryString issued to solr -> " + queryString + "\n\n");
+        }
         
         method.setQueryString(queryString);
         
         method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
                 new DefaultHttpMethodRetryHandler(3, false));
         
-        if(querySolrForFilesDebug) {
-            System.out.println("\tQueryString issued to solr -> " + queryString);
-        }
+        
         
         try {
             // execute the method
@@ -617,34 +630,3 @@ public class FileDownloadTemplateController {
 }
 
 
-
-/*
-
-
-try {
-    fc.doGet(mockRequest);
-} catch(Exception e) {
-    System.out.println("Error in main");
-}
- */
-/*
-String [] id = {"obs4MIPs.NASA-JPL.AIRS.mon.v1:esg-datanode.jpl.nasa.gov"};
-String peer = "undefined";
-String showAll = "true";
-mockRequest.addParameter("id", id);
-mockRequest.addParameter("peer", peer);
-mockRequest.addParameter("showAll", showAll);
-String queryString = "format=application%2Fsolr%2Bjson&type=File&shards=localhost:8983/solr&variable=hus";
-*/
-
-/*
-String queryString = "format=application%2Fsolr%2Bjson&type=File&shards=localhost:8983/solr&variable=hus";
-String dataset_id = "obs4MIPs.NASA-JPL.AIRS.mon.v1:esg-datanode.jpl.nasa.gov";
-String [] fqArr = {""};
-String peer = "localhost:8983/solr";
-
-DocElement docElement = getDocElement(queryString,dataset_id,fqArr,peer);
-
-
-System.out.println("docelement\n" + docElement.toXML());
-*/

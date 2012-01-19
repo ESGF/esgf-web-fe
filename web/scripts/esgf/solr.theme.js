@@ -143,15 +143,9 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         	
         	var url = techNote[i].split("|");
         	
-    	    output += '<span class="actionitem ai_las"><a href="' + url[url.length-3] + '" target="_blank">' + url[url.length-2] + '</a></span>';
+    	    //output += '<span class="actionitem ai_las"><a href="' + url[url.length-3] + '" target="_blank">' + url[url.length-2] + '</a></span>';
         } 
         
-        /*
-        if(doc.xlink.search("Technical Note") > -1) {
-	    	var tuple = url.split("\|");
-    	    output += '<span class="actionitem ai_las"><a href="' + '#' + '" target="_blank">Technical Note</a></span>';
-		}
-		*/
     }
     
     if (ESGF.setting.annotate === true) {
@@ -177,9 +171,9 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             		//alert('xlink defined');
             		//alert(evt.data.doc['xlink']);
             		//add to the datacart localstorage
-                	if(evt.data.doc['index_peer'] != undefined) {
+                	if(evt.data.doc['index_node'] != undefined) {
                 		
-                		var datasetInfo = {'peer' : evt.data.doc['index_peer'] , 'xlink' : evt.data.doc['xlink']};
+                		var datasetInfo = {'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink']};
                 		
                     	ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
                 	
@@ -199,9 +193,9 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             		//alert('xlink undefined');
             	
             		//add to the datacart localstorage
-                	if(evt.data.doc['index_peer'] != undefined) {
+                	if(evt.data.doc['index_node'] != undefined) {
                     
-                		var datasetInfo = {'peer' : evt.data.doc['index_peer'] , 'xlink' : 'undefined' };
+                		var datasetInfo = {'peer' : evt.data.doc['index_node'] , 'xlink' : 'undefined' };
                 		
                 		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
                 	

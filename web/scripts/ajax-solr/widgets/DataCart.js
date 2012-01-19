@@ -323,11 +323,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
             		
             		var file_id = this.id;
                 	
-                	//strip "[" and "]"
-                	//FIXME: Need a better way of stripping these two (not sure why they appear)
-                	file_id = file_id.substr(2,file_id.length);
-                	file_id = file_id.substr(0,file_id.length-2);
-                	
                 	//push 
                 	file_ids.push(file_id);
                 });
@@ -335,17 +330,17 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
             }
             
             
-            
-            
             var form = '<form action="'+ queryString +'" method="post" >';
             
             //iterate over the file_ids and add to query string
             //this can probably be collapsed into the loop above
             for(var i=0;i<file_ids.length;i++) {
-				var file_id = file_ids[i];
-				form += '<input type="hidden" name="file_id" value="' + file_id + '">';
+				var id = file_ids[i];
+				id.replace("\\|","%7C");
+				form += '<input type="hidden" name="id" value="' + id + '">';
 			}
             form += '</form>';
+            
             
             
             //send request using a dynamically generated form with the query string as the action
@@ -376,11 +371,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
             $(this).parent().parent().parent().find('tr.rows_'+ dataset).find(':checkbox:checked').each( function(index) {
                 if(this.id != selectedDocId) {
                 	var file_id = this.id;
-                	
-                	//strip "[" and "]"
-                	//FIXME: Need a better way of stripping these two (not sure why they appear)
-                	file_id = file_id.substr(2,file_id.length);
-                	file_id = file_id.substr(0,file_id.length-2);
                 	
                 	//push 
                 	file_ids.push(file_id);
@@ -420,10 +410,12 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
             //iterate over the file_ids and add to query string
             //this can probably be collapsed into the loop above
             for(var i=0;i<file_ids.length;i++) {
-				var file_id = file_ids[i];
-				form += '<input type="hidden" name="file_id" value="' + file_id + '">';
+				var id = file_ids[i];
+				id.replace("\\|","%7C");
+				form += '<input type="hidden" name="id" value="' + id + '">';
 			}
             form += '</form>';
+            
             //send request using a dynamically generated form with the query string as the action
             //the method should be post because the query string may be long
             //jQuery('<form action="'+ queryString +'" method="post" >'+ '' +'</form>')
@@ -454,29 +446,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
         	
 	    });
 	    
-	    /**
-	     * Event for checkbox file selection
-	     * NOTE: THIS NEEDS TO BE FIXED
-	     */
-	    $(".fileLevel").live('change', function() {
-	    	/*
-	    	var self = this;
-	    	var currentValue = $(this).attr('checked');
-			//if it is already checked, then uncheck both this and the topLevel 
-	    	if(!currentValue) {
-	    		alert('find element: ' + $(this).parent().parent().parent().html());
-	    		var selectedItem = $.tmplItem(this);
-		    	var selectedDocId = selectedItem.data.datasetId;
-		    	
-		    	alert('selectedItem: ' + selectedItem + ' selectedDocId: ' + selectedDocId);
-		    	$(this).parent().parent().parent().find('input').removeAttr('checked');//attr('checked','false');
-            	
-		    	//$(this).parent().parent().parent().find('input').attr('checked','false');
-		    } else {
-	    		alert('currently checked');
-	    	}
-	    	*/
-	    });
+	    
 	    
 	    
 	    /**
@@ -485,8 +455,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	     */
 	    $(".topLevel").live('change', function() {
 	    	    	
-	    	//alert('top level changed');
-	    	
 	    	var self = this;
 	    	
 	    	var currentValue = $(this).attr('checked');
@@ -497,8 +465,13 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		    	var selectedDocId = selectedItem.data.datasetId;
 		    	
 		    	var rowsId = selectedDocId.replace(/\./g,"_")
+		    	
+		        var newWord = rowsId.replace(/\./g,"_");
+		        var newNewWord = newWord.replace(":","_");
+		        var newNewNewWord = newWord.replace("|","_");
+		    	
 		    	//$(this).parent().parent().parent().find('tr.rows_'+ self.replacePeriod(selectedDocId)).each( function(index) {
-                $(this).parent().parent().parent().find('tr.rows_'+ rowsId).each( function(index) {
+                $(this).parent().parent().parent().find('tr.rows_'+ newNewNewWord).each( function(index) {
                 	
                 	var isChecked = $(this).find('input').attr('checked');
                 	
@@ -514,7 +487,11 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		    	
 		    	var rowsId = selectedDocId.replace(/\./g,"_")
 		    	
-		    	$(this).parent().parent().parent().find('tr.rows_'+ rowsId).each( function(index) {
+		    	var newWord = rowsId.replace(/\./g,"_");
+		        var newNewWord = newWord.replace(":","_");
+		        var newNewNewWord = newWord.replace("|","_");
+		    	
+		    	$(this).parent().parent().parent().find('tr.rows_'+ newNewNewWord).each( function(index) {
                 	
                 	var isChecked = $(this).find('input').attr('checked');
                 	
@@ -643,7 +620,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	rewriteTextQuery: function(queryString) {
     	var newQueryString = '';
 
-    	//alert('oldQueryString ' + queryString);
     	
     	var root = queryString.split('?')[0];
     	
@@ -660,9 +636,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     			//alert('constraint: ' + constraint);
         		if(constraint.search('query=') > -1) {
             		var queryClause = constraint.split('=');
-            		//alert('queryClause: ' + queryClause[1]);
-            		//alert('constraint: ' + constraint + ' queryClause: ' + queryClause);
-            		//fullText += queryClause + ' ';
             		fullText = fullText + queryClause[1] + ' ';
         		} else {
         			newQueryString += '&' + constraint;
@@ -675,7 +648,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
         	newQueryString += '&' + 'query=' + fullText;
     	}
     	
-    	//alert('new query string: ' + newQueryString + ' fulltext: ' + fullText);
     	
     	return newQueryString;
     },
@@ -725,26 +697,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     		}
     	}
     	
-    	//alert('peerArr: ' + peerArr);
-    	//alert('technoteArr: ' + technoteArr + ' ' + technoteArr.length);
     	
-    	/*
-    	//get the index peers
-    	var peerArr = '';
-    	for(var i=0;i<self.selected_arr.length;i++) {
-    		var id = self.selected_arr[i];
-    		var peer = ESGF.localStorage.get('dataCart',id);
-    		if(i != 0) {
-        		peerArr += ';' + peer;
-    		} else {
-    			peerArr += peer;
-    		}
-    		//alert('id: ' + id + ' peer: ' + peer);
-    	}
-    	
-    	
-    	
-    	*/
     	
     	
     	LOG.debug("BEGIN DATACART CONTENTS");
@@ -765,8 +718,16 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		//var queryStr = { "id" : arr , "shardType" : ESGF.setting.getShards, "shardsString" : shardsString, "fq" : fqParamArr, "q" : qParam, "showAll" : ESGF.setting.showAllContents};
 		var queryStr = {"id" : self.selected_arr, "peer" : peerArr, "technotes" : technoteArr, "showAll" : ESGF.setting.showAllContents, "fq" : fqParamArr};
 		
-		//issue a query to the getDataCart
-    	self.getDataCart(queryStr);
+		
+		//getter for the data cart tab
+		var selected = $( "#myTabs" ).tabs( "option", "selected" );
+		
+		//only query for files if the datacart is selected
+		if(selected == 1) {
+			//issue a query to the getDataCart
+	    	self.getDataCart(queryStr);
+		}
+		
     	
 	},
 	
@@ -968,11 +929,15 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	 /**
      * This function is used primarily to avoid annoying errors that occur with strings that have periods in them
      */
+	/**
+	 * Obviously needs revision
+	 */
     replacePeriod: function (word)
     {
         var newWord = word.replace(/\./g,"_");
         var newNewWord = newWord.replace(":","_");
-        return newNewWord;
+        var newNewNewWord = newWord.replace("|","_");
+        return newNewNewWord;
     },
 	
 
@@ -1026,15 +991,25 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 
 }(jQuery));
 
+
+/* OLD WAY OF GETTING PEERS */
+//alert('peerArr: ' + peerArr);
+//alert('technoteArr: ' + technoteArr + ' ' + technoteArr.length);
+
 /*
-//iterate over the file_ids and add to query string
-//this can probably be collapsed into the loop above
-for(var i=0;i<file_ids.length;i++) {
-	var file_id = file_ids[i];
-	if(i < (file_ids.length-1)) {
-		queryString += 'file_id=' + file_id + '&'; 
+//get the index peers
+var peerArr = '';
+for(var i=0;i<self.selected_arr.length;i++) {
+	var id = self.selected_arr[i];
+	var peer = ESGF.localStorage.get('dataCart',id);
+	if(i != 0) {
+		peerArr += ';' + peer;
 	} else {
-		queryString += 'file_id=' + file_id;
+		peerArr += peer;
 	}
+	//alert('id: ' + id + ' peer: ' + peer);
 }
+
+
+
 */

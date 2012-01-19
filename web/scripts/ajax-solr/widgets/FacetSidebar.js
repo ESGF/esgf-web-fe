@@ -179,11 +179,18 @@
 				
 				var facet = self.findFacetFromLabel(label);
 				
-				
-				
-				var index = facet_value.search(' ');
-				var facetValue = facet_value.substr(0,index);
-				
+				var regEx = new RegExp("\\(");
+				var index = facet_value.search(regEx) - 1;
+				facetValue = facet_value.substr(0,index);
+				/*
+				var index = 40;//facet_value.search('/\(30\)/');
+				var facetValue = '';
+				if(index < facet_value.length) {
+					facetValue = facet_value.substr(0,index);
+				} else {
+					facetValue = facet_value.substr(0,facet_value.length-1);
+				}
+				*/
 				Manager.store.addByValue('fq', facet + ':' + facetValue );
 				
 				
@@ -234,9 +241,12 @@
 				var shortName = map[0];
 				var longName = map[1];
 				
+				
 				//there is an extra whitespace in label, so trim it out
-				label = label.replace(' ','');
-				longName = longName.replace(' ','');
+				label = trimWhiteSpace(label);//label.replace('/ /gi','');
+				longName = trimWhiteSpace(longName);//longName.replace('/ /gi','');
+				
+				//alert(' longName: ' + longName + ' label: ' + label + ' ' + longName.length + ' ' + label.length);
 				
 				//used for debugging
 				//alert('label: ' + label + ' s: ' + shortName + ' l: ' + longName + ' lengthLBL: ' + label.length + ' lengthLN: ' + longName.length);
@@ -251,6 +261,16 @@
 	
 	});
 
+	function trimWhiteSpace(word) {
+		var temp = word;
+	    var index = temp.indexOf(" ");
+	        while(index != -1){
+	            temp = temp.replace(" ","");
+	            index = temp.indexOf(" ");
+	        }
+	        return temp;
+	}
+	
 	$(document).ready( function() {
 		$.fx.speeds._default = 1000;
 	});

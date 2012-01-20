@@ -129,6 +129,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	var optionsStr = '<div id="radio" style="margin-bottom:30px;display:none">' + 
     				 	 '<table>' +
     				 	 '<tr>' +
+    				 	 /*
     				 	 '<td>' +
     				 	 '<input type="radio" id="datacart_filter_all" name="datacart_filter" value="all" /> ' +
     				 	 'Show all files ' +
@@ -137,6 +138,12 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     				 	 '<input type="radio" id="datacart_filtered" name="datacart_filter" value="filtered" /> ' +
     				 	 'Filter over search constraints ' +
     				 	 '</td>' +
+    				 	 */
+    				 	 '<td></td>' + 
+    				 	 '<td></td>' +
+    				 	 '<td></td>' + 
+    				 	 '<td></td>' + 
+    				 	 '<td></td>' + 
     				 	 '<td>' +
     				 	 '<input id="remove_all" type="submit" value="Remove All" /> ' +
     				 	 '</td>' +

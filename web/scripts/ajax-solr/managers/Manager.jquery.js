@@ -182,10 +182,15 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   	  	} 
         
         //for search API
-  		//put in the dataset type
+  		
+        //put in the dataset type
         ESGF.localStorage.put('esgf_queryString','type:Dataset','type=Dataset');
-  		//put in the replica type (which for results is "false")
+  		
+        //put in the replica type (which for results is "false")
         ESGF.localStorage.put('esgf_queryString','replica:false','replica=false');
+        
+  		//put in the replica type (which for results is "false")
+        ESGF.localStorage.put('esgf_queryString','latest:true','latest=true');
         
         //if(ESGF.localStorage.get('esgf_queryString', 'offset') == undefined) {
 		//  ESGF.localStorage.put('esgf_queryString', 'offset', 'offset=' + 0);

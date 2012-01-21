@@ -155,21 +155,25 @@ setup_web_fe() {
     
     stop_tomcat
 
-    #make room for new install
-    if (( force_install )) ; then
-        echo "Removing Previous Installation of the ESGF Web Front-End..."
-        [ -d "${web_fe_app_home}" ] && rm -rf ${web_fe_app_home} || echo "WARNING: Strange, can't locate previous install @ ${web_fe_app_home}"
-    fi
-    
     #----------------------------
+    #make room for new install
+        [ -d "${web_fe_app_home}" ] && \
+            echo "Moving Previous Installation of the ESGF Web Front-End..." && \
+            mv -v ${web_fe_app_home}{,.bak}
+    
     mkdir -p ${web_fe_app_home}
     [ $? != 0 ] && echo "Could not create dir ${web_fe_app_home}" && popd >& /dev/null && checked_done 1
     cd ${web_fe_app_home}
     echo "Expanding war ${web_fe_dist_file} in $(pwd)"
-    $JAVA_HOME/bin/jar xf ${web_fe_dist_file}
-    
-    chown -R ${tomcat_user} ${web_fe_app_home}
-    chgrp -R ${tomcat_group} ${web_fe_app_home}
+    $JAVA_HOME/bin/jar xf ${web_fe_dist_file} && \
+        chown -R ${tomcat_user} ${web_fe_app_home} && \
+        chgrp -R ${tomcat_group} ${web_fe_app_home} || (popd >& /dev/null && rm -rf "${web_fe_app_home}" && mv -v ${web_fe_app_home}{.bak,} && checked_done 1)
+
+    [ -d "${web_fe_app_home}.bak" ] && \
+        echo "Removing Previous Installation of the ESGF Web Front-End..." && \
+        rm -rf "${web_fe_app_home}.bak"
+
+
     popd >& /dev/null
     #----------------------------
 

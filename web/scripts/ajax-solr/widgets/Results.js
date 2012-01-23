@@ -177,7 +177,7 @@
             	//if(Manager.store.values('fq') != 'type:Dataset,replica:false') {	
                 //if(searchConstraint != 'type:Dataset,replica:false,distrib,') {
             	
-                if(searchConstraint != 'offset,type:Dataset,replica:false,replica:false,distrib,') {
+                if(searchConstraint != 'offset,type:Dataset,replica:false,latest:true,distrib,') {
             	    		//alert ('i should not display this if ' + fq);
                 	for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
                         var doc = this.manager.response.response.docs[i];

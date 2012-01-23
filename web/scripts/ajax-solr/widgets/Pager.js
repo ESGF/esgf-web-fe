@@ -360,7 +360,8 @@ AjaxSolr.PagerWidget = AjaxSolr.AbstractWidget.extend(
             	
             	//alert(this.windowedLinks());
             	//alert('searchConstraint: ' + searchConstraint + ' ' + (searchConstraint != 'offset,type:Dataset,replica:false,distrib,'));
-                if(searchConstraint != 'offset,type:Dataset,replica:false,distrib,') {
+            	if(searchConstraint != 'offset,type:Dataset,replica:false,latest:true,distrib,') {
+                //if(searchConstraint != 'offset,type:Dataset,replica:false,distrib,') {
     	    	//if(Manager.store.values('fq') != 'type:Dataset,replica:false') {	
                 	//alert('rendering...');
                 	this.renderLinks(this.windowedLinks());

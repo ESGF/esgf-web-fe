@@ -102,7 +102,14 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           //queryString += '&shards=dev.esg.anl.gov:8983/solr,localhost:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,pcmdi9.llnl.gov:8983/solr';
           //queryString += '&shards=dev.esg.anl.gov:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,localhost:8983/solr';
           //queryString += '&shards=localhost:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,pcmdi9.llnl.gov:8983/solr';
+          //queryString += '&shards=localhost:8983/solr,test-datanode.jpl.nasa.gov:8983/solr';
+          //queryString += '&shards=localhost:8983/solr';
           
+          //alert(ESGF.localStorage.get('esgf_queryString','distrib'));
+
+          if(ESGF.localStorage.get('esgf_queryString','distrib') != 'distrib=false') {
+        	  //queryString += '&shards=localhost:8983/solr,test-datanode.jpl.nasa.gov:8983/solr';
+          }
           
           var revisedQueryString = self.rewriteTextQuery(queryString);
 

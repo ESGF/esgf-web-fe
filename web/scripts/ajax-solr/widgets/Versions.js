@@ -62,15 +62,15 @@
 AjaxSolr.VersionsWidget = AjaxSolr.AbstractWidget.extend({
 	
 	init: function() {
-		alert('init version');
+		//alert('init version');
 
-		alert('b4: ' + ESGF.localStorage.toString('esgf_queryString'));
+		//alert('b4: ' + ESGF.localStorage.toString('esgf_queryString'));
         ESGF.localStorage.put('esgf_queryString','latest:true','latest=true');
 
 		
 		if($("input#versioncheckbox").attr("checked")) { 
 			//attr('checked','true');
-			alert('reset the replica checkbox to false');
+			//alert('reset the replica checkbox to false');
 			$("input#versioncheckbox").removeAttr('checked');
 			
 		}
@@ -87,11 +87,11 @@ AjaxSolr.VersionsWidget = AjaxSolr.AbstractWidget.extend({
 		var self = this;
     
 		$('input#versioncheckbox').live('change',function () {
-			alert('changed checkbox');
+			//alert('changed checkbox');
 			
 
 			if($("input#versioncheckbox").attr("checked")) { 
-				alert('take the versions parameter out of the query');
+				//alert('take the versions parameter out of the query');
 				
 				ESGF.localStorage.remove('esgf_queryString','latest:true');
 				
@@ -99,12 +99,12 @@ AjaxSolr.VersionsWidget = AjaxSolr.AbstractWidget.extend({
 				
             	Manager.doRequest(0);
 			} else {
-				alert('put the versions parameter in the query');
+				//alert('put the versions parameter in the query');
 
-				alert('b4: ' + ESGF.localStorage.toString('esgf_queryString'));
+				//alert('b4: ' + ESGF.localStorage.toString('esgf_queryString'));
 		  		//put in the replica type (which for results is "false")
 		        ESGF.localStorage.put('esgf_queryString','latest:true','latest=true');
-				alert('after: ' + ESGF.localStorage.toString('esgf_queryString'));
+				//alert('after: ' + ESGF.localStorage.toString('esgf_queryString'));
 				
             	Manager.doRequest(0);
 			}

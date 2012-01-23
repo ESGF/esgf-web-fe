@@ -62,13 +62,12 @@
 AjaxSolr.ReplicasWidget = AjaxSolr.AbstractWidget.extend({
 	
 	init: function() {
-		alert('init replica');
+		//alert('init replica');
 
         ESGF.localStorage.put('esgf_queryString','replica:false','replica=false');
         
 		if($("input#replicacheckbox").attr("checked")) { 
 			//attr('checked','true');
-			alert('reset the replica checkbox to false');
 			$("input#replicacheckbox").removeAttr('checked');
 
 			
@@ -87,26 +86,26 @@ AjaxSolr.ReplicasWidget = AjaxSolr.AbstractWidget.extend({
 		
 		
 		$('input#replicacheckbox').live('change',function () {
-			alert('changed checkbox');
+			//alert('changed checkbox');
 			
 
 			if($("input#replicacheckbox").attr("checked")) { 
 				//alert('take the replicas parameter out of the query');
 
-				alert('b4: ' + ESGF.localStorage.toString('esgf_queryString'));
+				//alert('b4: ' + ESGF.localStorage.toString('esgf_queryString'));
 				
 				ESGF.localStorage.remove('esgf_queryString','replica:false');
 				
-				alert('after: ' + ESGF.localStorage.toString('esgf_queryString'));
+				//alert('after: ' + ESGF.localStorage.toString('esgf_queryString'));
 				
             	Manager.doRequest(0);
 			} else {
 				//alert('put the replicas parameter in the query');
 
 
-				alert('b4: ' + ESGF.localStorage.toString('esgf_queryString'));
+				//alert('b4: ' + ESGF.localStorage.toString('esgf_queryString'));
 		        ESGF.localStorage.put('esgf_queryString','replica:false','replica=false');
-				alert('after: ' + ESGF.localStorage.toString('esgf_queryString'));
+				//alert('after: ' + ESGF.localStorage.toString('esgf_queryString'));
 				
 				
 				Manager.doRequest(0);

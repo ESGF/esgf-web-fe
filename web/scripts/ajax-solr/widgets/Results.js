@@ -160,12 +160,32 @@
             		var value = esgf_fq[key];
             	}
             	
+            	//need to check the following to see if there are any USER ADDED search constraints
+            	var userAddedConstraint = 'false';
+            	
+            	
             	var esgf_queryString = ESGF.localStorage.getAll('esgf_queryString');
             	for(var key in esgf_queryString) {
             		if(key != '' && key != ' ') {
             			searchConstraint += key + ',';
             		}
             		//alert('key: ' + key + ' value: ' + esgf_queryString[key]);
+            		//have to ignore the following
+            		if(key.search('offset') > -1) {
+            			//alert('offset found');
+            		} else if(key.search('type:') > -1) {
+            			//alert('type found');
+            		} else if(key.search('replica:') > -1) {
+            			//alert('replica found');
+            		} else if(key.search('latest:') > -1) {
+            			//alert('latest found');
+            		} else if(key.search('distrib') > -1) {
+            			//alert('distrib found');
+            		} else if(key == '' || key == ' ') {
+            			//alert('blank found');
+            		} else {
+            			userAddedConstraint = 'true';
+            		}
             	}
             	
             	
@@ -176,8 +196,8 @@
             	/* for now that means the localStorage ONLY has type:Dataset;,replica:false */
             	//if(Manager.store.values('fq') != 'type:Dataset,replica:false') {	
                 //if(searchConstraint != 'type:Dataset,replica:false,distrib,') {
-            	
-                if(searchConstraint != 'offset,type:Dataset,replica:false,latest:true,distrib,') {
+            	if(userAddedConstraint == 'true') {
+                //if(searchConstraint != 'offset,type:Dataset,replica:false,latest:true,distrib,') {
             	    		//alert ('i should not display this if ' + fq);
                 	for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
                         var doc = this.manager.response.response.docs[i];

@@ -94,7 +94,11 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
         //alert('fqString: ' + fqString);
         if(fqString != "" && fqString != " ") {
         	//leave out the 'type:Dataset' constraint 
-            if(fqString.search('Dataset') == -1 && fqString.search('replica:false') == -1 && fqString.search('latest:true') == -1 && fqString.search('distrib') == -1 && fqString.search('offset') == -1) {
+        	//alert('fqString: ' + fqString);
+            //if(fqString.search('Dataset') == -1 && fqString.search('replica:false') == -1 && fqString.search('latest:true') == -1 && fqString.search('distrib') == -1 && fqString.search('offset') == -1) {
+        	if(fqString.search('Dataset') == -1 && fqString.search('replica') == -1 && fqString.search('latest') == -1 && fqString.search('distrib') == -1 && fqString.search('offset') == -1) {
+            		
+            	//alert('removing facet: ' + fqString);
             	
             	//check to see if this is a geospatial query (assuming 'east_degrees' is in every geo query)
                 //if it is -> need to change the current selection string
@@ -126,6 +130,25 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     	//remove everything from ajax-solr parameter store  
     	self.manager.store.remove('fq');
         
+    	var esgf_q = ESGF.localStorage.getAll('esgf_queryString');
+        
+    	for(var key in esgf_q) {
+        	if(key != '' && key != ' ') {
+        		if(key.search('replica:') > -1) {
+        			
+        		} else if(key.search('latest:') > -1) {
+        			
+        		} else if(key.search('distrib') > -1) {
+        			
+        		} else {
+                	ESGF.localStorage.remove('esgf_queryString',key);
+                	ESGF.localStorage.remove('esgf_fq',key);
+        		}
+            	//this.manager.store.addByValue('fq',k);
+        	}
+        	
+        }
+    	/*
     	//remove everything from the localstorage esgf_fq store
         var esgf_fq = ESGF.localStorage.getAll('esgf_fq');        
         for(var key in esgf_fq) {
@@ -139,6 +162,9 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
         }
         
         self.manager.doRequest(0);
+        */
+    	self.manager.doRequest(0);
+        
         return false;
       }));
       

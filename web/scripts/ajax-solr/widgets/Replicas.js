@@ -62,8 +62,7 @@
 AjaxSolr.ReplicasWidget = AjaxSolr.AbstractWidget.extend({
 	
 	init: function() {
-		//alert('init replica');
-
+		
         ESGF.localStorage.put('esgf_queryString','replica:false','replica=false');
         
 		if($("input#replicacheckbox").attr("checked")) { 

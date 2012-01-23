@@ -143,7 +143,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         	
         	var url = techNote[i].split("|");
         	
-    	    //output += '<span class="actionitem ai_las"><a href="' + url[url.length-3] + '" target="_blank">' + url[url.length-2] + '</a></span>';
+    	    output += '<span class="actionitem ai_las"><a href="' + url[url.length-3] + '" target="_blank">' + url[url.length-2] + '</a></span>';
         } 
         
     }

@@ -56,11 +56,11 @@
 							<td id="${$item.replacePeriods(datasetId)}_openid" style="float:right;font-size:11px;"><div id="${urls.url[j]}" style="word-wrap: break-word;vertical-align:middle"><a href="${urls.url[j]}">OPENDAP </a></div></td>
 	   					{{/if}}
 					{{/each}}
-<!--
+
 					{{if technotes.technote.length > 2}}
 						<td id="${$item.replacePeriods(datasetId)}_openid" style="float:right;font-size:11px;"><div id="d" style="word-wrap: break-word;vertical-align:middle"><a href="${technotes.technote[2].location}" title="${technotes.technote[2].name}" target="_blank">TECHNOTE </a></div></td>
 	   				{{/if}}	
--->
+
 					
 				</tr>		
 			{{/if}}

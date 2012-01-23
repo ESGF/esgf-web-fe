@@ -174,8 +174,8 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
         Manager.store.addByValue('fq','type:Dataset');
         
   		//put in the replica type (which for results is "false")
-        ESGF.localStorage.put('esgf_fq','replica:false','replica:false');
-        Manager.store.addByValue('fq','replica:false');
+        //ESGF.localStorage.put('esgf_fq','replica:false','replica:false');
+        //Manager.store.addByValue('fq','replica:false');
         
         if(ESGF.localStorage.get('esgf_queryString', 'offset') == undefined) {
   		  ESGF.localStorage.put('esgf_queryString', 'offset', 'offset=' + 0);
@@ -187,10 +187,10 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
         ESGF.localStorage.put('esgf_queryString','type:Dataset','type=Dataset');
   		
         //put in the replica type (which for results is "false")
-        ESGF.localStorage.put('esgf_queryString','replica:false','replica=false');
+        //ESGF.localStorage.put('esgf_queryString','replica:false','replica=false');
         
   		//put in the replica type (which for results is "false")
-        ESGF.localStorage.put('esgf_queryString','latest:true','latest=true');
+        //ESGF.localStorage.put('esgf_queryString','latest:true','latest=true');
         
         //if(ESGF.localStorage.get('esgf_queryString', 'offset') == undefined) {
 		//  ESGF.localStorage.put('esgf_queryString', 'offset', 'offset=' + 0);

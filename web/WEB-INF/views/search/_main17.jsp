@@ -32,8 +32,14 @@
 	    </div>
 	   	
 	   	  
-		<div class="span-18 last"> 
+		<div class="span-18 last" style="margin-bottom:5px"> 
+		<!--  
 			<input class="distribbutton1" id="distribbutton" type="submit" style="margin-left:20px"/>
+		-->
+			<input type="checkbox" class="distribcheckbox1" id="distribcheckbox" style="margin-left:20px" checked="yes" /> <span style="font-weight:bold">Search All Sites</span>
+			<input type="checkbox" class="replicacheckbox1" id="replicacheckbox" style="margin-left:20px"/> <span style="font-weight:bold">Show All Replicas</span>
+			<input type="checkbox" class="versioncheckbox1" id="versioncheckbox" style="margin-left:20px"/> <span style="font-weight:bold">Show All Versions</span>
+			
 		</div>
 		
 </div>

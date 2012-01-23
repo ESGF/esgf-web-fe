@@ -48,6 +48,8 @@
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/FacetSidebar.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Annotator.js" />'> </script>
 	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/DistributedSearch.js" />'> </script>
+	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Versions.js" />'> </script>
+	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Replicas.js" />'> </script>
 	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/DataCart.js" />'> </script>
     
 

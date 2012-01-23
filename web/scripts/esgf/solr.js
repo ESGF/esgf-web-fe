@@ -71,6 +71,14 @@
          Manager.addWidget(new AjaxSolr.DistributedSearchWidget({
              id: 'distributedSearch'
            }));
+
+         Manager.addWidget(new AjaxSolr.VersionsWidget({
+             id: 'versions'
+           }));
+
+         Manager.addWidget(new AjaxSolr.ReplicasWidget({
+             id: 'replicas'
+           }));
          
          Manager.addWidget(new AjaxSolr.DataCartWidget({
              id: 'distributedSearch2',

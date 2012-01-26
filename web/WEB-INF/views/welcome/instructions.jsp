@@ -15,7 +15,8 @@
 		<div class="projectitembottom">
 			<ul>
 				<li><a href='http://www.esgf.org/wiki/ESGF_User_Guide' >ESGF Full User Guide</a></li>
-				<li><a href='http://www.esgf.org/wiki/ESGF_Web_Search_User_Guide' >Search Help</a></li>                             
+				<li><a href='http://www.esgf.org/wiki/ESGF_Web_Search_User_Guide' >Search Help</a></li>
+				<li><a href='http://www.esgf.org/wiki/ESGF_wget_FAQ' >Wget Scripts FAQ</a></li>                             
 				<li><a href='http://www.esgf.org/wiki/ESGF_scripting' >Wget Scripting</a></li>
 				<li><a href='http://www.esgf.org/wiki/ESGF_GO' >Using Globus Online</a></li>
 				<li><a href='http://www.esgf.org/wiki/ESGF_RSS' >Subscribing to RSS Notification</a></li>

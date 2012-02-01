@@ -63,7 +63,7 @@
 
 
 
-AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
+AjaxSolr.theme.prototype.result = function (doc, snippetReplica, snippetVersion, snippet, actions) {
     var output = '';
 
     if (doc.title.length > 7000) {
@@ -84,11 +84,14 @@ AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
       output += '<div style="font-size:14px;font-style:bold" class="desc">';//'<h4 class="desc">';
 
       //output += '<a href="#" style="text-decoration:none">';
+      if(doc['replica']) {
+    	  output += '<span style="font-size:9px;color:#7d5f45;font-weight:bold;font-style:italic;font-type:Trade Gothic;margin-right:3px"> Replica </span>';
+      }
       output += '<span class="actionitem ai_meta"><a href="/esgf-web-fe/scripts/esgf/overlays/metadata_overlay.html" class="met" rel="#metadata_overlay"' + allStr + '>';
       output += doc.title + '</a>';
       output += '</div>' ;
       output += '<p id="links_' + doc.id + '" class="links"></p>';
-      output += "<p/><div class='snippet'>" + snippet + "</div>" + actions + '</div>';
+      output += "<p/><div>" + snippetReplica + "</div>" + "<div class='snippetVersion'>" + snippetVersion + "</div>" + "<div class='snippet'>" + snippet + "</div>" + actions + '</div>';
 
       return output;
 };
@@ -258,6 +261,7 @@ AjaxSolr.theme.prototype.snippet = function (doc) {
     if (doc.description != undefined)
         doc.text = doc.description[0];
     if (doc.text != undefined) {
+    	output += 'Description: ';
         if (doc.text.length > 500) {
             output += doc.text.substring(0, 500);
             output += '<span style="display:none;">' + doc.text.substring(500);
@@ -268,6 +272,35 @@ AjaxSolr.theme.prototype.snippet = function (doc) {
     } else {
         output = "No description available.";
     }
+
+    return output;
+};
+
+AjaxSolr.theme.prototype.snippetReplica = function (doc) {
+
+    var output = '';
+    if(doc['replica']) {
+        //output += 'Replica dataset at datanode: ' + doc['data_node'] + '<br />';
+        output += 'Master Gateway: ' + doc['master_gateway'];
+        
+    } else {
+        //output += 'Master dataset at datanode: ' + doc['data_node'];
+    }
+
+    return output;
+};
+
+AjaxSolr.theme.prototype.snippetVersion = function (doc) {
+
+    var output = '<span style="font-style:italic;font-weight:bold">';
+    //alert('latest: ' + doc['latest']);
+    if(doc['latest'] == 'true') {
+    	output += 'Version: Most Recent';
+    } else {
+        output += 'Version: ( Date: ' + doc['version'] + ' )';
+    }
+    
+    output += '</span>';
 
     return output;
 };

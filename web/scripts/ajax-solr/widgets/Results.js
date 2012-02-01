@@ -206,7 +206,9 @@
                             	//alert('doc: ' + doc.title);
                                 $(this.target).append(
                                     AjaxSolr.theme('result', doc,
-                                    AjaxSolr.theme('snippet', doc),
+                                            AjaxSolr.theme('snippetReplica', doc),
+                                            AjaxSolr.theme('snippetVersion', doc),
+                                            AjaxSolr.theme('snippet', doc),
                                     AjaxSolr.theme('actions', doc)));
                             } 
                         }

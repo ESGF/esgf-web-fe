@@ -281,7 +281,7 @@ AjaxSolr.theme.prototype.snippetReplica = function (doc) {
     var output = '';
     if(doc['replica']) {
         //output += 'Replica dataset at datanode: ' + doc['data_node'] + '<br />';
-        output += 'Master Gateway: ' + doc['master_gateway'];
+        output += 'Data Node: ' + doc['master_gateway'];
         
     } else {
         //output += 'Master dataset at datanode: ' + doc['data_node'];
@@ -295,9 +295,9 @@ AjaxSolr.theme.prototype.snippetVersion = function (doc) {
     var output = '<span style="font-style:italic;font-weight:bold">';
     //alert('latest: ' + doc['latest']);
     if(doc['latest'] == 'true') {
-    	output += 'Version: Most Recent';
+    	output += 'Version: ' + doc['version'] + ' (Most Recent)';
     } else {
-        output += 'Version: ( Date: ' + doc['version'] + ' )';
+        output += 'Version: ' + doc['version'] + ' ';
     }
     
     output += '</span>';

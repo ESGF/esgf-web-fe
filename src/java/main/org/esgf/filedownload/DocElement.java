@@ -257,7 +257,6 @@ public class DocElement implements DataCartElement {
         hasGridFTPEl.addContent(this.hasGridFTP);
         docEl.addContent(hasGridFTPEl);
         
-        System.out.println("\n\n\nADDING TECHNOTES\n\n\n");
         Element technotesEl = new Element("technotes");
         technotesEl.addContent(this.technotesElement.toElement());
         docEl.addContent(technotesEl);

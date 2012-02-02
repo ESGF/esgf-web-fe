@@ -15,6 +15,11 @@ public class FileElement implements DataCartElement {
     private String fileId;
     private String title;
     private String size;
+    
+    private String tracking_id;
+    private String checksum;
+    private String checksum_type;
+    
     private String hasGrid;
     private String hasHttp;
     private String hasOpenDap;
@@ -31,6 +36,11 @@ public class FileElement implements DataCartElement {
         this.fileId = new String("fileId");
         this.title = new String("title");
         this.size = new String("size");
+        
+        this.tracking_id = new String("tracking_id");
+        this.checksum = new String("checksum");
+        this.checksum_type = new String("checksum_type");
+        
         this.hasGrid = new String("false");
         this.hasHttp = new String("false");
         this.hasOpenDap = new String("false");
@@ -50,6 +60,10 @@ public class FileElement implements DataCartElement {
                 Iterator iter = docJSON.sortedKeys();
                 
                 boolean technote = false;
+
+                this.tracking_id = "unknown";
+                this.checksum = "unknown";
+                this.checksum_type = "unknown";
                 
                 while(iter.hasNext()) {
                     String key = (String)iter.next();
@@ -58,16 +72,40 @@ public class FileElement implements DataCartElement {
                     //System.out.println("key: " + key + " value: " + value);
                     //set the fileid
                     if(key.equals("id")) {
-                        System.out.println("id value: " + value);
+                        //System.out.println("id value: " + value);
                         this.fileId = value;
+                        if(this.fileId.equals("cmip5.output1.NCC.NorESM1-M.historicalExt.6hr.atmos.6hrLev.r2i1p1.v20111102.hus_6hrLev_NorESM1-M_historicalExt_r2i1p1_2006010100-2006063018.nc|bmbf-ipcc-ar5.dkrz.de")){
+                            //System.out.println("file");
+                        }
                     } 
                     //set the file size element
                     else if(key.equals("size")) {
                         this.size = value;
                     }
-                  //set the file title element
+                    //set the file title element
                     else if(key.equals("title")) {
                         this.title = value;
+                    }
+                    //set the file title element
+                    else if(key.equals("checksum")) {
+
+                        JSONArray checksumsJSON = (JSONArray)docJSON.getJSONArray(key);
+                        this.checksum = (String)checksumsJSON.get(0);
+                        //System.out.println("                   checksum: " + this.checksum);
+                        
+                    }
+                    //set the file title element
+                    else if(key.equals("tracking_id")) {
+                        JSONArray trackingIdJSON = (JSONArray)docJSON.getJSONArray(key);
+                        this.tracking_id = (String)trackingIdJSON.get(0);
+                        //System.out.println("                   TrackingId: " + this.tracking_id);
+                    }
+                    //set the file title element
+                    else if(key.equals("checksum_type")) {
+                        JSONArray checksum_typeJSON = (JSONArray)docJSON.getJSONArray(key);
+                        
+                        this.checksum_type = (String)checksum_typeJSON.get(0);
+                        //System.out.println("Checksum Type: " + this.checksum_type);
                     }
                     else if(key.equals("url")) {
                         
@@ -90,7 +128,6 @@ public class FileElement implements DataCartElement {
                             
                             String service = urlStrTokens[2];
                             servicesElement.addService(service);
-                            //System.out.println("url: " + url + " " + " mime: " + mime + " service: " + service);
                             if(service.equals("OPENDAP")) {
                                 this.hasOpenDap = "true";
                             } else if(service.equals("HTTPServer")) {
@@ -113,7 +150,6 @@ public class FileElement implements DataCartElement {
                     else if(key.equals("xlink")) {
                         technote = true;
                         
-                        System.out.println("XLINK");
                         JSONArray xlinkJSON = (JSONArray)docJSON.getJSONArray(key);
                         TechnotesElement technotesElement = new TechnotesElement();
                         for(int i=0;i<xlinkJSON.length();i++) {
@@ -172,6 +208,22 @@ public class FileElement implements DataCartElement {
             }
 
         }
+    }
+    
+    public String getTrackingId() {
+        return tracking_id;
+    }
+
+    public void setTrackingId(String tracking_id) {
+        this.tracking_id = tracking_id;
+    }
+
+    public String getChecksum() {
+        return checksum;
+    }
+
+    public void setChecksum(String checksum) {
+        this.checksum = checksum;
     }
 
     public String getHasTechnote() {
@@ -330,10 +382,22 @@ public class FileElement implements DataCartElement {
         Element titleEl = new Element("title");
         titleEl.addContent(this.title);
         fileEl.addContent(titleEl);
-        
+
         Element sizeEl = new Element("size");
         sizeEl.addContent(this.size);
         fileEl.addContent(sizeEl);
+        
+        Element checksumEl = new Element("checksum");
+        checksumEl.addContent(this.checksum);
+        fileEl.addContent(checksumEl);
+        
+        Element checksum_typeEl = new Element("checksum_type");
+        checksum_typeEl.addContent(this.checksum_type);
+        fileEl.addContent(checksum_typeEl);
+        
+        Element tracking_idEl = new Element("tracking_id");
+        tracking_idEl.addContent(this.tracking_id);
+        fileEl.addContent(tracking_idEl);
         
         Element hasGridEl = new Element("hasGrid");
         hasGridEl.addContent(this.hasGrid);

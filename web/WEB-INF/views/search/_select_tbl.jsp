@@ -5,8 +5,26 @@
 
 <script id="cartTemplateStyledNew" type="text/x-jquery-tmpl">
 	<tr style="margin-top:50px;" class="top_level_data_item ${$item.replacePeriods(datasetId)}" id="${$item.replacePeriods(datasetId)}" >
-		<td style="width: 40px;"><input class="topLevel" type="checkbox" id="${datasetId}" name="${datasetId}" checked="true" /> </td>
-		<td style="width: 300px;font-size:13px"><div style="word-wrap: break-word;font-weight:bold">${datasetId} (${count} files)</div></td>
+		{{if count > 0}}
+			<td style="width: 40px;"><input class="topLevel" type="checkbox" id="${datasetId}" name="${datasetId}" checked="true" /> </td>
+		{{else}}
+			<td style="width: 40px;"><input class="topLevel" disabled="true" type="checkbox" id="${datasetId}" name="${datasetId}" checked="true" /> </td>
+		{{/if}}
+		<td style="width: 300px;font-size:13px">
+			{{if count > 0}}
+			<div style="word-wrap: break-word;font-weight:bold">${datasetId} 
+				 (${count} files) 
+			</div>
+			{{else}}
+        	<div style="word-wrap: break-word;font-weight:bold;color:gray">${datasetId} 
+				 
+			</div>
+			<div style="word-wrap: break-word;font-size:10px;font-style:italic;font-weight:bold;color:gray;margin-top:5px">
+				NOTE: There are no files in this dataset that match the search criteria 
+			</div>
+			{{/if}}
+
+		</td>		
 		<td style="font-size:13px;float:right" id="${datasetId}"> 
 			{{if count > 0}}
 				<a href="#" class="showAllChildren">Expand</a> | 
@@ -24,26 +42,20 @@
 		<td></td>
 	</tr>
 
-<!--
-{{if technotes.technotes.technote.length > 2}}
-	<tr >
-		<td></td><td style="cursor:pointer"><a href="#" class="technotes">Show Technotes</a></td>
-	</tr>
-	{{each(k) technotes.technotes.technote}}
-		{{if technotes.technotes.technote[k].name != 'technoteName'}}
-			<tr class="rows_${$item.replacePeriods(datasetId)}_technotes" style="display:none">
-				<td></td><td><a style="margin-left:20px" href="${technotes.technotes.technote[k].location}" target="_blank" >${technotes.technotes.technote[k].name}</a> </td>
-			</tr>
-		{{/if}}
-	{{/each}}
-{{/if}}
--->
    		{{each(i) file}}
         	{{if i > 1}}
 				<tr class="rows_${$item.replacePeriods(datasetId)}" style="display:none">
 					<td style="width: 40px;"><input style="margin-left: 10px;" class="fileLevel" type="checkbox" class="fileId" id="${fileId}" checked="true" value="${urls.url[1]}"/></td>
 
-					<td style="width: 325px;padding-left:10px;font-size:11px;"><div style="word-wrap: break-word;"> ${$item.abbreviate(fileId)} (${$item.sizeConversion(size)}) </div></td>
+					<td style="width: 325px;padding-left:10px;font-size:11px;">
+						<div style="word-wrap: break-word;"> 
+						<span style="font-weight:bold"> ${$item.abbreviate(fileId)} (${$item.sizeConversion(size)}) </span>
+						<br /> 
+						<span style="font-style:italic">Tracking Id: ${tracking_id}</span>
+						<br />
+						<span style="font-style:italic">Checksum: ${checksum} (${checksum_type})</span>
+						</div>
+					</td>
 
 					{{each(j) urls.url}}
 						{{if services.service[j] == 'HTTPServer'}}
@@ -82,6 +94,22 @@
 		<td class="left_table_header"><input class="topLevel" type="checkbox" id="${doc.id}" name="${doc.id}" checked="true" />Datasets:  ${doc.id}</td>
 		<td id="${doc.id}" class="right_table_header">  <a href="#" class="showAllFiles">Expand</a> |  <a href="#" class="wgetAllChildren"> WGET </a> | <%-- <a href="#" class="globusOnlineAllChildren">Globus Online</a> | --%> <a href="#" class="remove_dataset_from_datacart">Remove</a> </td>
     </tr>
+
+
+<!--
+{{if technotes.technotes.technote.length > 2}}
+	<tr >
+		<td></td><td style="cursor:pointer"><a href="#" class="technotes">Show Technotes</a></td>
+	</tr>
+	{{each(k) technotes.technotes.technote}}
+		{{if technotes.technotes.technote[k].name != 'technoteName'}}
+			<tr class="rows_${$item.replacePeriods(datasetId)}_technotes" style="display:none">
+				<td></td><td><a style="margin-left:20px" href="${technotes.technotes.technote[k].location}" target="_blank" >${technotes.technotes.technote[k].name}</a> </td>
+			</tr>
+		{{/if}}
+	{{/each}}
+{{/if}}
+-->
 </script>
 
 <script id="cartTemplateStyled" type="text/x-jquery-tmpl">

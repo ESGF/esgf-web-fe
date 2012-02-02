@@ -129,7 +129,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	var optionsStr = '<div id="radio" style="margin-bottom:30px;display:none">' + 
     				 	 '<table>' +
     				 	 '<tr>' +
-    				 	 /*
     				 	 '<td>' +
     				 	 '<input type="radio" id="datacart_filter_all" name="datacart_filter" value="all" /> ' +
     				 	 'Show all files ' +
@@ -138,7 +137,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     				 	 '<input type="radio" id="datacart_filtered" name="datacart_filter" value="filtered" /> ' +
     				 	 'Filter over search constraints ' +
     				 	 '</td>' +
-    				 	 */
     				 	 '<td></td>' + 
     				 	 '<td></td>' +
     				 	 '<td></td>' + 
@@ -227,7 +225,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		//
 		$("input[name='datacart_filter']").change(	function() { 
 			
-			
+        	
 				if($("input[id='datacart_filtered']").attr("checked")) { 
 					ESGF.setting.showAllContents = 'false';
 				} else {
@@ -293,6 +291,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			var queryString = '/esg-search/wget/?';
 			//if the show all contents is the filter...then add the search constraints to the wget
             if(ESGF.setting.showAllContents == 'false') {
+            	
             	
 				// traverse through the constraints and add to the querystring
 				//for(var i in self.searchConstraints) {

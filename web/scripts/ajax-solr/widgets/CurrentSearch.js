@@ -113,7 +113,8 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
                     }
                 }
                 
-                
+                fqString = self.truncate(fqString, 20);
+                //alert('fqString: ' + fqString);
                 links.push($('<a href="#"/>').text('(x) ' + fqString).click( //function () {
                 	self.removeFacet(fq[i]))
                 );
@@ -177,6 +178,25 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     }
   },
 
+  
+  truncate : function( value,numChars ) {
+		
+		value = replaceUnderscores(value);
+		//return (this.data + separator);
+		var returnedValue = '';
+		//if(value.length > numChars) {
+		//	returnedValue = value.substr(0,numChars) + ' ... ';
+		//} else {
+		returnedValue = value;
+		//}
+		
+		return returnedValue;
+	},
+	
+	
+  
+  
+  
   /**
    * 
    * @param facet
@@ -296,5 +316,10 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
   }
   
 });
+
+function replaceUnderscores(word) {
+	var convertedStr = word.split('_').join(' '); 
+	return convertedStr;
+}
 
 }(jQuery));

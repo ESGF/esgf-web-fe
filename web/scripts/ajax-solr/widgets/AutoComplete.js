@@ -62,8 +62,11 @@
 
 AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 
+	
+	
 	init: function() {
 		var self = this;
+		
 		
 		/**
 		 * DOCUMENT ME
@@ -71,6 +74,8 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 		$('#search-button').live('click',function(){
 			var value = $('input#query').val();
 
+			ESGF.setting.textbox = value;
+			
 			if(value.length > 0) {
 				
 				/*
@@ -115,6 +120,9 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 		$(this.target).find('input').bind('keydown', function(e) {
 			if(self.requestSent === false && e.which === 13) {
 				var value = $('input#query').val();
+				
+				ESGF.setting.textbox = value;
+				
 				if(value.length > 0) {
 					/*
 					var multiString = value.split('\+');
@@ -160,12 +168,16 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 		
 	},
 
+	
+	
 	/**
 	 * DOCUMENT ME
 	 */
   afterRequest: function () {
-	  
-	  $(this.target).find('input').val('');
+
+		//alert('textBox: ' + ESGF.setting.textbox);
+	  $(this.target).find('input').val(ESGF.setting.textbox);
+		//alert('textBox: ' + ESGF.setting.textbox);
 	  
 	  var self = this;
 	  

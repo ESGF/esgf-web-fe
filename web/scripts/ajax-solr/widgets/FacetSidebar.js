@@ -74,6 +74,7 @@
 			var facet_arr = new Array();
 			
 		    for (facet in self.manager.response.facet_counts.facet_fields) {
+		    	
 		    	var label = self.findLabelFromFacet(facet);
 		    	var facet_obj = new Object();
 		    	var facet_val_arr = new Array();
@@ -83,8 +84,11 @@
 		    		
 		    		//get the facet value and count here (note the index has to be incremented for the count)
 		    		var facet_value = self.manager.response.facet_counts.facet_fields[facet][i];
+		    		
 		    		i = i + 1;
 		    		var count = self.manager.response.facet_counts.facet_fields[facet][i];
+		    		
+		    		
 		    		
 		    		if(facet == 'project'){
 		    			if(count > facet_max_count) {
@@ -168,6 +172,8 @@
 	                
 	                $('li.' + selectedItem.data.Facet_name).toggle();
 	                
+	                
+	                
 		   		});
 		    }
 		    
@@ -177,20 +183,22 @@
 				//gets the long name...have to extract the short name for search
 				var label = $(this).parent().parent().parent().find('a.showFacetValues').html();
 				
+				//alert('facet_value: ' + $(this).parent().find('a').attr('id'));
+				if($(this).parent().find('a').attr('id') != undefined) {
+					//facet_value = $(this).parent().find('a').attr('id');
+				}
+				
 				var facet = self.findFacetFromLabel(label);
 				
 				var regEx = new RegExp("\\(");
 				var index = facet_value.search(regEx) - 1;
 				facetValue = facet_value.substr(0,index);
-				/*
-				var index = 40;//facet_value.search('/\(30\)/');
-				var facetValue = '';
-				if(index < facet_value.length) {
-					facetValue = facet_value.substr(0,index);
-				} else {
-					facetValue = facet_value.substr(0,facet_value.length-1);
-				}
-				*/
+				
+				//alert('facetValue: ' + facetValue);
+				
+				facetValue = $(this).parent().find('a').attr('id');
+				
+				
 				Manager.store.addByValue('fq', facet + ':' + facetValue );
 				
 				

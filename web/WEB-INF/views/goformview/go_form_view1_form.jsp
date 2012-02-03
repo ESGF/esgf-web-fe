@@ -36,11 +36,15 @@
 			</td>
 		</tr>
     </table>
-<!--
-    <p>
-    <input type="checkbox" name="goEmail" value="goEmail" /> Email when transfer starts<br />
-    </p>
--->    
+
+	<a href="#" class="gosourcesbutton">Get Sources</a>
+    <!--  
+    <input style="" class="gosourcesbutton" type="submit" value="Get Sources">
+     	-->
+	<div class="sources">
+		
+	</div>
+
     <p>
       	<%-- Input params to go_form2 
       	goUserName -> Globus Online User Name
@@ -63,3 +67,31 @@
      	<input style="" class="adminbutton" type="submit" value="next">
 	</p>
 </form>
+
+<script type="text/javascript">
+$(function(){
+	
+	$('.gosourcesbutton').click(function(){
+
+		var queryStr = '/esgf-web-fe/gosources';
+		
+	    jQuery.ajax({
+      	  url: queryStr,
+      	  type: 'GET',
+      	  success: function(data) {     
+      		  alert('success');
+      		  alert(data);
+      		  for(var key in data) {
+      			  alert('key: ' + key + ' data: ' + data[key]));
+      		  }
+      	  },
+      	  error: function() {
+      		  alert('error');
+      	  }
+	    });
+      	
+	});
+	
+});
+
+</script>

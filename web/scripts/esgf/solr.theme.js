@@ -281,10 +281,11 @@ AjaxSolr.theme.prototype.snippetReplica = function (doc) {
     var output = '';
     if(doc['replica']) {
         //output += 'Replica dataset at datanode: ' + doc['data_node'] + '<br />';
-        output += 'Data Node: ' + doc['master_gateway'];
+        output += 'Data Node: ' + doc['data_node'];
         
     } else {
         //output += 'Master dataset at datanode: ' + doc['data_node'];
+        output += 'Data Node: ' + doc['data_node'];
     }
 
     return output;

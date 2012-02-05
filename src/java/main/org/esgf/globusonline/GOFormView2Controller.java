@@ -97,6 +97,7 @@ public class GOFormView2Controller {
     private final static String GOFORMVIEW_FILE_URLS = "GoFormView_File_Urls";
     private final static String GOFORMVIEW_FILE_NAMES = "GoFormView_File_Names";
     private final static String GOFORMVIEW_ENDPOINTS = "GoFormView_Endpoints";
+    private final static String GOFORMVIEW_SOURCEENDPOINTS = "GoFormView_SourceEndpoints";
     private final static String GOFORMVIEW_ENDPOINTINFOS = "GoFormView_EndpointInfos";
     private final static String GOFORMVIEW_ERROR = "GoFormView_Error";
     private final static String GOFORMVIEW_ERROR_MSG = "GoFormView_ErrorMsg";
@@ -131,6 +132,13 @@ public class GOFormView2Controller {
         LOG.debug("goUserName: " + goUserName + " " + "myProxyUserName: " + myProxyUserName +
                            " " + "myProxyUserPass: " + "*****" + " goEmail: " + goEmail);
 
+        
+        String myproxyUser = "myproxyUser";
+        String myproxyPass = "myproxyPass";
+        String [] sourceEndpoints = this.getSourceEndpointNames(myproxyUser, myproxyPass);        
+        model.put(GOFORMVIEW_SOURCEENDPOINTS, sourceEndpoints);
+        
+        /*
         StringBuffer errorStatus = new StringBuffer("Steps leading up to the error are shown below:<br><br>");
         errorStatus.append("Globus Online Username entered: ");
         errorStatus.append(goUserName);
@@ -227,9 +235,26 @@ public class GOFormView2Controller {
             model.put(GOFORMVIEW_ERROR_MSG, error);
             LOG.error("Failed to initialize Globus Online: " + e);
         }
+        */
         return new ModelAndView("goformview2", model);
     }
 
+    /*
+     * get the source endpoint names
+     * assuming there will be some code here that calls the GO API
+     * given the myproxy username & password
+     */
+    private String[] getSourceEndpointNames(String myproxyUser,String myproxyPass) {
+        int endpointVectorLength = 2;
+        String [] endPointNames = new String[endpointVectorLength];
+        
+        endPointNames[0] = "nodeC";
+        endPointNames[1] = "nodeD";
+        
+        
+        return endPointNames;
+    }
+    
     private String[] getDestinationEndpointNames(Vector<EndpointInfo> endpoints)
     {
         int numEndpoints = endpoints.size();

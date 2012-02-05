@@ -46,6 +46,7 @@ public class ExtractRoleInfoController {
     public ExtractRoleInfoController() throws FileNotFoundException, IOException {
         LOG.debug("IN ExtractRoleInfoController Constructor");
         if(Utils.environmentSwitch) {
+            System.out.println("SHOULD NOT BE HERE " + Utils.environmentSwitch);
             goi = new GroupOperationsESGFDBImpl();
             uoi = new UserOperationsESGFDBImpl();
             roi = new RoleOperationsESGFDBImpl();

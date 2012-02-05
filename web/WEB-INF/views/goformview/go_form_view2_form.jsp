@@ -8,7 +8,52 @@
 	<c:otherwise>
 <form id="new_user_form" action="goformview3" method="post">
 		<h3 style="" id="form_title">Globus Online Transfer: Step 2 of 3</h3>
-                <p>Please choose where you'd like to move the data:</p>
+		
+				<p>Please choose the source node(s) from where you'd like to move the data:</p>
+				
+             <table>
+				<tr id="">
+					<td>
+						<div class="" style="">Source Endpoints</div> 
+					<input style="margin-right:5px;" class="sourcenodes" id="thisnode" type="checkbox" name="sourcenodes" value="default" disabled checked>*This node* 
+					<c:set var="j" value="0"/>
+        					<c:forEach var="source" items="${GoFormView_SourceEndpoints}">
+        					
+        					<input style="margin-right:5px;" class="sourcenodes" id="${GoFormView_SourceEndpoints[j]}" type="checkbox" name="sourcenodes" value="${GoFormView_SourceEndpoints[j]}" >${GoFormView_SourceEndpoints[j]}
+					<c:set var="j" value="${j+1}"/>
+        					
+       						</c:forEach>
+       						
+					
+					</td>
+					
+				</tr>
+				<c:set var="j" value="0"/>
+        		<c:forEach var="source" items="${GoFormView_SourceEndpoints}">
+        			<tr id="${GoFormView_SourceEndpoints[j]}" style="display:none;margin-top:5px;">
+						<td>
+							<div class="" style="">${GoFormView_SourceEndpoints[j]} MyProxy UserName</div> 
+						</td>
+						<td>
+							<input type="text" class="text" value=""> 
+						</td>
+					</tr>
+					<tr id="${GoFormView_SourceEndpoints[j]}" style="display:none;margin-top:5px;">
+						<td>
+							<div class="" style="">${GoFormView_SourceEndpoints[j]} MyProxy Password</div> 
+						</td>
+						<td>
+							<input type="text" class="text" value=""> 
+						</td>
+					</tr>
+        			<c:set var="j" value="${j+1}"/>
+        					
+       			</c:forEach>
+				
+			</table>
+				
+				<p>Please choose where you'd like to move the data:</p>
+				
 			<table>
 				
 				<tr id="">
@@ -72,3 +117,31 @@
 		</form>
 	</c:otherwise>
 </c:choose>
+
+<script type="text/javascript">
+$(function(){
+	
+	
+	$('input.sourcenodes').click(function(){
+		$(this).parent().find('input.sourcenodes').each(function(index) {
+			var isChecked = $(this).attr('checked');
+			var id = $(this).attr('id');
+			if(isChecked) {
+				if(id != 'thisnode') {
+					$('tr#' + id).show();
+				}
+			} else {
+				if(id != 'thisnode') {
+					$('tr#' + id).hide();
+				}
+			}
+		
+		});
+		
+	});
+	
+	
+	
+});
+
+</script>

@@ -37,14 +37,6 @@
 		</tr>
     </table>
 
-	<a href="#" class="gosourcesbutton">Get Sources</a>
-    <!--  
-    <input style="" class="gosourcesbutton" type="submit" value="Get Sources">
-     	-->
-	<div class="sources">
-		
-	</div>
-
     <p>
       	<%-- Input params to go_form2 
       	goUserName -> Globus Online User Name
@@ -69,6 +61,7 @@
 </form>
 
 <script type="text/javascript">
+/*
 $(function(){
 	
 	$('.gosourcesbutton').click(function(){
@@ -78,12 +71,14 @@ $(function(){
 	    jQuery.ajax({
       	  url: queryStr,
       	  type: 'GET',
+		  dataType: 'json',
       	  success: function(data) {     
       		  alert('success');
-      		  alert(data);
-      		  for(var key in data) {
-      			  alert('key: ' + key + ' data: ' + data[key]));
+      		  alert(data.Sources.Source.length);
+      		  for(var i=0;i<data.Sources.Source.length;i++) {
+      			  alert(data.Sources.Source[i]);
       		  }
+      		  
       	  },
       	  error: function() {
       		  alert('error');
@@ -93,5 +88,5 @@ $(function(){
 	});
 	
 });
-
+*/
 </script>

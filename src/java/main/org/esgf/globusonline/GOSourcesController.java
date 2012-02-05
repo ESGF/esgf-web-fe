@@ -3,6 +3,8 @@ package org.esgf.globusonline;
 import javax.servlet.http.HttpServletRequest;
 
 import org.esgf.metadata.JSONException;
+import org.esgf.metadata.JSONObject;
+import org.esgf.metadata.XML;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,8 +28,9 @@ public class GOSourcesController {
     
         System.out.println("\t\t\tIn GOSourcesController");
         
-        
-        return "hello";
+        String xmlStr = "<Sources><Source>1</Source><Source>2</Source><Source>a</Source><Source>b</Source><Source>c</Source></Sources>";
+        JSONObject jo = XML.toJSONObject(xmlStr);
+        return jo.toString();
     }
     
 }

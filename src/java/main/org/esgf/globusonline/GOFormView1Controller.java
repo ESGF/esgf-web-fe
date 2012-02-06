@@ -111,20 +111,20 @@ public class GOFormView1Controller {
 
         String myproxyServerStr = null;
 
-        //get the openid here from the cookie
-        Cookie [] cookies = request.getCookies();
-        String openId = "";
-        for(int i = 0; i < cookies.length; i++)
-        {
-            if (cookies[i].getName().equals("esgf.idp.cookie"))
-            {
-                openId = cookies[i].getValue();
-            }
-        }
-
-        LOG.debug("Got User OpenID: " + openId);
         try
         {
+	    //get the openid here from the cookie
+	    Cookie [] cookies = request.getCookies();
+	    String openId = "";
+	    for(int i = 0; i < cookies.length; i++)
+	    {
+		if (cookies[i].getName().equals("esgf.idp.cookie"))
+		{
+		    openId = cookies[i].getValue();
+		}
+	    }
+
+	    LOG.debug("Got User OpenID: " + openId);
             URI myproxyServerURI = Utils.resolveMyProxyViaOpenID(openId);
             LOG.debug("Got MyProxy URI: " + myproxyServerURI);
 
@@ -140,27 +140,26 @@ public class GOFormView1Controller {
             }
             myproxyServerStr = mHost + ":" + mPort;
             LOG.debug("Using MyProxy Server: " + myproxyServerStr);
+
+	    if (request.getParameter(GOFORMVIEW_MODEL)!=null) {
+		//it should never come here...
+	    }
+	    else {
+		//place the dataset name, file names and urls into the model
+		model.put(GOFORMVIEW_MYPROXY_SERVER, myproxyServerStr);
+		model.put(GOFORMVIEW_FILE_URLS, file_urls);
+		model.put(GOFORMVIEW_FILE_NAMES, file_names);
+		model.put(GOFORMVIEW_DATASET_NAME, dataset_name);
+	    }
         }
         catch(Exception e)
         {
+	    String errorMsg = "Failed to resolve OpenID: " + e;
             LOG.error("Failed to resolve OpenID: " + e);
             model.put(GOFORMVIEW_ERROR, "error");
-            model.put(GOFORMVIEW_ERROR_MSG, "Failed to resolve OpenID: " + e);
+            model.put(GOFORMVIEW_ERROR_MSG, errorMsg + "<br><br>Please make sure that you're" +
+		      " logged in as a valid user before trying to download data!<br><br>");
         }
-
-        if (request.getParameter(GOFORMVIEW_MODEL)!=null) {
-            //it should never come here...
-        }
-        else {
-            
-            //place the dataset name, file names and urls into the model
-            model.put(GOFORMVIEW_MYPROXY_SERVER, myproxyServerStr);
-            model.put(GOFORMVIEW_FILE_URLS, file_urls);
-            model.put(GOFORMVIEW_FILE_NAMES, file_names);
-            model.put(GOFORMVIEW_DATASET_NAME, dataset_name);
-            
-        }
-
         return new ModelAndView("goformview1", model);
     }
 }

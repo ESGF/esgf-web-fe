@@ -62,12 +62,15 @@
 (function ($) {
 
     $(function () {
+    	
+    	
          Manager = new AjaxSolr.Manager({
                 proxyUrl: '/esgf-web-fe/solrproxy',
                 //proxyUrl: 'http://esg-gw.ornl.teragrid.org:8080/esgf-web-fe/solrproxy'
                 metadataProxyUrl: '/esgf-web-fe/metadataproxy'
             });
 
+     	
          Manager.addWidget(new AjaxSolr.DistributedSearchWidget({
              id: 'distributedSearch'
            }));
@@ -126,7 +129,7 @@
      		}
          });
          
-         
+
     });
 
     function processWidgets(fields) {

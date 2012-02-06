@@ -70,7 +70,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
     	  
           var self = this;
 
-		  
+
           //loads everything in the html5 'fq' store
           self.loadExistingQueries();
           
@@ -114,8 +114,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           var revisedQueryString = self.rewriteTextQuery(queryString);
 
           LOG.debug("Manager's querystring: " + revisedQueryString);
-          //alert('queryString: ' + revisedQueryString);
-          
+
           /**
            * Ajax call to the search API
            */
@@ -150,7 +149,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
             	  //ESGF.setting.searchType = 'local';
             	  
             	  //reload the page
-            	  window.location.reload();
+            	  //window.location.reload();
         	  }
           });
           
@@ -180,6 +179,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
         ESGF.localStorage.put('esgf_fq','type:Dataset','type:Dataset');
         Manager.store.addByValue('fq','type:Dataset');
         
+        
   		//put in the replica type (which for results is "false")
         //ESGF.localStorage.put('esgf_fq','replica:false','replica:false');
         //Manager.store.addByValue('fq','replica:false');
@@ -204,7 +204,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 	    //}
         
         var searchQuery = ESGF.localStorage.toString('esgf_queryString');
-        //ESGF.localStorage.printMap('esgf_queryString');
+        ESGF.localStorage.printMap('esgf_queryString');
         
         
         //get all of the fq parameters from the localstore
@@ -215,6 +215,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
         //add each constraint
         for(var key in esgf_fq) {
         	var value = esgf_fq[key];
+        	//alert('key: ' + key + ' value: ' + value);
         	if(key != '') {
         		Manager.store.addByValue('fq',value);
         	} 

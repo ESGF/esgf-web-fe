@@ -22,18 +22,22 @@
 
 <div class="span-6 last" style="padding-bottom:10px">
 	<div class="l2contentleftbox"> 
-		<ul class="ul_class" >
+		<ul class="ul_class" id="facetSidebarList">
 			<li class="li_class_title">
 	   			Search Categories
 			</li>
 		</ul>
-		 
+		
+		<div id="facets">
+		
+		</div>
+		<!--  
 		<table>
 			<tbody id="facetList">
 		
 	    	</tbody>
 		</table>
-		
+		--> 
 		
 	</div>
 	

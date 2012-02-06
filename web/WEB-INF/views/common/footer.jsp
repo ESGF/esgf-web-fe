@@ -41,6 +41,7 @@
 	
 <script type="text/javascript">
 $(function(){
+	/*
 	if($.browser.msie) {
 		alert("ESGF currently does not support Microsoft Internet Explorer.  Please try the Mozilla Firefox, Apple Safari, or Google Chrome browser.");
 		var disclaimer = '<p style="color:red;font-weight:bold;border:1px dashed #e8ddcf;margin-top:10px">' +
@@ -49,6 +50,7 @@ $(function(){
 						 '</p>';
 		$('div#disclaimer').append(disclaimer);
 	}
+	*/
 });
 
 </script>

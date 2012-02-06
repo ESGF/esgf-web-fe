@@ -524,7 +524,7 @@ legend#more_constraints{
 
 
 .li_facet_class {
-	position:relative;
+	/* position:relative; */
 	border-bottom: 1px solid #ccc;
 }
 

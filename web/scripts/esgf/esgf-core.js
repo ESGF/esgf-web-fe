@@ -143,8 +143,10 @@ ESGF.search.fileDownloadTemplateProxyUrl = '/esgf-web-fe/solrfileproxy',
 ESGF.setting.facetFile = '/esgf-web-fe/facetfileproxy',
 
 
-
-
+ESGF.setting.tempStore = {'esgf_queryString' : {'' : '' }};
+ESGF.setting.tempStore['esgf_fq'] = {'' : ''};
+ESGF.setting.tempStore['dataCart'] = {'' : ''};
+ESGF.setting.tempStore['esgf_searchStates'] = {'' : ''};
 
 // general util functions
 ESGF.util.toArray = function (obj) {

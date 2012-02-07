@@ -16,6 +16,10 @@
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.livequery.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.autocomplete.js" /> '></script>
 
+	<script type="text/javascript" src='<c:url value="/scripts/cim/cim-viewer-core.js" />'> </script>
+	<script type="text/javascript" src='<c:url value="/scripts/cim/cim-viewer-renderer.js" />'> </script>
+	<script type="text/javascript" src='<c:url value="/scripts/cim/cim-services-proxy.js" />'> </script>
+
 	<!--  
     <script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-download.js" /> '></script>
 	-->
@@ -57,10 +61,7 @@
     <script type="text/javascript" src='<c:url value="/scripts/esgf/solr.theme.js" />'> </script>
 
 
-	<script type="text/javascript" src='<c:url value="/scripts/cim/cim-viewer-core.js" />'> </script>
-	<script type="text/javascript" src='<c:url value="/scripts/cim/cim-viewer-renderer.js" />'> </script>
-	<script type="text/javascript" src='<c:url value="/scripts/cim/cim-services-proxy.js" />'> </script>
-
+	
 <script type="text/javascript">
             (function () {
             	
@@ -100,34 +101,21 @@
                 // Event handler for document ready event.
                 $jq(document).ready(function() {
                     // Model metadata selectors.
+                    
                     $jq('.cim-model').live('click', function() {
+                    	
+                    	/*
                     	alert($(this).parent().html());
                     	onCIMLinkClicked(this);
                         
                     	
                     	render('cmip5', 'model', $jq(this).text());
+                    	*/
                     });
                     
                 });
                 
-                function onCIMLinkClicked(obj) {
-                	alert('obj: ' + obj);
-                	
-                	var drs_components = get_drs_components(obj);
-                	
-                	alert(drs_components);
-                	
-                }
                 
-                
-                function get_drs_components(obj) {
-                	
-                	//do something from the obj to get the dict
-                	
-                	var dict = {'project' : 'cmip5', 'institute' : 'ipsl', 'model' : 'ipsl-cm5-lr', 'experiment' : 'amip' };
-                    
-                	return dict;
-                }
                 
                 
             }());

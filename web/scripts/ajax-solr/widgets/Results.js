@@ -147,22 +147,58 @@
 	        var self = this;
             $(this.target).empty();
             
+            
             if(ESGF.setting.storage) {
             	
             	//extract from localStorage
             	var esgf_fq = ESGF.localStorage.getAll('esgf_fq');
+            	
+            	var searchConstraint = '';
             	
             	//loop through all the fqs
             	for(var key in esgf_fq) {
             		var value = esgf_fq[key];
             	}
             	
+            	//need to check the following to see if there are any USER ADDED search constraints
+            	var userAddedConstraint = 'false';
+            	
+            	
+            	var esgf_queryString = ESGF.localStorage.getAll('esgf_queryString');
+            	for(var key in esgf_queryString) {
+            		if(key != '' && key != ' ') {
+            			searchConstraint += key + ',';
+            		}
+            		//alert('key: ' + key + ' value: ' + esgf_queryString[key]);
+            		//have to ignore the following
+            		if(key.search('offset') > -1) {
+            			//alert('offset found');
+            		} else if(key.search('type:') > -1) {
+            			//alert('type found');
+            		} else if(key.search('replica:') > -1) {
+            			//alert('replica found');
+            		} else if(key.search('latest:') > -1) {
+            			//alert('latest found');
+            		} else if(key.search('distrib') > -1) {
+            			//alert('distrib found');
+            		} else if(key == '' || key == ' ') {
+            			//alert('blank found');
+            		} else {
+            			userAddedConstraint = 'true';
+            		}
+            	}
+            	
+            	
             	var fq = localStorage['fq'];
 
+            	
                 /* only display results if there is a search */
-            	/* for now that means the localStorage ONLY has type:Dataset; */
-            	if(Manager.store.values('fq') != 'type:Dataset,replica:false') {	
-                	//alert ('i should not display this if ' + fq);
+            	/* for now that means the localStorage ONLY has type:Dataset;,replica:false */
+            	//if(Manager.store.values('fq') != 'type:Dataset,replica:false') {	
+                //if(searchConstraint != 'type:Dataset,replica:false,distrib,') {
+            	if(userAddedConstraint == 'true') {
+                //if(searchConstraint != 'offset,type:Dataset,replica:false,latest:true,distrib,') {
+            	    		//alert ('i should not display this if ' + fq);
                 	for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
                         var doc = this.manager.response.response.docs[i];
                     		if(self.postSolrProcessing(doc)) {
@@ -170,11 +206,13 @@
                             	//alert('doc: ' + doc.title);
                                 $(this.target).append(
                                     AjaxSolr.theme('result', doc,
-                                    AjaxSolr.theme('snippet', doc),
+                                            AjaxSolr.theme('snippetReplica', doc),
+                                            AjaxSolr.theme('snippetVersion', doc),
+                                            AjaxSolr.theme('snippet', doc),
                                     AjaxSolr.theme('actions', doc)));
                             } 
                         }
-                }
+                } 
             } else {
             	if(this.manager.store.values('fq') != 0)
             		for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {

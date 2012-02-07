@@ -62,13 +62,23 @@
 
 AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 
+	
+	
 	init: function() {
 		var self = this;
 		
+		
+		/**
+		 * DOCUMENT ME
+		 */
 		$('#search-button').live('click',function(){
 			var value = $('input#query').val();
 
+			ESGF.setting.textbox = value;
+			
 			if(value.length > 0) {
+				
+				/*
 				var multiString = value.split('\+');
 				
 				for(var i=0;i<multiString.length;i++) {
@@ -80,18 +90,41 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 				    	multiString[i] = '"' + multiString[i] + '"';
 				    }
 					ESGF.localStorage.put('esgf_fq','text:'+multiString[i],'text:'+multiString[i]);
+					ESGF.localStorage.put('esgf_queryString','text:'+multiString[i],'query='+multiString[i]);
 				}
-
+				*/
+				//remove previous text
+				var queryStringMap = ESGF.localStorage.getAll('esgf_queryString');
+				
+				for(var key in queryStringMap) {
+					var keyStr = key;
+					if(keyStr.search('text') > -1) {
+						//alert('remove ' + key + ' ' + queryStringMap[key]);
+						ESGF.localStorage.remove('esgf_queryString',keyStr);
+					}
+				}
+				
+				ESGF.localStorage.put('esgf_queryString','text:'+value,'query='+value);
+				var mapStr = ESGF.localStorage.toString('esgf_queryString');
+				
+				//alert(mapStr);
 				self.manager.doRequest(0);
 			}
 			
 		});
 		
 		
+		/**
+		 * DOCUMENT ME
+		 */
 		$(this.target).find('input').bind('keydown', function(e) {
 			if(self.requestSent === false && e.which === 13) {
 				var value = $('input#query').val();
+				
+				ESGF.setting.textbox = value;
+				
 				if(value.length > 0) {
+					/*
 					var multiString = value.split('\+');
 					
 					for(var i=0;i<multiString.length;i++) {
@@ -103,7 +136,29 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 					    	multiString[i] = '"' + multiString[i] + '"';
 					    }
 						ESGF.localStorage.put('esgf_fq','text:'+multiString[i],'text:'+multiString[i]);
+						
+						ESGF.localStorage.put('esgf_queryString','text:'+multiString[i],'query='+multiString[i]);
+						
 					}
+					*/
+					
+					//remove previous text
+					var queryStringMap = ESGF.localStorage.getAll('esgf_queryString');
+					
+					for(var key in queryStringMap) {
+						var keyStr = key;
+						if(keyStr.search('text') > -1) {
+							//alert('remove ' + keyStr + ' ' + queryStringMap[key]);
+							ESGF.localStorage.remove('esgf_queryString',keyStr);
+						}
+					}
+					
+					
+					
+					ESGF.localStorage.put('esgf_queryString','text:'+value,'query='+value);
+					var mapStr = ESGF.localStorage.toString('esgf_queryString');
+					
+					//alert(mapStr);
 					
 					self.manager.doRequest(0);
 				}
@@ -113,9 +168,16 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 		
 	},
 
+	
+	
+	/**
+	 * DOCUMENT ME
+	 */
   afterRequest: function () {
-	  
-	  $(this.target).find('input').val('');
+
+		//alert('textBox: ' + ESGF.setting.textbox);
+	  $(this.target).find('input').val(ESGF.setting.textbox);
+		//alert('textBox: ' + ESGF.setting.textbox);
 	  
 	  var self = this;
 	  

@@ -50,46 +50,71 @@
  *
  ******************************************************************************/
 
-package org.esgf.manager;
-
-import esg.search.query.api.SearchInput;
-
 /**
- * Manages how the query will be constructed before calling solr
- * Includes: geospatial search (centroid filter)
  *
- * Coming soon includes: temporal search
- *                       facet (currently hardcoded in SearchController)
- *
- * @author john.harney
- *
+ * fwang2@ornl.gov
+ * harneyjf@ornl.gov
  */
-public interface InputManager {
 
 
-    /**
-     * Method to input the facet profile
-     *
-     * Note: currently under development
-     */
-    public void inputFacetProfile();
+(function ($) {
 
-    /**
-     * Method to input the geospatial constraints
-     */
-    public void inputGeospatialConstraints();
+AjaxSolr.VersionsWidget = AjaxSolr.AbstractWidget.extend({
+	
+	init: function() {
+		//alert('init version');
 
-    /**
-     * Method to input the temporal constraints
-     */
-    public void inputTemporalConstraints();
+		//alert('b4: ' + ESGF.localStorage.toString('esgf_queryString'));
+        ESGF.localStorage.put('esgf_queryString','latest:true','latest=true');
 
+		
+		if($("input#versioncheckbox").attr("checked")) { 
+			//attr('checked','true');
+			//alert('reset the replica checkbox to false');
+			$("input#versioncheckbox").removeAttr('checked');
+			
+		}
+	},
+	
+	beforeRequest: function () {
 
-    /**
-     * Method returns the input to the SearchController
-     */
-    public SearchInput getInput();
+		$("input#versioncheckbox").die('change');
+	},
+	
+	afterRequest: function () {
+		
+		
+		var self = this;
+    
+		$('input#versioncheckbox').live('change',function () {
+			//alert('changed checkbox');
+			
 
+			if($("input#versioncheckbox").attr("checked")) { 
+				//alert('take the versions parameter out of the query');
+				
+				ESGF.localStorage.remove('esgf_queryString','latest:true');
+				
+				
+				
+            	Manager.doRequest(0);
+			} else {
+				//alert('put the versions parameter in the query');
 
+				//alert('b4: ' + ESGF.localStorage.toString('esgf_queryString'));
+		  		//put in the replica type (which for results is "false")
+		        ESGF.localStorage.put('esgf_queryString','latest:true','latest=true');
+				//alert('after: ' + ESGF.localStorage.toString('esgf_queryString'));
+				
+            	Manager.doRequest(0);
+			}
+			
+		});
+		
+		
+		
+	}
 
-}
+});
+
+}(jQuery));

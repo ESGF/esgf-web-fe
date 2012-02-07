@@ -46,13 +46,15 @@
       	goUserName -> Globus Online User Name
       	myProxyUserName -> username of the source myproxy
       	myProxyUserPass -> userpass of the source myproxy
+	GoFormView_Myproxy_Server -> OpenID matching MyProxy server 
       	id -> DatasetName
       	child_id[] -> FileNames
       	child_url[] -> FileUrls
       	goEmail -> toggler for sending email confirmation
       	--%>
       	<input type="hidden" name="id" id="${GoFormView_Dataset_Name}" value="${GoFormView_Dataset_Name}" />
-	  	<c:set var="j" value="0"/>
+      	<input type="hidden" name="GoFormView_Myproxy_Server" value="${GoFormView_Myproxy_Server}" />
+	<c:set var="j" value="0"/>
       	<c:forEach var="group" items="${GoFormView_File_Names}">
       		<input type="hidden" name="child_id" id="${GoFormView_File_Names[j]}" value="${GoFormView_File_Names[j]}" />
       		<input type="hidden" name="child_url" id="${GoFormView_File_Urls[j]}" value="${GoFormView_File_Urls[j]}" />

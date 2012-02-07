@@ -67,13 +67,9 @@
 package org.esgf.globusonline;
 
 import java.net.URI;
-import java.net.URL;
 
-import java.util.Enumeration;
 import java.util.Map;
-import java.util.Set;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Vector;
 
 import org.globusonline.*;
@@ -83,7 +79,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -105,6 +100,7 @@ public class GOFormView2Controller {
     private final static String GOFORMVIEW_ENDPOINTINFOS = "GoFormView_EndpointInfos";
     private final static String GOFORMVIEW_ERROR = "GoFormView_Error";
     private final static String GOFORMVIEW_ERROR_MSG = "GoFormView_ErrorMsg";
+    private final static String GOFORMVIEW_MYPROXY_SERVER = "GoFormView_Myproxy_Server";
     private final static String GOFORMVIEW_SRC_MYPROXY_USER = "GoFormView_SrcMyproxyUser";
     private final static String GOFORMVIEW_SRC_MYPROXY_PASS = "GoFormView_SrcMyproxyPass";
 
@@ -124,8 +120,9 @@ public class GOFormView2Controller {
         String dataset_name = request.getParameter("id");
         String [] file_names = request.getParameterValues("child_id");
         String [] file_urls = request.getParameterValues("child_url");
-        String goUserName = request.getParameter("goUserName");
-        String myProxyUserName = request.getParameter("myProxyUserName");
+        String goUserName = request.getParameter("goUserName"); 
+        String myProxyServerStr = request.getParameter(GOFORMVIEW_MYPROXY_SERVER);
+	String myProxyUserName = request.getParameter("myProxyUserName");
         String myProxyUserPass = request.getParameter("myProxyUserPass");
         String goEmail = request.getParameter("goEmail");
 
@@ -134,7 +131,9 @@ public class GOFormView2Controller {
         LOG.debug("GOFormView2Controller: file_urls = " + file_urls);
 
         LOG.debug("goUserName: " + goUserName + " " + "myProxyUserName: " + myProxyUserName +
-                           " " + "myProxyUserPass: " + "*****" + " goEmail: " + goEmail);
+                           " " + "myProxyUserPass: " + "*****" + " myProxyServerStr: " + myProxyServerStr);
+        System.out.println("goUserName: " + goUserName + " " + "myProxyUserName: " + myProxyUserName +
+                           " " + "myProxyUserPass: " + "*****" + " myProxyServerStr: " + myProxyServerStr);
 
         StringBuffer errorStatus = new StringBuffer("Steps leading up to the error are shown below:<br><br>");
         errorStatus.append("Globus Online Username entered: ");
@@ -143,47 +142,11 @@ public class GOFormView2Controller {
         errorStatus.append(myProxyUserName);
         errorStatus.append("<br>");
 
-        //get the openid here from the cookie
-        Cookie [] cookies = request.getCookies();
-        String openId = "";
-        for(int i = 0; i < cookies.length; i++)
-        {
-            if (cookies[i].getName().equals("esgf.idp.cookie"))
-            {
-                openId = cookies[i].getValue();
-            }
-        }
-
-        errorStatus.append("Retrieved OpenID: ");
-        errorStatus.append(openId);
-        errorStatus.append("<br>");
-
-        LOG.debug("Got User OpenID: " + openId);
         try
         {
-            URI myproxyServerURI = Utils.resolveMyProxyViaOpenID(openId);
-            LOG.debug("Got MyProxy URI: " + myproxyServerURI);
-
-            String mHost = myproxyServerURI.toString();
-            String mPort = "7512";
-            if (myproxyServerURI.getHost() != null)
-            {
-                mHost = myproxyServerURI.getHost();
-            }
-            if (myproxyServerURI.getPort() != -1)
-            {
-                mPort = new Integer(myproxyServerURI.getPort()).toString();
-            }
-            String myproxyServerStr = mHost + ":" + mPort;
-            LOG.debug("Using MyProxy Server: " + myproxyServerStr);
-
-            errorStatus.append("Resolved MyProxy Server: ");
-            errorStatus.append(myproxyServerStr);
-            errorStatus.append("<br>");
-
             LOG.debug("Initializing Globus Online Transfer object");
             JGOTransfer transfer = new JGOTransfer(
-                goUserName, myproxyServerStr, myProxyUserName,
+                goUserName, myProxyServerStr, myProxyUserName,
                 myProxyUserPass, CA_CERTIFICATE_FILE);
             //transfer.setVerbose(true);
             transfer.initialize();
@@ -214,7 +177,7 @@ public class GOFormView2Controller {
                 model.put(GOFORMVIEW_SRC_MYPROXY_PASS, myProxyUserPass);
 
                 String[] endPointNames = getDestinationEndpointNames(endpoints);
-                String[] endPointInfos = constructEndpointInfos(endpoints); 
+                String[] endPointInfos = constructEndpointInfos(endpoints);
 
                 LOG.debug("Retrieved an array of " + endPointNames.length + " Endpoint names");
                 LOG.debug("Retrieved an array of " + endPointInfos.length + " EndpointInfo strings");

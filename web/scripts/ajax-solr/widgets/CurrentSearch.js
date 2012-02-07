@@ -67,56 +67,105 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
   floatPrecision: 2,	
 	
   /**
-   * 
+   * DOCUMENT ME
    */
   afterRequest: function () {
 	  
     var self = this;
     var links = [];
     var i = null;
-    var fq = this.manager.store.values('fq');
-    for (i = 0, l = fq.length; i < l; i++) {
-        var fqString = fq[i];
-        //leave out the 'type:Dataset' constraint 
-        if(fqString.search('Dataset') == -1 && fqString.search('replica:false')) {
-        	
-        	//check to see if this is a geospatial query (assuming 'east_degrees' is in every geo query)
-            //if it is -> need to change the current selection string
-        	//this is mainly to make it human readable (as opposed to only solr readable)
-            if(fqString.search('east_degrees') !== -1)
-            {
-                if($("input[name='areaGroup']:checked").val() === 'circle') {
-                	fqString = self.outputCentroidString(fqString);
-                }
-                else {
-                	fqString = self.outputBoundingBoxString(fqString);
-                }
-            }
-            
-            
-            links.push($('<a href="#"/>').text('(x) ' + fqString).click( //function () {
-            	self.removeFacet(fq[i]))
-            );
-        }
-        
+    
+    var esgf_q = ESGF.localStorage.getAll('esgf_queryString');
+    
+  //remove everything from ajax-solr parameter store  
+	self.manager.store.remove('fq');
+    
+    for(var k in esgf_q) {
+    	if(k != '' && k != ' ') {
+        	this.manager.store.addByValue('fq',k);
+    	}
+    	
     }
 
+    var fq = this.manager.store.values('fq');
+    
+    for (i = 0, l = fq.length; i < l; i++) {
+        var fqString = fq[i];
+        //alert('fqString: ' + fqString);
+        if(fqString != "" && fqString != " ") {
+        	//leave out the 'type:Dataset' constraint 
+        	//alert('fqString: ' + fqString);
+            //if(fqString.search('Dataset') == -1 && fqString.search('replica:false') == -1 && fqString.search('latest:true') == -1 && fqString.search('distrib') == -1 && fqString.search('offset') == -1) {
+        	if(fqString.search('Dataset') == -1 && fqString.search('replica') == -1 && fqString.search('latest') == -1 && fqString.search('distrib') == -1 && fqString.search('offset') == -1) {
+            		
+            	//alert('removing facet: ' + fqString);
+            	
+            	//check to see if this is a geospatial query (assuming 'east_degrees' is in every geo query)
+                //if it is -> need to change the current selection string
+            	//this is mainly to make it human readable (as opposed to only solr readable)
+                if(fqString.search('east_degrees') !== -1)
+                {
+                    if($("input[name='areaGroup']:checked").val() === 'circle') {
+                    	fqString = self.outputCentroidString(fqString);
+                    }
+                    else {
+                    	fqString = self.outputBoundingBoxString(fqString);
+                    }
+                }
+                
+                fqString = self.truncate(fqString, 20);
+                //alert('fqString: ' + fqString);
+                links.push($('<a href="#"/>').text('(x) ' + fqString).click( //function () {
+                	self.removeFacet(fq[i]))
+                );
+            }
+        }
+        
+        
+    }
+	
+    
     if (links.length > 1) {
       links.unshift($('<a href="#"/>').text('remove all').click(function () {
         
     	//remove everything from ajax-solr parameter store  
     	self.manager.store.remove('fq');
         
-    	//remove everything from the localstorage store
+    	var esgf_q = ESGF.localStorage.getAll('esgf_queryString');
+        
+    	for(var key in esgf_q) {
+        	if(key != '' && key != ' ') {
+        		if(key.search('replica:') > -1) {
+        			
+        		} else if(key.search('latest:') > -1) {
+        			
+        		} else if(key.search('distrib') > -1) {
+        			
+        		} else {
+                	ESGF.localStorage.remove('esgf_queryString',key);
+                	ESGF.localStorage.remove('esgf_fq',key);
+        		}
+            	//this.manager.store.addByValue('fq',k);
+        	}
+        	
+        }
+    	/*
+    	//remove everything from the localstorage esgf_fq store
         var esgf_fq = ESGF.localStorage.getAll('esgf_fq');        
         for(var key in esgf_fq) {
-        	var value = esgf_fq[key];
-        	ESGF.localStorage.remove('esgf_fq',key,value);
+        	ESGF.localStorage.remove('esgf_fq',key);
         }
-        //var facet = null;
-        //self.removeGeospatialConstraints(facet);  
+
+    	//remove everything from the localstorage esgf_queryString store
+        var esgf_queryString = ESGF.localStorage.getAll('esgf_queryString');  
+        for(var key in esgf_queryString) {
+        	ESGF.localStorage.remove('esgf_queryString',key);
+        }
         
         self.manager.doRequest(0);
+        */
+    	self.manager.doRequest(0);
+        
         return false;
       }));
       
@@ -129,6 +178,25 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     }
   },
 
+  
+  truncate : function( value,numChars ) {
+		
+		value = replaceUnderscores(value);
+		//return (this.data + separator);
+		var returnedValue = '';
+		//if(value.length > numChars) {
+		//	returnedValue = value.substr(0,numChars) + ' ... ';
+		//} else {
+		returnedValue = value;
+		//}
+		
+		return returnedValue;
+	},
+	
+	
+  
+  
+  
   /**
    * 
    * @param facet
@@ -139,7 +207,8 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     return function () {
     	if(self.manager.store.removeByValue('fq',facet)) {
     		if(ESGF.setting.storage) {
-          	  	ESGF.localStorage.remove('esgf_fq', facet, facet);
+          	  	ESGF.localStorage.remove('esgf_fq', facet);
+          	  	ESGF.localStorage.remove('esgf_queryString', facet);
     		}
     		self.manager.doRequest(0);
         }
@@ -247,5 +316,10 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
   }
   
 });
+
+function replaceUnderscores(word) {
+	var convertedStr = word.split('_').join(' '); 
+	return convertedStr;
+}
 
 }(jQuery));

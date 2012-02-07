@@ -67,18 +67,15 @@
 package org.esgf.globusonline;
 
 import java.net.URI;
-import java.net.URL;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -94,10 +91,11 @@ public class GOFormView1Controller {
     private final static String GOFORMVIEW_DATASET_NAME = "GoFormView_Dataset_Name";
     private final static String GOFORMVIEW_FILE_URLS = "GoFormView_File_Urls";
     private final static String GOFORMVIEW_FILE_NAMES = "GoFormView_File_Names";
+    private final static String GOFORMVIEW_ERROR = "GoFormView_Error";
+    private final static String GOFORMVIEW_ERROR_MSG = "GoFormView_ErrorMsg";
     private final static String GOFORMVIEW_MYPROXY_SERVER = "GoFormView_Myproxy_Server";
 
     public GOFormView1Controller() {
-        System.out.println("In GOFormView1Controller");
     }
 
     @SuppressWarnings("unchecked")
@@ -146,6 +144,8 @@ public class GOFormView1Controller {
         catch(Exception e)
         {
             LOG.error("Failed to resolve OpenID: " + e);
+            model.put(GOFORMVIEW_ERROR, "error");
+            model.put(GOFORMVIEW_ERROR_MSG, "Failed to resolve OpenID: " + e);
         }
 
         if (request.getParameter(GOFORMVIEW_MODEL)!=null) {

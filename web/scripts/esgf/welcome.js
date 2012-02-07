@@ -9,15 +9,30 @@ $(function(){
     		
     		//put replica type
     		ESGF.localStorage.put('esgf_fq','replica:false','replica:false');
+
+            //for search API
+      		//put in the dataset type
+            ESGF.localStorage.put('esgf_queryString','type:Dataset','type=Dataset');
+      		//put in the replica type (which for results is "false")
+            ESGF.localStorage.put('esgf_queryString','replica:false','replica=false');
             
+            
+            
+            /*
     		//put text 
     		if(val == '') {
     			ESGF.localStorage.put('esgf_fq','text:' + '*','text:' + '*');
     		} else {
         		ESGF.localStorage.put('esgf_fq','text:' + val,'text:' + val);
     		}
+    		*/
             
-    		
+    		//for search API
+    		if(val == '') {
+    			ESGF.localStorage.put('esgf_queryString','text:' + '*','query=' + '*');
+    		} else {
+        		ESGF.localStorage.put('esgf_queryString','text:' + val,'query=' + val);
+    		}
     		
     	}
     	
@@ -71,7 +86,7 @@ $(function(){
     	    		var fq = localStorage['fq'];
     	    		addTextToStorage(fq,searchStr);
     			}
-          	  	location.href=window.location+'/live';
+          	  	location.href=window.location+'live';
     		}
     	});
     	

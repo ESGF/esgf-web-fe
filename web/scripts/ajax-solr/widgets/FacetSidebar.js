@@ -74,37 +74,43 @@
 			var facet_arr = new Array();
 			
 		    for (facet in self.manager.response.facet_counts.facet_fields) {
-
+		    	
 		    	var label = self.findLabelFromFacet(facet);
 		    	var facet_obj = new Object();
 		    	var facet_val_arr = new Array();
 		    	var facet_val_counts = new Array();
 		    	var facet_max_count = 0;
-		    	for(var facet_value in self.manager.response.facet_counts.facet_fields[facet]) {
-		    		if(facet == 'project') {
-		    			var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
-					    
+		    	for(var i=0;i<self.manager.response.facet_counts.facet_fields[facet].length;i++) {
+		    		
+		    		//get the facet value and count here (note the index has to be incremented for the count)
+		    		var facet_value = self.manager.response.facet_counts.facet_fields[facet][i];
+		    		
+		    		i = i + 1;
+		    		var count = self.manager.response.facet_counts.facet_fields[facet][i];
+		    		
+		    		
+		    		
+		    		if(facet == 'project'){
+		    			if(count > facet_max_count) {
+		    				facet_max_count = count;
+		    			}
+		    		
+		    			
+		    			facet_val_counts.push(count);
+		    			facet_val_arr.push(facet_value);
+		    		} else if(!isConstraint(facet)) {
+		    			
 		    			if(count > facet_max_count) {
 		    				facet_max_count = count;
 		    			}
 		    		
 		    			facet_val_counts.push(count);
 		    			facet_val_arr.push(facet_value);
-		    			
-		    			
-		    		}else if(!isConstraint(facet)) {
-		    			var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
-					    
-		    			if(count > facet_max_count) {
-		    				facet_max_count = count;
-		    			}
 		    		
-		    			facet_val_counts.push(count);
-		    			facet_val_arr.push(facet_value);
-		    			
 		    		} else if(matchesFacetValue(facet,facet_value)) {
-		    			var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
-					    
+		    			//var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
+		    			var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][1]);
+		    			
 		    			if(count > facet_max_count) {
 		    				facet_max_count = count;
 		    			}
@@ -112,10 +118,13 @@
 		    			facet_val_counts.push(count);
 		    			facet_val_arr.push(facet_value);
 		    		}
-		    		
 		    	}
+		    	
+		    	
 		    	facet_obj.Facet_name = facet;
 		    	facet_obj.Facet_label = label;
+		    	
+		    	
 		    	facet_obj.Facet_values = facet_val_arr;
 		    	facet_obj.Facet_counts = facet_val_counts;
 		    	facet_obj.Facet_max_count = facet_max_count;
@@ -131,15 +140,39 @@
 		    	$( "#facetTemplate").tmpl(facet_arr, {
 		    		replaceWhiteSpaces : function (word) {
 	                    return replaceWhiteSpace(word);
-	                }
+	                },
+		    		truncate : function( value,numChars ) {
+		    			
+		    			value = replaceUnderscores(value);
+		    			//return (this.data + separator);
+		    			var returnedValue = '';
+		    			//if(value.length > numChars) {
+		    			//	returnedValue = value.substr(0,numChars) + ' ... ';
+		    			//} else {
+		    			returnedValue = value;
+		    			//}
+		    			
+		    			return returnedValue;
+		    		}
 		        })
 		    	.appendTo("#facetList")
 		    	.find( "a.showFacetValues" ).click(function() {
 	                var selectedItem = $.tmplItem(this);
+	                
+	                
+	                /*
 	                for(var i = 0;i<selectedItem.data.Facet_values.length;i++) {
 	                	var convertedStr = replaceWhiteSpace(selectedItem.data.Facet_values[i]);
-	                    $('li#' + selectedItem.data.Facet_name + '_' + selectedItem.data.Facet_values[i]).toggle();
+		                
+	                    //$('li#' + selectedItem.data.Facet_name + '_' + selectedItem.data.Facet_values[i]).toggle();
+		                //$('li.' + selectedItem.data.Facet_name).toggle();
+		                
 	                }
+	                */
+	                
+	                $('li.' + selectedItem.data.Facet_name).toggle();
+	                
+	                
 	                
 		   		});
 		    }
@@ -148,14 +181,23 @@
 				var facet_value = $(this).html();
 				
 				//gets the long name...have to extract the short name for search
-				var label = $(this).parent().parent().find('a.showFacetValues').html();
+				var label = $(this).parent().parent().parent().find('a.showFacetValues').html();
+				
+				//alert('facet_value: ' + $(this).parent().find('a').attr('id'));
+				if($(this).parent().find('a').attr('id') != undefined) {
+					//facet_value = $(this).parent().find('a').attr('id');
+				}
 				
 				var facet = self.findFacetFromLabel(label);
 				
+				var regEx = new RegExp("\\(");
+				var index = facet_value.search(regEx) - 1;
+				facetValue = facet_value.substr(0,index);
 				
+				//alert('facetValue: ' + facetValue);
 				
-				var index = facet_value.search(' ');
-				var facetValue = facet_value.substr(0,index);
+				facetValue = $(this).parent().find('a').attr('id');
+				
 				
 				Manager.store.addByValue('fq', facet + ':' + facetValue );
 				
@@ -164,6 +206,10 @@
 				var key = facet + ':' + facetValue;
 				var value = facet + ':' + facetValue;
 				ESGF.localStorage.put('esgf_fq', key, value);
+				
+				//add to the esgf_queryString localstore
+				value = facet + '=' + facetValue;
+				ESGF.localStorage.put('esgf_queryString',key,value);
 				
 				//add to the old localstore
 				if(ESGF.setting.storage) {
@@ -203,9 +249,12 @@
 				var shortName = map[0];
 				var longName = map[1];
 				
+				
 				//there is an extra whitespace in label, so trim it out
-				label = label.replace(' ','');
-				longName = longName.replace(' ','');
+				label = trimWhiteSpace(label);//label.replace('/ /gi','');
+				longName = trimWhiteSpace(longName);//longName.replace('/ /gi','');
+				
+				//alert(' longName: ' + longName + ' label: ' + label + ' ' + longName.length + ' ' + label.length);
 				
 				//used for debugging
 				//alert('label: ' + label + ' s: ' + shortName + ' l: ' + longName + ' lengthLBL: ' + label.length + ' lengthLN: ' + longName.length);
@@ -220,6 +269,16 @@
 	
 	});
 
+	function trimWhiteSpace(word) {
+		var temp = word;
+	    var index = temp.indexOf(" ");
+	        while(index != -1){
+	            temp = temp.replace(" ","");
+	            index = temp.indexOf(" ");
+	        }
+	        return temp;
+	}
+	
 	$(document).ready( function() {
 		$.fx.speeds._default = 1000;
 	});
@@ -229,6 +288,10 @@
 		return convertedStr;
 	}
 	
+	function replaceUnderscores(word) {
+		var convertedStr = word.split('_').join(' '); 
+		return convertedStr;
+	}
 	
 	function matchesFacetValue(facet,value) {
 		var matchesFacetValue = false;
@@ -272,4 +335,43 @@
 		return isConstraint;
 	}
 	
+	
+	
 }(jQuery));
+
+/* LEGACY
+for(var facet_value in self.manager.response.facet_counts.facet_fields[facet]) {
+	if(facet == 'project') {
+		var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
+	    
+		if(count > facet_max_count) {
+			facet_max_count = count;
+		}
+	
+		facet_val_counts.push(count);
+		facet_val_arr.push(facet_value);
+		
+		
+	}else if(!isConstraint(facet)) {
+		var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
+	    
+		if(count > facet_max_count) {
+			facet_max_count = count;
+		}
+	
+		facet_val_counts.push(count);
+		facet_val_arr.push(facet_value);
+		
+	} else if(matchesFacetValue(facet,facet_value)) {
+		var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
+	    
+		if(count > facet_max_count) {
+			facet_max_count = count;
+		}
+	
+		facet_val_counts.push(count);
+		facet_val_arr.push(facet_value);
+	}
+	
+}
+*/

@@ -63,7 +63,7 @@
 
 
 
-AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
+AjaxSolr.theme.prototype.result = function (doc, snippetReplica, snippetVersion, snippet, actions) {
     var output = '';
 
     if (doc.title.length > 7000) {
@@ -84,11 +84,14 @@ AjaxSolr.theme.prototype.result = function (doc, snippet, actions) {
       output += '<div style="font-size:14px;font-style:bold" class="desc">';//'<h4 class="desc">';
 
       //output += '<a href="#" style="text-decoration:none">';
+      if(doc['replica']) {
+    	  output += '<span style="font-size:9px;color:#7d5f45;font-weight:bold;font-style:italic;font-type:Trade Gothic;margin-right:3px"> Replica </span>';
+      }
       output += '<span class="actionitem ai_meta"><a href="/esgf-web-fe/scripts/esgf/overlays/metadata_overlay.html" class="met" rel="#metadata_overlay"' + allStr + '>';
       output += doc.title + '</a>';
       output += '</div>' ;
       output += '<p id="links_' + doc.id + '" class="links"></p>';
-      output += "<p/><div class='snippet'>" + snippet + "</div>" + actions + '</div>';
+      output += "<p/><div>" + snippetReplica + "</div>" + "<div class='snippetVersion'>" + snippetVersion + "</div>" + "<div class='snippet'>" + snippet + "</div>" + actions + '</div>';
 
       return output;
 };
@@ -119,19 +122,37 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     
     if(doc.url instanceof Array) {
     	for(var i=0;i<doc.url.length;i++) {
+    		
     		var url = doc.url[i];
+    		
+    		//alert('url: ' + url);
     		if(url.search("LAS") > -1) {
     	    	var tuple = url.split("\|");
         	    output += '<span class="actionitem ai_las"><a href="' + tuple[0] + '" target="_blank">Visualize and Analyze</a></span>';
     	    } else if(url.search("OPENDAP") > -1) {
     	    	var tuple = url.split("\|");
         	    output += '<span class="actionitem ai_las"><a href="' + tuple[0] + '" target="_blank">OPENDAP</a></span>';
-    		}
+    		} 
     	}
     }
    
     output += '<span class="__actionitem__"> <a class="cim-model" href="#" id="">CIM Metadata</a></span>';
    
+    
+    if(doc.xlink != undefined) {
+        var techNote = doc.xlink;
+        
+        for (var i=0;i<techNote.length;i++) {
+        	//url.length - 1 => "Technical Note"
+        	//url.length - 2 => <type of technical note>
+        	//url.length - 3 => <physical url of technical note>
+        	
+        	var url = techNote[i].split("|");
+        	
+    	    output += '<span class="actionitem ai_las"><a href="' + url[url.length-3] + '" target="_blank">' + url[url.length-2] + '</a></span>';
+        } 
+        
+    }
     
     if (ESGF.setting.annotate === true) {
 
@@ -151,9 +172,53 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             selected[evt.data.doc.id] = doc;
             if ( jQuery.trim(this.innerHTML) == "Add To Cart") {
             	
-            	//add to the datacart localstorage
-            	ESGF.localStorage.put('dataCart',evt.data.doc.id,evt.data.doc.id);
-
+            	//alert('adding to cart');
+            	if(evt.data.doc['xlink'] != undefined) {
+            		//alert('xlink defined');
+            		//alert(evt.data.doc['xlink']);
+            		//add to the datacart localstorage
+                	if(evt.data.doc['index_node'] != undefined) {
+                		
+                		var datasetInfo = {'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink']};
+                		
+                    	ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
+                	
+                	
+                	} else {
+                    
+                		//alert('peer should be undefined');
+                		
+                		var datasetInfo = {'peer' : 'undefined' , 'xlink' : evt.data.doc['xlink']};
+                		
+                		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
+                	
+                	
+                	}
+            		
+            	} else {
+            		//alert('xlink undefined');
+            	
+            		//add to the datacart localstorage
+                	if(evt.data.doc['index_node'] != undefined) {
+                    
+                		var datasetInfo = {'peer' : evt.data.doc['index_node'] , 'xlink' : 'undefined' };
+                		
+                		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
+                	
+                	
+                	} else {
+                		//alert('peer should be undefined');
+                		var datasetInfo = {'peer' : 'undefined' , 'xlink' : 'undefined' };
+                		
+                		
+                		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
+                	
+                	
+                	}
+            	
+            	}
+            	
+            	
             	
             	//add to the datacart searchstates localstorage
             	
@@ -199,6 +264,7 @@ AjaxSolr.theme.prototype.snippet = function (doc) {
     if (doc.description != undefined)
         doc.text = doc.description[0];
     if (doc.text != undefined) {
+    	output += 'Description: ';
         if (doc.text.length > 500) {
             output += doc.text.substring(0, 500);
             output += '<span style="display:none;">' + doc.text.substring(500);
@@ -209,6 +275,36 @@ AjaxSolr.theme.prototype.snippet = function (doc) {
     } else {
         output = "No description available.";
     }
+
+    return output;
+};
+
+AjaxSolr.theme.prototype.snippetReplica = function (doc) {
+
+    var output = '';
+    if(doc['replica']) {
+        //output += 'Replica dataset at datanode: ' + doc['data_node'] + '<br />';
+        output += 'Data Node: ' + doc['data_node'];
+        
+    } else {
+        //output += 'Master dataset at datanode: ' + doc['data_node'];
+        output += 'Data Node: ' + doc['data_node'];
+    }
+
+    return output;
+};
+
+AjaxSolr.theme.prototype.snippetVersion = function (doc) {
+
+    var output = '<span style="font-style:italic;font-weight:bold">';
+    //alert('latest: ' + doc['latest']);
+    if(doc['latest'] == 'true') {
+    	output += 'Version: ' + doc['version'] + ' (Most Recent)';
+    } else {
+        output += 'Version: ' + doc['version'] + ' ';
+    }
+    
+    output += '</span>';
 
     return output;
 };

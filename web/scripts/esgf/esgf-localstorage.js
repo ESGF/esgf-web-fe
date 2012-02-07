@@ -91,7 +91,7 @@ ESGF.localStorage.removeAll = function(category) {
 	delete localStorage[category];
 };
 
-ESGF.localStorage.remove = function(category, key, value) {
+ESGF.localStorage.remove = function(category, key) {
 	if(localStorage[category] == undefined) {
 		localStorage.setObject(category,{'' : ''});
 	}

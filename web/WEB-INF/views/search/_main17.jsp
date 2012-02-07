@@ -28,11 +28,20 @@
 	    	 -->
 	    	 <div id="facet_browser_overlay"><a href="#" rel="#facet_overlay" style="font-size:10px" >Browse Categories</a></div>
 	    	<!-- <div><a href="#" style="font-size:10px">Advanced...&#9660;</a></div>  -->
+	    	<div id="search_help"><a href="http://www.esgf.org/wiki/ESGF_Web_Search_User_Guide" style="font-size:10px" >Search Help</a></div>
 	    </div>
 	   	
-		<div class="span-18 last"> 
+	   	  
+		<div class="span-18 last" style="margin-bottom:5px"> 
+		<!--  
 			<input class="distribbutton1" id="distribbutton" type="submit" style="margin-left:20px"/>
+		-->
+			<input type="checkbox" class="distribcheckbox1" id="distribcheckbox" style="margin-left:20px" checked="yes" /> <span style="font-weight:bold">Search All Sites</span>
+			<input type="checkbox" class="replicacheckbox1" id="replicacheckbox" style="margin-left:20px"/> <span style="font-weight:bold">Show All Replicas</span>
+			<input type="checkbox" class="versioncheckbox1" id="versioncheckbox" style="margin-left:20px"/> <span style="font-weight:bold">Show All Versions</span>
+			
 		</div>
+		
 </div>
 
 <div class="span-18 last" id="search-summary" style="margin-top:15px;">
@@ -93,6 +102,10 @@
       	  
       	  	//reset the contents of the datacart
       	  	ESGF.localStorage.removeAll('dataCart');
+      	  	
+
+      	  	//reset the contents of the datacart
+      	  	ESGF.localStorage.removeAll('esgf_queryString');
       	  	
     	});
     	

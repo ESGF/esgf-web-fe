@@ -50,41 +50,71 @@
  *
  ******************************************************************************/
 
-package org.esgf.manager;
-
-import esg.search.query.api.SearchOutput;
-
-
 /**
- * Manages post query processing procedures.
- * Includes: geospatial search (centroid filter)
  *
- * Coming soon includes: temporal search (time slicing)
- *                       facet (currently hardcoded in SearchController)
- *
- * @author john.harney
- *
+ * fwang2@ornl.gov
+ * harneyjf@ornl.gov
  */
-public interface OutputManager{
 
-    /**
-     * Method to filter results based on proximity to a center point
-     */
-    public void processCentroidFilter() throws Exception;
 
-    /**
-     * Method to revise the facet counts based on post query filters
-     */
-    public void facetRecount() throws Exception;
+(function ($) {
 
-    /**
-     * Method to filter results based on slices of time over a specified rang
-     */
-    public void processTimeSlicing() throws Exception;
+AjaxSolr.ReplicasWidget = AjaxSolr.AbstractWidget.extend({
+	
+	init: function() {
+		
+        ESGF.localStorage.put('esgf_queryString','replica:false','replica=false');
+        
+		if($("input#replicacheckbox").attr("checked")) { 
+			//attr('checked','true');
+			$("input#replicacheckbox").removeAttr('checked');
 
-    /**
-     * Method returns an output object after post querying processing is finished
-     */
-    public SearchOutput getOutput();
+			
+		}
+		
+	},
+	
+	beforeRequest: function () {
+		$("input#replicacheckbox").die('change');
+	},
+	
+	afterRequest: function () {
+		
+		var self = this;
+	    
+		
+		
+		$('input#replicacheckbox').live('change',function () {
+			//alert('changed checkbox');
+			
 
-}
+			if($("input#replicacheckbox").attr("checked")) { 
+				//alert('take the replicas parameter out of the query');
+
+				//alert('b4: ' + ESGF.localStorage.toString('esgf_queryString'));
+				
+				ESGF.localStorage.remove('esgf_queryString','replica:false');
+				
+				//alert('after: ' + ESGF.localStorage.toString('esgf_queryString'));
+				
+            	Manager.doRequest(0);
+			} else {
+				//alert('put the replicas parameter in the query');
+
+
+				//alert('b4: ' + ESGF.localStorage.toString('esgf_queryString'));
+		        ESGF.localStorage.put('esgf_queryString','replica:false','replica=false');
+				//alert('after: ' + ESGF.localStorage.toString('esgf_queryString'));
+				
+				
+				Manager.doRequest(0);
+			}
+			
+		});
+    
+		
+	}
+
+});
+
+}(jQuery));

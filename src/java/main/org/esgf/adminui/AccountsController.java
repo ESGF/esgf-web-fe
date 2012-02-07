@@ -66,33 +66,20 @@
  */
 package org.esgf.adminui;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.esgf.manager.InputManager;
-import org.esgf.manager.InputManagerImpl;
-import org.esgf.manager.OutputManager;
-import org.esgf.manager.OutputManagerImpl;
-import org.jdom.Document;
-import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -129,13 +116,17 @@ public class AccountsController {
     //    Pattern.compile(".*[^a-zA-Z0-9_\\-\\.\\@\\'\\:\\;\\,\\s/()].*");
 
     public AccountsController() throws FileNotFoundException, IOException {
+        //System.out.println("In accounts controller");
         LOG.debug("IN AccountsController Constructor");
         if(Utils.environmentSwitch) {
+            //System.out.println("In accounts controller db");
             uoi = new UserOperationsESGFDBImpl();
         }
         else {
+            //System.out.println("In accounts controller xml");
             uoi = new UserOperationsXMLImpl();
         }
+        //System.out.println("End accounts controller");
     }
 
     /**

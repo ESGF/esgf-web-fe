@@ -411,7 +411,7 @@ function onCIMLinkClicked(doc) {
 	
 	//calls the cim service for the give dict
 	//$cim.viewer.renderFromDRS(drs_components);
-	
+	render('cmip5', 'model', '$jq(this).text()');
 }
 
 

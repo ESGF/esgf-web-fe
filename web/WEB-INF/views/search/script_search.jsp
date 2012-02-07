@@ -101,9 +101,34 @@
                 $jq(document).ready(function() {
                     // Model metadata selectors.
                     $jq('.cim-model').live('click', function() {
-                        render('cmip5', 'model', $jq(this).text());
+                    	alert($(this).parent().html());
+                    	onCIMLinkClicked(this);
+                        
+                    	
+                    	render('cmip5', 'model', $jq(this).text());
                     });
                     
                 });
+                
+                function onCIMLinkClicked(obj) {
+                	alert('obj: ' + obj);
+                	
+                	var drs_components = get_drs_components(obj);
+                	
+                	alert(drs_components);
+                	
+                }
+                
+                
+                function get_drs_components(obj) {
+                	
+                	//do something from the obj to get the dict
+                	
+                	var dict = {'project' : 'cmip5', 'institute' : 'ipsl', 'model' : 'ipsl-cm5-lr', 'experiment' : 'amip' };
+                    
+                	return dict;
+                }
+                
+                
             }());
         </script>

@@ -118,10 +118,11 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           /**
            * Ajax call to the search API
            */
+          
           jQuery.ajax({
         	  url: revisedQueryString,
         	  type: 'GET',
-        	  success: function(data) {     
+        	  success: function(data) {   
         		  self.handleResponse(data);
         	  },
         	  error: function() {
@@ -135,9 +136,12 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 
             	  //reset the localStorage esgf_queryString map
             	  ESGF.localStorage.removeAll('esgf_queryString');
-            	  
+
             	  //reset the localStorage dataCart map
             	  ESGF.localStorage.removeAll('dataCart');
+            	  
+            	  //reset the localStorage searchStates map
+            	  ESGF.localStorage.removeAll('searchStates');
             	  
             	  
             	  //legacy
@@ -149,7 +153,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
             	  //ESGF.setting.searchType = 'local';
             	  
             	  //reload the page
-            	  //window.location.reload();
+            	  window.location.reload();
         	  }
           });
           
@@ -176,9 +180,10 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   		
   		//for direct requests to solr
   		//put in the dataset type
+  		/*
         ESGF.localStorage.put('esgf_fq','type:Dataset','type:Dataset');
         Manager.store.addByValue('fq','type:Dataset');
-        
+        */
         
   		//put in the replica type (which for results is "false")
         //ESGF.localStorage.put('esgf_fq','replica:false','replica:false');
@@ -210,12 +215,12 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
         //get all of the fq parameters from the localstore
         var esgf_fq = ESGF.localStorage.getAll('esgf_fq');
         
+        
         //FIXME: May have to take this out
         //legacy
         //add each constraint
         for(var key in esgf_fq) {
         	var value = esgf_fq[key];
-        	//alert('key: ' + key + ' value: ' + value);
         	if(key != '') {
         		Manager.store.addByValue('fq',value);
         	} 

@@ -359,6 +359,7 @@
 		
 		var fq = Manager.store.get('fq');
 		
+		
 		for(var i=0;i<fq.length;i++) {
 			var constraint = fq[i];
 			var facet_constraint = constraint['value'].split(":")[0];

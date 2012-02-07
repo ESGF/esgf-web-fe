@@ -15,12 +15,24 @@ ESGF.localStorage.toString = function(category) {
 	
 	
 	if($.browser.msie) {
-		//alert('IE toString - need to create a local objects');
+		
+		
+		
+		if(localStorage.getItem(category) == null) {
+			ESGF.localStorage.initialize(category);
+		}
 		//alert('tempStore: ' + ESGF.setting.tempStore['esgf_queryString']);
 
-		var map = ESGF.setting.tempStore[category];
+		//var map = ESGF.setting.tempStore[category];
 		
-		//var map = JSON.parse(localStorage.getItem(category));
+		var map = JSON.parse(localStorage.getItem(category));
+		
+		/*
+		if(category = 'dataCart') {
+			alert('IE toString - need to create a local objects');
+		}
+		*/
+		
 		
 		return JSON.stringify(map);
 
@@ -45,10 +57,18 @@ ESGF.localStorage.search = function(category, searchTerm) {
 	
 	if($.browser.msie) {
 		//alert('IE search');
+		/*
+		if(category = 'dataCart') {
+			alert('IE search - need to create a local objects');
+		}
+		*/
+		if(localStorage.getItem(category) == null) {
+			ESGF.localStorage.initialize(category);
+		}
 		
-		var map = ESGF.setting.tempStore[category];
+		//var map = ESGF.setting.tempStore[category];
 		
-		//var map = JSON.parse(localStorage.getItem(category));
+		var map = JSON.parse(localStorage.getItem(category));
 		
 		
 		var found = false;
@@ -95,9 +115,17 @@ ESGF.localStorage.get = function(category, key) {
 	
 	if($.browser.msie) {
 		//alert('IE get for category ' + category);
+		/*
+		if(category = 'dataCart') {
+			alert('IE search - need to create a local objects');
+		}
+		*/
+		if(localStorage.getItem(category) == null) {
+			ESGF.localStorage.initialize(category);
+		}
 		
-		var map = ESGF.setting.tempStore[category];
-		//var map = JSON.parse(localStorage.getItem(category));
+		//var map = ESGF.setting.tempStore[category];
+		var map = JSON.parse(localStorage.getItem(category));
 		
 		
 		return map[key];
@@ -120,9 +148,18 @@ ESGF.localStorage.get = function(category, key) {
 ESGF.localStorage.getAll = function(category) {
 	
 	if($.browser.msie) {
+		/*
+		if(category = 'dataCart') {
+			alert('IE getAll - need to create a local objects');
+		}
+		*/
+		if(localStorage.getItem(category) == null) {
+			ESGF.localStorage.initialize(category);
+		}
 		
-		var map = ESGF.setting.tempStore[category];
-		//var obj = localStorage.getItem(category);
+		
+		//var map = ESGF.setting.tempStore[category];
+		var map = JSON.parse(localStorage.getItem(category));
 		//var jsontext = '{"firstname":"Jesper","surname":"Aaberg","phone":["555-0100","555-0120"]}';
 		//var contact = JSON.parse(obj);
 		return map;
@@ -142,10 +179,17 @@ ESGF.localStorage.getAll = function(category) {
 ESGF.localStorage.put = function(category, key, value) {
 	if($.browser.msie) {
 			//alert('IE put for category ' + category);
-
+		/*
+		if(category = 'dataCart') {
+			alert('IE put - need to create a local objects');
+		}
+		*/
+		if(localStorage.getItem(category) == null) {
+			ESGF.localStorage.initialize(category);
+		}
 		
-		//var map = JSON.parse(localStorage.getItem(category));
-		var map = ESGF.setting.tempStore[category];
+		var map = JSON.parse(localStorage.getItem(category));
+		//var map = ESGF.setting.tempStore[category];
 		
 		
 		var canPut = true;
@@ -160,8 +204,8 @@ ESGF.localStorage.put = function(category, key, value) {
 			//alert('map ' + map);
 			//alert('put ... key ' + key + ' value ' + value);
 			map[key] = value;		
-			ESGF.setting.tempStore[category] = map;
-			//localStorage.setItem(category,JSON.stringify(map));
+			//ESGF.setting.tempStore[category] = map;
+			localStorage.setItem(category,JSON.stringify(map));
 			
 			
 		}
@@ -199,9 +243,18 @@ ESGF.localStorage.put = function(category, key, value) {
 ESGF.localStorage.update = function(category, key, value) {
 	
 	if($.browser.msie) {
+		/*
+		if(category = 'dataCart') {
+			alert('IE update - need to create a local objects');
+		}
+		*/
+		
+		
+		
+		
 		//alert('IE update');
-		var map = ESGF.setting.tempStore[category];
-		//var map = JSON.parse(localStorage.getItem(category));
+		//var map = ESGF.setting.tempStore[category];
+		var map = JSON.parse(localStorage.getItem(category));
 		var canUpdate = false;
 		for (var mapKey in map) {
 			if (key == mapKey) {
@@ -210,9 +263,9 @@ ESGF.localStorage.update = function(category, key, value) {
 		}
 		if(canUpdate) {
 			map[key] = value;
-			ESGF.setting.tempStore[category] = map;
+			//ESGF.setting.tempStore[category] = map;
 
-			//localStorage.setItem(category,JSON.stringify(map));
+			localStorage.setItem(category,JSON.stringify(map));
 		}
 
 		
@@ -240,13 +293,23 @@ ESGF.localStorage.update = function(category, key, value) {
 ESGF.localStorage.removeAll = function(category) {
 	
 	if($.browser.msie) {
+		/*
+		if(category = 'dataCart') {
+			alert('IE removeAll - need to create a local objects');
+		}
+		*/
 		//alert('IE removeAll');
-		var map = ESGF.setting.tempStore[category];
-
-		//var map = JSON.parse(localStorage.getItem(category));
 		
-		//delete localStorage[category];
-		delete map;
+		if(localStorage.getItem(category) == null) {
+			ESGF.localStorage.initialize(category);
+		}
+		
+		//var map = ESGF.setting.tempStore[category];
+
+		var map = JSON.parse(localStorage.getItem(category));
+		
+		delete localStorage[category];
+		//delete map;
 		
 	} else {
 		if(localStorage[category] == undefined) {
@@ -264,11 +327,20 @@ ESGF.localStorage.remove = function(category, key) {
 	
 	if($.browser.msie) {
 		//alert('IE remove for category ' + category);
+		/*
+		if(category = 'dataCart') {
+			alert('IE remove - need to create a local objects');
+		}
+		*/
+		
+		if(localStorage.getItem(category) == null) {
+			ESGF.localStorage.initialize(category);
+		}
 		
 		//get the map
-		var map = ESGF.setting.tempStore[category];
+		//var map = ESGF.setting.tempStore[category];
 
-		//var map = JSON.parse(localStorage.getItem(category));
+		var map = JSON.parse(localStorage.getItem(category));
 		
 		//alert('mapstring: ' + JSON.stringify(map));
 		
@@ -279,8 +351,8 @@ ESGF.localStorage.remove = function(category, key) {
 		}
 		if(canRemove) {
 			delete map[key];
-			ESGF.setting.tempStore[category] = map;
-			//localStorage.setItem(category,JSON.stringify(map));
+			//ESGF.setting.tempStore[category] = map;
+			localStorage.setItem(category,JSON.stringify(map));
 			
 		}
 		
@@ -316,9 +388,17 @@ ESGF.localStorage.append = function(category, key, value) {
 	
 	if($.browser.msie) {
 		//alert('IE append');
-
-		var map = ESGF.setting.tempStore[category];
-		//var map = JSON.parse(localStorage.getItem(category));
+		/*
+		if(category = 'dataCart') {
+			alert('IE append - need to create a local objects');
+		}
+		*/
+		if(localStorage.getItem(category) == null) {
+			ESGF.localStorage.initialize(category);
+		}
+		
+		//var map = ESGF.setting.tempStore[category];
+		var map = JSON.parse(localStorage.getItem(category));
 		
 		
 		if(map[key] == undefined) {
@@ -360,12 +440,21 @@ ESGF.localStorage.removeFromValue = function(category, key, value) {
 	
 	if($.browser.msie) {
 		//alert('IE removeFromValue');
+		/*
+		if(category = 'dataCart') {
+			alert('IE removeFromValue - need to create a local objects');
+		}
+		*/
 		
-		var map = ESGF.setting.tempStore[category];
-		//var map = JSON.parse(localStorage.getItem(category));
+		if(localStorage.getItem(category) == null) {
+			ESGF.localStorage.initialize(category);
+		}
+		
+		//var map = ESGF.setting.tempStore[category];
+		var map = JSON.parse(localStorage.getItem(category));
 		
 		if(map != undefined) {
-			var map = localStorage.getObject(category);
+			//var map = localStorage.getObject(category);
 			if(map[key] == undefined) {
 				map[key] = value;
 			} else {
@@ -376,8 +465,8 @@ ESGF.localStorage.removeFromValue = function(category, key, value) {
 				}
 			}
 
-			ESGF.setting.tempStore[category] = map;
-			//localStorage.setItem(category,JSON.stringify(map));
+			//ESGF.setting.tempStore[category] = map;
+			localStorage.setItem(category,JSON.stringify(map));
 			
 		}
 		
@@ -407,6 +496,20 @@ ESGF.localStorage.toKeyArr = function(category) {
 	
 	if($.browser.msie) {
 		
+		if(localStorage.getItem(category) == null) {
+			ESGF.localStorage.initialize(category);
+		}
+		
+		/*
+		if(category = 'dataCart') {
+			alert('IE toKeyArr - need to create a local objects');
+			alert('b4: ' + localStorage.getItem(category));
+			ESGF.localStorage.initialize(category);
+			alert('toKey map: ' + JSON.stringify(JSON.parse(localStorage.getItem(category))));
+			
+			
+		}
+		*/
 		
 		var dataCartMap = ESGF.localStorage.getAll(category);
 
@@ -418,6 +521,7 @@ ESGF.localStorage.toKeyArr = function(category) {
 	    		arr.push(key);
 			}
 		}
+		
 		return arr;
 		
 
@@ -447,6 +551,14 @@ ESGF.localStorage.printMap = function(category) {
 	
 	if($.browser.msie) {
 		//alert('IE printMap');
+		/*
+		if(category = 'dataCart') {
+			alert('IE printMap - need to create a local objects');
+		}
+		*/
+		if(localStorage.getItem(category) == null) {
+			ESGF.localStorage.initialize(category);
+		}
 		
 		var map = ESGF.localStorage.getAll(category);
 
@@ -471,4 +583,6 @@ ESGF.localStorage.printMap = function(category) {
 } 
 
 
-
+ESGF.localStorage.initialize = function(category) {
+	localStorage.setItem(category,JSON.stringify({'':''}));
+}

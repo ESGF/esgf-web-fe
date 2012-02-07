@@ -77,17 +77,15 @@ AjaxSolr.VersionsWidget = AjaxSolr.AbstractWidget.extend({
 	},
 	
 	beforeRequest: function () {
-
-		$("input#versioncheckbox").die('change');
+		
+		$("input#versioncheckbox").unbind('change');
 	},
 	
 	afterRequest: function () {
 		
-		
 		var self = this;
     
-		$('input#versioncheckbox').live('change',function () {
-			//alert('changed checkbox');
+		$('input#versioncheckbox').bind('change',function () {
 			
 
 			if($("input#versioncheckbox").attr("checked")) { 
@@ -97,7 +95,7 @@ AjaxSolr.VersionsWidget = AjaxSolr.AbstractWidget.extend({
 				
 				
 				
-            	Manager.doRequest(0);
+		    	Manager.doRequest(0);
 			} else {
 				//alert('put the versions parameter in the query');
 
@@ -106,15 +104,18 @@ AjaxSolr.VersionsWidget = AjaxSolr.AbstractWidget.extend({
 		        ESGF.localStorage.put('esgf_queryString','latest:true','latest=true');
 				//alert('after: ' + ESGF.localStorage.toString('esgf_queryString'));
 				
-            	Manager.doRequest(0);
+		    	Manager.doRequest(0);
 			}
 			
-		});
-		
-		
+		})
 		
 	}
+	
+	
+	
 
 });
+
+
 
 }(jQuery));

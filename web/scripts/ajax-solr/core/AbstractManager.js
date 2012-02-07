@@ -207,6 +207,7 @@ AjaxSolr.AbstractManager = AjaxSolr.Class.extend(
     var widgetId = null;
     this.response = data;
 
+    
     for (widgetId in this.widgets) {
      	//alert('widgetId...' + widgetId);
         if(this.widgets.hasOwnProperty(widgetId)) {

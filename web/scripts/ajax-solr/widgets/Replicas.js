@@ -75,7 +75,7 @@ AjaxSolr.ReplicasWidget = AjaxSolr.AbstractWidget.extend({
 	},
 	
 	beforeRequest: function () {
-		$("input#replicacheckbox").die('change');
+		$("input#replicacheckbox").unbind('change');
 	},
 	
 	afterRequest: function () {
@@ -84,8 +84,7 @@ AjaxSolr.ReplicasWidget = AjaxSolr.AbstractWidget.extend({
 	    
 		
 		
-		$('input#replicacheckbox').live('change',function () {
-			//alert('changed checkbox');
+		$('input#replicacheckbox').bind('change',function () {
 			
 
 			if($("input#replicacheckbox").attr("checked")) { 

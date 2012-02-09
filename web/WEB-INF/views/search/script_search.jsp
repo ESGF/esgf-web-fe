@@ -16,10 +16,16 @@
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.livequery.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.autocomplete.js" /> '></script>
 
+<!-- 
+	<script type="text/javascript" src='<c:url value="/scripts/cim/cim-viewer-core.js" />'> </script>
+	 
 	<script type="text/javascript" src='<c:url value="/scripts/cim/cim-viewer-core.js" />'> </script>
 	<script type="text/javascript" src='<c:url value="/scripts/cim/cim-viewer-renderer.js" />'> </script>
 	<script type="text/javascript" src='<c:url value="/scripts/cim/cim-services-proxy.js" />'> </script>
-
+	-->
+	
+	<script type="text/javascript" src='<c:url value="/scripts/cim/cim-viewer.js" />'> </script>
+	
 	<!--  
     <script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-download.js" /> '></script>
 	-->
@@ -66,6 +72,7 @@
             (function () {
             	
             	
+            	/*
                 // CIM viewer.
                 var viewer = cim.viewer;
 
@@ -98,24 +105,70 @@
                     viewer.renderFromName(project, cim_type, name, options);
                 };
 
+                */
+                
                 // Event handler for document ready event.
                 $jq(document).ready(function() {
                     // Model metadata selectors.
                     
                     $jq('.cim-model').live('click', function() {
+
+                    	var project = $(this).parent().find("a").attr("project");
                     	
-                    	/*
-                    	alert($(this).parent().html());
-                    	onCIMLinkClicked(this);
-                        
+                    	var model = $(this).parent().find("a").attr("model");
+
+                    	var institute = $(this).parent().find("a").attr("institute");
                     	
-                    	render('cmip5', 'model', $jq(this).text());
-                    	*/
+                    	var experiment = $(this).parent().find("a").attr("experiment");
+                    	
+                    	var drs_components = {'project' : project, 'model' : model, 'institute' : institute, 'experiment' : experiment};
+                    	
+                    	
+                    	try {
+                        	//calls the cim service for the give dict
+                        	cim.viewer.renderFromDRS(drs_components);
+                    	} catch(e) {
+                    		alert('There was error in rendering the CIM viewer. Contact your administrator');
+                    	}
+                    	
+                    	
                     });
+                    
+                    
                     
                 });
                 
-                
+                function onCIMLinkClicked(doc) {
+                	
+                	var drs_components = get_drs_components(doc);
+                	
+                	alert('drs_components: ' + JSON.stringify(drs_components));
+                	
+                	try {
+                    	//calls the cim service for the give dict
+                    	cim.viewer.renderFromDRS(drs_components);
+                	} catch(e) {
+                		alert('There was error in rendering the CIM viewer. Contact your administrator');
+                	}
+                	
+                	
+                	//render('cmip5', 'model', '$jq(this).text()');
+                }
+
+
+                function get_drs_components(doc) {
+                	
+                	//do something from the doc obj to get the dict
+                	//perhaps loop over all keys and add to the dict?
+                	//var dict = {};
+                	//for(var key in doc) {
+                	//	dict[key] = doc[key];
+                	//}
+                	
+                	var dict = {'project' : 'cmip5', 'institute' : 'ipsl', 'model' : 'ipsl-cm5-lr', 'experiment' : 'amip' };
+                    
+                	return dict;
+                }
                 
                 
             }());

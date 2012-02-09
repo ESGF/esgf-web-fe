@@ -137,9 +137,16 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     		} 
     	}
     }
-   
-    output += '<span class="__actionitem__"> <a class="cim-model" href="#" id="' + selectMetID + '">CIM Metadata</a></span>';
-   
+    
+    var projectStr = 'project="' + doc.project + '" ';
+    var modelStr = 'model="' + doc.model + '" ';
+    var instituteStr = 'institute="' + doc.institute + '" ';
+    var experimentStr = 'experiment="' + doc.experiment + '" ';
+    var cimStr = projectStr + modelStr + instituteStr + experimentStr;
+    
+    //output += '<span class="__actionitem__"> <a class="cim-model" href="#" id="' + selectMetID + '">CIM Metadata</a></span>';
+    output += '<span class="__actionitem__"> <a class="cim-model" href="#" ' + cimStr + '">CIM Metadata</a></span>';
+    
     
     if(doc.xlink != undefined) {
         var techNote = doc.xlink;
@@ -162,13 +169,14 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         output += "</div>";
     }
 
+    /*
     $("a[id=" + selectMetID + "]").live('click', {doc:doc}, function (evt) {
     	alert('rendering cim for doc id: ' + doc.id);
     
     	onCIMLinkClicked(doc);
     	
     });
-    
+    */
     
     $("a[id=" + selectID + "]").live('click', {doc:doc}, function (evt) {
     	
@@ -370,64 +378,6 @@ AjaxSolr.theme.prototype.facet_content = function(stopValue,objectedItems,thisOb
     return $facet_content;
 };
 
-
-//Renders a CIM instance based upon type and name.
-var render = function(project, cim_type, name) {
-    var options = viewerOptions[cim_type.toUpperCase()]();
-    viewer.renderFromName(project, cim_type, name, options);
-};
-
-//CIM viewer.
-var viewer = cim.viewer;
-
-// CIM viewer options by cim document type.
-var viewerOptions = {
-    'MODEL' : function() {
-        var result = viewer.options.forModel.defaults;
-        return result;
-    },
-
-    'DATAOBJECT' : function() {
-        var result = viewer.options.forDataObject.defaults;
-        return result;
-    },
-
-    'EXPERIMENT' : function() {
-        var result = viewer.options.forExperiment.defaults;
-        return result;
-    },
-    
-    'SIMULATION' : function() {
-        var result = viewer.options.forSimulation.defaults;
-        return result;
-    }
-};
-
-function onCIMLinkClicked(doc) {
-	
-	var drs_components = get_drs_components(doc);
-	
-	alert('drs_components: ' + JSON.stringify(drs_components));
-	
-	//calls the cim service for the give dict
-	//$cim.viewer.renderFromDRS(drs_components);
-	render('cmip5', 'model', '$jq(this).text()');
-}
-
-
-function get_drs_components(doc) {
-	
-	//do something from the doc obj to get the dict
-	//perhaps loop over all keys and add to the dict?
-	//var dict = {};
-	//for(var key in doc) {
-	//	dict[key] = doc[key];
-	//}
-	
-	var dict = {'project' : 'cmip5', 'institute' : 'ipsl', 'model' : 'ipsl-cm5-lr', 'experiment' : 'amip' };
-    
-	return dict;
-}
 
 })(jQuery);
 

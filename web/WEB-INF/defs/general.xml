@@ -219,6 +219,18 @@
        <put-attribute name="main" value="/WEB-INF/views/goformview/go_form_view4.jsp" />
     </definition>
 
+<!-- passwords layout  -->
+    <definition name="passwords-layout" extends="base-layout">
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+       <put-attribute name="layoutType" type="string" value="passwordsview"/>
+    </definition>
+    
+    <!-- go template -->
+    <definition name="passwordsview" extends="passwords-layout">
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+       <put-attribute name="main" value="/WEB-INF/views/passwordsview/passwordsview.jsp" />
+    </definition>
+
 <!-- start obsolete ? -->
 
     <definition name="base" template="/WEB-INF/views/common/b_search.jsp">

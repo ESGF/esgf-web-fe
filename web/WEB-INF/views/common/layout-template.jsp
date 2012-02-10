@@ -45,6 +45,11 @@
                          <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
+                <c:when test="${layoutType=='passwordsview'}">
+                    <div class="span-24 last" id="main">
+                         <ti:insertAttribute name="main" />
+                    </div>
+                </c:when>
                 <c:when test="${layoutType=='accountsview'}">
                     <div class="span-24 last" id="main">
                          <ti:insertAttribute name="main" />

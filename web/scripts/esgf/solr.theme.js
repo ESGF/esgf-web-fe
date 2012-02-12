@@ -144,8 +144,12 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     var experimentStr = 'experiment="' + doc.experiment + '" ';
     var cimStr = projectStr + modelStr + instituteStr + experimentStr;
     
-    //output += '<span class="__actionitem__"> <a class="cim-model" href="#" id="' + selectMetID + '">CIM Metadata</a></span>';
-    output += '<span class="__actionitem__"> <a class="cim-model" href="#" ' + cimStr + '">CIM Metadata</a></span>';
+    if(doc.project == 'CMIP5' || doc.project == 'cmip5') {
+    	//output += '<span class="__actionitem__"> <a class="cim-model" href="#" id="' + selectMetID + '">CIM Metadata</a></span>';
+        output += '<span class="__actionitem__"> <a class="cim-model" href="#" ' + cimStr + '">CIM Metadata</a></span>';
+        
+    }
+    
     
     
     if(doc.xlink != undefined) {

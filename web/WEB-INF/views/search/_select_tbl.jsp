@@ -43,45 +43,79 @@
 	</tr>
 
    		{{each(i) file}}
-        	{{if i > 1}}
-				<tr class="rows_${$item.replacePeriods(datasetId)}" style="display:none">
-					<td style="width: 40px;"><input style="margin-left: 10px;" class="fileLevel" type="checkbox" class="fileId" id="${fileId}" checked="true" value="${urls.url[1]}"/></td>
 
-					<td style="width: 325px;padding-left:10px;font-size:11px;">
-						<div style="word-wrap: break-word;"> 
-						<span style="font-weight:bold"> ${$item.abbreviate(fileId)} (${$item.sizeConversion(size)}) </span>
-						<br /> 
-						<span style="font-style:italic">Tracking Id: ${tracking_id}</span>
-						<br />
-						<span style="font-style:italic">Checksum: ${checksum} (${checksum_type})</span>
-						</div>
-					</td>
+			{{if i < 11}}
+        		{{if i > 1}}
+					<tr class="rows_${$item.replacePeriods(datasetId)}" style="display:none">
+						<td style="width: 40px;"><input style="margin-left: 10px;" class="fileLevel" type="checkbox" class="fileId" id="${fileId}" checked="true" value="${urls.url[1]}"/></td>
 
-					{{each(j) urls.url}}
-						{{if services.service[j] == 'HTTPServer'}}
-							<td id="${$item.replacePeriods(datasetId)}_http" style="float:right;font-size:11px;"><div id="${urls.url[j]}" style="word-wrap: break-word;vertical-align:middle"><a href="${urls.url[j]}">HTTP </a></div></td>
-	   					{{/if}}
-						{{if services.service[j] == 'GridFTP'}}
-							<td id="${$item.replacePeriods(datasetId)}_gridftp" id="${urls.url[j]}" style="float:right;font-size:11px;"><div id="${urls.url[j]}" style="word-wrap: break-word;vertical-align:middle"><a id="${fileId}" class="go_individual_gridftp" href="#">GridFTP </a></div></td>
-	   					{{/if}}
-						{{if services.service[j] == 'OPENDAP'}}
-							<td id="${$item.replacePeriods(datasetId)}_openid" style="float:right;font-size:11px;"><div id="${urls.url[j]}" style="word-wrap: break-word;vertical-align:middle"><a href="${urls.url[j]}">OPENDAP </a></div></td>
-	   					{{/if}}
-					{{/each}}
+						<td style="width: 325px;padding-left:10px;font-size:11px;">
+							<div style="word-wrap: break-word;"> 
+							<span style="font-weight:bold"> ${$item.abbreviate(fileId)} (${$item.sizeConversion(size)}) </span>
+							<br /> 
+							<span style="font-style:italic">Tracking Id: ${tracking_id}</span>
+							<br />
+							<span style="font-style:italic">Checksum: ${checksum} (${checksum_type})</span>
+							</div>
+						</td>
 
-					{{if technotes.technote.length > 2}}
-						<td id="${$item.replacePeriods(datasetId)}_openid" style="float:right;font-size:11px;"><div id="d" style="word-wrap: break-word;vertical-align:middle"><a href="${technotes.technote[2].location}" title="${technotes.technote[2].name}" target="_blank">TECHNOTE </a></div></td>
-	   				{{/if}}	
+						{{each(j) urls.url}}
+							{{if services.service[j] == 'HTTPServer'}}
+								<td id="${$item.replacePeriods(datasetId)}_http" style="float:right;font-size:11px;"><div id="${urls.url[j]}" style="word-wrap: break-word;vertical-align:middle"><a href="${urls.url[j]}">HTTP </a></div></td>
+	   						{{/if}}
+							{{if services.service[j] == 'GridFTP'}}
+								<td id="${$item.replacePeriods(datasetId)}_gridftp" id="${urls.url[j]}" style="float:right;font-size:11px;"><div id="${urls.url[j]}" style="word-wrap: break-word;vertical-align:middle"><a id="${fileId}" class="go_individual_gridftp" href="#">GridFTP </a></div></td>
+	   						{{/if}}
+							{{if services.service[j] == 'OPENDAP'}}
+								<td id="${$item.replacePeriods(datasetId)}_openid" style="float:right;font-size:11px;"><div id="${urls.url[j]}" style="word-wrap: break-word;vertical-align:middle"><a href="${urls.url[j]}">OPENDAP </a></div></td>
+	   						{{/if}}
+						{{/each}}
 
-					
-				</tr>		
+						{{if technotes.technote.length > 2}}
+							<td id="${$item.replacePeriods(datasetId)}_openid" style="float:right;font-size:11px;"><div id="d" style="word-wrap: break-word;vertical-align:middle"><a href="${technotes.technote[2].location}" title="${technotes.technote[2].name}" target="_blank">TECHNOTE </a></div></td>
+	   					{{/if}}	
+
+					</tr>	
+				{{/if}}
+				{{else}}
+					<tr class="rows_${$item.replacePeriods(datasetId)}_more" style="display:none">
+						<td style="width: 40px;"><input style="margin-left: 10px;" class="fileLevel" type="checkbox" class="fileId" id="${fileId}" checked="true" value="${urls.url[1]}"/></td>
+
+						<td style="width: 325px;padding-left:10px;font-size:11px;">
+							<div style="word-wrap: break-word;"> 
+							<span style="font-weight:bold"> ${$item.abbreviate(fileId)} (${$item.sizeConversion(size)}) </span>
+							<br /> 
+							<span style="font-style:italic">Tracking Id: ${tracking_id}</span>
+							<br />
+							<span style="font-style:italic">Checksum: ${checksum} (${checksum_type})</span>
+							</div>
+						</td>
+
+						{{each(j) urls.url}}
+							{{if services.service[j] == 'HTTPServer'}}
+								<td id="${$item.replacePeriods(datasetId)}_http" style="float:right;font-size:11px;"><div id="${urls.url[j]}" style="word-wrap: break-word;vertical-align:middle"><a href="${urls.url[j]}">HTTP </a></div></td>
+	   						{{/if}}
+							{{if services.service[j] == 'GridFTP'}}
+								<td id="${$item.replacePeriods(datasetId)}_gridftp" id="${urls.url[j]}" style="float:right;font-size:11px;"><div id="${urls.url[j]}" style="word-wrap: break-word;vertical-align:middle"><a id="${fileId}" class="go_individual_gridftp" href="#">GridFTP </a></div></td>
+	   						{{/if}}
+							{{if services.service[j] == 'OPENDAP'}}
+								<td id="${$item.replacePeriods(datasetId)}_openid" style="float:right;font-size:11px;"><div id="${urls.url[j]}" style="word-wrap: break-word;vertical-align:middle"><a href="${urls.url[j]}">OPENDAP </a></div></td>
+	   						{{/if}}
+						{{/each}}
+
+						{{if technotes.technote.length > 2}}
+							<td id="${$item.replacePeriods(datasetId)}_openid" style="float:right;font-size:11px;"><div id="d" style="word-wrap: break-word;vertical-align:middle"><a href="${technotes.technote[2].location}" title="${technotes.technote[2].name}" target="_blank">TECHNOTE </a></div></td>
+	   					{{/if}}	
+
+					</tr>	
+				
 			{{/if}}
 		{{/each}}
 	<tr>
 		<td></td>
 	</tr>	
 	<tr>
-		<td></td>
+		<td><td><a href="#" class="view_more_results">View more files</a></td></td>
 	</tr>
 	<tr>
 		<td></td>

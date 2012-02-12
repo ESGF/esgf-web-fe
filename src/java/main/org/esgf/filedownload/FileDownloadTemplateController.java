@@ -119,7 +119,7 @@ public class FileDownloadTemplateController {
     
     private static String solrURL="http://localhost:8983/solr/select";
     
-    private static String searchAPIURL = "http://localhost/esg-search/search?";
+    private static String searchAPIURL = "http://localhost:8081/esg-search/search?";
     
     private final static Logger LOG = Logger.getLogger(FileDownloadTemplateController.class);
 
@@ -136,6 +136,9 @@ public class FileDownloadTemplateController {
     private static final boolean solrResponseDebug = false;
     private static final boolean solrResponseToJSONDebug = false;
     private static final boolean resposneToJSONDebug = false;
+    
+    private static final int numInitialFilesShown = 100;
+    
     
     /**
      * Main method to test the controller using Mock Objects
@@ -209,57 +212,121 @@ public class FileDownloadTemplateController {
         String [] fq = request.getParameterValues("fq[]");
         //need to parse fqStr and create an array [] fq
         
+        String initialQuery = request.getParameter("initialQuery");
         
-        String queryString = preassembleQueryString(showAllStr,fq);
-
-
-        String [] peers = peerStr.split(";");
-        String [] technotes = technoteStr.split(";");
-        String [] id = request.getParameterValues("id[]");
+        System.out.println("\n\nINITIALQUERY\n" + initialQuery + "\n\n\n");
         
         
-        if(id != null) {
-            
-            List<DocElement> docElements = new ArrayList<DocElement>();
+        if(initialQuery.equals("true")) {
+            String queryString = preassembleQueryString(showAllStr,fq);
 
-            long beginTime = System.nanoTime();
+
+            String [] peers = peerStr.split(";");
+            String [] technotes = technoteStr.split(";");
+            String [] id = request.getParameterValues("id[]");
             
-            //peers, technotes and dataset id lengths SHOULD BE THE SAME
-            //if not, fail gracefully
             
-            if(doGetDebug) {
-                System.out.println("peer length: " + peers.length + " id length: " + id.length);
-            }
-            
-            for(int i=0;i<id.length;i++) {
-                DocElement docElement = getDocElement(queryString,id[i],peers[i],technotes[i]);
+            if(id != null) {
+                
+                List<DocElement> docElements = new ArrayList<DocElement>();
+
+                long beginTime = System.nanoTime();
+                
+                //peers, technotes and dataset id lengths SHOULD BE THE SAME
+                //if not, fail gracefully
+                
                 if(doGetDebug) {
-                    System.out.println("\tAdding docElement: " + i);
+                    System.out.println("peer length: " + peers.length + " id length: " + id.length);
                 }
-                docElements.add(docElement);
-            }
+                
+                for(int i=0;i<id.length;i++) {
+                    DocElement docElement = getDocElement(queryString,id[i],peers[i],technotes[i]);
+                    if(doGetDebug) {
+                        System.out.println("\tAdding docElement: " + i);
+                    }
+                    docElements.add(docElement);
+                }
 
-            dataCart = responseToJSON(docElements);
+                dataCart = responseToJSON(docElements);
 
-            
-            if(doGetDebug)
-                System.out.println("DATACART\n" + dataCart);
+                
+                if(doGetDebug)
+                    System.out.println("DATACART\n" + dataCart);
 
-            long endTime = System.nanoTime();
-            
-            if(clockDebug) {
-                System.out.println("--TIME MEASUREMENT FOR LOADING DATACART--");
-                System.out.println("\tTotal Time: " + ((int)(endTime - beginTime)) + "ns");
+                long endTime = System.nanoTime();
+                
+                if(clockDebug) {
+                    System.out.println("--TIME MEASUREMENT FOR LOADING DATACART--");
+                    System.out.println("\tTotal Time: " + ((int)(endTime - beginTime)) + "ns");
+                    
+                }
                 
             }
             
+            
+            if(doGetDebug)
+                System.out.println("---End doGet--");
+            
+            return dataCart;
+            
+            
+        } else {
+            
+            String queryString = preassembleQueryString(showAllStr,fq);
+
+
+            String [] peers = peerStr.split(";");
+            String [] technotes = technoteStr.split(";");
+            String [] id = request.getParameterValues("id[]");
+            
+            
+            if(id != null) {
+                
+                List<DocElement> docElements = new ArrayList<DocElement>();
+
+                long beginTime = System.nanoTime();
+                
+                //peers, technotes and dataset id lengths SHOULD BE THE SAME
+                //if not, fail gracefully
+                
+                if(doGetDebug) {
+                    System.out.println("peer length: " + peers.length + " id length: " + id.length);
+                }
+                
+                for(int i=0;i<id.length;i++) {
+                    DocElement docElement = getDocElement(queryString,id[i],peers[i],technotes[i]);
+                    if(doGetDebug) {
+                        System.out.println("\tAdding docElement: " + i);
+                    }
+                    docElements.add(docElement);
+                }
+
+                dataCart = responseToJSON(docElements);
+
+                
+                if(doGetDebug)
+                    System.out.println("DATACART\n" + dataCart);
+
+                long endTime = System.nanoTime();
+                
+                if(clockDebug) {
+                    System.out.println("--TIME MEASUREMENT FOR LOADING DATACART--");
+                    System.out.println("\tTotal Time: " + ((int)(endTime - beginTime)) + "ns");
+                    
+                }
+                
+            }
+            
+            
+            if(doGetDebug)
+                System.out.println("---End doGet--");
+            
+            return dataCart;
+            
+            
+            
         }
         
-        
-        if(doGetDebug)
-            System.out.println("---End doGet--");
-        
-        return dataCart;
         
     }
     
@@ -317,7 +384,7 @@ public class FileDownloadTemplateController {
         //format=application/solr+json
         //type=File
         String queryString = "";
-        queryString += "format=application%2Fsolr%2Bjson&type=File";
+        queryString += "format=application%2Fsolr%2Bjson&type=File&limit=" + numInitialFilesShown;
         
         //put any search criteria if the user selected "filter"
         if(showAll.equals("false")) {

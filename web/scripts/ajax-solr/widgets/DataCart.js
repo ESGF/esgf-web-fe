@@ -93,6 +93,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		$('.technotes').die('click');
 		$(".topLevel").die('change');
 		$(".fileLevel").die('change');
+		$('a.view_more_results').die('click');
 		
 		//add the spinning wheel in case there is a delay in loading the items in the data cart
         $(this.target).html($('<img/>').attr('src', 'images/ajax-loader.gif'));
@@ -235,6 +236,18 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 				Manager.doRequest(0);
 				
 		});
+		
+		
+		$('a.view_more_results').live('click',function() {
+			if(this.innerHTML == "View more files") {
+				this.innerHTML="Collapse files";
+				
+			} else {
+				this.innerHTML="View more files";
+			}
+		});
+		
+		
 		
 		$("input#remove_all").live('click', function() {
 			
@@ -722,7 +735,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	//* showAll (ESGF.setting.showAllContents) - a boolean filter for file display (if true, files are filtered over the search constraints)
     	//* fq (fqParamArr) - an array of search constraints
 		//var queryStr = { "id" : arr , "shardType" : ESGF.setting.getShards, "shardsString" : shardsString, "fq" : fqParamArr, "q" : qParam, "showAll" : ESGF.setting.showAllContents};
-		var queryStr = {"id" : self.selected_arr, "peer" : peerArr, "technotes" : technoteArr, "showAll" : ESGF.setting.showAllContents, "fq" : fqParamArr};
+		var queryStr = {"id" : self.selected_arr, "peer" : peerArr, "technotes" : technoteArr, "showAll" : ESGF.setting.showAllContents, "fq" : fqParamArr, "initialQuery" : "true"};
 		
 		
 		//getter for the data cart tab

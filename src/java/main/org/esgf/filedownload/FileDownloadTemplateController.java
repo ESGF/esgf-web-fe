@@ -137,7 +137,7 @@ public class FileDownloadTemplateController {
     private static final boolean solrResponseToJSONDebug = false;
     private static final boolean resposneToJSONDebug = false;
     
-    private static final int numInitialFilesShown = 100;
+    private static final int numInitialFilesShown = 10;
     
     
     /**
@@ -219,7 +219,8 @@ public class FileDownloadTemplateController {
         
         if(initialQuery.equals("true")) {
             String queryString = preassembleQueryString(showAllStr,fq);
-
+            
+            //queryString += "&rows=" + numInitialFilesShown;
 
             String [] peers = peerStr.split(";");
             String [] technotes = technoteStr.split(";");
@@ -274,56 +275,22 @@ public class FileDownloadTemplateController {
             
             String queryString = preassembleQueryString(showAllStr,fq);
 
-
-            String [] peers = peerStr.split(";");
-            String [] technotes = technoteStr.split(";");
-            String [] id = request.getParameterValues("id[]");
+            //change the offset
+            queryString += "&offset=" + numInitialFilesShown;
+            
+            String id = request.getParameter("id");
+            System.out.println("after id");
+            System.out.println("\tid: " + id);
             
             
-            if(id != null) {
-                
-                List<DocElement> docElements = new ArrayList<DocElement>();
-
-                long beginTime = System.nanoTime();
-                
-                //peers, technotes and dataset id lengths SHOULD BE THE SAME
-                //if not, fail gracefully
-                
-                if(doGetDebug) {
-                    System.out.println("peer length: " + peers.length + " id length: " + id.length);
-                }
-                
-                for(int i=0;i<id.length;i++) {
-                    DocElement docElement = getDocElement(queryString,id[i],peers[i],technotes[i]);
-                    if(doGetDebug) {
-                        System.out.println("\tAdding docElement: " + i);
-                    }
-                    docElements.add(docElement);
-                }
-
-                dataCart = responseToJSON(docElements);
-
-                
-                if(doGetDebug)
-                    System.out.println("DATACART\n" + dataCart);
-
-                long endTime = System.nanoTime();
-                
-                if(clockDebug) {
-                    System.out.println("--TIME MEASUREMENT FOR LOADING DATACART--");
-                    System.out.println("\tTotal Time: " + ((int)(endTime - beginTime)) + "ns");
-                    
-                }
-                
-            }
+            DocElement docElement = getDocElement(queryString,id,peerStr,technoteStr);
             
+            List<DocElement> docElements = new ArrayList<DocElement>();
+            docElements.add(docElement);
             
-            if(doGetDebug)
-                System.out.println("---End doGet--");
+            dataCart = responseToJSON(docElements);
             
             return dataCart;
-            
-            
             
         }
         
@@ -384,7 +351,7 @@ public class FileDownloadTemplateController {
         //format=application/solr+json
         //type=File
         String queryString = "";
-        queryString += "format=application%2Fsolr%2Bjson&type=File&limit=" + numInitialFilesShown;
+        queryString += "format=application%2Fsolr%2Bjson&type=File";//
         
         //put any search criteria if the user selected "filter"
         if(showAll.equals("false")) {

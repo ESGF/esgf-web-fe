@@ -10,7 +10,7 @@
 <form id="new_user_form" action="goformview2" method="post" >
 	<h3 style="" id="form_title">Globus Online Transfer: Step 1 of 3</h3>
         <p>If you don't have a <a href="http://www.globusonline.org">Globus Online</a> account, you can sign-up
-	for one at <a href="https://www.globusonine.org/SignUp">https://www.globusonine.org/SignUp</a>. </p>
+	for one at <a href="https://www.globusonline.org/SignUp">https://www.globusonline.org/SignUp</a>. </p>
 	<table id="adduser_table_id" class="adduser_table" >
 		<tr id="userName_input">
 			<td>

@@ -29,7 +29,7 @@
 		        	<a href='http://esg-vm-demo02.ccs.ornl.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
 		        </li>		        
 		        <li>
-		        	<a href='http://esgf-node.ipsl.fr/esgf-web-fe/'><img src="images/flags/France.png" class="icon"/>France Node</a>
+		        	<a href='http://esgf-node.ipsl.fr/esgf-web-fe/'><img src="images/flags/France.png" class="icon"/>IPSL Node</a>
 		        	<a href='http://esgf-node.ipsl.fr/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
 		        </li>                             		        
 		        <li>
@@ -37,7 +37,7 @@
 		        	<a href='http://esg-datanode.jpl.nasa.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
 		        </li>
 		        <li>
-		        	<a href='http://adm07.cmcc.it/esgf-web-fe/'><img src="images/flags/Italy.png" class="icon"/>Italy Node</a>
+		        	<a href='http://adm07.cmcc.it/esgf-web-fe/'><img src="images/flags/Italy.png" class="icon"/>CMCC Node</a>
 		        	<a href='http://adm07.cmcc.it/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
 		        </li>                             		        
 		        <li>

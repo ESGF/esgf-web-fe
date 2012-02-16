@@ -114,6 +114,8 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     
     selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
     
+    selectMetID = 'meta_select_'+ doc.id.replace(/\./g, "_");
+    
     if(ESGF.localStorage.search('dataCart',doc.id)) {
     	output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Remove From Cart</a></span>';
     } else {
@@ -136,6 +138,20 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     	}
     }
     
+    var projectStr = 'project="' + doc.project + '" ';
+    var modelStr = 'model="' + doc.model + '" ';
+    var instituteStr = 'institute="' + doc.institute + '" ';
+    var experimentStr = 'experiment="' + doc.experiment + '" ';
+    var cimStr = projectStr + modelStr + instituteStr + experimentStr;
+    
+    if(doc.project == 'CMIP5' || doc.project == 'cmip5') {
+    	//output += '<span class="__actionitem__"> <a class="cim-model" href="#" id="' + selectMetID + '">CIM Metadata</a></span>';
+        output += '<span class="__actionitem__"> <a class="cim-model" href="#" ' + cimStr + '">CIM Metadata</a></span>';
+        
+    }
+    
+    
+    
     if(doc.xlink != undefined) {
         var techNote = doc.xlink;
         
@@ -157,10 +173,18 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         output += "</div>";
     }
 
+    /*
+    $("a[id=" + selectMetID + "]").live('click', {doc:doc}, function (evt) {
+    	alert('rendering cim for doc id: ' + doc.id);
+    
+    	onCIMLinkClicked(doc);
+    	
+    });
+    */
+    
     $("a[id=" + selectID + "]").live('click', {doc:doc}, function (evt) {
     	
         var metadataFormat = doc.metadata_format;
-
         
         //right now, we only support downloads through TDS
         //when we support others, this if guard will be removed
@@ -358,43 +382,6 @@ AjaxSolr.theme.prototype.facet_content = function(stopValue,objectedItems,thisOb
     return $facet_content;
 };
 
-/*
-AjaxSolr.theme.prototype.metadata = function(thisObject) {
-    var self = thisObject;
-
-    //alert('writing title: ' + self.searchable_title);
-    //title
-    $('div#metadata_summary_dataset').after('<div class="addedMetadataTitle">' + 'Dataset: ' + self.searchable_title);
-
-    //alert('writing project: ' + self.facet_project);
-    $('div#projects_metadata').after('<div class="addedMetadata"><p>' + self.facet_project + '</p></div>');
-
-    //alert('writing investigator: '+ self.misc_investigators);
-    $('div#investigator_metadata').after('<div class="addedMetadata"><p>' + self.misc_investigators + '</p></div>');
-
-    //alert('writing contact info: ' + self.misc_contactinfo);
-    $('div#contact_metadata').after('<div class="addedMetadata"><p>' + self.misc_contactinfo + '</p></div>');
-
-    //alert('writing temporal: ' + self.searchable_datetime_start);
-    //temporal
-    $('div#time_metadata').after('<div class="addedMetadata"><p>Begin: ' + self.searchable_datetime_start + ' End: ' + self.searchable_datetime_stop + '</p></div>');
-
-    //alert('writing geo (nd): ' + self.searchable_north_degrees);
-    //geospatial
-    $('div#geospatial_metadata').after('<div class="addedMetadata"><p>' + 'coordinates (N,W,S,E):<br />(' + self.searchable_north_degrees + ',' + self.searchable_west_degrees + ',' + self.searchable_south_degrees + ',' + self.searchable_east_degrees + ')</p></div>');
-    if(self.searchable_north_degrees != 'N/A')
-    self.display_meta_map();
-
-    //alert('writing keywords: ' + self.misc_keywords);
-    $('div#keywords_metadata').after('<div class="addedMetadata"><p>' + self.misc_keywords + '</p></div>');
-
-    //alert('writing description: ' + self.searchable_description);
-    //abstract/description
-    $('div#abstract_metadata').after('<div class="addedMetadata"><p>' + self.searchable_description + '</p></div>');
-
-
-};
-*/
 
 })(jQuery);
 

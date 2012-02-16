@@ -1018,8 +1018,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	var self = this;
     	
     	if(data != null) {
-    		
-    		//alert('showing');
+    	
     		
     		var fileDownloadTemplate = data.doc;
     		

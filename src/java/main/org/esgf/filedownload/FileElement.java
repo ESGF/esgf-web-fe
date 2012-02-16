@@ -33,6 +33,11 @@ public class FileElement implements DataCartElement {
     
     public FileElement() {
 
+        this.initialize();
+        
+    }
+    
+    private void initialize() {
         this.fileId = new String("fileId");
         this.title = new String("title");
         this.size = new String("size");
@@ -50,12 +55,14 @@ public class FileElement implements DataCartElement {
         this.urlsElement = new URLSElement();
         this.servicesElement = new ServicesElement();
         this.technotesElement = new TechnotesElement();
-        
     }
     
     public FileElement(JSONObject docJSON, String string) {
         if(string.equals("solr")) {
             try {
+
+                this.initialize();
+                
                 
                 Iterator iter = docJSON.sortedKeys();
                 
@@ -130,21 +137,27 @@ public class FileElement implements DataCartElement {
                             servicesElement.addService(service);
                             if(service.equals("OPENDAP")) {
                                 this.hasOpenDap = "true";
+                                //System.out.print("\tService is an OPendap");
                             } else if(service.equals("HTTPServer")) {
+                                //System.out.print("\tService is an HTTP");
                                 this.hasHttp = "true";
                             } else if(service.equals("GridFTP")) {
                                 this.hasGrid = "true";
+                                //System.out.print("\tService is an GRIDFTP");
                             }
                         }
 
+                        
                         this.setUrlsElement(urlsElement);
                         this.setMimesElement(mimesElement);
                         this.setServicesElement(servicesElement);
+
+                        
                         
                         //come back to this
-                        this.hasGrid = "true";
-                        this.hasHttp = "true";
-                        this.hasOpenDap = "true";
+                        //this.hasGrid = "true";
+                        //this.hasHttp = "true";
+                        //this.hasOpenDap = "true";
 
                     }
                     else if(key.equals("xlink")) {

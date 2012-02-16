@@ -176,7 +176,7 @@ public class FileDownloadTemplateController {
         try {
             String dataCart = fc.doGet(mockRequest);
             
-            System.out.println("\n\n\nDATACART: " + dataCart);
+            //System.out.println("\n\n\nDATACART: " + dataCart);
             
         } catch (JSONException e) {
             e.printStackTrace();
@@ -214,7 +214,7 @@ public class FileDownloadTemplateController {
         
         String initialQuery = request.getParameter("initialQuery");
         
-        System.out.println("\n\nINITIALQUERY\n" + initialQuery + "\n\n\n");
+        //System.out.println("\n\nINITIALQUERY\n" + initialQuery + "\n\n\n");
         
         
         if(initialQuery.equals("true")) {
@@ -246,6 +246,7 @@ public class FileDownloadTemplateController {
                         System.out.println("\tAdding docElement: " + i);
                     }
                     docElements.add(docElement);
+
                 }
 
                 dataCart = responseToJSON(docElements);
@@ -279,14 +280,14 @@ public class FileDownloadTemplateController {
             queryString += "&offset=" + numInitialFilesShown;
             
             String id = request.getParameter("id");
-            System.out.println("after id");
-            System.out.println("\tid: " + id);
             
             
             DocElement docElement = getDocElement(queryString,id,peerStr,technoteStr);
             
             List<DocElement> docElements = new ArrayList<DocElement>();
             docElements.add(docElement);
+            
+            
             
             dataCart = responseToJSON(docElements);
             
@@ -456,6 +457,11 @@ public class FileDownloadTemplateController {
             //create a count element
             docElement.setCount(fileElements.size());
 
+            //determine here if grid ftp should be displayed
+            
+            
+            
+            
             //attach the file elements to the document
             for(int i=0;i<fileElements.size();i++) {
                 
@@ -465,6 +471,7 @@ public class FileDownloadTemplateController {
                     System.out.println("\tAdding file: " + i);
                 }
             }
+            
             
         }catch(Exception e) {
             System.out.println("Problem building doc element");

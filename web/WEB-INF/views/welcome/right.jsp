@@ -16,8 +16,6 @@
 		<%@ include file="/WEB-INF/views/welcome/quick_links.jsp" %>
 		
 		<%@ include file="/WEB-INF/views/welcome/instructions.jsp" %>
-		
-		<%@ include file="/WEB-INF/views/welcome/nodes.jsp" %>
 
 	</div>
             	

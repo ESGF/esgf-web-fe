@@ -1,9 +1,16 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
-
+<c:choose>
+<c:when test='${GoFormView_Error=="error"}' >
+	<strong>Error: Globus Online could not be initialized.</strong>
+<br><br>Please press back to correct the error, or try your  <a href="<c:url value="/live"/>">download</a> request again.
+<br><br>
+        <c:out value="${GoFormView_ErrorMsg}" escapeXml="false"/>
+	</c:when>
+	<c:otherwise>
 <form id="new_user_form" action="goformview2" method="post" >
 	<h3 style="" id="form_title">Globus Online Transfer: Step 1 of 3</h3>
         <p>If you don't have a <a href="http://www.globusonline.org">Globus Online</a> account, you can sign-up
-	for one at <a href="https://www.globusonine.org/SignUp">https://www.globusonine.org/SignUp</a>. </p>
+	for one at <a href="https://www.globusonline.org/SignUp">https://www.globusonline.org/SignUp</a>. </p>
 	<table id="adduser_table_id" class="adduser_table" >
 		<tr id="userName_input">
 			<td>
@@ -65,3 +72,5 @@
      	<input style="" class="adminbutton" type="submit" value="next">
 	</p>
 </form>
+	</c:otherwise>
+</c:choose>

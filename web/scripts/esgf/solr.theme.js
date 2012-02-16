@@ -113,13 +113,16 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     output += "Further options: ";
     
     selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
+
+    selectID = selectID.replace("|","_");
+    
     
     selectMetID = 'meta_select_'+ doc.id.replace(/\./g, "_");
     
     if(ESGF.localStorage.search('dataCart',doc.id)) {
-    	output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Remove From Cart</a></span>';
+    	output += '<span class="actionitem"> <a href="#" class="' + 'selections"' + ' id="' + selectID + '">Remove From Cart</a></span>';
     } else {
-    	output += '<span class="actionitem"> <a href="#" id="' + selectID + '">Add To Cart</a></span>';
+    	output += '<span class="actionitem"> <a href="#" class="' + 'selections"' + ' id="' + selectID + '">Add To Cart</a></span>';
     }
     
     if(doc.url instanceof Array) {
@@ -173,16 +176,16 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         output += "</div>";
     }
 
-    /*
-    $("a[id=" + selectMetID + "]").live('click', {doc:doc}, function (evt) {
-    	alert('rendering cim for doc id: ' + doc.id);
     
-    	onCIMLinkClicked(doc);
-    	
-    });
-    */
     
-    $("a[id=" + selectID + "]").live('click', {doc:doc}, function (evt) {
+    //alert('solr theme selectID ' + selectID);
+    
+    //alert('killing live link for ' + selectID);
+    //$("a[id=" + selectID + "]").die('click');
+	//alert('creating live link for ' + selectID);
+    //$("a[id=" + selectID + "]").live('click', {doc:doc}, function (evt) {
+    $("a#" + selectID).live('click', {doc:doc}, function (evt) {
+        	
     	
         var metadataFormat = doc.metadata_format;
         

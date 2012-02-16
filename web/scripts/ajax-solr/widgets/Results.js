@@ -66,6 +66,7 @@
 
         beforeRequest: function () {
             $(this.target).html($('<img/>').attr('src', 'images/ajax-loader.gif'));
+            $('a.selections').die('click');
         },
         
         
@@ -146,7 +147,7 @@
 	        var i = null;
 	        var self = this;
             $(this.target).empty();
-            
+
             
             if(ESGF.setting.storage) {
             	
@@ -201,7 +202,28 @@
             	    		//alert ('i should not display this if ' + fq);
                 	for (i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
                         var doc = this.manager.response.response.docs[i];
+                        
                     		if(self.postSolrProcessing(doc)) {
+                    			
+
+                                //$("a[id=" + selectID + "]").die('click');
+
+                    			//remove the live events
+                    		    selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
+                    		    
+                    		    selectID = selectID.replace("|","_");
+                    		    
+                    		    /*
+                    		    alert('selectedId: ' + selectID);
+                    		    
+                                //alert('killing live link for ' + selectID);
+                    		    if(doc['version'] == '20111119') {
+                    		    	alert('data doc that breaks ' + doc['id']);
+                    		    }
+                    		    */
+                    		    
+                    		    $("a#" + selectID).die('click');
+                    			
                                 //console.log('keep doc: ' + doc.title);
                             	//alert('doc: ' + doc.title);
                                 $(this.target).append(

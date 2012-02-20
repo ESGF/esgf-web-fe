@@ -125,20 +125,7 @@ public class GOFormView1Controller {
 	    }
 
 	    LOG.debug("Got User OpenID: " + openId);
-            URI myproxyServerURI = Utils.resolveMyProxyViaOpenID(openId);
-            LOG.debug("Got MyProxy URI: " + myproxyServerURI);
-
-            String mHost = myproxyServerURI.toString();
-            String mPort = "7512";
-            if (myproxyServerURI.getHost() != null)
-            {
-                mHost = myproxyServerURI.getHost();
-            }
-            if (myproxyServerURI.getPort() != -1)
-            {
-                mPort = new Integer(myproxyServerURI.getPort()).toString();
-            }
-            myproxyServerStr = mHost + ":" + mPort;
+            myproxyServerStr = Utils.resolveMyProxyViaOpenID(openId);
             LOG.debug("Using MyProxy Server: " + myproxyServerStr);
 
 	    if (request.getParameter(GOFORMVIEW_MODEL)!=null) {

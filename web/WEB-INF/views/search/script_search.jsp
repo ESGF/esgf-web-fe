@@ -44,9 +44,9 @@
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/FacetBrowser.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/TagClouds.js" />'> </script>
 
-    <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Geospatial.js" />'> </script>
+    <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Geospatial3.js" />'> </script>
 
-    <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Temporal2.js" />'> </script>
+    <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Temporal3.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Metadata.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/FacetSidebar.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Annotator.js" />'> </script>

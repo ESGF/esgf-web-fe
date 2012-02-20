@@ -119,7 +119,7 @@ public class FileDownloadTemplateController {
     
     private static String solrURL="http://localhost:8983/solr/select";
     
-    private static String searchAPIURL = "http://localhost/esg-search/search?";
+    private static String searchAPIURL = "http://localhost:8081/esg-search/search?";
     
     private final static Logger LOG = Logger.getLogger(FileDownloadTemplateController.class);
 

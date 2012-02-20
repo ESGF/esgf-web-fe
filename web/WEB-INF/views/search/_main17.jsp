@@ -1,4 +1,6 @@
 <%@ include file="/WEB-INF/views/search/_overlay.jsp" %>
+<%@ include file="/WEB-INF/views/search/temporal_widget_dialog.jsp" %>
+<%@ include file="/WEB-INF/views/search/geospatial_widget_dialog.jsp" %>
 <%@ include file="/WEB-INF/views/search/_select_tbl.jsp" %>
 
 <style>
@@ -21,9 +23,13 @@
 	    	<input id="search-button" type="submit" value="Search" />
 	    </div>
 	    <div class="span-3 last" style="margin-top:5px">
-
+<!--  
 	    	<div id="temporal"><a href="<c:url value="/scripts/esgf/overlays/temporal_overlay.html" />" id="temporal" rel="#temporal_overlay" style="font-size:10px">Temporal Search</a></div>
-	    	<div id="geo"><a href="<c:url value="/scripts/esgf/overlays/geospatial_overlay.html" />" rel="#geospatial_overlay" style="font-size:10px" id="geo">Geospatial Search</a></div>
+-->	    	
+			<div id="temporal"><a href="#" id="temporal" style="font-size:10px">Temporal Search</a></div>
+			<div id="geo"><a href="#" id="geospatial" style="font-size:10px">G Search</a></div>
+			
+			<!--  <div id="geo"><a href="<c:url value="/scripts/esgf/overlays/geospatial_overlay.html" />" rel="#geospatial_overlay" style="font-size:10px" id="geo">Geospatial Search</a></div>-->
 	    	<!-- <div id="distributed"><a href="#" style="font-size:10px" id="distributed">Turn on Distributed Search</a></div>
 	    	 -->
 	    	 <div id="facet_browser_overlay"><a href="#" rel="#facet_overlay" style="font-size:10px" >Browse Categories</a></div>

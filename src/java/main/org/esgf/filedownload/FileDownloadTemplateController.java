@@ -137,6 +137,9 @@ public class FileDownloadTemplateController {
     private static final boolean solrResponseToJSONDebug = false;
     private static final boolean resposneToJSONDebug = false;
     
+    private static final int numInitialFilesShown = 10;
+    
+    
     /**
      * Main method to test the controller using Mock Objects
      * 
@@ -173,7 +176,7 @@ public class FileDownloadTemplateController {
         try {
             String dataCart = fc.doGet(mockRequest);
             
-            System.out.println("\n\n\nDATACART: " + dataCart);
+            //System.out.println("\n\n\nDATACART: " + dataCart);
             
         } catch (JSONException e) {
             e.printStackTrace();
@@ -209,57 +212,89 @@ public class FileDownloadTemplateController {
         String [] fq = request.getParameterValues("fq[]");
         //need to parse fqStr and create an array [] fq
         
+        String initialQuery = request.getParameter("initialQuery");
         
-        String queryString = preassembleQueryString(showAllStr,fq);
-
-
-        String [] peers = peerStr.split(";");
-        String [] technotes = technoteStr.split(";");
-        String [] id = request.getParameterValues("id[]");
+        //System.out.println("\n\nINITIALQUERY\n" + initialQuery + "\n\n\n");
         
         
-        if(id != null) {
+        if(initialQuery.equals("true")) {
+            String queryString = preassembleQueryString(showAllStr,fq);
             
-            List<DocElement> docElements = new ArrayList<DocElement>();
+            //queryString += "&rows=" + numInitialFilesShown;
 
-            long beginTime = System.nanoTime();
+            String [] peers = peerStr.split(";");
+            String [] technotes = technoteStr.split(";");
+            String [] id = request.getParameterValues("id[]");
             
-            //peers, technotes and dataset id lengths SHOULD BE THE SAME
-            //if not, fail gracefully
             
-            if(doGetDebug) {
-                System.out.println("peer length: " + peers.length + " id length: " + id.length);
-            }
-            
-            for(int i=0;i<id.length;i++) {
-                DocElement docElement = getDocElement(queryString,id[i],peers[i],technotes[i]);
+            if(id != null) {
+                
+                List<DocElement> docElements = new ArrayList<DocElement>();
+
+                long beginTime = System.nanoTime();
+                
+                //peers, technotes and dataset id lengths SHOULD BE THE SAME
+                //if not, fail gracefully
+                
                 if(doGetDebug) {
-                    System.out.println("\tAdding docElement: " + i);
+                    System.out.println("peer length: " + peers.length + " id length: " + id.length);
                 }
-                docElements.add(docElement);
-            }
+                
+                for(int i=0;i<id.length;i++) {
+                    DocElement docElement = getDocElement(queryString,id[i],peers[i],technotes[i]);
+                    if(doGetDebug) {
+                        System.out.println("\tAdding docElement: " + i);
+                    }
+                    docElements.add(docElement);
 
-            dataCart = responseToJSON(docElements);
+                }
 
-            
-            if(doGetDebug)
-                System.out.println("DATACART\n" + dataCart);
+                dataCart = responseToJSON(docElements);
 
-            long endTime = System.nanoTime();
-            
-            if(clockDebug) {
-                System.out.println("--TIME MEASUREMENT FOR LOADING DATACART--");
-                System.out.println("\tTotal Time: " + ((int)(endTime - beginTime)) + "ns");
+                
+                if(doGetDebug)
+                    System.out.println("DATACART\n" + dataCart);
+
+                long endTime = System.nanoTime();
+                
+                if(clockDebug) {
+                    System.out.println("--TIME MEASUREMENT FOR LOADING DATACART--");
+                    System.out.println("\tTotal Time: " + ((int)(endTime - beginTime)) + "ns");
+                    
+                }
                 
             }
             
+            
+            if(doGetDebug)
+                System.out.println("---End doGet--");
+            
+            return dataCart;
+            
+            
+        } else {
+            
+            String queryString = preassembleQueryString(showAllStr,fq);
+
+            //change the offset
+            queryString += "&offset=" + numInitialFilesShown;
+            
+            String id = request.getParameter("id");
+            
+            
+            DocElement docElement = getDocElement(queryString,id,peerStr,technoteStr);
+            
+            List<DocElement> docElements = new ArrayList<DocElement>();
+            docElements.add(docElement);
+            
+            
+            
+            dataCart = responseToJSON(docElements);
+            
+            return dataCart;
+            
         }
         
-        
-        if(doGetDebug)
-            System.out.println("---End doGet--");
-        
-        return dataCart;
         
     }
     
@@ -317,7 +352,7 @@ public class FileDownloadTemplateController {
         //format=application/solr+json
         //type=File
         String queryString = "";
-        queryString += "format=application%2Fsolr%2Bjson&type=File";
+        queryString += "format=application%2Fsolr%2Bjson&type=File";//
         
         //put any search criteria if the user selected "filter"
         if(showAll.equals("false")) {
@@ -422,6 +457,11 @@ public class FileDownloadTemplateController {
             //create a count element
             docElement.setCount(fileElements.size());
 
+            //determine here if grid ftp should be displayed
+            
+            
+            
+            
             //attach the file elements to the document
             for(int i=0;i<fileElements.size();i++) {
                 
@@ -431,6 +471,7 @@ public class FileDownloadTemplateController {
                     System.out.println("\tAdding file: " + i);
                 }
             }
+            
             
         }catch(Exception e) {
             System.out.println("Problem building doc element");

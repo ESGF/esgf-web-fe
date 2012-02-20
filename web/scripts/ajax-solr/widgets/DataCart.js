@@ -93,6 +93,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		$('.technotes').die('click');
 		$(".topLevel").die('change');
 		$(".fileLevel").die('change');
+		$('a.view_more_results').die('click');
 		
 		//add the spinning wheel in case there is a delay in loading the items in the data cart
         $(this.target).html($('<img/>').attr('src', 'images/ajax-loader.gif'));
@@ -102,6 +103,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	 * DOCUMENT ME
 	 */
 	afterRequest: function () {
+		
+		
 		
 		//empty the tab
         $(this.target).empty();
@@ -235,6 +238,145 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 				Manager.doRequest(0);
 				
 		});
+		
+		
+		$('a.view_more_results').live('click',function() {
+			
+			var id = ';';
+			
+        	var selectedItem = $.tmplItem(this);
+        	var selectedDocId = selectedItem.data.datasetId;
+
+	    	var rowsId = selectedDocId.replace(/\./g,"_")
+	    	
+	        var newWord = rowsId.replace(/\./g,"_");
+	        var newNewWord = newWord.replace(":","_");
+	        var newNewNewWord = newWord.replace("|","_");
+	    	
+			//alert('selectedDocId: ' + newNewNewWord);
+			var id = newNewNewWord;
+			//alert('origSelectedDocId: ' + selectedDocId);
+    		var datasetInfo = ESGF.localStorage.get('dataCart',selectedDocId);
+    		
+    		var peer = datasetInfo.peer;
+    		
+    		//alert('peer: ' + peer);
+
+        	var fqParamArr = self.createFqParamArray();
+        	
+			
+			
+			if(this.innerHTML == "View more files") {
+				this.innerHTML="Collapse files";
+				
+				
+				
+				var appendedRows = $(this).parent().parent().parent().parent().find('tr.appendRow_'+self.replacePeriod(selectedDocId));
+				
+				appendedRows.toggle();
+				
+				//get the remaining results from the back end
+				var queryStr = {"id" : selectedDocId, "initialQuery" : "false", "peer" : peer, "showAll" : ESGF.setting.showAllContents, "fq" : fqParamArr}; //, "peer" : peerArr, "technotes" : technoteArr, "showAll" : ESGF.setting.showAllContents, "fq" : fqParamArr, "initialQuery" : "true"};
+				
+				self.addDataCartSpinWheel();
+				
+				$.ajax({
+					url: '/esgf-web-fe/solrfileproxy',
+					global: false,
+					type: "GET",
+					data: queryStr,
+					dataType: 'json',
+					
+					//Upon success remove the spinning wheel and show the contents given by solr
+					success: function(data) {
+						//alert('success');
+		    			self.removeDataCartSpinWheel();
+		    			
+		    			var newRows = '';
+		    			
+		    			for(var i=2;i<data.doc.file.length;i++ ) {//data.doc.file.length;i++) {
+		    				
+		    				var newRow = '<tr class="hhh rows_' + self.replacePeriod(data.doc.datasetId)/*${$item.replacePeriods(datasetId)}*/ + '">';
+							
+							//checkbox
+							newRow += '<td style="width: 40px;">' +
+										 '<input style="margin-left: 10px;" ' +
+										         'class="fileLevel" ' +
+										         'id="' + data.doc.file[i].fileId/*${fileId}*/ + '" ' + 
+										         'type="checkbox" ' +
+										         'class="fileId" ' +
+										         'checked="true" ' + 
+										         'value=" ' + data.doc.file[i].urls.url[1]/*${urls.url[1]}*/ + '"' +
+										         '/>' +
+										 '</td>';
+	
+							
+							//file id, checksum, tracking id
+							newRow += '<td style="width: 325px;padding-left:10px;font-size:11px;">';
+							newRow += '  <div style="word-wrap: break-word;"> ';
+							newRow += '    <span style="font-weight:bold"> ' + data.doc.file[i].fileId + '(' + self.sizeConvert(data.doc.file[i].size) + ')' + ' </span>';
+							newRow += '    <br />';
+							newRow += '    <span style="font-style:italic">Tracking Id: ' + data.doc.file[i].tracking_id + '</span>';
+							newRow += '    <br />';
+							newRow += '    <span style="font-style:italic">Checksum: ' + data.doc.file[i].checksum + '(' + data.doc.file[i].checksum_type + ') ' + '</span>';
+							newRow += '  </div>';
+							newRow += '</td>';
+							
+							//file access methods
+							for(var j=0;j<data.doc.file[i].urls.url.length;j++) {
+								if(data.doc.file[i].services.service[j] == 'HTTPServer') {
+									newRow += '<td id="' + self.replacePeriod(data.doc.datasetId)/*${$item.replacePeriods(datasetId)}_http */ + '_http" style="float:right;font-size:11px;"><div id="' + data.doc.file[i].urls.url[j]/*${urls.url[j]}*/ + '" style="word-wrap: break-word;vertical-align:middle"><a href="' + data.doc.file[i].urls.url[j] + '">HTTP </a></div></td>';
+								}
+								if(data.doc.file[i].services.service[j] == 'GridFTP') {
+									newRow += '<td id="" style="float:right;font-size:11px;"><div id="" style="word-wrap: break-word;vertical-align:middle"><a id="" class="go_individual_gridftp" href="#">GridFTP </a></div></td>';
+								}
+								if(data.doc.file[i].services.service[j] == 'OPENDAP') {
+									newRow += '<td id="" style="float:right;font-size:11px;"><div id="" style="word-wrap: break-word;vertical-align:middle"><a href="">OPENDAP </a></div></td>';
+								}
+							}
+							
+							//technotes (if any)
+							if(data.doc.file[i].technotes.technote.length > 2) {
+								newRow += '<td id=" ' + replacePeriod(data.doc.datasetId) + '_openid' + '"' +
+								'style="float:right;font-size:11px;">' +
+								'<div id="d" ' + 
+								'style="word-wrap: break-word;vertical-align:middle">' +
+								'<a href="" title="" target="_blank">TECHNOTE </a></div></td>';
+								
+							}
+							
+							
+			    			newRow += '</tr>';
+			    			
+			    			newRows += newRow;
+			    			
+		    			}
+
+		    			
+		    			appendedRows.after(newRows);
+		    			
+					},
+					error: function() {
+						alert('error');
+					}
+				});
+				
+				
+				
+			} else {
+				this.innerHTML="View more files";
+				//alert($(this).parent().parent().parent().parent().find('tr.hhh').html());
+				
+				var thing = $(this).parent().parent().parent().parent().find('tr.appendRow_'+newNewNewWord);
+				
+				thing.toggle();
+				
+				$(this).parent().parent().parent().parent().find('tr.hhh').remove();
+				
+			}
+		});
+		
+		
 		
 		$("input#remove_all").live('click', function() {
 			
@@ -689,6 +831,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     		var datasetInfo = ESGF.localStorage.get('dataCart',id);
     		
     		var peer = datasetInfo.peer;
+    		
+    		
     		if(i != 0) {
         		peerArr += ';' + peer;
     		} else {
@@ -722,7 +866,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	//* showAll (ESGF.setting.showAllContents) - a boolean filter for file display (if true, files are filtered over the search constraints)
     	//* fq (fqParamArr) - an array of search constraints
 		//var queryStr = { "id" : arr , "shardType" : ESGF.setting.getShards, "shardsString" : shardsString, "fq" : fqParamArr, "q" : qParam, "showAll" : ESGF.setting.showAllContents};
-		var queryStr = {"id" : self.selected_arr, "peer" : peerArr, "technotes" : technoteArr, "showAll" : ESGF.setting.showAllContents, "fq" : fqParamArr};
+		var queryStr = {"id" : self.selected_arr, "peer" : peerArr, "technotes" : technoteArr, "showAll" : ESGF.setting.showAllContents, "fq" : fqParamArr, "initialQuery" : "true"};
 		
 		
 		//getter for the data cart tab
@@ -874,8 +1018,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	var self = this;
     	
     	if(data != null) {
-    		
-    		//alert('showing');
+    	
     		
     		var fileDownloadTemplate = data.doc;
     		
@@ -883,6 +1026,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     		$( "#cartTemplateStyledNew").tmpl(fileDownloadTemplate, {
     			
     			replacePeriods : function (word) {
+    				LOG.debug('replacePeriods: ' + self.replacePeriod(word));
                     return self.replacePeriod(word);
                 },
                 abbreviate : function (word) {
@@ -901,18 +1045,25 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
             })
             .appendTo("#datasetList")
             .find( "a.showAllChildren" ).click(function() {
+
+            	var selectedItem = $.tmplItem(this);
+                var selectedDoc = selectedItem;
+
+            	var selectedDocId = selectedItem.data.datasetId;
+            	
+            	//alert('tr.view_more_results_' + self.replacePeriod(selectedDocId));
+            	
+            	$('tr.view_more_results_' + self.replacePeriod(selectedDocId)).toggle();
             	
             	if(this.innerHTML === "Expand") {
                     this.innerHTML="Collapse";
+                    
+                    
                 } else {
                     this.innerHTML="Expand";
                 }
             	
             	
-            	var selectedItem = $.tmplItem(this);
-                var selectedDoc = selectedItem;
-
-            	var selectedDocId = selectedItem.data.datasetId;
             	
             	var id = $(this).parent().parent().parent().html();
                 
@@ -920,6 +1071,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
             	
             	
             });
+    		
+    		
     		
     	}
 		
@@ -995,27 +1148,47 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 
 });
 
+
+
 }(jQuery));
 
-
-/* OLD WAY OF GETTING PEERS */
-//alert('peerArr: ' + peerArr);
-//alert('technoteArr: ' + technoteArr + ' ' + technoteArr.length);
-
-/*
-//get the index peers
-var peerArr = '';
-for(var i=0;i<self.selected_arr.length;i++) {
-	var id = self.selected_arr[i];
-	var peer = ESGF.localStorage.get('dataCart',id);
-	if(i != 0) {
-		peerArr += ';' + peer;
-	} else {
-		peerArr += peer;
-	}
-	//alert('id: ' + id + ' peer: ' + peer);
+function formatPrice(price) {
+    return "ZZZZ" + price;
 }
 
 
+function replacePeriodGlobal(word)
+{
+    var newWord = word.replace(/\./g,"_");
+    var newNewWord = newWord.replace(":","_");
+    var newNewNewWord = newWord.replace("|","_");
+    return newNewNewWord;
+}
 
-*/
+function abbreviateWordGlobal(word) {
+	var abbreviation = word;
+    if(word.length > 25) {
+        abbreviation = word.slice(0,10) + '...' + word.slice(word.length-11,word.length);
+    }
+    return abbreviation;
+}
+
+function sizeConversionGlobal(size) {
+	var convSize;
+    if(size == null) {
+        convSize = 'N/A';
+    } else {
+        var sizeFlt = parseFloat(size,10);
+        if(sizeFlt > 1000000000) {
+            var num = 1000000000;
+            convSize = (sizeFlt / num).toFixed(2) + ' GB';
+        } else if (sizeFlt > 1000000) {
+            var num = 1000000;
+            convSize = (sizeFlt / num).toFixed(2) + ' MB';
+        } else {
+            var num = 1000;
+            convSize = (sizeFlt / num).toFixed(2) + ' KB';
+        }
+    }
+    return convSize;
+}

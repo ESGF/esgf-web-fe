@@ -47,3 +47,31 @@
      <link rel="stylesheet"
         href='<c:url value="/styles/annotator_overlay.css" />'
         type="text/css" media="screen, projection">
+        
+        
+     <link rel="stylesheet"
+        href='<c:url value="/styles/cim/cim-viewer.css" />'
+        type="text/css" media="screen, projection">
+
+        
+        <!-- Test page CSS -->
+        <style>
+            .testpage-header {
+                margin-top: 10px;
+                font-size: large;
+                font-weight: bold;
+                font-style: italic;
+            }
+            .testpage-row {
+                margin-top: 10px;
+            }
+            .testpage-row-caption {
+                width:200px;
+                float:left;
+                padding-top:3px;
+                font-weight: bold;
+            }
+            .testpage-row-content {
+                margin-left:200px;
+            }
+        </style>

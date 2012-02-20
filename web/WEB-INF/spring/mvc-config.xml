@@ -66,5 +66,6 @@
 
     <bean id="newsService" class="org.esgf.service.NewsServiceImpl">
     </bean>
+    
 
 </beans>

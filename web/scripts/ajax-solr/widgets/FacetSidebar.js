@@ -68,7 +68,8 @@
 		
 			
 			//initialize the contents in the facet sidebar
-	    	$('#facets').append('<table ><tbody id="facetList"></tbody></table>');
+			//$('#facets').append('<table ><tbody id="facetList"></tbody></table>');
+			$('#facets').append('<div id="facetList"></div>');
 	    	
 	    	$("#facetList").empty();
 			

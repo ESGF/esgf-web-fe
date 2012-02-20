@@ -11,6 +11,11 @@
 	<h3 style="" id="form_title">Globus Online Transfer: Step 1 of 3</h3>
         <p>If you don't have a <a href="http://www.globusonline.org">Globus Online</a> account, you can sign-up
 	for one at <a href="https://www.globusonline.org/SignUp">https://www.globusonline.org/SignUp</a>. </p>
+        <p>If you are not familiar with doing Globus Online transfers
+        in ESG, or this is your first time, please read this <a
+        href="http://www.esgf.org/wiki/ESGF_GO">documentation</a> to
+        be sure that your account is setup properly and that this
+        transfer can work.</p>
 	<table id="adduser_table_id" class="adduser_table" >
 		<tr id="userName_input">
 			<td>

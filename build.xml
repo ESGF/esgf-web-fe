@@ -585,13 +585,11 @@ Builds the project via ant (obviously).
   	</path>
   	
     <!-- instrument classes -->
-  	<!--    
     <cobertura-instrument todir="${test_build_dir_inst}" datafile="${test_coverage_file}">
     	<fileset dir="${build_dir}/esg">
 	<include name="**/*.class" />
       </fileset> 
     </cobertura-instrument>
-	-->
   	
     <!-- set test_classapth to see instrumented classes -->
   	<!--

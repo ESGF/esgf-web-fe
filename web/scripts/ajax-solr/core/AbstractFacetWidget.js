@@ -104,6 +104,7 @@ AjaxSolr.AbstractFacetWidget = AjaxSolr.AbstractWidget.extend(
    *   filter query with the given value.
    */
   clickHandler: function (value) {
+	  alert('click handler for ' + value);
     var self = this;
     return function () {
       if (self.add(value)) {

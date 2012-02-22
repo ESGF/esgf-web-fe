@@ -136,19 +136,23 @@
     function processWidgets(fields) {
     	
     	LOG.debug("Fields: " + fields);
-    	
+
     	var shortNameArr = new Array();
+    	var longNameArr = new Array();
     	
     	for(var i=0;i<fields.length;i++) {
     		var fullField = fields[i];
     		var mappingStr = fullField.split(":");
     		var shortName = mappingStr[0];
+    		var longName = mappingStr[1];
     		shortNameArr.push(shortName);
+    		longNameArr.push(longName);
     	}
 
     	
     	//Register widgets for facet browser
     	//Also, add those facets to the overlay defined in esgf-web-fe/web/WEB-INF/views/search/_overlay.jsp
+    	/*
         for (var i = 0, l = fields.length; i < l; i++) {
             Manager.addWidget(new AjaxSolr.FacetBrowserWidget({
               id: shortNameArr[i],
@@ -158,7 +162,15 @@
             var facet_div = '<div class="facet_item"><div id="' + shortNameArr[i] + '"></div></div>';
             $('div.facet_items').append(facet_div);
         }
-        
+        */
+    	
+    	Manager.addWidget(new AjaxSolr.FacetBrowserWidget({
+    		id: 'id1',
+    		target: '#' + 'id1',
+    		field: 'field1',
+    		shortNames: shortNameArr,
+    		longNames: longNameArr
+    	}));
         
         
         

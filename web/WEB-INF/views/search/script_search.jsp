@@ -41,7 +41,7 @@
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/CurrentSearch.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Text.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/AutoComplete.js" />'> </script>
-    <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/FacetBrowser.js" />'> </script>
+    <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/FacetBrowser3.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/TagClouds.js" />'> </script>
 
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Geospatial3.js" />'> </script>

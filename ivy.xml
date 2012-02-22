@@ -114,6 +114,7 @@
     <dependency org="org.esgf" name="esgf-node-manager" rev="0.6.1" transitive="false" conf="base->runtime" />
     <dependency org="org.esgf" name="esgf-security" rev="1.5.6" transitive="false" conf="base->default" />
 
+    <dependency org="net.sourceforge.cobertura" name="cobertura" rev="1.9.4" conf="base->default"/>
     <dependency org="antlr" name="antlr" rev="2.7.7" conf="base->default" />
     <dependency org="commons-fileupload" name="commons-fileupload" rev="1.2.1" conf="base->default"/>
     <dependency org="commons-io" name="commons-io" rev="2.0.1" conf="base->default"/>

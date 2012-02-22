@@ -198,7 +198,7 @@ public class URLSElementTest {
     }
     
     
-    
+    /*
     private Element getElementFromFile(String URLSfileName) {
         SAXBuilder parser = new SAXBuilder();
         Element rootElement = null;
@@ -251,6 +251,7 @@ public class URLSElementTest {
         
         return URLXML;
     }
+    */
     
 }
 

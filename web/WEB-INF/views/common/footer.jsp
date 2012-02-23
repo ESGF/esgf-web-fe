@@ -31,9 +31,9 @@
 		</div>
 	</div>
 	
-	<div class="prepend-3 span-6 last">
+	<div class="prepend-1 span-8 last">
 		<div class="footerright">
-        	<a href="#">Privacy Policy</a> | <a href="#">Terms of Use </a> 
+        	<a href="#">Privacy Policy</a> | <a href="#">Terms of Use </a> | <a href="mailto:esgf-support@lists.llnl.gov?subject=ESGF Portal Feedback">Contact ESGF</a>
         </div>
 	</div>
 </div>  

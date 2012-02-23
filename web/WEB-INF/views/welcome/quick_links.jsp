@@ -21,6 +21,9 @@
 				<li><a href='http://${pageContext.request.serverName}/esg-search/wget'>Wget Script Generator</a></li>
 				<li><a href='http://${pageContext.request.serverName}/esg-search/feed/nodes.rss'>ESGF aggregated RSS feed</a>
 				    <a href='http://${pageContext.request.serverName}/esg-search/feed/nodes.rss'><img src='images/rss_icon.png'/ align="bottom"></a></li>
+				<li>
+					<a href="mailto:esgf-support@lists.llnl.gov?subject=ESGF Portal Feedback">Contact ESGF</a>
+				</li>
 			</ul>
 		</div>
 	</div>

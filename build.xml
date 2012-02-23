@@ -567,6 +567,8 @@ Builds the project via ant (obviously).
     <mkdir dir="${test_reports_dir}"/>
     <delete dir="${test_coverage_dir}" />
     <mkdir dir="${test_coverage_dir}" />
+    <mkdir dir="${build_dir}/esg" />
+
 
     <path id="coverage.classpath">
       <fileset dir="${lib_dir}" includes="**/*.jar" />

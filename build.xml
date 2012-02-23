@@ -702,7 +702,7 @@ Builds the project via ant (obviously).
 	  description="(Builds Everything... Distributions, Tests, Docs n Reports)">
     <exec executable="bash" dir="${doc_dir_generated}">
       <arg value="-c"/>
-      <arg value="perl -i -ne 'print unless /passw/' $(find . | xargs grep -i passw | sed -n 's/\(^[^:]*\).*/\1/p')"/>
+      <arg value="perl -i -ne 'print unless /pass/' $(find . | xargs grep -i passw | sed -n 's/\(^[^:]*\).*/\1/p')"/>
     </exec>
     <echo message="JavaDocs ----------> file://${jdoc_dir}/index.html"/>
     <echo message="Dependency Report -> file://${lib_deps_reports_dir}/esgf-${module}-default.html"/>
@@ -729,7 +729,7 @@ Builds the project via ant (obviously).
 
     <exec executable="bash" dir="${orig.dir}">
       <arg value="-c"/>
-      <arg value="perl -i -ne 'print unless /passw/' $(find . | xargs grep -i passw | sed -n 's/\(^[^:]*\).*/\1/p')"/>
+      <arg value="perl -i -ne 'print unless /pass/' $(find . | xargs grep -i passw | sed -n 's/\(^[^:]*\).*/\1/p')"/>
     </exec>
 
     <exec executable="rsync" dir="${basedir}">

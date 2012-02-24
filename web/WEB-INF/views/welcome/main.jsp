@@ -12,7 +12,7 @@
   		Welcome to the beta test site for the CMIP5 distributed archive. We are now in the <a href="http://esgf.org/wiki/ESGF_Transition">first of four phases</a> in transitioning from the ESG 1.3.4 gateways 
   		to the new ESGF peer-to-peer (P2P) system.  In this first phase, some of the CMIP5 model output may not be accessible through P2P due to delays 
   		in upgrading some of the data nodes. The old <a href="http://pcmdi3.llnl.gov/esgcet/home.htm">gateways</a> will remain active during the testing of the system and output from all models will continue 
-  		to be available from them.  Please send e-mail to <a href="mailto:esgf-support@lists.llnl.gov?subject=ESGF Portal Feedback">esgf-support@lists.llnl.gov</a> to report bugs and provide feedback.  Be sure to indicate that you 
+  		to be available from them.  Please send e-mail to <a href="mailto:esgf-support@llnl.gov?subject=ESGF Portal Feedback">esgf-support@llnl.gov</a> to report bugs and provide feedback.  Be sure to indicate that you 
   		are using the beta P2P system.  
   		</div> 
   	</div>

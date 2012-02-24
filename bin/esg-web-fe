@@ -92,7 +92,7 @@ init() {
 
     web_fe_dist_url=${esg_dist_url}/esgf-web-fe/esgf-web-fe.war
     web_fe_context_root=esgf-web-fe
-    web_fe_app_home=${tomcat_install_dir}/webapps/${web_fe_context_root}
+    web_fe_service_app_home=${tomcat_install_dir}/webapps/${web_fe_context_root}
     
 }
 
@@ -125,7 +125,7 @@ setup_web_fe() {
     local default="Y"
     ((force_install)) && default="N"
     local dosetup
-    if [ -d ${web_fe_app_home} ]; then 
+    if [ -d ${web_fe_service_app_home} ]; then
         echo "Detected an existing web front-end installation..."
         read -p "Do you want to continue with web front-end installation and setup? $([ "$default" = "N" ] && echo "[y/N]" || echo "[Y/n]") " dosetup
         [ -z "${dosetup}" ] && dosetup=${default}
@@ -138,8 +138,8 @@ setup_web_fe() {
         read -p "Do you want to make a back up of the existing distribution?? [Y/n] " dobackup
         [ -z "${dobackup}" ] && dobackup=${default}
         if [ "${dobackup}" = "Y" ] || [ "${dobackup}" = "y" ]; then
-            echo "Creating a backup archive of this web application $web_fe_app_home"
-            backup ${web_fe_app_home}
+            echo "Creating a backup archive of this web application $web_fe_service_app_home"
+            backup ${web_fe_service_app_home}
         fi
 
         echo
@@ -157,21 +157,21 @@ setup_web_fe() {
 
     #----------------------------
     #make room for new install
-        [ -d "${web_fe_app_home}" ] && \
+        [ -d "${web_fe_service_app_home}" ] && \
             echo "Moving Previous Installation of the ESGF Web Front-End..." && \
-            mv -v ${web_fe_app_home}{,.bak}
+            mv -v ${web_fe_service_app_home}{,.bak}
     
-    mkdir -p ${web_fe_app_home}
-    [ $? != 0 ] && echo "Could not create dir ${web_fe_app_home}" && popd >& /dev/null && checked_done 1
-    cd ${web_fe_app_home}
+    mkdir -p ${web_fe_service_app_home}
+    [ $? != 0 ] && echo "Could not create dir ${web_fe_service_app_home}" && popd >& /dev/null && checked_done 1
+    cd ${web_fe_service_app_home}
     echo "Expanding war ${web_fe_dist_file} in $(pwd)"
     $JAVA_HOME/bin/jar xf ${web_fe_dist_file} && \
-        chown -R ${tomcat_user} ${web_fe_app_home} && \
-        chgrp -R ${tomcat_group} ${web_fe_app_home} || (popd >& /dev/null && rm -rf "${web_fe_app_home}" && mv -v ${web_fe_app_home}{.bak,} && checked_done 1)
+        chown -R ${tomcat_user} ${web_fe_service_app_home} && \
+        chgrp -R ${tomcat_group} ${web_fe_service_app_home} || (popd >& /dev/null && rm -rf "${web_fe_service_app_home}" && mv -v ${web_fe_service_app_home}{.bak,} && checked_done 1)
 
-    [ -d "${web_fe_app_home}.bak" ] && \
+    [ -d "${web_fe_service_app_home}.bak" ] && \
         echo "Removing Previous Installation of the ESGF Web Front-End..." && \
-        rm -rf "${web_fe_app_home}.bak"
+        rm -rf "${web_fe_service_app_home}.bak"
 
 
     popd >& /dev/null
@@ -186,7 +186,7 @@ setup_web_fe() {
 
     if [ ! -e "${target_properties_file}" ] || ((force_install)) ; then
         [ -e "${target_properties_file}" ] && cp ${target_properties_file} ${target_properties_file}.bak        
-        cp -v ${web_fe_app_home}/WEB-INF/classes/messages.properties ${esg_config_dir}
+        cp -v ${web_fe_service_app_home}/WEB-INF/classes/messages.properties ${esg_config_dir}
         sed -i 's#^[ ]*\(esgf.datanode.name=\).*$#\1'${node_short_name}'#'   ${target_properties_file} && echo -n ":" || echo -n "8"
         sed -i 's#^[ ]*\(esgf.homepage.institutionLogo=\).*$#\1'${institution_logo:-"/images/p2p_default_logo.png"}'#'   ${target_properties_file} && echo -n "-" || echo -n "."
         sed -i 's#^[ ]*\(esgf.homepage.about=\).*$#\1Please Enter Information about your organization here#' ${target_properties_file} && echo -n ")" || echo -n "("
@@ -207,26 +207,31 @@ post_web_fe_install() {
 }
 
 write_web_fe_install_log() {
-    echo "$(date ${date_format}) webapp:${web_fe_context_root}=${esgf_web_fe_version} ${web_fe_app_home}" >> ${install_manifest}
+    echo "$(date ${date_format}) webapp:${web_fe_context_root}=${esgf_web_fe_version} ${web_fe_service_app_home}" >> ${install_manifest}
     dedup ${install_manifest}
     write_as_property web_fe_service_endpoint http://${esgf_host}/${web_fe_context_root}/
-    write_as_property web_fe_app_home
+    write_as_property web_fe_service_app_home
     return 0
 }
 
 clean_web_fe_webapp_subsystem() {
     init
     local doit="N"
-    if [ -e ${web_fe_app_home} ]; then
-        read -p "remove ESGF Search Front-End web service? (${web_fe_app_home}) [y/N]: " doit
+    if [ -e ${web_fe_service_app_home} ]; then
+        read -p "remove ESGF Search Front-End web service? (${web_fe_service_app_home}) [y/N]: " doit
         if [ "doit" = "Y" ] || [ "$doit" = "y" ]; then
-            echo "removing ${web_fe_app_home}"
-            if [ -n ${web_fe_app_home} ]; then
-                rm -rf ${web_fe_app_home}
-                [ $? != 0 ] && echo "ERROR: Unable to remove ${web_fe_app_home}" && return 1
+            echo "removing ${web_fe_service_app_home}"
+            if [ -n ${web_fe_service_app_home} ]; then
+                rm -rf ${web_fe_service_app_home}
+                [ $? != 0 ] && echo "ERROR: Unable to remove ${web_fe_service_app_home}" && return 1
                 perl -n -i -e'print unless m!webapp:esgf-web-fe!' ${install_manifest}
             fi
         fi
     fi 
+    if [ ! -e ${web_fe_service_app_home} ]; then
+        debug_print "removing web-fe associated properties..."
+        remove_property web_fe_service_endpoint
+        remove_property web_fe_service_app_home
+    fi
     return 0
 }

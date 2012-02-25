@@ -286,62 +286,44 @@ public class Utils {
     }
     
     public static String resolveMyProxyViaOpenID(String openId)
+        throws YadisException, Exception
     {
         String result = null;
-        try
+        LOG.debug("Attempting to resolve MyProxy Server from OpenID: " + openId);
+
+        YadisResolver resolver = new YadisResolver();
+        Set<String> serviceTypes = new HashSet<String>();
+        // service type for P2P issued OpenIDs
+        serviceTypes.add("esg:myproxy-service");
+        // service type for Gateway issued OpenIDs
+        serviceTypes.add("urn:esg:security:myproxy-service");
+
+        YadisResult yadisResult = resolver.discover(openId, 10, new HttpCache(), serviceTypes);
+        XrdsServiceEndpoint endpoint = (XrdsServiceEndpoint) yadisResult.getEndpoints().get(0);
+
+        // clean up endpoint, as some appear to contain cruft
+        // e.g. "socket://hostname.org:7512:7512
+        String ep = endpoint.getUri();
+        int pos = ep.indexOf("://");
+        if (pos != -1)
         {
-            LOG.debug("Attempting to resolve MyProxy Server from OpenID: " + openId);
-
-            YadisResolver resolver = new YadisResolver();
-            Set<String> serviceTypes = new HashSet<String>();
-            // service type for P2P issued OpenIDs
-            serviceTypes.add("esg:myproxy-service");
-            // service type for Gateway issued OpenIDs
-            serviceTypes.add("urn:esg:security:myproxy-service");
-
-            YadisResult yadisResult = resolver.discover(openId, 10, new HttpCache(), serviceTypes);
-            XrdsServiceEndpoint endpoint = (XrdsServiceEndpoint) yadisResult.getEndpoints().get(0);
-
-            // clean up endpoint, as some appear to contain cruft
-            // e.g. "socket://hostname.org:7512:7512
-            String ep = endpoint.getUri();
-            int pos = ep.indexOf("://");
+            ep = ep.substring(pos + 3);
+        }
+        pos = ep.indexOf(":");
+        if (pos != -1)
+        {
+            pos = ep.indexOf(":", pos+1);
             if (pos != -1)
             {
-                ep = ep.substring(pos + 3);
+                ep = ep.substring(0, pos);
             }
-            pos = ep.indexOf(":");
-            if (pos != -1)
-            {
-                pos = ep.indexOf(":", pos+1);
-                if (pos != -1)
-                {
-                    ep = ep.substring(0, pos);
-                }
-            }
-            else
-            {
-                ep = ep + ":7512";
-            }
-            result = ep;
         }
-        catch(YadisException ye)
+        else
         {
-            if (ye.getErrorCode() == OpenIDException.YADIS_INVALID_URL)
-            {
-                LOG.error("The OpenID URL provided is invalid.  Please make sure that you're " +
-                          "logged in as a valid Gateway user.");
-            }
-            else
-            {
-                LOG.error("A Yadis error occurred trying to resolve the specified OpenID. " +
-                          "Please make sure that you're logged in as a valid Gateway user.");
-            }
+            ep = ep + ":7512";
         }
-        catch(Exception e)
-        {
-            LOG.error("OpenID Discovery error: " + e);
-        }
+        result = ep;
+
         return result;
     }
 }

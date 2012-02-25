@@ -12,13 +12,13 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
-public class URLSElement2Test {
+public class FileElement2Test {
     //test runner
     public static void main(String [] args) {
         
         
         System.out.println("Running test for URLSElement2Test");
-        Result result = JUnitCore.runClasses(URLSElement2Test.class);
+        Result result = JUnitCore.runClasses(FileElement2Test.class);
         
         for (Failure failure : result.getFailures()) {
             System.out.println(failure.toString());
@@ -48,6 +48,14 @@ public class URLSElement2Test {
      * addUrl()
      * 
      * removeUrl()
+     * 
+     * addMime()
+     * 
+     * removeMime()
+     * 
+     * addService()
+     * 
+     * removeService()
      * 
      */
     

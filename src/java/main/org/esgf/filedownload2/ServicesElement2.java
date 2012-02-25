@@ -24,11 +24,11 @@ import org.xml.sax.SAXException;
 
 public class ServicesElement2 {
 
-    /** Urls given by the results of the search api */
+    /** Description */
     private List<String> services;
     
 
-    private final static String testInitializationFile = "C:\\Users\\8xo\\esgf-web-fe\\mimeselement.xml";
+    private final static String testInitializationFile = "C:\\Users\\8xo\\esgf-web-fe\\serviceselement.xml";
     
     /**
      * 
@@ -37,7 +37,7 @@ public class ServicesElement2 {
         
     }
 
-    /**
+    /** 
      * 
      * @param urls
      */
@@ -55,7 +55,10 @@ public class ServicesElement2 {
         return services;
     }
     
-    
+    /**Description of addService()
+     * 
+     * @param service
+     */
     public void addService(String service) {
         if(this.services == null) {
             this.services = new ArrayList<String>();
@@ -65,6 +68,10 @@ public class ServicesElement2 {
         }
     }
     
+    /** Description of removeService
+     * 
+     * @param service
+     */
     public void removeService(String service) {
         if(service != null) {
             this.services.remove(service);
@@ -123,7 +130,10 @@ public class ServicesElement2 {
         return json;
     }
     
-    
+    /** Description of toJSON()
+     * 
+     * @return
+     */
     public String toJSON() {
         String json = null;
         
@@ -162,8 +172,6 @@ public class ServicesElement2 {
      */
     public void fromFile(String file) {
         
-        //overwrite whatever was in the data structure
-        this.services = null;
         
         
         File fXmlFile = new File(file);
@@ -175,29 +183,9 @@ public class ServicesElement2 {
             
             doc.getDocumentElement().normalize();
             
+            org.w3c.dom.Element docElement = doc.getDocumentElement();
             
-            if(doc.getDocumentElement().getNodeName().equals("services")) {
-              //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
-                NodeList nList = doc.getElementsByTagName("service");
-         
-                for (int temp = 0; temp < nList.getLength(); temp++) {
-         
-                    
-                   Node nNode = nList.item(temp);
-                   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-         
-                      org.w3c.dom.Element eElement = (org.w3c.dom.Element) nNode;
-         
-                      //System.out.println(eElement.getTextContent());
-                      String service = eElement.getTextContent();
-                      if(this.services == null) {
-                          this.services = new ArrayList<String>();
-                      }
-                      this.services.add(service);
-                      
-                   }
-                }
-            }
+            this.readHelper(docElement);
             
             
         } catch (ParserConfigurationException e) {
@@ -208,6 +196,44 @@ public class ServicesElement2 {
             e.printStackTrace();
         }
         
+    }
+    
+    /** Description of readHelper()
+     * 
+     * @param docElement
+     */
+    public void readHelper(org.w3c.dom.Element docElement) {
+
+        //overwrite whatever was in the data structure
+        this.services = null;
+        
+        
+        if(docElement.getNodeName().equals("services")) {
+          //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+            //NodeList nList = doc.getElementsByTagName("service");
+     
+            NodeList nList = docElement.getChildNodes();
+            
+            
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+     
+                
+               Node nNode = nList.item(temp);
+               if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+     
+                  org.w3c.dom.Element eElement = (org.w3c.dom.Element) nNode;
+     
+                  //System.out.println(eElement.getTextContent());
+                  String service = eElement.getTextContent();
+                  if(this.services == null) {
+                      this.services = new ArrayList<String>();
+                  }
+                  this.services.add(service);
+                  
+               }
+            }
+            
+        }
     }
     
     public static void main(String [] args) {

@@ -174,30 +174,9 @@ public class URLSElement2 {
             Document doc = dBuilder.parse(fXmlFile);
             
             doc.getDocumentElement().normalize();
+            org.w3c.dom.Element docElement = doc.getDocumentElement();
             
-            
-            if(doc.getDocumentElement().getNodeName().equals("urls")) {
-              //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
-                NodeList nList = doc.getElementsByTagName("url");
-         
-                for (int temp = 0; temp < nList.getLength(); temp++) {
-         
-                    
-                   Node nNode = nList.item(temp);
-                   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-         
-                      org.w3c.dom.Element eElement = (org.w3c.dom.Element) nNode;
-         
-                      //System.out.println(eElement.getTextContent());
-                      String url = eElement.getTextContent();
-                      if(this.urls == null) {
-                          this.urls = new ArrayList<String>();
-                      }
-                      this.urls.add(url);
-                      
-                   }
-                }
-            }
+            this.readHelper(docElement);
             
             
         } catch (ParserConfigurationException e) {
@@ -208,6 +187,40 @@ public class URLSElement2 {
             e.printStackTrace();
         }
         
+    }
+    
+    public void readHelper(org.w3c.dom.Element docElement) {
+
+        //overwrite whatever was in the data structure
+        this.urls = null;
+        
+        
+        if(docElement.getNodeName().equals("urls")) {
+          //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+            //NodeList nList = doc.getElementsByTagName("service");
+     
+            NodeList nList = docElement.getChildNodes();
+            
+            
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+     
+                
+               Node nNode = nList.item(temp);
+               if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+     
+                  org.w3c.dom.Element eElement = (org.w3c.dom.Element) nNode;
+     
+                  //System.out.println(eElement.getTextContent());
+                  String url = eElement.getTextContent();
+                  if(this.urls == null) {
+                      this.urls = new ArrayList<String>();
+                  }
+                  this.urls.add(url);
+                  
+               }
+            }
+            
+        }
     }
     
     public static void main(String [] args) {

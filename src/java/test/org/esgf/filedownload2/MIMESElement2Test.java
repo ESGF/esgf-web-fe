@@ -43,6 +43,8 @@ public class MIMESElement2Test {
      * 
      * fromFile()
      * 
+     * readHelper()
+     * 
      * addUrl()
      * 
      * removeUrl()

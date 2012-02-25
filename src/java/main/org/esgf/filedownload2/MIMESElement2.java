@@ -24,7 +24,7 @@ import org.xml.sax.SAXException;
 
 public class MIMESElement2 {
 
-    /** Urls given by the results of the search api */
+    /** Description */
     private List<String> mimes;
     
 
@@ -55,7 +55,10 @@ public class MIMESElement2 {
         return mimes;
     }
     
-    
+    /** Description of addMime()
+     * 
+     * @param mime
+     */
     public void addMime(String mime) {
         if(this.mimes == null) {
             this.mimes = new ArrayList<String>();
@@ -65,6 +68,10 @@ public class MIMESElement2 {
         }
     }
     
+    /** Description of removeMime() 
+     * 
+     * @param mime
+     */
     public void removeMime(String mime) {
         if(mime != null) {
             this.mimes.remove(mime);
@@ -123,7 +130,10 @@ public class MIMESElement2 {
         return json;
     }
     
-    
+    /** Description of toJSON()
+     * 
+     * @return
+     */
     public String toJSON() {
         String json = null;
         
@@ -174,30 +184,10 @@ public class MIMESElement2 {
             Document doc = dBuilder.parse(fXmlFile);
             
             doc.getDocumentElement().normalize();
+
+            org.w3c.dom.Element docElement = doc.getDocumentElement();
             
-            
-            if(doc.getDocumentElement().getNodeName().equals("mimes")) {
-              //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
-                NodeList nList = doc.getElementsByTagName("mime");
-         
-                for (int temp = 0; temp < nList.getLength(); temp++) {
-         
-                    
-                   Node nNode = nList.item(temp);
-                   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-         
-                      org.w3c.dom.Element eElement = (org.w3c.dom.Element) nNode;
-         
-                      //System.out.println(eElement.getTextContent());
-                      String mime = eElement.getTextContent();
-                      if(this.mimes == null) {
-                          this.mimes = new ArrayList<String>();
-                      }
-                      this.mimes.add(mime);
-                      
-                   }
-                }
-            }
+            this.readHelper(docElement);
             
             
         } catch (ParserConfigurationException e) {
@@ -208,6 +198,44 @@ public class MIMESElement2 {
             e.printStackTrace();
         }
         
+    }
+    
+    /** Description of readHelper()
+     * 
+     * @param docElement
+     */
+    public void readHelper(org.w3c.dom.Element docElement) {
+
+        //overwrite whatever was in the data structure
+        this.mimes = null;
+        
+        
+        if(docElement.getNodeName().equals("mimes")) {
+          //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+            //NodeList nList = doc.getElementsByTagName("service");
+     
+            NodeList nList = docElement.getChildNodes();
+            
+            
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+     
+                
+               Node nNode = nList.item(temp);
+               if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+     
+                  org.w3c.dom.Element eElement = (org.w3c.dom.Element) nNode;
+     
+                  //System.out.println(eElement.getTextContent());
+                  String mime = eElement.getTextContent();
+                  if(this.mimes == null) {
+                      this.mimes = new ArrayList<String>();
+                  }
+                  this.mimes.add(mime);
+                  
+               }
+            }
+            
+        }
     }
     
     public static void main(String [] args) {

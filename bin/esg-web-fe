@@ -157,22 +157,17 @@ setup_web_fe() {
 
     #----------------------------
     #make room for new install
-        [ -d "${web_fe_service_app_home}" ] && \
-            echo "Moving Previous Installation of the ESGF Web Front-End..." && \
-            mv -v ${web_fe_service_app_home}{,.bak}
-    
+    set_aside_web_app ${web_fe_service_app_home}
+
     mkdir -p ${web_fe_service_app_home}
     [ $? != 0 ] && echo "Could not create dir ${web_fe_service_app_home}" && popd >& /dev/null && checked_done 1
     cd ${web_fe_service_app_home}
     echo "Expanding war ${web_fe_dist_file} in $(pwd)"
-    $JAVA_HOME/bin/jar xf ${web_fe_dist_file} && \
-        chown -R ${tomcat_user} ${web_fe_service_app_home} && \
-        chgrp -R ${tomcat_group} ${web_fe_service_app_home} || (popd >& /dev/null && rm -rf "${web_fe_service_app_home}" && mv -v ${web_fe_service_app_home}{.bak,} && checked_done 1)
+    $JAVA_HOME/bin/jar xf ${web_fe_dist_file}
+    set_aside_web_app_cleanup ${web_fe_service_app_home} $?
 
-    [ -d "${web_fe_service_app_home}.bak" ] && \
-        echo "Removing Previous Installation of the ESGF Web Front-End..." && \
-        rm -rf "${web_fe_service_app_home}.bak"
-
+    chown -R ${tomcat_user} ${web_fe_service_app_home}
+    chgrp -R ${tomcat_group} ${web_fe_service_app_home}
 
     popd >& /dev/null
     #----------------------------

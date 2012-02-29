@@ -47,6 +47,8 @@ $(function(){
 	if($.browser.mozilla) {
 		var versionPad = 'v' + $.browser.version;
 		if(versionPad.search('v3') != -1) {
+			alert("ESGF currently does not support Mozilla Firefox 3.x.  Please try the Mozilla Firefox (versions 9 and above), Apple Safari, or Google Chrome browser.");
+			
 			var disclaimer = '<p style="color:red;font-weight:bold;border:1px dashed #e8ddcf;margin-top:10px">' +
 			 'IMPORTANT: The ESGF P2P system interface may be viewed using the Mozilla Firefox (versions 9 and above), Google Chrome, or Apple Safari browsers. ' +
 			 '</p>';

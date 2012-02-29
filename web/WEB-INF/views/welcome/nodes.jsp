@@ -17,37 +17,37 @@
 	<div class="span-7 last infocontent">
 			<ul>
 		        <li>
-		        	<a href='http://pcmdi9.llnl.gov/'><img src="images/flags/USA.png" class="icon"/>PCMDI Node</a>
-		        	<a href='http://pcmdi9.llnl.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
-		        </li>       
-		        <li>
-		        	<a href='http://esg-datanode.jpl.nasa.gov/'><img src="images/flags/USA.png" class="icon"/>NASA-JPL Node</a>
-		        	<a href='http://esg-datanode.jpl.nasa.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
-		        </li>                          
-		        <li>
-		        	<a href='http://esg-vm-demo02.ccs.ornl.gov/'><img src="images/flags/USA.png" class="icon"/>ORNL Node</a>
-		        	<a href='http://esg-vm-demo02.ccs.ornl.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
-		        </li>	             		        
-		        <li>
-		        	<a href='http://esg1-gw.pnl.gov/'><img src="images/flags/USA.png" class="icon"/>PNNL Node</a>
-		        	<a href='http://esg1-gw.pnl.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
-		        </li>	          
-		        <li>
 		        	<a href='http://dev.esg.anl.gov/'><img src="images/flags/USA.png" class="icon"/>ANL Node</a>
 		        	<a href='http://dev.esg.anl.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
 		        </li>
 		        <li>
 		        	<a href='http://adm07.cmcc.it/'><img src="images/flags/Italy.png" class="icon"/>CMCC Node</a>
 		        	<a href='http://adm07.cmcc.it/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
-		        </li>              
-		        <li>
-		        	<a href='http://esgf-node.ipsl.fr/'><img src="images/flags/France.png" class="icon"/>IPSL Node</a>
-		        	<a href='http://esgf-node.ipsl.fr/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
-		        </li>   
+		        </li>    
 		        <li>
 		        	<a href='http://cmip3.dkrz.de/'><img src="images/flags/Germany.png" class="icon"/>DKRZ Node</a>
 		        	<a href='http://cmip3.dkrz.de/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
-		        </li>                            		        
+		        </li>       
+		        <li>
+		        	<a href='http://esgf-node.ipsl.fr/'><img src="images/flags/France.png" class="icon"/>IPSL Node</a>
+		        	<a href='http://esgf-node.ipsl.fr/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
+		        </li>         
+		        <li>
+		        	<a href='http://esg-datanode.jpl.nasa.gov/'><img src="images/flags/USA.png" class="icon"/>NASA-JPL Node</a>
+		        	<a href='http://esg-datanode.jpl.nasa.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
+		        </li>         
+		        <li>
+		        	<a href='http://esg-vm-demo02.ccs.ornl.gov/'><img src="images/flags/USA.png" class="icon"/>ORNL Node</a>
+		        	<a href='http://esg-vm-demo02.ccs.ornl.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
+		        </li>	                                   
+		        <li>
+		        	<a href='http://pcmdi9.llnl.gov/'><img src="images/flags/USA.png" class="icon"/>PCMDI Node</a>
+		        	<a href='http://pcmdi9.llnl.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
+		        </li>                 		        
+		        <li>
+		        	<a href='http://esg1-gw.pnl.gov/'><img src="images/flags/USA.png" class="icon"/>PNNL Node</a>
+		        	<a href='http://esg1-gw.pnl.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
+		        </li>	                    		        
 		        
 	    	</ul>
 	</div>

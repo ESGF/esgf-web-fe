@@ -365,9 +365,24 @@ public class FileElement2 {
                     } else if(service.equals("GridFTP")) {
                         this.hasGrid = "true";
                         //System.out.print("\tService is an GRIDFTP");
+                    } else if(service.equals("SRM")) {
+                        this.hasSRM = "true";
+                        //System.out.print("\tService is an GRIDFTP");
                     }
                 }
 
+                if(this.hasOpenDap == null) {
+                    this.hasOpenDap = "false";
+                } 
+                if(this.hasGrid == null) {
+                    this.hasGrid = "false";
+                } 
+                if(this.hasHttp == null) {
+                    this.hasHttp = "false";
+                } 
+                if(this.hasSRM == null) {
+                    this.hasSRM = "false";
+                }
                 
                 this.urlsElement = urlsElement;
                 this.mimesElement = mimesElement;

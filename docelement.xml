@@ -55,5 +55,29 @@
         <mime>mime2</mime>
       </mimes>
     </file>
+    <file>
+      <fileId>fileId1</fileId>
+      <size>size1</size>
+      <title>title1</title>
+      <tracking_id>fileId1</tracking_id>
+      <checksum>size1</checksum>
+      <checksum_type>title1</checksum_type>
+      <hasGrid>title1</hasGrid>
+      <hasHttp>fileId1</hasHttp>
+      <hasOpenDap>size1</hasOpenDap>
+      <hasSRM>title1</hasSRM>
+      <services>
+        <service>service1</service>
+        <service>service2</service>
+      </services>
+      <urls>
+        <url>url1</url>
+        <url>url2</url>
+      </urls>
+      <mimes>
+        <mime>mime1</mime>
+        <mime>mime2</mime>
+      </mimes>
+    </file>
   </files>
 </doc>

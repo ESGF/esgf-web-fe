@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import org.esgf.filedownload.DocElement;
 import org.esgf.filedownload.FileDownloadTemplateController;
 import org.esgf.filedownload.FileElement;
+import org.esgf.filedownload.XmlFormatter;
 import org.esgf.metadata.JSONArray;
 import org.esgf.metadata.JSONException;
 import org.esgf.metadata.JSONObject;
@@ -25,7 +26,7 @@ import org.esgf.metadata.XML;
 
 public class DataCartSolrHandler {
 
-    private static String searchAPIURL = "http://localhost/esg-search/search?";
+    private static String searchAPIURL = "http://localhost:8081/esg-search/search?";
     private static String queryPrefix = "format=application%2Fsolr%2Bjson&type=File";
     private final static Logger LOG = Logger.getLogger(DataCartSolrHandler.class);
     
@@ -33,46 +34,91 @@ public class DataCartSolrHandler {
     
     private String peerStr;
     private String showAllStr;
-    private String initialQuery;
+    private String [] fq;
+    //private String technoteStr;
     
-    //private JSONObject solrResponse;
     
     private String solrQueryString;
     
-    private String [] fq;
-    private String [] id;
-    //private String technoteStr;
-    
+    public static String getSearchAPIURL() {
+        return searchAPIURL;
+    }
+
+    public static void setSearchAPIURL(String searchAPIURL) {
+        DataCartSolrHandler.searchAPIURL = searchAPIURL;
+    }
+
+    public static String getQueryPrefix() {
+        return queryPrefix;
+    }
+
+    public static void setQueryPrefix(String queryPrefix) {
+        DataCartSolrHandler.queryPrefix = queryPrefix;
+    }
+
+    public String getPeerStr() {
+        return peerStr;
+    }
+
+    public void setPeerStr(String peerStr) {
+        this.peerStr = peerStr;
+    }
+
+    public String getShowAllStr() {
+        return showAllStr;
+    }
+
+    public void setShowAllStr(String showAllStr) {
+        this.showAllStr = showAllStr;
+    }
+
+
+    public String getSolrQueryString() {
+        return solrQueryString;
+    }
+
+    public void setSolrQueryString(String solrQueryString) {
+        this.solrQueryString = solrQueryString;
+    }
+
+    public String[] getFq() {
+        return fq;
+    }
+
+    public void setFq(String[] fq) {
+        this.fq = fq;
+    }
+
     
     public DataCartSolrHandler() {
         
     }
     
-    public DataCartSolrHandler(String peerStr,String showAllStr,String initialQuery,String [] fq,String [] id) {
+    public DataCartSolrHandler(String peerStr,String showAllStr,String [] fq) {
         this.peerStr = peerStr;
         this.showAllStr = showAllStr;
-        this.initialQuery = initialQuery;
         
         this.solrQueryString = null;
         
         if(fq != null) {
+            this.fq = new String[fq.length];
             for(int i=0;i<fq.length;i++) {
                 this.fq[i] = fq[i];
             }
         }
-        
-        if(id != null) {
-            for(int i=0;i<id.length;i++) {
-                this.id[i] = id[i];
-            }
-        }
-        
-        
+        this.preassembleQueryString();
     }
     
-    public void preassembleQueryString() {
+    private void preassembleQueryString() {
+        
+        System.out.println("In preassemble query string");
         
         this.solrQueryString = queryPrefix;
+        
+        if(this.showAllStr == null) {
+            System.out.println("NULL");
+        }
+        
         
       //put any search criteria if the user selected "filter"
         if(this.showAllStr.equals("false")) {
@@ -81,7 +127,7 @@ public class DataCartSolrHandler {
             if(this.fq != null) {
                 for(int i=0;i<this.fq.length;i++) {
                     String fqParam = this.fq[i];
-                    
+                    System.out.println("\t" + fqParam);
                     /*
                      * Should ignore the following:
                      * - blanks - ""
@@ -115,76 +161,88 @@ public class DataCartSolrHandler {
         }
     }
     
+   
+    
     public DocElement2 getDocElement2(String datasetId) {
+        
         
         DocElement2 docElement = new DocElement2();
         
+        //set the dataset id
         docElement.setDatasetId(datasetId);
         
+        //get the file elements and set it
         List<FileElement2> fileElements = getFileElements(datasetId);
 
+        //set the file elements
         docElement.setFileElements(fileElements);
         
         //create a count element
         docElement.setCount(fileElements.size());
         
-        for(int i=0;i<fileElements.size();i++) {
-            FileElement2 fileElement = fileElements.get(i);
-            
-            if(fileElement.getHasHttp().equals("true")){
-                docElement.setHasHttp("true");
-            }
-            if(fileElement.getHasOpenDap().equals("true")) {
-                docElement.setHasOpenDap("true");
-            }
-            if(fileElement.getHasGrid().equals("true")) {
+        //set the booleans
+        docElement.setHasGridFTP("false");
+        docElement.setHasHttp("false");
+        docElement.setHasOpenDap("false");
+        docElement.setHasSRM("false");
+        for(int i=0;i<docElement.getFileElements().size();i++) {
+            FileElement2 fe = docElement.getFileElements().get(i);
+            if(fe.getHasGrid().equals("true")) {
                 docElement.setHasGridFTP("true");
             }
-            if(fileElement.getHasSRM().equals("true")) {
+            if(fe.getHasHttp().equals("true")) {
+                docElement.setHasHttp("true");
+            }
+            if(fe.getHasOpenDap().equals("true")) {
+                docElement.setHasOpenDap("true");
+            }
+            if(fe.getHasSRM().equals("true")) {
                 docElement.setHasSRM("true");
             }
         }
+        
         
         return docElement;
     }
     
     private List<FileElement2> getFileElements(String dataset_id) {
-    
+     
         List<FileElement2> fileElements = new ArrayList<FileElement2>();
         
-      //raw response from solr of files matching the query for dataset_id
-        String solrResponse = querySolrForFiles(dataset_id);
-
-        //convert to JSON array
-        JSONArray files = solrResponseToJSON(solrResponse);
+        JSONArray responseFiles = queryIndex(dataset_id);
         
-        for(int j=0;j<files.length();j++) {
+        for(int i=0;i<responseFiles.length();i++) {
             
+            JSONObject file = null;
             try {
-                //grab the JSON object
-                JSONObject docJSON = new JSONObject(files.get(j).toString());
-
-                FileElement2 fileElement = new FileElement2();
-                fileElement.fromSolr(docJSON);
-                
-                fileElements.add(fileElement);
-                
-                //create a new FileElement from the JSONObject
-                //FileElement fileElement = new FileElement(docJSON,"solr");
-                //System.out.println("\ttracking id" + fileElement.getTrackingId());
-                //fileElements.add(fileElement);
-                
-            } catch(Exception e) {
-                System.out.println("Problem assembling files");
+                file = responseFiles.getJSONObject(i);
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-        }
 
+            FileElement2 fileElement = new FileElement2();
+            fileElement.fromSolr(file);
+            
+            
+            fileElements.add(fileElement);
+            
+        }    
         
-        //if(getFileElementsDebug) {
-        //    System.out.println("---End Get File Elements---");
-        //}
-
+        
         return fileElements;
+    }
+    
+    
+    public JSONArray queryIndex(String dataset_id) {
+        
+        String rawResponse = this.querySolrForFiles(dataset_id);
+        
+        
+        JSONArray jsonResponse = this.solrResponseToJSON(rawResponse);
+        
+        return jsonResponse;
+        
     }
     
     private String querySolrForFiles(String dataset_id) {
@@ -199,11 +257,6 @@ public class DataCartSolrHandler {
         //attact the dataset id to the query string
         GetMethod method = new GetMethod(searchAPIURL);
         
-        //dataset_id = dataset_id.replace("|", "%7C");
-        //if(querySolrForFilesDebug) {
-        //    System.out.println("\n\n\tQueryString issued to solr (before encoding) -> " + (this.solrQueryString+"&dataset_id=" + dataset_id));
-        //}
-        
         //add the dataset to the query string
         try {
             this.solrQueryString += "&dataset_id=" + URLEncoder.encode(dataset_id,"UTF-8").toString();
@@ -211,10 +264,6 @@ public class DataCartSolrHandler {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-        
-        //if(querySolrForFilesDebug) {
-        //    System.out.println("\tQueryString issued to solr -> " + queryString + "\n\n");
-        //}
         
         method.setQueryString(this.solrQueryString);
         
@@ -250,13 +299,6 @@ public class DataCartSolrHandler {
         int end = responseBody.length();
         String responseString = responseBody.substring(start,end);
         
-        ///if(solrResponseDebug) {
-        //    System.out.println("\tResponse:\n\t" + responseString);
-        //}
-        
-        //if(querySolrForFilesDebug) {
-        //    System.out.println("---End Query Solr for Files---");
-        //}
 
         return responseString;
         
@@ -267,10 +309,7 @@ public class DataCartSolrHandler {
      * @param rawString
      * @return
      */
-    private static JSONArray solrResponseToJSON(String rawString) {
-        //if(solrResponseToJSONDebug) {
-        //    System.out.println("---SolrResponseToJSON---");
-        //}
+    private JSONArray solrResponseToJSON(String rawString) {
         
         //convert extracted string into json array
         JSONObject jsonResponse = null;
@@ -284,24 +323,44 @@ public class DataCartSolrHandler {
             e.printStackTrace();
         }
         
-        //if(solrResponseToJSONDebug) {
-        //    System.out.println("---End SolrResponseToJSON---");
-        //}
         return jsonArray;
     }
     
     
     public static void main(String [] args) {
 
-        String peerStr = "";
-        String showAllStr = "";
-        String initialQuery = "";
+        String showAllStr = "false";
+        String peerStr = "esg-datanode.jpl.nasa.gov";
+        
+        String [] id = {"obs4MIPs.NASA-JPL.AIRS.mon.v1|esg-datanode.jpl.nasa.gov"};
+
+        //this is the string that I will get
+        String fqStr = ",offset=0,replica=false";
+        //need to convert to fq []
+        
+        String [] fq = fqStr.split(",");
+
+        
+        DataCartSolrHandler handler = new DataCartSolrHandler(peerStr,showAllStr,fq);
+
+        //System.out.println("ShowAllStr: " + showAllStr);
+        //System.out.println("PeerStr: " + handler.getPeerStr());
+        //System.out.println("Initial Query: " + handler.getInitialQuery());
         
         
         
-        //DataCartSolrHandler handler = new DataCartSolrHandler(peerStr,showAllStr,initialQuery);
+        System.out.println("QueryString: " + handler.getSolrQueryString());
         
+        DocElement2 doc = handler.getDocElement2(id[0]);
+        
+
+        System.out.println("\tDatasetId: " + doc.getDatasetId());
+        System.out.println("\tDatasetCount: " + doc.getCount());
+         
+        System.out.println(new XmlFormatter().format(doc.toXML()));
         
     }
     
 }
+
+

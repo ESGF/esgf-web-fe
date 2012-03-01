@@ -869,15 +869,117 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		var queryStr = {"id" : self.selected_arr, "peer" : peerArr, "technotes" : technoteArr, "showAll" : ESGF.setting.showAllContents, "fq" : fqParamArr, "initialQuery" : "true"};
 		
 		
+		/*
+		alert('queryStr... id: ' + queryStr.id + ' peerArr: ' + 
+				queryStr.peer + ' technotes: ' + queryStr.technotes + ' showAll: ' + 
+				queryStr.showAll + ' fq: ' + queryStr.fq + 
+				' initialQ: ' + queryStr.initialQuery);
+		*/
+		LOG.debug('queryStr... id: ' + queryStr.id + ' peerArr: ' + 
+				queryStr.peer + ' technotes: ' + queryStr.technotes + ' showAll: ' + 
+				queryStr.showAll + ' fq: ' + queryStr.fq + 
+				' initialQ: ' + queryStr.initialQuery);
+		
 		//getter for the data cart tab
 		var selected = $( "#myTabs" ).tabs( "option", "selected" );
 		
+		
+		if(selected == 1) {
+			
+			$.ajax({
+				url: '/esgf-web-fe/solrfileproxy2/datacart',
+				global: false,
+				type: "GET",
+				data: queryStr,
+				dataType: 'json',
+				
+				//Upon success remove the spinning wheel and show the contents given by solr
+				 
+				success: function(data) {
+
+					alert('type: ' + (typeof data.docs.doc));
+					alert('data: ' + (data.docs.doc[0]));
+					/*
+	    			//alert('data: ' + data.docs.doc[0].files.file.length);
+	    			for(var i=0;i<data.docs.doc[0].files.file.length;i++) {
+	    				var file = data.docs.doc[0].files.file[i];
+	    				//alert(file.fileId);
+	    			}
+	    			*/
+	    			var fileDownloadTemplate = data.docs;
+	        		
+	    			$( "#cartTemplateStyledNew2").tmpl(fileDownloadTemplate, {
+	        			
+	        			replacePeriods : function (word) {
+	        				LOG.debug('replacePeriods: ' + self.replacePeriod(word));
+	                        return self.replacePeriod(word);
+	                    },
+	                    abbreviate : function (word) {
+	                        var abbreviation = word;
+	                        if(word.length > 50) {
+	                            abbreviation = word;//word.slice(0,20) + '...' + word.slice(word.length-21,word.length);
+	                        }
+	                        return abbreviation;
+	                    },
+	                    addOne: function(num) {
+	                        return (num+1);
+	                    },
+	                    sizeConversion : function(size) {
+	                    	return self.sizeConvert(size);
+	                    }
+	                    
+	                })
+	                .appendTo("#datasetList")
+	                .find( "a.showAllChildren" ).click(function() {
+
+	                	
+	                	var selectedItem = $.tmplItem(this);
+	                    var selectedDoc = selectedItem;
+
+	                	var selectedDocId = selectedItem.data.datasetId;
+	                	
+	                	//alert('tr.view_more_results_' + self.replacePeriod(selectedDocId));
+	                	
+	                	$('tr.view_more_results_' + self.replacePeriod(selectedDocId)).toggle();
+	                	
+	                	if(this.innerHTML === "Expand") {
+	                        this.innerHTML="Collapse";
+	                        
+	                        
+	                    } else {
+	                        this.innerHTML="Expand";
+	                    }
+	                	
+	                	
+	                	
+	                	var id = $(this).parent().parent().parent().html();
+	                    
+	                	$('tr.rows_'+self.replacePeriod(selectedDocId)).toggle();
+	                	
+	                	
+	                });
+	        		
+	    			
+	    			
+	    			
+	    			
+				},
+				error: function() {
+					alert('error');
+				}
+			});
+			
+			
+			
+		}
+		
+		/*
 		//only query for files if the datacart is selected
 		if(selected == 1) {
 			//issue a query to the getDataCart
 	    	self.getDataCart(queryStr);
 		}
-		
+		*/
     	
 	},
 	

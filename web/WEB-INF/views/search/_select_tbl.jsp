@@ -2,7 +2,7 @@
 
 <script id="cartTemplateStyledNew2" type="text/x-jquery-tmpl">
 
-<%--
+
 {{each(i) doc}}
 	{{if count > 0}}
 	<tr style="margin-top:50px;" class="top_level_data_item ${$item.replacePeriods(datasetId)}" id="${$item.replacePeriods(datasetId)}" >
@@ -49,7 +49,7 @@
 
 	{{if count > 0}}
 			{{each(j) files.file}}
-				<tr class="rows_${$item.replacePeriods(datasetId)}">
+				<tr class="rows_${$item.replacePeriods(datasetId)}" style="display:none">
 					<td style="width: 40px;"><input style="margin-left: 10px;" class="fileLevel" type="checkbox" class="fileId" id="${fileId}" checked="true" value="${urls.url[1]}"/></td>
 	
 					<td style="width: 325px;padding-left:10px;font-size:11px;">
@@ -65,7 +65,7 @@
 						{{if services.service[j] == 'HTTPServer'}}
 							<td id="${$item.replacePeriods(datasetId)}_http" style="float:right;font-size:11px;"><div id="${urls.url[j]}" style="word-wrap: break-word;vertical-align:middle"><a href="${urls.url[j]}">HTTP </a></div></td>
 						{{/if}}
-						{{if services.service[j] == 'HTTPServer'}}
+						{{if services.service[j] == 'GridFTP'}}
 							<td id="${$item.replacePeriods(datasetId)}_gridftp" id="${urls.url[j]}" style="float:right;font-size:11px;"><div id="${urls.url[j]}" style="word-wrap: break-word;vertical-align:middle"><a id="${fileId}" class="go_individual_gridftp" href="#">GridFTP </a></div></td>
 	   					{{/if}}
 						{{if services.service[j] == 'OPENDAP'}}
@@ -81,7 +81,6 @@
 	{{/if}}
 {{/each}}
 
---%>
 </script>
 
 

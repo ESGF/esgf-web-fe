@@ -897,8 +897,37 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 				 
 				success: function(data) {
 
-					alert('type: ' + (typeof data.docs.doc));
-					alert('data: ' + (data.docs.doc[0]));
+					var docLength = data.docs.doc.length;
+					
+					if(docLength == undefined) {
+						alert('need to create the array of doc');
+						var docArray = new Array();
+						docArray.push(data.docs.doc);
+						
+						alert('docArray size: ' + docArray);
+						
+						data.docs['doc'] = docArray;
+						
+						length = data.docs.doc.length;
+					}
+					
+					/*
+					alert(data.docs.doc);
+					//traverse all doc elements to make sure that they all have file array
+					for(var j=0;j<data.docs.doc.length;j++) {
+						var fileLength = data.docs.doc[j].files.file.length;
+						if(fileLength == undefined) {
+							var fileArray = new Array();
+							fileArray.push(data.docs.doc[j].files.file);
+							data.docs.doc.files['file'] = fileArray;
+						}
+					}
+					*/
+					
+					
+					//alert('length: ' + length + ' id: ' + data.docs.doc[0].datasetId);
+					
+					//alert('data: ' + (data.docs.doc[0]));
 					/*
 	    			//alert('data: ' + data.docs.doc[0].files.file.length);
 	    			for(var i=0;i<data.docs.doc[0].files.file.length;i++) {
@@ -1153,6 +1182,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 
             	var selectedDocId = selectedItem.data.datasetId;
             	
+            	alert('selectedDoc: ' + selectedDocId);
+            	
             	//alert('tr.view_more_results_' + self.replacePeriod(selectedDocId));
             	
             	$('tr.view_more_results_' + self.replacePeriod(selectedDocId)).toggle();
@@ -1195,6 +1226,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	 */
     replacePeriod: function (word)
     {
+    	LOG.debug('word: ' + word);
         var newWord = word.replace(/\./g,"_");
         var newNewWord = newWord.replace(":","_");
         var newNewNewWord = newWord.replace("|","_");

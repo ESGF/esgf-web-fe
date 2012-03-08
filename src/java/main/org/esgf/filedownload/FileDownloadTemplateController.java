@@ -352,7 +352,7 @@ public class FileDownloadTemplateController {
         //format=application/solr+json
         //type=File
         String queryString = "";
-        queryString += "format=application%2Fsolr%2Bjson&type=File";//
+        queryString += "format=application%2Fsolr%2Bjson&limit=10000&type=File";//
         
         //put any search criteria if the user selected "filter"
         if(showAll.equals("false")) {
@@ -454,6 +454,8 @@ public class FileDownloadTemplateController {
             
             List<FileElement> fileElements = getFileElements(queryString,dataset_id);
 
+            
+            
             //create a count element
             docElement.setCount(fileElements.size());
 

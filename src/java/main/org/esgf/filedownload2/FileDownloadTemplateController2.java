@@ -119,16 +119,25 @@ public class FileDownloadTemplateController2 {
             fq = fqStr.split(",");
         }
         
+        if(fq == null) {
+            System.out.println("There are no fq params");
+        }
+        
         DataCartSolrHandler handler = new DataCartSolrHandler(peer,showAll,fq);
 
         DataCartDocs2 doc = new DataCartDocs2();
         
-        for(int i=0;i<id.length;i++) {
-            DocElement2 d = handler.getDocElement2(id[i]);
-            doc.addDocElement2(d);
-            doc.toFile(testInitializationFile);
-            //System.out.println(new XmlFormatter().format(d.toXML()));
+        if(id != null) {
+            for(int i=0;i<id.length;i++) {
+                DocElement2 d = handler.getDocElement2(id[i]);
+                doc.addDocElement2(d);
+                doc.toFile(testInitializationFile);
+                //System.out.println(new XmlFormatter().format(d.toXML()));
+            }
         }
+        
+        
+        System.out.println("Returning...");
         
         return doc.toJSON();
         //return new XmlFormatter().format(doc.toXML());

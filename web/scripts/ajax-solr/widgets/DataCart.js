@@ -82,19 +82,18 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	//grab the search constraints
     	self.searchConstraints = ESGF.localStorage.toKeyArr('esgf_fq');
     	
-		//kill any live events that are associated with this widget
-		$('#myTabs').die('tabsselect');
+    	/*
 		$(".wgetAllChildren").die('click');
 		$(".globusOnlineAllChildren").die('click');
 		$('.remove_dataset_from_datacart').die('click');
-		$("input#uber_script").die('click');
 		$("input#remove_all").die('click');
 		$('.go_individual_gridftp').die('click');
 		$('.technotes').die('click');
 		$(".topLevel").die('change');
 		$(".fileLevel").die('change');
 		$('a.view_more_results').die('click');
-		
+		*/
+    	
 		//add the spinning wheel in case there is a delay in loading the items in the data cart
         $(this.target).html($('<img/>').attr('src', 'images/ajax-loader.gif'));
 	},
@@ -158,6 +157,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	//add the options to the page
     	$('#carts').append(optionsStr);
     	
+    	
     	//toggle the "checked" attribute of the showAllContents radio button
     	if(ESGF.setting.showAllContents == 'true') {
     		$("input[id='datacart_filtered']").attr("checked","false");
@@ -177,592 +177,226 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
         $("#datasetList").empty();
 		
         
-        
+
+		//getter for the data cart tab
+		var selected = $( "#myTabs" ).tabs( "option", "selected" );
+		
 		//create the data cart template
-        self.createTemplate(self.selected_arr);
+        //only create if the data cart tab is selected
+		if(selected == 1) {
+	        self.createTemplate(self.selected_arr);
+		}
 		
-        
-        
-        /* live datacart events */
-        
-		/**
-	     * Event for tab selection (as of now, toggling between "Results" and "Datacart")
-	     * If this is done, then a request should be sent to the manager
-	     */
-		$('#myTabs').live('tabsselect', function(event, ui) {
-			if (ui.index == 1) {
-				//leave the pagination on
-				ESGF.setting.paginationOn = 'true';	
-				
-				
-				Manager.doRequest(0);
-			}
-			
-		});
-		
-		 
-	    $('.technotes').live('click',function(){
-	    	var self = this;
-	    	
-	    	var selectedItem = $.tmplItem(this);
-	    	
-	    	//get the selected id
-        	var datasetId = selectedItem.data.datasetId;
-
-	    	if(this.innerHTML === "Show Technotes") {
-                this.innerHTML="Hide Technotes";
-            } else {
-                this.innerHTML="Show Technotes";
-            }
-	    	
-	    	var newWord = datasetId.replace(/\./g,"_");
-	        var newNewWord = newWord.replace(":","_");
-	        
-	    	$('tr.rows_'+ newNewWord + '_technotes').toggle();
-	    });
-		
-		/**
-		 * When a user selects a new radio button the global variable "showAllContents" should be changed
-		 * (true if all files selected, false if filtered selected)
-		 */
-		//
-		$("input[name='datacart_filter']").change(	function() { 
-			
-        	
-				if($("input[id='datacart_filtered']").attr("checked")) { 
-					ESGF.setting.showAllContents = 'false';
-				} else {
-					ESGF.setting.showAllContents = 'true';
-				}
-
-				Manager.doRequest(0);
-				
-		});
-		
-		
-		$('a.view_more_results').live('click',function() {
-			
-			var id = ';';
-			
-        	var selectedItem = $.tmplItem(this);
-        	var selectedDocId = selectedItem.data.datasetId;
-
-	    	var rowsId = selectedDocId.replace(/\./g,"_")
-	    	
-	        var newWord = rowsId.replace(/\./g,"_");
-	        var newNewWord = newWord.replace(":","_");
-	        var newNewNewWord = newWord.replace("|","_");
-	    	
-			//alert('selectedDocId: ' + newNewNewWord);
-			var id = newNewNewWord;
-			//alert('origSelectedDocId: ' + selectedDocId);
-    		var datasetInfo = ESGF.localStorage.get('dataCart',selectedDocId);
-    		
-    		var peer = datasetInfo.peer;
-    		
-    		//alert('peer: ' + peer);
-
-        	var fqParamArr = self.createFqParamArray();
-        	
-			
-			
-			if(this.innerHTML == "View more files") {
-				this.innerHTML="Collapse files";
-				
-				
-				
-				var appendedRows = $(this).parent().parent().parent().parent().find('tr.appendRow_'+self.replacePeriod(selectedDocId));
-				
-				appendedRows.toggle();
-				
-				//get the remaining results from the back end
-				var queryStr = {"id" : selectedDocId, "initialQuery" : "false", "peer" : peer, "showAll" : ESGF.setting.showAllContents, "fq" : fqParamArr}; //, "peer" : peerArr, "technotes" : technoteArr, "showAll" : ESGF.setting.showAllContents, "fq" : fqParamArr, "initialQuery" : "true"};
-				
-				self.addDataCartSpinWheel();
-				
-				$.ajax({
-					url: '/esgf-web-fe/solrfileproxy',
-					global: false,
-					type: "GET",
-					data: queryStr,
-					dataType: 'json',
-					
-					//Upon success remove the spinning wheel and show the contents given by solr
-					success: function(data) {
-						//alert('success');
-		    			self.removeDataCartSpinWheel();
-		    			
-		    			var newRows = '';
-		    			
-		    			for(var i=2;i<data.doc.file.length;i++ ) {//data.doc.file.length;i++) {
-		    				
-		    				var newRow = '<tr class="hhh rows_' + self.replacePeriod(data.doc.datasetId)/*${$item.replacePeriods(datasetId)}*/ + '">';
-							
-							//checkbox
-							newRow += '<td style="width: 40px;">' +
-										 '<input style="margin-left: 10px;" ' +
-										         'class="fileLevel" ' +
-										         'id="' + data.doc.file[i].fileId/*${fileId}*/ + '" ' + 
-										         'type="checkbox" ' +
-										         'class="fileId" ' +
-										         'checked="true" ' + 
-										         'value=" ' + data.doc.file[i].urls.url[1]/*${urls.url[1]}*/ + '"' +
-										         '/>' +
-										 '</td>';
-	
-							
-							//file id, checksum, tracking id
-							newRow += '<td style="width: 325px;padding-left:10px;font-size:11px;">';
-							newRow += '  <div style="word-wrap: break-word;"> ';
-							newRow += '    <span style="font-weight:bold"> ' + data.doc.file[i].fileId + '(' + self.sizeConvert(data.doc.file[i].size) + ')' + ' </span>';
-							newRow += '    <br />';
-							newRow += '    <span style="font-style:italic">Tracking Id: ' + data.doc.file[i].tracking_id + '</span>';
-							newRow += '    <br />';
-							newRow += '    <span style="font-style:italic">Checksum: ' + data.doc.file[i].checksum + '(' + data.doc.file[i].checksum_type + ') ' + '</span>';
-							newRow += '  </div>';
-							newRow += '</td>';
-							
-							//file access methods
-							for(var j=0;j<data.doc.file[i].urls.url.length;j++) {
-								if(data.doc.file[i].services.service[j] == 'HTTPServer') {
-									newRow += '<td id="' + self.replacePeriod(data.doc.datasetId)/*${$item.replacePeriods(datasetId)}_http */ + '_http" style="float:right;font-size:11px;"><div id="' + data.doc.file[i].urls.url[j]/*${urls.url[j]}*/ + '" style="word-wrap: break-word;vertical-align:middle"><a href="' + data.doc.file[i].urls.url[j] + '">HTTP </a></div></td>';
-								}
-								if(data.doc.file[i].services.service[j] == 'GridFTP') {
-									newRow += '<td id="" style="float:right;font-size:11px;"><div id="" style="word-wrap: break-word;vertical-align:middle"><a id="" class="go_individual_gridftp" href="#">GridFTP </a></div></td>';
-								}
-								if(data.doc.file[i].services.service[j] == 'OPENDAP') {
-									newRow += '<td id="" style="float:right;font-size:11px;"><div id="" style="word-wrap: break-word;vertical-align:middle"><a href="">OPENDAP </a></div></td>';
-								}
-							}
-							
-							//technotes (if any)
-							if(data.doc.file[i].technotes.technote.length > 2) {
-								newRow += '<td id=" ' + replacePeriod(data.doc.datasetId) + '_openid' + '"' +
-								'style="float:right;font-size:11px;">' +
-								'<div id="d" ' + 
-								'style="word-wrap: break-word;vertical-align:middle">' +
-								'<a href="" title="" target="_blank">TECHNOTE </a></div></td>';
-								
-							}
-							
-							
-			    			newRow += '</tr>';
-			    			
-			    			newRows += newRow;
-			    			
-		    			}
-
-		    			
-		    			appendedRows.after(newRows);
-		    			
-					},
-					error: function() {
-						alert('error');
-					}
-				});
-				
-				
-				
-			} else {
-				this.innerHTML="View more files";
-				//alert($(this).parent().parent().parent().parent().find('tr.hhh').html());
-				
-				var thing = $(this).parent().parent().parent().parent().find('tr.appendRow_'+newNewNewWord);
-				
-				thing.toggle();
-				
-				$(this).parent().parent().parent().parent().find('tr.hhh').remove();
-				
-			}
-		});
-		
-		
-		
-		$("input#remove_all").live('click', function() {
-			
-			for(var i=0;i<self.selected_arr.length;i++) {
-				var selectedDocId = self.selected_arr[i];
-
-	        	//remove the dataset from the localStorage
-	        	ESGF.localStorage.remove('dataCart',selectedDocId);
-
-	        	//change from remove from cart to add to cart
-	        	$('a#ai_select_'+ selectedDocId.replace(/\./g, "_")).html('Add To Cart');
-	        	
-	        	
-			}    
-
-        	//re-issue request to search api
-        	Manager.doRequest(0);
-			
-			/*
-			var selectedItem = $.tmplItem(this);
-	    	
-	    	//get the selected id
-        	var selectedDocId = selectedItem.data.datasetId;
-
-        	//remove the dataset from the localStorage
-        	ESGF.localStorage.remove('dataCart',selectedDocId);
-
-        	//change from remove from cart to add to cart
-        	$('a#ai_select_'+ selectedDocId.replace(/\./g, "_")).html('Add To Cart');
-        	
-        	//re-issue request to search api
-        	Manager.doRequest(0);
-			*/
-		});
-		
-		/**
-		 * DOCUMENT ME
-		 * When the user clicks "Download All Files", this method is executed
-		 * 
-		 * A query string is assembled using the file ids and the search constraints (if 'filtered' is selected)
-		 * 
-		 * The string is then executed as a form action and sent to the wget api.  Example:
-		 * 
-		 * esg-search/wget/?project=cmip5
-		 * 
-		 * Would get all files that have been placed in the data cart bucketed in the project cmip5 
-		 */
-		$("input#uber_script").live('click', function() {
-
-			LOG.debug("Uber script: " + JSON.stringify(self.searchConstraints));
-			
-			var sentConstraints = new Array();
-
-			var queryString = '/esg-search/wget/?';
-			//if the show all contents is the filter...then add the search constraints to the wget
-            if(ESGF.setting.showAllContents == 'false') {
-            	
-            	
-				// traverse through the constraints and add to the querystring
-				//for(var i in self.searchConstraints) {
-				for(var i=0;i<self.searchConstraints.length;i++) {
-
-					if(self.searchConstraints[i].search('replica') == -1 && 
-					   self.searchConstraints[i].search('type') == -1) {
-					   
-					   //FIXME
-					   //replace the : with =
-					   var constraint = self.searchConstraints[i].replace(':','=');
-					   
-					   //replace 'text' with 'query' for free text searches
-					   constraint = constraint.replace('text','query');
-					   
-					   queryString += constraint + '&';
-					   
-					}
-				}
-			
-            }
-            
-            //gather the file_ids
-        	var file_ids   = new Array();
-            
-            //iterate over the selected array of datasets in the data cart
-            for(var i=0;i<self.selected_arr.length;i++) {
-            	var selectedDocId = self.selected_arr[i];
-            	var datasetId = self.replacePeriod(self.selected_arr[i]);
-            	
-            	
-            	//grab the ids from the elements in the jquery template
-            	//FIXME: need clearer representation of these ids
-            	$(this).parent().parent().parent().parent().parent().parent().find('tr.rows_'+ datasetId).find(':checkbox:checked').each( function(index) {
-            		
-            		var file_id = this.id;
-                	
-                	//push 
-                	file_ids.push(file_id);
-                });
-            	
-            }
-            
-            
-            var form = '<form action="'+ queryString +'" method="post" >';
-            
-            //iterate over the file_ids and add to query string
-            //this can probably be collapsed into the loop above
-            for(var i=0;i<file_ids.length;i++) {
-				var id = file_ids[i];
-				id.replace("\\|","%7C");
-				form += '<input type="hidden" name="id" value="' + id + '">';
-			}
-            form += '</form>';
-            
-            
-            
-            //send request using a dynamically generated form with the query string as the action
-            //the method should be post because the query string may be long
-            //jQuery('<form action="'+ queryString +'" method="post" >'+ '' +'</form>')
-            jQuery(form).appendTo('body').submit().remove();
-			
-			
-		});
-		
-	    
-	    /**
-	     * Click event for generating the wget script for individual datasets
-	     * 
-	     * Similar to the uber script above
-	     */
-	    $(".wgetAllChildren").live ('click', function (e){
-	    	
-	    	//grab the dataset id from the template
-        	var selectedItem = $.tmplItem(this);
-        	var selectedDocId = selectedItem.data.datasetId;
-        	
-        	//gather the ids and the urls for download
-        	var file_ids   = new Array();
-            
-            var dataset = self.replacePeriod(selectedDocId);
-            
-            $(this).parent().parent().parent().find('tr.rows_'+ dataset).find(':checkbox:checked').each( function(index) {
-                if(this.id != selectedDocId) {
-                	var file_id = this.id;
-                	
-                	//push 
-                	file_ids.push(file_id);
-                	
-               }
-            });
-            
-            
-            var queryString = '/esg-search/wget/?';
-			
-            
-            var constraintCount = 0;
-            
-            //if the show all contents is the filter...then add the search constraints to the wget
-            if(ESGF.setting.showAllContents == 'false') {
-            	// traverse through the constraints and add to the querystring
-    			//for(var i in self.searchConstraints) {
-    			for(var i=0;i<self.searchConstraints.length;i++) {
-    				if(self.searchConstraints[i].search('replica') == -1 && 
-    				   self.searchConstraints[i].search('type') == -1) {
-    				   constraintCount = constraintCount + 1;
-    				   
-    				   //replace the : with =
-    				   var constraint = self.searchConstraints[i].replace(':','=');
-    				   
-					   //replace 'text' with 'query' for free text searches
-					   constraint = constraint.replace('text','query');
-    				   queryString += constraint + '&';
-    				   
-    				}
-    			}
-            }
-			
-            
-            var form = '<form action="'+ queryString +'" method="post" >';
-            
-            //iterate over the file_ids and add to query string
-            //this can probably be collapsed into the loop above
-            for(var i=0;i<file_ids.length;i++) {
-				var id = file_ids[i];
-				id.replace("\\|","%7C");
-				form += '<input type="hidden" name="id" value="' + id + '">';
-			}
-            form += '</form>';
-            
-            //send request using a dynamically generated form with the query string as the action
-            //the method should be post because the query string may be long
-            //jQuery('<form action="'+ queryString +'" method="post" >'+ '' +'</form>')
-            jQuery(form).appendTo('body').submit().remove();
-            
-	    	
-	    });
-	    
-	    
-	    /**
-	     * Click event for removing datasets from the data cart
-	     */
-	    $('.remove_dataset_from_datacart').live ('click', function(e) {
-	    	
-	    	var selectedItem = $.tmplItem(this);
-	    	
-	    	//get the selected id
-        	var selectedDocId = selectedItem.data.datasetId;
-
-        	//remove the dataset from the localStorage
-        	ESGF.localStorage.remove('dataCart',selectedDocId);
-
-        	//change from remove from cart to add to cart
-        	$('a#ai_select_'+ selectedDocId.replace(/\./g, "_")).html('Add To Cart');
-        	
-        	//re-issue request to search api
-        	Manager.doRequest(0);
-        	
-	    });
-	    
-	    
-	    
-	    
-	    /**
-	     * Event for checkbox file selection
-	     * NOTE: THIS NEEDS TO BE FIXED
-	     */
-	    $(".topLevel").live('change', function() {
-	    	    	
-	    	var self = this;
-	    	
-	    	var currentValue = $(this).attr('checked');
-
-	    	
-	    	if(currentValue) {
-	    		var selectedItem = $.tmplItem(this);
-		    	var selectedDocId = selectedItem.data.datasetId;
-		    	
-		    	var rowsId = selectedDocId.replace(/\./g,"_")
-		    	
-		        var newWord = rowsId.replace(/\./g,"_");
-		        var newNewWord = newWord.replace(":","_");
-		        var newNewNewWord = newWord.replace("|","_");
-		    	
-		    	//$(this).parent().parent().parent().find('tr.rows_'+ self.replacePeriod(selectedDocId)).each( function(index) {
-                $(this).parent().parent().parent().find('tr.rows_'+ newNewNewWord).each( function(index) {
-                	
-                	var isChecked = $(this).find('input').attr('checked');
-                	
-                	if(!isChecked) {
-                    	$(this).find('input').attr('checked','true');
-                	}
-                	
-		        });
-	    	} else {
-	    		
-	    		var selectedItem = $.tmplItem(this);
-		    	var selectedDocId = selectedItem.data.datasetId;
-		    	
-		    	var rowsId = selectedDocId.replace(/\./g,"_")
-		    	
-		    	var newWord = rowsId.replace(/\./g,"_");
-		        var newNewWord = newWord.replace(":","_");
-		        var newNewNewWord = newWord.replace("|","_");
-		    	
-		    	$(this).parent().parent().parent().find('tr.rows_'+ newNewNewWord).each( function(index) {
-                	
-                	var isChecked = $(this).find('input').attr('checked');
-                	
-                	if(isChecked) {
-                    	$(this).find('input').removeAttr('checked');//attr('checked','false');
-                    }
-		        });
-	    	}
-	    	
-	    	
-	    });
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    /**
-	     * Grabs individual files and sends that information to the Globus Online view
-	     */
-	    $('.go_individual_gridftp').live('click',function(e) {
-	    	
-	    	var selectedDocId = $(this).parent().parent().parent().parent().find('input').attr('id');
-	    	
-	    	//gather the ids and the urls for download
-	    	var ids   = new Array();
-	        var values = new Array();
-	        
-	        var file_id = $(this).parent().find('a').attr('id');
-	        var grid_url = $(this).parent().parent().find('div').attr('id');
-	        
-	        ids.push(file_id);
-	        values.push(grid_url);
-	        
-	        var globus_url = '/esgf-web-fe/goformview1';
-	        
-	        //begin assembling queryString
-	        var queryString = 'type=create&id=' + selectedDocId;
-
-
-	        //assemble the input fields with the query string
-	        for(var i=0;i<ids.length;i++) {
-	        	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
-	        }
-	        var input = '';
-	        jQuery.each(queryString.split('&'), function(){
-	          var pair = this.split('=');
-	          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-	        });
-	        
-	        //send request
-	        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
-	        .appendTo('body').submit().remove();
-	        
-	        
-	    });
-	   
-	    
-	    /**
-	     * Click event for launching globus online bulk data transfer
-	     */
-	    $(".globusOnlineAllChildren").live('click',function(e){
-	    	
-	    	//grab the dataset id from the template
-	    	var selectedItem = $.tmplItem(this);
-        	var selectedDocId = selectedItem.data.datasetId;
-
-	    	//gather the ids and the urls for download
-	    	var ids   = new Array();
-	        var values = new Array();
-	        
-	        var rowsStr = 'tr.rows_'+ self.replacePeriod(selectedDocId);
-
-	        
-	        var $element = $(this).parent().parent().parent().find(rowsStr);
-	        
-	        $element.each(function(index) {
-	        	var isChecked = $(this).find('input').attr('checked');
-        	
-	        	if(isChecked) {
-	        		var gridElement = 'td#' + self.replacePeriod(selectedDocId) + '_gridftp';
-		        	var grid_url = $(this).find(gridElement).find('div').attr('id');
-		        	values.push(grid_url);
-		        	var file_id = $(this).find(gridElement).find('a').attr('id');
-		        	ids.push(file_id);
-	        	}
-	        	
-	        });
-	        
-	        //get the globus online
-	        var globus_url = '/esgf-web-fe/goformview1';
-	        
-	        //begin assembling queryString
-	        var queryString = 'type=create&id=' + selectedDocId;
-
-	        //assemble the input fields with the query string
-	        for(var i=0;i<ids.length;i++) {
-	        	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
-	        }
-	        var input = '';
-	        jQuery.each(queryString.split('&'), function(){
-	            var pair = this.split('=');
-	            input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-	        });
-	        
-            //add the search constraints
-	    	input+= '<input type="hidden" name="constraints" value="' + (JSON.stringify(self.searchConstraints)).replace(/\"/gi,'\'') + '" />';
-            
-	        //send request
-	        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
-	        .appendTo('body').submit().remove();
-	        
-	    });
-	    
+       
 	},
 
     
+	/**
+     * Create the template for the datacart
+     * 
+     * There is a new procedure for creating the datacart template because the search API is now called
+     * 
+     * 
+     * 
+     */
+    createTemplate: function() {
+
+    	alert('creating template');
+    	
+    	var self = this;
+    	
+    	//Get all of the search constraints (fq params)
+    	var fqParamArr = new Array();
+    	fqParams = ESGF.localStorage.getAll('esgf_queryString');
+    	for(var key in fqParams) {
+    		if(key != 'type:Dataset' && (key.search('distrib') < 0))
+    			fqParamArr.push(fqParams[key]);
+    	}
+    	
+    	//get the peerArr and technoteArr
+    	//these will actually be ';' delimited strings...
+    	//will probably need to create an array for these
+    	var peerArr='',technoteArr='';
+
+		//the datasetInfo object will have a 'peer' and 'xlink' property
+    	for(var i=0;i<self.selected_arr.length;i++) {
+    		var datasetInfo = ESGF.localStorage.get('dataCart',self.selected_arr[i]);
+
+    		//extract the peer and 'xlink' and add it to the arrs
+    		if(i!=0) {
+    			peerArr += ';'+datasetInfo.peer;
+    			technoteArr += ';'+datasetInfo.xlink;
+    		} else {
+    			peerArr += datasetInfo.peer;
+    			technoteArr += datasetInfo.xlink;
+    		};
+    	}
+    	
+    	//assemble the query string
+    	//
+    	// 
+    	var queryStr = {"id" : self.selected_arr, 
+    					"peer" : peerArr, 
+    					"technotes" : technoteArr, 
+    					"showAll" : ESGF.setting.showAllContents, 
+    					"fq" : fqParamArr, 
+    					"initialQuery" : "true"};
+		
+    	//getter for the data cart tab
+		var selected = $( "#myTabs" ).tabs( "option", "selected" );
+		
+		//only make the ajax call when the data cart is selected
+		if(selected == 1) {
+			$.ajax({
+				url: '/esgf-web-fe/solrfileproxy2/datacart',
+				global: false,
+				type: "GET",
+				data: queryStr,
+				dataType: 'json',
+				success: function(data) {
+					
+					if(data.docs.doc != undefined) {
+						var docLength = data.docs.doc.length;
+						
+						//if the doc length is undefined, then the number of docs returned may be one
+						//there is a bug in the json java code that will automatically convert this to a json object
+						if(docLength == undefined) {
+							var docArray = new Array();
+							docArray.push(data.docs.doc);
+							data.docs['doc'] = docArray;
+							docLength = data.docs.doc.length;
+						}
+						
+		    			var fileDownloadTemplate = data.docs;
+		    			
+		    			$( "#cartTemplateStyledNew2").tmpl(fileDownloadTemplate, {
+		        			
+		        			replacePeriods : function (word) {
+		                    },
+		                    abbreviate : function (word) {
+		                    },
+		                    addOne: function(num) {
+		                    },
+		                    sizeConversion : function(size) {
+		                    }
+		                    
+		                })
+		                .appendTo("#datasetList")
+		                .find( "a.showAllChildren" ).click(function() {
+
+		                });
+		    			
+						
+					} else {
+						alert('No data sets have been added to your cart');
+					}
+					
+					
+				},
+				error: function() {
+					alert('Error loading data cart');
+				}
+			})
+		}
+    	/*
+		
+		LOG.debug('queryStr... id: ' + queryStr.id + ' peerArr: ' + 
+				queryStr.peer + ' technotes: ' + queryStr.technotes + ' showAll: ' + 
+				queryStr.showAll + ' fq: ' + queryStr.fq + 
+				' initialQ: ' + queryStr.initialQuery);
+		
+		//getter for the data cart tab
+		var selected = $( "#myTabs" ).tabs( "option", "selected" );
+		
+		
+		if(selected == 1) {
+			
+			$.ajax({
+				url: '/esgf-web-fe/solrfileproxy2/datacart',
+				global: false,
+				type: "GET",
+				data: queryStr,
+				dataType: 'json',
+				
+				//Upon success remove the spinning wheel and show the contents given by solr
+				 
+				success: function(data) {
+
+					var docLength = data.docs.doc.length;
+					
+					if(docLength == undefined) {
+						var docArray = new Array();
+						docArray.push(data.docs.doc);
+						
+						data.docs['doc'] = docArray;
+						
+						length = data.docs.doc.length;
+					}
+					
+	    			var fileDownloadTemplate = data.docs;
+	        		
+	    			$( "#cartTemplateStyledNew2").tmpl(fileDownloadTemplate, {
+	        			
+	        			replacePeriods : function (word) {
+	        				LOG.debug('replacePeriods: ' + self.replacePeriod(word));
+	                        return self.replacePeriod(word);
+	                    },
+	                    abbreviate : function (word) {
+	                        var abbreviation = word;
+	                        if(word.length > 50) {
+	                            abbreviation = word;//word.slice(0,20) + '...' + word.slice(word.length-21,word.length);
+	                        }
+	                        return abbreviation;
+	                    },
+	                    addOne: function(num) {
+	                        return (num+1);
+	                    },
+	                    sizeConversion : function(size) {
+	                    	return self.sizeConvert(size);
+	                    }
+	                    
+	                })
+	                .appendTo("#datasetList")
+	                .find( "a.showAllChildren" ).click(function() {
+
+	                	
+	                	//need to get the dataset id here
+	                	
+	                	
+	                	alert($(this).parent().find('a').attr('id'));
+	                	
+	                	var selectedDocId = $(this).parent().find('a').attr('id');
+	                	
+	                	
+	                	
+	                	
+	                	if(this.innerHTML === "Expand") {
+	                        this.innerHTML="Collapse";
+	                        
+	                        
+	                    } else {
+	                        this.innerHTML="Expand";
+	                    }
+	                	
+	                	//$('tr.rows_'+self.replacePeriod(selectedDocId)).toggle();
+	                	$('tr.rows_'+selectedDocId).toggle();
+	                	
+	                });
+				},
+				error: function() {
+					alert('error');
+				}
+			});
+			
+			
+			
+		}
+    	
+		*/
+		
+	},
+	
+	
     
 	
 	rewriteTextQuery: function(queryString) {
@@ -800,217 +434,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	return newQueryString;
     },
 	
-	/**
-     * Create the template for the datacart
-     * 
-     * There is a new procedure for creating the datacart template because the search API is now called
-     * 
-     * 
-     * 
-     */
-    createTemplate: function() {
-
-    	
-    	var self = this;
-
-
-    	//FIXME: Is the q parameter needed?
-    	//get the 'q' parameter here
-    	//var qParam = Manager.store.get('q')['value'];
-    	
-    	//get the 'fq' parameter here
-    	var fqParamArr = self.createFqParamArray();
-		
-    	
-
-    	var peerArr = '';
-    	var technoteArr = '';
-    	
-    	for(var i=0;i<self.selected_arr.length;i++) {
-    		var id = self.selected_arr[i];
-    		var datasetInfo = ESGF.localStorage.get('dataCart',id);
-    		
-    		var peer = datasetInfo.peer;
-    		
-    		
-    		if(i != 0) {
-        		peerArr += ';' + peer;
-    		} else {
-    			peerArr += peer;
-    		}
-    		
-    		var xlink = datasetInfo.xlink;
-    		if(i != 0) {
-        		technoteArr += ';' + xlink;
-    		} else {
-    			technoteArr += xlink;
-    		}
-    	}
-    	
-    	
-    	
-    	
-    	LOG.debug("BEGIN DATACART CONTENTS");
-    	LOG.debug("ID: " + self.selected_arr);
-    	LOG.debug("PEER: " + peerArr);
-    	LOG.debug("TECHNOTE: " + technoteArr);
-    	LOG.debug("SHOWALL: " + ESGF.setting.showAllContents);
-    	LOG.debug("FQ: " + fqParamArr + " " + fqParamArr.length);
-    	
-    	LOG.debug("END DATACART CONTENTS");
-    	
-    	
-		//setup the query string
-    	//we only send three parameters:
-    	//* id (self.selected_arr) - an arry of datasets that have been selected for the datacart to display
-    	//* showAll (ESGF.setting.showAllContents) - a boolean filter for file display (if true, files are filtered over the search constraints)
-    	//* fq (fqParamArr) - an array of search constraints
-		//var queryStr = { "id" : arr , "shardType" : ESGF.setting.getShards, "shardsString" : shardsString, "fq" : fqParamArr, "q" : qParam, "showAll" : ESGF.setting.showAllContents};
-		var queryStr = {"id" : self.selected_arr, "peer" : peerArr, "technotes" : technoteArr, "showAll" : ESGF.setting.showAllContents, "fq" : fqParamArr, "initialQuery" : "true"};
-		
-		
-		/*
-		alert('queryStr... id: ' + queryStr.id + ' peerArr: ' + 
-				queryStr.peer + ' technotes: ' + queryStr.technotes + ' showAll: ' + 
-				queryStr.showAll + ' fq: ' + queryStr.fq + 
-				' initialQ: ' + queryStr.initialQuery);
-		*/
-		LOG.debug('queryStr... id: ' + queryStr.id + ' peerArr: ' + 
-				queryStr.peer + ' technotes: ' + queryStr.technotes + ' showAll: ' + 
-				queryStr.showAll + ' fq: ' + queryStr.fq + 
-				' initialQ: ' + queryStr.initialQuery);
-		
-		//getter for the data cart tab
-		var selected = $( "#myTabs" ).tabs( "option", "selected" );
-		
-		
-		if(selected == 1) {
-			
-			$.ajax({
-				url: '/esgf-web-fe/solrfileproxy2/datacart',
-				global: false,
-				type: "GET",
-				data: queryStr,
-				dataType: 'json',
-				
-				//Upon success remove the spinning wheel and show the contents given by solr
-				 
-				success: function(data) {
-
-					var docLength = data.docs.doc.length;
-					
-					if(docLength == undefined) {
-						alert('need to create the array of doc');
-						var docArray = new Array();
-						docArray.push(data.docs.doc);
-						
-						alert('docArray size: ' + docArray);
-						
-						data.docs['doc'] = docArray;
-						
-						length = data.docs.doc.length;
-					}
-					
-					/*
-					alert(data.docs.doc);
-					//traverse all doc elements to make sure that they all have file array
-					for(var j=0;j<data.docs.doc.length;j++) {
-						var fileLength = data.docs.doc[j].files.file.length;
-						if(fileLength == undefined) {
-							var fileArray = new Array();
-							fileArray.push(data.docs.doc[j].files.file);
-							data.docs.doc.files['file'] = fileArray;
-						}
-					}
-					*/
-					
-					
-					//alert('length: ' + length + ' id: ' + data.docs.doc[0].datasetId);
-					
-					//alert('data: ' + (data.docs.doc[0]));
-					/*
-	    			//alert('data: ' + data.docs.doc[0].files.file.length);
-	    			for(var i=0;i<data.docs.doc[0].files.file.length;i++) {
-	    				var file = data.docs.doc[0].files.file[i];
-	    				//alert(file.fileId);
-	    			}
-	    			*/
-	    			var fileDownloadTemplate = data.docs;
-	        		
-	    			$( "#cartTemplateStyledNew2").tmpl(fileDownloadTemplate, {
-	        			
-	        			replacePeriods : function (word) {
-	        				LOG.debug('replacePeriods: ' + self.replacePeriod(word));
-	                        return self.replacePeriod(word);
-	                    },
-	                    abbreviate : function (word) {
-	                        var abbreviation = word;
-	                        if(word.length > 50) {
-	                            abbreviation = word;//word.slice(0,20) + '...' + word.slice(word.length-21,word.length);
-	                        }
-	                        return abbreviation;
-	                    },
-	                    addOne: function(num) {
-	                        return (num+1);
-	                    },
-	                    sizeConversion : function(size) {
-	                    	return self.sizeConvert(size);
-	                    }
-	                    
-	                })
-	                .appendTo("#datasetList")
-	                .find( "a.showAllChildren" ).click(function() {
-
-	                	
-	                	var selectedItem = $.tmplItem(this);
-	                    var selectedDoc = selectedItem;
-
-	                	var selectedDocId = selectedItem.data.datasetId;
-	                	
-	                	//alert('tr.view_more_results_' + self.replacePeriod(selectedDocId));
-	                	
-	                	$('tr.view_more_results_' + self.replacePeriod(selectedDocId)).toggle();
-	                	
-	                	if(this.innerHTML === "Expand") {
-	                        this.innerHTML="Collapse";
-	                        
-	                        
-	                    } else {
-	                        this.innerHTML="Expand";
-	                    }
-	                	
-	                	
-	                	
-	                	var id = $(this).parent().parent().parent().html();
-	                    
-	                	$('tr.rows_'+self.replacePeriod(selectedDocId)).toggle();
-	                	
-	                	
-	                });
-	        		
-	    			
-	    			
-	    			
-	    			
-				},
-				error: function() {
-					alert('error');
-				}
-			});
-			
-			
-			
-		}
-		
-		/*
-		//only query for files if the datacart is selected
-		if(selected == 1) {
-			//issue a query to the getDataCart
-	    	self.getDataCart(queryStr);
-		}
-		*/
-    	
-	},
+	
 	
 	
 	getDataCartUsingSearchAPI: function(queryStr) {
@@ -1175,8 +599,13 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
                 }
             })
             .appendTo("#datasetList")
+            /*
             .find( "a.showAllChildren" ).click(function() {
 
+            	
+            	alert('a.showAllChildren');
+            	
+            	
             	var selectedItem = $.tmplItem(this);
                 var selectedDoc = selectedItem;
 
@@ -1203,7 +632,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
             	$('tr.rows_'+self.replacePeriod(selectedDocId)).toggle();
             	
             	
-            });
+            })*/
+            ;
     		
     		
     		

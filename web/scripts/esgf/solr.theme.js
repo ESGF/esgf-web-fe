@@ -62,7 +62,6 @@
 (function ($) {
 
 
-
 AjaxSolr.theme.prototype.result = function (doc, snippetReplica, snippetVersion, snippet, actions) {
     var output = '';
 

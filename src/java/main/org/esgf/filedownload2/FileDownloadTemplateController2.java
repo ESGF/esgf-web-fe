@@ -64,6 +64,8 @@ public class FileDownloadTemplateController2 {
         String technotes = request.getParameter("technotes");
         
         String showAll = request.getParameter("showAll");
+
+        String initialQuery = request.getParameter("initialQuery");
         
         String idStr = request.getParameter("id");
         String [] id = idStr.split(",");
@@ -71,15 +73,19 @@ public class FileDownloadTemplateController2 {
         String fqStr = request.getParameter("fq");
         String [] fq = fqStr.split(".");
         
-        DataCartSolrHandler handler = new DataCartSolrHandler(peer,showAll,fq);
+        DataCartSolrHandler handler = new DataCartSolrHandler(peer,showAll,fq,initialQuery);
 
         DataCartDocs2 doc = new DataCartDocs2();
         
         for(int i=0;i<id.length;i++) {
+            handler.preassembleQueryString();
             DocElement2 d = handler.getDocElement2(id[i]);
+            System.out.println("QUERY STRING: " + handler.getSolrQueryString());
             doc.addDocElement2(d);
-            System.out.println(new XmlFormatter().format(d.toXML()));
+            //System.out.println(new XmlFormatter().format(d.toXML()));
         }
+        
+        doc.toFile(testInitializationFile);
         
         //return doc.toJSON();
         return doc.toJSON();
@@ -102,6 +108,11 @@ public class FileDownloadTemplateController2 {
         
         String showAll = request.getParameter("showAll");
         
+        String initialQuery = request.getParameter("initialQuery");
+        
+        System.out.println("Initial Query: " + initialQuery);
+        
+        
         String [] id = null;
         if(!useCurl) {
             id = request.getParameterValues("id[]");
@@ -123,21 +134,20 @@ public class FileDownloadTemplateController2 {
             System.out.println("There are no fq params");
         }
         
-        DataCartSolrHandler handler = new DataCartSolrHandler(peer,showAll,fq);
+        DataCartSolrHandler handler = new DataCartSolrHandler(peer,showAll,fq,initialQuery);
 
         DataCartDocs2 doc = new DataCartDocs2();
         
         if(id != null) {
             for(int i=0;i<id.length;i++) {
+                handler.preassembleQueryString();
                 DocElement2 d = handler.getDocElement2(id[i]);
                 doc.addDocElement2(d);
                 doc.toFile(testInitializationFile);
                 //System.out.println(new XmlFormatter().format(d.toXML()));
             }
         }
-        
-        
-        System.out.println("Returning...");
+       
         
         return doc.toJSON();
         //return new XmlFormatter().format(doc.toXML());

@@ -31,11 +31,13 @@ public class DataCartSolrHandler {
     private final static Logger LOG = Logger.getLogger(DataCartSolrHandler.class);
     
     private static int initialLimit = 10;
+    private static int totalLimit = 10000;
     
     private String peerStr;
     private String showAllStr;
     private String [] fq;
     //private String technoteStr;
+    private String initialQuery;
     
     
     private String solrQueryString;
@@ -94,11 +96,13 @@ public class DataCartSolrHandler {
         
     }
     
-    public DataCartSolrHandler(String peerStr,String showAllStr,String [] fq) {
+    public DataCartSolrHandler(String peerStr,String showAllStr,String [] fq,String initialQuery) {
         this.peerStr = peerStr;
         this.showAllStr = showAllStr;
         
         this.solrQueryString = null;
+        
+        this.initialQuery = initialQuery;
         
         if(fq != null) {
             this.fq = new String[fq.length];
@@ -109,16 +113,13 @@ public class DataCartSolrHandler {
         this.preassembleQueryString();
     }
     
-    private void preassembleQueryString() {
-        
-        System.out.println("In preassemble query string");
+    public void preassembleQueryString() {
         
         this.solrQueryString = queryPrefix;
         
         if(this.showAllStr == null) {
             System.out.println("NULL");
         }
-        
         
       //put any search criteria if the user selected "filter"
         if(this.showAllStr.equals("false")) {
@@ -127,7 +128,6 @@ public class DataCartSolrHandler {
             if(this.fq != null) {
                 for(int i=0;i<this.fq.length;i++) {
                     String fqParam = this.fq[i];
-                    System.out.println("\t" + fqParam);
                     /*
                      * Should ignore the following:
                      * - blanks - ""
@@ -159,6 +159,14 @@ public class DataCartSolrHandler {
             }
             
         }
+        
+        //if this is the initialQuery, only serve the number of files declared in "initialLimit"
+        if(this.initialQuery.equals("true")) {
+            this.solrQueryString += "&limit="+initialLimit;
+        } else {
+            this.solrQueryString += "&offset=10&limit="+totalLimit;
+        }
+        
     }
     
    
@@ -166,21 +174,61 @@ public class DataCartSolrHandler {
     public DocElement2 getDocElement2(String datasetId) {
         
         
+        
+        
+        //System.out.println("\nIn get doc element for: " + datasetId + "\n\n");
+        
         DocElement2 docElement = new DocElement2();
         
         //set the dataset id
         docElement.setDatasetId(datasetId);
         
         //get the file elements and set it
-        List<FileElement2> fileElements = getFileElements(datasetId);
 
+        //query the index here
+        //JSONArray responseFiles = queryIndex(datasetId);
+        String rawResponse = queryIndex(datasetId);
+        
+        /*
+        if(datasetId.equals("obs4MIPs.NASA-JPL.AIRS.mon.v1|esg-datanode.jpl.nasa.gov")) {
+            System.out.println("In second dataset");
+            System.out.println("QueryString:\n\t" + this.solrQueryString);
+            
+            //System.out.println("\tRAW RESPONSE\n\n" + rawResponse + "\n\n");
+            
+        }
+        */
+        
+        //convert extracted string into json array
+        JSONObject jsonResponse = null;
+        JSONArray jsonArray = null;
+        String numFound = null;
+        try {
+            jsonResponse = new JSONObject(rawResponse);
+            jsonArray = jsonResponse.getJSONArray("docs");
+            numFound = jsonResponse.getString("numFound");
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            System.out.println("Problem converting Solr response to json string");
+            e.printStackTrace();
+        }
+        
+        //create a count element
+        if(numFound == null) {
+            docElement.setCount(-1);
+        } else {
+            System.out.println("NumFound: " + numFound);
+            docElement.setCount(Integer.parseInt(numFound));
+        }
+       
+        JSONArray responseFiles = this.solrResponseToJSON(rawResponse);
+        
+        List<FileElement2> fileElements = getFileElements(datasetId,responseFiles);
+      
         //set the file elements
         docElement.setFileElements(fileElements);
         
-        //create a count element
-        docElement.setCount(fileElements.size());
-        
-        //set the booleans
+      //set the booleans
         docElement.setHasGridFTP("false");
         docElement.setHasHttp("false");
         docElement.setHasOpenDap("false");
@@ -200,16 +248,15 @@ public class DataCartSolrHandler {
                 docElement.setHasSRM("true");
             }
         }
-        
+
         
         return docElement;
     }
     
-    private List<FileElement2> getFileElements(String dataset_id) {
+    private List<FileElement2> getFileElements(String dataset_id,JSONArray responseFiles) {
      
         List<FileElement2> fileElements = new ArrayList<FileElement2>();
         
-        JSONArray responseFiles = queryIndex(dataset_id);
         
         for(int i=0;i<responseFiles.length();i++) {
             
@@ -234,14 +281,13 @@ public class DataCartSolrHandler {
     }
     
     
-    public JSONArray queryIndex(String dataset_id) {
+    public String queryIndex(String dataset_id) {
         
         String rawResponse = this.querySolrForFiles(dataset_id);
         
         
-        JSONArray jsonResponse = this.solrResponseToJSON(rawResponse);
         
-        return jsonResponse;
+        return rawResponse;
         
     }
     
@@ -332,33 +378,50 @@ public class DataCartSolrHandler {
         String showAllStr = "false";
         String peerStr = "esg-datanode.jpl.nasa.gov";
         
-        String [] id = {"obs4MIPs.NASA-JPL.AIRS.mon.v1|esg-datanode.jpl.nasa.gov"};
-
+        //String [] id = {"obs4MIPs.NASA-JPL.AIRS.mon.v1|esg-datanode.jpl.nasa.gov"};
+       
+        
+        String [] id = {
+                        "cmip5.output1.NCC.NorESM1-M.historicalExt.6hr.atmos.6hrLev.r2i1p1.v20111102|norstore-trd-bio1.hpc.ntnu.no",
+                        "obs4MIPs.NASA-JPL.AIRS.mon.v1|esg-datanode.jpl.nasa.gov"
+                        };
         //this is the string that I will get
         String fqStr = ",offset=0,replica=false";
         //need to convert to fq []
         
         String [] fq = fqStr.split(",");
 
+        String initialQuery = "true";
         
-        DataCartSolrHandler handler = new DataCartSolrHandler(peerStr,showAllStr,fq);
+        DataCartSolrHandler handler = new DataCartSolrHandler(peerStr,showAllStr,fq,initialQuery);
 
+        
+        DataCartDocs2 doc = new DataCartDocs2();
+        
+        for(int i=0;i<id.length;i++) {
+            handler.preassembleQueryString();
+            DocElement2 d = handler.getDocElement2(id[i]);
+            doc.addDocElement2(d);
+            if(i == 1)
+            System.out.println(new XmlFormatter().format(d.toXML()));
+        }
+        
+        
+        /*
         //System.out.println("ShowAllStr: " + showAllStr);
         //System.out.println("PeerStr: " + handler.getPeerStr());
         //System.out.println("Initial Query: " + handler.getInitialQuery());
         
-        
-        
         System.out.println("QueryString: " + handler.getSolrQueryString());
         
-        DocElement2 doc = handler.getDocElement2(id[0]);
+        DocElement2 doc = handler.getDocElement2(id[1]);
         
 
         System.out.println("\tDatasetId: " + doc.getDatasetId());
         System.out.println("\tDatasetCount: " + doc.getCount());
          
         System.out.println(new XmlFormatter().format(doc.toXML()));
-        
+        */
     }
     
 }

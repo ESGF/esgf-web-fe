@@ -201,7 +201,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
      */
     createTemplate: function() {
 
-    	alert('creating template');
     	
     	var self = this;
     	
@@ -271,7 +270,9 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		    			
 		    			$( "#cartTemplateStyledNew2").tmpl(fileDownloadTemplate, {
 		        			
-		        			replacePeriods : function (word) {
+		        			replaceChars : function (word) {
+		        				LOG.debug("Replacing Char: " + word + " " + word.length);
+		        				return replaceChars(word);
 		                    },
 		                    abbreviate : function (word) {
 		                    },
@@ -720,6 +721,14 @@ function formatPrice(price) {
     return "ZZZZ" + price;
 }
 
+function replaceChars(word) {
+
+    var newWord = word.replace(/\./g,"_");
+    newWord = newWord.replace(":","_");
+    newWord = newWord.replace("|","_");
+    
+    return newWord;
+}
 
 function replacePeriodGlobal(word)
 {

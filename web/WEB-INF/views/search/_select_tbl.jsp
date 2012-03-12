@@ -15,7 +15,7 @@
 			<td style="width: 300px;font-size:13px">
 				{{if count > 0}}
 					<div style="word-wrap: break-word;font-weight:bold"  ><span class="datasetId">${datasetId}</span>
-						(<span class="datasetCount">${count}</span> files) 
+						(<span class="datasetCount_${$item.replaceChars(datasetId)}">${count}</span> files) 
 					</div>
 				{{else}}
         			<div style="word-wrap: break-word;font-weight:bold;color:gray" class="datasetId"><span class="datasetId">${datasetId}</span>
@@ -41,6 +41,23 @@
 			</td>
 		</tr>
 		
+	{{else}}
+		<tr style="margin-top:50px;" class="top_level_data_item"  >
+			<td style="width: 40px;"><input class="topLevel" disabled="true" type="checkbox" checked="true" /> </td>
+			<td style="width: 300px;font-size:13px">
+				
+				<div style="word-wrap: break-word;font-weight:bold;color:gray"><span class="datasetId">${datasetId}</span> 
+				</div>
+				<div style="word-wrap: break-word;font-size:10px;font-style:italic;font-weight:bold;color:gray;margin-top:5px">
+					NOTE: There are no files in this dataset that match the search criteria 
+				</div>
+			</td>
+			<td style="font-size:13px;float:right" > 
+				<a href="#" class="remove_dataset">Remove</a> 
+			</td>
+		</tr>
+
+
 	{{/if}}
 
 	{{if count > 0}}
@@ -58,7 +75,7 @@
                 </td>
 				<td style="width: 325px;padding-left:10px;font-size:11px;">
 					<div style="word-wrap: break-word;"> 
-						<span style="font-weight:bold"> ${fileId} ${size} </span>
+						<span style="font-weight:bold"> ${fileId} (${$item.sizeConversion(size)}) </span>
 						<br /> 
 						<span style="font-style:italic">Tracking Id: ${tracking_id}</span>
 						<br />
@@ -68,10 +85,35 @@
 				
 				{{each(k) services.service}}
 					{{if services.service[k]  == 'HTTPServer'}}
-						<td style="float:right;font-size:11px;"><div style="word-wrap: break-word;vertical-align:middle"><a href="${urls.url[k]}">HTTP </a></div></td>
+						<td style="float:right;font-size:11px;">
+							<div style="word-wrap: break-word;vertical-align:middle">
+								<a href="${urls.url[k]}">HTTP </a>
+							</div>
+						</td>
 					{{/if}}
 					{{if services.service[k]  == 'GridFTP'}}
-						<td style="float:right;font-size:11px;"><div style="word-wrap: break-word;vertical-align:middle"><a href="#" class="go_individual_gridftp" >GridFTP </a></div></td>
+						<td style="float:right;font-size:11px;">
+							<span style="display:none" class="gridftp">${urls.url[k]}</span>
+							<div style="word-wrap: break-word;vertical-align:middle">
+								<a href="#" class="go_individual_gridftp" >GridFTP </a>
+							</div>
+						</td>
+					{{/if}}
+					{{if services.service[k]  == 'OPENDAP'}}
+						<td style="float:right;font-size:11px;">
+							<span style="display:none" >${urls.url[k]}</span>
+							<div style="word-wrap: break-word;vertical-align:middle">
+								<a href="${urls.url[k]}">OPENDAP </a>
+							</div>
+						</td>
+					{{/if}}
+					{{if services.service[k]  == 'SRM'}}
+						<td style="float:right;font-size:11px;">
+							<span style="display:none" >${urls.url[k]}</span>
+							<div style="word-wrap: break-word;vertical-align:middle">
+								<a href="#">SRM </a>
+							</div>
+						</td>
 					{{/if}}
 				{{/each}}
 

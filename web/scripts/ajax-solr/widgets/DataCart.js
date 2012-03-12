@@ -279,6 +279,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		                    addOne: function(num) {
 		                    },
 		                    sizeConversion : function(size) {
+		                    	return sizeConversion(size);
 		                    }
 		                    
 		                })
@@ -289,7 +290,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		    			
 						
 					} else {
-						alert('No data sets have been added to your cart');
+						//alert('No data sets have been added to your cart');
 					}
 					
 					
@@ -729,6 +730,27 @@ function replaceChars(word) {
     
     return newWord;
 }
+
+function sizeConversion(size) {
+	var convSize;
+	if(size == null) {
+	    convSize = 'N/A';
+	} else {
+	    var sizeFlt = parseFloat(size,10);
+	    if(sizeFlt > 1000000000) {
+	        var num = 1000000000;
+	        convSize = (sizeFlt / num).toFixed(2) + ' GB';
+	    } else if (sizeFlt > 1000000) {
+	        var num = 1000000;
+	        convSize = (sizeFlt / num).toFixed(2) + ' MB';
+	    } else {
+	        var num = 1000;
+	        convSize = (sizeFlt / num).toFixed(2) + ' KB';
+	    }
+	}
+	return convSize;
+}
+
 
 function replacePeriodGlobal(word)
 {

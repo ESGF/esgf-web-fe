@@ -112,6 +112,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		//grab all the keys from the datacart map and place in an array
     	self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
 
+    	
 		/* live datacart events */
         
     	
@@ -178,6 +179,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		});
 		
 		
+		
 		/**
 		 * DOCUMENT ME
 		 * When the user clicks "Download All Files", this method is executed
@@ -192,117 +194,131 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		 */
 		$("input#uber_script").live('click', function() {
 
-			alert('uber script');
+			//alert('uber script');
 			
 
-			var queryString = '/esg-search/wget/?';
-			
-			queryString = addConstraintsToWGETQueryString(queryString);
 			
 			
 			//gather the file_ids
         	var file_ids   = new Array();
             
         	//iterate over the selected array of datasets in the data cart
-            for(var i=0;i<self.selected_arr.length;i++) {
+        	
+        	
+            for(var i=0;i<ESGF.localStorage.toKeyArr('dataCart').length;i++) {
             
-            	var selectedDocId = self.selected_arr[i];
-            	alert('finding files under ' + selectedDocId);
+            	var selectedDocId = ESGF.localStorage.toKeyArr('dataCart')[i];//self.selected_arr[i];
             	
-
+            	//alert('selectedDocId: ' + selectedDocId);
+            	
+            	var selectedDocCount = $('span.datasetCount_'+replaceChars(selectedDocId)).html();
+            	
             	//if the count is greater than 10, check to see if the additional rows have been not been expanded for this dataset
             	//if not (null) then need an extra ajax call to get the rest of the file ids
             	var isAdded = $('tr.addedrow_' + replaceChars(selectedDocId)).html();//$(this).parent().parent().parent().find('tr.addedrow_' + replaceChars(selectedDocId)).html();
             	
-            	if(isAdded == null) {
-            		alert('null');
-            	} else {
-            		alert('isAdded ' + isAdded);
+            	
+            	
+            	if(isAdded == null && selectedDocCount > 10) {
+            	
             		$('tr.file_rows_'+ replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
-            			LOG.debug(selectedDocId + ' index: ' + index);
+            			var file_id = $(this).parent().find('input').attr('value');
+            			file_ids.push(file_id);
             		});
+            		
+            		
+            		
+            		//get the rest
+                	var idArr = new Array();
+    				idArr.push(selectedDocId);
+    				
+                	
+                	//get the peerArr and technoteArr
+    		    	//these will actually be ';' delimited strings...
+    		    	//will probably need to create an array for these
+    		    	var peerArr='',technoteArr='';
+
+    				//the datasetInfo object will have a 'peer' and 'xlink' property
+    		    	//for(var i=0;i<self.selected_arr.length;i++) {
+    		    	for(var j=0;j<ESGF.localStorage.toKeyArr('dataCart').length;j++) {
+    		    		if(ESGF.localStorage.toKeyArr('dataCart')[j] == selectedDocId) {
+    		    			var datasetInfo = ESGF.localStorage.get('dataCart',ESGF.localStorage.toKeyArr('dataCart')[j]);
+
+    			    		//extract the peer and 'xlink' and add it to the arrs
+    			    		if(j!=0) {
+    			    			peerArr += ';'+datasetInfo.peer;
+    			    			technoteArr += ';'+datasetInfo.xlink;
+    			    		} else {
+    			    			peerArr += datasetInfo.peer;
+    			    			technoteArr += datasetInfo.xlink;
+    			    		};
+    		    		}
+    		    		
+    		    	}
+    				
+    		    	//Get all of the search constraints (fq params)
+    		    	var fqParamArr = new Array();
+    		    	fqParams = ESGF.localStorage.getAll('esgf_queryString');
+    		    	for(var key in fqParams) {
+    		    		if(key != 'type:Dataset' && (key.search('distrib') < 0))
+    		    			fqParamArr.push(fqParams[key]);
+    		    	}
+    		    	
+    		    	//assemble the queryStr obj
+    				var queryStr = {"id" : idArr, 
+    						"peer" : peerArr, 
+    						"technotes" : technoteArr, 
+    						"showAll" : ESGF.setting.showAllContents, 
+    						"fq" : fqParamArr, 
+    						"initialQuery" : "false"};
+    				
+            		
+                	$.ajax({
+    					url: '/esgf-web-fe/solrfileproxy2/datacart',
+    					global: false,
+    					type: "GET",
+    					data: queryStr,
+    				    async: false,
+    					dataType: 'json',
+    					success: function(data) {
+    						//alert('success for: ' + data.docs.doc.datasetId);
+    						for(var i=0;i<data.docs.doc.files.file.length;i++){
+    							var file = data.docs.doc.files.file[i];
+    							file_ids.push(file.fileId);
+    						}
+    						
+    						
+    						
+    					},
+    					error: function() {
+    						alert('error in getting extra files');
+    					}
+                	});
+            		
+            	
+            	
+            	} else {
+            		$('tr.file_rows_'+ replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
+            			var file_id = $(this).parent().find('input').attr('value');
+            			file_ids.push(file_id);
+            		});
+            		
+            		
             	}
             }
 			
-			
-			/*
-			LOG.debug("Uber script: " + JSON.stringify(self.searchConstraints));
-			
-			var sentConstraints = new Array();
-
-			var queryString = '/esg-search/wget/?';
-			//if the show all contents is the filter...then add the search constraints to the wget
-            if(ESGF.setting.showAllContents == 'false') {
-            	
-            	
-				// traverse through the constraints and add to the querystring
-				//for(var i in self.searchConstraints) {
-				for(var i=0;i<self.searchConstraints.length;i++) {
-
-					if(self.searchConstraints[i].search('replica') == -1 && 
-					   self.searchConstraints[i].search('type') == -1) {
-					   
-					   //FIXME
-					   //replace the : with =
-					   var constraint = self.searchConstraints[i].replace(':','=');
-					   
-					   //replace 'text' with 'query' for free text searches
-					   constraint = constraint.replace('text','query');
-					   
-					   queryString += constraint + '&';
-					   
-					}
-				}
-			
-            }
             
-            //gather the file_ids
-        	var file_ids   = new Array();
+            //alert(file_ids.length);
             
-            //iterate over the selected array of datasets in the data cart
-            for(var i=0;i<self.selected_arr.length;i++) {
-            	var selectedDocId = self.selected_arr[i];
-            	var datasetId = self.replacePeriod(self.selected_arr[i]);
-            	
-            	
-            	//grab the ids from the elements in the jquery template
-            	//FIXME: need clearer representation of these ids
-            	$(this).parent().parent().parent().parent().parent().parent().find('tr.rows_'+ datasetId).find(':checkbox:checked').each( function(index) {
-            		
-            		var file_id = this.id;
-                	
-                	//push 
-                	file_ids.push(file_id);
-                });
-            	
-            }
+            var queryString = '/esg-search/wget/?';
+        	
+            var constraintCount = 0;
             
-            
-            var form = '<form action="'+ queryString +'" method="post" >';
-            
-            //iterate over the file_ids and add to query string
-            //this can probably be collapsed into the loop above
-            for(var i=0;i<file_ids.length;i++) {
-				var id = file_ids[i];
-				id.replace("\\|","%7C");
-				form += '<input type="hidden" name="id" value="' + id + '">';
-			}
-            form += '</form>';
-            
-            
-            
-            //send request using a dynamically generated form with the query string as the action
-            //the method should be post because the query string may be long
-            //jQuery('<form action="'+ queryString +'" method="post" >'+ '' +'</form>')
-            jQuery(form).appendTo('body').submit().remove();
-			
-			*/
+            queryString = addConstraintsToWGETQueryString(queryString);
+        	
+            submitWGETScriptForm(queryString,file_ids);
 			
 		});
-		
-		
-		
-		
 		
 		
 		/*---------End header level events----------*/
@@ -438,11 +454,36 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 							//add the fileId, checksum, tracking id here
 							newRow += '<td style="width: 325px;padding-left:10px;font-size:11px;">';
 							newRow += '<div style="word-wrap: break-word;">';
-							newRow += '<span style="font-weight:bold"> ' + file.fileId + ' ' + file.size  + ' </span> <br />';
+							newRow += '<span style="font-weight:bold"> ' + file.fileId + ' ' + sizeConversion(file.size)  + ' </span> <br />';
 							newRow += '<span style="font-weight:italic"> Tracking Id: ' + file.tracking_id + '</span> <br />';
 							newRow += '<span style="font-weight:italic"> Checksum: ' + file.checksum + ' (' + file.checksum_type + ') </span>';
 							newRow += '</div>';
 							newRow += '</td>';
+							
+							for(var j=0;j<file.services.service.length;j++) {
+								if(file.services.service[j] == 'HTTPServer') {
+									newRow += '<td style="float:right;font-size:11px;">';
+									newRow += '<div style="word-wrap: break-word;vertical-align:middle">'
+									newRow += '<a href="' + file.urls.url[j] + '">HTTP </a>';
+									newRow += '</div>';
+									newRow += '</td>';
+								} else if(file.services.service[j] == 'GridFTP') {
+									newRow += '<td style="float:right;font-size:11px;">';
+									newRow += '<span style="display:none" class="gridftp">' + file.urls.url[j] + '</span>';
+									newRow += '<div style="word-wrap: break-word;vertical-align:middle">'
+									newRow += '<a href="' + '#' + '">GridFTP </a>';
+									newRow += '</div>';
+									newRow += '</td>';
+								} else if(file.services.service[j] == 'OPENDAP') {
+									newRow += '<td style="float:right;font-size:11px;">';
+									newRow += '<div style="word-wrap: break-word;vertical-align:middle">'
+									newRow += '<a href="' + file.urls.url[j] + '">OPENDAP </a>';
+									newRow += '</div>';
+									newRow += '</td>';
+								}
+							}
+							
+							
 							
 							newRow += '</tr>';
 							
@@ -472,7 +513,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 			
 			var selectedDocId = ($(this).parent().parent().find('span.datasetId').html());
 			
-			var selectedDocCount = ($(this).parent().parent().find('span.datasetCount').html());
+			var selectedDocCount = ($(this).parent().parent().find('span.datasetCount_'+replaceChars(selectedDocId)).html());
 			
         	//gather the ids and the urls for download
         	var file_ids   = new Array();
@@ -590,12 +631,159 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 			
 			//var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
 			var selectedDocId = ($(this).parent().parent().find('span.datasetId').html());
+			var selectedDocCount = ($(this).parent().parent().find('span.datasetCount_'+replaceChars(selectedDocId)).html());
 			
+			alert('globus online ' + selectedDocId + ' ' + selectedDocCount);
 			
-			alert('globus online ' + selectedDocId);
-			
-			
-		
+        	//gather the ids and the urls for download
+        	var file_ids   = new Array();
+        	var grid_urls   = new Array();
+        	
+        	//if the count is greater than 10, check to see if the additional rows have been not been expanded for this dataset
+        	//if not (null) then need an extra ajax call to get the rest of the file ids
+        	var isAdded = $(this).parent().parent().parent().find('tr.addedrow_' + replaceChars(selectedDocId)).html();
+            	
+        	if(isAdded == null && selectedDocCount > 10) {
+        		alert('additional files need to be extracted');
+        		
+        		
+        		//traverse for file id rows that are checked
+            	$(this).parent().parent().parent().find('tr.file_rows_'+ replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
+            	
+            		var file_id = $(this).parent().find('input').attr('value');
+            		
+            		var grid_url = $(this).parent().parent().find('span.gridftp').html();
+            		//if(index == 0) {
+            		//}
+            		LOG.debug('file_id: ' + file_id);
+            		
+            		file_ids.push(file_id);
+            		grid_urls.push(grid_url);
+            		//file_ids.push(file_id);
+            	});
+            	
+            	
+            	//get the rest of the file
+            	var idArr = new Array();
+				idArr.push(selectedDocId);
+				
+				//get the peerArr and technoteArr
+		    	//these will actually be ';' delimited strings...
+		    	//will probably need to create an array for these
+		    	var peerArr='',technoteArr='';
+
+		    	//the datasetInfo object will have a 'peer' and 'xlink' property
+		    	for(var i=0;i<self.selected_arr.length;i++) {
+		    		if(self.selected_arr[i] == selectedDocId) {
+		    			var datasetInfo = ESGF.localStorage.get('dataCart',self.selected_arr[i]);
+
+			    		//extract the peer and 'xlink' and add it to the arrs
+			    		if(i!=0) {
+			    			peerArr += ';'+datasetInfo.peer;
+			    			technoteArr += ';'+datasetInfo.xlink;
+			    		} else {
+			    			peerArr += datasetInfo.peer;
+			    			technoteArr += datasetInfo.xlink;
+			    		};
+		    		}
+		    	}
+		    	
+		    	//Get all of the search constraints (fq params)
+		    	var fqParamArr = new Array();
+		    	fqParams = ESGF.localStorage.getAll('esgf_queryString');
+		    	for(var key in fqParams) {
+		    		if(key != 'type:Dataset' && (key.search('distrib') < 0))
+		    			fqParamArr.push(fqParams[key]);
+		    	}
+		    	
+		    	//assemble the queryStr obj
+				var queryStr = {"id" : idArr, 
+						"peer" : peerArr, 
+						"technotes" : technoteArr, 
+						"showAll" : ESGF.setting.showAllContents, 
+						"fq" : fqParamArr, 
+						"initialQuery" : "false"};
+				
+				
+				$.ajax({
+					url: '/esgf-web-fe/solrfileproxy2/datacart',
+					global: false,
+					type: "GET",
+					data: queryStr,
+					dataType: 'json',
+					success: function(data) {
+						
+						for(var i=0;i<data.docs.doc.files.file.length;i++){
+							var file = data.docs.doc.files.file[i];
+							file_ids.push(file.fileId);
+						}
+						alert('success: ' + file_ids.length + ' ' + grid_urls.length);
+						
+						/*
+						var queryString = '/esg-search/wget/?';
+		            	
+		                queryString = addConstraintsToWGETQueryString(queryString);
+		            	
+		                submitWGETScriptForm(queryString,file_ids);
+		                */
+						
+					},
+					error: function() {
+						alert('error in getting extra files');
+					}
+            	});
+				
+        		
+            	/*
+            	//get the rest
+            	
+            	
+        		*/
+            	
+            	
+            	
+            	
+            	
+            	
+            	
+            	
+            	
+            	
+            	/*
+            	
+            	//get the globus online
+    	        var globus_url = '/esgf-web-fe/goformview1';
+    	        
+    	        //begin assembling queryString
+    	        var queryString = 'type=create&id=' + selectedDocId;
+
+    	        //assemble the input fields with the query string
+    	        for(var i=0;i<file_ids.length;i++) {
+    	        	queryString += '&child_url=' + grid_urls[i] + '&child_id=' + file_ids[i];
+    	        }
+    	        var input = '';
+    	        jQuery.each(queryString.split('&'), function(){
+    	            var pair = this.split('=');
+    	            input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
+    	        });
+    	        
+    	        
+                //add the search constraints
+    	    	input+= '<input type="hidden" name="constraints" value="' + (JSON.stringify(ESGF.localStorage.toKeyArr('esgf_fq'))).replace(/\"/gi,'\'') + '" />';
+                
+    	        //send request
+    	        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
+    	        .appendTo('body').submit().remove();
+            	*/
+        		
+        	} else {
+        		alert('no additional files need to be extracted');
+        		
+        		
+        		
+        	}
+        	
+        	
 			
 		});
 		

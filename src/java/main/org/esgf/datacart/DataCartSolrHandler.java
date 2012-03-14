@@ -100,81 +100,23 @@ public class DataCartSolrHandler {
         
         this.solrQueryString = queryPrefix;
         
-        /*
-      //put any search criteria if the user selected "filter"
-        if(this.showAllStr.equals("false")) {
-        
-            String fullText = "";
-            if(this.fq != null) {
-                for(int i=0;i<this.fq.length;i++) {
-                    String fqParam = this.fq[i];
-                    //
-                    // Should ignore the following:
-                    // - blanks - ""
-                    // - replica - "replica=..."
-                    // - offset - "offset=..."
-                    //
-                    boolean ignore = fqParam.equals("") || 
-                                     fqParam.equals(" ") ||
-                                     fqParam.contains("offset=") ||
-                                     fqParam.contains("replica=");
-                    
-                    //otherwise add to the query
-                    if(!ignore) {
-                        if(!fqParam.contains("query")) {
-                            this.solrQueryString += "&" + fqParam;
-                        } 
-                        //full text queries have to be handled differently
-                        else {
-                            String [] clause = fqParam.split("=");
-                            fullText += clause[1] + "%20";
-                        }
-                    }
-
-                }//end for
-                if(!fullText.equals("") && !fullText.equals(" ")) {
-                    this.solrQueryString += "&query=" + fullText;
-                }
-
-            }
-            
-        }
-        
-        //if this is the initialQuery, only serve the number of files declared in "initialLimit"
-        if(this.initialQuery.equals("true")) {
-            this.solrQueryString += "&limit="+initialLimit;
-        } else {
-            this.solrQueryString += "&offset=" + initialLimit + "&limit="+totalLimit;
-        }
-        */
     }
     
     public void addSearchConstraints(String [] fq,String showAllStr) {
-        
-        System.out.println("\n\n---IN ADD SEARCH----");
-        System.out.println("PRE QUERY STRING: " + this.solrQueryString);
         
         if(fq != null) {
             this.fq = new String[fq.length];
             for(int i=0;i<fq.length;i++) {
                 this.fq[i] = fq[i];
-                System.out.println(fq[i]);
+                System.out.println("\tAdding constraint: " + fq[i]);
             }
         }
         
         this.showAllStr = showAllStr;
         
-        if(this.fq == null) {
-            System.out.println("\tFQ is null");
-        } else if(this.fq.length == 0) {
-            System.out.println("\tNo FQ");
-        } else {
-            System.out.println("\tFQ Length: " + this.fq.length);
-        }
-        
         if(this.fq != null && this.showAllStr != null) {
             
-            System.out.println("Show all string: " + this.showAllStr);
+            //System.out.println("Show all string: " + this.showAllStr);
             
           //put any search criteria if the user selected "filter"
             if(this.showAllStr.equals("false")) {
@@ -182,6 +124,16 @@ public class DataCartSolrHandler {
                 String fullText = "";
                 if(this.fq != null) {
                     for(int i=0;i<this.fq.length;i++) {
+                        
+                        /*
+                        String fqParam = null;
+                        try {
+                            fqParam = URLEncoder.encode(this.fq[i],"UTF-8").toString();
+                        } catch (UnsupportedEncodingException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                        */
                         String fqParam = this.fq[i];
                         /*
                          * Should ignore the following:
@@ -194,9 +146,24 @@ public class DataCartSolrHandler {
                                          fqParam.contains("offset=") ||
                                          fqParam.contains("replica=");
 
-                        System.out.println("\tIGNORE?: " + fqParam);
+                        
+                        
+                        
                         //otherwise add to the query
                         if(!ignore) {
+                        
+                            String valueTerm = fqParam.split("=")[1];
+                            String valueTermEnc = null;
+                            try {
+                                valueTermEnc = URLEncoder.encode(valueTerm,"UTF-8").toString();
+                            } catch (UnsupportedEncodingException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+                            
+                            fqParam = fqParam.split("=")[0] + "=" + valueTermEnc;
+
+                            //System.out.println("\t\t\tFQPARAM: " + fqParam);
                             if(!fqParam.contains("query")) {
                                 this.solrQueryString += "&" + fqParam;
                             } 
@@ -218,9 +185,9 @@ public class DataCartSolrHandler {
             
         }
 
-        System.out.println("QUERY STRING: " + this.solrQueryString);
+        //System.out.println("QUERY STRING: " + this.solrQueryString);
         
-        System.out.println("---End ADD SEARCH----\n\n");
+        //System.out.println("---End ADD SEARCH----\n\n");
     }
     
     
@@ -245,7 +212,7 @@ public class DataCartSolrHandler {
     public DocElement getDocElement(String datasetId) {
         
         
-        System.out.println("\nIn get doc element for: " + datasetId);
+        //System.out.println("\nIn get doc element for: " + datasetId);
         
         DocElement docElement = new DocElement();
         
@@ -258,9 +225,9 @@ public class DataCartSolrHandler {
         //JSONArray responseFiles = queryIndex(datasetId);
         String rawResponse = queryIndex(datasetId);
 
-        System.out.println("-----RAW RESPONSE-----");
-        System.out.println(datasetId);
-        System.out.println("-----END RAW RESPONSE-----");
+        //System.out.println("-----RAW RESPONSE-----");
+        //System.out.println(datasetId);
+        //System.out.println("-----END RAW RESPONSE-----");
        
         //convert extracted string into json array
         JSONObject jsonResponse = null;
@@ -274,8 +241,8 @@ public class DataCartSolrHandler {
             numFound = jsonResponse.getString("numFound");
         } catch (JSONException e) {
             // TODO Auto-generated catch block
-            System.out.println("Problem converting Solr response to json string");
-            e.printStackTrace();
+            System.out.println("Problem converting Solr response to json string - getDocElement");
+            //e.printStackTrace();
         }
         
         //create a count element
@@ -370,15 +337,15 @@ public class DataCartSolrHandler {
         //add the dataset to the query string
         try {
             this.solrQueryString += "&dataset_id=" + URLEncoder.encode(dataset_id,"UTF-8").toString();
-            System.out.println("\n\t" + URLEncoder.encode(dataset_id,"UTF-8").toString());
+            //System.out.println("\n\t" + URLEncoder.encode(dataset_id,"UTF-8").toString());
         } catch (UnsupportedEncodingException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         
-        System.out.println("\n\n\nSOLR QUERY\n\n");
-        System.out.println(this.solrQueryString);
-        System.out.println("\n\n");
+        //System.out.println("\n\n\nSOLR QUERY\n\n");
+        //System.out.println(this.solrQueryString);
+        //System.out.println("\n\n");
         
         
         method.setQueryString(this.solrQueryString);
@@ -435,7 +402,7 @@ public class DataCartSolrHandler {
             jsonArray = jsonResponse.getJSONArray("docs");
         } catch (JSONException e) {
             // TODO Auto-generated catch block
-            System.out.println("Problem converting Solr response to json string");
+            System.out.println("Problem converting Solr response to json string - solrResponseToJSON");
             e.printStackTrace();
         }
         

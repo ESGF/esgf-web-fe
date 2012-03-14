@@ -37,7 +37,7 @@ public class FileDownloadTemplateController {
         
         FileDownloadTemplateController fc = new FileDownloadTemplateController();
         
-        fc.getDocElement(mockRequest);
+        //fc.getDocElement(mockRequest);
         
     }
     

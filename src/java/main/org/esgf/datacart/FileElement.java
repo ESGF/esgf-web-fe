@@ -511,6 +511,8 @@ public class FileElement implements DataCartElement{
                         this.hasOpenDap = topLevelElement.getTextContent();
                     } else if(topLevelElement.getTagName().equals("hasSRM")) {
                         this.hasSRM = topLevelElement.getTextContent();
+                    } else if(topLevelElement.getTagName().equals("technote")) {
+                        this.technoteStr = topLevelElement.getTextContent();
                     } else if(topLevelElement.getTagName().equals("services")) {
                         this.servicesElement = new ServicesElement();
                         this.servicesElement.readHelper(topLevelElement);

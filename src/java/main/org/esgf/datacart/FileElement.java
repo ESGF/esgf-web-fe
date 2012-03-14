@@ -57,7 +57,7 @@ public class FileElement implements DataCartElement{
     private MIMESElement mimesElement;
     /** Description */
     private URLSElement urlsElement;
-    
+    /** Description */
     private String technoteStr;
     
     private final static String testInitializationFile = "C:\\Users\\8xo\\esgf-web-fe\\fileelement.xml";
@@ -237,11 +237,11 @@ public class FileElement implements DataCartElement{
     public void fromSolr(JSONObject solrResponse) {
         Iterator iter = solrResponse.sortedKeys();
         
-        boolean technote = false;
 
         this.tracking_id = "unknown";
         this.checksum = "unknown";
         this.checksum_type = "unknown";
+        this.technoteStr = "NA";
         
         while(iter.hasNext()) {
             String key = (String)iter.next();
@@ -393,38 +393,30 @@ public class FileElement implements DataCartElement{
                 
                 try {
                     JSONArray xlinkJSON = (JSONArray)solrResponse.getJSONArray(key);
-                    System.out.println("\n****XLINK LENGTH****\n\n" + xlinkJSON.length());
+                    //System.out.println("\n****XLINK LENGTH****\n\n" + xlinkJSON.length());
+                    
+                    //just get the pdf url
+                    String [] technoteTokens = ((String)xlinkJSON.get(0)).split("\\|");
+                    
+                    String technoteStr = technoteTokens[0];
+                    
+                    this.technoteStr = technoteStr;
+                    
+                    //System.out.println("\ttechnote: " + this.technoteStr);
                 } catch(Exception e) {
                     e.printStackTrace();
                 }
-                
-                /*
-                technote = true;
-                
-                JSONArray xlinkJSON = (JSONArray)solrResponse.getJSONArray(key);
-                TechnotesElement technotesElement = new TechnotesElement();
-                for(int i=0;i<xlinkJSON.length();i++) {
-                    String xlinkStr = xlinkJSON.get(i).toString();
-                    String [] xlinkStrTokens = xlinkStr.split("\\|");
-                    String name = xlinkStrTokens[1];
-                    String location = xlinkStrTokens[0];
-                    
-                    TechnoteElement technoteElement = new TechnoteElement();
-                    technoteElement.setName(name);
-                    technoteElement.setLocation(location);
-                    
-                    technotesElement.addTechnoteElement(technoteElement);
-                }
-                
-                this.setTechnotesElement(technotesElement);
-                */
+               
             }
             
             
         }
     }
     
-    
+    /** Description 
+     * 
+     * @param xmlStr
+     */
     public void fromXML(String xmlStr) {
         try {
             DocumentBuilderFactory dbf =
@@ -483,6 +475,10 @@ public class FileElement implements DataCartElement{
         
     }
     
+    /** Description of readHelper
+     * 
+     * @param docElement
+     */
     public void readHelper(org.w3c.dom.Element docElement) {
         
         

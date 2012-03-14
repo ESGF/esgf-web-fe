@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,7 +37,7 @@ public class FileDownloadTemplateController {
         
         FileDownloadTemplateController fc = new FileDownloadTemplateController();
         
-        fc.getDocElement2(mockRequest);
+        fc.getDocElement(mockRequest);
         
     }
     
@@ -49,7 +50,7 @@ public class FileDownloadTemplateController {
      * @return
      */
     @RequestMapping(method=RequestMethod.GET, value="/datacart")
-    public @ResponseBody String getDocElement2(HttpServletRequest request) {
+    public @ResponseBody String getDocs(HttpServletRequest request) {
         
         this.printParameters(request);
         
@@ -104,7 +105,37 @@ public class FileDownloadTemplateController {
         
     }
     
+    /**
+     * 
+     * @param request
+     * @return
+     */
+    @RequestMapping(method=RequestMethod.GET, value="/datacart/{datasetId")
+    public @ResponseBody String getDoc(@PathVariable String datasetId,HttpServletRequest request) {
     
+        String peerStr = request.getParameter("peerStr");
+        String [] peers = peerStr.split(";");
+
+        System.out.println("Here1");
+        //NOTE: ID and PEERS SHOULD BE THE SAME LENGTH!!!!
+        
+        //get the fq string and convert to an array of peers
+        String fqStr = request.getParameter("fqStr");
+        String [] fq = fqStr.split(";");
+        
+        
+        String technotes = request.getParameter("technotesStr");
+        
+        //get the search constraints togggle parameter
+        String showAllStr = request.getParameter("showAllStr");
+        
+        //get the flag denoting whether or not this is an initial Query
+        String initialQuery = request.getParameter("initialQuery");
+        
+        DocElement doc = getDocElement(datasetId,peers[0],initialQuery,fq,showAllStr);
+        
+        return doc.toJSON();
+    }
     
     
     private DocElement getDocElement(String id,String peer,String initialQuery,String [] fq,String showAllStr) {

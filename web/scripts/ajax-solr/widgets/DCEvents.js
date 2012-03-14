@@ -398,32 +398,39 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 							for(var j=0;j<file.services.service.length;j++) {
 								if(file.services.service[j] == 'HTTPServer') {
 									newRow += '<td style="float:right;font-size:11px;">';
-									newRow += '<div style="word-wrap: break-word;vertical-align:middle">'
+									newRow += '<div style="word-wrap: break-word;vertical-align:middle">';
 									newRow += '<a href="' + file.urls.url[j] + '">HTTP </a>';
 									newRow += '</div>';
 									newRow += '</td>';
 								} else if(file.services.service[j] == 'GridFTP') {
 									newRow += '<td style="float:right;font-size:11px;">';
 									newRow += '<span style="display:none" class="gridftp">' + file.urls.url[j] + '</span>';
-									newRow += '<div style="word-wrap: break-word;vertical-align:middle">'
+									newRow += '<div style="word-wrap: break-word;vertical-align:middle">';
 									newRow += '<a href="' + '#' + '">GridFTP </a>';
 									newRow += '</div>';
 									newRow += '</td>';
 								} else if(file.services.service[j] == 'OPENDAP') {
 									newRow += '<td style="float:right;font-size:11px;">';
-									newRow += '<div style="word-wrap: break-word;vertical-align:middle">'
+									newRow += '<div style="word-wrap: break-word;vertical-align:middle">';
 									newRow += '<a href="' + file.urls.url[j] + '">OPENDAP </a>';
 									newRow += '</div>';
 									newRow += '</td>';
 								} else if(file.services.service[j] == 'SRM') {
 									newRow += '<td style="float:right;font-size:11px;">';
-									newRow += '<div style="word-wrap: break-word;vertical-align:middle">'
+									newRow += '<div style="word-wrap: break-word;vertical-align:middle">';
 										newRow += '<a href="' + file.urls.url[j] + '">SRM </a>';
 									newRow += '</div>';
 									newRow += '</td>';
 								}
 							}
 							
+							if(file.technote != 'NA') {
+								newRow += '<td style="float:right;font-size:11px;">';
+								newRow += '<div style="word-wrap: break-word;vertical-align:middle">';
+								newRow += '<a href="${technote}" target="_blank">TECHNOTE </a>';
+								newRow += '</div>';
+								newRow += '</td>';
+							}
 							
 							
 							newRow += '</tr>';

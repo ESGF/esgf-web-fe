@@ -115,6 +115,14 @@
 						</td>
 					{{/if}}
 				{{/each}}
+				{{if technote  != 'NA'}}
+					<td style="float:right;font-size:11px;">
+						<div style="word-wrap: break-word;vertical-align:middle">
+							<a href="${technote}" target="_blank">TECHNOTE </a>
+						</div>
+					</td>
+				{{/if}}
+				
 			</tr>
 
 		{{/each}}

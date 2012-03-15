@@ -61,7 +61,7 @@
  *
  * For any redirect trouble, please refers to ROOT/urlrewrite.xml
  *
- * @author Feiyi Wang (fwang2@ornl.gov)
+ * @author Neill Miller (neillm@mcs.anl.gov), Feiyi Wang (fwang2@ornl.gov)
  *
  */
 package org.esgf.globusonline;
@@ -73,6 +73,14 @@ import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+
+import org.openid4java.discovery.yadis.YadisException;
+
+import esg.common.util.ESGFProperties;
+
+import esg.node.security.UserInfo;
+import esg.node.security.UserInfoCredentialedDAO;
+import esg.node.security.UserInfoDAO;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -94,6 +102,7 @@ public class GOFormView1Controller {
     private final static String GOFORMVIEW_ERROR = "GoFormView_Error";
     private final static String GOFORMVIEW_ERROR_MSG = "GoFormView_ErrorMsg";
     private final static String GOFORMVIEW_MYPROXY_SERVER = "GoFormView_Myproxy_Server";
+    private final static String GOFORMVIEW_SRC_MYPROXY_USER = "GoFormView_SrcMyproxyUser";
 
     public GOFormView1Controller() {
     }
@@ -128,16 +137,43 @@ public class GOFormView1Controller {
             myproxyServerStr = Utils.resolveMyProxyViaOpenID(openId);
             LOG.debug("Using MyProxy Server: " + myproxyServerStr);
 
+            ESGFProperties esgfProperties = new ESGFProperties();
+            UserInfoDAO uid = new UserInfoDAO(esgfProperties);
+            UserInfo userInfo = uid.getUserByOpenid(openId);
+            String myproxyUserName = userInfo.getUserName();
+
+            LOG.debug("Got MyProxy Username: " + myproxyUserName);
+            //System.out.println("Got MyProxy Username: " + myproxyUserName);
+
 	    if (request.getParameter(GOFORMVIEW_MODEL)!=null) {
 		//it should never come here...
 	    }
 	    else {
 		//place the dataset name, file names and urls into the model
 		model.put(GOFORMVIEW_MYPROXY_SERVER, myproxyServerStr);
+		model.put(GOFORMVIEW_SRC_MYPROXY_USER, myproxyUserName);
 		model.put(GOFORMVIEW_FILE_URLS, file_urls);
 		model.put(GOFORMVIEW_FILE_NAMES, file_names);
 		model.put(GOFORMVIEW_DATASET_NAME, dataset_name);
 	    }
+        }
+        catch(YadisException ye)
+        {
+            String eMsg = ye.toString();
+            if (eMsg.indexOf("0x702") != -1)
+            {
+                model.put(GOFORMVIEW_ERROR, "error");
+                model.put(GOFORMVIEW_ERROR_MSG, "Please <a href=\"login\">Login</a>" +
+                          " before trying to download data!");
+            }
+            else
+            {
+                String errorMsg = "Failed to resolve OpenID: " + ye;
+                LOG.error("Failed to resolve OpenID: " + ye);
+                model.put(GOFORMVIEW_ERROR, "error");
+                model.put(GOFORMVIEW_ERROR_MSG, errorMsg + "<br><br>Please make sure that you're" +
+                          " logged in as a valid user before trying to download data!<br><br>");
+            }
         }
         catch(Exception e)
         {

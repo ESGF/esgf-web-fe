@@ -200,6 +200,9 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 			//gather the file_ids
         	var file_ids   = new Array();
             
+        	//gather the dataset_ids
+        	var dataset_ids = new Array();
+        	
         	//iterate over the selected array of datasets in the data cart
         	
         	
@@ -213,7 +216,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
             	//if not (null) then need an extra ajax call to get the rest of the file ids
             	var isAdded = $('tr.addedrow_' + replaceChars(selectedDocId)).html();//$(this).parent().parent().parent().find('tr.addedrow_' + replaceChars(selectedDocId)).html();
             	
-            	
+            	dataset_ids.push(selectedDocId);
             	
             	if(isAdded == null && selectedDocCount > 10) {
             	
@@ -283,7 +286,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
             
             queryString = addConstraintsToWGETQueryString(queryString);
         	
-            submitWGETScriptForm(queryString,file_ids);
+            submitWGETScriptForm(queryString,file_ids,dataset_ids);
 			
 		});
 		
@@ -379,7 +382,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 							
 							//add the checkbox here
 							newRow += '<td style="width: 40px;">';
-							newRow += '<input style="margin-left: 10px;" '
+							newRow += '<input style="margin-left: 10px;display:none" '
 							newRow += 'class="fileLevel fileId" ';
 							newRow += 'type="checkbox" ';
 							newRow += 'checked="true" ';
@@ -466,6 +469,13 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
         	//gather the ids and the urls for download
         	var file_ids   = new Array();
         	
+
+        	//gather the dataset_ids
+        	var dataset_ids = new Array();
+
+        	dataset_ids.push(selectedDocId);
+        	
+        	
         	//if the count is greater than 10, check to see if the additional rows have been not been expanded for this dataset
         	//if not (null) then need an extra ajax call to get the rest of the file ids
         	var isAdded = $(this).parent().parent().parent().find('tr.addedrow_' + replaceChars(selectedDocId)).html();
@@ -514,7 +524,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		            	
 		                queryString = addConstraintsToWGETQueryString(queryString);
 		            	
-		                submitWGETScriptForm(queryString,file_ids);
+		                submitWGETScriptForm(queryString,file_ids,dataset_ids);
 		                
 						
 					},
@@ -823,21 +833,31 @@ function addConstraintsToWGETQueryString(queryString) {
     return queryString;
 }
 
-function submitWGETScriptForm(queryString,file_ids) {
+function submitWGETScriptForm(queryString,file_ids,dataset_ids) {
 	var form = '<form action="'+ queryString +'" method="post" >';
     
+	alert('dataset ids: ' + dataset_ids);
+	
     //iterate over the file_ids and add to query string
     //this can probably be collapsed into the loop above
+	/*
     for(var i=0;i<file_ids.length;i++) {
 		var id = file_ids[i];
 		id.replace("\\|","%7C");
 		form += '<input type="hidden" name="id" value="' + id + '">';
 	}
     form += '</form>';
-    
+    */
+	
+	for(var i=0;i<dataset_ids.length;i++) {
+		var id = dataset_ids[i];
+		id.replace("\\|","%7C");
+		form += '<input type="hidden" name="dataset_id" value="' + id + '">';
+	}
+    form += '</form>';
+	
     //send request using a dynamically generated form with the query string as the action
     //the method should be post because the query string may be long
     //jQuery('<form action="'+ queryString +'" method="post" >'+ '' +'</form>')
     jQuery(form).appendTo('body').submit().remove();
 }
-

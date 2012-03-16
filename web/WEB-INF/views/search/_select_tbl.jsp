@@ -65,7 +65,7 @@
 		{{each(j) files.file}}
 			<tr class="file_rows_${$item.replaceChars(datasetId)}" style="display:none">
 				<td style="width: 40px;">
-					<input style="margin-left: 10px;" 
+					<input style="margin-left: 10px;display:none" 
 						   class="fileLevel" 
 						   type="checkbox" 
                            class="fileId" 

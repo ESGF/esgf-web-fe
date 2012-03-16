@@ -118,7 +118,7 @@ ESGF.setting.dataCartVersion = 'v1';
 
 
 //need a variable representing the current state of the datacart
-ESGF.setting.showAllContents = 'true';
+ESGF.setting.showAllContents = 'false';
 
 //need a variable representing the manner in which to get the sharding information
 ESGF.setting.getShards = 'solrconfig';

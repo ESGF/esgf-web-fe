@@ -444,21 +444,6 @@ public class DataCartSolrHandler {
         }
         
         
-        /*
-        //System.out.println("ShowAllStr: " + showAllStr);
-        //System.out.println("PeerStr: " + handler.getPeerStr());
-        //System.out.println("Initial Query: " + handler.getInitialQuery());
-        
-        System.out.println("QueryString: " + handler.getSolrQueryString());
-        
-        DocElement2 doc = handler.getDocElement2(id[1]);
-        
-
-        System.out.println("\tDatasetId: " + doc.getDatasetId());
-        System.out.println("\tDatasetCount: " + doc.getCount());
-         
-        System.out.println(new XmlFormatter().format(doc.toXML()));
-        */
     }
     
 }

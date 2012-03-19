@@ -61,7 +61,7 @@
  *
  * For any redirect trouble, please refers to ROOT/urlrewrite.xml
  *
- * @author Feiyi Wang (fwang2@ornl.gov)
+ * @author Neill Miller (neillm@mcs.anl.gov), Feiyi Wang (fwang2@ornl.gov)
  *
  */
 package org.esgf.globusonline;
@@ -122,9 +122,9 @@ public class GOFormView2Controller {
         String [] file_urls = request.getParameterValues("child_url");
         String goUserName = request.getParameter("goUserName"); 
         String myProxyServerStr = request.getParameter(GOFORMVIEW_MYPROXY_SERVER);
-	String myProxyUserName = request.getParameter("myProxyUserName");
+	String myProxyUserName = request.getParameter(GOFORMVIEW_SRC_MYPROXY_USER);
         String myProxyUserPass = request.getParameter("myProxyUserPass");
-        String goEmail = request.getParameter("goEmail");
+        //String goEmail = request.getParameter("goEmail");
 
         LOG.debug("GOFormView2Controller: dataset_name = " + dataset_name);
         LOG.debug("GOFormView2Controller: file_names = " + file_names);
@@ -145,11 +145,14 @@ public class GOFormView2Controller {
         try
         {
             LOG.debug("Initializing Globus Online Transfer object");
+
             JGOTransfer transfer = new JGOTransfer(
                 goUserName, myProxyServerStr, myProxyUserName,
                 myProxyUserPass, CA_CERTIFICATE_FILE);
-            //transfer.setVerbose(true);
+
+            transfer.setVerbose(true);
             transfer.initialize();
+
             LOG.debug("Globus Online Transfer object Initialize complete");
 
             errorStatus.append("Globus Online Transfer object Initialize complete<br>");
@@ -194,6 +197,7 @@ public class GOFormView2Controller {
             model.put(GOFORMVIEW_ERROR, "error");
             model.put(GOFORMVIEW_ERROR_MSG, error);
             LOG.error("Failed to initialize Globus Online: " + e);
+            e.printStackTrace();
         }
         return new ModelAndView("goformview2", model);
     }

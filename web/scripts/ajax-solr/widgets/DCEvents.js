@@ -836,7 +836,6 @@ function addConstraintsToWGETQueryString(queryString) {
 function submitWGETScriptForm(queryString,file_ids,dataset_ids) {
 	var form = '<form action="'+ queryString +'" method="post" >';
     
-	alert('dataset ids: ' + dataset_ids);
 	
     //iterate over the file_ids and add to query string
     //this can probably be collapsed into the loop above

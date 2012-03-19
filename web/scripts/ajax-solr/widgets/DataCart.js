@@ -157,7 +157,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	//add the options to the page
     	$('#carts').append(optionsStr);
     	
-    	alert('ESGF.setting.showAllContents ' + ESGF.setting.showAllContents);
     	//toggle the "checked" attribute of the showAllContents radio button
     	if(ESGF.setting.showAllContents == 'true') {
     		$("input[id='datacart_filtered']").attr("checked","false");

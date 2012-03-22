@@ -1,8 +1,8 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
-<div class="span-24 last" style="background: #ffffff;">
+<div class="span-24 last" >
 	<div class="span-2"></div>
-	<div id="disclaimer" class="span-20" style="text-align:center"> 
+	<div id="disclaimer" class="span-20" style="text-align:center;margin-left:50px"> 
 	</div>
 	<div class="span-2 last" ></div>
 </div>
@@ -41,10 +41,27 @@
 	
 <script type="text/javascript">
 $(function(){
-	if($.browser.msie) {
+	
+	$('div#disclaimer').empty();
+	
+	if($.browser.mozilla) {
+		var versionPad = 'v' + $.browser.version;
+		if(versionPad.search('v3') != -1) {
+			alert("ESGF currently does not support Mozilla Firefox 3.x.  Please try the Mozilla Firefox (versions 9 and above), Apple Safari, or Google Chrome browser.");
+			
+			var disclaimer = '<p style="color:red;font-weight:bold;border:1px dashed #e8ddcf;margin-top:10px">' +
+			 'IMPORTANT: The ESGF P2P system interface may be viewed using the Mozilla Firefox (versions 9 and above), Google Chrome, or Apple Safari browsers. ' +
+			 '</p>';
+			$('div#disclaimer').append(disclaimer);
+		}
+		/*
+		
+		*/
+	}
+	else if($.browser.msie) {
 		alert("ESGF currently does not support Microsoft Internet Explorer.  Please try the Mozilla Firefox, Apple Safari, or Google Chrome browser.");
 		var disclaimer = '<p style="color:red;font-weight:bold;border:1px dashed #e8ddcf;margin-top:10px">' +
-						 'IMPORTANT: The ESGF P2P system interface may be viewed using the Mozilla Firefox, Google Chrome, or Apple Safari browsers. ' +
+						 'IMPORTANT: The ESGF P2P system interface may be viewed using the Mozilla Firefox (versions 9 and above), Google Chrome, or Apple Safari browsers. ' +
 						 'Support for the Microsoft Internet Explorer browser will be included in subsequent releases.' +
 						 '</p>';
 		$('div#disclaimer').append(disclaimer);

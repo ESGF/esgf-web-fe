@@ -1,161 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <docs>
   <doc>
-    <datasetId>obs4MIPs.NASA-JPL.AIRS.mon.v1|localhost</datasetId>
-    <count>6</count>
+    <datasetId>anl.cssef.homme.v1|esg.anl.gov</datasetId>
+    <count>12</count>
     <hasHttp>true</hasHttp>
-    <hasOpenDap>true</hasOpenDap>
-    <hasGridFTP>false</hasGridFTP>
-    <hasSRM>false</hasSRM>
+    <hasOpenDap>false</hasOpenDap>
+    <hasGridFTP>true</hasGridFTP>
+    <hasSRM>true</hasSRM>
     <files>
       <file>
-        <fileId>obs4MIPs.NASA-JPL.AIRS.mon.v1.husNobs_AIRS_L3_RetStd-v5_200209-201105.nc|localhost</fileId>
-        <size>462697336</size>
-        <title>husNobs_AIRS_L3_RetStd-v5_200209-201105.nc</title>
-        <tracking_id>7c2ee54c-e8e7-440e-8d36-49a302d413dd</tracking_id>
-        <checksum>72cc3d58f2c7cff0ddc5b2f5277258cb</checksum>
-        <checksum_type>MD5</checksum_type>
-        <hasGrid>false</hasGrid>
+        <fileId>anl.cssef.homme.v1.fcn-ne120b.cam2.h0.0006-07-latlon.nc|esg.anl.gov</fileId>
+        <size>8338398316</size>
+        <title>fcn-ne120b.cam2.h0.0006-07-latlon.nc</title>
+        <tracking_id>unknown</tracking_id>
+        <checksum>unknown</checksum>
+        <checksum_type>unknown</checksum_type>
+        <hasGrid>true</hasGrid>
         <hasHttp>true</hasHttp>
-        <hasOpenDap>true</hasOpenDap>
+        <hasOpenDap>false</hasOpenDap>
         <hasSRM>false</hasSRM>
         <technote>NA</technote>
         <services>
           <service>HTTPServer</service>
-          <service>OPENDAP</service>
+          <service>GridFTP</service>
         </services>
         <urls>
-          <url>http://localhost:8081/thredds/fileServer/esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc</url>
-          <url>http://localhost:8081/thredds/dodsC/esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc.html</url>
+          <url>http://esg.anl.gov/thredds/fileServer/CSSEF/fcn-ne120b.cam2.h0.0006-07-latlon.nc</url>
+          <url>gsiftp://esg.anl.gov:2811//CSSEF/fcn-ne120b.cam2.h0.0006-07-latlon.nc</url>
         </urls>
         <mimes>
           <mime>application/netcdf</mime>
-          <mime>application/opendap-html</mime>
+          <mime>application/gridftp</mime>
         </mimes>
       </file>
       <file>
-        <fileId>obs4MIPs.NASA-JPL.AIRS.mon.v1.husStderr_AIRS_L3_RetStd-v5_200209-201105.nc|localhost</fileId>
-        <size>462697316</size>
-        <title>husStderr_AIRS_L3_RetStd-v5_200209-201105.nc</title>
-        <tracking_id>1ac23cbb-c856-4661-ad29-2c5ef8e1f871</tracking_id>
-        <checksum>7aa000edd1faa7f0b7a27fabc693980a</checksum>
-        <checksum_type>MD5</checksum_type>
-        <hasGrid>false</hasGrid>
+        <fileId>anl.cssef.homme.v1.fcn-ne120b.cam2.h0.0006-08-latlon.nc|esg.anl.gov</fileId>
+        <size>8338398316</size>
+        <title>fcn-ne120b.cam2.h0.0006-08-latlon.nc</title>
+        <tracking_id>unknown</tracking_id>
+        <checksum>unknown</checksum>
+        <checksum_type>unknown</checksum_type>
+        <hasGrid>true</hasGrid>
         <hasHttp>true</hasHttp>
-        <hasOpenDap>true</hasOpenDap>
+        <hasOpenDap>false</hasOpenDap>
         <hasSRM>false</hasSRM>
         <technote>NA</technote>
         <services>
           <service>HTTPServer</service>
-          <service>OPENDAP</service>
+          <service>GridFTP</service>
         </services>
         <urls>
-          <url>http://localhost:8081/thredds/fileServer/esg_dataroot/obs4MIPs/observations/atmos/husStderr/mon/grid/NASA-JPL/AIRS/v20110608/husStderr_AIRS_L3_RetStd-v5_200209-201105.nc</url>
-          <url>http://localhost:8081/thredds/dodsC/esg_dataroot/obs4MIPs/observations/atmos/husStderr/mon/grid/NASA-JPL/AIRS/v20110608/husStderr_AIRS_L3_RetStd-v5_200209-201105.nc.html</url>
+          <url>http://esg.anl.gov/thredds/fileServer/CSSEF/fcn-ne120b.cam2.h0.0006-08-latlon.nc</url>
+          <url>gsiftp://esg.anl.gov:2811//CSSEF/fcn-ne120b.cam2.h0.0006-08-latlon.nc</url>
         </urls>
         <mimes>
           <mime>application/netcdf</mime>
-          <mime>application/opendap-html</mime>
-        </mimes>
-      </file>
-      <file>
-        <fileId>obs4MIPs.NASA-JPL.AIRS.mon.v1.taNobs_AIRS_L3_RetStd-v5_200209-201105.nc|localhost</fileId>
-        <size>462697324</size>
-        <title>taNobs_AIRS_L3_RetStd-v5_200209-201105.nc</title>
-        <tracking_id>ac6a3a07-2706-4fb8-b500-27347c0c53f8</tracking_id>
-        <checksum>34734569b60743c253a5f6d771e33e9d</checksum>
-        <checksum_type>MD5</checksum_type>
-        <hasGrid>false</hasGrid>
-        <hasHttp>true</hasHttp>
-        <hasOpenDap>true</hasOpenDap>
-        <hasSRM>false</hasSRM>
-        <technote>NA</technote>
-        <services>
-          <service>HTTPServer</service>
-          <service>OPENDAP</service>
-        </services>
-        <urls>
-          <url>http://localhost:8081/thredds/fileServer/esg_dataroot/obs4MIPs/observations/atmos/taNobs/mon/grid/NASA-JPL/AIRS/v20110608/taNobs_AIRS_L3_RetStd-v5_200209-201105.nc</url>
-          <url>http://localhost:8081/thredds/dodsC/esg_dataroot/obs4MIPs/observations/atmos/taNobs/mon/grid/NASA-JPL/AIRS/v20110608/taNobs_AIRS_L3_RetStd-v5_200209-201105.nc.html</url>
-        </urls>
-        <mimes>
-          <mime>application/netcdf</mime>
-          <mime>application/opendap-html</mime>
-        </mimes>
-      </file>
-      <file>
-        <fileId>obs4MIPs.NASA-JPL.AIRS.mon.v1.taStderr_AIRS_L3_RetStd-v5_200209-201105.nc|localhost</fileId>
-        <size>462697300</size>
-        <title>taStderr_AIRS_L3_RetStd-v5_200209-201105.nc</title>
-        <tracking_id>e018e1c9-c061-454d-9133-035210e4141a</tracking_id>
-        <checksum>f15ae33c1bf707c8f9a0141b2f2acefa</checksum>
-        <checksum_type>MD5</checksum_type>
-        <hasGrid>false</hasGrid>
-        <hasHttp>true</hasHttp>
-        <hasOpenDap>true</hasOpenDap>
-        <hasSRM>false</hasSRM>
-        <technote>NA</technote>
-        <services>
-          <service>HTTPServer</service>
-          <service>OPENDAP</service>
-        </services>
-        <urls>
-          <url>http://localhost:8081/thredds/fileServer/esg_dataroot/obs4MIPs/observations/atmos/taStderr/mon/grid/NASA-JPL/AIRS/v20110608/taStderr_AIRS_L3_RetStd-v5_200209-201105.nc</url>
-          <url>http://localhost:8081/thredds/dodsC/esg_dataroot/obs4MIPs/observations/atmos/taStderr/mon/grid/NASA-JPL/AIRS/v20110608/taStderr_AIRS_L3_RetStd-v5_200209-201105.nc.html</url>
-        </urls>
-        <mimes>
-          <mime>application/netcdf</mime>
-          <mime>application/opendap-html</mime>
-        </mimes>
-      </file>
-      <file>
-        <fileId>obs4MIPs.NASA-JPL.AIRS.mon.v1.hus_AIRS_L3_RetStd-v5_200209-201105.nc|localhost</fileId>
-        <size>462697260</size>
-        <title>hus_AIRS_L3_RetStd-v5_200209-201105.nc</title>
-        <tracking_id>5312a434-d2bf-4390-b702-8150d2423551</tracking_id>
-        <checksum>01989f5b1581a173681882f607fda6d0</checksum>
-        <checksum_type>MD5</checksum_type>
-        <hasGrid>false</hasGrid>
-        <hasHttp>true</hasHttp>
-        <hasOpenDap>true</hasOpenDap>
-        <hasSRM>false</hasSRM>
-        <technote>http://esg-datanode.jpl.nasa.gov/thredds/fileServer/esg_dataroot/obs4MIPs/technotes/husTechNote_AIRS_L3_RetStd-v5_200209-201105.pdf</technote>
-        <services>
-          <service>HTTPServer</service>
-          <service>OPENDAP</service>
-        </services>
-        <urls>
-          <url>http://localhost:8081/thredds/fileServer/esg_dataroot/obs4MIPs/observations/atmos/hus/mon/grid/NASA-JPL/AIRS/v20110608/hus_AIRS_L3_RetStd-v5_200209-201105.nc</url>
-          <url>http://localhost:8081/thredds/dodsC/esg_dataroot/obs4MIPs/observations/atmos/hus/mon/grid/NASA-JPL/AIRS/v20110608/hus_AIRS_L3_RetStd-v5_200209-201105.nc.html</url>
-        </urls>
-        <mimes>
-          <mime>application/netcdf</mime>
-          <mime>application/opendap-html</mime>
-        </mimes>
-      </file>
-      <file>
-        <fileId>obs4MIPs.NASA-JPL.AIRS.mon.v1.ta_AIRS_L3_RetStd-v5_200209-201105.nc|localhost</fileId>
-        <size>462697248</size>
-        <title>ta_AIRS_L3_RetStd-v5_200209-201105.nc</title>
-        <tracking_id>744e3cad-f23c-4054-98e3-a9f9b9a37610</tracking_id>
-        <checksum>81575155235143fcf1a5c28b54769dc5</checksum>
-        <checksum_type>MD5</checksum_type>
-        <hasGrid>false</hasGrid>
-        <hasHttp>true</hasHttp>
-        <hasOpenDap>true</hasOpenDap>
-        <hasSRM>false</hasSRM>
-        <technote>http://esg-datanode.jpl.nasa.gov/thredds/fileServer/esg_dataroot/obs4MIPs/technotes/taTechNote_AIRS_L3_RetStd-v5_200209-201105.pdf</technote>
-        <services>
-          <service>HTTPServer</service>
-          <service>OPENDAP</service>
-        </services>
-        <urls>
-          <url>http://localhost:8081/thredds/fileServer/esg_dataroot/obs4MIPs/observations/atmos/ta/mon/grid/NASA-JPL/AIRS/v20110608/ta_AIRS_L3_RetStd-v5_200209-201105.nc</url>
-          <url>http://localhost:8081/thredds/dodsC/esg_dataroot/obs4MIPs/observations/atmos/ta/mon/grid/NASA-JPL/AIRS/v20110608/ta_AIRS_L3_RetStd-v5_200209-201105.nc.html</url>
-        </urls>
-        <mimes>
-          <mime>application/netcdf</mime>
-          <mime>application/opendap-html</mime>
+          <mime>application/gridftp</mime>
         </mimes>
       </file>
     </files>

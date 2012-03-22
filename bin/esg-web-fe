@@ -188,12 +188,19 @@ setup_web_fe() {
     fi
     
     #always change the footer to match the current version
-    [ -e "${target_properties_file}" ] && sed -i 's#^[ ]*\(esgf.footer.version=\).*$#\1'${esgf_web_fe_version}'#' ${target_properties_file} && echo -n "." || echo -n "x"
+    [ -e "${target_properties_file}" ] && sed -i 's#^[ ]*\(esgf.footer.version=\).*$#\1'${script_version:1}'  [fe-'${esgf_web_fe_version}']#' ${target_properties_file} && echo -n "." || echo -n "x"
 
     write_web_fe_install_log
     post_web_fe_install
     checked_done 0
 
+}
+
+web_fe_startup_hook() {
+    echo -n "Web-FE Startup Hook... "
+    local target_properties_file=${esg_config_dir}/messages.properties
+    #always change the footer to match the current version
+    [ -e "${target_properties_file}" ] && sed -i 's#^[ ]*\(esgf.footer.version=\).*$#\1'${script_version:1}'  [fe-'${esgf_web_fe_version}']#' ${target_properties_file} && echo ":-)" || echo ":-("
 }
 
 post_web_fe_install() {

@@ -200,6 +200,9 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 			//gather the file_ids
         	var file_ids   = new Array();
             
+        	//gather the dataset_ids
+        	var dataset_ids = new Array();
+        	
         	//iterate over the selected array of datasets in the data cart
         	
         	
@@ -213,7 +216,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
             	//if not (null) then need an extra ajax call to get the rest of the file ids
             	var isAdded = $('tr.addedrow_' + replaceChars(selectedDocId)).html();//$(this).parent().parent().parent().find('tr.addedrow_' + replaceChars(selectedDocId)).html();
             	
-            	
+            	dataset_ids.push(selectedDocId);
             	
             	if(isAdded == null && selectedDocCount > 10) {
             	
@@ -239,12 +242,12 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
                 	
                 	
             		//assemble the query string
-                	var queryStr = {"id" : idStr, 
-                					"peer" : peerStr, 
-                					"technotes" : technoteStr, 
-                					"showAll" : ESGF.setting.showAllContents, 
-                					"fq" : fqParamStr, 
-                					"initialQuery" : "false"};
+                	var queryStr = {"idStr" : idStr, 
+        					"peerStr" : peerStr, 
+        					"technotesStr" : technoteStr, 
+        					"showAllStr" : ESGF.setting.showAllContents, 
+        					"fqStr" : fqParamStr, 
+        					"initialQuery" : "true"};
 
                 	
                 	$.ajax({
@@ -283,7 +286,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
             
             queryString = addConstraintsToWGETQueryString(queryString);
         	
-            submitWGETScriptForm(queryString,file_ids);
+            submitWGETScriptForm(queryString,file_ids,dataset_ids);
 			
 		});
 		
@@ -379,7 +382,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 							
 							//add the checkbox here
 							newRow += '<td style="width: 40px;">';
-							newRow += '<input style="margin-left: 10px;" '
+							newRow += '<input style="margin-left: 10px;display:none" '
 							newRow += 'class="fileLevel fileId" ';
 							newRow += 'type="checkbox" ';
 							newRow += 'checked="true" ';
@@ -466,6 +469,13 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
         	//gather the ids and the urls for download
         	var file_ids   = new Array();
         	
+
+        	//gather the dataset_ids
+        	var dataset_ids = new Array();
+
+        	dataset_ids.push(selectedDocId);
+        	
+        	
         	//if the count is greater than 10, check to see if the additional rows have been not been expanded for this dataset
         	//if not (null) then need an extra ajax call to get the rest of the file ids
         	var isAdded = $(this).parent().parent().parent().find('tr.addedrow_' + replaceChars(selectedDocId)).html();
@@ -490,12 +500,12 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 				
             	
 		    	//assemble the queryStr obj
-				var queryStr = {"id" : idStr, 
-						"peer" : peerStr, 
-						"technotes" : technoteStr, 
-						"showAll" : ESGF.setting.showAllContents, 
-						"fq" : fqParamStr, 
-						"initialQuery" : "false"};
+            	var queryStr = {"idStr" : idStr, 
+    					"peerStr" : peerStr, 
+    					"technotesStr" : technoteStr, 
+    					"showAllStr" : ESGF.setting.showAllContents, 
+    					"fqStr" : fqParamStr, 
+    					"initialQuery" : "false"};
 				
         		
             	$.ajax({
@@ -514,7 +524,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		            	
 		                queryString = addConstraintsToWGETQueryString(queryString);
 		            	
-		                submitWGETScriptForm(queryString,file_ids);
+		                submitWGETScriptForm(queryString,file_ids,dataset_ids);
 		                
 						
 					},
@@ -555,53 +565,43 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 			var selectedDocId = ($(this).parent().parent().find('span.datasetId').html());
 			var selectedDocCount = ($(this).parent().parent().find('span.datasetCount_'+replaceChars(selectedDocId)).html());
 			
-			alert('globus online ' + selectedDocId + ' ' + selectedDocCount);
-			
         	//gather the ids and the urls for download
         	var file_ids   = new Array();
         	var grid_urls   = new Array();
-        	
+			
         	//if the count is greater than 10, check to see if the additional rows have been not been expanded for this dataset
         	//if not (null) then need an extra ajax call to get the rest of the file ids
         	var isAdded = $(this).parent().parent().parent().find('tr.addedrow_' + replaceChars(selectedDocId)).html();
             	
         	if(isAdded == null && selectedDocCount > 10) {
-        		alert('additional files need to be extracted');
         		
-        		
-        		//traverse for file id rows that are checked
+        		//traverse for file id rows that are checked and that appear
             	$(this).parent().parent().parent().find('tr.file_rows_'+ replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
             	
             		var file_id = $(this).parent().find('input').attr('value');
             		
             		var grid_url = $(this).parent().parent().find('span.gridftp').html();
-            		//if(index == 0) {
-            		//}
-            		LOG.debug('file_id: ' + file_id);
             		
+
             		file_ids.push(file_id);
             		grid_urls.push(grid_url);
-            		//file_ids.push(file_id);
+            		
             	});
             	
-            	
+
             	var idStr = getIdStr();
-            	
 				var peerStr = getPeerStr();
 				var technoteStr = getTechnoteStr();
-				
-				
-				
 		    	var fqParamStr = getFqParamStr();
-		    	
-		    	
-		    	//assemble the queryStr obj
-				var queryStr = {"id" : idStr, 
-						"peer" : peerStr, 
-						"technotes" : technoteStr, 
-						"showAll" : ESGF.setting.showAllContents, 
-						"fq" : fqParamStr, 
-						"initialQuery" : "false"};
+            	
+            	//assemble the queryStr obj
+
+		    	var queryStr = {"idStr" : idStr, 
+		    					"peerStr" : peerStr, 
+		    					"technotesStr" : technoteStr, 
+		    					"showAllStr" : ESGF.setting.showAllContents, 
+		    					"fqStr" : fqParamStr, 
+		    					"initialQuery" : "false"};
 				
 				
 				$.ajax({
@@ -612,37 +612,88 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 					dataType: 'json',
 					success: function(data) {
 						
+						
 						for(var i=0;i<data.docs.doc.files.file.length;i++){
 							var file = data.docs.doc.files.file[i];
 							file_ids.push(file.fileId);
+							
+							for(var j=0;j<file.services.service.length;j++) {
+								if(file.services.service[j] == 'GridFTP') {
+									grid_urls.push(file.urls.url[j]);
+								}
+							}
+							
 						}
-						alert('success: ' + file_ids.length + ' ' + grid_urls.length);
 						
-						/*
-						var queryString = '/esg-search/wget/?';
-		            	
-		                queryString = addConstraintsToWGETQueryString(queryString);
-		            	
-		                submitWGETScriptForm(queryString,file_ids);
-		                */
+						var globus_url = '/esgf-web-fe/goformview1';
+				        
+				        //begin assembling queryString
+				        var queryString = 'type=create&id=' + selectedDocId;
+
+
+				        //assemble the input fields with the query string
+				        for(var i=0;i<file_ids.length;i++) {
+				        	queryString += '&child_url=' + grid_urls[i] + '&child_id=' + file_ids[i];
+				        }
+				        var input = '';
+				        jQuery.each(queryString.split('&'), function(){
+				          var pair = this.split('=');
+				          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
+				        });
+				        
+				        //send request
+				        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
+				        .appendTo('body').submit().remove();
+						
+		                
 						
 					},
 					error: function() {
 						alert('error in getting extra files');
 					}
             	});
-				
-        		
-            	/*
-            	//get the rest
-            	
-            	
-        		*/
         		
         	} else {
-        		alert('no additional files need to be extracted');
+        		
+        		
+        		//traverse for file id rows that are checked and that appear
+            	$(this).parent().parent().parent().find('tr.file_rows_'+ replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
+            	
+            		var file_id = $(this).parent().find('input').attr('value');
+            		
+            		var grid_url = $(this).parent().parent().find('span.gridftp').html();
+            		
+            		LOG.debug('grid_url: ' + grid_url);
+
+            		file_ids.push(file_id);
+            		grid_urls.push(grid_url);
+            		
+            	});
+            	
+            	
+            	var globus_url = '/esgf-web-fe/goformview1';
+		        
+		        //begin assembling queryString
+		        var queryString = 'type=create&id=' + selectedDocId;
+
+
+		        //assemble the input fields with the query string
+		        for(var i=0;i<file_ids.length;i++) {
+		        	queryString += '&child_url=' + grid_urls[i] + '&child_id=' + file_ids[i];
+		        }
+		        var input = '';
+		        jQuery.each(queryString.split('&'), function(){
+		          var pair = this.split('=');
+		          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
+		        });
+		        
+		        //send request
+		        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
+		        .appendTo('body').submit().remove();
+				
         		
         	}
+        	
         	
 		});
 		
@@ -652,49 +703,42 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 	     */
 	    $('.go_individual_gridftp').live('click',function(e) {
 	    	
-	    	alert('go gridftp');
-	    	
-	    	var selectedDocId = '';
-	    	var selectedFileId = '';
-	    	
+	    	var selectedDocId = ($(this).parent().parent().parent().parent().find('span.datasetId').html());
 	    	
 	    	//gather the ids and the urls for download
+	    	var ids   = new Array();
+	        var values = new Array();
 	    	
+	    	var file_id = $(this).parent().parent().parent().find('input').attr('value');
+    		var grid_url = $(this).parent().parent().find('span.gridftp').html();
+    		
+    		ids.push(file_id);
+	        values.push(grid_url);
+    		
+	    	
+    		var globus_url = '/esgf-web-fe/goformview1';
 	        
-	    });
-		
-		
-		
-		
-	    $('.technotes').live('click',function(){
-	    	
-	    	/*
-	    	var self = this;
-	    	
-	    	var selectedItem = $.tmplItem(this);
-	    	
-	    	//get the selected id
-        	var datasetId = selectedItem.data.datasetId;
+	        //begin assembling queryString
+	        var queryString = 'type=create&id=' + selectedDocId;
 
-	    	if(this.innerHTML === "Show Technotes") {
-                this.innerHTML="Hide Technotes";
-            } else {
-                this.innerHTML="Show Technotes";
-            }
-	    	
-	    	var newWord = datasetId.replace(/\./g,"_");
-	        var newNewWord = newWord.replace(":","_");
+
+	        //assemble the input fields with the query string
+	        for(var i=0;i<ids.length;i++) {
+	        	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
+	        }
+	        var input = '';
+	        jQuery.each(queryString.split('&'), function(){
+	          var pair = this.split('=');
+	          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
+	        });
 	        
-	    	$('tr.rows_'+ newNewWord + '_technotes').toggle();
-	    	*/
+	        //send request
+	        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
+	        .appendTo('body').submit().remove();
+	        
+	        
 	    });
 		
-		
-	    
-	    
-	    
-	    
-	    
 	    
 	    
 	    /**
@@ -753,53 +797,6 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 	    	
 	    });
 	    
-	    
-	    
-	    
-	    /**
-	     * Grabs individual files and sends that information to the Globus Online view
-	     */
-	    $('.go_individual_gridftp').live('click',function(e) {
-	    	
-	    	/*
-	    	var selectedDocId = $(this).parent().parent().parent().parent().find('input').attr('id');
-	    	
-	    	//gather the ids and the urls for download
-	    	var ids   = new Array();
-	        var values = new Array();
-	        
-	        var file_id = $(this).parent().find('a').attr('id');
-	        var grid_url = $(this).parent().parent().find('div').attr('id');
-	        
-	        ids.push(file_id);
-	        values.push(grid_url);
-	        
-	        var globus_url = '/esgf-web-fe/goformview1';
-	        
-	        //begin assembling queryString
-	        var queryString = 'type=create&id=' + selectedDocId;
-
-
-	        //assemble the input fields with the query string
-	        for(var i=0;i<ids.length;i++) {
-	        	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
-	        }
-	        var input = '';
-	        jQuery.each(queryString.split('&'), function(){
-	          var pair = this.split('=');
-	          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-	        });
-	        
-	        //send request
-	        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
-	        .appendTo('body').submit().remove();
-	        */
-	        
-	    });
-	   
-	    
-	   
-		
 		
 	}
 
@@ -836,24 +833,30 @@ function addConstraintsToWGETQueryString(queryString) {
     return queryString;
 }
 
-function submitWGETScriptForm(queryString,file_ids) {
+function submitWGETScriptForm(queryString,file_ids,dataset_ids) {
 	var form = '<form action="'+ queryString +'" method="post" >';
     
+	
     //iterate over the file_ids and add to query string
     //this can probably be collapsed into the loop above
+	/*
     for(var i=0;i<file_ids.length;i++) {
 		var id = file_ids[i];
 		id.replace("\\|","%7C");
 		form += '<input type="hidden" name="id" value="' + id + '">';
 	}
     form += '</form>';
-    
+    */
+	
+	for(var i=0;i<dataset_ids.length;i++) {
+		var id = dataset_ids[i];
+		id.replace("\\|","%7C");
+		form += '<input type="hidden" name="dataset_id" value="' + id + '">';
+	}
+    form += '</form>';
+	
     //send request using a dynamically generated form with the query string as the action
     //the method should be post because the query string may be long
     //jQuery('<form action="'+ queryString +'" method="post" >'+ '' +'</form>')
     jQuery(form).appendTo('body').submit().remove();
-}
-
-function assembleDataCartQueryString() {
-	
 }

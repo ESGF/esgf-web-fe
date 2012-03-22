@@ -136,7 +136,10 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     	    } else if(url.search("OPENDAP") > -1) {
     	    	var tuple = url.split("\|");
         	    output += '<span class="actionitem ai_las"><a href="' + tuple[0] + '" target="_blank">OPENDAP</a></span>';
-    		} 
+            } else if(url.search("application/gis") > -1) {
+                var tuple = url.split("\|");
+                output += '<span class="actionitem ai_las"><a href="' + tuple[0] + '" target="_blank">'+tuple[2]+'</a></span>';
+            } 
     	}
     }
     

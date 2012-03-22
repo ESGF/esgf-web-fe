@@ -61,7 +61,7 @@
  *
  * For any redirect trouble, please refers to ROOT/urlrewrite.xml
  *
- * @author Feiyi Wang (fwang2@ornl.gov)
+ * @author Neill Miller (neillm@mcs.anl.gov), Feiyi Wang (fwang2@ornl.gov)
  *
  */
 package org.esgf.globusonline;
@@ -183,7 +183,7 @@ public class GOFormView3Controller {
         //if myproxy is required then navigate to the myproxy prompt page
 //         if (isGlobusConnect == false)
 //         {
-        return new ModelAndView("goformview3", model);
+        return new ModelAndView("goformview4", model);
 //         } 
         //otherwise go to the confirmation page
 //         else

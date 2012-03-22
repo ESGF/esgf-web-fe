@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/solrfileproxy2")
 public class FileDownloadTemplateController {
 
-    private final static boolean writeToXMLFile = true;
+    private final static boolean writeToXMLFile = false;
     private final static String testInitializationFile = "C:\\Users\\8xo\\esgf-web-fe\\docselement.xml";
 
     public static void main(String [] args) {
@@ -68,7 +68,6 @@ public class FileDownloadTemplateController {
             id = null;
         }
 
-        System.out.println("Here1");
         //NOTE: ID and PEERS SHOULD BE THE SAME LENGTH!!!!
         
         //get the fq string and convert to an array of peers
@@ -116,7 +115,6 @@ public class FileDownloadTemplateController {
         String peerStr = request.getParameter("peerStr");
         String [] peers = peerStr.split(";");
 
-        System.out.println("Here1");
         //NOTE: ID and PEERS SHOULD BE THE SAME LENGTH!!!!
         
         //get the fq string and convert to an array of peers
@@ -151,10 +149,10 @@ public class FileDownloadTemplateController {
         
         //REPLACE ME!
         //should be handler.addShard(peer+":8983/solr");
-        handler.addShard("localhost"+":8983/solr");
-        
+        //handler.addShard("localhost"+":8983/solr");
+        handler.addShard(peer+":8983/solr");
        
-        System.out.println("solr queryString: " + handler.getSolrQueryString());
+        //System.out.println("solr queryString: " + handler.getSolrQueryString());
         doc = handler.getDocElement(id);
         
         
@@ -237,53 +235,6 @@ public class FileDownloadTemplateController {
             System.out.println("\tinitialQuery is null");
         }
         
-    }
-    
-    /**
-     * 
-     * @param request
-     * @return
-     */
-    @RequestMapping(method=RequestMethod.GET)
-    public @ResponseBody String doGet(HttpServletRequest request) {
-
-        /*
-        System.out.println("In doGet");
-
-        this.printParameters(request);
-        
-        String peer = request.getParameter("peer");
-        
-        String technotes = request.getParameter("technotes");
-        
-        String showAll = request.getParameter("showAll");
-
-        String initialQuery = request.getParameter("initialQuery");
-        
-        String idStr = request.getParameter("id");
-        String [] id = idStr.split(",");
-        
-        String fqStr = request.getParameter("fq");
-        String [] fq = fqStr.split(".");
-        
-        DataCartSolrHandler handler = new DataCartSolrHandler(showAll,fq,initialQuery);
-
-        DataCartDocs2 doc = new DataCartDocs2();
-        
-        for(int i=0;i<id.length;i++) {
-            handler.preassembleQueryString();
-            DocElement2 d = handler.getDocElement2(id[i]);
-            System.out.println("QUERY STRING: " + handler.getSolrQueryString());
-            doc.addDocElement2(d);
-            //System.out.println(new XmlFormatter().format(d.toXML()));
-        }
-        
-        doc.toFile(testInitializationFile);
-        
-        //return doc.toJSON();
-        return doc.toJSON();
-        */
-        return null;
     }
 }
 

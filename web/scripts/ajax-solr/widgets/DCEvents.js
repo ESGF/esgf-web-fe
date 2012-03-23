@@ -464,6 +464,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 			
 			var selectedDocId = ($(this).parent().parent().find('span.datasetId').html());
 			
+			
 			var selectedDocCount = ($(this).parent().parent().find('span.datasetCount_'+replaceChars(selectedDocId)).html());
 			
         	//gather the ids and the urls for download
@@ -550,7 +551,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
                 
                 queryString = addConstraintsToWGETQueryString(queryString);
             	
-                submitWGETScriptForm(queryString,file_ids);
+                submitWGETScriptForm(queryString,file_ids,dataset_ids);
         		
         	}
         	

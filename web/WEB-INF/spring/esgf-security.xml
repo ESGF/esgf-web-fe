@@ -29,13 +29,15 @@
 	     The attribute use-expressions="true" allows use of role-based security tags in the views.
 	     -->
 	<security:http use-expressions="true">
+	
+		<!-- User registration view needs https -->
+		<security:intercept-url pattern="/createAccount" requires-channel="https"/>
 
-		<!-- Note: require HTTP for all URLs to avoid problems with secure cookies -->
 		<!-- <security:intercept-url pattern="/login" requires-channel="http" />
 		<security:intercept-url pattern="/j_spring_openid_security_check" requires-channel="http" /> -->
 		<security:intercept-url pattern="/**/user/**" requires-channel="http" access="hasRole('ROLE_USER')"/>
 				
-		<!-- Views that require admin pribileges -->
+		<!-- Views that require admin privileges -->
 		<security:intercept-url pattern="/**/admin/**" requires-channel="http" access="hasRole('ROLE_ADMIN')"/>
 		<security:intercept-url pattern="/usermanagement" requires-channel="http" access="hasRole('ROLE_ADMIN')"/>
 		<security:intercept-url pattern="/adminview" requires-channel="http" access="hasRole('ROLE_ADMIN')"/>

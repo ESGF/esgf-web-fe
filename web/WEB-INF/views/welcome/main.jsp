@@ -24,6 +24,8 @@
  		the transition is complete.  Please send e-mail to <a href="mailto:esgf-support@llnl.gov?subject=ESGF Portal Feedback">esgf-support@llnl.gov</a> to report bugs and provide feedback.  Be sure to 
  		indicate that you are using the beta P2P system.  
   		
+        <br/>If you have trouble running wget scripts to download data,
+        please consult the <a href="http://www.esgf.org/wiki/ESGF_wget_FAQ">TABLE OF WORKING DATA NODES</a>.  		
   		
   		</div> 
   	</div>

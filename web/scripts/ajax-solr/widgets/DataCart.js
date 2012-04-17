@@ -82,27 +82,17 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	//grab the search constraints
     	self.searchConstraints = ESGF.localStorage.toKeyArr('esgf_fq');
     	
-    	/*
-		$(".wgetAllChildren").die('click');
-		$(".globusOnlineAllChildren").die('click');
-		$('.remove_dataset_from_datacart').die('click');
-		$("input#remove_all").die('click');
-		$('.go_individual_gridftp').die('click');
-		$('.technotes').die('click');
-		$(".topLevel").die('change');
-		$(".fileLevel").die('change');
-		$('a.view_more_results').die('click');
-		*/
     	
 		//add the spinning wheel in case there is a delay in loading the items in the data cart
-        $(this.target).html($('<img/>').attr('src', 'images/ajax-loader.gif'));
+        
+    	//CHANGE ME!!!
+    	//$(this.target).html($('<img/>').attr('src', 'images/ajax-loader.gif'));
 	},
 	
 	/**
 	 * DOCUMENT ME
 	 */
 	afterRequest: function () {
-		
 		
 		
 		//empty the tab
@@ -116,10 +106,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		
 		//grab all the keys from the datacart map and place in an array
     	self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
-    	
-    	
-    	
-    	
     	
     	//empty the carts tab and append/initialize the datacart table 
     	$('#carts').empty();
@@ -176,19 +162,77 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
         $("#datasetList").empty();
 		
         
-
-		//getter for the data cart tab
+      //getter for the data cart tab
 		var selected = $( "#myTabs" ).tabs( "option", "selected" );
 		
 		//create the data cart template
         //only create if the data cart tab is selected
 		if(selected == 1) {
-	        self.createTemplate(self.selected_arr);
+	        self.createTemplateShort(self.selected_arr);
 		}
 		
+		
        
+		
 	},
 
+	
+	createTemplateShort: function() {
+		
+		var self = this;
+		
+    	
+		//alert(self.selected_arr);
+		
+		var datasetList = '';
+		
+		for(var i=0;i<self.selected_arr.length;i++) {
+			datasetList += '<tr style="margin-top:50px;" class="top_level_data_item"  >'
+			
+			datasetList += '<td style="width: 40px;"><input class="topLevel" type="checkbox" checked="true" /> </td>';	
+			
+			datasetList += '<td style="width: 300px;font-size:13px">';
+			
+			datasetList += '<div style="word-wrap: break-word;font-weight:bold"  ><span class="datasetId">' + self.selected_arr[i] + '</span></div>';
+			//<span class="datasetId">${datasetId}</span>
+			//(<span class="datasetCount_${$item.replaceChars(datasetId)}">${count}</span> files) 
+		    //</div>
+			
+			
+			datasetList += '</td>';
+			
+			datasetList += '<td style="font-size:13px;float:right" >';
+			
+			datasetList += '<a href="#" class="showAllFiles_short" id="">Expand</a> | ';
+			datasetList += '<a href="#" class="wgetAllFiles"> WGET </a> |';
+			datasetList += ' <a href="#" class="globusOnlineAllFiles" >Globus Online</a> |';
+			datasetList += ' <a href="#" class="remove_dataset_short">Remove</a>'; 
+			datasetList += '</td>';
+			/*
+			<td style="font-size:13px;float:right" > 
+			{{if count > 0}}
+				<a href="#" class="showAllFiles" id="${$item.replacePeriods(datasetId)}">Expand</a> | 
+				{{if hasHttp > 0}}
+					<a href="#" class="wgetAllFiles"> WGET </a> |  
+				{{/if}}
+				{{if hasGridFTP > 0}}
+					<a href="#" class="globusOnlineAllFiles" >Globus Online</a> |
+				{{/if}}
+			{{/if}}
+			<a href="#" class="remove_dataset">Remove</a> 
+			</td>
+			*/
+			
+			
+			
+			datasetList += '</tr>';
+		}
+		
+		$( "#datasetList").append(datasetList);
+		
+		
+	},
+	
     
 	/**
      * Create the template for the datacart
@@ -314,6 +358,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	
 	//dynamically add spinning wheel to the datacart space
 	addDataCartSpinWheel: function () {
+		alert('spinning');
     	//add a spin wheel to indicate that the system is processing
     	$('tbody#datasetList').after('<img id="spinner" src="images/ajax-loader.gif" />');
     	$('tbody#datasetList').after('<p id="waitWarn">Waiting for files...</p>');

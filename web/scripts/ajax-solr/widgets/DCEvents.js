@@ -88,6 +88,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		
 		//kill the show all files link
 		$('a.showAllFiles').die('click');
+		$('a.showAllFiles_short').die('click');
 		
 		//kill the view more files link
 		$('a.view_more_files').die('click');
@@ -103,6 +104,8 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 				
 		
 		$('.remove_dataset').die('click');
+		$('.remove_dataset_short').die('click');
+		
 	},
 	
 	afterRequest: function () {
@@ -296,11 +299,8 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		
 		/*---------Begin dataset level events---------*/
 		
-		/**
-	     * Click event for removing individual datasets from the data cart
-	     */
-	    $('.remove_dataset').live ('click', function(e) {
-	    	
+		$('.remove_dataset_short').live ('click', function(e) {
+
 	    	var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
 			
 	    	//remove the dataset from the localStorage
@@ -314,6 +314,100 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 	    });
 		
 		
+		/**
+	     * Click event for removing individual datasets from the data cart
+	     */
+	    $('.remove_dataset').live ('click', function(e) {
+
+	    	
+	    	var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
+			
+	    	//remove the dataset from the localStorage
+        	ESGF.localStorage.remove('dataCart',selectedDocId);
+
+        	$('a#ai_select_'+ selectedDocId.replace(/\./g, "_")).html('Add To Cart');
+        	
+        	//re-issue request to search api
+        	Manager.doRequest(0);
+        	
+	    });
+		
+	    $('a.showAllFiles_short').live('click',function() {
+			
+	    	alert('expansion');
+	    	
+	    	
+	    	//extract the dataset Id from the span tag
+			var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
+			
+			alert('selectedDocId ' + selectedDocId);
+			
+	    	//change verbage of the expand link
+			if(this.innerHTML === "Expand") {
+                this.innerHTML="Collapse";
+                //$('tr.view_files_'+replaceChars(selectedDocId)).toggle();
+            } else {
+                this.innerHTML="Expand";
+                //$('tr.view_files_'+replaceChars(selectedDocId)).toggle();
+                
+            }
+	    	
+			
+			
+			var idStr = selectedDocId;
+			
+			var peerStr = getPeerStr();
+			var technoteStr = getTechnoteStr();
+							
+	    	var fqParamStr = getFqParamStr();
+	    	
+	    	var queryStr = {"idStr" : idStr, 
+					"peerStr" : peerStr, 
+					"technotesStr" : technoteStr, 
+					"showAll" : ESGF.setting.showAllContents, 
+					"fqStr" : fqParamStr, 
+					"initialQuery" : "true"}; 
+			
+	    	alert('make ajax call for selectedDocId ' + selectedDocId);
+	    	
+	    	var url = '/esgf-web-fe/solrfileproxy2/datacart/'+selectedDocId;
+	    	url = url.replace('.', '');
+			alert('url: ' + url);
+			
+			
+			
+			$.ajax({
+				url: url,
+				global: false,
+				type: "POST",
+				data: queryStr,
+				dataType: 'json',
+				success: function(data) {
+					alert('success');
+				},
+				error: function() {
+					alert('error in getting new rows');
+				}
+			});
+			
+	    	/*
+			//extract the dataset Id from the span tag
+			var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
+			
+			//change verbage of the expand link
+			if(this.innerHTML === "Expand") {
+                this.innerHTML="Collapse";
+                $('tr.view_files_'+replaceChars(selectedDocId)).toggle();
+            } else {
+                this.innerHTML="Expand";
+                $('tr.view_files_'+replaceChars(selectedDocId)).toggle();
+                
+            }
+			//toggle the rows of files
+			$('tr.file_rows_'+replaceChars(selectedDocId)).toggle();
+			*/
+	    	
+		});
 		
 		$('a.showAllFiles').live('click',function() {
 			

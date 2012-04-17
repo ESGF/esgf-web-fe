@@ -109,7 +109,7 @@ public class FileDownloadTemplateController {
      * @param request
      * @return
      */
-    @RequestMapping(method=RequestMethod.GET, value="/datacart/{datasetId")
+    @RequestMapping(method=RequestMethod.POST, value="/datacart/{datasetId}")
     public @ResponseBody String getDoc(@PathVariable String datasetId,HttpServletRequest request) {
     
         String peerStr = request.getParameter("peerStr");
@@ -130,7 +130,17 @@ public class FileDownloadTemplateController {
         //get the flag denoting whether or not this is an initial Query
         String initialQuery = request.getParameter("initialQuery");
         
+        System.out.println("--------");
+        System.out.println("\tpeerStr\t" + peerStr);
+        System.out.println("\tfqStr\t" + fqStr);
+        System.out.println("\tshowAllStr\t" + showAllStr);
+        System.out.println("\tinitialQuery\t" + initialQuery);
+        
+        
         DocElement doc = getDocElement(datasetId,peers[0],initialQuery,fq,showAllStr);
+        
+        System.out.println(doc.toXML());
+        
         
         return doc.toJSON();
     }
@@ -149,10 +159,13 @@ public class FileDownloadTemplateController {
         
         //REPLACE ME!
         //should be handler.addShard(peer+":8983/solr");
-        //handler.addShard("localhost"+":8983/solr");
-        handler.addShard(peer+":8983/solr");
+        handler.addShard("localhost"+":8983/solr");
+        //handler.addShard(peer+":8983/solr");
        
-        //System.out.println("solr queryString: " + handler.getSolrQueryString());
+        
+        
+        
+        System.out.println("\n\n\nid: " + id + "\n\n");
         doc = handler.getDocElement(id);
         
         

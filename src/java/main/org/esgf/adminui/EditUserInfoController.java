@@ -69,7 +69,7 @@ public class EditUserInfoController {
     public @ResponseBody String doGet(HttpServletRequest request, HttpServletResponse response) {
         LOG.debug("EditUserInfoController doGet");
 
-        return "hello world";        
+        return "";        
     }
     
     /**
@@ -83,14 +83,30 @@ public class EditUserInfoController {
     @RequestMapping(method=RequestMethod.POST)
     public @ResponseBody String doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException, JDOMException {
         LOG.debug("ExtractUserInfoController doPost");
-
-        String username = (String)request.getParameter("userName");
-        String type = (String)request.getParameter("type");
-        String newpasswd = (String)request.getParameter("newpasswd");
-        String verifypasswd = (String)request.getParameter("verifypasswd");
-        String oldpasswd = (String)request.getParameter("oldpasswd");
+        String query = (String)request.getParameter("query");
+        String username = "";
+        String type = "";
+        String newpasswd = "";
+        String verifypasswd = "";
+        String oldpasswd = "";
         boolean error = false;
-        String errormessage = "";
+        String errormessage = "";        
+        JSONObject jsonObj = null;
+        
+        try {
+            jsonObj = new JSONObject(query);
+            username = jsonObj.getString("userName");
+            type = jsonObj.getString("type");
+            newpasswd = jsonObj.getString("newpasswd");
+            verifypasswd = jsonObj.getString("verifypasswd");
+            oldpasswd = jsonObj.getString("oldpasswd");
+        } catch (JSONException e) {
+            LOG.debug("error in parsing the json text string :" + query);
+            errormessage = "error in parsing the json text string :" + query;
+            error = true;
+        }
+        
+
         
         if (type.equals("editUserInfo")) {
             error = processUserPasswordChange(username, oldpasswd, newpasswd, verifypasswd);

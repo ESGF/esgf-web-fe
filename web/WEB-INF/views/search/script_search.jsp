@@ -62,6 +62,8 @@
 	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/datacart/DataCart.js" />'> </script>
 	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/datacart/DataCartEvents.js" />'> </script>
 	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/datacart/DCEvents.js" />'> </script>
+	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/datacart/DataCartExpandFeature.js" />'> </script>
+	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/datacart/DataCartWGET.js" />'> </script>
 	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/datacart/DataCartGlobusOnline.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/CIM.js" />'> </script>
    

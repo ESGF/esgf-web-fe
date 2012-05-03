@@ -92,9 +92,15 @@
          
          Manager.addWidget(new AjaxSolr.DCEventsWidget({
              id: 'dcevents'
-             //target: '#events'
-            	 
            }));
+         
+         Manager.addWidget(new AjaxSolr.DataCartExpandFeatureWidget({
+        	 id: 'expandfeature'
+         }));
+         
+         Manager.addWidget(new AjaxSolr.DataCartWGETWidget({
+        	 id: 'wgetfeature'
+         }));
          
          Manager.addWidget(new AjaxSolr.DataCartGlobusOnlineWidget({
              id: 'datacartglobusonline'

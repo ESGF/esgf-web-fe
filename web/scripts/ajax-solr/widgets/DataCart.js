@@ -82,7 +82,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	//grab the search constraints
     	self.searchConstraints = ESGF.localStorage.toKeyArr('esgf_fq');
     	
-    	
 		//add the spinning wheel in case there is a delay in loading the items in the data cart
         
     	//CHANGE ME!!!
@@ -131,7 +130,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     				 	 '<td></td>' + 
     				 	 '<td></td>' + 
     				 	 '<td>' +
-    				 	 '<input id="remove_all" type="submit" value="Remove All" /> ' +
+    				 	 '<input id="remove_all_short" type="submit" value="Remove All" /> ' +
     				 	 '</td>' +
     				 	 '<td>' +
     				 	 '<input id="uber_script" type="submit" value="WGET All Selected" /> ' +
@@ -162,6 +161,9 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
         $("#datasetList").empty();
 		
         
+        
+        
+        
       //getter for the data cart tab
 		var selected = $( "#myTabs" ).tabs( "option", "selected" );
 		
@@ -177,6 +179,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	},
 
 	
+	
+	
 	createTemplateShort: function() {
 		
 		var self = this;
@@ -191,7 +195,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			
 			datasetList += '<td style="width: 40px;"><input class="topLevel" type="checkbox" checked="true" /> </td>';	
 			
-			datasetList += '<td style="width: 300px;font-size:13px">';
+			datasetList += '<td style="width: 325px;font-size:13px">';
 			
 			datasetList += '<div style="word-wrap: break-word;font-weight:bold"  ><span class="datasetId">' + self.selected_arr[i] + '</span></div>';
 			//<span class="datasetId">${datasetId}</span>
@@ -201,30 +205,19 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			
 			datasetList += '</td>';
 			
-			datasetList += '<td style="font-size:13px;float:right" >';
+			datasetList += '<td style="font-size:11px;float:right" >';
 			
-			datasetList += '<a href="#" class="showAllFiles_short" id="">Expand</a> | ';
-			datasetList += '<a href="#" class="wgetAllFiles"> WGET </a> |';
-			datasetList += ' <a href="#" class="globusOnlineAllFiles" >Globus Online</a> |';
-			datasetList += ' <a href="#" class="remove_dataset_short">Remove</a>'; 
-			datasetList += '</td>';
-			/*
-			<td style="font-size:13px;float:right" > 
-			{{if count > 0}}
-				<a href="#" class="showAllFiles" id="${$item.replacePeriods(datasetId)}">Expand</a> | 
-				{{if hasHttp > 0}}
-					<a href="#" class="wgetAllFiles"> WGET </a> |  
-				{{/if}}
-				{{if hasGridFTP > 0}}
-					<a href="#" class="globusOnlineAllFiles" >Globus Online</a> |
-				{{/if}}
-			{{/if}}
-			<a href="#" class="remove_dataset">Remove</a> 
-			</td>
-			*/
+			datasetList += '<a class="showAllFiles_short" style="cursor:pointer">Expand</a> | ';
+			datasetList += '<span class="wgetAllFiles_short" style="display:none;font-weight:bold;"> Downloading... </span>';
+			datasetList += '<a class="wgetAllFiles_short" style="cursor:pointer"> WGET </a> |';
+			datasetList += '<span class="globusOnlineAllFiles_short" style="display:none;font-weight:bold;"> Transerring to GO page...</span>';
+			datasetList += ' <a class="globusOnlineAllFiles_short" style="cursor:pointer">Globus Online</a> |';
+			datasetList += ' <a class="remove_dataset_short" style="cursor:pointer">Remove</a>'; 
+			datasetList += '</td>';	
 			
 			
-			
+			datasetList += '</tr>';
+			datasetList += '<tr class="file_rows_' + replaceChars(self.selected_arr[i]) + '" style="">';
 			datasetList += '</tr>';
 		}
 		
@@ -234,87 +227,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	},
 	
     
-	/**
-     * Create the template for the datacart
-     * 
-     * There is a new procedure for creating the datacart template because the search API is now called
-     * 
-     * 
-     * 
-     */
-    createTemplate: function() {
-
-    	var self = this;
-    	
-    	//get all of the search constraints (fq params)
-    	var fqParamStr = getFqParamStr();
-    	
-    	//get the peers
-    	var peerStr = getPeerStr();
-    	
-    	//get the technotes
-    	var technoteStr = getTechnoteStr();
-    	
-    	//get the ids
-    	var idStr = getIdStr();
-    	
-    	//assemble the query string
-    	var queryStr = {"idStr" : idStr, 
-    					"peerStr" : peerStr, 
-    					"technotesStr" : technoteStr, 
-    					"showAllStr" : ESGF.setting.showAllContents, 
-    					"fqStr" : fqParamStr, 
-    					"initialQuery" : "true"};
-		
-    	
-    	//getter for the data cart tab
-		var selected = $( "#myTabs" ).tabs( "option", "selected" );
-		
-		//only make the ajax call when the data cart is selected
-		if(selected == 1) {
-			
-			self.addDataCartSpinWheel();
-			
-			$.ajax({
-				url: '/esgf-web-fe/solrfileproxy2/datacart',
-				global: false,
-				type: "GET",
-				data: queryStr,
-				dataType: 'json',
-				success: function(data) {
-					
-					self.removeDataCartSpinWheel();
-					
-					var fileDownloadTemplate = rewriteDocsObject(data.docs);
-					
-					$( "#cartTemplateStyledNew2").tmpl(fileDownloadTemplate, {
-						
-						replaceChars : function (word) {
-							LOG.debug("Replacing Char: " + word + " " + word.length);
-							return replaceChars(word);
-			            },
-			            abbreviate : function (word) {
-			            },
-			            addOne: function(num) {
-			            },
-			            sizeConversion : function(size) {
-			            	return sizeConversion(size);
-			            }
-			            
-			        })
-			        .appendTo("#datasetList")
-			        .find( "a.showAllChildren" ).click(function() {
-
-			        });
-					
-				},
-				error: function() {
-					alert('Error loading data cart');
-				}
-			})
-		}
-    	
-	},
+	
 	
 	
     
@@ -434,9 +347,99 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
             }
         }
         return convSize;
-    }
+    },
     
+    
+    
+    // old version of the data cart template
 
+    /**
+     * Create the template for the datacart
+     * 
+     * There is a new procedure for creating the datacart template because the search API is now called
+     * 
+     * 
+     * 
+     */
+    createTemplate: function() {
+
+    	var self = this;
+    	
+    	//get all of the search constraints (fq params)
+    	var fqParamStr = getFqParamStr();
+    	
+    	//get the peers
+    	var peerStr = getPeerStr();
+    	
+    	//get the technotes
+    	var technoteStr = getTechnoteStr();
+    	
+    	//get the ids
+    	var idStr = getIdStr();
+    	
+    	//assemble the query string
+    	var queryStr = {"idStr" : idStr, 
+    					"peerStr" : peerStr, 
+    					"technotesStr" : technoteStr, 
+    					"showAllStr" : ESGF.setting.showAllContents, 
+    					"fqStr" : fqParamStr, 
+    					"initialQuery" : "true"};
+		
+    	
+    	//getter for the data cart tab
+		var selected = $( "#myTabs" ).tabs( "option", "selected" );
+		
+		//only make the ajax call when the data cart is selected
+		if(selected == 1) {
+			
+			self.addDataCartSpinWheel();
+			
+			$.ajax({
+				url: '/esgf-web-fe/solrfileproxy2/datacart',
+				global: false,
+				type: "GET",
+				data: queryStr,
+				dataType: 'json',
+				success: function(data) {
+					
+					self.removeDataCartSpinWheel();
+					
+					var fileDownloadTemplate = rewriteDocsObject(data.docs);
+					
+					$( "#cartTemplateStyledNew2").tmpl(fileDownloadTemplate, {
+						
+						replaceChars : function (word) {
+							LOG.debug("Replacing Char: " + word + " " + word.length);
+							return replaceChars(word);
+			            },
+			            abbreviate : function (word) {
+			            },
+			            addOne: function(num) {
+			            },
+			            sizeConversion : function(size) {
+			            	return sizeConversion(size);
+			            }
+			            
+			        })
+			        .appendTo("#datasetList")
+			        .find( "a.showAllChildren" ).click(function() {
+
+			        });
+					
+				},
+				error: function() {
+					alert('Error loading data cart');
+				}
+			})
+		}
+    	
+	}
+    
+    
+    
+    
+    
+    
 });
 
 
@@ -580,6 +583,13 @@ function getTechnoteStr() {
 	
 	return technoteStr;
 }
+
+
+function rewriteFilesObject(files) {
+	
+}
+
+
 
 function rewriteDocsObject(docs) {
 	

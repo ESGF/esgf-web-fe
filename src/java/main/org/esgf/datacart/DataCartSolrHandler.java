@@ -108,7 +108,7 @@ public class DataCartSolrHandler {
             this.fq = new String[fq.length];
             for(int i=0;i<fq.length;i++) {
                 this.fq[i] = fq[i];
-                System.out.println("\tAdding constraint: " + fq[i]);
+                //System.out.println("\tAdding constraint: " + fq[i]);
             }
         }
         
@@ -163,7 +163,6 @@ public class DataCartSolrHandler {
                             
                             fqParam = fqParam.split("=")[0] + "=" + valueTermEnc;
 
-                            //System.out.println("\t\t\tFQPARAM: " + fqParam);
                             if(!fqParam.contains("query")) {
                                 this.solrQueryString += "&" + fqParam;
                             } 
@@ -185,9 +184,7 @@ public class DataCartSolrHandler {
             
         }
 
-        //System.out.println("QUERY STRING: " + this.solrQueryString);
         
-        //System.out.println("---End ADD SEARCH----\n\n");
     }
     
     
@@ -212,7 +209,6 @@ public class DataCartSolrHandler {
     public DocElement getDocElement(String datasetId) {
         
         
-        //System.out.println("\nIn get doc element for: " + datasetId);
         
         DocElement docElement = new DocElement();
         
@@ -226,7 +222,7 @@ public class DataCartSolrHandler {
         String rawResponse = queryIndex(datasetId);
 
         //System.out.println("-----RAW RESPONSE-----");
-        //System.out.println(datasetId);
+        //System.out.println(rawResponse);
         //System.out.println("-----END RAW RESPONSE-----");
        
         //convert extracted string into json array
@@ -252,10 +248,14 @@ public class DataCartSolrHandler {
             docElement.setCount(Integer.parseInt(numFound));
         }
        
+        
+        
+        
         JSONArray responseFiles = this.solrResponseToJSON(rawResponse);
         
         List<FileElement> fileElements = getFileElements(datasetId,responseFiles);
       
+        
         //set the file elements
         docElement.setFileElements(fileElements);
         
@@ -334,23 +334,17 @@ public class DataCartSolrHandler {
         //attact the dataset id to the query string
         GetMethod method = new GetMethod(searchAPIURL);
         
-        System.out.println("\n\n\ndataset_id\n\n");
-        System.out.println(dataset_id);
         
         //add the dataset to the query string
         try {
             this.solrQueryString += "&dataset_id=" + URLEncoder.encode(dataset_id,"UTF-8").toString();
             //System.out.println("\nthis.solrQueryString->\t" + URLEncoder.encode(dataset_id,"UTF-8").toString());
-            System.out.println("\nthis.solrQueryString->\t" + this.solrQueryString);
+            //System.out.println("\n\tthis.solrQueryString->\t" + this.solrQueryString);
             
         } catch (UnsupportedEncodingException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-        
-        //System.out.println("\n\n\nSOLR QUERY\n\n");
-        //System.out.println(this.solrQueryString);
-        //System.out.println("\n\n");
         
         
         method.setQueryString(this.solrQueryString);
@@ -387,7 +381,7 @@ public class DataCartSolrHandler {
         int end = responseBody.length();
         String responseString = responseBody.substring(start,end);
         
-        System.out.println("\n\n\n" + responseString + "\n\n\n");
+        //System.out.println("\nRESPONSE STR\n\n" + responseString + "\n\n\n");
 
         return responseString;
         

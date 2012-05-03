@@ -112,6 +112,12 @@ public class FileDownloadTemplateController {
     @RequestMapping(method=RequestMethod.POST, value="/datacart/{datasetId}")
     public @ResponseBody String getDoc(@PathVariable String datasetId,HttpServletRequest request) {
     
+        
+        String idStr = request.getParameter("idStr");
+        
+        //System.out.println("\n\n\n\nDATASET ID: " + idStr + "\n\n\n\n");
+        
+        
         String peerStr = request.getParameter("peerStr");
         String [] peers = peerStr.split(";");
 
@@ -136,12 +142,15 @@ public class FileDownloadTemplateController {
         System.out.println("\tshowAllStr\t" + showAllStr);
         System.out.println("\tinitialQuery\t" + initialQuery);
         
+        datasetId = idStr;
         
         DocElement doc = getDocElement(datasetId,peers[0],initialQuery,fq,showAllStr);
         
-        System.out.println(doc.toXML());
+        //System.out.println(doc.toXML());
         
+       
         
+        //return "<a>b</a>";
         return doc.toJSON();
     }
     
@@ -163,9 +172,6 @@ public class FileDownloadTemplateController {
         //handler.addShard(peer+":8983/solr");
        
         
-        
-        
-        System.out.println("\n\n\nid: " + id + "\n\n");
         doc = handler.getDocElement(id);
         
         

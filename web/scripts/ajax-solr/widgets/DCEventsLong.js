@@ -81,31 +81,31 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		$('#myTabs').die('tabsselect');
 		
 		//kill the remove all event
-		$("input#remove_all_short").die('click');
+		$("input#remove_all").die('click');
 		
 		//kill the uber script
-		$("input#uber_script_short").die('click');
+		$("input#uber_script").die('click');
 		
 		//kill the show all files link
+		$('a.showAllFiles').die('click');
 		$('a.showAllFiles_short').die('click');
 		
 		//kill the view more files link
-		$('a.view_more_files_short').die('click');
+		$('a.view_more_files').die('click');
 		
 		//kill the go gridftp
-		$('.go_individual_gridftp_short').die('click');
+		$('.go_individual_gridftp').die('click');
 		    
 		//kill the all files globus online
-		$('a.globusOnlineAllFiles_short').die('click');
+		$('a.globusOnlineAllFiles').die('click');
 			
 		//kill the all files wget	
-		$('a.wgetAllFiles_short').die('click');
+		$('a.wgetAllFiles').die('click');
 				
 		
+		$('.remove_dataset').die('click');
 		$('.remove_dataset_short').die('click');
 		
-
-    	$("input[name='datacart_filter']").die('change');
 	},
 	
 	afterRequest: function () {
@@ -161,8 +161,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		 * The "remove all" button event (will clear the data cart)
 		 * Specifically it clears the localstorage entry for 'dataCart'
 		 */
-		$("input#remove_all_short").live('click', function() {
-
+		$("input#remove_all").live('click', function() {
 			
 			
 			for(var i=0;i<self.selected_arr.length;i++) {
@@ -176,7 +175,6 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 	        	
 	        	
 			}    
-			
 
         	//re-issue request to search api
         	Manager.doRequest(0);
@@ -197,11 +195,11 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		 * 
 		 * Would get all files that have been placed in the data cart bucketed in the project cmip5 
 		 */
-		$("input#uber_script_short").live('click', function() {
+		$("input#uber_script").live('click', function() {
 
-			alert('uber script');
+			//alert('uber script');
 			
-			/*
+			
 			//gather the file_ids
         	var file_ids   = new Array();
             
@@ -292,7 +290,6 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
             queryString = addConstraintsToWGETQueryString(queryString);
         	
             submitWGETScriptForm(queryString,file_ids,dataset_ids);
-			*/
 			
 		});
 		
@@ -317,238 +314,136 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 	    });
 		
 		
-		
+		/**
+	     * Click event for removing individual datasets from the data cart
+	     */
+	    $('.remove_dataset').live ('click', function(e) {
+
+	    	
+	    	var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
+			
+	    	//remove the dataset from the localStorage
+        	ESGF.localStorage.remove('dataCart',selectedDocId);
+
+        	$('a#ai_select_'+ selectedDocId.replace(/\./g, "_")).html('Add To Cart');
+        	
+        	//re-issue request to search api
+        	Manager.doRequest(0);
+        	
+	    });
 		
 	    $('a.showAllFiles_short').live('click',function() {
 			
+	    	alert('expansion');
 	    	
 	    	
 	    	//extract the dataset Id from the span tag
 			var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
 			
+			alert('selectedDocId ' + selectedDocId);
 			
-			//change verbage of the expand link
-			if(this.innerHTML === "Collapse") {
-				
-				
-				var idStr = selectedDocId;
-				
-				
-				//collapse the first 10
-				var removeTag = 'remove_' + 'file_rows_' + replaceChars(idStr);
-				$('.'+removeTag).remove();
-				
-				
-				
-				
-				
-			} else {
-
-				
-				var idStr = selectedDocId;
-				
-				var peerStr = getPeerStr();
-				var technoteStr = getTechnoteStr();
-								
-		    	var fqParamStr = getFqParamStr();
-		    	
-		    	
-		    	
-		    	var queryStr = {"idStr" : idStr, 
-						"peerStr" : peerStr, 
-						"technotesStr" : technoteStr, 
-						"showAllStr" : ESGF.setting.showAllContents, 
-						"fqStr" : fqParamStr, 
-						"initialQuery" : "true"}; 
-				
-		    	
-		    	//NEED TO FIX THIS!!!!
-		    	selectedDocId = 'aa.gov';
-		    	selectedDocId = Url.encode(selectedDocId);
-		    	var url = '/esgf-web-fe/solrfileproxy2/datacart/'+selectedDocId;
-				
-				
-				
-				$.ajax({
-					url: url,
-					global: false,
-					type: "POST",
-					data: queryStr,
-					dataType: 'json',
-					success: function(data) {
-						
-						var tagid = 'file_rows_' + replaceChars(idStr);
-						
-						
-						if(data.doc.files.file == undefined) {
+	    	//change verbage of the expand link
+			if(this.innerHTML === "Expand") {
+                this.innerHTML="Collapse";
+                //$('tr.view_files_'+replaceChars(selectedDocId)).toggle();
+            } else {
+                this.innerHTML="Expand";
+                //$('tr.view_files_'+replaceChars(selectedDocId)).toggle();
+                
+            }
+	    	
+			
+			
+			var idStr = selectedDocId;
+			
+			var peerStr = getPeerStr();
+			var technoteStr = getTechnoteStr();
 							
-							var appendedFiles = '';
-							appendedFiles += '<tr class="remove_' + tagid + '">';
-							appendedFiles += '<td style="width: 40px"></td>';
-							appendedFiles += '<td style="width: 300px;font-size:13px">'
-							appendedFiles += '	<div style="word-wrap: break-word;font-weight:bold;color:gray;font-style:italic;font-weight:bold;color:gray;margin-top:5px" class="datasetId">';
-							
-							appendedFiles += 'NOTE: There are no files in this dataset that match the search criteria';
-							
-							appendedFiles += '</div>';
-							appendedFiles += '</td>';
-							appendedFiles += '</tr>';
-								
-							$('.'+tagid).after(appendedFiles);
-							
-							
-							
-							
-						} else {
-							var fileLength = data.doc.files.file.length;
-
-							
-							if(fileLength == undefined) {
-								var fileArray = new Array();
-								fileArray.push(data.doc.files.file);
-								data.doc.files['file'] = fileArray;
-								fileLength = data.doc.files.file.length;
-							}
-
-							
-							var fileDownloadTemplate = data.doc;
-							
-							
-							for(var j=0;j<data.doc.files.file.length;j++) {
-								if(data.doc.files.file[j].services.service == 'HTTPServer' ||
-				    					data.doc.files.file[j].services.service == 'OPENDAP' || 
-				    					data.doc.files.file[j].services.service == 'SRM' ||
-				    					data.doc.files.file[j].services.service == 'GridFTP') {
-									
-									var serviceArray = new Array();
-			    					serviceArray.push(data.doc.files.file[j].services.service);
-			    					data.doc.files.file[j].services['service'] = serviceArray;
-			    					
-			    					var urlsArray = new Array();
-			    					urlsArray.push(data.doc.files.file[j].urls.url);
-			    					data.doc.files.file[j].urls['url'] = urlsArray;
-			    					
-			    					var mimesArray = new Array();
-			    					mimesArray.push(data.doc.files.file[j].mimes.mime);
-			    					data.doc.files.file[j].mimes['mime'] = mimesArray;
-									
-								}
-							}
-							
-
-							var appendedFiles = '';
-							
-							for(var i=0;i<fileLength;i++) {
-								
-								
-								appendedFiles += '<tr class="remove_' + tagid + '">';
-									
-								//appendedFiles += '<td>a</td>';
-								appendedFiles += '<td style="width: 40px">' +
-												 '<input style="margin-left: 10px;display:none"' + 
-									   					'class="fileLevel"' + 
-									   					'type="checkbox"' + 
-									   					'class="fileId"' + 
-									   					'id="${fileId}"' + 
-									   					'checked="true"' + 
-									   					'/>' +
-									   					'</td>';
-								
-								
-								appendedFiles += '<td style="width: 425px;padding-left:10px;font-size:11px;">' +
-												 '<div style="word-wrap: break-word;">' + 
-												 '<span style="font-weight:bold">' + data.doc.files.file[i].fileId + '</span>' +
-												 '	<br />' + 
-												 '<span style="font-style:italic">' + 'tracking_id: ' + data.doc.files.file[i].tracking_id + '</span>' +
-												 '  <br />' +
-												 '<span style="font-style:italic">checksum: ' + data.doc.files.file[i].checksum + ' (' + data.doc.files.file[i].checksum_type + ')' + '</span>' +
-												 '</div>' +
-												 '</td>';
-								
-								
-								appendedFiles += '<td style="float-right;font-size:11px;text-align:right">';
-								
-								for(var j=0;j<data.doc.files.file[i].services.service.length;j++) {
-									var service = data.doc.files.file[i].services.service[j];
-									var url = data.doc.files.file[i].urls.url[j];
-									if(service == 'HTTPServer') {
-										service = 'HTTP';
-									}
-									
-									appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '" ' + 'target="_blank">' + service + '</a> </span>';
-								}
-								
-								appendedFiles += '</td>';
-								
-								appendedFiles += '</tr>';
-								
-							}
-
-							appendedFiles += '<tr class="remove_' + tagid + '">';
-							appendedFiles += '<td></td>';
-							appendedFiles += '</tr>';
-							
-							if(fileLength >= 10) {
-								appendedFiles += '<tr class="view_files_' + 'oooo' + ' remove_' + tagid + '" style="">';
-								appendedFiles += '<td></td>';
-								appendedFiles += '<td style="display:none"><span class="datasetId">' + data.doc.datasetId + '</td>';
-								appendedFiles += '<td><a class="view_more_files_short" style="cursor:pointer">' + 'View more files' + '</a></td>';
-								appendedFiles += '</tr>';
-								
-								
-								appendedFiles += '<tr class="file_append_' + replaceChars(data.doc.datasetId) + ' remove_' + tagid + '">';
-								//appendedFiles += '<tr class="file_append_' + replaceChars(data.doc.datasetId) + ' remove_' + tagid + '">';
-								appendedFiles += '<td></td>';
-								appendedFiles += '</tr>';
-							}
-							
-							
-							
-							$('.'+tagid).after(appendedFiles);
-							
-							
-						}
-						
-						
-					},
-					error: function() {
-						alert('error in getting new rows');
-					}
-				});
-					
-			}
+	    	var fqParamStr = getFqParamStr();
+	    	
+	    	var queryStr = {"idStr" : idStr, 
+					"peerStr" : peerStr, 
+					"technotesStr" : technoteStr, 
+					"showAll" : ESGF.setting.showAllContents, 
+					"fqStr" : fqParamStr, 
+					"initialQuery" : "true"}; 
+			
+	    	alert('make ajax call for selectedDocId ' + selectedDocId);
+	    	
+	    	var url = '/esgf-web-fe/solrfileproxy2/datacart/'+selectedDocId;
+	    	url = url.replace('.', '');
+			alert('url: ' + url);
+			
+			
+			
+			$.ajax({
+				url: url,
+				global: false,
+				type: "POST",
+				data: queryStr,
+				dataType: 'json',
+				success: function(data) {
+					alert('success');
+				},
+				error: function() {
+					alert('error in getting new rows');
+				}
+			});
+			
+	    	/*
+			//extract the dataset Id from the span tag
+			var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
 			
 			//change verbage of the expand link
 			if(this.innerHTML === "Expand") {
                 this.innerHTML="Collapse";
+                $('tr.view_files_'+replaceChars(selectedDocId)).toggle();
             } else {
                 this.innerHTML="Expand";
+                $('tr.view_files_'+replaceChars(selectedDocId)).toggle();
+                
             }
+			//toggle the rows of files
+			$('tr.file_rows_'+replaceChars(selectedDocId)).toggle();
+			*/
+	    	
+		});
+		
+		$('a.showAllFiles').live('click',function() {
 			
+			//extract the dataset Id from the span tag
+			var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
+			
+			//change verbage of the expand link
+			if(this.innerHTML === "Expand") {
+                this.innerHTML="Collapse";
+                $('tr.view_files_'+replaceChars(selectedDocId)).toggle();
+            } else {
+                this.innerHTML="Expand";
+                $('tr.view_files_'+replaceChars(selectedDocId)).toggle();
+                
+            }
+			//toggle the rows of files
+			$('tr.file_rows_'+replaceChars(selectedDocId)).toggle();
 			
 		});
 		
 		
-	    
-		
-		$('a.view_more_files_short').live('click',function() {
+		$('a.view_more_files').live('click',function() {
 			
 			var selectedDocId = ($(this).parent().parent().find('span.datasetId').html());
 			
-			var self=this;
 			
 			if(this.innerHTML == "View more files") {
+				this.innerHTML="Collapse files";
 				
 				
 				var idStr = selectedDocId;
 				
 				var peerStr = getPeerStr();
-				
-				
 				var technoteStr = getTechnoteStr();
-				
+								
 		    	var fqParamStr = getFqParamStr();
-		    	
 		    	
 		    	var queryStr = {"idStr" : idStr, 
 						"peerStr" : peerStr, 
@@ -556,11 +451,14 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 						"showAll" : ESGF.setting.showAllContents, 
 						"fqStr" : fqParamStr, 
 						"initialQuery" : "false"}; 
-				
-		    	var appendedRows = $(this).parent().parent().parent().find('tr.file_append_' + replaceChars(selectedDocId));
-
-		    	appendedRows.after('<tr id="spinner"><td></td><td><img src="images/ajax-loader.gif" /></td></tr>');
 		    	
+		    	
+				var appendedRows = $(this).parent().parent().parent().find('tr.file_append_' + replaceChars(selectedDocId));
+				
+				
+				appendedRows.after('<tr class="addedrow_' + replaceChars(selectedDocId) + '"><td></td></tr>');
+				
+				
 				$.ajax({
 					url: '/esgf-web-fe/solrfileproxy2/datacart',
 					global: false,
@@ -568,9 +466,6 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 					data: queryStr,
 					dataType: 'json',
 					success: function(data) {
-
-						$('tr#spinner').remove();
-						
 						var newRows = '';
 						
 						data.docs = rewriteDocsObject(data.docs);
@@ -598,30 +493,29 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 							newRow += '</td>';
 							
 							for(var j=0;j<file.services.service.length;j++) {
-								alert('here');
 								if(file.services.service[j] == 'HTTPServer') {
 									newRow += '<td style="float:right;font-size:11px;">';
 									newRow += '<div style="word-wrap: break-word;vertical-align:middle">';
-									newRow += '<a href="' + file.urls.url[j] + '"> HTTP </a>';
+									newRow += '<a href="' + file.urls.url[j] + '">HTTP </a>';
 									newRow += '</div>';
 									newRow += '</td>';
 								} else if(file.services.service[j] == 'GridFTP') {
 									newRow += '<td style="float:right;font-size:11px;">';
 									newRow += '<span style="display:none" class="gridftp">' + file.urls.url[j] + '</span>';
 									newRow += '<div style="word-wrap: break-word;vertical-align:middle">';
-									newRow += '<a href="' + '#' + '" class="go_individual_gridftp_short"> GrridFTP </a>';
+									newRow += '<a href="' + '#' + '">GridFTP </a>';
 									newRow += '</div>';
 									newRow += '</td>';
 								} else if(file.services.service[j] == 'OPENDAP') {
 									newRow += '<td style="float:right;font-size:11px;">';
 									newRow += '<div style="word-wrap: break-word;vertical-align:middle">';
-									newRow += '<a href="' + file.urls.url[j] + '"> OPENDAP </a>';
+									newRow += '<a href="' + file.urls.url[j] + '">OPENDAP </a>';
 									newRow += '</div>';
 									newRow += '</td>';
 								} else if(file.services.service[j] == 'SRM') {
 									newRow += '<td style="float:right;font-size:11px;">';
 									newRow += '<div style="word-wrap: break-word;vertical-align:middle">';
-										newRow += '<a href="' + file.urls.url[j] + '"> SRM </a>';
+										newRow += '<a href="' + file.urls.url[j] + '">SRM </a>';
 									newRow += '</div>';
 									newRow += '</td>';
 								}
@@ -640,50 +534,32 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 							
 							
 							newRows += newRow;
-						
 						}
-
-						appendedRows.after(newRows);
 						
-						self.innerHTML = 'Collapse files';
+						appendedRows.after(newRows);
 						
 					},
 					error: function() {
-						alert('error');
+						alert('error in getting new rows');
 					}
 				});
 				
-				
 			} else {
-
+				this.innerHTML="View more files";
+				
 				$('tr.addedrow_'+replaceChars(selectedDocId)).remove();
-				this.innerHTML = 'View more files';
+				
 			}
+			
 			
 		});
 		
-		$('a.wgetAllFiles_short').live('click',function() {
-			
-			//extract the dataset Id from the span tag
-			var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
-			
-			
-			//var self = this;
-			//self.innerHTML = "Downloading...";
-			
-			var parentElement = $(this).parent();
-			
-			//alert(parentElement.html());
-
-			parentElement.find('a.wgetAllFiles_short').hide();
-			parentElement.find('span.wgetAllFiles_short').show();
-			
-			//alert('sele: ' + selectedDocId + ' ' + replaceChars(selectedDocId));
-			
-			//$('.wgetAllFiles_short_'+replaceChars(selectedDocId)).remove();
-			
+		$('a.wgetAllFiles').live('click',function() {
 			
 			var selectedDocId = ($(this).parent().parent().find('span.datasetId').html());
+			
+			
+			var selectedDocCount = ($(this).parent().parent().find('span.datasetCount_'+replaceChars(selectedDocId)).html());
 			
         	//gather the ids and the urls for download
         	var file_ids   = new Array();
@@ -691,266 +567,97 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 
         	//gather the dataset_ids
         	var dataset_ids = new Array();
+
         	dataset_ids.push(selectedDocId);
         	
         	
-        	//just make the two ajax calls for now
-        	//1 - for the first ten
-        	//2 - for >10
+        	//if the count is greater than 10, check to see if the additional rows have been not been expanded for this dataset
+        	//if not (null) then need an extra ajax call to get the rest of the file ids
+        	var isAdded = $(this).parent().parent().parent().find('tr.addedrow_' + replaceChars(selectedDocId)).html();
+            	
+        	if(isAdded == null && selectedDocCount > 10) {
 
-			var idStr = selectedDocId;
-			
-			var peerStr = getPeerStr();
-			var technoteStr = getTechnoteStr();
-							
-	    	var fqParamStr = getFqParamStr();
-	    	
-	    	
-	    	
-	    	var queryStr = {"idStr" : idStr, 
-					"peerStr" : peerStr, 
-					"technotesStr" : technoteStr, 
-					"showAllStr" : ESGF.setting.showAllContents, 
-					"fqStr" : fqParamStr, 
-					"initialQuery" : "true"}; 
-	    	
-	    	$.ajax({
-				url: '/esgf-web-fe/solrfileproxy2/datacart',
-				global: false,
-				type: "GET",
-				data: queryStr,
-				dataType: 'json',
-				success: function(data) {
-					
-					if(data.docs.doc.files.file != undefined) {
+        		//traverse for file id rows that are checked
+            	$(this).parent().parent().parent().find('tr.file_rows_'+ replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
+            	
+            		var file_id = $(this).parent().find('input').attr('value');
+            		
+            		file_ids.push(file_id);
+            	});
+            	
+				var idStr = selectedDocId;
+				
+            	var peerStr = getPeerStr();
+            	
+            	var technoteStr = getTechnoteStr();
+				
+            	var fqParamStr = getFqParamStr();
+				
+            	
+		    	//assemble the queryStr obj
+            	var queryStr = {"idStr" : idStr, 
+    					"peerStr" : peerStr, 
+    					"technotesStr" : technoteStr, 
+    					"showAllStr" : ESGF.setting.showAllContents, 
+    					"fqStr" : fqParamStr, 
+    					"initialQuery" : "false"};
+				
+        		
+            	$.ajax({
+					url: '/esgf-web-fe/solrfileproxy2/datacart',
+					global: false,
+					type: "GET",
+					data: queryStr,
+					dataType: 'json',
+					success: function(data) {
 						for(var i=0;i<data.docs.doc.files.file.length;i++){
 							var file = data.docs.doc.files.file[i];
 							file_ids.push(file.fileId);
 						}
 						
+						var queryString = '/esg-search/wget/?';
+		            	
+		                queryString = addConstraintsToWGETQueryString(queryString);
+		            	
+		                submitWGETScriptForm(queryString,file_ids,dataset_ids);
+		                
 						
-						if(data.docs.doc.files.file.length >= 10) {
-							queryStr = {"idStr" : idStr, 
-									"peerStr" : peerStr, 
-									"technotesStr" : technoteStr, 
-									"showAllStr" : ESGF.setting.showAllContents, 
-									"fqStr" : fqParamStr, 
-									"initialQuery" : "false"}; 
-							
-							$.ajax({
-								url: '/esgf-web-fe/solrfileproxy2/datacart',
-								global: false,
-								type: "GET",
-								data: queryStr,
-								dataType: 'json',
-								success: function(data) {
-									for(var i=0;i<data.docs.doc.files.file.length;i++){
-										var file = data.docs.doc.files.file[i];
-										file_ids.push(file.fileId);
-									}
-
-									var queryString = '/esg-search/wget/?';
-					            	
-					                queryString = addConstraintsToWGETQueryString(queryString);
-					            	
-					                submitWGETScriptForm(queryString,file_ids,dataset_ids);
-									
-
-					    			
-									parentElement.find('a.wgetAllFiles_short').show();
-									parentElement.find('span.wgetAllFiles_short').hide();
-				
-									
-								},
-								error: function() {
-									alert('error');
-
-									
-									parentElement.find('a.wgetAllFiles_short').show();
-									parentElement.find('span.wgetAllFiles_short').hide();
-				
-								}
-							});
-						} else {
-							var queryString = '/esg-search/wget/?';
-			            	
-			                queryString = addConstraintsToWGETQueryString(queryString);
-			            	
-			                submitWGETScriptForm(queryString,file_ids,dataset_ids);
-			    			
-									parentElement.find('a.wgetAllFiles_short').show();
-									parentElement.find('span.wgetAllFiles_short').hide();
-				
-						}
-					} else {
-						
-						
-						parentElement.find('a.wgetAllFiles_short').show();
-						parentElement.find('span.wgetAllFiles_short').hide();
-						alert('There are no files in this dataset that match the search criteria.');
+					},
+					error: function() {
+						alert('error in getting extra files');
 					}
-					
-					
-				},
-				error: function() {
-					alert('error');
-
-					
-					parentElement.find('a.wgetAllFiles_short').show();
-					parentElement.find('span.wgetAllFiles_short').hide();
-			
-				}
-	    	});
-        	
+            	});
+        		
+        		
+        	} else {
+        		
+            	//traverse for file id rows that are checked
+            	$(this).parent().parent().parent().find('tr.file_rows_'+ replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
+            	
+            		var file_id = $(this).parent().find('input').attr('value');
+            		
+            		file_ids.push(file_id);
+            		
+            	});
+            	var queryString = '/esg-search/wget/?';
+            	
+                var constraintCount = 0;
+                
+                queryString = addConstraintsToWGETQueryString(queryString);
+            	
+                submitWGETScriptForm(queryString,file_ids,dataset_ids);
+        		
+        	}
         	
 		});
 		
 		
-		/**
-	     * Grabs individual files and sends that information to the Globus Online view
-	     */
-	    $('.go_individual_gridftp_short').live('click',function(e) {
-	    	
-	    	alert('hello');
-	    	
-	    	var selectedDocId = ($(this).parent().parent().parent().parent().find('span.datasetId').html());
-	    	
-	    	//gather the ids and the urls for download
-	    	var ids   = new Array();
-	        var values = new Array();
-	    	
-	    	var file_id = $(this).parent().parent().parent().find('input').attr('value');
-    		var grid_url = $(this).parent().parent().find('span.gridftp').html();
-    		
-    		ids.push(file_id);
-	        values.push(grid_url);
-    		
-	    	
-    		var globus_url = '/esgf-web-fe/goformview1';
-	        
-	        //begin assembling queryString
-	        var queryString = 'type=create&id=' + selectedDocId;
 
-
-	        //assemble the input fields with the query string
-	        for(var i=0;i<ids.length;i++) {
-	        	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
-	        }
-	        var input = '';
-	        jQuery.each(queryString.split('&'), function(){
-	          var pair = this.split('=');
-	          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-	        });
-	        
-	        //send request
-	        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
-	        .appendTo('body').submit().remove();
-	        
-	        
-	    });
 		
-		$('a.globusOnlineAllFiles_short').live('click',function() {
-			
-			var parentElement = $(this).parent();
-			
-			
-			
-			parentElement.find('a.globusOnlineAllFiles_short').hide();
-			parentElement.find('span.globusOnlineAllFiles_short').show();
-
-			var selectedDocId = ($(this).parent().parent().find('span.datasetId').html());
-			
-        	//gather the ids and the urls for download
-        	var file_ids   = new Array();
-        	var grid_urls   = new Array();
-        	
-        	var idStr = selectedDocId;
-			
-			var peerStr = getPeerStr();
-			var technoteStr = getTechnoteStr();
-							
-	    	var fqParamStr = getFqParamStr();
-	    	
-	    	var queryStr = {"idStr" : idStr, 
-					"peerStr" : peerStr, 
-					"technotesStr" : technoteStr, 
-					"showAllStr" : ESGF.setting.showAllContents, 
-					"fqStr" : fqParamStr, 
-					"initialQuery" : "true"}; 
-        	
-	    	$.ajax({
-				url: '/esgf-web-fe/solrfileproxy2/datacart',
-				global: false,
-				type: "GET",
-				data: queryStr,
-				dataType: 'json',
-				success: function(data) {
-					
-					if(data.docs.doc.files.file != undefined) {
-					
-						for(var i=0;i<data.docs.doc.files.file.length;i++){
-							var file = data.docs.doc.files.file[i];
-							file_ids.push(file.fileId);
-							
-
-							for(var j=0;j<file.services.service.length;j++) {
-								if(file.services.service[j] == 'GridFTP') {
-									grid_urls.push(file.urls.url[j]);
-								}
-							}
-							
-							
-						}
-
-						var globus_url = '/esgf-web-fe/goformview1';
-				        
-				        //begin assembling queryString
-				        var queryString = 'type=create&id=' + selectedDocId;
-
-
-				        //assemble the input fields with the query string
-				        for(var i=0;i<file_ids.length;i++) {
-				        	queryString += '&child_url=' + grid_urls[i] + '&child_id=' + file_ids[i];
-				        }
-				        var input = '';
-				        jQuery.each(queryString.split('&'), function(){
-				          var pair = this.split('=');
-				          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-				        });
-				        
-				        //send request
-				        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
-				        .appendTo('body').submit().remove();
-						
-					} else {
-						alert('There are no files in this dataset that match the search criteria.');
-
-						parentElement.find('a.globusOnlineAllFiles_short').show();
-						parentElement.find('span.globusOnlineAllFiles_short').hide();
-						
-					}
-					
-					
-					
-					
-					
-				},
-				error: function() {
-					alert('error');
-					parentElement.find('a.globusOnlineAllFiles_short').show();
-					parentElement.find('span.globusOnlineAllFiles_short').hide();
-
-					
-				}
-	    	});
-	    	
-	    	
-	    	
-	    	
-	    	
-			/*
+		$('a.globusOnlineAllFiles').live('click',function() {
 			
 			//var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
+			var selectedDocId = ($(this).parent().parent().find('span.datasetId').html());
 			var selectedDocCount = ($(this).parent().parent().find('span.datasetCount_'+replaceChars(selectedDocId)).html());
 			
         	//gather the ids and the urls for download
@@ -1081,8 +788,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 				
         		
         	}
-        	*/
-			
+        	
         	
 		});
 		
@@ -1090,10 +796,8 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		/**
 	     * Grabs individual files and sends that information to the Globus Online view
 	     */
-	    //$('.go_individual_gridftp_short').live('click',function(e) {
+	    $('.go_individual_gridftp').live('click',function(e) {
 	    	
-	    	
-	    	/*
 	    	var selectedDocId = ($(this).parent().parent().parent().parent().find('span.datasetId').html());
 	    	
 	    	//gather the ids and the urls for download
@@ -1126,9 +830,9 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 	        //send request
 	        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
 	        .appendTo('body').submit().remove();
-	        */
 	        
-	    //});
+	        
+	    });
 		
 	    
 	    
@@ -1250,85 +954,4 @@ function submitWGETScriptForm(queryString,file_ids,dataset_ids) {
     //the method should be post because the query string may be long
     //jQuery('<form action="'+ queryString +'" method="post" >'+ '' +'</form>')
     jQuery(form).appendTo('body').submit().remove();
-}
-
-
-
-/**
-*
-*  URL encode / decode
-*  http://www.webtoolkit.info/
-*
-**/
- 
-var Url = {
- 
-	// public method for url encoding
-	encode : function (string) {
-		return escape(this._utf8_encode(string));
-	},
- 
-	// public method for url decoding
-	decode : function (string) {
-		return this._utf8_decode(unescape(string));
-	},
- 
-	// private method for UTF-8 encoding
-	_utf8_encode : function (string) {
-		string = string.replace(/\r\n/g,"\n");
-		var utftext = "";
- 
-		for (var n = 0; n < string.length; n++) {
- 
-			var c = string.charCodeAt(n);
- 
-			if (c < 128) {
-				utftext += String.fromCharCode(c);
-			}
-			else if((c > 127) && (c < 2048)) {
-				utftext += String.fromCharCode((c >> 6) | 192);
-				utftext += String.fromCharCode((c & 63) | 128);
-			}
-			else {
-				utftext += String.fromCharCode((c >> 12) | 224);
-				utftext += String.fromCharCode(((c >> 6) & 63) | 128);
-				utftext += String.fromCharCode((c & 63) | 128);
-			}
- 
-		}
- 
-		return utftext;
-	},
- 
-	// private method for UTF-8 decoding
-	_utf8_decode : function (utftext) {
-		var string = "";
-		var i = 0;
-		var c = c1 = c2 = 0;
- 
-		while ( i < utftext.length ) {
- 
-			c = utftext.charCodeAt(i);
- 
-			if (c < 128) {
-				string += String.fromCharCode(c);
-				i++;
-			}
-			else if((c > 191) && (c < 224)) {
-				c2 = utftext.charCodeAt(i+1);
-				string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
-				i += 2;
-			}
-			else {
-				c2 = utftext.charCodeAt(i+1);
-				c3 = utftext.charCodeAt(i+2);
-				string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
-				i += 3;
-			}
- 
-		}
- 
-		return string;
-	}
- 
 }

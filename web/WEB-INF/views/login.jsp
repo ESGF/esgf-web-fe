@@ -29,6 +29,15 @@
 	                                        
 				    <!-- the value of the action attribute must be the same as the URL intercepted by the spring security filter  -->
 	                <form name="loginForm" action='<c:url value="/j_spring_openid_security_check"/>' >
+						<script language="javascript">
+							function sanitize() {
+								openidElement = document.getElementById("openid_identifier");
+								openid = openidElement.value;
+								openid = openid.replace("http:","https:")
+								               .replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+								openidElement.value = openid;
+							}
+						</script>															    				
 	                    <div class="panel">  	                         	
 	                    	<c:if test="${param['failed']==true}">
 	                    		<span class="myerror">Error: unable to resolve OpenID identifier.</span>
@@ -36,8 +45,10 @@
 	                        <table border="0" align="center">
 	                            <tr>
 	                                <td align="right" class="required"><b>Openid:</b></td>
-	                                <td align="left" style="width:100%"><input type="text" name="openid_identifier" size="60" value="${cookie[openid_cookie].value}" style="width:100%"/ ></td>
-	                                <td><input type="submit" value="Login" class="button"/></td>
+	                                <td align="left" style="width:100%">
+	                                 	<input type="text" name="openid_identifier" id="openid_identifier" size="60" value="${cookie[openid_cookie].value}" style="width:100%"/ >
+	                                 </td>
+	                                <td><input type="submit" value="Login" class="button" onclick="javascript:sanitize()"/></td>
 	                            </tr>
 	                            <tr>
 	                                <td>&nbsp;</td>

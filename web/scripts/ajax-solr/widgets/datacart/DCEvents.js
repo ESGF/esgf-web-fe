@@ -59,7 +59,7 @@
 
 (function ($) {
 
-	
+
 AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 
 	/**
@@ -92,11 +92,6 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		//kill the view more files link
 		$('a.view_more_files_short').die('click');
 		
-		//kill the go gridftp
-		$('.go_individual_gridftp_short').die('click');
-		    
-		//kill the all files globus online
-		$('a.globusOnlineAllFiles_short').die('click');
 			
 		//kill the all files wget	
 		$('a.wgetAllFiles_short').die('click');
@@ -474,8 +469,11 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 									if(service == 'HTTPServer') {
 										service = 'HTTP';
 									}
-									
-									appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '" ' + 'target="_blank">' + service + '</a> </span>';
+									if(service == 'GridFTP') {
+										appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a style="cursor:pointer">' + service + '</a> </span>';
+									} else {
+										appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '" ' + 'target="_blank">' + service + '</a> </span>';
+									}
 								}
 								
 								appendedFiles += '</td>';
@@ -597,35 +595,37 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 							newRow += '</div>';
 							newRow += '</td>';
 							
+
+							newRow += '<td style="float:right;font-size:11px;">';
 							for(var j=0;j<file.services.service.length;j++) {
-								alert('here');
 								if(file.services.service[j] == 'HTTPServer') {
-									newRow += '<td style="float:right;font-size:11px;">';
-									newRow += '<div style="word-wrap: break-word;vertical-align:middle">';
-									newRow += '<a href="' + file.urls.url[j] + '"> HTTP </a>';
-									newRow += '</div>';
-									newRow += '</td>';
+									//newRow += '<td style="float:right;font-size:11px;">';
+									newRow += '<span style="word-wrap: break-word;vertical-align:middle"> ';
+									newRow += '<a href="' + file.urls.url[j] + '">HTTP</a>';
+									newRow += '</span>';
+									//newRow += '</td>';
 								} else if(file.services.service[j] == 'GridFTP') {
-									newRow += '<td style="float:right;font-size:11px;">';
-									newRow += '<span style="display:none" class="gridftp">' + file.urls.url[j] + '</span>';
-									newRow += '<div style="word-wrap: break-word;vertical-align:middle">';
-									newRow += '<a href="' + '#' + '" class="go_individual_gridftp_short"> GrridFTP </a>';
-									newRow += '</div>';
-									newRow += '</td>';
+									//newRow += '<td style="float:right;font-size:11px;">';
+									newRow += '<span style="display:none" class="gridftp">' + file.urls.url[j] + '</span> ';
+									newRow += '<span style="word-wrap: break-word;vertical-align:middle">';
+									newRow += '<a style="cursor:pointer" class="go_individual_gridftp_short">GridFTP</a>';
+									newRow += '</span>';
+									//newRow += '</td>';
 								} else if(file.services.service[j] == 'OPENDAP') {
-									newRow += '<td style="float:right;font-size:11px;">';
-									newRow += '<div style="word-wrap: break-word;vertical-align:middle">';
-									newRow += '<a href="' + file.urls.url[j] + '"> OPENDAP </a>';
-									newRow += '</div>';
-									newRow += '</td>';
+									//newRow += '<td style="float:right;font-size:11px;">';
+									newRow += '<span style="word-wrap: break-word;vertical-align:middle">' ;
+									newRow += '<a href="' + file.urls.url[j] + '">OPENDAP</a>';
+									newRow += '</span>';
+									//newRow += '</td>';
 								} else if(file.services.service[j] == 'SRM') {
-									newRow += '<td style="float:right;font-size:11px;">';
-									newRow += '<div style="word-wrap: break-word;vertical-align:middle">';
-										newRow += '<a href="' + file.urls.url[j] + '"> SRM </a>';
-									newRow += '</div>';
-									newRow += '</td>';
+									//newRow += '<td style="float:right;font-size:11px;">';
+									newRow += '<span style="word-wrap: break-word;vertical-align:middle">' ;
+										newRow += '<a href="' + file.urls.url[j] + '">SRM</a>';
+									newRow += '</span>';
+									//newRow += '</td>';
 								}
 							}
+							newRow += '</td>';
 							
 							if(file.technote != 'NA') {
 								newRow += '<td style="float:right;font-size:11px;">';
@@ -806,285 +806,6 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		});
 		
 		
-		/**
-	     * Grabs individual files and sends that information to the Globus Online view
-	     */
-	    $('.go_individual_gridftp_short').live('click',function(e) {
-	    	
-	    	alert('hello');
-	    	
-	    	var selectedDocId = ($(this).parent().parent().parent().parent().find('span.datasetId').html());
-	    	
-	    	//gather the ids and the urls for download
-	    	var ids   = new Array();
-	        var values = new Array();
-	    	
-	    	var file_id = $(this).parent().parent().parent().find('input').attr('value');
-    		var grid_url = $(this).parent().parent().find('span.gridftp').html();
-    		
-    		ids.push(file_id);
-	        values.push(grid_url);
-    		
-	    	
-    		var globus_url = '/esgf-web-fe/goformview1';
-	        
-	        //begin assembling queryString
-	        var queryString = 'type=create&id=' + selectedDocId;
-
-
-	        //assemble the input fields with the query string
-	        for(var i=0;i<ids.length;i++) {
-	        	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
-	        }
-	        var input = '';
-	        jQuery.each(queryString.split('&'), function(){
-	          var pair = this.split('=');
-	          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-	        });
-	        
-	        //send request
-	        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
-	        .appendTo('body').submit().remove();
-	        
-	        
-	    });
-		
-		$('a.globusOnlineAllFiles_short').live('click',function() {
-			
-			var parentElement = $(this).parent();
-			
-			
-			
-			parentElement.find('a.globusOnlineAllFiles_short').hide();
-			parentElement.find('span.globusOnlineAllFiles_short').show();
-
-			var selectedDocId = ($(this).parent().parent().find('span.datasetId').html());
-			
-        	//gather the ids and the urls for download
-        	var file_ids   = new Array();
-        	var grid_urls   = new Array();
-        	
-        	var idStr = selectedDocId;
-			
-			var peerStr = getPeerStr();
-			var technoteStr = getTechnoteStr();
-							
-	    	var fqParamStr = getFqParamStr();
-	    	
-	    	var queryStr = {"idStr" : idStr, 
-					"peerStr" : peerStr, 
-					"technotesStr" : technoteStr, 
-					"showAllStr" : ESGF.setting.showAllContents, 
-					"fqStr" : fqParamStr, 
-					"initialQuery" : "true"}; 
-        	
-	    	$.ajax({
-				url: '/esgf-web-fe/solrfileproxy2/datacart',
-				global: false,
-				type: "GET",
-				data: queryStr,
-				dataType: 'json',
-				success: function(data) {
-					
-					if(data.docs.doc.files.file != undefined) {
-					
-						for(var i=0;i<data.docs.doc.files.file.length;i++){
-							var file = data.docs.doc.files.file[i];
-							file_ids.push(file.fileId);
-							
-
-							for(var j=0;j<file.services.service.length;j++) {
-								if(file.services.service[j] == 'GridFTP') {
-									grid_urls.push(file.urls.url[j]);
-								}
-							}
-							
-							
-						}
-
-						var globus_url = '/esgf-web-fe/goformview1';
-				        
-				        //begin assembling queryString
-				        var queryString = 'type=create&id=' + selectedDocId;
-
-
-				        //assemble the input fields with the query string
-				        for(var i=0;i<file_ids.length;i++) {
-				        	queryString += '&child_url=' + grid_urls[i] + '&child_id=' + file_ids[i];
-				        }
-				        var input = '';
-				        jQuery.each(queryString.split('&'), function(){
-				          var pair = this.split('=');
-				          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-				        });
-				        
-				        //send request
-				        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
-				        .appendTo('body').submit().remove();
-						
-					} else {
-						alert('There are no files in this dataset that match the search criteria.');
-
-						parentElement.find('a.globusOnlineAllFiles_short').show();
-						parentElement.find('span.globusOnlineAllFiles_short').hide();
-						
-					}
-					
-					
-					
-					
-					
-				},
-				error: function() {
-					alert('error');
-					parentElement.find('a.globusOnlineAllFiles_short').show();
-					parentElement.find('span.globusOnlineAllFiles_short').hide();
-
-					
-				}
-	    	});
-	    	
-	    	
-	    	
-	    	
-	    	
-			/*
-			
-			//var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
-			var selectedDocCount = ($(this).parent().parent().find('span.datasetCount_'+replaceChars(selectedDocId)).html());
-			
-        	//gather the ids and the urls for download
-        	var file_ids   = new Array();
-        	var grid_urls   = new Array();
-			
-        	//if the count is greater than 10, check to see if the additional rows have been not been expanded for this dataset
-        	//if not (null) then need an extra ajax call to get the rest of the file ids
-        	var isAdded = $(this).parent().parent().parent().find('tr.addedrow_' + replaceChars(selectedDocId)).html();
-            	
-        	if(isAdded == null && selectedDocCount > 10) {
-        		
-        		//traverse for file id rows that are checked and that appear
-            	$(this).parent().parent().parent().find('tr.file_rows_'+ replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
-            	
-            		var file_id = $(this).parent().find('input').attr('value');
-            		
-            		var grid_url = $(this).parent().parent().find('span.gridftp').html();
-            		
-
-            		file_ids.push(file_id);
-            		grid_urls.push(grid_url);
-            		
-            	});
-            	
-
-            	var idStr = getIdStr();
-				var peerStr = getPeerStr();
-				var technoteStr = getTechnoteStr();
-		    	var fqParamStr = getFqParamStr();
-            	
-            	//assemble the queryStr obj
-
-		    	var queryStr = {"idStr" : idStr, 
-		    					"peerStr" : peerStr, 
-		    					"technotesStr" : technoteStr, 
-		    					"showAllStr" : ESGF.setting.showAllContents, 
-		    					"fqStr" : fqParamStr, 
-		    					"initialQuery" : "false"};
-				
-				
-				$.ajax({
-					url: '/esgf-web-fe/solrfileproxy2/datacart',
-					global: false,
-					type: "GET",
-					data: queryStr,
-					dataType: 'json',
-					success: function(data) {
-						
-						
-						for(var i=0;i<data.docs.doc.files.file.length;i++){
-							var file = data.docs.doc.files.file[i];
-							file_ids.push(file.fileId);
-							
-							for(var j=0;j<file.services.service.length;j++) {
-								if(file.services.service[j] == 'GridFTP') {
-									grid_urls.push(file.urls.url[j]);
-								}
-							}
-							
-						}
-						
-						var globus_url = '/esgf-web-fe/goformview1';
-				        
-				        //begin assembling queryString
-				        var queryString = 'type=create&id=' + selectedDocId;
-
-
-				        //assemble the input fields with the query string
-				        for(var i=0;i<file_ids.length;i++) {
-				        	queryString += '&child_url=' + grid_urls[i] + '&child_id=' + file_ids[i];
-				        }
-				        var input = '';
-				        jQuery.each(queryString.split('&'), function(){
-				          var pair = this.split('=');
-				          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-				        });
-				        
-				        //send request
-				        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
-				        .appendTo('body').submit().remove();
-						
-		                
-						
-					},
-					error: function() {
-						alert('error in getting extra files');
-					}
-            	});
-        		
-        	} else {
-        		
-        		
-        		//traverse for file id rows that are checked and that appear
-            	$(this).parent().parent().parent().find('tr.file_rows_'+ replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
-            	
-            		var file_id = $(this).parent().find('input').attr('value');
-            		
-            		var grid_url = $(this).parent().parent().find('span.gridftp').html();
-            		
-            		LOG.debug('grid_url: ' + grid_url);
-
-            		file_ids.push(file_id);
-            		grid_urls.push(grid_url);
-            		
-            	});
-            	
-            	
-            	var globus_url = '/esgf-web-fe/goformview1';
-		        
-		        //begin assembling queryString
-		        var queryString = 'type=create&id=' + selectedDocId;
-
-
-		        //assemble the input fields with the query string
-		        for(var i=0;i<file_ids.length;i++) {
-		        	queryString += '&child_url=' + grid_urls[i] + '&child_id=' + file_ids[i];
-		        }
-		        var input = '';
-		        jQuery.each(queryString.split('&'), function(){
-		          var pair = this.split('=');
-		          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-		        });
-		        
-		        //send request
-		        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
-		        .appendTo('body').submit().remove();
-				
-        		
-        	}
-        	*/
-			
-        	
-		});
 		
 		
 		/**

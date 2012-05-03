@@ -60,7 +60,6 @@
 
 
 (function ($) {
-
     $(function () {
          Manager = new AjaxSolr.Manager({
                 proxyUrl: '/esgf-web-fe/solrproxy',
@@ -93,6 +92,12 @@
          
          Manager.addWidget(new AjaxSolr.DCEventsWidget({
              id: 'dcevents'
+             //target: '#events'
+            	 
+           }));
+         
+         Manager.addWidget(new AjaxSolr.DataCartGlobusOnlineWidget({
+             id: 'datacartglobusonline'
              //target: '#events'
             	 
            }));

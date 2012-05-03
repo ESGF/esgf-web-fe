@@ -86,6 +86,10 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
         
     	//CHANGE ME!!!
     	//$(this.target).html($('<img/>').attr('src', 'images/ajax-loader.gif'));
+    	
+    	//grab all the keys from the datacart map and place in an array
+    	self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
+    	
 	},
 	
 	/**
@@ -103,9 +107,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		var selected = $( "#myTabs" ).tabs( "option", "selected" );
 		
 		
-		//grab all the keys from the datacart map and place in an array
-    	self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
-    	
+		
     	//empty the carts tab and append/initialize the datacart table 
     	$('#carts').empty();
     	

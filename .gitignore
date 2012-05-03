@@ -1,4 +1,6 @@
-
+.settings/*
+.classpath
+.project
 TAGS
 .ant-targets-build.xml
 *~

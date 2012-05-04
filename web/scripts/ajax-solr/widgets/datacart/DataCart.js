@@ -111,6 +111,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	//empty the carts tab and append/initialize the datacart table 
     	$('#carts').empty();
     	
+    	
     	//this string represents the options for the data cart
     	//as of now, the options are:
     	// - radio box that the user chooses to show files
@@ -118,31 +119,58 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	var optionsStr = '<div id="radio" style="margin-bottom:30px;display:none">' + 
     				 	 '<table>' +
     				 	 '<tr>' +
-    				 	 '<td>' +
+    				 	 '<td style="width:80px;font-size:12px;padding:0px">' +
     				 	 '<input type="radio" id="datacart_filter_all" name="datacart_filter" value="all" /> ' +
-    				 	 'Show all files ' +
+    				 	 'Show all ' +
     				 	 '</td>' +
-    				 	 '<td>' +
+    				 	 '<td style="width:200px;font-size:12px;padding:0px">' +
     				 	 '<input type="radio" id="datacart_filtered" name="datacart_filter" value="filtered" /> ' +
     				 	 'Filter over search constraints ' +
     				 	 '</td>' +
-    				 	 '<td></td>' + 
-    				 	 '<td></td>' +
-    				 	 '<td></td>' + 
-    				 	 '<td></td>' + 
-    				 	 '<td></td>' + 
-    				 	 '<td>' +
-    				 	 '<input id="remove_all_short" type="submit" value="Remove All" /> ' +
+    				 	 '<td class="sfileCounter" style="width:220;display:none;padding:0px">Show initial <select class="fileCounter" name="fileC">' +
+    				 	 '<option id="fileCounter5" value="5">5</option>'+
+    					 '<option id="fileCounter10" value="10" selected="selected">10</option>' +
+    					 '<option id="fileCounter25" value="25" >25</option>' +
+    					 '<option id="fileCounter50" value="50">50</option>' +
+    					 '</select> files</td>' + 
+    				 	 '<td style="font-size:12px;padding:0px">' +
+    				 	 '<a href="#">Remove All</a>' +
+    				 	 //'<input class="datacart-buttons" type="submit" value="Remove All" />'+
+    			      	//'<input id="remove_all_short" type="submit" value="Remove All" /> ' +
     				 	 '</td>' +
-    				 	 '<td>' +
-    				 	 '<input id="uber_script" type="submit" value="WGET All Selected" /> ' +
+    				 	 '<td style="font-size:12px;padding:0px">' +
+    				 	 //'<input class="datacart-buttons" type="submit" value="WGET All Selected" />'+
+
+    				 	 '<a href="#">WGET All Selected</a>' +
+    				 	 //'<input id="uber_script_short" type="submit" value="WGET All Selected" /> ' +
     				 	 '</td>' +
     				 	 '</tr>' +
     				 	 '</table>' +
     				 	 '</div>';
     	
+    	
+    	
+    	
     	//add the options to the page
     	$('#carts').append(optionsStr);
+
+		$("select[name='fileC']").attr("selectedIndex",3);
+    	
+		
+    	if(ESGF.setting.fileCounter == 5) {
+    		$("select[name='fileC']").attr("selectedIndex",0);
+		} else if(ESGF.setting.fileCounter == 10) {
+    		$("select[name='fileC']").attr("selectedIndex",1);
+		} else if(ESGF.setting.fileCounter == 25) { 
+    		$("select[name='fileC']").attr("selectedIndex",2);
+		} else {
+    		$("select[name='fileC']").attr("selectedIndex",3);
+		}
+    	
+    	$('td.sfileCounter').show();
+    	
+    	
+    	
     	
     	//toggle the "checked" attribute of the showAllContents radio button
     	if(ESGF.setting.showAllContents == 'true') {
@@ -349,7 +377,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
             }
         }
         return convSize;
-    },
+    }
     
     
     
@@ -363,6 +391,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
      * 
      * 
      */
+    /*
     createTemplate: function() {
 
     	var self = this;
@@ -436,7 +465,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		}
     	
 	}
-    
+    */
     
     
     

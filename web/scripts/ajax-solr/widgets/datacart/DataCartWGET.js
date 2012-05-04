@@ -79,13 +79,13 @@
 			
 			var self = this;
 
+			
 	    	//grab the search constraints
 	    	self.searchConstraints = ESGF.localStorage.toKeyArr('esgf_fq');
 	    	
 	    	
 	    	//grab all the keys from the datacart map and place in an array
 	    	self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
-
 	    	
 			//kill the uber script
 			$("input#uber_script_short").die('click');
@@ -100,6 +100,129 @@
 		 */
 		afterRequest: function() {
 		
+			/**
+			 * DOCUMENT ME
+			 * When the user clicks "Download All Files", this method is executed
+			 * 
+			 * A query string is assembled using the file ids and the search constraints (if 'filtered' is selected)
+			 * 
+			 * The string is then executed as a form action and sent to the wget api.  Example:
+			 * 
+			 * esg-search/wget/?project=cmip5
+			 * 
+			 * Would get all files that have been placed in the data cart bucketed in the project cmip5 
+			 */
+			$("input#uber_script_short").live('click', function() {
+
+				
+				var self = this;
+				
+				
+				//gather the file_ids
+	        	var file_ids   = new Array();
+	            
+	        	//gather the dataset_ids
+	        	var dataset_ids = new Array();
+	        	
+	        	//iterate over the selected array of datasets in the data cart
+	        	//grab all the keys from the datacart map and place in an array
+		    	self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
+
+	        	
+	            for(var i=0;i<self.selected_arr.length;i++) {
+	            
+	            	var selectedDocId = self.selected_arr[i];//self.selected_arr[i];
+	            	
+	            	
+	            	var selectedDocCount = $('span.datasetCount_'+replaceChars(selectedDocId)).html();
+	            	
+	            	//if the count is greater than 10, check to see if the additional rows have been not been expanded for this dataset
+	            	//if not (null) then need an extra ajax call to get the rest of the file ids
+	            	var isAdded = $('tr.addedrow_' + replaceChars(selectedDocId)).html();//$(this).parent().parent().parent().find('tr.addedrow_' + replaceChars(selectedDocId)).html();
+	            	
+	            	dataset_ids.push(selectedDocId);
+	            	
+	            	if(isAdded == null && selectedDocCount > ESGF.setting.fileCounter) {
+	            	
+	            		
+	            		$('tr.file_rows_'+ replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
+	            			var file_id = $(this).parent().find('input').attr('value');
+	            			file_ids.push(file_id);
+	            		});
+	            		
+	            		
+	            		
+	            		//get all of the search constraints (fq params)
+	                	var fqParamStr = getFqParamStr();
+	                	
+	                	//get the peers
+	                	var peerStr = getPeerStr();
+	                	
+	                	//get the technotes
+	                	var technoteStr = getTechnoteStr();
+	            		
+	                	//the id str is only one file
+	                	var idStr = selectedDocId;
+	                	
+	                	
+	                	
+	            		//assemble the query string
+	                	var queryStr = {"idStr" : idStr, 
+	        					"peerStr" : peerStr, 
+	        					"technotesStr" : technoteStr, 
+	        					"showAllStr" : ESGF.setting.showAllContents, 
+	        					"fqStr" : fqParamStr, 
+	        					"initialQuery" : "true",
+	        					"fileCounter" : ESGF.setting.fileCounter};
+
+	                	
+	                	$.ajax({
+	    					url: '/esgf-web-fe/solrfileproxy2/datacart',
+	    					global: false,
+	    					type: "GET",
+	    					data: queryStr,
+	    				    async: false,
+	    					dataType: 'json',
+	    					success: function(data) {
+	    						for(var i=0;i<data.docs.doc.files.file.length;i++){
+	    							var file = data.docs.doc.files.file[i];
+	    							file_ids.push(file.fileId);
+	    						}
+	    						
+	    					},
+	    					error: function() {
+	    						alert('error in uber script');
+	    					}
+	                	});
+	            		
+	            	
+	            	} else {
+	            		$('tr.file_rows_'+ replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
+	            			var file_id = $(this).parent().find('input').attr('value');
+	            			file_ids.push(file_id);
+	            		});
+	            		
+	            		
+	            	}
+	            	
+	            }
+	            
+	            var queryString = '/esg-search/wget/?';
+	        	
+	            var constraintCount = 0;
+	            
+	            queryString = addConstraintsToWGETQueryString(queryString);
+	        	
+	            submitWGETScriptForm(queryString,file_ids,dataset_ids);
+				
+				
+			});
+			
+			
+			
+			
+			
+			
 			
 			$('a.wgetAllFiles_short').live('click',function() {
 				
@@ -151,7 +274,8 @@
 						"technotesStr" : technoteStr, 
 						"showAllStr" : ESGF.setting.showAllContents, 
 						"fqStr" : fqParamStr, 
-						"initialQuery" : "true"}; 
+						"initialQuery" : "true",
+    					"fileCounter" : ESGF.setting.fileCounter};
 		    	
 		    	$.ajax({
 					url: '/esgf-web-fe/solrfileproxy2/datacart',
@@ -174,7 +298,8 @@
 										"technotesStr" : technoteStr, 
 										"showAllStr" : ESGF.setting.showAllContents, 
 										"fqStr" : fqParamStr, 
-										"initialQuery" : "false"}; 
+										"initialQuery" : "false",
+			        					"fileCounter" : ESGF.setting.fileCounter};
 								
 								$.ajax({
 									url: '/esgf-web-fe/solrfileproxy2/datacart',
@@ -245,116 +370,6 @@
 			});
 			
 			
-			/**
-			 * DOCUMENT ME
-			 * When the user clicks "Download All Files", this method is executed
-			 * 
-			 * A query string is assembled using the file ids and the search constraints (if 'filtered' is selected)
-			 * 
-			 * The string is then executed as a form action and sent to the wget api.  Example:
-			 * 
-			 * esg-search/wget/?project=cmip5
-			 * 
-			 * Would get all files that have been placed in the data cart bucketed in the project cmip5 
-			 */
-			$("input#uber_script_short").live('click', function() {
-
-				alert('uber script');
-				
-				/*
-				//gather the file_ids
-	        	var file_ids   = new Array();
-	            
-	        	//gather the dataset_ids
-	        	var dataset_ids = new Array();
-	        	
-	        	//iterate over the selected array of datasets in the data cart
-	        	
-	        	
-	            for(var i=0;i<ESGF.localStorage.toKeyArr('dataCart').length;i++) {
-	            
-	            	var selectedDocId = ESGF.localStorage.toKeyArr('dataCart')[i];//self.selected_arr[i];
-	            	
-	            	var selectedDocCount = $('span.datasetCount_'+replaceChars(selectedDocId)).html();
-	            	
-	            	//if the count is greater than 10, check to see if the additional rows have been not been expanded for this dataset
-	            	//if not (null) then need an extra ajax call to get the rest of the file ids
-	            	var isAdded = $('tr.addedrow_' + replaceChars(selectedDocId)).html();//$(this).parent().parent().parent().find('tr.addedrow_' + replaceChars(selectedDocId)).html();
-	            	
-	            	dataset_ids.push(selectedDocId);
-	            	
-	            	if(isAdded == null && selectedDocCount > 10) {
-	            	
-	            		
-	            		$('tr.file_rows_'+ replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
-	            			var file_id = $(this).parent().find('input').attr('value');
-	            			file_ids.push(file_id);
-	            		});
-	            		
-	            		
-	            		
-	            		//get all of the search constraints (fq params)
-	                	var fqParamStr = getFqParamStr();
-	                	
-	                	//get the peers
-	                	var peerStr = getPeerStr();
-	                	
-	                	//get the technotes
-	                	var technoteStr = getTechnoteStr();
-	            		
-	                	//the id str is only one file
-	                	var idStr = selectedDocId;
-	                	
-	                	
-	            		//assemble the query string
-	                	var queryStr = {"idStr" : idStr, 
-	        					"peerStr" : peerStr, 
-	        					"technotesStr" : technoteStr, 
-	        					"showAllStr" : ESGF.setting.showAllContents, 
-	        					"fqStr" : fqParamStr, 
-	        					"initialQuery" : "true"};
-
-	                	
-	                	$.ajax({
-	    					url: '/esgf-web-fe/solrfileproxy2/datacart',
-	    					global: false,
-	    					type: "GET",
-	    					data: queryStr,
-	    				    async: false,
-	    					dataType: 'json',
-	    					success: function(data) {
-	    						for(var i=0;i<data.docs.doc.files.file.length;i++){
-	    							var file = data.docs.doc.files.file[i];
-	    							file_ids.push(file.fileId);
-	    						}
-	    						
-	    					},
-	    					error: function() {
-	    						alert('error in uber script');
-	    					}
-	                	});
-	            		
-	            	
-	            	} else {
-	            		$('tr.file_rows_'+ replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
-	            			var file_id = $(this).parent().find('input').attr('value');
-	            			file_ids.push(file_id);
-	            		});
-	            		
-	            		
-	            	}
-	            }
-	            
-	            var queryString = '/esg-search/wget/?';
-	        	
-	            var constraintCount = 0;
-	            
-	            queryString = addConstraintsToWGETQueryString(queryString);
-	        	
-	            submitWGETScriptForm(queryString,file_ids,dataset_ids);
-				*/
-				
-			});
 			
 			
 		}

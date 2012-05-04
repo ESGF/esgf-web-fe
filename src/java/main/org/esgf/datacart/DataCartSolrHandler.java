@@ -88,11 +88,19 @@ public class DataCartSolrHandler {
         this.solrQueryString = null;
         this.preassembleQueryString();
         
-        this.addLimit(initialQuery);
+        this.addLimit(initialQuery,"10");
         
         this.addSearchConstraints(fq, showAllStr);
         
+    }
+    
+    public DataCartSolrHandler(String showAllStr,String [] fq,String initialQuery,String fileCounter) {
+        this.solrQueryString = null;
+        this.preassembleQueryString();
         
+        this.addLimit(initialQuery,fileCounter);
+        
+        this.addSearchConstraints(fq, showAllStr);
         
     }
     
@@ -188,14 +196,16 @@ public class DataCartSolrHandler {
     }
     
     
-    public void addLimit(String initialQuery) {
+    public void addLimit(String initialQuery,String fileCounter) {
         this.initialQuery = initialQuery;
+        
+        initialLimit = Integer.parseInt(fileCounter);
         
       //if this is the initialQuery, only serve the number of files declared in "initialLimit"
         if(this.initialQuery.equals("true")) {
             this.solrQueryString += "&limit="+initialLimit;
         } else {
-            this.solrQueryString += "&offset=10&limit="+totalLimit;
+            this.solrQueryString += "&offset=" + initialLimit + "&limit="+totalLimit;
         }
     }
     

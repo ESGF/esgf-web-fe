@@ -76,34 +76,31 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 	beforeRequest: function () {
 
 		//kill any live events that are associated with the datacart widget
-		
+
+		//grab all the keys from the datacart map and place in an array
+    	self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
+    	
+    	
+    	
 		//kill tab select
 		$('#myTabs').die('tabsselect');
 		
-		//kill the remove all event
+		//kill the remove events
 		$("input#remove_all_short").die('click');
-		
-				
-		
 		$('.remove_dataset_short').die('click');
-		
-
-    	$("input[name='datacart_filter']").die('change');
+    	
+		//kill the radio button change event
+		$("input[name='datacart_filter']").die('change');
+    	
+    	
 	},
 	
 	afterRequest: function () {
 		
 		var self = this;
 
-		//grab all the keys from the datacart map and place in an array
-    	self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
 
     	
-		/* live datacart events */
-        
-    	
-
-		/*---------Begin header level events---------*/
     	
 		/**
 	     * Event for tab selection (as of now, toggling between "Results" and "Datacart")
@@ -121,6 +118,32 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 			}
 			
 		});
+		
+		$("select[name='fileC']").change(	function() { 
+			//alert('fileCounter'+ESGF.setting.fileCounter);
+	    	
+			//var sel = document.fileC.selectedIndex;
+			//alert($("select[id='fileCounter50']").attr("selectedIndex"));
+			
+			var selectedIndex = $("select[name='fileC']").attr("selectedIndex");
+			
+			
+			if(selectedIndex == 0) {
+				ESGF.setting.fileCounter = 5;
+			} else if(selectedIndex == 1) {
+				ESGF.setting.fileCounter = 10;
+			} else if(selectedIndex == 2) { 
+				ESGF.setting.fileCounter = 25;
+			} else {
+				ESGF.setting.fileCounter = 50;
+			}
+
+			Manager.doRequest(0);
+			
+			//alert($('.fileCounter'+ESGF.setting.fileCounter).attr("selected"));
+	    	//$('.fileCounter').change();
+		});
+		
 		
 		/**
 		 * When a user selects a new radio button the global variable "showAllContents" should be changed
@@ -146,8 +169,6 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		 */
 		$("input#remove_all_short").live('click', function() {
 
-			
-			
 			for(var i=0;i<self.selected_arr.length;i++) {
 				var selectedDocId = self.selected_arr[i];
 
@@ -157,10 +178,8 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 	        	//change from remove from cart to add to cart
 	        	$('a#ai_select_'+ selectedDocId.replace(/\./g, "_")).html('Add To Cart');
 	        	
-	        	
 			}    
 			
-
         	//re-issue request to search api
         	Manager.doRequest(0);
 			
@@ -168,13 +187,6 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		
 		
 		
-		
-		
-		
-		/*---------End header level events----------*/
-		
-		
-		/*---------Begin dataset level events---------*/
 		
 		$('.remove_dataset_short').live ('click', function(e) {
 
@@ -190,112 +202,6 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
         	
 	    });
 		
-		
-		
-		
-		
-		
-		/**
-	     * Grabs individual files and sends that information to the Globus Online view
-	     */
-	    //$('.go_individual_gridftp_short').live('click',function(e) {
-	    	
-	    	
-	    	/*
-	    	var selectedDocId = ($(this).parent().parent().parent().parent().find('span.datasetId').html());
-	    	
-	    	//gather the ids and the urls for download
-	    	var ids   = new Array();
-	        var values = new Array();
-	    	
-	    	var file_id = $(this).parent().parent().parent().find('input').attr('value');
-    		var grid_url = $(this).parent().parent().find('span.gridftp').html();
-    		
-    		ids.push(file_id);
-	        values.push(grid_url);
-    		
-	    	
-    		var globus_url = '/esgf-web-fe/goformview1';
-	        
-	        //begin assembling queryString
-	        var queryString = 'type=create&id=' + selectedDocId;
-
-
-	        //assemble the input fields with the query string
-	        for(var i=0;i<ids.length;i++) {
-	        	queryString += '&child_url=' + values[i] + '&child_id=' + ids[i];
-	        }
-	        var input = '';
-	        jQuery.each(queryString.split('&'), function(){
-	          var pair = this.split('=');
-	          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-	        });
-	        
-	        //send request
-	        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
-	        .appendTo('body').submit().remove();
-	        */
-	        
-	    //});
-		
-	    
-	    
-	    /**
-	     * Event for checkbox file selection
-	     * NOTE: THIS NEEDS TO BE FIXED
-	     */
-	    $(".topLevel").live('change', function() {
-	    	    	
-	    	/*
-	    	var self = this;
-	    	
-	    	var currentValue = $(this).attr('checked');
-
-	    	
-	    	if(currentValue) {
-	    		var selectedItem = $.tmplItem(this);
-		    	var selectedDocId = selectedItem.data.datasetId;
-		    	
-		    	var rowsId = selectedDocId.replace(/\./g,"_")
-		    	
-		        var newWord = rowsId.replace(/\./g,"_");
-		        var newNewWord = newWord.replace(":","_");
-		        var newNewNewWord = newWord.replace("|","_");
-		    	
-		    	//$(this).parent().parent().parent().find('tr.rows_'+ self.replacePeriod(selectedDocId)).each( function(index) {
-                $(this).parent().parent().parent().find('tr.rows_'+ newNewNewWord).each( function(index) {
-                	
-                	var isChecked = $(this).find('input').attr('checked');
-                	
-                	if(!isChecked) {
-                    	$(this).find('input').attr('checked','true');
-                	}
-                	
-		        });
-	    	} else {
-	    		
-	    		var selectedItem = $.tmplItem(this);
-		    	var selectedDocId = selectedItem.data.datasetId;
-		    	
-		    	var rowsId = selectedDocId.replace(/\./g,"_")
-		    	
-		    	var newWord = rowsId.replace(/\./g,"_");
-		        var newNewWord = newWord.replace(":","_");
-		        var newNewNewWord = newWord.replace("|","_");
-		    	
-		    	$(this).parent().parent().parent().find('tr.rows_'+ newNewNewWord).each( function(index) {
-                	
-                	var isChecked = $(this).find('input').attr('checked');
-                	
-                	if(isChecked) {
-                    	$(this).find('input').removeAttr('checked');//attr('checked','false');
-                    }
-		        });
-	    	}
-	    	*/
-	    	
-	    });
-	    
 		
 	}
 

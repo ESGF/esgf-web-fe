@@ -109,7 +109,6 @@
 				//change verbage of the expand link
 				if(this.innerHTML === "Collapse") {
 					
-					
 					var idStr = selectedDocId;
 					
 					
@@ -117,6 +116,7 @@
 					var removeTag = 'remove_' + 'file_rows_' + replaceChars(idStr);
 					$('.'+removeTag).remove();
 					
+					var removeExtraTag = 'addedrow_' + replaceChars(selectedDocId);
 					
 					
 					
@@ -138,7 +138,8 @@
 							"technotesStr" : technoteStr, 
 							"showAllStr" : ESGF.setting.showAllContents, 
 							"fqStr" : fqParamStr, 
-							"initialQuery" : "true"}; 
+							"initialQuery" : "true",
+        					"fileCounter" : ESGF.setting.fileCounter};
 					
 			    	
 			    	//NEED TO FIX THIS!!!!
@@ -270,8 +271,8 @@
 								appendedFiles += '<td></td>';
 								appendedFiles += '</tr>';
 								
-								if(fileLength >= 10) {
-									appendedFiles += '<tr class="view_files_' + 'oooo' + ' remove_' + tagid + '" style="">';
+								if(fileLength >= ESGF.setting.fileCounter) {
+									appendedFiles += '<tr class="view_files_' + '' + ' remove_' + tagid + '" style="">';
 									appendedFiles += '<td></td>';
 									appendedFiles += '<td style="display:none"><span class="datasetId">' + data.doc.datasetId + '</td>';
 									appendedFiles += '<td><a class="view_more_files_short" style="cursor:pointer;font-size:11px">' + 'View more files' + '</a></td>';
@@ -340,7 +341,8 @@
 							"technotesStr" : technoteStr, 
 							"showAll" : ESGF.setting.showAllContents, 
 							"fqStr" : fqParamStr, 
-							"initialQuery" : "false"}; 
+							"initialQuery" : "false",
+        					"fileCounter" : ESGF.setting.fileCounter};
 					
 			    	var appendedRows = $(this).parent().parent().parent().find('tr.file_append_' + replaceChars(selectedDocId));
 
@@ -360,9 +362,12 @@
 							
 							data.docs = rewriteDocsObject(data.docs);
 							
+							var tagid = 'file_rows_' + replaceChars(idStr);
+							//' remove_' + tagid + '
+							
 							for(var i=0;i<data.docs.doc[0].files.file.length;i++){
 								var file = data.docs.doc[0].files.file[i];
-								var newRow = '<tr class="file_rows_' + replaceChars(selectedDocId) + ' addedrow_' + replaceChars(selectedDocId) + '">';
+								var newRow = '<tr class="file_rows_' + replaceChars(selectedDocId) + ' addedrow_' + replaceChars(selectedDocId) + ' remove_' + tagid + '">';
 								
 								//add the checkbox here
 								newRow += '<td style="width: 40px;">';

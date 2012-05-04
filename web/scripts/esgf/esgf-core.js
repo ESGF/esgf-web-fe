@@ -126,9 +126,13 @@ ESGF.setting.getShards = 'solrconfig';
 //need a variable representing the current text in the text query box
 ESGF.setting.textbox = '';
 
-
 //need a toggler for offset (=0 or in pagination)
 ESGF.setting.paginationOn = 'false';
+
+//file denomination counter
+ESGF.setting.fileCounter = 10;
+
+
 
 /**
  * Proxy for creating the template for file downloads.

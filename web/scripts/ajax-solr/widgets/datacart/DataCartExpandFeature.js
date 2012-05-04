@@ -304,6 +304,8 @@
 				//change verbage of the expand link
 				if(this.innerHTML === "Expand") {
 	                this.innerHTML="Collapse";
+
+					
 	            } else {
 	                this.innerHTML="Expand";
 	            }

@@ -117,7 +117,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class FileDownloadTemplateController {
 
     
-    private static String solrURL="http://localhost:8983/solr/select";
+/*    private static String solrURL="http://localhost:8983/solr/select";
     
     private static String searchAPIURL = "http://localhost:8081/esg-search/search?";
     
@@ -140,11 +140,11 @@ public class FileDownloadTemplateController {
     private static final int numInitialFilesShown = 10;
     
     
-    /**
+    *//**
      * Main method to test the controller using Mock Objects
      * 
      * @param args
-     */
+     *//*
     public static void main(String [] args) {
         
         final MockHttpServletRequest mockRequest = new MockHttpServletRequest();
@@ -188,7 +188,7 @@ public class FileDownloadTemplateController {
     
 
     
-    /**
+    *//**
      * Function doGet
      * 
      * Entry point into the FileDownloadController
@@ -196,7 +196,7 @@ public class FileDownloadTemplateController {
      * @param request
      * @return
      * @throws JSONException
-     */
+     *//*
     @RequestMapping(method=RequestMethod.GET)
     public @ResponseBody String doGet(HttpServletRequest request) throws JSONException {
         
@@ -370,12 +370,12 @@ public class FileDownloadTemplateController {
                     if(preAssembleQueryStringDebug) {
                         System.out.println("\t    Adding: " + fqParam);
                     }
-                    /*
+                    
                      * Should ignore the following:
                      * - blanks - ""
                      * - replica - "replica=..."
                      * - offset - "offset=..."
-                     */
+                     
                     boolean ignore = fqParam.equals("") || 
                                      fqParam.equals(" ") ||
                                      fqParam.contains("offset=") ||
@@ -437,7 +437,7 @@ public class FileDownloadTemplateController {
             docElement.setDatasetId(dataset_id);
 
             //add the technote information
-            /*
+            
             TechnotesElement technotesElement = new TechnotesElement();
             String [] technotes = technote.split(",");
             for(int i=0;i<technotes.length;i++) {
@@ -450,7 +450,7 @@ public class FileDownloadTemplateController {
                 technotesElement.addTechnoteElement(te);
             }
             docElement.setTechnotesElement(technotesElement);
-            */
+            
             
             List<FileElement> fileElements = getFileElements(queryString,dataset_id);
 
@@ -530,11 +530,11 @@ public class FileDownloadTemplateController {
     
     
     
-    /**
+    *//**
      * 
      * @param rawString
      * @return
-     */
+     *//*
     private static JSONArray solrResponseToJSON(String rawString) {
         if(solrResponseToJSONDebug) {
             System.out.println("---SolrResponseToJSON---");
@@ -559,12 +559,12 @@ public class FileDownloadTemplateController {
     }
     
     
-    /**
+    *//**
      * 
      * @param queryString
      * @param dataset_id
      * @return
-     */
+     *//*
     private static String querySolrForFiles(String queryString,String dataset_id) {
         if(querySolrForFilesDebug) {
             System.out.println("---Query Solr for Files---");
@@ -647,12 +647,12 @@ public class FileDownloadTemplateController {
     
     
     
-    /**
+    *//**
      * queryStringInfo(HttpServletRequest request)
      * Private method that prints out the contents of the request.  Used mainly for debugging.
      * 
      * @param request
-     */
+     *//*
     @SuppressWarnings("unchecked")
     public static void queryStringInfo(HttpServletRequest request) {
         System.out.println("--------Utils Query String Info--------");
@@ -666,7 +666,7 @@ public class FileDownloadTemplateController {
         System.out.println("--------End Utils Query String Info--------");
     }
 
-    
+    */
     
 }
 

@@ -100,6 +100,8 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		var self = this;
 
 
+		//grab all the keys from the datacart map and place in an array
+    	self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
     	
     	
 		/**
@@ -167,7 +169,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		 * The "remove all" button event (will clear the data cart)
 		 * Specifically it clears the localstorage entry for 'dataCart'
 		 */
-		$("input#remove_all_short").live('click', function() {
+		$("a#remove_all_short").live('click', function() {
 
 			for(var i=0;i<self.selected_arr.length;i++) {
 				var selectedDocId = self.selected_arr[i];

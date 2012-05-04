@@ -174,7 +174,8 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 					"technotesStr" : technoteStr, 
 					"showAllStr" : ESGF.setting.showAllContents, 
 					"fqStr" : fqParamStr, 
-					"initialQuery" : "true"}; 
+					"initialQuery" : "true",
+					"fileCounter" : ESGF.setting.fileCounter}; 
         	
 	    	$.ajax({
 				url: '/esgf-web-fe/solrfileproxy2/datacart',

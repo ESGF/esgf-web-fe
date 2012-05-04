@@ -195,6 +195,9 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         //when we support others, this if guard will be removed
         if(metadataFormat === 'THREDDS') {
 
+        	//alert('number of files: ' + evt.data.doc['number_of_files']);
+        	//var docInfo = 
+        	
             selected[evt.data.doc.id] = doc;
             if ( jQuery.trim(this.innerHTML) == "Add To Cart") {
             	
@@ -205,7 +208,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             		//add to the datacart localstorage
                 	if(evt.data.doc['index_node'] != undefined) {
                 		
-                		var datasetInfo = {'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink']};
+                		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink']};
                 		
                     	ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
                 	
@@ -214,7 +217,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                     
                 		//alert('peer should be undefined');
                 		
-                		var datasetInfo = {'peer' : 'undefined' , 'xlink' : evt.data.doc['xlink']};
+                		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : 'undefined' , 'xlink' : evt.data.doc['xlink']};
                 		
                 		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
                 	
@@ -227,14 +230,14 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             		//add to the datacart localstorage
                 	if(evt.data.doc['index_node'] != undefined) {
                     
-                		var datasetInfo = {'peer' : evt.data.doc['index_node'] , 'xlink' : 'undefined' };
+                		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : 'undefined' };
                 		
                 		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
                 	
                 	
                 	} else {
                 		//alert('peer should be undefined');
-                		var datasetInfo = {'peer' : 'undefined' , 'xlink' : 'undefined' };
+                		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : 'undefined' , 'xlink' : 'undefined' };
                 		
                 		
                 		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);

@@ -112,7 +112,7 @@
 			 * 
 			 * Would get all files that have been placed in the data cart bucketed in the project cmip5 
 			 */
-			$("input#uber_script_short").live('click', function() {
+			$("a#uber_script_short").live('click', function() {
 
 				
 				var self = this;

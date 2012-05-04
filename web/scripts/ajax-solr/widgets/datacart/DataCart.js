@@ -134,14 +134,14 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     					 '<option id="fileCounter50" value="50">50</option>' +
     					 '</select> files</td>' + 
     				 	 '<td style="font-size:12px;padding:0px">' +
-    				 	 '<a href="#">Remove All</a>' +
+    				 	 '<a id="remove_all_short" style="cursor:pointer">Remove All</a>' +
     				 	 //'<input class="datacart-buttons" type="submit" value="Remove All" />'+
     			      	//'<input id="remove_all_short" type="submit" value="Remove All" /> ' +
     				 	 '</td>' +
     				 	 '<td style="font-size:12px;padding:0px">' +
     				 	 //'<input class="datacart-buttons" type="submit" value="WGET All Selected" />'+
 
-    				 	 '<a href="#">WGET All Selected</a>' +
+    				 	 '<a id="uber_script_short" style="cursor:pointer">WGET All Selected</a>' +
     				 	 //'<input id="uber_script_short" type="submit" value="WGET All Selected" /> ' +
     				 	 '</td>' +
     				 	 '</tr>' +
@@ -227,7 +227,10 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			
 			datasetList += '<td style="width: 325px;font-size:13px">';
 			
+			//alert(ESGF.localStorage.get('dataCart',self.selected_arr[i])['numFiles']);
+			
 			datasetList += '<div style="word-wrap: break-word;font-weight:bold"  ><span class="datasetId">' + self.selected_arr[i] + '</span></div>';
+			datasetList += '<span>' + ' (Total Number of Files: ' +  ESGF.localStorage.get('dataCart',self.selected_arr[i])['numFiles'] + ')</span>';
 			//<span class="datasetId">${datasetId}</span>
 			//(<span class="datasetCount_${$item.replaceChars(datasetId)}">${count}</span> files) 
 		    //</div>

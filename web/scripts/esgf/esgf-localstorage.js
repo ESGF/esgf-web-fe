@@ -10,6 +10,10 @@ Storage.prototype.getObject = function(key) {
 	return JSON.parse(this.getItem(key));
 }
 
+String.prototype.trim = function () {
+    return this.replace(/^\s*/, "").replace(/\s*$/, "");
+}
+
 
 ESGF.localStorage.toString = function(category) {
 	
@@ -343,20 +347,23 @@ ESGF.localStorage.remove = function(category, key) {
 		var map = JSON.parse(localStorage.getItem(category));
 		
 		//alert('mapstring: ' + JSON.stringify(map));
-		
+		/*
 		for(var mapKey in map) {
 			if (key == mapKey) {
 				canRemove = true;
 			}
-		}
-		if(canRemove) {
-			delete map[key];
-			//ESGF.setting.tempStore[category] = map;
-			localStorage.setItem(category,JSON.stringify(map));
+			var canRemove = false;
+			if (key == mapKey) {
+				canRemove = true;
+			}
+			if(canRemove) {
+				delete map[key];
+				//ESGF.setting.tempStore[category] = map;
+				localStorage.setItem(category,JSON.stringify(map));
 			
+			}
 		}
-		
-		
+		*/
 		
 		
 	} else {

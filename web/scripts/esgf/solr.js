@@ -60,7 +60,6 @@
 
 
 (function ($) {
-
     $(function () {
     	
     	
@@ -87,9 +86,28 @@
              id: 'cimviewer'
            }));
          
+     	
          Manager.addWidget(new AjaxSolr.DataCartWidget({
              id: 'distributedSearch2',
              target: '#carts'
+            	 
+           }));
+         
+         Manager.addWidget(new AjaxSolr.DCEventsWidget({
+             id: 'dcevents'
+           }));
+         
+         Manager.addWidget(new AjaxSolr.DataCartExpandFeatureWidget({
+        	 id: 'expandfeature'
+         }));
+         
+         Manager.addWidget(new AjaxSolr.DataCartWGETWidget({
+        	 id: 'wgetfeature'
+         }));
+         
+         Manager.addWidget(new AjaxSolr.DataCartGlobusOnlineWidget({
+             id: 'datacartglobusonline'
+             //target: '#events'
             	 
            }));
          
@@ -215,40 +233,6 @@
         Manager.init();
         Manager.store.addByValue('q','*:*');
 
-        /*
-        var params = {
-                 'facet': true,
-                 'facet.field': shortNameArr,//fields,
-                 'facet.limit': 20,
-                 'facet.mincount': 1,
-                 'f.topics.facet.limit': 50,
-                 'json.nl': 'map'
-               };
-
-    	var fieldsStr = 'facets=';
-        for (var name in params) {
-        	if(name == 'facet.field') {
-               for(var i=0;i<fields.length;i++) {
-                   //Manager.store.addByValue(name,fields[i]);
-            	   //Manager.store.addByValue(name,shortNameArr[i]);
-            		   if(i<(fields.length-1)) {
-                		   fieldsStr += shortNameArr[i] + ',';
-                	   } else {
-                		   fieldsStr += shortNameArr[i];
-                	   }
-            	   
-               }
-        	}
-        	else {
-               //Manager.store.addByValue(name, params[name]);
-        	}
-
-        	
-        }
-
-        
-    	ESGF.localStorage.put('esgf_queryString',fieldsStr,fieldsStr);
-        */
         
 
 
@@ -256,7 +240,7 @@
         
     }
 
-    
+
 })(jQuery);
 
 

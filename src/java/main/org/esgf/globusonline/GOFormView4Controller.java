@@ -61,7 +61,7 @@
  *
  * For any redirect trouble, please refers to ROOT/urlrewrite.xml
  *
- * @author Feiyi Wang (fwang2@ornl.gov)
+ * @author Neill Miller (neillm@mcs.anl.gov), Feiyi Wang (fwang2@ornl.gov)
  *
  */
 package org.esgf.globusonline;
@@ -117,44 +117,100 @@ public class GOFormView4Controller {
         /* get model params here */
         String dataset_name = request.getParameter("id");
         String userCertificate = request.getParameter("usercertificate");
-        String [] file_names = request.getParameterValues("child_id");
-        String [] file_urls = request.getParameterValues("child_url");
         String goUserName = request.getParameter("gousername");
         String target = request.getParameter("target");
-        String endpointInfo = request.getParameter("endpointinfo");
+        String [] file_names = request.getParameterValues("child_id");
+        String [] file_urls = request.getParameterValues("child_url");
+        String[] endpointInfos = request.getParameterValues("endpointinfos");
+        String endpoint = request.getParameter("endpointdropdown");
 
         //if this request comes via go form view 3, then obtain the request parameters for myproxy username
         String srcMyproxyUserName = request.getParameter("srcmyproxyuser");
         String srcMyproxyUserPass = request.getParameter("srcmyproxypass");
 
-        String destMyproxyUserName = null;
-        String destMyproxyUserPass = null;
-
         StringBuffer errorStatus = new StringBuffer("Steps leading up to the error are shown below:<br><br>");
-        if ((request.getParameter("myproxyUserName") != null) && (request.getParameter("myproxyUserPass") != null))
-        {
-            destMyproxyUserName = request.getParameter("myproxyUserName");
-            destMyproxyUserPass= request.getParameter("myproxyUserPass");
-        }
+
         LOG.debug("GOFORMView4Controller got Certificate " + userCertificate);
         LOG.debug("GOFORMView4Controller got Target " + target);
-        LOG.debug("GOFORMView4Controller got endpointInfo " + endpointInfo);
+        LOG.debug("GOFORMView4Controller got selected endpoint " + endpoint);
         LOG.debug("GOFORMView4Controller got Src Myproxy User " + srcMyproxyUserName);
         LOG.debug("GOFORMView4Controller got Src Myproxy Pass ******");
-        LOG.debug("GOFORMView4Controller got Dest Myproxy User " + destMyproxyUserName);
-        LOG.debug("GOFORMView4Controller got Dest Myproxy Pass ******");
+
+        System.out.println("GOFORMView4Controller got Certificate " + userCertificate);
+        System.out.println("GOFORMView4Controller got Target " + target);
+        System.out.println("GOFORMView4Controller got selected endpoint " + endpoint);
+        System.out.println("GOFORMView4Controller got Src Myproxy User " + srcMyproxyUserName);
+        System.out.println("GOFORMView4Controller got Src Myproxy Pass ******");
 
         Map<String,Object> model = new HashMap<String,Object>();
 
         JGOTransfer transfer = new JGOTransfer(goUserName, userCertificate, userCertificate, CA_CERTIFICATE_FILE);
-        //transfer.setVerbose(true);
+        transfer.setVerbose(true);
         try
         {
+            String newURL = null, goEP = null;
+            String[] pieces = null;
+            Vector<String> fileList = null;
+            HashMap<String, Vector<String>> sourceMap = new HashMap<String, Vector<String>>();
+
             transfer.initialize();
 
-            ESGFProperties esgfProperties = new ESGFProperties();
-            String goSourceEndpoint = esgfProperties.getProperty("gridftp.globusonline.endpoint");
-            LOG.debug("GOT SOURCE ENDPOINT: " + goSourceEndpoint);
+            // find the endpointInfo line that matches the endpoint the user selected
+            int len = endpointInfos.length;
+            String endpointInfo = null;
+            String searchEndpoint = endpoint + "^^";
+            for(int i = 0; i < len; i++)
+            {
+                if (endpointInfos[i].startsWith(searchEndpoint))
+                {
+                    endpointInfo = endpointInfos[i];
+                    break;
+                }
+            }
+            System.out.println("User selected endpoint that has the info: " + endpointInfo);
+            LOG.debug("User selected endpoint that has the info: " + endpointInfo);
+
+            boolean isGlobusConnect = endpointInfo.endsWith("true");
+
+            // FIXME: Cache from previous time we called this?
+            // or reconstruct from the other format of them that we have?
+            Vector<EndpointInfo> goEndpointInfos = transfer.listEndpoints();
+
+            // first pass, find all sources
+            // we create a mapping of GO endpoints to Filelists
+            for(String curURL : file_urls)
+            {
+                pieces = curURL.split("//");
+                goEP = Utils.lookupGOEPBasedOnGridFTPURL(pieces[1], goEndpointInfos, true);
+                if (goEP == null)
+                {
+                    goEP = Utils.lookupGOEPBasedOnGridFTPURL(pieces[1], goEndpointInfos, false);
+                }
+
+                if (!sourceMap.containsKey(goEP))
+                {
+                    LOG.debug("Mapped GridFTP Server " + pieces[1] + " to GO EP " + goEP);
+                    System.out.println("Mapped GridFTP Server " + pieces[1] + " to GO EP " + goEP);
+                    sourceMap.put(goEP, new Vector<String>());
+                }
+
+                fileList = sourceMap.get(goEP);
+                newURL = "//" + pieces[2];
+
+                LOG.debug("Transformed " + curURL + " into " + newURL);
+                System.out.println("Transformed " + curURL + " into " + newURL);
+                fileList.add(newURL);
+            }
+
+            // FIXME: For now we always just grab the first endpoint
+            // since we can only handle a single source endpoint (per
+            // transfer) ... break up into multiple transfers later
+            Map.Entry<String, Vector<String>> entry = sourceMap.entrySet().iterator().next();
+            String goSourceEndpoint = entry.getKey();
+            fileList = entry.getValue();
+
+            LOG.debug("USING SOURCE ENDPOINT: " + goSourceEndpoint);
+            System.out.println("USING SOURCE ENDPOINT: " + goSourceEndpoint);
 
             errorStatus.append("Source endpoint resolved as \"");
             errorStatus.append(goSourceEndpoint);
@@ -162,46 +218,69 @@ public class GOFormView4Controller {
 
             // first activate the source endpoint
             LOG.debug("Activating source endpoint " + goSourceEndpoint);
+            System.out.println("Activating source endpoint " + goSourceEndpoint);
             errorStatus.append("Attempting to activate Source Endpoint " + goSourceEndpoint + " ...<br>");
             transfer.activateEndpoint(goSourceEndpoint, srcMyproxyUserName, srcMyproxyUserPass);
             errorStatus.append("Source Endpoint activated properly!<br>");
 
-            // second, activate the target endpoint (if not GlobusConnect)
             String[] endpointPieces = endpointInfo.split("\\^\\^");
-            if (endpointInfo.endsWith("true"))
+            String destEPName = endpointPieces[0];
+
+            // second, activate the target endpoint (special case GlobusConnect)
+            if (isGlobusConnect == true)
             {
-                LOG.debug("Detected Globus Connect target endpoint");
+                LOG.debug("Detected Globus Connect target endpoint: " + destEPName);
+                System.out.println("Detected Globus Connect target endpoint: " + destEPName);
                 errorStatus.append("Detected Globus Connect target endpoint.<br>");
-                errorStatus.append("Attempting to activate Destination Endpoint " + endpointPieces[0] + " ...<br>");
-                transfer.activateEndpoint(endpointPieces[0]);
+                errorStatus.append("Attempting to activate Destination Endpoint " + destEPName + " ...<br>");
+                transfer.activateEndpoint(destEPName);
                 errorStatus.append("Destination Endpoint activated properly!<br>");
             }
             else
             {
-                LOG.debug("Activating destination endpoint " + endpointPieces[0]);
-                errorStatus.append("Attempting to activate Destination Endpoint " + endpointPieces[0] + " ...<br>");
-                transfer.activateEndpoint(endpointPieces[0], destMyproxyUserName, destMyproxyUserPass);
+                // find if an existing endpoint exists in this user's namespace
+                EndpointInfo destInfo = Utils.getLocalEndpointBasedOnGlobalName(
+                    goUserName, destEPName, goEndpointInfos);
+                if (destInfo == null)
+                {
+                    // if not, add a new endpoint here with the info
+                    // from the selected Endpoint
+                    String gridFTPServer = endpointPieces[1];
+                    if (gridFTPServer.startsWith("gsiftp://"))
+                    {
+                        gridFTPServer = gridFTPServer.substring(9);
+                    }
+                    String myproxyServer = endpointPieces[2];
+                    String localEPName = destEPName;
+                    int pos = destEPName.indexOf("#");
+                    if (pos != -1)
+                    {
+                        localEPName = destEPName.substring(pos+1);
+                    }
+                    localEPName = goUserName + "#" + localEPName;
+
+                    System.out.println("Adding new Endpoint \"" + localEPName + "\" with GridFTP: "
+                                       + gridFTPServer + ", and MyProxy: " + myproxyServer);
+
+                    transfer.addEndpoint(localEPName, gridFTPServer, myproxyServer, false);
+                    destEPName = localEPName;
+                }
+                else
+                {
+                    // if so, use it as the dest since it's presumably already configured
+                    destEPName = destInfo.getEPName();
+                }
+
+                LOG.debug("Activating destination endpoint " + destEPName);
+                System.out.println("Activating destination endpoint " + destEPName);
+                errorStatus.append("Attempting to activate Destination Endpoint " + destEPName + " ...<br>");
+                transfer.activateEndpoint(destEPName, srcMyproxyUserName, srcMyproxyUserPass);
                 errorStatus.append("Destination Endpoint activated properly!<br>");
-            }
-
-            // transform all URLs here
-            String newURL = null;
-            String[] pieces = null;
-            Vector<String> fileList = new Vector<String>();
-            for(String curURL : file_urls)
-            {
-                // ESG URLs are of the form "gsiftp://host//file-part.
-                // we only want the file part in this file list (i.e. //file-part).
-                pieces = curURL.split("//");
-                newURL = "//" + pieces[2];
-
-                //LOG.debug("Transformed " + curURL + " into " + newURL);
-                fileList.add(newURL);
             }
 
             // kick off the transfer here!
             errorStatus.append("Attempting to start Globus Online Transfer ...<br>");
-            String taskID = transfer.transfer(goSourceEndpoint, endpointPieces[0], fileList, target);
+            String taskID = transfer.transfer(goSourceEndpoint, destEPName, fileList, target);
             if (taskID != null)
             {
                 errorStatus.append("Globus Online Transfer got TaskID " + taskID + ".<br>");

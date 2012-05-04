@@ -242,7 +242,13 @@ body {
 }
 
 
-
+.datacart-buttons {
+	font-size: 13px;
+	color: white;
+	border: 1px solid #9c9c9c;
+	background: #838943;
+	cursor: pointer;
+}
 
 
 #search-results {

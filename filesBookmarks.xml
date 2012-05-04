@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bookmarks>
+  <bookmark>
+    <openId>openId0</openId>
+    <constraints>
+      <fqConstraint>distrib=true0</fqConstraint>
+    </constraints>
+    <timeStamp>timeStamp</timeStamp>
+  </bookmark>
+  <bookmark>
+    <openId>openId1</openId>
+    <constraints>
+      <fqConstraint>distrib=true1</fqConstraint>
+    </constraints>
+    <timeStamp>timeStamp</timeStamp>
+  </bookmark>
+</bookmarks>

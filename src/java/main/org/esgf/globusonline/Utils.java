@@ -1,3 +1,55 @@
+/*****************************************************************************
+ * Copyright © 2011 , UT-Battelle, LLC All rights reserved
+ *
+ * OPEN SOURCE LICENSE
+ *
+ * Subject to the conditions of this License, UT-Battelle, LLC (the
+ * “Licensor”) hereby grants to any person (the “Licensee”) obtaining a copy
+ * of this software and associated documentation files (the "Software"), a
+ * perpetual, worldwide, non-exclusive, irrevocable copyright license to use,
+ * copy, modify, merge, publish, distribute, and/or sublicense copies of the
+ * Software.
+ *
+ * 1. Redistributions of Software must retain the above open source license
+ * grant, copyright and license notices, this list of conditions, and the
+ * disclaimer listed below.  Changes or modifications to, or derivative works
+ * of the Software must be noted with comments and the contributor and
+ * organization’s name.  If the Software is protected by a proprietary
+ * trademark owned by Licensor or the Department of Energy, then derivative
+ * works of the Software may not be distributed using the trademark without
+ * the prior written approval of the trademark owner.
+ *
+ * 2. Neither the names of Licensor nor the Department of Energy may be used
+ * to endorse or promote products derived from this Software without their
+ * specific prior written permission.
+ *
+ * 3. The Software, with or without modification, must include the following
+ * acknowledgment:
+ *
+ *    "This product includes software produced by UT-Battelle, LLC under
+ *    Contract No. DE-AC05-00OR22725 with the Department of Energy.”
+ *
+ * 4. Licensee is authorized to commercialize its derivative works of the
+ * Software.  All derivative works of the Software must include paragraphs 1,
+ * 2, and 3 above, and the DISCLAIMER below.
+ *
+ *
+ * DISCLAIMER
+ *
+ * UT-Battelle, LLC AND THE GOVERNMENT MAKE NO REPRESENTATIONS AND DISCLAIM
+ * ALL WARRANTIES, BOTH EXPRESSED AND IMPLIED.  THERE ARE NO EXPRESS OR
+ * IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE,
+ * OR THAT THE USE OF THE SOFTWARE WILL NOT INFRINGE ANY PATENT, COPYRIGHT,
+ * TRADEMARK, OR OTHER PROPRIETARY RIGHTS, OR THAT THE SOFTWARE WILL
+ * ACCOMPLISH THE INTENDED RESULTS OR THAT THE SOFTWARE OR ITS USE WILL NOT
+ * RESULT IN INJURY OR DAMAGE.  The user assumes responsibility for all
+ * liabilities, penalties, fines, claims, causes of action, and costs and
+ * expenses, caused by, resulting from or arising out of, in whole or in part
+ * the use, storage or disposal of the SOFTWARE.
+ *
+ *
+ ******************************************************************************/
+
 package org.esgf.globusonline;
 
 import java.io.BufferedReader;
@@ -11,6 +63,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Vector;
+
+import org.globusonline.EndpointInfo;
 
 import java.net.URI;
 
@@ -285,41 +340,94 @@ public class Utils {
         LOG.debug("--------End Utils printElementContents--------");
     }
     
-    public static URI resolveMyProxyViaOpenID(String openId)
+    public static String resolveMyProxyViaOpenID(String openId)
+        throws YadisException, Exception
     {
-        URI result = null;
-        try
-        {
-            LOG.debug("Attempting to resolve MyProxy Server from OpenID: " + openId);
+        String result = null;
+        LOG.debug("Attempting to resolve MyProxy Server from OpenID: " + openId);
 
-            YadisResolver resolver = new YadisResolver();
-            Set<String> serviceTypes = new HashSet<String>();
-            // service type for P2P OpenIDs
-            serviceTypes.add("esg:myproxy-service");
-            // service type for Gateway OpenIDs
-            serviceTypes.add("urn:esg:security:myproxy-service");
+        YadisResolver resolver = new YadisResolver();
+        Set<String> serviceTypes = new HashSet<String>();
+        // service type for P2P issued OpenIDs
+        serviceTypes.add("esg:myproxy-service");
+        // service type for Gateway issued OpenIDs
+        serviceTypes.add("urn:esg:security:myproxy-service");
 
-            YadisResult yadisResult = resolver.discover(openId, 10, new HttpCache(), serviceTypes);
-            XrdsServiceEndpoint endpoint = (XrdsServiceEndpoint) yadisResult.getEndpoints().get(0);
-            result = new URI(endpoint.getUri());
-        }
-        catch(YadisException ye)
+        YadisResult yadisResult = resolver.discover(openId, 10, new HttpCache(), serviceTypes);
+        XrdsServiceEndpoint endpoint = (XrdsServiceEndpoint) yadisResult.getEndpoints().get(0);
+
+        // clean up endpoint, as some appear to contain cruft
+        // e.g. "socket://hostname.org:7512:7512
+        String ep = endpoint.getUri();
+        int pos = ep.indexOf("://");
+        if (pos != -1)
         {
-            if (ye.getErrorCode() == OpenIDException.YADIS_INVALID_URL)
-            {
-                LOG.error("The OpenID URL provided is invalid.  Please make sure that you're " +
-                          "logged in as a valid Gateway user.");
-            }
-            else
-            {
-                LOG.error("A Yadis error occurred trying to resolve the specified OpenID. " +
-                          "Please make sure that you're logged in as a valid Gateway user.");
-            }
+            ep = ep.substring(pos + 3);
         }
-        catch(Exception e)
+        pos = ep.indexOf(":");
+        if (pos != -1)
         {
-            LOG.error("OpenID Discovery error: " + e);
+            pos = ep.indexOf(":", pos+1);
+            if (pos != -1)
+            {
+                ep = ep.substring(0, pos);
+            }
         }
+        else
+        {
+            ep = ep + ":7512";
+        }
+        result = ep;
+
         return result;
+    }
+
+    /*
+      If there are multiple endpoints with the same GridFTP
+      information, this method gives preference to one that starts
+      with "esg#" since it's the most likely to be correct.
+    */
+    public static String lookupGOEPBasedOnGridFTPURL(
+        String gftpURL, Vector<EndpointInfo> endpointInfos, boolean forceESG)
+    {
+        String goEP = null, hosts = null;
+        for(EndpointInfo curInfo : endpointInfos)
+        {
+            hosts = curInfo.getHosts();
+            if (hosts.contains(gftpURL))
+            {
+                if ((forceESG == true) && (!curInfo.getEPName().startsWith("esg")))
+                {
+                    continue;
+                }
+                goEP = curInfo.getEPName();
+                break;
+            }
+        }
+        return goEP;
+    }
+
+    public static EndpointInfo getLocalEndpointBasedOnGlobalName(
+        String goUserName, String endpointName, Vector<EndpointInfo> endpointInfos)
+    {
+        String epName = endpointName;
+        int pos = endpointName.indexOf("#");
+        if (pos != -1)
+        {
+            epName = endpointName.substring(pos+1);
+        }
+        for(EndpointInfo curInfo : endpointInfos)
+        {
+            String curEPName = curInfo.getEPName();
+            if (curEPName.startsWith(goUserName))
+            {
+                if (curEPName.endsWith("#" + epName))
+                {
+                    System.out.println("FOUND MATCHING LOCAL ENDPOINT INFO: " + curInfo);
+                    return curInfo;
+                }
+            }
+        }
+        return null;
     }
 }

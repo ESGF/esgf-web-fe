@@ -139,6 +139,7 @@ AjaxSolr.AbstractManager = AjaxSolr.Class.extend(
    * @param {AjaxSolr.AbstractWidget} widget
    */
   addWidget: function (widget) { 
+	  
     widget.manager = this;
     this.widgets[widget.id] = widget;
   },

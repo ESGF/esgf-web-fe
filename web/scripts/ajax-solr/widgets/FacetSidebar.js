@@ -95,33 +95,61 @@
 		    		i = i + 1;
 		    		var count = self.manager.response.facet_counts.facet_fields[facet][i];
 		    		
-		    		
-		    		
+/*
+	    			facet_val_counts.push(count);
+	    			facet_val_arr.push(facet_value);
+*/		    		
 		    		if(facet == 'project'){
+		    			
+		    			
 		    			if(count > facet_max_count) {
 		    				facet_max_count = count;
 		    			}
-		    		
+		    			
 		    			
 		    			facet_val_counts.push(count);
 		    			facet_val_arr.push(facet_value);
 		    		} else if(!isConstraint(facet)) {
 		    			
-		    			if(count > facet_max_count) {
-		    				facet_max_count = count;
-		    			}
-		    		
-		    			facet_val_counts.push(count);
-		    			facet_val_arr.push(facet_value);
-		    		
-		    		} else if(matchesFacetValue(facet,facet_value)) {
-		    			//var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
-		    			var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][1]);
 		    			
 		    			if(count > facet_max_count) {
 		    				facet_max_count = count;
 		    			}
+		    			
+
+		    			facet_val_counts.push(count);
+		    			facet_val_arr.push(facet_value);
 		    		
+		    		} else if(matchesFacetValue(facet,facet_value)) {
+		    			
+		    			/*
+		    			if(facet == 'variable' && facet_value == 'clt') {
+			    			alert('facet: ' + facet + ' facet_value: ' + facet_value);
+			    			
+			    			var v = self.manager.response.facet_counts.facet_fields[facet];
+			    			//for(key in v) {
+			    			for(var j=0;j<v.length;j++) {
+			    				if(v[j] == facet_value) {
+				    				alert('key: ' + j + ' ' + v[j]);
+				    				j = j+1;
+				    				alert('count: ' + v[j]);
+			    				}
+			    			}
+			    			
+			    		}
+		    			*/
+		    			
+		    			
+		    			
+		    			//var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][facet_value]);
+		    			//var count = parseInt(self.manager.response.facet_counts.facet_fields[facet][1]);
+		    			
+		    			
+		    			if(count > facet_max_count) {
+		    				facet_max_count = count;
+		    			}
+		    			
+		    			
 		    			facet_val_counts.push(count);
 		    			facet_val_arr.push(facet_value);
 		    		}

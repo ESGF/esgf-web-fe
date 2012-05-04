@@ -62,7 +62,6 @@
 (function ($) {
 
 
-
 AjaxSolr.theme.prototype.result = function (doc, snippetReplica, snippetVersion, snippet, actions) {
     var output = '';
 
@@ -137,7 +136,10 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     	    } else if(url.search("OPENDAP") > -1) {
     	    	var tuple = url.split("\|");
         	    output += '<span class="actionitem ai_las"><a href="' + tuple[0] + '" target="_blank">OPENDAP</a></span>';
-    		} 
+            } else if(url.search("application/gis") > -1) {
+                var tuple = url.split("\|");
+                output += '<span class="actionitem ai_las"><a href="' + tuple[0] + '" target="_blank">'+tuple[2]+'</a></span>';
+            } 
     	}
     }
     
@@ -149,7 +151,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     
     if(doc.project == 'CMIP5' || doc.project == 'cmip5') {
     	//output += '<span class="__actionitem__"> <a class="cim-model" href="#" id="' + selectMetID + '">CIM Metadata</a></span>';
-        output += '<span class="__actionitem__"> <a class="cim-model" href="#" ' + cimStr + '">CIM Metadata</a></span>';
+        output += '<span class="__actionitem__"> <a class="cim-model" href="#" ' + cimStr + '">Model Metadata</a></span>';
         
     }
     
@@ -193,6 +195,9 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         //when we support others, this if guard will be removed
         if(metadataFormat === 'THREDDS') {
 
+        	//alert('number of files: ' + evt.data.doc['number_of_files']);
+        	//var docInfo = 
+        	
             selected[evt.data.doc.id] = doc;
             if ( jQuery.trim(this.innerHTML) == "Add To Cart") {
             	
@@ -203,7 +208,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             		//add to the datacart localstorage
                 	if(evt.data.doc['index_node'] != undefined) {
                 		
-                		var datasetInfo = {'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink']};
+                		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink']};
                 		
                     	ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
                 	
@@ -212,7 +217,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                     
                 		//alert('peer should be undefined');
                 		
-                		var datasetInfo = {'peer' : 'undefined' , 'xlink' : evt.data.doc['xlink']};
+                		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : 'undefined' , 'xlink' : evt.data.doc['xlink']};
                 		
                 		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
                 	
@@ -225,14 +230,14 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             		//add to the datacart localstorage
                 	if(evt.data.doc['index_node'] != undefined) {
                     
-                		var datasetInfo = {'peer' : evt.data.doc['index_node'] , 'xlink' : 'undefined' };
+                		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : 'undefined' };
                 		
                 		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
                 	
                 	
                 	} else {
                 		//alert('peer should be undefined');
-                		var datasetInfo = {'peer' : 'undefined' , 'xlink' : 'undefined' };
+                		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : 'undefined' , 'xlink' : 'undefined' };
                 		
                 		
                 		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);

@@ -180,8 +180,8 @@ public class FileDownloadTemplateController {
         
         //REPLACE ME!
         //should be handler.addShard(peer+":8983/solr");
-        handler.addShard("localhost"+":8983/solr");
-        //handler.addShard(peer+":8983/solr");
+        //handler.addShard("localhost"+":8983/solr");
+        handler.addShard(peer+":8983/solr");
        
         
         doc = handler.getDocElement(id);

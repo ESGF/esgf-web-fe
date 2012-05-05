@@ -118,10 +118,20 @@
 					
 					var removeExtraTag = 'addedrow_' + replaceChars(selectedDocId);
 					
-					
+
+	                this.innerHTML="Expand";
 					
 					
 				} else {
+
+					var self = this;
+
+					var parentElement = $(this).parent();
+					
+
+					parentElement.find('a.showAllFiles_short').hide();
+					parentElement.find('span.showAllFiles_short').show();
+					
 
 					
 					var idStr = selectedDocId;
@@ -156,6 +166,7 @@
 						data: queryStr,
 						dataType: 'json',
 						success: function(data) {
+
 							
 							var tagid = 'file_rows_' + replaceChars(idStr);
 							
@@ -176,7 +187,11 @@
 									
 								$('.'+tagid).after(appendedFiles);
 								
-								
+
+								parentElement.find('a.showAllFiles_short').show();
+								parentElement.find('span.showAllFiles_short').hide();
+
+								self.innerHTML="Collapse";
 								
 								
 							} else {
@@ -215,7 +230,6 @@
 									}
 								}
 								
-
 								var appendedFiles = '';
 								
 								for(var i=0;i<fileLength;i++) {
@@ -288,26 +302,37 @@
 								
 								
 								$('.'+tagid).after(appendedFiles);
-								
-								
+
+								parentElement.find('a.showAllFiles_short').show();
+								parentElement.find('span.showAllFiles_short').hide();
+
+								self.innerHTML="Collapse";
 							}
-							
 							
 						},
 						error: function() {
 							alert('error in getting new rows');
 						}
 					});
+					
+					
+					
+					
+					
+					
+					
+					
+					
 						
 				}
 				
 				//change verbage of the expand link
 				if(this.innerHTML === "Expand") {
-	                this.innerHTML="Collapse";
+	                //this.innerHTML="Collapse";
 
 					
 	            } else {
-	                this.innerHTML="Expand";
+	                //this.innerHTML="Expand";
 	            }
 				
 		    	

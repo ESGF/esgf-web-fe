@@ -240,6 +240,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			
 			datasetList += '<td style="font-size:11px;float:right" >';
 			
+			datasetList += '<span class="showAllFiles_short" style="display:none;font-weight:bold;"> Expanding... </span>';
 			datasetList += '<a class="showAllFiles_short" style="cursor:pointer">Expand</a> | ';
 			datasetList += '<span class="wgetAllFiles_short" style="display:none;font-weight:bold;"> Downloading... </span>';
 			datasetList += '<a class="wgetAllFiles_short" style="cursor:pointer"> WGET </a> |';

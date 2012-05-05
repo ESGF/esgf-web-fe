@@ -12,14 +12,16 @@
 </style>
 
 <div class="span-18 last" >
-		<div class="span-12">
-			<span id="search-box">
-				<input id="query" name="text" type="text" value="" />
-			</span>
-		</div>
-	    <div class="span-3 ">
-	    	<input id="search-button" type="submit" value="Search" />
-	    </div>
+        <div class="span-15">
+	       <span id="search-box">
+	               <input id="query" name="text" type="text" value="" />
+	       </span>
+	       <input id="search-button" type="submit" value="Search" />
+	       <br/>&nbsp; &nbsp;
+	       Examples: <i>temperature</i>, <i>"surface temperature"</i>, <i>climate AND project:CMIP5 AND variable:hus</i>.
+	       <br/>&nbsp; &nbsp;
+	       To download data: add datasets to your Data Cart, then click on <i>Expand</i> or <i>wget</i>.
+        </div>
 	    <div class="span-3 last" style="margin-top:5px">
 
 	    	<div id="temporal"><a href="<c:url value="/scripts/esgf/overlays/temporal_overlay.html" />" id="temporal" rel="#temporal_overlay" style="font-size:10px">Temporal Search</a></div>

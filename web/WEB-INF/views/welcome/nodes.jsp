@@ -25,13 +25,17 @@
 		        	<a href='http://adm07.cmcc.it/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
 		        </li>    
 		        <li>
-		        	<a href='http://cmip3.dkrz.de/'><img src="images/flags/Germany.png" class="icon"/>DKRZ Node</a>
-		        	<a href='http://cmip3.dkrz.de/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
+		        	<a href='http://esgf-dev.dkrz.de/'><img src="images/flags/Germany.png" class="icon"/>DKRZ Node</a>
+		        	<a href='http://esgf-dev.dkrz.de/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
 		        </li>       
 		        <li>
 		        	<a href='http://esgf-node.ipsl.fr/'><img src="images/flags/France.png" class="icon"/>IPSL Node</a>
 		        	<a href='http://esgf-node.ipsl.fr/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
-		        </li>         
+		        </li>  
+		        <li>
+		        	<a href='http://esgf.nccs.nasa.gov/'><img src="images/flags/USA.png" class="icon"/>NASA-GSFC Node</a>
+		        	<a href='http://esgf.nccs.nasa.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
+		        </li>       
 		        <li>
 		        	<a href='http://esg-datanode.jpl.nasa.gov/'><img src="images/flags/USA.png" class="icon"/>NASA-JPL Node</a>
 		        	<a href='http://esg-datanode.jpl.nasa.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>

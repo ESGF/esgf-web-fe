@@ -17,10 +17,8 @@
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.livequery.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.autocomplete.js" /> '></script>
 
-<<<<<<< HEAD
 	<script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-localstorage.js" /> '></script>
 
-=======
 <!--  
 >>>>>>> devel
 	<script type="text/javascript" src='<c:url value="/scripts/cim/cim-viewer.js" />'> </script>

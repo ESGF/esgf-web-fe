@@ -331,39 +331,30 @@ ESGF.localStorage.remove = function(category, key) {
 	
 	if($.browser.msie) {
 		//alert('IE remove for category ' + category);
-		/*
-		if(category = 'dataCart') {
-			alert('IE remove - need to create a local objects');
-		}
-		*/
+		
+		//if(category = 'dataCart') {
+			//alert('IE remove - need to create a local objects');
+		//}
+		
 		
 		if(localStorage.getItem(category) == null) {
 			ESGF.localStorage.initialize(category);
 		}
 		
-		//get the map
-		//var map = ESGF.setting.tempStore[category];
-
 		var map = JSON.parse(localStorage.getItem(category));
 		
-		//alert('mapstring: ' + JSON.stringify(map));
-		/*
-		for(var mapKey in map) {
+	
+		
+		var canRemove = false;
+		for (var mapKey in map) {
 			if (key == mapKey) {
 				canRemove = true;
-			}
-			var canRemove = false;
-			if (key == mapKey) {
-				canRemove = true;
-			}
-			if(canRemove) {
-				delete map[key];
-				//ESGF.setting.tempStore[category] = map;
-				localStorage.setItem(category,JSON.stringify(map));
-			
 			}
 		}
-		*/
+		if(canRemove) {
+			delete map[key];
+			localStorage.setItem(category,JSON.stringify(map));
+		}
 		
 		
 	} else {

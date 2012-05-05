@@ -41,7 +41,6 @@
 	
 <script type="text/javascript">
 $(function(){
-<<<<<<< HEAD
 	/*
 	if($.browser.msie) {
 =======
@@ -58,9 +57,6 @@ $(function(){
 			 '</p>';
 			$('div#disclaimer').append(disclaimer);
 		}
-		/*
-		
-		*/
 	}
 	else if($.browser.msie) {
 >>>>>>> devel

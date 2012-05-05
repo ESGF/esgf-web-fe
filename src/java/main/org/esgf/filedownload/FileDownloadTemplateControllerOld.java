@@ -114,7 +114,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/solrfileproxy")
-public class FileDownloadTemplateController {
+public class FileDownloadTemplateControllerOld {
 
     
 /*    private static String solrURL="http://localhost:8983/solr/select";

@@ -25,7 +25,11 @@
 		        	<a href='http://adm07.cmcc.it/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
 		        </li>    
 		        <li>
-		        	<a href='http://esgf-dev.dkrz.de/'><img src="images/flags/Germany.png" class="icon"/>DKRZ Node</a>
+		        	<a href='http://euclipse1.dkrz.de/'><img src="images/flags/Germany.png" class="icon"/>DKRZ Node 1</a>
+		        	<a href='http://euclipse1.dkrz.de/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
+		        </li>       
+		        <li>
+		        	<a href='http://esgf-dev.dkrz.de/'><img src="images/flags/Germany.png" class="icon"/>DKRZ Node 2</a>
 		        	<a href='http://esgf-dev.dkrz.de/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
 		        </li>       
 		        <li>

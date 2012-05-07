@@ -116,6 +116,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     selectID = selectID.replace("|","_");
     
     
+    
     selectMetID = 'meta_select_'+ doc.id.replace(/\./g, "_");
     
     if(ESGF.localStorage.search('dataCart',doc.id)) {
@@ -178,6 +179,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         output += "</div>";
     }
 
+    output += '<span><a href="metadataview?' + 'id=' + doc.id + '">metadata</a></span>';
     
     
     //alert('solr theme selectID ' + selectID);

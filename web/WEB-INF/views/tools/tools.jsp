@@ -1,4 +1,6 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
+<%@ include file="/WEB-INF/views/tools/tools_style_search.jsp" %>
+<%@ include file="/WEB-INF/views/tools/tools_script_search.jsp" %>
 
 <ti:insertDefinition name="main-layout" >
 

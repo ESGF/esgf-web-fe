@@ -129,7 +129,7 @@
     	//$('#myform input[type=checkbox]:checked')
     	$('#constraintChoices input[type=checkbox]').live('click', function () {
     		//alert($('form#my').html());
-    		alert($('input#showConstraints').attr('checked'));
+    		/*
     		if ($('input#showConstraints').attr('checked'))
     		{
         		alert('show constraints');
@@ -138,6 +138,7 @@
     		{
         		alert('hide constraints');
     		}
+    		*/
 		});
         $('#myTabs').tabs();
         

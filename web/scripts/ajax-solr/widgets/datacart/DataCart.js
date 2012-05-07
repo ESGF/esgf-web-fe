@@ -82,27 +82,20 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	//grab the search constraints
     	self.searchConstraints = ESGF.localStorage.toKeyArr('esgf_fq');
     	
-    	/*
-		$(".wgetAllChildren").die('click');
-		$(".globusOnlineAllChildren").die('click');
-		$('.remove_dataset_from_datacart').die('click');
-		$("input#remove_all").die('click');
-		$('.go_individual_gridftp').die('click');
-		$('.technotes').die('click');
-		$(".topLevel").die('change');
-		$(".fileLevel").die('change');
-		$('a.view_more_results').die('click');
-		*/
-    	
 		//add the spinning wheel in case there is a delay in loading the items in the data cart
-        $(this.target).html($('<img/>').attr('src', 'images/ajax-loader.gif'));
+        
+    	//CHANGE ME!!!
+    	//$(this.target).html($('<img/>').attr('src', 'images/ajax-loader.gif'));
+    	
+    	//grab all the keys from the datacart map and place in an array
+    	self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
+    	
 	},
 	
 	/**
 	 * DOCUMENT ME
 	 */
 	afterRequest: function () {
-		
 		
 		
 		//empty the tab
@@ -114,15 +107,10 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		var selected = $( "#myTabs" ).tabs( "option", "selected" );
 		
 		
-		//grab all the keys from the datacart map and place in an array
-    	self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
-    	
-    	
-    	
-    	
-    	
+		
     	//empty the carts tab and append/initialize the datacart table 
     	$('#carts').empty();
+    	
     	
     	//this string represents the options for the data cart
     	//as of now, the options are:
@@ -131,31 +119,58 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	var optionsStr = '<div id="radio" style="margin-bottom:30px;display:none">' + 
     				 	 '<table>' +
     				 	 '<tr>' +
-    				 	 '<td>' +
+    				 	 '<td style="width:80px;font-size:12px;padding:0px">' +
     				 	 '<input type="radio" id="datacart_filter_all" name="datacart_filter" value="all" /> ' +
-    				 	 'Show all files ' +
+    				 	 'Show all ' +
     				 	 '</td>' +
-    				 	 '<td>' +
+    				 	 '<td style="width:200px;font-size:12px;padding:0px">' +
     				 	 '<input type="radio" id="datacart_filtered" name="datacart_filter" value="filtered" /> ' +
     				 	 'Filter over search constraints ' +
     				 	 '</td>' +
-    				 	 '<td></td>' + 
-    				 	 '<td></td>' +
-    				 	 '<td></td>' + 
-    				 	 '<td></td>' + 
-    				 	 '<td></td>' + 
-    				 	 '<td>' +
-    				 	 '<input id="remove_all" type="submit" value="Remove All" /> ' +
+    				 	 '<td class="sfileCounter" style="width:220;display:none;padding:0px">Show initial <select class="fileCounter" name="fileC">' +
+    				 	 '<option id="fileCounter5" value="5">5</option>'+
+    					 '<option id="fileCounter10" value="10" selected="selected">10</option>' +
+    					 '<option id="fileCounter25" value="25" >25</option>' +
+    					 '<option id="fileCounter50" value="50">50</option>' +
+    					 '</select> files</td>' + 
+    				 	 '<td style="font-size:12px;padding:0px">' +
+    				 	 '<a id="remove_all_short" style="cursor:pointer">Remove All</a>' +
+    				 	 //'<input class="datacart-buttons" type="submit" value="Remove All" />'+
+    			      	//'<input id="remove_all_short" type="submit" value="Remove All" /> ' +
     				 	 '</td>' +
-    				 	 '<td>' +
-    				 	 '<input id="uber_script" type="submit" value="WGET All Selected" /> ' +
+    				 	 '<td style="font-size:12px;padding:0px">' +
+    				 	 //'<input class="datacart-buttons" type="submit" value="WGET All Selected" />'+
+
+    				 	 '<a id="uber_script_short" style="cursor:pointer">WGET All Selected</a>' +
+    				 	 //'<input id="uber_script_short" type="submit" value="WGET All Selected" /> ' +
     				 	 '</td>' +
     				 	 '</tr>' +
     				 	 '</table>' +
     				 	 '</div>';
     	
+    	
+    	
+    	
     	//add the options to the page
     	$('#carts').append(optionsStr);
+
+		$("select[name='fileC']").attr("selectedIndex",3);
+    	
+		
+    	if(ESGF.setting.fileCounter == 5) {
+    		$("select[name='fileC']").attr("selectedIndex",0);
+		} else if(ESGF.setting.fileCounter == 10) {
+    		$("select[name='fileC']").attr("selectedIndex",1);
+		} else if(ESGF.setting.fileCounter == 25) { 
+    		$("select[name='fileC']").attr("selectedIndex",2);
+		} else {
+    		$("select[name='fileC']").attr("selectedIndex",3);
+		}
+    	
+    	$('td.sfileCounter').show();
+    	
+    	
+    	
     	
     	//toggle the "checked" attribute of the showAllContents radio button
     	if(ESGF.setting.showAllContents == 'true') {
@@ -176,101 +191,77 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
         $("#datasetList").empty();
 		
         
-
-		//getter for the data cart tab
+        
+        
+        
+      //getter for the data cart tab
 		var selected = $( "#myTabs" ).tabs( "option", "selected" );
 		
 		//create the data cart template
         //only create if the data cart tab is selected
 		if(selected == 1) {
-	        self.createTemplate(self.selected_arr);
+	        self.createTemplateShort(self.selected_arr);
 		}
+		
 		
        
+		
 	},
 
-    
-	/**
-     * Create the template for the datacart
-     * 
-     * There is a new procedure for creating the datacart template because the search API is now called
-     * 
-     * 
-     * 
-     */
-    createTemplate: function() {
-
-    	var self = this;
-    	
-    	//get all of the search constraints (fq params)
-    	var fqParamStr = getFqParamStr();
-    	
-    	//get the peers
-    	var peerStr = getPeerStr();
-    	
-    	//get the technotes
-    	var technoteStr = getTechnoteStr();
-    	
-    	//get the ids
-    	var idStr = getIdStr();
-    	
-    	//assemble the query string
-    	var queryStr = {"idStr" : idStr, 
-    					"peerStr" : peerStr, 
-    					"technotesStr" : technoteStr, 
-    					"showAllStr" : ESGF.setting.showAllContents, 
-    					"fqStr" : fqParamStr, 
-    					"initialQuery" : "true"};
+	
+	
+	
+	createTemplateShort: function() {
+		
+		var self = this;
 		
     	
-    	//getter for the data cart tab
-		var selected = $( "#myTabs" ).tabs( "option", "selected" );
+		//alert(self.selected_arr);
 		
-		//only make the ajax call when the data cart is selected
-		if(selected == 1) {
+		var datasetList = '';
+		
+		for(var i=0;i<self.selected_arr.length;i++) {
+			datasetList += '<tr style="margin-top:50px;" class="top_level_data_item"  >'
 			
-			self.addDataCartSpinWheel();
+			datasetList += '<td style="width: 40px;"><input class="topLevel" type="checkbox" checked="true" /> </td>';	
 			
-			$.ajax({
-				url: '/esgf-web-fe/solrfileproxy2/datacart',
-				global: false,
-				type: "GET",
-				data: queryStr,
-				dataType: 'json',
-				success: function(data) {
-					
-					self.removeDataCartSpinWheel();
-					
-					var fileDownloadTemplate = rewriteDocsObject(data.docs);
-					
-					$( "#cartTemplateStyledNew2").tmpl(fileDownloadTemplate, {
-						
-						replaceChars : function (word) {
-							LOG.debug("Replacing Char: " + word + " " + word.length);
-							return replaceChars(word);
-			            },
-			            abbreviate : function (word) {
-			            },
-			            addOne: function(num) {
-			            },
-			            sizeConversion : function(size) {
-			            	return sizeConversion(size);
-			            }
-			            
-			        })
-			        .appendTo("#datasetList")
-			        .find( "a.showAllChildren" ).click(function() {
-
-			        });
-					
-				},
-				error: function() {
-					alert('Error loading data cart');
-				}
-			})
+			datasetList += '<td style="width: 325px;font-size:13px">';
+			
+			//alert(ESGF.localStorage.get('dataCart',self.selected_arr[i])['numFiles']);
+			
+			datasetList += '<div style="word-wrap: break-word;font-weight:bold"  ><span class="datasetId">' + self.selected_arr[i] + '</span></div>';
+			datasetList += '<span>' + ' (Total Number of Files: ' +  ESGF.localStorage.get('dataCart',self.selected_arr[i])['numFiles'] + ')</span>';
+			//<span class="datasetId">${datasetId}</span>
+			//(<span class="datasetCount_${$item.replaceChars(datasetId)}">${count}</span> files) 
+		    //</div>
+			
+			
+			datasetList += '</td>';
+			
+			datasetList += '<td style="font-size:11px;float:right" >';
+			
+			datasetList += '<span class="showAllFiles_short" style="display:none;font-weight:bold;"> Expanding... </span>';
+			datasetList += '<a class="showAllFiles_short" style="cursor:pointer">Expand</a> | ';
+			datasetList += '<span class="wgetAllFiles_short" style="display:none;font-weight:bold;"> Downloading... </span>';
+			datasetList += '<a class="wgetAllFiles_short" style="cursor:pointer"> WGET </a> |';
+			datasetList += '<span class="globusOnlineAllFiles_short" style="display:none;font-weight:bold;"> Transerring to GO page...</span>';
+			datasetList += ' <a class="globusOnlineAllFiles_short" style="cursor:pointer">Globus Online</a> |';
+			datasetList += ' <a class="remove_dataset_short" style="cursor:pointer">Remove</a>'; 
+			datasetList += '</td>';	
+			
+			
+			datasetList += '</tr>';
+			datasetList += '<tr class="file_rows_' + replaceChars(self.selected_arr[i]) + '" style="">';
+			datasetList += '</tr>';
 		}
-    	
+		
+		$( "#datasetList").append(datasetList);
+		
+		
 	},
+	
+    
+	
 	
 	
     
@@ -314,6 +305,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	
 	//dynamically add spinning wheel to the datacart space
 	addDataCartSpinWheel: function () {
+		alert('spinning');
     	//add a spin wheel to indicate that the system is processing
     	$('tbody#datasetList').after('<img id="spinner" src="images/ajax-loader.gif" />');
     	$('tbody#datasetList').after('<p id="waitWarn">Waiting for files...</p>');
@@ -391,7 +383,98 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
         return convSize;
     }
     
+    
+    
+    // old version of the data cart template
 
+    /**
+     * Create the template for the datacart
+     * 
+     * There is a new procedure for creating the datacart template because the search API is now called
+     * 
+     * 
+     * 
+     */
+    /*
+    createTemplate: function() {
+
+    	var self = this;
+    	
+    	//get all of the search constraints (fq params)
+    	var fqParamStr = getFqParamStr();
+    	
+    	//get the peers
+    	var peerStr = getPeerStr();
+    	
+    	//get the technotes
+    	var technoteStr = getTechnoteStr();
+    	
+    	//get the ids
+    	var idStr = getIdStr();
+    	
+    	//assemble the query string
+    	var queryStr = {"idStr" : idStr, 
+    					"peerStr" : peerStr, 
+    					"technotesStr" : technoteStr, 
+    					"showAllStr" : ESGF.setting.showAllContents, 
+    					"fqStr" : fqParamStr, 
+    					"initialQuery" : "true"};
+		
+    	
+    	//getter for the data cart tab
+		var selected = $( "#myTabs" ).tabs( "option", "selected" );
+		
+		//only make the ajax call when the data cart is selected
+		if(selected == 1) {
+			
+			self.addDataCartSpinWheel();
+			
+			$.ajax({
+				url: '/esgf-web-fe/solrfileproxy2/datacart',
+				global: false,
+				type: "GET",
+				data: queryStr,
+				dataType: 'json',
+				success: function(data) {
+					
+					self.removeDataCartSpinWheel();
+					
+					var fileDownloadTemplate = rewriteDocsObject(data.docs);
+					
+					$( "#cartTemplateStyledNew2").tmpl(fileDownloadTemplate, {
+						
+						replaceChars : function (word) {
+							LOG.debug("Replacing Char: " + word + " " + word.length);
+							return replaceChars(word);
+			            },
+			            abbreviate : function (word) {
+			            },
+			            addOne: function(num) {
+			            },
+			            sizeConversion : function(size) {
+			            	return sizeConversion(size);
+			            }
+			            
+			        })
+			        .appendTo("#datasetList")
+			        .find( "a.showAllChildren" ).click(function() {
+
+			        });
+					
+				},
+				error: function() {
+					alert('Error loading data cart');
+				}
+			})
+		}
+    	
+	}
+    */
+    
+    
+    
+    
+    
 });
 
 
@@ -535,6 +618,13 @@ function getTechnoteStr() {
 	
 	return technoteStr;
 }
+
+
+function rewriteFilesObject(files) {
+	
+}
+
+
 
 function rewriteDocsObject(docs) {
 	

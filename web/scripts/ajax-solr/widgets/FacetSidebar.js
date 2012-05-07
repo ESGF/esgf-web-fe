@@ -66,6 +66,13 @@
 		
 		afterRequest: function () {
 		
+			
+			//initialize the contents in the facet sidebar
+			//$('#facets').append('<table ><tbody id="facetList"></tbody></table>');
+			$('#facets').append('<div id="facetList"></div>');
+	    	
+	    	$("#facetList").empty();
+			
 			var self = this;
 			var facet = '';
 			
@@ -159,12 +166,41 @@
 		    	facet_arr.push(facet_obj);
 		    	
 	    	}
-		    
-		    
+
+
 		    
 		    if($( "#facetTemplate").html() != null) {
 
 	            $("#facetList").empty();
+	            
+	            $( "#facetTemplate1").tmpl(facet_arr, {
+	            	replaceWhiteSpaces : function (word) {
+	                    return replaceWhiteSpace(word);
+	                },
+		    		truncate : function( value,numChars ) {
+		    			
+		    			value = replaceUnderscores(value);
+		    			//return (this.data + separator);
+		    			var returnedValue = '';
+		    			//if(value.length > numChars) {
+		    			//	returnedValue = value.substr(0,numChars) + ' ... ';
+		    			//} else {
+		    			returnedValue = value;
+		    			//}
+		    			
+		    			return returnedValue;
+		    		}
+	            	
+	            })
+	            .appendTo("#facetList")
+	            .find( "a.showFacetValues" ).click(function() {
+	                var selectedItem = $.tmplItem(this);
+	                
+	                $('li.' + selectedItem.data.Facet_name).toggle();
+	                
+	                
+		   		});
+	            /*
 		    	$( "#facetTemplate").tmpl(facet_arr, {
 		    		replaceWhiteSpaces : function (word) {
 	                    return replaceWhiteSpace(word);
@@ -183,27 +219,19 @@
 		    			return returnedValue;
 		    		}
 		        })
+		        
 		    	.appendTo("#facetList")
+		    	
 		    	.find( "a.showFacetValues" ).click(function() {
 	                var selectedItem = $.tmplItem(this);
-	                
-	                
-	                /*
-	                for(var i = 0;i<selectedItem.data.Facet_values.length;i++) {
-	                	var convertedStr = replaceWhiteSpace(selectedItem.data.Facet_values[i]);
-		                
-	                    //$('li#' + selectedItem.data.Facet_name + '_' + selectedItem.data.Facet_values[i]).toggle();
-		                //$('li.' + selectedItem.data.Facet_name).toggle();
-		                
-	                }
-	                */
 	                
 	                $('li.' + selectedItem.data.Facet_name).toggle();
 	                
 	                
-	                
 		   		});
+				*/
 		    }
+
 		    
 		    $('a.alink').click( function () {
 				var facet_value = $(this).html();
@@ -254,6 +282,9 @@
 				
 			});
 	    	
+		    
+
+		    
 		},
 	
 		findLabelFromFacet: function(facet) {
@@ -295,6 +326,10 @@
 			return facet;
 		}
 	
+		
+
+		
+		
 	});
 
 	function trimWhiteSpace(word) {
@@ -352,6 +387,7 @@
 		var isConstraint = false;
 		
 		var fq = Manager.store.get('fq');
+		
 		
 		for(var i=0;i<fq.length;i++) {
 			var constraint = fq[i];

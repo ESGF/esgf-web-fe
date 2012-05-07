@@ -126,9 +126,13 @@ ESGF.setting.getShards = 'solrconfig';
 //need a variable representing the current text in the text query box
 ESGF.setting.textbox = '';
 
-
 //need a toggler for offset (=0 or in pagination)
 ESGF.setting.paginationOn = 'false';
+
+//file denomination counter
+ESGF.setting.fileCounter = 10;
+
+
 
 /**
  * Proxy for creating the template for file downloads.
@@ -143,8 +147,10 @@ ESGF.search.fileDownloadTemplateProxyUrl = '/esgf-web-fe/solrfileproxy',
 ESGF.setting.facetFile = '/esgf-web-fe/facetfileproxy',
 
 
-
-
+ESGF.setting.tempStore = {'esgf_queryString' : {'' : '' }};
+ESGF.setting.tempStore['esgf_fq'] = {'' : ''};
+ESGF.setting.tempStore['dataCart'] = {'' : ''};
+ESGF.setting.tempStore['esgf_searchStates'] = {'' : ''};
 
 // general util functions
 ESGF.util.toArray = function (obj) {

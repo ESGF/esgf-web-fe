@@ -60,14 +60,16 @@
 
 
 (function ($) {
-
     $(function () {
+    	
+    	
          Manager = new AjaxSolr.Manager({
                 proxyUrl: '/esgf-web-fe/solrproxy',
                 //proxyUrl: 'http://esg-gw.ornl.teragrid.org:8080/esgf-web-fe/solrproxy'
                 metadataProxyUrl: '/esgf-web-fe/metadataproxy'
             });
 
+     	
          Manager.addWidget(new AjaxSolr.DistributedSearchWidget({
              id: 'distributedSearch'
            }));
@@ -93,6 +95,18 @@
          
          Manager.addWidget(new AjaxSolr.DCEventsWidget({
              id: 'dcevents'
+           }));
+         
+         Manager.addWidget(new AjaxSolr.DataCartExpandFeatureWidget({
+        	 id: 'expandfeature'
+         }));
+         
+         Manager.addWidget(new AjaxSolr.DataCartWGETWidget({
+        	 id: 'wgetfeature'
+         }));
+         
+         Manager.addWidget(new AjaxSolr.DataCartGlobusOnlineWidget({
+             id: 'datacartglobusonline'
              //target: '#events'
             	 
            }));
@@ -137,7 +151,7 @@
      		}
          });
          
-         
+
     });
 
     function processWidgets(fields) {

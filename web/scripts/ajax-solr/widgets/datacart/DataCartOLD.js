@@ -166,7 +166,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     		$("input[id='datacart_filter_all']").attr("checked","false");
     		$("input[id='datacart_filtered']").attr("checked","true");
     	}
-    	
+
+        
     	//if there are no items in the datacart don't show the radio buttons
     	if(self.selected_arr.length > 0) {
     		$('div#radio').show();
@@ -176,7 +177,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	$('#carts').append('<table style="width:100%;table-layout: fixed"><tbody id="datasetList"></tbody></table>');
         $("#datasetList").empty();
 		
-        
         
 		//create the data cart template
         self.createTemplate(self.selected_arr);

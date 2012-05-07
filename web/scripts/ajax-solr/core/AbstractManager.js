@@ -139,6 +139,7 @@ AjaxSolr.AbstractManager = AjaxSolr.Class.extend(
    * @param {AjaxSolr.AbstractWidget} widget
    */
   addWidget: function (widget) { 
+	  
     widget.manager = this;
     this.widgets[widget.id] = widget;
   },
@@ -207,7 +208,9 @@ AjaxSolr.AbstractManager = AjaxSolr.Class.extend(
     var widgetId = null;
     this.response = data;
 
+    
     for (widgetId in this.widgets) {
+     	//alert('widgetId...' + widgetId);
         if(this.widgets.hasOwnProperty(widgetId)) {
         	if(widgetId == 'text') {
             	//alert('calling after request for ' + widgetId);
@@ -215,5 +218,6 @@ AjaxSolr.AbstractManager = AjaxSolr.Class.extend(
             this.widgets[widgetId].afterRequest();
         }
     }
+
   }
 });

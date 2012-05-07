@@ -17,7 +17,10 @@
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.livequery.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.autocomplete.js" /> '></script>
 
+	<script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-localstorage.js" /> '></script>
+
 <!--  
+>>>>>>> devel
 	<script type="text/javascript" src='<c:url value="/scripts/cim/cim-viewer.js" />'> </script>
 -->
 	<script type="text/javascript" src='<c:url value="/scripts/cim/jscim-min.js" />'> </script>
@@ -59,9 +62,12 @@
 	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/DistributedSearch.js" />'> </script>
 	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Versions.js" />'> </script>
 	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Replicas.js" />'> </script>
-	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/DataCart.js" />'> </script>
-	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/DataCartEvents.js" />'> </script>
-	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/DCEvents.js" />'> </script>
+	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/datacart/DataCart.js" />'> </script>
+	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/datacart/DataCartEvents.js" />'> </script>
+	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/datacart/DCEvents.js" />'> </script>
+	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/datacart/DataCartExpandFeature.js" />'> </script>
+	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/datacart/DataCartWGET.js" />'> </script>
+	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/datacart/DataCartGlobusOnline.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/CIM.js" />'> </script>
    
 

@@ -70,7 +70,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
     	  
           var self = this;
 
-		  
+
           //loads everything in the html5 'fq' store
           self.loadExistingQueries();
           
@@ -102,6 +102,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           //queryString += '&shards=dev.esg.anl.gov:8983/solr,localhost:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,pcmdi9.llnl.gov:8983/solr';
           //queryString += '&shards=dev.esg.anl.gov:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,localhost:8983/solr';
           //queryString += '&shards=localhost:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,pcmdi9.llnl.gov:8983/solr';
+          //queryString += '&shards=localhost:8983/solr,pcmdi9.llnl.gov:8983/solr';
           //queryString += '&shards=localhost:8983/solr,test-datanode.jpl.nasa.gov:8983/solr';
           //queryString += '&shards=localhost:8983/solr';
           
@@ -116,15 +117,15 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           var revisedQueryString = self.rewriteTextQuery(queryString);
 
           LOG.debug("Manager's querystring: " + revisedQueryString);
-          //alert('queryString: ' + revisedQueryString);
-          
+
           /**
            * Ajax call to the search API
            */
+          
           jQuery.ajax({
         	  url: revisedQueryString,
         	  type: 'GET',
-        	  success: function(data) {     
+        	  success: function(data) {   
         		  self.handleResponse(data);
         	  },
         	  error: function() {
@@ -138,9 +139,12 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 
             	  //reset the localStorage esgf_queryString map
             	  ESGF.localStorage.removeAll('esgf_queryString');
-            	  
+
             	  //reset the localStorage dataCart map
             	  ESGF.localStorage.removeAll('dataCart');
+            	  
+            	  //reset the localStorage searchStates map
+            	  ESGF.localStorage.removeAll('searchStates');
             	  
             	  
             	  //legacy
@@ -179,8 +183,10 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   		
   		//for direct requests to solr
   		//put in the dataset type
+  		/*
         ESGF.localStorage.put('esgf_fq','type:Dataset','type:Dataset');
         Manager.store.addByValue('fq','type:Dataset');
+        */
         
   		//put in the replica type (which for results is "false")
         //ESGF.localStorage.put('esgf_fq','replica:false','replica:false');
@@ -206,11 +212,12 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 	    //}
         
         var searchQuery = ESGF.localStorage.toString('esgf_queryString');
-        //ESGF.localStorage.printMap('esgf_queryString');
+        ESGF.localStorage.printMap('esgf_queryString');
         
         
         //get all of the fq parameters from the localstore
         var esgf_fq = ESGF.localStorage.getAll('esgf_fq');
+        
         
         //FIXME: May have to take this out
         //legacy

@@ -33,6 +33,7 @@ public class FileDownloadTemplateController {
         mockRequest.addParameter("fq", fqStr);
         mockRequest.addParameter("initialQuery", initialQuery);
         mockRequest.addParameter("id", idStr);
+        mockRequest.addParameter("fileCounter", "10");
         
         
         FileDownloadTemplateController fc = new FileDownloadTemplateController();
@@ -83,6 +84,12 @@ public class FileDownloadTemplateController {
         //get the flag denoting whether or not this is an initial Query
         String initialQuery = request.getParameter("initialQuery");
 
+        
+        //get the fileCounter
+        String fileCounter = request.getParameter("fileCounter");
+        System.out.println("\n\tFILECOUNT: " + fileCounter + "\n");
+        
+        
         //DataCartSolrHandler handler = new DataCartSolrHandler(showAll,fq,initialQuery);
         DataCartDocs docs = new DataCartDocs();
 
@@ -91,7 +98,7 @@ public class FileDownloadTemplateController {
         if(id != null) {
             for(int i=0;i<id.length;i++) {
                 
-                DocElement d = getDocElement(id[i],peers[i],initialQuery,fq,showAllStr);
+                DocElement d = getDocElement(id[i],peers[i],initialQuery,fq,showAllStr,fileCounter);
                 docs.addDocElement(d);
                 
             }
@@ -109,9 +116,15 @@ public class FileDownloadTemplateController {
      * @param request
      * @return
      */
-    @RequestMapping(method=RequestMethod.GET, value="/datacart/{datasetId")
+    @RequestMapping(method=RequestMethod.POST, value="/datacart/{datasetId}")
     public @ResponseBody String getDoc(@PathVariable String datasetId,HttpServletRequest request) {
     
+        
+        String idStr = request.getParameter("idStr");
+        
+        //System.out.println("\n\n\n\nDATASET ID: " + idStr + "\n\n\n\n");
+        
+        
         String peerStr = request.getParameter("peerStr");
         String [] peers = peerStr.split(";");
 
@@ -130,20 +143,38 @@ public class FileDownloadTemplateController {
         //get the flag denoting whether or not this is an initial Query
         String initialQuery = request.getParameter("initialQuery");
         
-        DocElement doc = getDocElement(datasetId,peers[0],initialQuery,fq,showAllStr);
+
+        //get the fileCounter
+        String fileCounter = request.getParameter("fileCounter");
         
+        System.out.println("--------");
+        System.out.println("\tpeerStr\t" + peerStr);
+        System.out.println("\tfqStr\t" + fqStr);
+        System.out.println("\tshowAllStr\t" + showAllStr);
+        System.out.println("\tinitialQuery\t" + initialQuery);
+        System.out.println("\tfileCount\t " + fileCounter + "\n");
+        
+        datasetId = idStr;
+        
+        DocElement doc = getDocElement(datasetId,peers[0],initialQuery,fq,showAllStr,fileCounter);
+        
+        //System.out.println(doc.toXML());
+        
+       
+        
+        //return "<a>b</a>";
         return doc.toJSON();
     }
     
     
-    private DocElement getDocElement(String id,String peer,String initialQuery,String [] fq,String showAllStr) {
+    private DocElement getDocElement(String id,String peer,String initialQuery,String [] fq,String showAllStr,String fileCounter) {
         
         DocElement doc = null;
         
         DataCartSolrHandler handler = new DataCartSolrHandler();
         handler.preassembleQueryString();
 
-        handler.addLimit(initialQuery);
+        handler.addLimit(initialQuery,fileCounter);
         handler.addSearchConstraints(fq, showAllStr);
 
         
@@ -152,7 +183,7 @@ public class FileDownloadTemplateController {
         //handler.addShard("localhost"+":8983/solr");
         handler.addShard(peer+":8983/solr");
        
-        //System.out.println("solr queryString: " + handler.getSolrQueryString());
+        
         doc = handler.getDocElement(id);
         
         
@@ -233,6 +264,14 @@ public class FileDownloadTemplateController {
             System.out.println("\tinitialQuery: " + initialQuery);
         } else {
             System.out.println("\tinitialQuery is null");
+        }
+        
+        System.out.println("File Counter");
+        String fileCounter = request.getParameter("fileCounter");
+        if(fileCounter != null) {
+            System.out.println("\tfileCounter: " + fileCounter);
+        } else {
+            System.out.println("\tfileCounter is null");
         }
         
     }

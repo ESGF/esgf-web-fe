@@ -146,6 +146,18 @@
 
 </script>
 
+
+<script id="fileTemplate" type="text/x-jquery-tmpl">
+	{{each(j) files.file}}
+		<tr>
+<td style="width: 40px;">td ${j}</td>
+<td style="width: 340px;">td ${j}</td>
+<td style="width: 40px;">td ${j}</td>
+		</tr>
+	{{/each}}
+</script>
+
+
 <%--
 			<tr class="rows_${$item.replacePeriods(datasetId)}" style="display:none">
 				<td style="width: 40px;"><input style="margin-left: 10px;" class="fileLevel" type="checkbox" class="fileId" id="${fileId}" checked="true" value="${urls.url[1]}"/></td>

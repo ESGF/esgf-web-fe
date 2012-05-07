@@ -41,6 +41,9 @@
 	
 <script type="text/javascript">
 $(function(){
+	/*
+	if($.browser.msie) {
+=======
 	
 	$('div#disclaimer').empty();
 	
@@ -54,11 +57,9 @@ $(function(){
 			 '</p>';
 			$('div#disclaimer').append(disclaimer);
 		}
-		/*
-		
-		*/
 	}
 	else if($.browser.msie) {
+>>>>>>> devel
 		alert("ESGF currently does not support Microsoft Internet Explorer.  Please try the Mozilla Firefox, Apple Safari, or Google Chrome browser.");
 		var disclaimer = '<p style="color:red;font-weight:bold;border:1px dashed #e8ddcf;margin-top:10px">' +
 						 'IMPORTANT: The ESGF P2P system interface may be viewed using the Mozilla Firefox (versions 9 and above), Google Chrome, or Apple Safari browsers. ' +
@@ -66,6 +67,7 @@ $(function(){
 						 '</p>';
 		$('div#disclaimer').append(disclaimer);
 	}
+	*/
 });
 
 </script>

@@ -62,6 +62,7 @@
 	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/DistributedSearch.js" />'> </script>
 	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Versions.js" />'> </script>
 	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Replicas.js" />'> </script>
+	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/DatasetSelection.js" />'> </script>
 	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/datacart/DataCart.js" />'> </script>
 	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/datacart/DataCartEvents.js" />'> </script>
 	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/datacart/DCEvents.js" />'> </script>

@@ -104,7 +104,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           //queryString += '&shards=localhost:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,pcmdi9.llnl.gov:8983/solr';
           //queryString += '&shards=localhost:8983/solr,pcmdi9.llnl.gov:8983/solr';
           //queryString += '&shards=localhost:8983/solr,test-datanode.jpl.nasa.gov:8983/solr';
-          //queryString += '&shards=localhost:8983/solr';
+          queryString += '&shards=localhost:8983/solr';
           
           //alert(ESGF.localStorage.get('esgf_queryString','distrib'));
 
@@ -127,6 +127,12 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
         	  type: 'GET',
         	  success: function(data) {   
         		  self.handleResponse(data);
+        		  
+        		  //for(var key in data.response) {
+        			  //alert('key: ' + key);
+        		  //}
+        		  //alert(data.response.docs.length);
+        		  
         	  },
         	  error: function() {
         		  alert("There was an error in processing your query.  Try your search again.");
@@ -317,7 +323,8 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
     	if(fullText != '') {
         	newQueryString += '&' + 'query=' + fullText;
     	}
-    	
+
+    	newQueryString += '&' + 'limit=' + ESGF.setting.datasetCounter;
     	//alert('new query string: ' + newQueryString + ' fulltext: ' + fullText);
     	
     	return newQueryString;

@@ -35,34 +35,74 @@
 	    </div>
 	   	
 	   	  
-		<div class="span-18 last" style="margin-bottom:5px"> 
+		
+		
+		
+</div>
+
+<div class="span-18 last" style="margin-bottom:15px"> 
 		<!--  
 			<input class="distribbutton1" id="distribbutton" type="submit" style="margin-left:20px"/>
 		-->
-			<input type="checkbox" class="distribcheckbox1" id="distribcheckbox" style="margin-left:20px" checked="yes" /> <span style="font-weight:bold">Search All Sites</span>
+		<div class="span-12 last">
+		<input type="checkbox" class="distribcheckbox1" id="distribcheckbox" style="margin-left:20px" checked="yes" /> <span style="font-weight:bold">Search All Sites</span>
 			<input type="checkbox" class="replicacheckbox1" id="replicacheckbox" style="margin-left:20px"/> <span style="font-weight:bold">Show All Replicas</span>
 			<input type="checkbox" class="versioncheckbox1" id="versioncheckbox" style="margin-left:20px"/> <span style="font-weight:bold">Show All Versions</span>
 			
+		
 		</div>
 		
 </div>
 
-<div class="span-18 last" id="search-summary" style="margin-top:15px;">
+<div class="span-20 last" id="search-summary" style="margin-top:0px;">
 		
-		    	  
-		    <div class="span-7" id="search-speed">
+		<div class="span-18 last">
+			<ul id="pager"></ul>
+		    <div id="pager-header"></div>
+		    <a id="add_all" style="margin-left:20px;cursor:pointer">Add All to Datacart</a>
+		    <a id="remove_all" style="margin-left:20px;cursor:pointer">Remove All from Datacart</a>
+		</div>
+		
+		<!-- old -->    	  
+		    <!-- <div class="span-7" id="search-speed">   -->
 		    	<!--<div id="search-help" style="margin-left:15px;">(press ESC to close suggestions)</div>-->
-		    </div>
+			<!-- </div> -->
 		    
-		
-		    <div id="page-navigation" class="span-11 last">
+		<!--  
+		    <div id="page-navigation" class="span-8">
 		      <ul id="pager"></ul>
 		      <div id="pager-header"></div>
 		    </div>
 	
-	    </div>  
+			<div class="span-5 last">
+			<a id="add_all" style="margin-left:10px;cursor:pointer">Add All to Datacart</a>
+			</div>
+		-->
+			
+</div>  
 
 
+
+<div class="span-20 last" id="search-summary" style="margin-top:5px;">
+	<div class="prepend-1 span-14 last">
+	Display
+			<select class="datasetCounter" name="datasetC" style="display:inline">
+				<option id="" value="5">5</option>
+				<option id="" value="10" selected="selected">10</option>
+				<option id="" value="25">25</option>
+				<option id="" value="50">50</option>
+				<option id="" value="100000">All</option>
+			</select>
+	files per page
+	
+	</div>
+	
+</div>
+
+
+	
+	
+	
 	
 <div class="span-18 last" >
 

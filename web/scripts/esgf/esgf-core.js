@@ -132,7 +132,8 @@ ESGF.setting.paginationOn = 'false';
 //file denomination counter
 ESGF.setting.fileCounter = 10;
 
-
+//dataset denomination counter
+ESGF.setting.datasetCounter = 10;
 
 /**
  * Proxy for creating the template for file downloads.

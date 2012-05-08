@@ -106,8 +106,10 @@
 				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
 				
 				
+				
 				//change verbage of the expand link
 				if(this.innerHTML === "Collapse") {
+					
 					
 					var idStr = selectedDocId;
 					
@@ -120,7 +122,7 @@
 					
 
 	                this.innerHTML="Expand";
-					
+
 					
 				} else {
 
@@ -326,16 +328,8 @@
 						
 				}
 				
-				//change verbage of the expand link
-				if(this.innerHTML === "Expand") {
-	                //this.innerHTML="Collapse";
-
-					
-	            } else {
-	                //this.innerHTML="Expand";
-	            }
 				
-		    	
+				
 		    	
 				
 			});

@@ -88,10 +88,14 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		//kill the remove events
 		$("input#remove_all_short").die('click');
 		$('.remove_dataset_short').die('click');
-    	
+    	$('a#remove_all_short').die('click');
+		
+		
 		//kill the radio button change event
 		$("input[name='datacart_filter']").die('change');
-    	
+
+		$("select[name='fileC']").die('change');
+		//kill
     	
 	},
 	
@@ -121,7 +125,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 			
 		});
 		
-		$("select[name='fileC']").change(	function() { 
+		$("select[name='fileC']").live(	'change', function() { 
 			//alert('fileCounter'+ESGF.setting.fileCounter);
 	    	
 			//var sel = document.fileC.selectedIndex;
@@ -181,6 +185,10 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 	        	$('a#ai_select_'+ selectedDocId.replace(/\./g, "_")).html('Add To Cart');
 	        	
 			}    
+			
+			$('a#add_all').html('Add All to Datacart');
+			
+			
 			
         	//re-issue request to search api
         	Manager.doRequest(0);

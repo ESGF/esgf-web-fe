@@ -81,6 +81,10 @@
          Manager.addWidget(new AjaxSolr.ReplicasWidget({
              id: 'replicas'
            }));
+         
+         Manager.addWidget(new AjaxSolr.DatasetSelectionWidget({
+             id: 'datasetSelection'
+           }));
 
          Manager.addWidget(new AjaxSolr.CIMWidget({
              id: 'cimviewer'

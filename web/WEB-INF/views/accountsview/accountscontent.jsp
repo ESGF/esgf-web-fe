@@ -131,15 +131,15 @@
 	<table id="groups_table_id">  
 		<tr>
 			<td> Old Password: </td>
-			<td> <input type="text" name="oldpassword"/> </td>
+			<td> <input type="password" name="oldpassword"/> </td>
 		</tr>
 		<tr>
 			<td> Password: </td>
-			<td> <input type="text" name="password1"/> </td>
+			<td> <input type="password" name="password1"/> </td>
 		</tr>
 		<tr>
 			<td> Verify: </td>
-			<td> <input type="text" name="password2"/> </td>
+			<td> <input type="password" name="password2"/> </td>
 		</tr>
 		<tr span="2">
 			<td>
@@ -165,20 +165,20 @@ $(document).ready(function(){
 			return;
 		} else {
 			var jsonObj = new Object;
-			jsonObj.userName = ${accounts_userinfo.userName};
+			jsonObj.userName = "${accounts_userinfo.userName}";
 			jsonObj.type = "editUserInfo";
 			jsonObj.oldpasswd = oldpassword;
 			jsonObj.newpasswd = password1;
 			jsonObj.verifypasswd = password2;
 			
-			var query = JSON.stringify(jsonObj);
+			var jsonStr = JSON.stringify(jsonObj);
 			var userinfo_url = '/esgf-web-fe/edituserinfoproxy';
 			$.ajax({
 	    		type: "POST",
 	    		url: userinfo_url,
 				async: true,
 				cache: false,
-	    		data: query,
+	    		data: {query:jsonStr},
 	    		dataType: 'json',
 	    		success: function(data) {
 	    			$("div .editstatus").html("The password reset is successful!");

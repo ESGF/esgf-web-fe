@@ -216,6 +216,21 @@ body {
 	*/
 }
 
+.metadata-buttons {
+	font-size: 0.9em;
+	border: 1px solid #9c9c9c;
+	background: #CCFFFF;
+	cursor: pointer;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 8px;
+	padding-right: 8px;
+    /* margin-top: 10px; */  
+	/*
+	*/
+}
+
+
 #search-button:hover {
 	background: #00FF00;
 }

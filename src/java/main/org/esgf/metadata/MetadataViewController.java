@@ -3,8 +3,10 @@ package org.esgf.metadata;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +30,13 @@ import org.springframework.web.servlet.ModelAndView;
 public class MetadataViewController {
 
     private final static String METADATAVIEW_DATASET_NAME = "MetadataView_Dataset_Name";
+    private final static String METADATAVIEW_DATASET_TITLE = "MetadataView_Dataset_Title";
+    private final static String METADATAVIEW_DATASET_NUMFILES = "MetadataView_Dataset_NumFiles";
+    private final static String METADATAVIEW_DATASET_INDEXNODE = "MetadataView_Dataset_IndexNode";
+    private final static String METADATAVIEW_DATASET_XLINK = "MetadataView_Dataset_Xlink";
     private final static String RESPONSE = "Response";
+    private static final String METADATAVIEW_KEYARR = "MetadataView_KeyArr";
+    private static final String METADATAVIEW_VALUEARR = "MetadataView_ValueArr";
 
     private static String searchAPIURL = "http://localhost:8081/esg-search/search?";
     
@@ -49,16 +57,11 @@ public class MetadataViewController {
             System.out.println("NULL");
         }
         
+        
+        
         String solrQueryString = "";
 
         
-        String responseBody = null;
-        
-        // create an http client
-        HttpClient client = new HttpClient();
-
-        //attact the dataset id to the query string
-        GetMethod method = new GetMethod(searchAPIURL);
         
         //add the dataset to the query string
         try {
@@ -71,10 +74,227 @@ public class MetadataViewController {
             e1.printStackTrace();
         }
         
+        
+        
+        JSONObject jsonResponse = this.getJSONResponse(solrQueryString);
+        
+        
+        
+        //fromSolr(jsonResponse);
+        
+        
+        
+        Iterator iter = jsonResponse.sortedKeys();
+        
+        
+        
+        
+        while(iter.hasNext()) {
+        
+            String key = (String)iter.next();
+            
+            if(key.equals("docs")) {
+                try {
+                    
+                    JSONArray jsonarr = new JSONArray(jsonResponse.getString(key));
+                    
+                    JSONObject jsonobj = (JSONObject)jsonarr.get(0);
+                    
+                    Iterator iter2 = jsonobj.sortedKeys();
+                    
+                    
+                    List<String> keys = new ArrayList<String>();
+                    List<String> values = new ArrayList<String>();
+                    
+                    
+                    while(iter2.hasNext()) {
+                        
+                        
+                        String key2 = (String)iter2.next();
+                        
+                        String value = "";
+                        
+
+                        if(key2.equals("title")) {
+                            String title = (String)jsonobj.getString(key2);
+
+                            model.put(METADATAVIEW_DATASET_TITLE, title);
+                            
+                            value = title;
+                            
+                        }
+                        else if(key2.equals("number_of_files")) {
+                            JSONArray keyArr = jsonobj.getJSONArray(key2);
+                            
+                            int length = keyArr.length();
+                            String valueString = "";
+                            for(int i=0;i<length;i++) {
+                                if(i == (length-1)) {
+                                    valueString += keyArr.getString(i);
+                                } else {
+                                    valueString += keyArr.getString(i) + " ; ";
+                                }
+                            }
+                            
+                            //String numFiles = (String)jsonobj.getString(key2);
+
+                            model.put(METADATAVIEW_DATASET_NUMFILES, valueString);
+                            
+                            value = valueString;
+                            
+                        }
+                        else if(key2.equals("index_node")) {
+                            JSONArray keyArr = jsonobj.getJSONArray(key2);
+                            
+                            String indexNode = (String)jsonobj.getString(key2);
+
+                            int length = keyArr.length();
+                            String valueString = "";
+                            for(int i=0;i<length;i++) {
+                                if(i == (length-1)) {
+                                    valueString += keyArr.getString(i);
+                                } else {
+                                    valueString += keyArr.getString(i) + " ; ";
+                                }
+                            }
+                            
+                            model.put(METADATAVIEW_DATASET_INDEXNODE, valueString);
+                            
+                            value = valueString;
+                            
+                        }
+                        else if(key2.equals("xlink")) {
+                            JSONArray keyArr = jsonobj.getJSONArray(key2);
+                            
+                            String xlink = (String)jsonobj.getString(key2);
+
+                            int length = keyArr.length();
+                            String valueString = "";
+                            for(int i=0;i<length;i++) {
+                                if(i == (length-1)) {
+                                    valueString += keyArr.getString(i);
+                                } else {
+                                    valueString += keyArr.getString(i) + " ; ";
+                                }
+                            }
+                            
+                            model.put(METADATAVIEW_DATASET_INDEXNODE, valueString);
+                            
+                            value = xlink;
+                            
+                        }
+                        else if((jsonobj.get(key2)).getClass().getName().equals("org.esgf.metadata.JSONArray")) {
+                            
+                            JSONArray keyArr = jsonobj.getJSONArray(key2);
+                            
+                            int length = keyArr.length();
+                            String valueString = "";
+                            for(int i=0;i<length;i++) {
+                                if(i == (length-1)) {
+                                    valueString += keyArr.getString(i);
+                                } else {
+                                    valueString += keyArr.getString(i) + " ; ";
+                                }
+                            }
+                            //System.out.println("\t\tKey: " + key2 + " Value: " + valueString);
+
+                            value = valueString;
+                            
+                        } else {
+                            String valueString = (String)jsonobj.getString(key2);
+                            
+                            //System.out.println("\t\tKey: " + key2 + " Value: " + valueString);
+
+                            value = valueString;
+                        }
+                        
+                        
+                        
+                        
+                        keys.add(key2);
+                        values.add(value);
+                        
+                        
+                        
+                        
+                    }
+                    
+                    System.out.println("Sizes: " + keys.size() + " " + values.size());
+
+                    for(int i=0;i<keys.size();i++)
+                    {
+                        System.out.println("Value: " + i + " " + values.get(i));
+                    }
+                    for(int i=0;i<keys.size();i++)
+                    {
+                        System.out.println("Key: " + i + " " + keys.get(i));
+                    }
+
+                    String [] keyArr = new String[keys.size()];
+                    String [] valueArr = new String[values.size()];
+                    for(int i=0;i<keys.size();i++) {
+                        keyArr[i] = keys.get(i);
+                    }
+                    for(int i=0;i<values.size();i++) {
+                        valueArr[i] = values.get(i);
+                    }
+
+                    model.put(METADATAVIEW_KEYARR, keyArr);
+                    model.put(METADATAVIEW_VALUEARR, valueArr);
+                    
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+               
+            }
+            
+
+        }
+        
+        
+        
+        return new ModelAndView("metadataview", model);
+    
+    }
+    
+    
+    
+    
+    
+    
+    public void fromSolr(JSONObject solrResponse) {
+        
+        
+            
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    private JSONObject getJSONResponse(String solrQueryString) {
+        
+
+        String responseBody = null;
+        
+        // create an http client
+        HttpClient client = new HttpClient();
+
+        //attact the dataset id to the query string
+        GetMethod method = new GetMethod(searchAPIURL);
+        
+        
         method.setQueryString(solrQueryString);
         
         System.out.println("\tQUERYSTR: " + method.getQueryString());
-        		
+                
         
         method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
                 new DefaultHttpMethodRetryHandler(3, false));
@@ -127,27 +347,9 @@ public class MetadataViewController {
             //e.printStackTrace();
         }
         
-        
-        fromSolr(jsonResponse);
-        
-        
-        
-        
-        model.put(RESPONSE, responseString);
-        /*
-     
-       
-        return responseString;
-        */
-        
-        
-        
-        
-        
-        
-        return new ModelAndView("metadataview", model);
-    
+        return jsonResponse;
     }
+    
     
     @SuppressWarnings("unchecked")
     @RequestMapping(method=RequestMethod.POST)
@@ -167,247 +369,6 @@ public class MetadataViewController {
         return new ModelAndView("metadataview", model);
     
     }
-    
-    
-    
-    public void fromSolr(JSONObject solrResponse) {
-        
-        System.out.println("\n\n\tFROM SOLR\n");
-        
-        Iterator iter = solrResponse.sortedKeys();
-        while(iter.hasNext()) {
-            String key = (String)iter.next();
-            
-            if(key.equals("docs")) {
-                try {
-                    System.out.println("KEY: " + solrResponse.getString(key));
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                /*
-                try{
-                    String value = solrResponse.getString(key);
-                    
-                    //System.out.println(solrResponse.getString(key));
-                    JSONObject jsonobj = new JSONObject(value);
-                    
-                    Iterator iter2 = jsonobj.sortedKeys();
-                    
-                    while(iter2.hasNext()) {
-                        String key2 = (String)iter2.next();
-                        
-                        System.out.println("Key2: " + key2);
-                    }
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                
-                JSONObject value = null;
-                try {
-
-                   //value = solrResponse.getString(key);
-
-                   value = solrResponse.getJSONObject(key);
-                   
-                   
-                   
-                   //System.out.println("value: " + value);
-                   Iterator iter2 = value.sortedKeys();
-                   
-                   while(iter2.hasNext()) {
-                       String key2 = (String)iter2.next();
-                       
-                       System.out.println("key2: " + key2);
-                   }
-                   
-                   
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                */
-            }
-        }
-
-        /*
-        this.tracking_id = "unknown";
-        this.checksum = "unknown";
-        this.checksum_type = "unknown";
-        this.technoteStr = "NA";
-        
-        while(iter.hasNext()) {
-            String key = (String)iter.next();
-
-            String value = null;
-            try {
-                value = solrResponse.getString(key);
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            //System.out.println("key: " + key + " value: " + value);
-            //set the fileid
-            if(key.equals("id")) {
-                
-                this.fileId = value;
-                
-            } 
-            //set the file size element
-            else if(key.equals("size")) {
-                
-                this.size = value;
-                
-            }
-            //set the file title element
-            else if(key.equals("title")) {
-                
-                this.title = value;
-                
-            }
-            //set the file title element
-            else if(key.equals("checksum")) {
-                
-                JSONArray checksumsJSON;
-                try {
-                    checksumsJSON = (JSONArray)solrResponse.getJSONArray(key);
-                    this.checksum = (String)checksumsJSON.get(0);
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                //System.out.println("                   checksum: " + this.checksum);
-                
-            }
-            //set the file title element
-            else if(key.equals("tracking_id")) {
-                
-                JSONArray trackingIdJSON;
-                try {
-                    trackingIdJSON = (JSONArray)solrResponse.getJSONArray(key);
-                    this.tracking_id = (String)trackingIdJSON.get(0);
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                //System.out.println("                   TrackingId: " + this.tracking_id);
-                
-            }
-            //set the file title element
-            else if(key.equals("checksum_type")) {
-                
-                
-                JSONArray checksum_typeJSON;
-                try {
-                    checksum_typeJSON = (JSONArray)solrResponse.getJSONArray(key);
-                    this.checksum_type = (String)checksum_typeJSON.get(0);
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                
-                //System.out.println("Checksum Type: " + this.checksum_type);
-                
-                
-            }
-            else if(key.equals("url")) {
-                
-                
-                //set the urls, mimes, and services elements
-                URLSElement urlsElement = new URLSElement();
-                MIMESElement mimesElement = new MIMESElement();
-                ServicesElement servicesElement = new ServicesElement();
-                JSONArray urlsJSON = null;
-                try {
-                    urlsJSON = (JSONArray)solrResponse.getJSONArray(key);
-                } catch (JSONException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-                
-                for(int i=0;i<urlsJSON.length();i++) {
-                    String urlStr = null;
-                    try {
-                        urlStr = urlsJSON.get(i).toString();
-                    } catch (JSONException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    
-                    String [] urlStrTokens = urlStr.split("\\|");
-                    
-                    String url = urlStrTokens[0];
-                    urlsElement.addUrl(url);
-                    
-                    String mime = urlStrTokens[1];
-                    mimesElement.addMime(mime);
-                    
-                    String service = urlStrTokens[2];
-                    servicesElement.addService(service);
-                    if(service.equals("OPENDAP")) {
-                        this.hasOpenDap = "true";
-                        //System.out.print("\tService is an OPendap");
-                    } else if(service.equals("HTTPServer")) {
-                        //System.out.print("\tService is an HTTP");
-                        this.hasHttp = "true";
-                    } else if(service.equals("GridFTP")) {
-                        this.hasGrid = "true";
-                        //System.out.print("\tService is an GRIDFTP");
-                    } else if(service.equals("SRM")) {
-                        this.hasSRM = "true";
-                        //System.out.print("\tService is an GRIDFTP");
-                    }
-                }
-
-                if(this.hasOpenDap == null) {
-                    this.hasOpenDap = "false";
-                } 
-                if(this.hasGrid == null) {
-                    this.hasGrid = "false";
-                } 
-                if(this.hasHttp == null) {
-                    this.hasHttp = "false";
-                } 
-                if(this.hasSRM == null) {
-                    this.hasSRM = "false";
-                }
-                
-                this.urlsElement = urlsElement;
-                this.mimesElement = mimesElement;
-                this.servicesElement = servicesElement;
-
-                
-                
-            }
-            else if(key.equals("xlink")) {
-                
-                try {
-                    JSONArray xlinkJSON = (JSONArray)solrResponse.getJSONArray(key);
-                    //System.out.println("\n****XLINK LENGTH****\n\n" + xlinkJSON.length());
-                    
-                    //just get the pdf url
-                    String [] technoteTokens = ((String)xlinkJSON.get(0)).split("\\|");
-                    
-                    String technoteStr = technoteTokens[0];
-                    
-                    this.technoteStr = technoteStr;
-                    
-                    //System.out.println("\ttechnote: " + this.technoteStr);
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-               
-            }
-            
-            
-        }
-        */
-    }
-    
-    
-    
-    
-    
-    
     
     
     

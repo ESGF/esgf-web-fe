@@ -189,29 +189,6 @@ $(function(){
  
 	});
 	
-	//metadata_id
-	//var queryStr = 
-	/*
-	//get all of the search constraints (fq params)
-   	var fqParamStr = getFqParamStr();
-   	
-   	//get the peers
-   	var peerStr = getPeerStr();
-   	
-   	//get the technotes
-   	var technoteStr = getTechnoteStr();
-   	
-   	//get the ids
-   	var idStr = getIdStr();//metadata_id;
-   	
-   	//assemble the query string
-   	var queryStr = {"idStr" : idStr, 
-   					"peerStr" : peerStr, 
-   					"technotesStr" : technoteStr, 
-   					"showAllStr" : ESGF.setting.showAllContents, 
-   					"fqStr" : fqParamStr, 
-   					"initialQuery" : "true"};	
-		*/
 		
 	var queryStr = {'id' : metadata_id};	
 		
@@ -222,7 +199,17 @@ $(function(){
 		dataType: 'json',
 		data: queryStr,
 		success: function(data) {
-			alert(data.files.fileId[0]);
+			var fileList = '<table>';
+			fileList += '<th>File Name</th>';
+			fileList += '<th>File Size</th>';
+			for(var i=0;i<data.files.fileId.length;i++) {
+				fileList += '<tr>';
+				fileList += '<td>' + data.files.fileId[i] +  '</td>'; 
+				fileList += '<td>' + data.files.size[i] +  '</td>'; 
+				fileList += '</tr>';
+			}
+			fileList += '</table>';
+			$('#fileList').append(fileList);
 		},
 		error: function() {
 			alert('error');

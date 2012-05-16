@@ -61,7 +61,6 @@ AjaxSolr.DatasetSelectionWidget = AjaxSolr.AbstractWidget.extend({
 		
 		
 		$("select[name='datasetC']").live('change', function() {
-			alert('change');
 			var selectedIndex = $("select[name='datasetC']").attr("selectedIndex");
 			
 			if(selectedIndex == 0) {

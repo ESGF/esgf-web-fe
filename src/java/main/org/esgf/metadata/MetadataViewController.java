@@ -50,9 +50,7 @@ public class MetadataViewController {
         
         String id = request.getParameter("id");
         if(id != null) {
-            System.out.println("ID: " + id);
             model.put(METADATAVIEW_DATASET_NAME, id);
-            System.out.println("Putting " + id + " into the model");
         } else {
             System.out.println("NULL");
         }
@@ -219,16 +217,8 @@ public class MetadataViewController {
                         
                     }
                     
-                    System.out.println("Sizes: " + keys.size() + " " + values.size());
+                    //System.out.println("Sizes: " + keys.size() + " " + values.size());
 
-                    for(int i=0;i<keys.size();i++)
-                    {
-                        System.out.println("Value: " + i + " " + values.get(i));
-                    }
-                    for(int i=0;i<keys.size();i++)
-                    {
-                        System.out.println("Key: " + i + " " + keys.get(i));
-                    }
 
                     String [] keyArr = new String[keys.size()];
                     String [] valueArr = new String[values.size()];

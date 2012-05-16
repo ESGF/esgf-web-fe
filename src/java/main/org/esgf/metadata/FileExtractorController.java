@@ -35,7 +35,6 @@ public class FileExtractorController {
 
         String id = request.getParameter("id");
         
-        System.out.println("ID: " + id);
         
 
         String marker = "\"response\":";
@@ -56,7 +55,7 @@ public class FileExtractorController {
         try {
             solrQueryString += "format=application%2Fsolr%2Bjson&type=File&dataset_id=" + URLEncoder.encode(id,"UTF-8").toString();
             //System.out.println("\nthis.solrQueryString->\t" + URLEncoder.encode(dataset_id,"UTF-8").toString());
-            System.out.println("\n\tthis.solrQueryString->\t" + solrQueryString);
+            //System.out.println("\n\tthis.solrQueryString->\t" + solrQueryString);
             
         } catch (UnsupportedEncodingException e1) {
             // TODO Auto-generated catch block
@@ -96,7 +95,9 @@ public class FileExtractorController {
         int end = responseBody.length();
         String responseString = responseBody.substring(start,end);
         
-        //System.out.println("\nRESPONSE STR\n\n" + responseString + "\n\n\n");
+
+        List<String> values = new ArrayList<String>();
+        List<String> sizes = new ArrayList<String>();
 
         JSONObject jsonResponse = null;
         JSONArray jsonArray = null;
@@ -105,54 +106,64 @@ public class FileExtractorController {
             
             jsonResponse = new JSONObject(responseString);
             
-            
-            
             jsonArray = jsonResponse.getJSONArray("docs");
             
-            System.out.println("length: " + jsonArray.length());
             
-            //jsonArray = jsonResponse.getJSONArray("docs");
-            //numFound = jsonResponse.getString("numFound");
+            
+            for(int i=0;i<jsonArray.length();i++) {
+                JSONObject elem = null;
+                try {
+                    elem = jsonArray.getJSONObject(i);
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                Iterator iter = elem.sortedKeys();
+                
+                
+                while(iter.hasNext()) {
+                    String key = (String)iter.next();
+                    
+                    if(key.equals("id")) {
+                        String valueString = "";
+                        try {
+                            valueString = (String)elem.getString(key);
+                        } catch (JSONException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                        values.add(valueString);
+                    } else if(key.equals("size")) {
+                        String valueString = "";
+                        try {
+                            valueString = (String)elem.getString(key);
+                        } catch (JSONException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                        sizes.add(valueString);
+                        
+                        
+                    }
+                    
+                    
+                }
+                
+                
+            }
+
+            
+            
+            
+            
+            
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             System.out.println("Problem converting Solr response to json string - getDocElement");
             //e.printStackTrace();
         }
 
-        List<String> values = new ArrayList<String>();
         
-        for(int i=0;i<jsonArray.length();i++) {
-            JSONObject elem = null;
-            try {
-                elem = jsonArray.getJSONObject(i);
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            Iterator iter = elem.sortedKeys();
-            
-            
-            while(iter.hasNext()) {
-                String key = (String)iter.next();
-                
-                if(key.equals("id")) {
-                    String valueString = "";
-                    try {
-                        valueString = (String)elem.getString(key);
-                    } catch (JSONException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    System.out.println(valueString);
-                    values.add(valueString);
-                }
-                
-                
-            }
-            
-            
-        }
-
         Element filesEl = new Element("files");
        
         for(int i=0;i<values.size();i++) {
@@ -160,6 +171,9 @@ public class FileExtractorController {
             Element fileIdEl = new Element("fileId");
             fileIdEl.addContent(values.get(i));
             filesEl.addContent(fileIdEl);
+            Element sizeEl = new Element("size");
+            sizeEl.addContent(sizes.get(i));
+            filesEl.addContent(sizeEl);
         }
         
         String xml = "";

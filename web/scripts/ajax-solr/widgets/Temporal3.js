@@ -119,8 +119,15 @@
                         }); //end datepicker
                         
                         
-                	}
+                	},
             	
+                	buttons: {
+                		Submit: function() {
+                			$( this ).dialog( "close" );
+                			
+                			self.executeDateRequest();
+                		}
+                	}
             		
             	})
             	
@@ -145,19 +152,32 @@
     	   
     	   var datetime_start, datetime_startFQ,
            datetime_stop, datetime_stopFQ; 
+
     	   
     	   //datetime_start
-           if(self.dateFrom.value) {
-               datetime_start = self.dateFrom + 'T00:00:00Z';
-           } else {
+           if(self.dateFrom == '*' || self.dateFrom == '') {
                datetime_start = '*';
+           } else {
+               datetime_start = self.dateFrom + 'T00:00:00Z';
            }
            //datetime_stop
-           if(self.dateTo.value) {
-               datetime_stop = self.dateTo + 'T00:00:00Z';
-           } else {
+           if(self.dateTo == '*' || self.dateTo == '') {
                datetime_stop = '*';
+           } else {
+               datetime_stop = self.dateTo + 'T00:00:00Z';
            }
+           
+           
+           
+           var startStr = 'start='+datetime_start;
+           var stopStr = 'end='+datetime_stop;
+           
+
+           ESGF.localStorage.put('esgf_fq',startStr,startStr);
+           ESGF.localStorage.put('esgf_fq',stopStr,stopStr);
+           ESGF.localStorage.put('esgf_queryString',startStr,startStr);
+           ESGF.localStorage.put('esgf_queryString',stopStr,stopStr);
+           /*
            datetime_startFQ = 'datetime_start:[' + datetime_start + ' TO *]';
            datetime_stopFQ = 'datetime_stop:[* TO ' + datetime_stop + ']';
            Manager.store.addByValue('fq', datetime_startFQ );	
@@ -170,8 +190,9 @@
            
            ESGF.localStorage.put('esgf_queryString','start='+datetime_start,'start='+datetime_start);
            ESGF.localStorage.put('esgf_queryString','stop='+datetime_stop,'stop='+datetime_stop);
-			
-          
+		*/
+           //$('a#temporal').unbind('click');
+           //$('#dialog').unbind('dialog');
            
            Manager.doRequest(0);
     	   

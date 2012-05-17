@@ -162,7 +162,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
             	  //ESGF.setting.searchType = 'local';
             	  
             	  //reload the page
-            	  window.location.reload();
+            	  //window.location.reload();
         	  }
           });
           

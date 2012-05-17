@@ -116,6 +116,56 @@
                         //display a fresh map
                         self.display_map();
                         
+            		},
+            	
+            		buttons: {
+            			Submit: function() {
+                            self.executeGeospatialQuery();
+
+
+                            
+                            var bboxStr = 'bbox=[' + self.boundingboxND + ',' +
+                                                     self.boundingboxSD + ',' +
+                                                     self.boundingboxED + ',' +
+                                                     self.boundingboxWD + ']';
+                            
+                            //ESGF.localStorage.put('esgf_fq',bboxStr,bboxStr);
+                            //ESGF.localStorage.put('esgf_queryString',bboxStr,bboxStr);
+                            /*
+                            ESGF.localStorage.put('esgf_fq',startStr,startStr);
+                            ESGF.localStorage.put('esgf_fq',stopStr,stopStr);
+                            ESGF.localStorage.put('esgf_queryString',startStr,startStr);
+                            ESGF.localStorage.put('esgf_queryString',stopStr,stopStr);
+                            */
+
+                            Manager.doRequest(0);		
+                            
+            				$( this ).dialog( "close" );
+            				
+            				/*
+            				//execute the geospatial query
+                            if($("input[name='searchType']:checked").val() !== null && $("input[name='areaGroup']:checked").val() !== null) {
+                                
+                            	//erase any previous geospatial request
+                                var fq = Manager.store.values('fq');
+                                for (i = 0, l = fq.length; i < l; i++) {
+                                    //any previous filter query that contains 'east_degrees' can be assumed to be a geo search
+                                    if(fq[i].search('east_degrees') !== -1) {
+                                        Manager.store.removeByValue('fq', fq[i]);
+                                    }
+                                }
+
+                                self.executeGeospatialQuery();
+                                Manager.doRequest(0);		
+
+                				$( this ).dialog( "close" );
+                            
+                            } else {
+                                alert('A Geospatial search type must be selected');
+                            }
+            				//self.executeDateRequest();
+            				*/
+            			}
             		}
                     
             		
@@ -124,7 +174,7 @@
     		
     		
     		$('button#submitGeo').live('click', function(){
-            	
+            	/*
     			alert('here?');
     			
             	//execute the geospatial query
@@ -145,7 +195,7 @@
                 } else {
                     alert('A Geospatial search type must be selected');
                 }
-            	
+            	*/
             	
             });
             
@@ -451,7 +501,7 @@
             var i = null;
             self.centroidCenter = marker.getPosition();  
             var latConv = self.dist(self.centroidCenter, new google.maps.LatLng(self.centroidCenter.lat() + 0.1, self.centroidCenter.lng()))*10;
-            var lngConv = self.dist(self.centroidCenter, new google.maps.LatLng(self.centroidCenter.lat(), self.centroidCenter.lng() + 0.1))*10;
+            var lngConv = self.dist(self.centroidCenter, new google.maps.Lng(self.centroidCenter.lat(), self.centroidCenter.lng() + 0.1))*10;
             // loop
             var points = [];
             var step = parseInt(360/nodes,10) || 40;
@@ -533,6 +583,7 @@
      */
     encloses: function (geoSearchType) {
     	
+    	
         var self = this;
         var geoQueryString = '';
         var sw = null;
@@ -569,6 +620,7 @@
             
         }else { // geosearch type is a bounding box
         	
+        	
         	//sw extreme point of the bounding box
             sw = self.bounds.getSouthWest();
             //ne extreme point of the bounding box
@@ -579,6 +631,8 @@
             self.boundingboxSD = sw.lat();
             self.boundingboxED = ne.lng();
             self.boundingboxND = ne.lat();
+            
+            alert('self.boundingboxED' + self.boundingboxED);
 
             var searchAPIQueryStr = 'bbox=[' + self.boundingboxWD + ',' + self.boundingboxSD + ',' + self.boundingboxED + ',' + self.boundingboxND + ']'; 
             
@@ -589,13 +643,13 @@
         }
         
         //attact the geo to the query string
-        if(ESGF.setting.storage) {
+        //if(ESGF.setting.storage) {
         	ESGF.localStorage.put('esgf_fq', geoQueryString, geoQueryString);
-        }
+        //}
         
         
         
-        Manager.store.addByValue('fq',geoQueryString);
+        //Manager.store.addByValue('fq',geoQueryString);
     },
     
     

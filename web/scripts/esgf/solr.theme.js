@@ -87,7 +87,9 @@ AjaxSolr.theme.prototype.result = function (doc, snippetReplica, snippetVersion,
     	  output += '<span style="font-size:9px;color:#7d5f45;font-weight:bold;font-style:italic;font-type:Trade Gothic;margin-right:3px"> Replica </span>';
       }
       output += '<span class="actionitem ai_meta">';
-      output += '<a href="metadataview?' + 'id=' + doc.id + '" ';
+      //output += '<a href="metadataview?' + 'id=' + doc.id + '" ';
+      //alert('')
+      output += '<a href="metadataview/' + doc.id + '.html"' ;//?' + 'id=' + doc.id + '" ';
       //output += 'class="met" rel="#metadata_overlay"';
       output += allStr + '>';
       output += doc.title + '</a>';

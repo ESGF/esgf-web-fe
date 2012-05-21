@@ -21,6 +21,7 @@ import org.esgf.datacart.MIMESElement;
 import org.esgf.datacart.ServicesElement;
 import org.esgf.datacart.URLSElement;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -41,14 +42,14 @@ public class MetadataViewController {
     private static String searchAPIURL = "http://localhost:8081/esg-search/search?";
     
     @SuppressWarnings("unchecked")
-    @RequestMapping(method=RequestMethod.GET)
-    public ModelAndView doGet(final HttpServletRequest request) {
+    @RequestMapping(method=RequestMethod.GET,value="/{dataset_id}.html")
+    public ModelAndView doGet(final HttpServletRequest request,@PathVariable("dataset_id") String dataset_id) {
     
         Map<String,Object> model = new HashMap<String,Object>();
 
         
         
-        String id = request.getParameter("id");
+        String id = dataset_id;//request.getParameter("id");
         if(id != null) {
             model.put(METADATAVIEW_DATASET_NAME, id);
         } else {
@@ -59,7 +60,7 @@ public class MetadataViewController {
         
         String solrQueryString = "";
 
-        
+        //System.out.println("Dataset_id: " + dataset_id);
         
         //add the dataset to the query string
         try {
@@ -76,15 +77,10 @@ public class MetadataViewController {
         
         JSONObject jsonResponse = this.getJSONResponse(solrQueryString);
         
-        
-        
-        //fromSolr(jsonResponse);
-        
+            
         
         
         Iterator iter = jsonResponse.sortedKeys();
-        
-        
         
         
         while(iter.hasNext()) {

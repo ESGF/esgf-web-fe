@@ -5,6 +5,7 @@
 		Metadata
 	</span>
 		
+		
 	<span style="float:right;margin-bottom:20px;margin-top:10px">
 		<select id="s3" multiple="multiple">
 			<c:set var="j" value="0"/>
@@ -44,6 +45,5 @@
 		</c:forEach>
 		
 	</table>
-	
 </div>
 

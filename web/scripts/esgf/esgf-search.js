@@ -63,6 +63,7 @@ LOG.debug("Make ajax call to get active peers");
 */
 //Getting 406 errors from inside the lab...need to fix this at some point
 
+	/*
 $.ajax({
     url: "peer/list",
     dataType: 'json',
@@ -71,11 +72,12 @@ $.ajax({
         ESGF.search.shards = data;
     },
 	error: function() {
-		alert('error in getting peers');
+		alert('error in getting peersss');
 	}
 
 });
-
+*/
+	
 
 /*
 

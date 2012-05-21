@@ -16,11 +16,13 @@
             
  
 <div class="span-24 last" style="margin-top:40px;min-height:500px;" class="metadata_page">
+ 
 	<%@ include file="metadata_header.jsp" %>
 	
 	<%@ include file="metadata_info.jsp" %>
 	
 	<%@ include file="file_info.jsp" %>
+
 </div>
 
 

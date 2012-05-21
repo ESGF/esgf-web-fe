@@ -20,7 +20,7 @@
     <div class="geospatial_map_info">  
     	<fieldset id="search_type_area">  
 	 		<p class=legend> Search Type: </p>  
-	 		<input type="radio" name="searchType" id="searchType" value="Encloses" checked /> Encloses   
+	 		<input type="radio" name="searchType" id="searchType" value="Encloses" checked disabled /> Encloses   
 	 		<!--  
 	 		<input type="radio" name="searchType" id="searchType" value="Overlaps" /> Overlaps   
 			-->
@@ -44,7 +44,7 @@
  			<p class=legend> Define Area: </p>  
 
  			<input type="radio" name="areaGroup" value="square" /> Square   
- 			<input type="radio" name="areaGroup" value="circle" /> Circle   
+ 			<input type="radio" name="areaGroup" value="circle" disabled /> Circle   
 
  			<div id="geospatial_circleInputs" style="display:none">  
      			<label> Radius (km):</label><input type="text" name="radius" size="3" value="5" />  
@@ -60,10 +60,11 @@
     </div>    
     
 </div>
-<!--  -->
+<!--  
 <div class="overlay_footer" style="display:none">
     <button class="geoButton" id="submitGeo">Submit Geospatial Constraintss</button> 
 </div> 
+ -->
  
 </body>
 </html> 

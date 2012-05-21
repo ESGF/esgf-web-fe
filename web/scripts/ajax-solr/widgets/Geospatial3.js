@@ -131,40 +131,12 @@
                             
                             //ESGF.localStorage.put('esgf_fq',bboxStr,bboxStr);
                             //ESGF.localStorage.put('esgf_queryString',bboxStr,bboxStr);
-                            /*
-                            ESGF.localStorage.put('esgf_fq',startStr,startStr);
-                            ESGF.localStorage.put('esgf_fq',stopStr,stopStr);
-                            ESGF.localStorage.put('esgf_queryString',startStr,startStr);
-                            ESGF.localStorage.put('esgf_queryString',stopStr,stopStr);
-                            */
+                           
 
                             Manager.doRequest(0);		
                             
             				$( this ).dialog( "close" );
             				
-            				/*
-            				//execute the geospatial query
-                            if($("input[name='searchType']:checked").val() !== null && $("input[name='areaGroup']:checked").val() !== null) {
-                                
-                            	//erase any previous geospatial request
-                                var fq = Manager.store.values('fq');
-                                for (i = 0, l = fq.length; i < l; i++) {
-                                    //any previous filter query that contains 'east_degrees' can be assumed to be a geo search
-                                    if(fq[i].search('east_degrees') !== -1) {
-                                        Manager.store.removeByValue('fq', fq[i]);
-                                    }
-                                }
-
-                                self.executeGeospatialQuery();
-                                Manager.doRequest(0);		
-
-                				$( this ).dialog( "close" );
-                            
-                            } else {
-                                alert('A Geospatial search type must be selected');
-                            }
-            				//self.executeDateRequest();
-            				*/
             			}
             		}
                     
@@ -565,12 +537,12 @@
 	        var geoSearchType = $("input[name='searchType']:checked").val();
 	        var geoShape = $("input[name='areaGroup']:checked").val();
 	
-	        if(geoSearchType === 'Encloses') {
+	        //if(geoSearchType === 'Encloses') {
 	            self.encloses(geoShape);
-	        }
-	        else {
-	            self.overlaps(geoShape);
-	        }
+	        //}
+	        //else {
+	            //self.overlaps(geoShape);
+	        //}
         
 
         },
@@ -632,22 +604,26 @@
             self.boundingboxED = ne.lng();
             self.boundingboxND = ne.lat();
             
-            alert('self.boundingboxED' + self.boundingboxED);
+            //alert('self.boundingboxSD' + self.boundingboxSD + ' self.boundingboxND' + self.boundingboxND);
 
-            var searchAPIQueryStr = 'bbox=[' + self.boundingboxWD + ',' + self.boundingboxSD + ',' + self.boundingboxED + ',' + self.boundingboxND + ']'; 
+            //var searchAPIQueryStr = 'bbox=[' + self.boundingboxWD + ',' + self.boundingboxSD + ',' + self.boundingboxED + ',' + self.boundingboxND + ']'; 
+            var searchAPIQueryStr = 'bbox=[' + self.boundingboxWD.toFixed(2) + ',' + self.boundingboxSD.toFixed(2) + ',' + self.boundingboxED.toFixed(2) + ',' + self.boundingboxND.toFixed(2) + ']'; 
             
-            geoQueryString += self.getEnclosesBBQuery(self.boundingboxSD,self.boundingboxWD,self.boundingboxND,self.boundingboxED);
+            //geoQueryString += self.getEnclosesBBQuery(self.boundingboxSD,self.boundingboxWD,self.boundingboxND,self.boundingboxED);
             
-            ESGF.localStorage.put('esgf_queryString',geoQueryString,searchAPIQueryStr);
+            //ESGF.localStorage.put('esgf_queryString',geoQueryString,searchAPIQueryStr);
+            //ESGF.localStorage.put('esgf_fq', geoQueryString,searchAPIQueryStr);
+            ESGF.localStorage.put('esgf_queryString',searchAPIQueryStr,searchAPIQueryStr);
+            ESGF.localStorage.put('esgf_fq', searchAPIQueryStr,searchAPIQueryStr);
             
         }
         
         //attact the geo to the query string
         //if(ESGF.setting.storage) {
-        	ESGF.localStorage.put('esgf_fq', geoQueryString, geoQueryString);
+        	//ESGF.localStorage.put('esgf_fq', geoQueryString, geoQueryString);
         //}
         
-        
+        //E,N,W,S
         
         //Manager.store.addByValue('fq',geoQueryString);
     },
@@ -711,7 +687,7 @@
         }
         
         //add the geo string to the querystring
-        Manager.store.addByValue('fq',geoQueryString);
+        //Manager.store.addByValue('fq',geoQueryString);
     }
     
     

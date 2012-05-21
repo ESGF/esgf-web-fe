@@ -53,7 +53,7 @@ public class FileDownloadTemplateController {
     @RequestMapping(method=RequestMethod.GET, value="/datacart")
     public @ResponseBody String getDocs(HttpServletRequest request) {
         
-        this.printParameters(request);
+        //this.printParameters(request);
         
         
         String peerStr = request.getParameter("peerStr");
@@ -87,7 +87,6 @@ public class FileDownloadTemplateController {
         
         //get the fileCounter
         String fileCounter = request.getParameter("fileCounter");
-        System.out.println("\n\tFILECOUNT: " + fileCounter + "\n");
         
         
         //DataCartSolrHandler handler = new DataCartSolrHandler(showAll,fq,initialQuery);
@@ -147,12 +146,14 @@ public class FileDownloadTemplateController {
         //get the fileCounter
         String fileCounter = request.getParameter("fileCounter");
         
+        /*
         System.out.println("--------");
         System.out.println("\tpeerStr\t" + peerStr);
         System.out.println("\tfqStr\t" + fqStr);
         System.out.println("\tshowAllStr\t" + showAllStr);
         System.out.println("\tinitialQuery\t" + initialQuery);
         System.out.println("\tfileCount\t " + fileCounter + "\n");
+        */
         
         datasetId = idStr;
         
@@ -208,7 +209,7 @@ public class FileDownloadTemplateController {
         String peerStr = request.getParameter("peerStr");
         if(peerStr != null) {
             String [] peers = peerStr.split(";");
-            System.out.println("PEERS");
+            //System.out.println("PEERS");
             for(int i=0;i<peers.length;i++) {
                 System.out.println("\tPeer: " + peers[i]);
             }

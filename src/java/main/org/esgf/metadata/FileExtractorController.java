@@ -153,13 +153,9 @@ public class FileExtractorController {
             }
 
             
-            
-            
-            
-            
         } catch (JSONException e) {
             // TODO Auto-generated catch block
-            System.out.println("Problem converting Solr response to json string - getDocElement");
+            System.out.println("Problem converting Solr responseq to json string - getDocElement");
             //e.printStackTrace();
         }
 

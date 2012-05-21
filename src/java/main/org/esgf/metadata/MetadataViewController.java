@@ -47,21 +47,14 @@ public class MetadataViewController {
     
         Map<String,Object> model = new HashMap<String,Object>();
 
-        
-        
-        String id = dataset_id;//request.getParameter("id");
-        if(id != null) {
-            model.put(METADATAVIEW_DATASET_NAME, id);
-        } else {
-            System.out.println("NULL");
-        }
+        String id = dataset_id;
+
+        model.put(METADATAVIEW_DATASET_NAME, id);
         
         
         
         String solrQueryString = "";
 
-        //System.out.println("Dataset_id: " + dataset_id);
-        
         //add the dataset to the query string
         try {
             solrQueryString += "format=application%2Fsolr%2Bjson&id=" + URLEncoder.encode(id,"UTF-8").toString();
@@ -73,15 +66,9 @@ public class MetadataViewController {
             e1.printStackTrace();
         }
         
-        
-        
         JSONObject jsonResponse = this.getJSONResponse(solrQueryString);
         
-            
-        
-        
         Iterator iter = jsonResponse.sortedKeys();
-        
         
         while(iter.hasNext()) {
         
@@ -91,15 +78,10 @@ public class MetadataViewController {
                 try {
                     
                     JSONArray jsonarr = new JSONArray(jsonResponse.getString(key));
-                    
                     JSONObject jsonobj = (JSONObject)jsonarr.get(0);
-                    
                     Iterator iter2 = jsonobj.sortedKeys();
-                    
-                    
                     List<String> keys = new ArrayList<String>();
                     List<String> values = new ArrayList<String>();
-                    
                     
                     while(iter2.hasNext()) {
                         
@@ -109,112 +91,33 @@ public class MetadataViewController {
                         String value = "";
                         
 
-                        if(key2.equals("title")) {
-                            String title = (String)jsonobj.getString(key2);
-
-                            model.put(METADATAVIEW_DATASET_TITLE, title);
+                        if((jsonobj.get(key2)).getClass().getName().equals("org.esgf.metadata.JSONArray")) {
                             
-                            value = title;
                             
-                        }
-                        else if(key2.equals("number_of_files")) {
-                            JSONArray keyArr = jsonobj.getJSONArray(key2);
+                            value = this.processJSONArray(jsonobj, key2);
                             
-                            int length = keyArr.length();
-                            String valueString = "";
-                            for(int i=0;i<length;i++) {
-                                if(i == (length-1)) {
-                                    valueString += keyArr.getString(i);
-                                } else {
-                                    valueString += keyArr.getString(i) + " ; ";
-                                }
+                            if(key2.equals("number_of_files")) {
+                                model.put(METADATAVIEW_DATASET_NUMFILES, value);
+                            } else if(key2.equals("index_node")) {
+                                model.put(METADATAVIEW_DATASET_INDEXNODE, value);
+                            } else if(key2.equals("xlink")) {
+                                model.put(METADATAVIEW_DATASET_XLINK, value);
                             }
-                            
-                            //String numFiles = (String)jsonobj.getString(key2);
-
-                            model.put(METADATAVIEW_DATASET_NUMFILES, valueString);
-                            
-                            value = valueString;
-                            
-                        }
-                        else if(key2.equals("index_node")) {
-                            JSONArray keyArr = jsonobj.getJSONArray(key2);
-                            
-                            String indexNode = (String)jsonobj.getString(key2);
-
-                            int length = keyArr.length();
-                            String valueString = "";
-                            for(int i=0;i<length;i++) {
-                                if(i == (length-1)) {
-                                    valueString += keyArr.getString(i);
-                                } else {
-                                    valueString += keyArr.getString(i) + " ; ";
-                                }
-                            }
-                            
-                            model.put(METADATAVIEW_DATASET_INDEXNODE, valueString);
-                            
-                            value = valueString;
-                            
-                        }
-                        else if(key2.equals("xlink")) {
-                            JSONArray keyArr = jsonobj.getJSONArray(key2);
-                            
-                            String xlink = (String)jsonobj.getString(key2);
-
-                            int length = keyArr.length();
-                            String valueString = "";
-                            for(int i=0;i<length;i++) {
-                                if(i == (length-1)) {
-                                    valueString += keyArr.getString(i);
-                                } else {
-                                    valueString += keyArr.getString(i) + " ; ";
-                                }
-                            }
-                            
-                            model.put(METADATAVIEW_DATASET_INDEXNODE, valueString);
-                            
-                            value = xlink;
-                            
-                        }
-                        else if((jsonobj.get(key2)).getClass().getName().equals("org.esgf.metadata.JSONArray")) {
-                            
-                            JSONArray keyArr = jsonobj.getJSONArray(key2);
-                            
-                            int length = keyArr.length();
-                            String valueString = "";
-                            for(int i=0;i<length;i++) {
-                                if(i == (length-1)) {
-                                    valueString += keyArr.getString(i);
-                                } else {
-                                    valueString += keyArr.getString(i) + " ; ";
-                                }
-                            }
-                            //System.out.println("\t\tKey: " + key2 + " Value: " + valueString);
-
-                            value = valueString;
                             
                         } else {
-                            String valueString = (String)jsonobj.getString(key2);
+                                                      
+                            value = (String)jsonobj.getString(key2);   
                             
-                            //System.out.println("\t\tKey: " + key2 + " Value: " + valueString);
-
-                            value = valueString;
+                            if(key2.equals("title")) {
+                                model.put(METADATAVIEW_DATASET_TITLE, value);
+                            } 
                         }
-                        
-                        
-                        
                         
                         keys.add(key2);
                         values.add(value);
                         
-                        
-                        
-                        
                     }
                     
-                    //System.out.println("Sizes: " + keys.size() + " " + values.size());
-
 
                     String [] keyArr = new String[keys.size()];
                     String [] valueArr = new String[values.size()];
@@ -244,30 +147,35 @@ public class MetadataViewController {
     
     }
     
-    
-    
-    
-    
-    
-    public void fromSolr(JSONObject solrResponse) {
+    private String processJSONArray(JSONObject jsonobj,String key) {
         
-        
-            
 
+        String valueString = "";
+        
+        try {
+            JSONArray keyArr = jsonobj.getJSONArray(key);
+            
+            int length = keyArr.length();
+            for(int i=0;i<length;i++) {
+                if(i == (length-1)) {
+                    valueString += keyArr.getString(i);
+                } else {
+                    valueString += keyArr.getString(i) + " ; ";
+                }
+            }
+        } catch(Exception e) {
+            
+        }
+        
+        
+        
+        return valueString;
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
+   
     
     private JSONObject getJSONResponse(String solrQueryString) {
         
-
         String responseBody = null;
         
         // create an http client
@@ -279,8 +187,6 @@ public class MetadataViewController {
         
         method.setQueryString(solrQueryString);
         
-        System.out.println("\tQUERYSTR: " + method.getQueryString());
-                
         
         method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
                 new DefaultHttpMethodRetryHandler(3, false));
@@ -315,8 +221,6 @@ public class MetadataViewController {
         String responseString = responseBody.substring(start,end);
         
         
-        
-        
       //convert extracted string into json array
         JSONObject jsonResponse = null;
         JSONArray jsonArray = null;
@@ -325,37 +229,93 @@ public class MetadataViewController {
             
             jsonResponse = new JSONObject(responseString);
             
-            //jsonArray = jsonResponse.getJSONArray("docs");
-            //numFound = jsonResponse.getString("numFound");
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             System.out.println("Problem converting Solr response to json string - getDocElement");
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         
         return jsonResponse;
     }
     
-    
-    @SuppressWarnings("unchecked")
-    @RequestMapping(method=RequestMethod.POST)
-    public ModelAndView doPost(final HttpServletRequest request) {
-    
-        Map<String,Object> model = new HashMap<String,Object>();
-
-        String id = request.getParameter("id");
-        if(id != null) {
-            System.out.println("ID: " + id);
-            model.put(METADATAVIEW_DATASET_NAME, id);
-            System.out.println("Putting " + id + " into the model");
-        } else {
-            System.out.println("NULL");
-        }
-        
-        return new ModelAndView("metadataview", model);
-    
-    }
+  
     
     
     
 }
+
+
+
+/*
+if(key2.equals("title")) {
+    String title = (String)jsonobj.getString(key2);
+
+    model.put(METADATAVIEW_DATASET_TITLE, title);
+    
+    value = title;
+    
+}
+else if(key2.equals("number_of_files")) {
+    JSONArray keyArr = jsonobj.getJSONArray(key2);
+    
+    int length = keyArr.length();
+    String valueString = "";
+    for(int i=0;i<length;i++) {
+        if(i == (length-1)) {
+            valueString += keyArr.getString(i);
+        } else {
+            valueString += keyArr.getString(i) + " ; ";
+        }
+    }
+    
+    //String numFiles = (String)jsonobj.getString(key2);
+
+    model.put(METADATAVIEW_DATASET_NUMFILES, valueString);
+    
+    value = valueString;
+    
+}
+else if(key2.equals("index_node")) {
+    
+   
+    JSONArray keyArr = jsonobj.getJSONArray(key2);
+    
+    String indexNode = (String)jsonobj.getString(key2);
+
+    int length = keyArr.length();
+    String valueString = "";
+    for(int i=0;i<length;i++) {
+        if(i == (length-1)) {
+            valueString += keyArr.getString(i);
+        } else {
+            valueString += keyArr.getString(i) + " ; ";
+        }
+    }
+    
+    model.put(METADATAVIEW_DATASET_INDEXNODE, valueString);
+    
+    value = valueString;
+    
+}
+else if(key2.equals("xlink")) {
+    JSONArray keyArr = jsonobj.getJSONArray(key2);
+    
+    String xlink = (String)jsonobj.getString(key2);
+
+    int length = keyArr.length();
+    String valueString = "";
+    for(int i=0;i<length;i++) {
+        if(i == (length-1)) {
+            valueString += keyArr.getString(i);
+        } else {
+            valueString += keyArr.getString(i) + " ; ";
+        }
+    }
+    
+    model.put(METADATAVIEW_DATASET_INDEXNODE, valueString);
+    
+    value = valueString;
+    
+}
+else 
+*/

@@ -620,10 +620,6 @@ function getTechnoteStr() {
 }
 
 
-function rewriteFilesObject(files) {
-	
-}
-
 
 
 function rewriteDocsObject(docs) {

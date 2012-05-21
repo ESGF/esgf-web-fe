@@ -222,13 +222,13 @@
 
 <!-- metadata page layout  -->
     <definition name="metadata-layout" extends="base-layout">
-        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+       <!--  <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />  -->
        <put-attribute name="layoutType" type="string" value="metadataview"/>
     </definition>
     
     <!-- go template -->
     <definition name="metadataview" extends="metadata-layout">
-        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+        <!--  <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" /> -->
        <put-attribute name="main" value="/WEB-INF/views/metadataview/metadata_view.jsp" />
     </definition>
 

@@ -188,6 +188,34 @@
 		dataType: 'json',
 		data: queryStr,
 		success: function(data) {
+			
+			//alert('data: ' + data.files);
+			
+			//for(var key in data.files.fileId) {
+				//alert('key: ' + key);
+			//}
+			var fileIdLength = data.files.file.length;
+			
+			if(fileIdLength == undefined) {
+				var fileIdArray = new Array();
+				fileIdArray.push(data.files.file);
+				data.files['file'] = fileIdArray;
+				fileIdLength = data.files.file.length;
+			}
+			
+			var fileList = '<table>';
+			fileList += '<th>File Name</th>';
+			fileList += '<th>File Size</th>';
+			for(var i=0;i<fileIdLength;i++) {
+				fileList += '<tr>';
+				fileList += '<td>' + data.files.file[i].fileId +  '</td>'; 
+				fileList += '<td>' + data.files.file[i].size +  ' Bytes</td>'; 
+				fileList += '</tr>';
+			}
+			fileList += '</table>';
+			$('#fileList').append(fileList);
+			
+			/*
 			var fileList = '<table>';
 			fileList += '<th>File Name</th>';
 			fileList += '<th>File Size</th>';
@@ -199,6 +227,8 @@
 			}
 			fileList += '</table>';
 			$('#fileList').append(fileList);
+			*/
+		
 		},
 		error: function() {
 			alert('error');

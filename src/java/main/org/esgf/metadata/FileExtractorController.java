@@ -158,8 +158,29 @@ public class FileExtractorController {
             System.out.println("Problem converting Solr responseq to json string - getDocElement");
             //e.printStackTrace();
         }
-
         
+
+        Element filesEl = new Element("files");
+        
+        for(int i=0;i<values.size();i++) {
+            Element fileEl = new Element("file");
+
+            Element fileIdEl = new Element("fileId");
+            fileIdEl.addContent(values.get(i));
+            fileEl.addContent(fileIdEl);
+
+            Element sizeEl = new Element("size");
+            sizeEl.addContent(sizes.get(i));
+            fileEl.addContent(sizeEl);
+            
+            filesEl.addContent(fileEl);
+        }
+        
+        
+        
+        
+
+        /*
         Element filesEl = new Element("files");
        
         for(int i=0;i<values.size();i++) {
@@ -171,6 +192,7 @@ public class FileExtractorController {
             sizeEl.addContent(sizes.get(i));
             filesEl.addContent(sizeEl);
         }
+        */
         
         String xml = "";
         

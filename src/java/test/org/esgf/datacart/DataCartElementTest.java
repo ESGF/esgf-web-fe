@@ -1,5 +1,8 @@
 package org.esgf.datacart;
 
+import static org.junit.Assert.*;
+
+import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -22,7 +25,10 @@ public class DataCartElementTest {
     }
     
     
-    
+    @Test
+    public void test1() {
+        assertEquals(0,0);
+    }
     
     
     

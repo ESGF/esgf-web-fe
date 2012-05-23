@@ -305,7 +305,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	
 	//dynamically add spinning wheel to the datacart space
 	addDataCartSpinWheel: function () {
-		alert('spinning');
     	//add a spin wheel to indicate that the system is processing
     	$('tbody#datasetList').after('<img id="spinner" src="images/ajax-loader.gif" />');
     	$('tbody#datasetList').after('<p id="waitWarn">Waiting for files...</p>');
@@ -603,9 +602,12 @@ function getTechnoteStr() {
 	
 	//the datasetInfo object will have a 'peer' and 'xlink' property
 	var selected_arr = ESGF.localStorage.toKeyArr('dataCart');
+	
+	
 	for(var i=0;i<selected_arr.length;i++) {
 		var datasetInfo = ESGF.localStorage.get('dataCart',selected_arr[i]);
 
+		
 		//extract the peer and 'xlink' and add it to the arrs
 		if(i!=0) {
 			//peerArr += ';'+datasetInfo.peer;

@@ -77,6 +77,8 @@ public class FileDownloadTemplateController {
         
         
         String technotes = request.getParameter("technotesStr");
+        System.out.println("Technotes: " + technotes);
+        
         
         //get the search constraints togggle parameter
         String showAllStr = request.getParameter("showAllStr");
@@ -135,6 +137,8 @@ public class FileDownloadTemplateController {
         
         
         String technotes = request.getParameter("technotesStr");
+        //System.out.println("Technotes: " + technotes);
+        
         
         //get the search constraints togggle parameter
         String showAllStr = request.getParameter("showAllStr");
@@ -150,6 +154,7 @@ public class FileDownloadTemplateController {
         System.out.println("--------");
         System.out.println("\tpeerStr\t" + peerStr);
         System.out.println("\tfqStr\t" + fqStr);
+        System.out.println("\ttechnotesStr\t" + technotes);
         System.out.println("\tshowAllStr\t" + showAllStr);
         System.out.println("\tinitialQuery\t" + initialQuery);
         System.out.println("\tfileCount\t " + fileCounter + "\n");

@@ -395,6 +395,7 @@ public class FileElement implements DataCartElement{
                     JSONArray xlinkJSON = (JSONArray)solrResponse.getJSONArray(key);
                     //System.out.println("\n****XLINK LENGTH****\n\n" + xlinkJSON.length());
                     
+                    
                     //just get the pdf url
                     String [] technoteTokens = ((String)xlinkJSON.get(0)).split("\\|");
                     

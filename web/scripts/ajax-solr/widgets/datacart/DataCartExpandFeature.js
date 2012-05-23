@@ -159,7 +159,7 @@
 			    	selectedDocId = Url.encode(selectedDocId);
 			    	var url = '/esgf-web-fe/solrfileproxy2/datacart/'+selectedDocId;
 					
-					
+					//ESGF.localStorage.
 					
 					$.ajax({
 						url: url,
@@ -232,6 +232,9 @@
 									}
 								}
 								
+
+								//alert('technote: ' + data.doc.files.file[3].technote);
+								
 								var appendedFiles = '';
 								
 								for(var i=0;i<fileLength;i++) {
@@ -275,6 +278,19 @@
 										} else {
 											appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '" ' + 'target="_blank">' + service + '</a> </span>';
 										}
+										
+										
+										
+									}
+									
+									if(data.doc.files.file[i].technote != 'NA') {
+										
+										
+										var technoteStr = data.doc.files.file[i].technote;
+										//alert('i: ' + i + ' ' + technoteStr);
+										//var technoteArr = technoteStr.split("\\|");
+										//alert('len: ' + technoteArr.length);
+										appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a style="cursor:pointer" href="' + technoteStr + '" target="_blank" >' + 'TECHNOTE' + '</a> </span>';
 									}
 									
 									appendedFiles += '</td>';

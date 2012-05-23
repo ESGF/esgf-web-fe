@@ -210,7 +210,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             	
             	//alert('adding to cart');
             	if(evt.data.doc['xlink'] != undefined) {
-            		//alert('xlink defined');
+            		alert('xlink defined');
             		//alert(evt.data.doc['xlink']);
             		//add to the datacart localstorage
                 	if(evt.data.doc['index_node'] != undefined) {
@@ -226,13 +226,15 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                 		
                 		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : 'undefined' , 'xlink' : evt.data.doc['xlink']};
                 		
+                		alert('xlink: ' + datasetInfo['xlink']);
+                		
                 		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
                 	
                 	
                 	}
             		
             	} else {
-            		//alert('xlink undefined');
+            		alert('xlink undefined');
             	
             		//add to the datacart localstorage
                 	if(evt.data.doc['index_node'] != undefined) {

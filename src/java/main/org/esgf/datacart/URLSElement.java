@@ -179,11 +179,14 @@ public class URLSElement {
             
             
         } catch (ParserConfigurationException e) {
+            //System.out.println("ParserConfigurationException");
             e.printStackTrace();
         } catch (SAXException e) {
+            System.out.println("SAXException");
             e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            this.urls = new ArrayList<String>();
+            //System.out.println("File Does not exist");
         }
         
     }
@@ -193,33 +196,45 @@ public class URLSElement {
         //overwrite whatever was in the data structure
         this.urls = null;
         
-        
-        if(docElement.getNodeName().equals("urls")) {
-          //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
-            //NodeList nList = doc.getElementsByTagName("service");
-     
-            NodeList nList = docElement.getChildNodes();
-            
-            
-            for (int temp = 0; temp < nList.getLength(); temp++) {
-     
-                
-               Node nNode = nList.item(temp);
-               if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-     
-                  org.w3c.dom.Element eElement = (org.w3c.dom.Element) nNode;
-     
-                  //System.out.println(eElement.getTextContent());
-                  String url = eElement.getTextContent();
-                  if(this.urls == null) {
-                      this.urls = new ArrayList<String>();
-                  }
-                  this.urls.add(url);
+        if(docElement == null) {
+            this.urls = new ArrayList<String>();
+        } else {
+            if(docElement.getNodeName().equals("urls")) {
+                //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+                  //NodeList nList = doc.getElementsByTagName("service");
+           
+                  NodeList nList = docElement.getChildNodes();
                   
-               }
-            }
-            
+                  
+                  for (int temp = 0; temp < nList.getLength(); temp++) {
+           
+                      
+                     Node nNode = nList.item(temp);
+                     if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+           
+                        org.w3c.dom.Element eElement = (org.w3c.dom.Element) nNode;
+
+                        //System.out.println(eElement.getTextContent());
+                        //System.out.println(eElement.getTagName());
+                        
+                        if(eElement.getTagName().equals("url")) {
+                            String url = eElement.getTextContent();
+                            if(this.urls == null) {
+                                this.urls = new ArrayList<String>();
+                            }
+                            this.urls.add(url);
+                        }
+                        
+                        
+                     }
+                  }
+                  
+              } else {
+                  this.urls = new ArrayList<String>();
+              }
         }
+        
+        
     }
     
     public static void main(String [] args) {

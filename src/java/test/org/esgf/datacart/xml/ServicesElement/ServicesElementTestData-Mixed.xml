@@ -1,0 +1,5 @@
+<services>
+	<service>service1</service>
+	<ab>ab1</ab>
+	<service>service2</service>
+</services>

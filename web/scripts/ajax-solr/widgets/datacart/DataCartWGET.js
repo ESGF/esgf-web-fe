@@ -89,6 +89,7 @@
 	    	
 			//kill the uber script
 			$("input#uber_script_short").die('click');
+			$("a#uber_script_short").die('click');
 				
 			//kill the all files wget	
 			$('a.wgetAllFiles_short').die('click');
@@ -115,6 +116,8 @@
 			$("a#uber_script_short").live('click', function() {
 
 				
+				//alert('uber');
+				
 				var self = this;
 				
 				
@@ -128,6 +131,8 @@
 	        	//grab all the keys from the datacart map and place in an array
 		    	self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
 
+            	//get the peers
+            	var peerStr = getPeerStr();
 	        	
 	            for(var i=0;i<self.selected_arr.length;i++) {
 	            
@@ -155,8 +160,6 @@
 	            		//get all of the search constraints (fq params)
 	                	var fqParamStr = getFqParamStr();
 	                	
-	                	//get the peers
-	                	var peerStr = getPeerStr();
 	                	
 	                	//get the technotes
 	                	var technoteStr = getTechnoteStr();
@@ -211,8 +214,30 @@
 	        	
 	            var constraintCount = 0;
 	            
+	            var peers = peerStr.split(";");
+	            var peerAppend = '';
+	            for(var i=0;i<peers.length;i++) {
+	            	/*
+	            	if(peers[i] == 'esg-datanode.jpl.nasa.gov') {
+	            		peerAppend += 'localhost:18983/solr';
+	            	} else if (peers[i] == 'pcmdi9.llnl.gov') {
+	            		peerAppend += 'localhost:28983/solr';
+	            	} else*/ {
+		            	peerAppend += peers[i] + ':8983/solr';
+	            	}
+	            	if(i != (peers.length-1)) {
+	            		peerAppend += ',';
+	            	}
+	            }
+	            
+	            //alert('peerAppend: ' + peerAppend);
+	            
 	            queryString = addConstraintsToWGETQueryString(queryString);
 	        	
+	            //alert('peerStr: ' + peerStr + ' queryString: ' + queryString);
+	            
+	            queryString += '&shards=' + peerAppend;
+	            
 	            submitWGETScriptForm(queryString,file_ids,dataset_ids);
 				
 				
@@ -262,7 +287,10 @@
 
 				var idStr = selectedDocId;
 				
-				var peerStr = getPeerStr();
+				//alert('idStr ' + idStr);
+				
+				var peerStr = getIndividualPeer(idStr);//getPeerStr();
+				
 				var technoteStr = getTechnoteStr();
 								
 		    	var fqParamStr = getFqParamStr();
@@ -313,8 +341,20 @@
 											file_ids.push(file.fileId);
 										}
 
-										var queryString = '/esg-search/wget/?';
+										/*
+										if(peerStr == 'esg-datanode.jpl.nasa.gov') {
+											peerStr = 'localhost:18983/solr';
+										} else if (peerStr == 'pcmdi9.llnl.gov') {
+											peerStr = 'localhost:28983/solr';
+										}*/
+										peerStr += ':8983/solr';
+										
+										var queryString = '/esg-search/wget/?' + 'shards=' + peerStr + '&';
 						            	
+										//var queryString = '/esg-search/wget/?';
+						            	
+										
+										
 						                queryString = addConstraintsToWGETQueryString(queryString);
 						            	
 						                submitWGETScriptForm(queryString,file_ids,dataset_ids);
@@ -336,7 +376,18 @@
 									}
 								});
 							} else {
-								var queryString = '/esg-search/wget/?';
+								
+
+								//alert('peerStr: ' + peerStr);
+								/*
+								if(peerStr == 'esg-datanode.jpl.nasa.gov') {
+									peerStr = 'localhost:18983/solr';
+								} else if (peerStr == 'pcmdi9.llnl.gov') {
+									peerStr = 'localhost:28983/solr';
+								}
+								*/
+								peerStr += ':8983/solr';
+								var queryString = '/esg-search/wget/?' + 'shards=' + peerStr + '&';
 				            	
 				                queryString = addConstraintsToWGETQueryString(queryString);
 				            	

@@ -574,6 +574,17 @@ function getIdStr () {
 	return idStr;
 }
 
+function getIndividualPeer(id) {
+	var peerStr = '';
+	
+	var datasetInfo = ESGF.localStorage.get('dataCart',id);
+	
+	peerStr = datasetInfo['peer'];
+	
+	
+	return peerStr.toString();
+	
+}
 
 function getPeerStr() {
 	var peerStr = '';

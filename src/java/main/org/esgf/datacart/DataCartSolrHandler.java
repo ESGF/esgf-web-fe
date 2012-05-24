@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.http.HTTPException;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
@@ -21,7 +23,7 @@ import org.esgf.metadata.JSONObject;
 
 public class DataCartSolrHandler {
 
-    private static String searchAPIURL = "http://localhost/esg-search/search?";
+    private static String searchAPIURL = "http://localhost:8081/esg-search/search?";
     private static String queryPrefix = "format=application%2Fsolr%2Bjson&type=File";
     private final static Logger LOG = Logger.getLogger(DataCartSolrHandler.class);
     
@@ -210,9 +212,23 @@ public class DataCartSolrHandler {
     }
     
     public void addShard(String shard) {
+        
+        //System.out.println("Shard: " + shard);
+        /*
+        if(shard.equals("esg-datanode.jpl.nasa.gov:8983/solr")) {
+            shard = "localhost:18983/solr";
+        } 
+        
+        if (shard.equals("pcmdi9.llnl.gov:8983/solr")) {
+            shard = "localhost:28983/solr";
+        }
+        */
         if(!shard.equals("undefined")) {
             this.solrQueryString += "&shards=" + shard;
-        }
+        } 
+        
+        
+        
     }
    
     
@@ -419,6 +435,7 @@ public class DataCartSolrHandler {
         return jsonArray;
     }
     
+   
     
     public static void main(String [] args) {
 

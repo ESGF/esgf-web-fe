@@ -138,7 +138,9 @@
 					
 					var idStr = selectedDocId;
 					
-					var peerStr = getPeerStr();
+					var peerStr = getIndividualPeer(idStr);//getPeerStr();
+					
+					
 					var technoteStr = getTechnoteStr();
 									
 			    	var fqParamStr = getFqParamStr();
@@ -159,7 +161,6 @@
 			    	selectedDocId = Url.encode(selectedDocId);
 			    	var url = '/esgf-web-fe/solrfileproxy2/datacart/'+selectedDocId;
 					
-					//ESGF.localStorage.
 					
 					$.ajax({
 						url: url,
@@ -365,8 +366,9 @@
 					
 					var idStr = selectedDocId;
 					
-					var peerStr = getPeerStr();
+					var peerStr = getIndividualPeer(idStr);//getPeerStr();
 					
+					//alert('peerStr: ' + peerStr);
 					
 					var technoteStr = getTechnoteStr();
 					

@@ -1,5 +1,7 @@
 package org.esgf.datacart;
 
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -127,7 +129,7 @@ public class FileDownloadTemplateController {
         
         
         String peerStr = request.getParameter("peerStr");
-        String [] peers = peerStr.split(";");
+        //String [] peers = peerStr.split(";");
 
         //NOTE: ID and PEERS SHOULD BE THE SAME LENGTH!!!!
         
@@ -162,7 +164,7 @@ public class FileDownloadTemplateController {
         
         datasetId = idStr;
         
-        DocElement doc = getDocElement(datasetId,peers[0],initialQuery,fq,showAllStr,fileCounter);
+        DocElement doc = getDocElement(datasetId,peerStr,initialQuery,fq,showAllStr,fileCounter);
         
         //System.out.println(doc.toXML());
         
@@ -188,16 +190,26 @@ public class FileDownloadTemplateController {
         //should be handler.addShard(peer+":8983/solr");
         //handler.addShard("localhost"+":8983/solr");
         handler.addShard(peer+":8983/solr");
-       
-        
+
         doc = handler.getDocElement(id);
-        
         
         
         return doc;
     }
     
     
+    
+    public static void queryStringInfo(HttpServletRequest request) {
+        System.out.println("--------Utils Query String Info--------");
+        Enumeration<String> paramEnum = request.getParameterNames();
+        
+        while(paramEnum.hasMoreElements()) { 
+            String postContent = (String) paramEnum.nextElement();
+            System.out.println(postContent+"-->"); 
+            System.out.println(request.getParameter(postContent));
+        }
+        System.out.println("--------End Utils Query String Info--------");
+    }
     
     
     

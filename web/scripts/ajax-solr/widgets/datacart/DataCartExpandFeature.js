@@ -100,7 +100,9 @@
 
 			
 		    $('a.showAllFiles_short').live('click',function() {
-						    	
+
+				var openid = $('span#principal_username').html();
+				//alert('openid: ' + $('span#principal_username').html());
 		    	
 		    	//extract the dataset Id from the span tag
 				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
@@ -277,10 +279,12 @@
 										if(service == 'GridFTP') {
 											appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a style="cursor:pointer" class="go_individual_gridftp_short">' + service + '</a> </span>';
 										} else {
-											appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '" ' + 'target="_blank">' + service + '</a> </span>';
+											if(openid == 'anonymousUser') {
+												appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '&openid=' + openid +  '" ' + 'target="_blank">' + service + '</a> </span>';
+											} else {
+												appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '" ' + 'target="_blank">' + service + '</a> </span>';
+											}
 										}
-										
-										
 										
 									}
 									
@@ -355,6 +359,9 @@
 		    
 			
 			$('a.view_more_files_short').live('click',function() {
+
+				var openid = $('span#principal_username').html();
+				
 				
 				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html());
 				
@@ -401,6 +408,9 @@
 							
 							data.docs = rewriteDocsObject(data.docs);
 							
+							
+							
+							
 							var tagid = 'file_rows_' + replaceChars(idStr);
 							//' remove_' + tagid + '
 							
@@ -432,7 +442,11 @@
 									if(file.services.service[j] == 'HTTPServer') {
 										//newRow += '<td style="float:right;font-size:11px;">';
 										newRow += '<span style="word-wrap: break-word;vertical-align:middle"> ';
-										newRow += '<a href="' + file.urls.url[j] + '">HTTP</a>';
+										newRow += '<a href="' + file.urls.url[j];
+										if(openid != 'anonymousUser') {
+											newRow += '&openid=' + openid;
+										}
+										newRow += '">HTTP</a>';
 										newRow += '</span>';
 										//newRow += '</td>';
 									} else if(file.services.service[j] == 'GridFTP') {

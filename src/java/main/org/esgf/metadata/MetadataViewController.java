@@ -39,7 +39,7 @@ public class MetadataViewController {
     private static final String METADATAVIEW_KEYARR = "MetadataView_KeyArr";
     private static final String METADATAVIEW_VALUEARR = "MetadataView_ValueArr";
 
-    private static String searchAPIURL = "http://localhost:8081/esg-search/search?";
+    private static String searchAPIURL = "http://localhost/esg-search/search?";
     
     @SuppressWarnings("unchecked")
     @RequestMapping(method=RequestMethod.GET,value="/{dataset_id}.html")
@@ -59,7 +59,6 @@ public class MetadataViewController {
         try {
             solrQueryString += "format=application%2Fsolr%2Bjson&id=" + URLEncoder.encode(id,"UTF-8").toString();
             //System.out.println("\nthis.solrQueryString->\t" + URLEncoder.encode(dataset_id,"UTF-8").toString());
-            //System.out.println("\n\tthis.solrQueryString->\t" + this.solrQueryString);
             
         } catch (UnsupportedEncodingException e1) {
             // TODO Auto-generated catch block
@@ -184,6 +183,9 @@ public class MetadataViewController {
         //attact the dataset id to the query string
         GetMethod method = new GetMethod(searchAPIURL);
         
+
+        System.out.println("this.solrQueryString prefix->\t" + searchAPIURL);
+        System.out.println("this.solrQueryString->\t" + solrQueryString);
         
         method.setQueryString(solrQueryString);
         

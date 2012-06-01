@@ -18,12 +18,12 @@
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.autocomplete.js" /> '></script>
 
 
+
+	<script type="text/javascript" src='http://purl.org/org/es-doc/plugins/jscim-esgf-web-fe.js'> </script>
+
 <!--  
->>>>>>> devel
-	<script type="text/javascript" src='<c:url value="/scripts/cim/cim-viewer.js" />'> </script>
--->
 	<script type="text/javascript" src='<c:url value="/scripts/cim/jscim-min.js" />'> </script>
-	
+	-->
 	<!--  
     <script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-download.js" /> '></script>
 	-->
@@ -68,9 +68,11 @@
 	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/datacart/DataCartExpandFeature.js" />'> </script>
 	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/datacart/DataCartWGET.js" />'> </script>
 	<script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/datacart/DataCartGlobusOnline.js" />'> </script>
+	
+	  
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/CIM.js" />'> </script>
    
-
+    
     <script type="text/javascript" src='<c:url value="/scripts/esgf/solr.theme.js" />'> </script>
 
 

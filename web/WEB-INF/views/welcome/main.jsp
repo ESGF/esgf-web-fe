@@ -16,6 +16,7 @@
   		to be available from them.  Please send e-mail to <a href="mailto:esgf-support@llnl.gov?subject=ESGF Portal Feedback">esgf-support@llnl.gov</a> to report bugs and provide feedback.  Be sure to indicate that you 
   		are using the beta P2P system.  
   		-->
+  		<!--  
   		Welcome to the future of the CMIP5 distributed archive!!!
 
  		We are now in the transition phase from the ESG 1.3.4 gateways to the new ESGF peer-to-peer (P2P) system.  
@@ -26,6 +27,11 @@
   		
         <br/>If you have trouble running wget scripts to download data,
         please consult the <a href="http://www.esgf.org/wiki/ESGF_wget_FAQ">TABLE OF WORKING DATA NODES</a>.  		
+  		-->
+  		Welcome to the new CMIP5 distributed archive. Our new ESGF peer-to-peer
+(P2P) enterprise system is now the official site for CMIP5 model output.
+The old <a href="http://pcmdi3.llnl.gov/esgcet/home.htm" target="_blank">gateways</a> will remain active and output from all models will continue to be available until the end of July 2012.  
+Please send e-mail to <a href="mailto:esgf-support@llnl.gov?subject=ESGF Portal Feedback">esgf-users@llnl.gov</a> to report bugs and provide feedback.
   		
   		</div> 
   	</div>

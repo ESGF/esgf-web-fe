@@ -47,10 +47,17 @@
      <link rel="stylesheet"
         href='<c:url value="/styles/annotator_overlay.css" />'
         type="text/css" media="screen, projection">
-        
+        <!--  
      <link rel="stylesheet"
         href='<c:url value="/styles/cim/jscim-min.css" />'
         type="text/css" media="screen, projection">
+-->
+     <link rel="stylesheet"
+        href='http://purl.org/org/es-doc/plugins/jscim-esgf-web-fe.css'
+        type="text/css" media="screen, projection">
+     
+
+
 <!--          
      <link rel="stylesheet"
         href='<c:url value="/styles/cim/cim-viewer.css" />'

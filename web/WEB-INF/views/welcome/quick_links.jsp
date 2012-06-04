@@ -22,7 +22,7 @@
 				<li><a href='http://${pageContext.request.serverName}/esg-search/feed/nodes.rss'>ESGF aggregated RSS feed</a>
 				    <a href='http://${pageContext.request.serverName}/esg-search/feed/nodes.rss'><img src='images/rss_icon.png'/ align="bottom"></a></li>
 				<li>
-					<a href="mailto:esgf-support@llnl.gov?subject=ESGF Portal Feedback">Contact ESGF</a>
+					<a href="mailto:esgf-user@lists.llnl.gov?subject=ESGF Portal Feedback">Contact ESGF</a>
 				</li>
 			</ul>
 		</div>

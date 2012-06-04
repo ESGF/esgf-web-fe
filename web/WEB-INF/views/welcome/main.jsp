@@ -31,7 +31,7 @@
   		Welcome to the new CMIP5 distributed archive. Our new ESGF peer-to-peer
 (P2P) enterprise system is now the official site for CMIP5 model output.
 The old <a href="http://pcmdi3.llnl.gov/esgcet/home.htm" target="_blank">gateways</a> will remain active and output from all models will continue to be available until the end of July 2012.  
-Please send e-mail to <a href="mailto:esgf-support@llnl.gov?subject=ESGF Portal Feedback">esgf-users@llnl.gov</a> to report bugs and provide feedback.
+Please send e-mail to <a href="mailto:esgf-user@lists.llnl.gov?subject=ESGF Portal Feedback">esgf-user@lists.llnl.gov</a> to report bugs and provide feedback.
   		
   		</div> 
   	</div>

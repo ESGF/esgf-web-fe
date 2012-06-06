@@ -5,7 +5,7 @@
 <sec:authentication property="principal" var="principal"/>
 
 <div class="span-24 last headertop" style="border-top: 3px solid #18638a;padding-top: 5px;padding-bottom: 5px">
-		<span id="principal_username" style="display:none"><%-- ${principal}--%> ${principal}</span>
+		<span id="principal_username" style="display:none"><%-- ${principal}--%> ${principal.username}</span>
 	<!-- <div class="span-24"></div> -->
 	<div class="span-11 prepend-1">
 		<img src='<c:url value="/images/esgf.png"/>' height="92px" />

@@ -179,6 +179,7 @@
 	});
 
 	
+	/*
 	var queryStr = {'id' : metadata_id};	
 	
 	$.ajax({
@@ -215,27 +216,15 @@
 			fileList += '</table>';
 			$('#fileList').append(fileList);
 			
-			/*
-			var fileList = '<table>';
-			fileList += '<th>File Name</th>';
-			fileList += '<th>File Size</th>';
-			for(var i=0;i<data.files.fileId.length;i++) {
-				fileList += '<tr>';
-				fileList += '<td>' + data.files.fileId[i] +  '</td>'; 
-				fileList += '<td>' + data.files.size[i] +  '</td>'; 
-				fileList += '</tr>';
-			}
-			fileList += '</table>';
-			$('#fileList').append(fileList);
-			*/
+			
 		
 		},
 		error: function() {
 			alert('error');
 		}
-	
+		
 	});
-
+	*/
 
 })(jQuery);
 

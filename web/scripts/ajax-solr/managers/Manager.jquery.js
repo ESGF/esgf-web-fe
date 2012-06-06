@@ -105,7 +105,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           //queryString += '&shards=localhost:8983/solr,pcmdi9.llnl.gov:8983/solr';
           //queryString += '&shards=localhost:8983/solr,test-datanode.jpl.nasa.gov:8983/solr';
           //queryString += '&shards=localhost:8983/solr,localhost:18983/solr,localhost:28983/solr';
-          
+          /* http://esg-datanode.jpl.nasa.gov/thredds/esgcet/1/obs4MIPs.CNES.AVISO.mon.v1.html */
           //alert(ESGF.localStorage.get('esgf_queryString','distrib'));
 
           if(ESGF.localStorage.get('esgf_queryString','distrib') != 'distrib=false') {

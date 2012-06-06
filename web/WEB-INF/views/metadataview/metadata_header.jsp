@@ -11,9 +11,12 @@
 	
 	<div class="prepend-1 span-8 append-1 last">
 		<!--  <span style="float:right"><button class="metadata-buttons" type="button" id="metadata_addCart">Add to Cart</button></span> -->
+		<!--  hide these buttons for now -->
+		<!--  
 		<span style="float:right"><button class="metadata-buttons" type="button" id="metadata_viewFiles">View Files</button></span>
-		<span style="float:right"><button class="metadata-buttons" type="button" id="metadata_viewMetadata">Hide Metadata</button></span>
 		
+		<span style="float:right"><button class="metadata-buttons" type="button" id="metadata_viewMetadata">Hide Metadata</button></span>
+		-->
 	</div>
 		
 </div>

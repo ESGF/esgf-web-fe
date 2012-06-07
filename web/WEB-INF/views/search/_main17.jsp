@@ -57,7 +57,11 @@
 			<input class="distribbutton1" id="distribbutton" type="submit" style="margin-left:20px"/>
 		-->
 		<div class="span-12 last">
-		<input type="checkbox" class="distribcheckbox1" id="distribcheckbox" style="margin-left:20px" checked="yes" /> <span style="font-weight:bold">Search All Sites</span>
+		<!--  <input type="checkbox" class="distribcheckbox1" id="distribcheckbox" style="margin-left:20px" checked="yes" /> <span style="font-weight:bold">Search All Sites</span> -->
+			<!--  
+		    <input type="checkbox" class="distribcheckbox1" id="distribcheckbox" style="margin-left:20px"/> <span style="font-weight:bold">Search All Sites</span>
+			-->
+			<input type="checkbox" class="distribcheckbox1" id="distribcheckbox" style="margin-left:20px"/><span style="font-weight:bold">Search All Sites</span>
 			<input type="checkbox" class="replicacheckbox1" id="replicacheckbox" style="margin-left:20px"/> <span style="font-weight:bold">Show All Replicas</span>
 			<input type="checkbox" class="versioncheckbox1" id="versioncheckbox" style="margin-left:20px"/> <span style="font-weight:bold">Show All Versions</span>
 			

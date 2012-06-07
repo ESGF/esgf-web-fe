@@ -5,7 +5,18 @@
 <sec:authentication property="principal" var="principal"/>
 
 <div class="span-24 last headertop" style="border-top: 3px solid #18638a;padding-top: 5px;padding-bottom: 5px">
-		<span id="principal_username" style="display:none"><%-- ${principal}--%> ${principal.username}</span>
+	
+	<c:choose>
+	 	<c:when test="${principal=='anonymousUser'}">
+			<span id="principal_username" style="display:none"> ${principal}</span>
+	 	</c:when>
+	 	<c:otherwise>
+			<span id="principal_username" style="display:none"> ${principal.username}</span>
+	 	</c:otherwise>
+	</c:choose>
+	
+			<span id="principal_username" style="display:none"> ${principal}</span>
+	
 	<!-- <div class="span-24"></div> -->
 	<div class="span-11 prepend-1">
 		<img src='<c:url value="/images/esgf.png"/>' height="92px" />

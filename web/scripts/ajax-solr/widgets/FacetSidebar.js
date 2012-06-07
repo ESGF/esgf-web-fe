@@ -1,10 +1,10 @@
 /*****************************************************************************
- * Copyright © 2011 , UT-Battelle, LLC All rights reserved
+ * Copyright ï¿½ 2011 , UT-Battelle, LLC All rights reserved
  *
  * OPEN SOURCE LICENSE
  *
  * Subject to the conditions of this License, UT-Battelle, LLC (the
- * ÒLicensorÓ) hereby grants to any person (the ÒLicenseeÓ) obtaining a copy
+ * ï¿½Licensorï¿½) hereby grants to any person (the ï¿½Licenseeï¿½) obtaining a copy
  * of this software and associated documentation files (the "Software"), a
  * perpetual, worldwide, non-exclusive, irrevocable copyright license to use,
  * copy, modify, merge, publish, distribute, and/or sublicense copies of the
@@ -14,7 +14,7 @@
  * grant, copyright and license notices, this list of conditions, and the
  * disclaimer listed below.  Changes or modifications to, or derivative works
  * of the Software must be noted with comments and the contributor and
- * organizationÕs name.  If the Software is protected by a proprietary
+ * organizationï¿½s name.  If the Software is protected by a proprietary
  * trademark owned by Licensor or the Department of Energy, then derivative
  * works of the Software may not be distributed using the trademark without
  * the prior written approval of the trademark owner.
@@ -27,7 +27,7 @@
  * acknowledgment:
  *
  *    "This product includes software produced by UT-Battelle, LLC under
- *    Contract No. DE-AC05-00OR22725 with the Department of Energy.Ó
+ *    Contract No. DE-AC05-00OR22725 with the Department of Energy.ï¿½
  *
  * 4. Licensee is authorized to commercialize its derivative works of the
  * Software.  All derivative works of the Software must include paragraphs 1,
@@ -154,11 +154,12 @@
 		    			facet_val_arr.push(facet_value);
 		    		}
 		    	}
-		    	
+
+                var searchConstraints = ESGF.localStorage.toKeyArr('esgf_fq');
 		    	
 		    	facet_obj.Facet_name = facet;
 		    	facet_obj.Facet_label = label;
-		    	
+		    	facet_obj.Search_counts = searchConstraints.length;
 		    	
 		    	facet_obj.Facet_values = facet_val_arr;
 		    	facet_obj.Facet_counts = facet_val_counts;
@@ -195,8 +196,25 @@
 	            .appendTo("#facetList")
 	            .find( "a.showFacetValues" ).click(function() {
 	                var selectedItem = $.tmplItem(this);
+	                //alert($(this).html());
 	                
-	                $('li.' + selectedItem.data.Facet_name).toggle();
+	                var searchConstraints = ESGF.localStorage.toKeyArr('esgf_fq');
+	                
+	                var facetTopic = $(this).html();
+	                
+	                //alert('search Constraints: ' + facetTopic);
+	                
+	                if(facetTopic == 'Variable Long Name' ||
+	                   facetTopic == 'Variable' ||
+	                   facetTopic == 'Ensemble' ||
+	                   facetTopic == 'CF Standard Name') {
+	                	//alert(searchConstraints.length);
+	                	if(searchConstraints.length > 2) {
+		                	$('li.' + selectedItem.data.Facet_name).toggle();
+	                	}
+	                } else {
+	                	$('li.' + selectedItem.data.Facet_name).toggle();
+	                }
 	                
 	                
 		   		});

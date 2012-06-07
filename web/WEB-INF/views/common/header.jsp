@@ -8,14 +8,14 @@
 	
 	<c:choose>
 	 	<c:when test="${principal=='anonymousUser'}">
-			<span id="principal_username" style="display:none"> ${principal}</span>
+			<span id="principal_username" style="display:none">${principal}</span>
 	 	</c:when>
 	 	<c:otherwise>
-			<span id="principal_username" style="display:none"> ${principal.username}</span>
+			<span id="principal_username" style="display:none">${principal.username}</span>
 	 	</c:otherwise>
 	</c:choose>
 	
-			<span id="principal_username" style="display:none"> ${principal}</span>
+			<!-- <span id="principal_username" style="display:none">${principal}</span> -->
 	
 	<!-- <div class="span-24"></div> -->
 	<div class="span-11 prepend-1">

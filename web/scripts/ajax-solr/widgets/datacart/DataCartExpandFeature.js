@@ -280,7 +280,7 @@
 											appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a style="cursor:pointer" class="go_individual_gridftp_short">' + service + '</a> </span>';
 										} else {
 											if(openid != 'anonymousUser') {
-												appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '&openid=' + openid +  '" ' + 'target="_blank">' + service + '</a> </span>';
+												appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '?openid=' + openid +  '" ' + 'target="_blank">' + service + '</a> </span>';
 											} else {
 												appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '" ' + 'target="_blank">' + service + '</a> </span>';
 											}
@@ -444,7 +444,7 @@
 										newRow += '<span style="word-wrap: break-word;vertical-align:middle"> ';
 										newRow += '<a href="' + file.urls.url[j];
 										if(openid != 'anonymousUser') {
-											newRow += '&openid=' + openid;
+											newRow += '?openid=' + openid;
 										}
 										newRow += '">HTTP </a>';
 										newRow += '</span>';

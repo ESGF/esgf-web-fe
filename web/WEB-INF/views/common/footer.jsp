@@ -18,7 +18,7 @@
 
 <div class="span-24 last footer">
 
-	<div class="span-15 left">
+	<div class="span-12 append-3 left">
 		<div class="footerleft">
 			<p>
 			<sec:authentication property="principal" var="principal"/>
@@ -26,10 +26,11 @@
 		    	<c:when test="${principal=='anonymousUser'}">Guest User</c:when>
 		   		<c:otherwise>User: <c:out value="${principal.username}"/></c:otherwise>
 		   	</c:choose>
-		   	| ESGF P2P Version <spring:message code="esgf.footer.version" />
+		   	<br /> <span style="font-style:italics;font-size:10px">ESGF P2P Version <spring:message code="esgf.footer.version" /> </span>
 		   	</p> 
 		</div>
 	</div>
+	
 	
 	<div class="prepend-1 span-8 last">
 		<div class="footerright">

@@ -69,6 +69,9 @@ AjaxSolr.DistributedSearchWidget = AjaxSolr.AbstractWidget.extend({
 		
 		
 		ESGF.localStorage.remove('esgf_queryString','distrib');
+
+		ESGF.localStorage.put('esgf_queryString','distrib','distrib=false');
+		
 		
 	},
 	

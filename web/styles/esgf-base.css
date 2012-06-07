@@ -86,7 +86,7 @@ body {
 /* footer */
 .footer {
 	float:left;
-	height:44px;
+	height:55px;
 	background-color:#7d5f45; 
 }
 .footerinner {
@@ -100,7 +100,7 @@ body {
 	padding:0px 20px 0px 20px;
 	height:34px;
 	/* border-right:2px solid #926f51; */
-	padding-top:15px;	
+	padding-top:10px;	
 }
 .footerleft p {
 	color:#e8decd;

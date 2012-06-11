@@ -24,7 +24,7 @@
  <ul class="ul_class" >
 		
 		<li class="li_facet_class">
-			{{if Search_counts < 3}}
+			{{if Search_counts < 2}}
 				{{if Facet_label == 'Variable' || Facet_label == 'Ensemble' || Facet_label == 'Variable Long Name' || Facet_label == 'CF Standard Name'}}
 					<a class="showFacetValues" style="background-color:#808080" id="${Facet_label}">${Facet_label}</a>	
 				{{else}}

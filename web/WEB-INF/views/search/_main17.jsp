@@ -75,8 +75,6 @@
 		<div class="span-18 last">
 			<ul id="pager"></ul>
 		    <div id="pager-header"></div>
-		    <a id="add_all" style="margin-left:20px;cursor:pointer">Add All to Datacart</a>
-		    <a id="remove_all" style="margin-left:20px;cursor:pointer">Remove All from Datacart</a>
 		</div>
 		
 		<!-- old -->    	  
@@ -100,6 +98,7 @@
 
 
 <div class="span-20 last" id="search-summary" style="margin-top:5px;">
+
 	<div class="prepend-1 span-14 last">
 	Display
 			<select class="datasetCounter" name="datasetC" style="display:inline">
@@ -109,10 +108,14 @@
 				<option id="" value="50">50</option>
 				<option id="" value="100000">All</option>
 			</select>
-	files per page
+	datasets per page
+	
+		    </div>
+	<div class="prepend-1 span-14 last">
+		<a id="add_all" style="margin-left:20px;cursor:pointer">Add All Displayed to Datacart</a>
+		<a id="remove_all" style="margin-left:20px;cursor:pointer">Remove All Displayed from Datacart</a>
 	
 	</div>
-	
 </div>
 
 

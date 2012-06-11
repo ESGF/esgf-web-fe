@@ -209,7 +209,7 @@
 	                   facetTopic == 'Ensemble' ||
 	                   facetTopic == 'CF Standard Name') {
 	                	//alert(searchConstraints.length);
-	                	if(searchConstraints.length > 2) {
+	                	if(searchConstraints.length > 1) {
 		                	$('li.' + selectedItem.data.Facet_name).toggle();
 	                	}
 	                } else {

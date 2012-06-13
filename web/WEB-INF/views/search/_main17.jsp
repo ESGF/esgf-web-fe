@@ -106,7 +106,9 @@
 				<option id="" value="10" selected="selected">10</option>
 				<option id="" value="25">25</option>
 				<option id="" value="50">50</option>
-				<option id="" value="100000">All</option>
+				<option id="" value="100">100</option>
+				<option id="" value="200">200</option>
+				<option id="" value="500">500</option>
 			</select>
 	datasets per page
 	

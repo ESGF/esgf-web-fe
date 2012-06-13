@@ -71,8 +71,12 @@ AjaxSolr.DatasetSelectionWidget = AjaxSolr.AbstractWidget.extend({
 				ESGF.setting.datasetCounter = 25;
 			} else if(selectedIndex == 3) {
 				ESGF.setting.datasetCounter = 50;
+			} else if(selectedIndex == 4) {
+				ESGF.setting.datasetCounter = 100;
+			} else if(selectedIndex == 5) {
+				ESGF.setting.datasetCounter = 200;
 			} else {
-				ESGF.setting.datasetCounter = 10000;
+				ESGF.setting.datasetCounter = 500;
 			}
 
 			Manager.doRequest(0);

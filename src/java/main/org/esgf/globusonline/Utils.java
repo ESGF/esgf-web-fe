@@ -1,10 +1,10 @@
 /*****************************************************************************
- * Copyright © 2011 , UT-Battelle, LLC All rights reserved
+ * Copyright ¬© 2011 , UT-Battelle, LLC All rights reserved
  *
  * OPEN SOURCE LICENSE
  *
  * Subject to the conditions of this License, UT-Battelle, LLC (the
- * “Licensor”) hereby grants to any person (the “Licensee”) obtaining a copy
+ * √íLicensor√ì) hereby grants to any person (the √íLicensee√ì) obtaining a copy
  * of this software and associated documentation files (the "Software"), a
  * perpetual, worldwide, non-exclusive, irrevocable copyright license to use,
  * copy, modify, merge, publish, distribute, and/or sublicense copies of the
@@ -14,7 +14,7 @@
  * grant, copyright and license notices, this list of conditions, and the
  * disclaimer listed below.  Changes or modifications to, or derivative works
  * of the Software must be noted with comments and the contributor and
- * organization’s name.  If the Software is protected by a proprietary
+ * organization√ïs name.  If the Software is protected by a proprietary
  * trademark owned by Licensor or the Department of Energy, then derivative
  * works of the Software may not be distributed using the trademark without
  * the prior written approval of the trademark owner.
@@ -27,7 +27,7 @@
  * acknowledgment:
  *
  *    "This product includes software produced by UT-Battelle, LLC under
- *    Contract No. DE-AC05-00OR22725 with the Department of Energy.”
+ *    Contract No. DE-AC05-00OR22725 with the Department of Energy.√ì
  *
  * 4. Licensee is authorized to commercialize its derivative works of the
  * Software.  All derivative works of the Software must include paragraphs 1,
@@ -65,6 +65,8 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Vector;
 
+import org.globusonline.JGOTransfer;
+import org.globusonline.JGOTransferException;
 import org.globusonline.EndpointInfo;
 
 import java.net.URI;
@@ -382,6 +384,26 @@ public class Utils {
         return result;
     }
 
+    public static Vector<EndpointInfo> bringGCEndpointsToTop(
+        String goUserName, Vector<EndpointInfo> endpoints)
+    {
+        Vector<EndpointInfo> gcUserEps = new Vector<EndpointInfo>();
+        Vector<EndpointInfo> tmp = new Vector<EndpointInfo>();
+        for(EndpointInfo cur : endpoints)
+        {
+            if (cur.getEPName().startsWith(goUserName) && cur.isGlobusConnect())
+            {
+                gcUserEps.add(cur);
+            }
+            else
+            {
+                tmp.add(cur);
+            }
+        }
+        gcUserEps.addAll(tmp);
+        return gcUserEps;
+    }
+
     /*
       If there are multiple endpoints with the same GridFTP
       information, this method gives preference to one that starts
@@ -423,11 +445,56 @@ public class Utils {
             {
                 if (curEPName.endsWith("#" + epName))
                 {
-                    System.out.println("FOUND MATCHING LOCAL ENDPOINT INFO: " + curInfo);
+                    System.out.println("Found matching local Endpoint Info: " + curInfo);
                     return curInfo;
                 }
             }
         }
         return null;
+    }
+
+    public static String getEndpointInfoFromEndpointStr(String endpoint, String[] endpointInfos)
+    {
+        String endpointInfo = null;
+        String searchEndpoint = endpoint + "^^";
+        int len = endpointInfos.length;
+        for(int i = 0; i < len; i++)
+        {
+            if (endpointInfos[i].startsWith(searchEndpoint))
+            {
+                endpointInfo = endpointInfos[i];
+                break;
+            }
+        }
+        return endpointInfo;
+    }
+
+    public static String createGlobusOnlineEndpointFromEndpointInfo(
+        JGOTransfer transfer, String goUserName, String info)
+        throws JGOTransferException
+    {
+        Random rand = new Random(); 
+        String localEPName = "esg-dyn-ep" + Integer.toString(rand.nextInt());
+        System.out.println("Default generated local EP name is: " + localEPName);
+        String[] endpointPieces = info.split("\\^\\^");
+        String destEPName = endpointPieces[0];
+        String gridFTPServer = endpointPieces[1];
+        if (gridFTPServer.startsWith("gsiftp://"))
+        {
+            gridFTPServer = gridFTPServer.substring(9);
+        }
+        String myproxyServer = endpointPieces[2];
+        int pos = destEPName.indexOf("#");
+        if (pos != -1)
+        {
+            localEPName = "esg-dyn-" + destEPName.substring(pos+1);
+        }
+        localEPName = goUserName + "#" + localEPName;
+
+        System.out.println("Adding new Endpoint \"" + localEPName + "\" with GridFTP: "
+                           + gridFTPServer + ", and MyProxy: " + myproxyServer);
+
+        transfer.addEndpoint(localEPName, gridFTPServer, myproxyServer, false);
+        return localEPName;
     }
 }

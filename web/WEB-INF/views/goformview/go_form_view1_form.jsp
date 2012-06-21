@@ -18,6 +18,12 @@
         in ESG, or this is your first time, please read this
         <a target="_blank" href="http://www.esgf.org/wiki/ESGF_GO">documentation</a>
         to be sure that your account is setup properly and that this transfer can work.</p>
+        <p>Finally, please be sure that you know where you'd like to
+        move this data.  If it is to your local machine,
+        <a href="https://www.globusonline.org/globus_connect/">Globus
+        Connect</a> needs to be properly configured and running
+        now. To configure Globus Connect, follow the instructions
+        <a href="https://www.globusonline.org/globus_connect/">here</a>.</p>
 
 	<table id="adduser_table_id" class="adduser_table" >
 		<tr id="userName_input">

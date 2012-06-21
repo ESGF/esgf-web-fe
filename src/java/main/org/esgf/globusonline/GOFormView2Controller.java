@@ -1,10 +1,10 @@
 /*****************************************************************************
- * Copyright © 2011 , UT-Battelle, LLC All rights reserved
+ * Copyright ¬© 2011 , UT-Battelle, LLC All rights reserved
  *
  * OPEN SOURCE LICENSE
  *
  * Subject to the conditions of this License, UT-Battelle, LLC (the
- * “Licensor”) hereby grants to any person (the “Licensee”) obtaining a copy
+ * √íLicensor√ì) hereby grants to any person (the √íLicensee√ì) obtaining a copy
  * of this software and associated documentation files (the "Software"), a
  * perpetual, worldwide, non-exclusive, irrevocable copyright license to use,
  * copy, modify, merge, publish, distribute, and/or sublicense copies of the
@@ -14,7 +14,7 @@
  * grant, copyright and license notices, this list of conditions, and the
  * disclaimer listed below.  Changes or modifications to, or derivative works
  * of the Software must be noted with comments and the contributor and
- * organization’s name.  If the Software is protected by a proprietary
+ * organization√ïs name.  If the Software is protected by a proprietary
  * trademark owned by Licensor or the Department of Energy, then derivative
  * works of the Software may not be distributed using the trademark without
  * the prior written approval of the trademark owner.
@@ -27,7 +27,7 @@
  * acknowledgment:
  *
  *    "This product includes software produced by UT-Battelle, LLC under
- *    Contract No. DE-AC05-00OR22725 with the Department of Energy.”
+ *    Contract No. DE-AC05-00OR22725 with the Department of Energy.√ì
  *
  * 4. Licensee is authorized to commercialize its derivative works of the
  * Software.  All derivative works of the Software must include paragraphs 1,
@@ -164,6 +164,10 @@ public class GOFormView2Controller {
             Vector<EndpointInfo> endpoints = transfer.listEndpoints();
             LOG.debug("We pulled down " + endpoints.size() + " endpoints");
             errorStatus.append("Endpoints retrieved<br>");
+
+            // Make sure if any of the user's local endpoints are
+            // globus connect endpoints, they are listed first
+            endpoints = Utils.bringGCEndpointsToTop(goUserName, endpoints);
 
             if (request.getParameter(GOFORMVIEW_MODEL)!=null) {
 

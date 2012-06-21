@@ -1,10 +1,10 @@
 /*****************************************************************************
- * Copyright © 2011 , UT-Battelle, LLC All rights reserved
+ * Copyright ¬© 2011 , UT-Battelle, LLC All rights reserved
  *
  * OPEN SOURCE LICENSE
  *
  * Subject to the conditions of this License, UT-Battelle, LLC (the
- * “Licensor”) hereby grants to any person (the “Licensee”) obtaining a copy
+ * √íLicensor√ì) hereby grants to any person (the √íLicensee√ì) obtaining a copy
  * of this software and associated documentation files (the "Software"), a
  * perpetual, worldwide, non-exclusive, irrevocable copyright license to use,
  * copy, modify, merge, publish, distribute, and/or sublicense copies of the
@@ -14,7 +14,7 @@
  * grant, copyright and license notices, this list of conditions, and the
  * disclaimer listed below.  Changes or modifications to, or derivative works
  * of the Software must be noted with comments and the contributor and
- * organization’s name.  If the Software is protected by a proprietary
+ * organization√ïs name.  If the Software is protected by a proprietary
  * trademark owned by Licensor or the Department of Energy, then derivative
  * works of the Software may not be distributed using the trademark without
  * the prior written approval of the trademark owner.
@@ -27,7 +27,7 @@
  * acknowledgment:
  *
  *    "This product includes software produced by UT-Battelle, LLC under
- *    Contract No. DE-AC05-00OR22725 with the Department of Energy.”
+ *    Contract No. DE-AC05-00OR22725 with the Department of Energy.√ì
  *
  * 4. Licensee is authorized to commercialize its derivative works of the
  * Software.  All derivative works of the Software must include paragraphs 1,
@@ -156,17 +156,7 @@ public class GOFormView4Controller {
             transfer.initialize();
 
             // find the endpointInfo line that matches the endpoint the user selected
-            int len = endpointInfos.length;
-            String endpointInfo = null;
-            String searchEndpoint = endpoint + "^^";
-            for(int i = 0; i < len; i++)
-            {
-                if (endpointInfos[i].startsWith(searchEndpoint))
-                {
-                    endpointInfo = endpointInfos[i];
-                    break;
-                }
-            }
+            String endpointInfo = Utils.getEndpointInfoFromEndpointStr(endpoint, endpointInfos);
             System.out.println("User selected endpoint that has the info: " + endpointInfo);
             LOG.debug("User selected endpoint that has the info: " + endpointInfo);
 
@@ -181,36 +171,59 @@ public class GOFormView4Controller {
             for(String curURL : file_urls)
             {
                 pieces = curURL.split("//");
-                goEP = Utils.lookupGOEPBasedOnGridFTPURL(pieces[1], goEndpointInfos, true);
-                if (goEP == null)
+                if ((pieces != null) && (pieces.length > 1))
                 {
-                    goEP = Utils.lookupGOEPBasedOnGridFTPURL(pieces[1], goEndpointInfos, false);
-                }
+                    goEP = Utils.lookupGOEPBasedOnGridFTPURL(pieces[1], goEndpointInfos, true);
+                    if (goEP == null)
+                    {
+                        goEP = Utils.lookupGOEPBasedOnGridFTPURL(pieces[1], goEndpointInfos, false);
+                    }
 
-                if (!sourceMap.containsKey(goEP))
+                    if (!sourceMap.containsKey(goEP))
+                    {
+                        LOG.debug("Mapped GridFTP Server " + pieces[1] + " to GO EP " + goEP);
+                        System.out.println("Mapped GridFTP Server " + pieces[1] + " to GO EP " + goEP);
+                        sourceMap.put(goEP, new Vector<String>());
+                    }
+
+                    fileList = sourceMap.get(goEP);
+                    newURL = "//" + pieces[2];
+
+                    LOG.debug("Transformed " + curURL + " into " + newURL);
+                    System.out.println("Transformed " + curURL + " into " + newURL);
+                    fileList.add(newURL);
+                }
+                else
                 {
-                    LOG.debug("Mapped GridFTP Server " + pieces[1] + " to GO EP " + goEP);
-                    System.out.println("Mapped GridFTP Server " + pieces[1] + " to GO EP " + goEP);
-                    sourceMap.put(goEP, new Vector<String>());
+                    LOG.debug("Failed to split URL on //: " + curURL);
+                    System.out.println("Failed to split URL on //: " + curURL);
                 }
-
-                fileList = sourceMap.get(goEP);
-                newURL = "//" + pieces[2];
-
-                LOG.debug("Transformed " + curURL + " into " + newURL);
-                System.out.println("Transformed " + curURL + " into " + newURL);
-                fileList.add(newURL);
             }
 
-            // FIXME: For now we always just grab the first endpoint
-            // since we can only handle a single source endpoint (per
-            // transfer) ... break up into multiple transfers later
+            // For now we always just grab the first endpoint since we
+            // can only handle a single source endpoint (per transfer)
+            // ... break up into multiple transfers later when we
+            // support transfers of multiple data sets at once
             Map.Entry<String, Vector<String>> entry = sourceMap.entrySet().iterator().next();
             String goSourceEndpoint = entry.getKey();
-            fileList = entry.getValue();
 
-            LOG.debug("USING SOURCE ENDPOINT: " + goSourceEndpoint);
-            System.out.println("USING SOURCE ENDPOINT: " + goSourceEndpoint);
+            System.out.println("Got GO Source EP: " + goSourceEndpoint);
+            if (goSourceEndpoint != null)
+            {
+                fileList = entry.getValue();
+            }
+            else
+            {
+                // Create source endpoint matching first known Endpoint info
+                EndpointInfo info = goEndpointInfos.get(0);
+                String srcEndpointInfo = info.getEPName() + "^^" + info.getHosts() +
+                    "^^" + info.getMyproxyServer() + "^^" + info.isGlobusConnect();
+                goSourceEndpoint = Utils.createGlobusOnlineEndpointFromEndpointInfo(
+                    transfer, goUserName, srcEndpointInfo);
+            }
+
+            LOG.debug("Using GO Source EP: " + goSourceEndpoint);
+            System.out.println("Using GO Source EP: " + goSourceEndpoint);
 
             errorStatus.append("Source endpoint resolved as \"");
             errorStatus.append(goSourceEndpoint);
@@ -243,27 +256,8 @@ public class GOFormView4Controller {
                     goUserName, destEPName, goEndpointInfos);
                 if (destInfo == null)
                 {
-                    // if not, add a new endpoint here with the info
-                    // from the selected Endpoint
-                    String gridFTPServer = endpointPieces[1];
-                    if (gridFTPServer.startsWith("gsiftp://"))
-                    {
-                        gridFTPServer = gridFTPServer.substring(9);
-                    }
-                    String myproxyServer = endpointPieces[2];
-                    String localEPName = destEPName;
-                    int pos = destEPName.indexOf("#");
-                    if (pos != -1)
-                    {
-                        localEPName = destEPName.substring(pos+1);
-                    }
-                    localEPName = goUserName + "#" + localEPName;
-
-                    System.out.println("Adding new Endpoint \"" + localEPName + "\" with GridFTP: "
-                                       + gridFTPServer + ", and MyProxy: " + myproxyServer);
-
-                    transfer.addEndpoint(localEPName, gridFTPServer, myproxyServer, false);
-                    destEPName = localEPName;
+                    destEPName = Utils.createGlobusOnlineEndpointFromEndpointInfo(
+                        transfer, goUserName, endpointInfo);
                 }
                 else
                 {

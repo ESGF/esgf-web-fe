@@ -1,9 +1,9 @@
-/* Copyright © 2011 , UT-Battelle, LLC All rights reserved
+/* Copyright ï¿½ 2011 , UT-Battelle, LLC All rights reserved
  *
  * OPEN SOURCE LICENSE
  *
  * Subject to the conditions of this License, UT-Battelle, LLC (the
- * ÒLicensorÓ) hereby grants to any person (the ÒLicenseeÓ) obtaining a copy
+ * ï¿½Licensorï¿½) hereby grants to any person (the ï¿½Licenseeï¿½) obtaining a copy
  * of this software and associated documentation files (the "Software"), a
  * perpetual, worldwide, non-exclusive, irrevocable copyright license to use,
  * copy, modify, merge, publish, distribute, and/or sublicense copies of the
@@ -13,7 +13,7 @@
  * grant, copyright and license notices, this list of conditions, and the
  * disclaimer listed below.  Changes or modifications to, or derivative works
  * of the Software must be noted with comments and the contributor and
- * organizationÕs name.  If the Software is protected by a proprietary
+ * organizationï¿½s name.  If the Software is protected by a proprietary
  * trademark owned by Licensor or the Department of Energy, then derivative
  * works of the Software may not be distributed using the trademark without
  * the prior written approval of the trademark owner.
@@ -26,7 +26,7 @@
  * acknowledgment:
  *
  *    "This product includes software produced by UT-Battelle, LLC under
- *    Contract No. DE-AC05-00OR22725 with the Department of Energy.Ó
+ *    Contract No. DE-AC05-00OR22725 with the Department of Energy.ï¿½
  *
  * 4. Licensee is authorized to commercialize its derivative works of the
  * Software.  All derivative works of the Software must include paragraphs 1,
@@ -156,6 +156,7 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 			parentElement.find('a.globusOnlineAllFiles_short').hide();
 			parentElement.find('span.globusOnlineAllFiles_short').show();
 
+	    	
 			var selectedDocId = ($(this).parent().parent().find('span.datasetId').html());
 			
         	//gather the ids and the urls for download
@@ -177,6 +178,7 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 					"initialQuery" : "true",
 					"fileCounter" : ESGF.setting.fileCounter}; 
         	
+	    	
 	    	$.ajax({
 				url: '/esgf-web-fe/solrfileproxy2/datacart',
 				global: false,
@@ -187,6 +189,8 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 					
 					if(data.docs.doc.files.file != undefined) {
 					
+						var gridFTPFound = false;
+						
 						for(var i=0;i<data.docs.doc.files.file.length;i++){
 							var file = data.docs.doc.files.file[i];
 							file_ids.push(file.fileId);
@@ -195,31 +199,41 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 							for(var j=0;j<file.services.service.length;j++) {
 								if(file.services.service[j] == 'GridFTP') {
 									grid_urls.push(file.urls.url[j]);
+									gridFTPFound = true;
 								}
 							}
 							
 							
 						}
+						
+						if(gridFTPFound) {
+							var globus_url = '/esgf-web-fe/goformview1';
+					        
+					        //begin assembling queryString
+					        var queryString = 'type=create&id=' + selectedDocId;
 
-						var globus_url = '/esgf-web-fe/goformview1';
-				        
-				        //begin assembling queryString
-				        var queryString = 'type=create&id=' + selectedDocId;
 
+					        //assemble the input fields with the query string
+					        for(var i=0;i<file_ids.length;i++) {
+					        	queryString += '&child_url=' + grid_urls[i] + '&child_id=' + file_ids[i];
+					        }
+					        var input = '';
+					        jQuery.each(queryString.split('&'), function(){
+					          var pair = this.split('=');
+					          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
+					        });
+					        
+					        //send request
+					        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
+					        .appendTo('body').submit().remove();
+						} else {
 
-				        //assemble the input fields with the query string
-				        for(var i=0;i<file_ids.length;i++) {
-				        	queryString += '&child_url=' + grid_urls[i] + '&child_id=' + file_ids[i];
-				        }
-				        var input = '';
-				        jQuery.each(queryString.split('&'), function(){
-				          var pair = this.split('=');
-				          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-				        });
-				        
-				        //send request
-				        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
-				        .appendTo('body').submit().remove();
+							parentElement.find('a.globusOnlineAllFiles_short').show();
+							parentElement.find('span.globusOnlineAllFiles_short').hide();
+							alert('Globus Online is not applicable to this dataset.  Please try WGET option.');
+						}
+
+						
 						
 					} else {
 						alert('There are no files in this dataset that match the search criteria.');

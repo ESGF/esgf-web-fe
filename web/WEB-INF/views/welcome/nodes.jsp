@@ -45,24 +45,21 @@
 		        	<a href='http://esg-datanode.jpl.nasa.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
 		        </li>
 		        <li>
+		        	<a href='http://esg2.nci.org.au/'><img src="images/flags/Australia.png" class="icon"/>NCI Node</a>
+		        	<a href='http://esg2.nci.org.au/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
+		        </li>				
+		        <li>
 		        	<a href='http://esg.ccs.ornl.gov/'><img src="images/flags/USA.png" class="icon"/>ORNL Node</a>
 		        	<a href='http://esg.ccs.ornl.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
 		        </li>
-		        <!--      
-		        <li>
-		        	<a href='http://esg-vm-demo02.ccs.ornl.gov/'><img src="images/flags/USA.png" class="icon"/>ORNL Node</a>
-		        	<a href='http://esg-vm-demo02.ccs.ornl.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
-		        </li>	
-		        -->                                        
 		        <li>
 		        	<a href='http://pcmdi9.llnl.gov/'><img src="images/flags/USA.png" class="icon"/>PCMDI Node</a>
 		        	<a href='http://pcmdi9.llnl.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
 		        </li>                 		        
-		        <li>
+                <!-- <li>
 		        	<a href='http://esg1-gw.pnl.gov/'><img src="images/flags/USA.png" class="icon"/>PNNL Node</a>
 		        	<a href='http://esg1-gw.pnl.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
-		        </li>	                    		        
-		        
+		        </li> -->		        
 	    	</ul>
 	</div>
 </div>

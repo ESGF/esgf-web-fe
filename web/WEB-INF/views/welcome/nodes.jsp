@@ -29,8 +29,8 @@
 		        	<a href='http://euclipse1.dkrz.de/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
 		        </li>       
 		        <li>
-		        	<a href='http://esgf-dev.dkrz.de/'><img src="images/flags/Germany.png" class="icon"/>DKRZ CMIP5 Node</a>
-		        	<a href='http://esgf-dev.dkrz.de/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
+		        	<a href='http://esgf-data.dkrz.de/'><img src="images/flags/Germany.png" class="icon"/>DKRZ CMIP5 Node</a>
+		        	<a href='http://esgf-data.dkrz.de/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
 		        </li>       
 		        <li>
 		        	<a href='http://esgf-node.ipsl.fr/'><img src="images/flags/France.png" class="icon"/>IPSL Node</a>

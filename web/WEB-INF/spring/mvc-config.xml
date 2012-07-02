@@ -55,6 +55,7 @@
           p:viewClass="org.springframework.web.servlet.view.tiles2.TilesView" />
 
      <!-- Message resources -->
+     
      <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
               <property name="basenames">
                  <list>
@@ -63,9 +64,9 @@
                  </list>
               </property>
       </bean>
-
+<!--  
     <bean id="newsService" class="org.esgf.service.NewsServiceImpl">
     </bean>
-    
+    -->
 
 </beans>

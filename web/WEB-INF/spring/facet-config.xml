@@ -36,15 +36,17 @@
     </bean>
 
     <!-- Client to the Apache-Solr server -->
+    <!--  
     <bean name="searchService" class="esg.search.query.impl.solr.SearchServiceImpl">
         <constructor-arg index="0" value="http://localhost:8983/solr"/>
     </bean>
-
+	-->
     <!-- Search controller -->
+    <!--  
     <bean id="searchController" class="org.esgf.web.SearchController" >
         <constructor-arg index="0" ref="searchService"/>
         <constructor-arg index="1" ref="facetProfile"/>
     </bean>
-     
+     -->
 </beans>
      

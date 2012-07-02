@@ -26,12 +26,12 @@
 
 -->
 
-
+<!--  
     <bean id="feDataSource"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource"
         p:driverClassName="org.h2.Driver"
         p:url="jdbc:h2:mem:esgf-fe;AUTO_SERVER=TRUE"
         p:username="sa"
         p:password="" />
-
+-->
 </beans>

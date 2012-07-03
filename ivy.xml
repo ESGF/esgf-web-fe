@@ -20,7 +20,7 @@
 
 
     <dependency org="globus" name="cog-jglobus" rev="1.8.0"/>
-    <dependency org="org.globusonline" name="JGOClient" rev="1.0.2"/>
+    <dependency org="org.globusonline" name="JGOClient" rev="1.0.1"/>
     <dependency org="cryptix" name="cryptix-base" rev="1.0"/>
     <dependency org="cryptix" name="cryptix" rev="3.2"/>
     <dependency org="cryptix" name="cryptix-asn1" rev="1.0"/>

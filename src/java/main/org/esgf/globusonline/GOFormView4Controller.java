@@ -123,10 +123,12 @@ public class GOFormView4Controller {
         String [] file_urls = request.getParameterValues("child_url");
         String[] endpointInfos = request.getParameterValues("endpointinfos");
         String endpoint = request.getParameter("endpointdropdown");
+        String createdSrcEndpoint = null, createdDestEndpoint = null;
 
         //if this request comes via go form view 3, then obtain the request parameters for myproxy username
         String srcMyproxyUserName = request.getParameter("srcmyproxyuser");
         String srcMyproxyUserPass = request.getParameter("srcmyproxypass");
+        String myProxyServerStr = request.getParameter("srcmyproxyserver");
 
         StringBuffer errorStatus = new StringBuffer("Steps leading up to the error are shown below:<br><br>");
 
@@ -135,12 +137,14 @@ public class GOFormView4Controller {
         LOG.debug("GOFORMView4Controller got selected endpoint " + endpoint);
         LOG.debug("GOFORMView4Controller got Src Myproxy User " + srcMyproxyUserName);
         LOG.debug("GOFORMView4Controller got Src Myproxy Pass ******");
+        LOG.debug("GOFORMView4Controller got Src Myproxy Server " + myProxyServerStr);
 
         System.out.println("GOFORMView4Controller got Certificate " + userCertificate);
         System.out.println("GOFORMView4Controller got Target " + target);
         System.out.println("GOFORMView4Controller got selected endpoint " + endpoint);
         System.out.println("GOFORMView4Controller got Src Myproxy User " + srcMyproxyUserName);
         System.out.println("GOFORMView4Controller got Src Myproxy Pass ******");
+        System.out.println("GOFORMView4Controller got Src Myproxy Server " + myProxyServerStr);
 
         Map<String,Object> model = new HashMap<String,Object>();
 
@@ -217,9 +221,10 @@ public class GOFormView4Controller {
                 // Create source endpoint matching first known Endpoint info
                 EndpointInfo info = goEndpointInfos.get(0);
                 String srcEndpointInfo = info.getEPName() + "^^" + info.getHosts() +
-                    "^^" + info.getMyproxyServer() + "^^" + info.isGlobusConnect();
+                    "^^" + myProxyServerStr + "^^" + info.isGlobusConnect();
                 goSourceEndpoint = Utils.createGlobusOnlineEndpointFromEndpointInfo(
                     transfer, goUserName, srcEndpointInfo);
+                createdSrcEndpoint = goSourceEndpoint;
             }
 
             LOG.debug("Using GO Source EP: " + goSourceEndpoint);
@@ -233,7 +238,28 @@ public class GOFormView4Controller {
             LOG.debug("Activating source endpoint " + goSourceEndpoint);
             System.out.println("Activating source endpoint " + goSourceEndpoint);
             errorStatus.append("Attempting to activate Source Endpoint " + goSourceEndpoint + " ...<br>");
-            transfer.activateEndpoint(goSourceEndpoint, srcMyproxyUserName, srcMyproxyUserPass);
+            try
+            {
+                // first try the activation as-is, with the 'original' myproxy info
+                transfer.activateEndpoint(goSourceEndpoint, srcMyproxyUserName, srcMyproxyUserPass);
+            }
+            catch(Exception e)
+            {
+                // if that failed, manually override myproxy server to match user's
+                // Create source endpoint matching first known Endpoint info
+                LOG.debug("[*] Attempting newly created EP with MyProxy Server " + myProxyServerStr);
+                System.out.println("[*] Attempting newly created EP with MyProxy Server " + myProxyServerStr);
+                EndpointInfo info = goEndpointInfos.get(0);
+                String srcEndpointInfo = info.getEPName() + "^^" + info.getHosts() +
+                    "^^" + myProxyServerStr + "^^" + info.isGlobusConnect();
+                goSourceEndpoint = Utils.createGlobusOnlineEndpointFromEndpointInfo(
+                    transfer, goUserName, srcEndpointInfo);
+                createdSrcEndpoint = goSourceEndpoint;
+
+                LOG.debug("Activating source endpoint " + goSourceEndpoint);
+                System.out.println("Activating source endpoint " + goSourceEndpoint);
+                transfer.activateEndpoint(goSourceEndpoint, srcMyproxyUserName, srcMyproxyUserPass);
+            }
             errorStatus.append("Source Endpoint activated properly!<br>");
 
             String[] endpointPieces = endpointInfo.split("\\^\\^");
@@ -258,6 +284,7 @@ public class GOFormView4Controller {
                 {
                     destEPName = Utils.createGlobusOnlineEndpointFromEndpointInfo(
                         transfer, goUserName, endpointInfo);
+                    createdDestEndpoint = destEPName;
                 }
                 else
                 {
@@ -305,6 +332,17 @@ public class GOFormView4Controller {
             model.put(GOFORMVIEW_ERROR, "error");
             model.put(GOFORMVIEW_ERROR_MSG, error);
             LOG.error("Failed to initialize Globus Online: " + e);
+
+            System.out.println("Trying to teardown created source endpoints ...");
+            if (createdSrcEndpoint != null)
+            {
+                try { transfer.removeEndpoint(createdSrcEndpoint); } catch(Exception e1) {}
+            }
+            if (createdDestEndpoint != null)
+            {
+                try { transfer.removeEndpoint(createdDestEndpoint); } catch(Exception e2) {}
+            }
+            System.out.println("Attempted endpoint removal complete");
         }
         return new ModelAndView("goformview4", model);
     }

@@ -94,6 +94,7 @@ public class GOFormView3Controller {
     private final static String GOFORMVIEW_USER_CERTIFICATE = "GoFormView_UserCertificate";
     private final static String GOFORMVIEW_GO_USERNAME = "GoFormView_GOUsername";
     private final static String GOFORMVIEW_GO_CONNECT = "GoFormView_GOConnect";
+    private final static String GOFORMVIEW_MYPROXY_SERVER = "GoFormView_Myproxy_Server";
     private final static String GOFORMVIEW_SRC_MYPROXY_USER = "GoFormView_SrcMyproxyUser";
     private final static String GOFORMVIEW_SRC_MYPROXY_PASS = "GoFormView_SrcMyproxyPass";
     private final static String GOFORMVIEW_DEST_MYPROXY_SERVER = "GoFormView_DestMyproxyServer";
@@ -117,6 +118,7 @@ public class GOFormView3Controller {
         String target = request.getParameter("target");
         String myProxyUserName = request.getParameter("srcmyproxyuser");
         String myProxyUserPass = request.getParameter("srcmyproxypass");
+        String myProxyServerStr = request.getParameter("srcmyproxyserver");
 
         LOG.debug("GOFormView3Controller: Got GO Username " + goUserName);
         LOG.debug("GOFormView3Controller: Got User Certificate " + userCertificate);
@@ -125,6 +127,7 @@ public class GOFormView3Controller {
         LOG.debug("GOFormView3Controller: Got endpointInfos " + endpointInfos);
         LOG.debug("GOFormView3Controller: Source MyProxy User  " + myProxyUserName);
         LOG.debug("GOFormView3Controller: Source MyProxy Pass *****");
+        LOG.debug("GOFormView3Controller: Source MyProxy Server  " + myProxyServerStr);
 
         Map<String,Object> model = new HashMap<String,Object>();
 
@@ -170,6 +173,7 @@ public class GOFormView3Controller {
             model.put(GOFORMVIEW_DEST_TARGET_PATH, target);
             model.put(GOFORMVIEW_DEST_ENDPOINT_INFO, endpointInfo);
             model.put(GOFORMVIEW_GO_USERNAME, goUserName);
+            model.put(GOFORMVIEW_MYPROXY_SERVER, myProxyServerStr);
             model.put(GOFORMVIEW_SRC_MYPROXY_USER, myProxyUserName);
             model.put(GOFORMVIEW_SRC_MYPROXY_PASS, myProxyUserPass);
         }

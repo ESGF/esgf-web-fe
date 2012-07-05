@@ -182,6 +182,7 @@ public class GOFormView2Controller {
                 model.put(GOFORMVIEW_GO_USERNAME, goUserName);
                 model.put(GOFORMVIEW_SRC_MYPROXY_USER, myProxyUserName);
                 model.put(GOFORMVIEW_SRC_MYPROXY_PASS, myProxyUserPass);
+                model.put(GOFORMVIEW_MYPROXY_SERVER, myProxyServerStr);
 
                 String[] endPointNames = getDestinationEndpointNames(endpoints);
                 String[] endPointInfos = constructEndpointInfos(endpoints);

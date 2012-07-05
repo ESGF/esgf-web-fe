@@ -50,6 +50,7 @@ Please click Next to continue.
   		<input type="hidden" name="gousername" id="${GoFormView_GOUsername}" value="${GoFormView_GOUsername}" />
                 <input type="hidden" name="srcmyproxyuser" id="${GoFormView_SrcMyproxyUser}" value="${GoFormView_SrcMyproxyUser}" />
                 <input type="hidden" name="srcmyproxypass" id="${GoFormView_SrcMyproxyPass}" value="${GoFormView_SrcMyproxyPass}" />
+                <input type="hidden" name="srcmyproxyserver" id="${GoFormView_Myproxy_Server}" value="${GoFormView_Myproxy_Server}" />
   		<input type="hidden" name="endpointinfo" id="${GoFormView_DestEndpointInfo}" value="${GoFormView_DestEndpointInfo}" />
 		<c:set var="j" value="0"/>
  		<c:forEach var="group" items="${GoFormView_File_Names}">

@@ -487,10 +487,17 @@ public class Utils {
         int pos = destEPName.indexOf("#");
         if (pos != -1)
         {
-            localEPName = "esg-dyn-" + destEPName.substring(pos+1);
+            localEPName = localEPName + "-" + destEPName.substring(pos+1);
         }
         localEPName = goUserName + "#" + localEPName;
 
+        // check if there are multiple GridFTP entries and remove all
+        // but the first if so
+        pos = gridFTPServer.indexOf(",");
+        if (pos != -1)
+        {
+            gridFTPServer = gridFTPServer.substring(0, pos);
+        }
         System.out.println("Adding new Endpoint \"" + localEPName + "\" with GridFTP: "
                            + gridFTPServer + ", and MyProxy: " + myproxyServer);
 

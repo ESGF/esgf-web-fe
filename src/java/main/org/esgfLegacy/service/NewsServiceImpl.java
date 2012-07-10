@@ -50,28 +50,52 @@
  *
  ******************************************************************************/
 
+package org.esgfLegacy.service;
+
 /**
- *
  * @author Feiyi Wang (fwang2@ornl.gov)
- *
  */
 
-package org.esgf.dao;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.esgf.domain.NewsEntity;
-import org.springframework.stereotype.Repository;
+import org.esgfLegacy.NewsEntityDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
 
+@Service(value = "newsService")
+public class NewsServiceImpl implements NewsService {
 
-@Repository("newsEntityDao")
-public class NewsEntityDaoJPA extends GenericDaoJPA<NewsEntity> implements
-        NewsEntityDao {
+    private final static Logger LOG = Logger.getLogger(NewsServiceImpl.class);
 
-    private final static Logger LOG = Logger.getLogger(NewsEntityDaoJPA.class);
+    private NewsEntityDao newsEntityDao;
 
-    public NewsEntityDaoJPA() {
-        super(NewsEntity.class);
+    public NewsEntity getNewsEntity(Long id) throws DataAccessException {
+        return newsEntityDao.get(id);
     }
 
+    public List<NewsEntity> getNewsEntityAll() throws DataAccessException {
+        return newsEntityDao.getAll();
+    }
+
+    public void saveNewsEntity(NewsEntity news) throws DataAccessException {
+        newsEntityDao.save(news);
+
+    }
+
+    public void removeNewsEntity(Long id) throws DataAccessException {
+        newsEntityDao.delete(id);
+    }
+
+    @Autowired
+    public void setNewsEntityDao(NewsEntityDao newsEntityDao) {
+        this.newsEntityDao = newsEntityDao;
+    }
+
+    public NewsEntityDao getNewsEntityDao() {
+        return newsEntityDao;
+    }
 
 }

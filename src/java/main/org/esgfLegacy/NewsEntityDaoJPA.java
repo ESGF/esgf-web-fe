@@ -1,10 +1,10 @@
 /*****************************************************************************
- * Copyright © 2011 , UT-Battelle, LLC All rights reserved
+ * Copyright ï¿½ 2011 , UT-Battelle, LLC All rights reserved
  *
  * OPEN SOURCE LICENSE
  *
  * Subject to the conditions of this License, UT-Battelle, LLC (the
- * ÒLicensorÓ) hereby grants to any person (the ÒLicenseeÓ) obtaining a copy
+ * ï¿½Licensorï¿½) hereby grants to any person (the ï¿½Licenseeï¿½) obtaining a copy
  * of this software and associated documentation files (the "Software"), a
  * perpetual, worldwide, non-exclusive, irrevocable copyright license to use,
  * copy, modify, merge, publish, distribute, and/or sublicense copies of the
@@ -14,7 +14,7 @@
  * grant, copyright and license notices, this list of conditions, and the
  * disclaimer listed below.  Changes or modifications to, or derivative works
  * of the Software must be noted with comments and the contributor and
- * organizationÕs name.  If the Software is protected by a proprietary
+ * organizationï¿½s name.  If the Software is protected by a proprietary
  * trademark owned by Licensor or the Department of Energy, then derivative
  * works of the Software may not be distributed using the trademark without
  * the prior written approval of the trademark owner.
@@ -27,7 +27,7 @@
  * acknowledgment:
  *
  *    "This product includes software produced by UT-Battelle, LLC under
- *    Contract No. DE-AC05-00OR22725 with the Department of Energy.Ó
+ *    Contract No. DE-AC05-00OR22725 with the Department of Energy.ï¿½
  *
  * 4. Licensee is authorized to commercialize its derivative works of the
  * Software.  All derivative works of the Software must include paragraphs 1,
@@ -50,36 +50,28 @@
  *
  ******************************************************************************/
 
-package org.esgf.web;
+/**
+ *
+ * @author Feiyi Wang (fwang2@ornl.gov)
+ *
+ */
 
-import java.util.List;
+package org.esgfLegacy;
 
 import org.apache.log4j.Logger;
 import org.esgf.domain.NewsEntity;
-import org.esgf.service.NewsService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.stereotype.Repository;
 
-@Controller
-@RequestMapping(value = "/home")
-public class HomeController {
 
-    private final static Logger LOG = Logger.getLogger(HomeController.class);
+@Repository("newsEntityDao")
+public class NewsEntityDaoJPA extends GenericDaoJPA<NewsEntity> implements
+        NewsEntityDao {
 
-    private NewsService newsService;
+    private final static Logger LOG = Logger.getLogger(NewsEntityDaoJPA.class);
 
-    @Autowired
-    public HomeController(NewsService newsService) {
-        this.newsService = newsService;
+    public NewsEntityDaoJPA() {
+        super(NewsEntity.class);
     }
-    @RequestMapping(method = RequestMethod.GET)
-    public String index(Model model) {
-        List<NewsEntity> newsList = newsService.getNewsEntityAll();
-        LOG.debug("Total news items: " + newsList.size());
-        model.addAttribute("newsList", newsList);
-        return "home";
-    }
+
+
 }

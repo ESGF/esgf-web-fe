@@ -53,7 +53,12 @@
 package org.esgf.web;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.TreeMap;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -82,6 +87,8 @@ public class FacetFileController {
     private final static String FACET_FILE = "facets.properties";
     private final static String FACET_LABEL_FILE = "longnames.properties";
     
+    private final static String FACET_PROPERTIES_FILE = "/esg/config/facets.properties";
+    
     /**
      * This method gives a response to a request (called by esgf-web-fe/web/scripts/esgf/solr.js) for the facets defined in the file facets.properties.  
      * The logic places all facets (delimited by a ; for the time being) into a json array, where it is parsed in solr.js
@@ -95,9 +102,8 @@ public class FacetFileController {
     @RequestMapping(method=RequestMethod.GET)
     public @ResponseBody String doGet() throws IOException, ParserConfigurationException, JSONException {
       
-        //final File file = new ClassPathResource(FACET_FILE).getFile();
-        final File file = new ClassPathResource(FACET_LABEL_FILE).getFile();
-        String [] tokens = parseFacets(file);
+        String [] tokens = getFacetInfo();
+        
         JSONArray facet_arrJSON = new JSONArray(tokens);
   
         String jsonContent = facet_arrJSON.toString();
@@ -120,8 +126,6 @@ public class FacetFileController {
         try {
             String fileContents = FileUtils.readFileToString(file);
             
-            //LOG.debug("FileContents: " + fileContents + "\n---\n");
-            
             String delims = ";";
             String [] tokens = fileContents.split(delims);
             
@@ -133,5 +137,77 @@ public class FacetFileController {
         
         
     }
+    
+    
+    /**
+     * New helper method for extracting facet info from the facets.properties file in /esg/config
+     * 
+     * @return
+     */
+    private static String [] getFacetInfo() {
+        
+
+        String [] facetTokens = null;
+        
+        Properties properties = new Properties();
+        String propertiesFile = FACET_PROPERTIES_FILE;
+        try {
+            
+            properties.load(new FileInputStream(propertiesFile));
+            
+            facetTokens = new String [properties.size()];
+            
+            for(Object key : properties.keySet()) {
+                String value = (String)properties.get(key);
+                
+                String [] valueTokens = value.split(":");
+                try {
+                    int index = Integer.parseInt(valueTokens[0]);
+                    
+                    if(index < properties.size()) {
+
+                        String facetInfo = (String)key + ":" + valueTokens[1] + ":" + valueTokens[2];
+                        facetTokens[index] = facetInfo;
+                    }
+                    
+                } catch(Exception e) {
+                    System.out.println("\nCOULD NOT INDEX: " + key + "\n");
+                }
+                
+            }
+            
+            List<String> fixedFacetTokens = new ArrayList<String>();
+            
+            //"fix" the array here (for any index collisions
+            for(int i=0;i<facetTokens.length;i++) {
+                if(facetTokens[i] != null) {
+                    fixedFacetTokens.add(facetTokens[i]);
+                }
+            }
+            
+            facetTokens = (String [])fixedFacetTokens.toArray(new String[fixedFacetTokens.size()] );
+            
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        return facetTokens;
+    }
+    
+    
+
+    
+    public static void main(String [] args) {
+        
+        String [] facets = getFacetInfo();
+        for(int i=0;i<facets.length;i++) {
+            System.out.println("facet: " + i + " " + facets[i]);
+        }
+        System.out.println(facets.length);
+        
+    }
+    
+    
+    
     
 }

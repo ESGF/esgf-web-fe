@@ -1,10 +1,10 @@
 /*****************************************************************************
- * Copyright © 2011 , UT-Battelle, LLC All rights reserved
+ * Copyright ï¿½ 2011 , UT-Battelle, LLC All rights reserved
  *
  * OPEN SOURCE LICENSE
  *
  * Subject to the conditions of this License, UT-Battelle, LLC (the
- * ÒLicensorÓ) hereby grants to any person (the ÒLicenseeÓ) obtaining a copy
+ * ï¿½Licensorï¿½) hereby grants to any person (the ï¿½Licenseeï¿½) obtaining a copy
  * of this software and associated documentation files (the "Software"), a
  * perpetual, worldwide, non-exclusive, irrevocable copyright license to use,
  * copy, modify, merge, publish, distribute, and/or sublicense copies of the
@@ -14,7 +14,7 @@
  * grant, copyright and license notices, this list of conditions, and the
  * disclaimer listed below.  Changes or modifications to, or derivative works
  * of the Software must be noted with comments and the contributor and
- * organizationÕs name.  If the Software is protected by a proprietary
+ * organizationï¿½s name.  If the Software is protected by a proprietary
  * trademark owned by Licensor or the Department of Energy, then derivative
  * works of the Software may not be distributed using the trademark without
  * the prior written approval of the trademark owner.
@@ -27,7 +27,7 @@
  * acknowledgment:
  *
  *    "This product includes software produced by UT-Battelle, LLC under
- *    Contract No. DE-AC05-00OR22725 with the Department of Energy.Ó
+ *    Contract No. DE-AC05-00OR22725 with the Department of Energy.ï¿½
  *
  * 4. Licensee is authorized to commercialize its derivative works of the
  * Software.  All derivative works of the Software must include paragraphs 1,
@@ -50,9 +50,7 @@
  *
  ******************************************************************************/
 
-
-package org.esgf.service;
-
+package org.esgfLegacy;
 
 /**
  * @author Feiyi Wang (fwang2@ornl.gov)
@@ -60,17 +58,44 @@ package org.esgf.service;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.esgf.domain.NewsEntity;
+import org.esgfLegacy.NewsEntityDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
 
-public interface NewsService {
+//@Service(value = "newsService")
+public class NewsServiceImpl implements NewsService {
 
-    public NewsEntity getNewsEntity(Long id) throws DataAccessException;
+    private final static Logger LOG = Logger.getLogger(NewsServiceImpl.class);
 
-    public List<NewsEntity> getNewsEntityAll() throws DataAccessException;
+    private NewsEntityDao newsEntityDao;
 
-    public void saveNewsEntity(NewsEntity news) throws DataAccessException;
+    public NewsEntity getNewsEntity(Long id) throws DataAccessException {
+        return newsEntityDao.get(id);
+    }
 
-    public void removeNewsEntity(Long id) throws DataAccessException;
+    public List<NewsEntity> getNewsEntityAll() throws DataAccessException {
+        return newsEntityDao.getAll();
+    }
+
+    public void saveNewsEntity(NewsEntity news) throws DataAccessException {
+        newsEntityDao.save(news);
+
+    }
+
+    public void removeNewsEntity(Long id) throws DataAccessException {
+        newsEntityDao.delete(id);
+    }
+
+    @Autowired
+    public void setNewsEntityDao(NewsEntityDao newsEntityDao) {
+        this.newsEntityDao = newsEntityDao;
+    }
+
+    public NewsEntityDao getNewsEntityDao() {
+        return newsEntityDao;
+    }
 
 }

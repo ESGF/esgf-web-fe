@@ -1,10 +1,10 @@
 /*****************************************************************************
- * Copyright © 2011 , UT-Battelle, LLC All rights reserved
+ * Copyright ï¿½ 2011 , UT-Battelle, LLC All rights reserved
  *
  * OPEN SOURCE LICENSE
  *
  * Subject to the conditions of this License, UT-Battelle, LLC (the
- * ÒLicensorÓ) hereby grants to any person (the ÒLicenseeÓ) obtaining a copy
+ * ï¿½Licensorï¿½) hereby grants to any person (the ï¿½Licenseeï¿½) obtaining a copy
  * of this software and associated documentation files (the "Software"), a
  * perpetual, worldwide, non-exclusive, irrevocable copyright license to use,
  * copy, modify, merge, publish, distribute, and/or sublicense copies of the
@@ -14,7 +14,7 @@
  * grant, copyright and license notices, this list of conditions, and the
  * disclaimer listed below.  Changes or modifications to, or derivative works
  * of the Software must be noted with comments and the contributor and
- * organizationÕs name.  If the Software is protected by a proprietary
+ * organizationï¿½s name.  If the Software is protected by a proprietary
  * trademark owned by Licensor or the Department of Energy, then derivative
  * works of the Software may not be distributed using the trademark without
  * the prior written approval of the trademark owner.
@@ -27,7 +27,7 @@
  * acknowledgment:
  *
  *    "This product includes software produced by UT-Battelle, LLC under
- *    Contract No. DE-AC05-00OR22725 with the Department of Energy.Ó
+ *    Contract No. DE-AC05-00OR22725 with the Department of Energy.ï¿½
  *
  * 4. Licensee is authorized to commercialize its derivative works of the
  * Software.  All derivative works of the Software must include paragraphs 1,
@@ -50,30 +50,39 @@
  *
  ******************************************************************************/
 
+package org.esgfLegacy;
 
-/**
- * Core Persistence Interface
- *
- * @author Feiyi Wang (fwang2@ornl.gov)
- *
- */
-
-package org.esgf.dao;
 import java.util.List;
 
-import org.esgf.domain.DomainObject;
-;
+//import org.esgf.service.NodeService;
+//import org.esgf.service.NodeStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-public interface GenericDao<T extends DomainObject> {
+/**
+ * 
+ * This class provide simple peer status update with REST-like API:
+ * <code> peer/list </code>
+ * <p> 
+ * 
+ * @author Feiyi Wang
+ *
+ */
+@Controller
+public class NodeStatusController {
 
-    public T get(Long id);
-
-    public List<T> getAll();
-
-    public void save(T object);
-
-    public void delete(T object);
-
-    public void delete(Long id);
-
+    @Autowired
+    @Qualifier("nodeStatus")
+    private NodeService nodeService;
+    
+    @RequestMapping(value="peer/list", method=RequestMethod.GET,
+            headers={"Accept=text/xml, application/json"})
+    public @ResponseBody List<NodeStatus> getActiveNodes() {
+        return nodeService.getLiveNodeList();
+        
+    }
 }

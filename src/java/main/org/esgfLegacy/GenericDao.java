@@ -1,10 +1,10 @@
 /*****************************************************************************
- * Copyright © 2011 , UT-Battelle, LLC All rights reserved
+ * Copyright ï¿½ 2011 , UT-Battelle, LLC All rights reserved
  *
  * OPEN SOURCE LICENSE
  *
  * Subject to the conditions of this License, UT-Battelle, LLC (the
- * ÒLicensorÓ) hereby grants to any person (the ÒLicenseeÓ) obtaining a copy
+ * ï¿½Licensorï¿½) hereby grants to any person (the ï¿½Licenseeï¿½) obtaining a copy
  * of this software and associated documentation files (the "Software"), a
  * perpetual, worldwide, non-exclusive, irrevocable copyright license to use,
  * copy, modify, merge, publish, distribute, and/or sublicense copies of the
@@ -14,7 +14,7 @@
  * grant, copyright and license notices, this list of conditions, and the
  * disclaimer listed below.  Changes or modifications to, or derivative works
  * of the Software must be noted with comments and the contributor and
- * organizationÕs name.  If the Software is protected by a proprietary
+ * organizationï¿½s name.  If the Software is protected by a proprietary
  * trademark owned by Licensor or the Department of Energy, then derivative
  * works of the Software may not be distributed using the trademark without
  * the prior written approval of the trademark owner.
@@ -27,7 +27,7 @@
  * acknowledgment:
  *
  *    "This product includes software produced by UT-Battelle, LLC under
- *    Contract No. DE-AC05-00OR22725 with the Department of Energy.Ó
+ *    Contract No. DE-AC05-00OR22725 with the Department of Energy.ï¿½
  *
  * 4. Licensee is authorized to commercialize its derivative works of the
  * Software.  All derivative works of the Software must include paragraphs 1,
@@ -50,35 +50,30 @@
  *
  ******************************************************************************/
 
-package org.esgf.service;
 
 /**
- * A simple class of defining information encapsulated in NodeStatus
- * 
- * @author Feiyi Wang
+ * Core Persistence Interface
+ *
+ * @author Feiyi Wang (fwang2@ornl.gov)
  *
  */
-public class NodeStatus {
-    private String nodeIp;
-    private String nodeName;
 
-    public NodeStatus(String name, String ip) {
-        this.nodeName = name;
-        this.nodeIp = ip;
+package org.esgfLegacy;
+import java.util.List;
 
-    }
+import org.esgf.domain.DomainObject;
+;
 
-    public String getNodeIp() {
-        return nodeIp;
-    }
-    public void setNodeIp(String nodeIp) {
-        this.nodeIp = nodeIp;
-    }
-    public String getNodeName() {
-        return nodeName;
-    }
-    public void setNodeNamet(String nodeName) {
-        this.nodeName = nodeName;
-    }
+public interface GenericDao<T extends DomainObject> {
+
+    public T get(Long id);
+
+    public List<T> getAll();
+
+    public void save(T object);
+
+    public void delete(T object);
+
+    public void delete(Long id);
 
 }

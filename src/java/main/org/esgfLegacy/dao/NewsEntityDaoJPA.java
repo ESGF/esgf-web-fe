@@ -50,39 +50,28 @@
  *
  ******************************************************************************/
 
-package org.esgf.web;
-
-import java.util.List;
-
-import org.esgf.service.NodeService;
-import org.esgf.service.NodeStatus;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 /**
- * 
- * This class provide simple peer status update with REST-like API:
- * <code> peer/list </code>
- * <p> 
- * 
- * @author Feiyi Wang
+ *
+ * @author Feiyi Wang (fwang2@ornl.gov)
  *
  */
-@Controller
-public class NodeStatusController {
 
-    @Autowired
-    @Qualifier("nodeStatus")
-    private NodeService nodeService;
-    
-    @RequestMapping(value="peer/list", method=RequestMethod.GET,
-            headers={"Accept=text/xml, application/json"})
-    public @ResponseBody List<NodeStatus> getActiveNodes() {
-        return nodeService.getLiveNodeList();
-        
+package org.esgfLegacy.dao;
+
+import org.apache.log4j.Logger;
+import org.esgf.domain.NewsEntity;
+import org.springframework.stereotype.Repository;
+
+
+@Repository("newsEntityDao")
+public class NewsEntityDaoJPA extends GenericDaoJPA<NewsEntity> implements
+        NewsEntityDao {
+
+    private final static Logger LOG = Logger.getLogger(NewsEntityDaoJPA.class);
+
+    public NewsEntityDaoJPA() {
+        super(NewsEntity.class);
     }
+
+
 }

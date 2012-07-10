@@ -54,6 +54,7 @@ package org.esgf.web;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -187,19 +188,48 @@ public class FacetFileController {
             
             facetTokens = (String [])fixedFacetTokens.toArray(new String[fixedFacetTokens.size()] );
             
+        } catch(FileNotFoundException f) {
+            
+            System.out.println("Using default facet list");
+            facetTokens = getDefaultFacets();
+            
         } catch(Exception e) {
+        
             e.printStackTrace();
         }
         
         return facetTokens;
     }
     
-    
+    private static String [] getDefaultFacets() {
+        
+        String [] facets = new String[13];
+        facets[0] = "project:Project:optional_project_description";
+        facets[1] = "institute:Institute:optional_institute_description";
+        facets[2] = "model:Model:optional_model_description";
+        facets[3] = "source_id:Instrument:optional_instrument_description";
+        facets[4] = "experiment_family:Experiment Family:optional_experiment_family_description";
+        facets[5] = "time_frequency:Time Frequency:optional_time_frequency_description";
+        facets[6] = "product:Product:optional_product_description";
+        facets[7] = "realm:Realm:optional_realm_description";
+        facets[8] = "variable:Variable:optional_variable_description";
+        facets[9] = "variable_long_name:Variable Long Name:optional_variable_long_name_description";
+        facets[10] = "cmor_table:CMIP Table:optional_cmor_table_description";
+        facets[11] = "cf_standard_name:CF Standard Name:optional_cf_standard_name_description";
+        facets[12] = "ensemble:Ensemble:optional_ensemble_description";
+        
+        
+        
+        return facets;
+        
+    }
 
     
     public static void main(String [] args) {
         
         String [] facets = getFacetInfo();
+        
+        
         for(int i=0;i<facets.length;i++) {
             System.out.println("facet: " + i + " " + facets[i]);
         }

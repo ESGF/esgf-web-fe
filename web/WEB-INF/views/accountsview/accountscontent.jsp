@@ -115,7 +115,10 @@ p {
 				<input id="changepwd" value="Change password" class="button" type="button"/>
 			</p> 			
 		</fieldset>
-
+    <fieldset style="background: #F5F5E0">
+      <legend> SUP </legend>
+      <p> hello </p>
+    </fieldset>
 	</div>
 </div>
  

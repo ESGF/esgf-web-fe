@@ -73,6 +73,7 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import org.globusonline.*;
+import org.globus.myproxy.MyProxyException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -195,6 +196,32 @@ public class GOFormView2Controller {
 
                 LOG.debug("All info placed in the model!");
             }
+        }
+        catch(MyProxyException me)
+        {
+            String error = me.toString();
+            if (error.contains("invalid password"))
+            {
+                error = "We could not start your download because of the following error:<br><br>The password you provided for your ESGF account with username \"" + myProxyUserName + "\" is incorrect.<br><br>Please use your browser back button to go to the previous page, and try the request again.";
+            }
+            else
+            {
+                error = errorStatus.toString() + "<br><b>Main Error:</b><br><br>" + me.toString();
+            }
+            model.put(GOFORMVIEW_ERROR, "error");
+            model.put(GOFORMVIEW_ERROR_MSG, error);
+            LOG.error("Failed to initialize Globus Online: " + me);
+        }
+        catch(JGOTransferException jgte)
+        {
+            String error = jgte.toString();
+            if (error.contains("Endpoint List failure: ClientError.AuthenticationFailed(400 Authentication Failed)"))
+            {
+                error = "Your Globus Online Account \"" + goUserName + "\" is not linked to the ESGF Portal account.<br><br>Please follow steps in <a href=\"http://www.esgf.org/wiki/ESGF_GO_AccountSetup\">http://www.esgf.org/wiki/ESGF_GO_AccountSetup</a> to link accounts.";
+            }
+            model.put(GOFORMVIEW_ERROR, "error");
+            model.put(GOFORMVIEW_ERROR_MSG, error);
+            LOG.error("Failed to initialize Globus Online: " + jgte);
         }
         catch(Exception e)
         {

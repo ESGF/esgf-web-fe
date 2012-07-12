@@ -36,7 +36,7 @@
 		</tr>
 		<tr>
 			<td>
-				<div class="adduser_properties" style=""><b>ESGF</b> Portal Password</div> 
+				<div class="adduser_properties" style=""><b>ESGF</b> Portal Password (username: <c:out value="${GoFormView_SrcMyproxyUser}"/>)</div>
 			</td>
 			<td>
 				<input type="password" class="text" id="myProxyUserPass" name="myProxyUserPass" value=""> 

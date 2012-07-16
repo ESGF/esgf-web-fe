@@ -155,6 +155,7 @@ public class GOFormView4Controller {
             String newURL = null, goEP = null;
             String[] pieces = null;
             Vector<String> fileList = null;
+            HashMap<String, String> sourceEpToGFTPMap = new HashMap<String, String>();
             HashMap<String, Vector<String>> sourceMap = new HashMap<String, Vector<String>>();
 
             transfer.initialize();
@@ -172,6 +173,7 @@ public class GOFormView4Controller {
 
             // first pass, find all sources
             // we create a mapping of GO endpoints to Filelists
+           
             for(String curURL : file_urls)
             {
                 pieces = curURL.split("//");
@@ -187,6 +189,7 @@ public class GOFormView4Controller {
                     {
                         LOG.debug("Mapped GridFTP Server " + pieces[1] + " to GO EP " + goEP);
                         System.out.println("Mapped GridFTP Server " + pieces[1] + " to GO EP " + goEP);
+                        sourceEpToGFTPMap.put(goEP, pieces[1]);
                         sourceMap.put(goEP, new Vector<String>());
                     }
 
@@ -210,18 +213,20 @@ public class GOFormView4Controller {
             // support transfers of multiple data sets at once
             Map.Entry<String, Vector<String>> entry = sourceMap.entrySet().iterator().next();
             String goSourceEndpoint = entry.getKey();
+            Map.Entry<String, String> gftpEntry = sourceEpToGFTPMap.entrySet().iterator().next();
+            String gftpServer = gftpEntry.getValue();
 
             System.out.println("Got GO Source EP: " + goSourceEndpoint);
+            System.out.println("Got GFTP Server: " + gftpServer);
             if (goSourceEndpoint != null)
             {
                 fileList = entry.getValue();
             }
             else
             {
-                // Create source endpoint matching first known Endpoint info
-                EndpointInfo info = goEndpointInfos.get(0);
-                String srcEndpointInfo = info.getEPName() + "^^" + info.getHosts() +
-                    "^^" + myProxyServerStr + "^^" + info.isGlobusConnect();
+                // create new endpoint using known information
+                String srcEndpointInfo = "D^^" + gftpServer +
+                    "^^" + myProxyServerStr + "^^false";
                 goSourceEndpoint = Utils.createGlobusOnlineEndpointFromEndpointInfo(
                     transfer, goUserName, srcEndpointInfo);
                 createdSrcEndpoint = goSourceEndpoint;

@@ -2,8 +2,7 @@
 <c:when test='${GoFormView_Error=="error"}' >
 	<strong>Oops, we could not start the download just yet.</strong>
 <br><br>
-        <c:out value="${GoFormView_ErrorMsg}" escapeXml="false"/>
-<br><br>Press back to correct the error, or try your  <a href="<c:url value="/live"/>">download</a> request again.
+        <c:out value="${GoFormView_ErrorMsg}" escapeXml="false"/> 
 <br><br>
 	</c:when>
 	<c:otherwise>

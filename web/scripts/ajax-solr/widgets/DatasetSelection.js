@@ -23,26 +23,34 @@ AjaxSolr.DatasetSelectionWidget = AjaxSolr.AbstractWidget.extend({
 				
 				//
             	//ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
-        	
-    			
+			
+			var canAdd = true;
+			
+			
+			
 				for(var i=0;i<Manager.response.response.docs.length;i++) {
 					var doc = Manager.response.response.docs[i];
 					
 					var datasetInfo = {'numFiles' : doc['number_of_files'], 'peer' : doc['index_node'] , 'xlink' : doc['xlink']};
 	        		
-					ESGF.localStorage.put('dataCart',doc.id,datasetInfo);
-					//alert('i: ' + i + ' ' + doc.id);
+					if(canAdd) {
+						//alert(' in can add for: ' + doc.id);
+						if(ESGF.setting.datacartMax <= ESGF.localStorage.toKeyArr('dataCart').length) {
+			        		alert('Data cart contents exceeded.  Please remove a dataset from the datacart before adding a new one. ' +
+			        			  'Note that the last dataset added was ' + ESGF.localStorage.toKeyArr('dataCart')[ESGF.localStorage.toKeyArr('dataCart').length-1]);
+			        		canAdd = false;
+						} else {
 
+							ESGF.localStorage.put('dataCart',doc.id,datasetInfo);
+						}
+						
+					}
+					
 				}
-
+			
+			
             	Manager.doRequest(0);
 				
-			//} 
-			//if(){
-				
-				
-			//}
-			
 			
 		});
 		

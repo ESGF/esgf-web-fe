@@ -95,6 +95,8 @@ ESGF.localStorage.getAll = function(category) {
  */
 ESGF.localStorage.put = function(category, key, value) {
 		
+		var added = false;
+	
 		if(localStorage.getItem(category) == null) {
 			ESGF.localStorage.initialize(category);
 		}
@@ -110,10 +112,13 @@ ESGF.localStorage.put = function(category, key, value) {
 		//If there is no duplicate,
 		//add item to the map and place it back in the localStorage category map
 		if(canPut) {
+			added = true;
 			map[key] = value;		
 			localStorage.setItem(category,JSON.stringify(map));
 		}
 		
+		
+		return added;
 };
 
 /**

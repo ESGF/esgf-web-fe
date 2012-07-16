@@ -184,15 +184,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         output += "</div>";
     }
 
-    //output += '<span><a href="metadataview?' + 'id=' + doc.id + '">metadata</a></span>';
     
-    
-    //alert('solr theme selectID ' + selectID);
-    
-    //alert('killing live link for ' + selectID);
-    //$("a[id=" + selectID + "]").die('click');
-	//alert('creating live link for ' + selectID);
-    //$("a[id=" + selectID + "]").live('click', {doc:doc}, function (evt) {
     $("a#" + selectID).live('click', {doc:doc}, function (evt) {
         	
     	
@@ -208,77 +200,84 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             selected[evt.data.doc.id] = doc;
             if ( jQuery.trim(this.innerHTML) == "Add To Cart") {
             	
-            	//alert('adding to cart');
-            	if(evt.data.doc['xlink'] != undefined) {
-            		//alert('xlink defined');
-            		//alert(evt.data.doc['xlink']);
-            		//add to the datacart localstorage
-                	if(evt.data.doc['index_node'] != undefined) {
-
-                		//alert('index defined');
-                		
-                		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink']};
-
-                		//alert(datasetInfo['peer']);
-                		
-                    	ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
-                	
-                	
-                	} else {
-                    
-                		//alert('peer should be undefined');
-                		
-                		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : 'undefined' , 'xlink' : evt.data.doc['xlink']};
-                		
-                		//alert('xlink: ' + datasetInfo['xlink']);
-                		
-
-                		//alert(datasetInfo['peer']);
-                		
-                		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
-                	
-                	
-                	}
-            		
+            	if(ESGF.setting.datacartMax <= ESGF.localStorage.toKeyArr('dataCart').length) {
+            		alert('Data cart contents exceeded.  Please remove a dataset from the datacart before adding a new one');
             	} else {
-            		//alert('xlink undefined');
-            	
-            		//add to the datacart localstorage
-                	if(evt.data.doc['index_node'] != undefined) {
-                    
-                		
-                		//alert('index defined');
-                		
-                		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : 'undefined' };
 
-                		//alert(datasetInfo['peer']);
+                	//alert('adding to cart');
+                	if(evt.data.doc['xlink'] != undefined) {
+                		//alert('xlink defined');
+                		//alert(evt.data.doc['xlink']);
+                		//add to the datacart localstorage
+                    	if(evt.data.doc['index_node'] != undefined) {
+
+                    		//alert('index defined');
+                    		
+                    		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink']};
+
+                    		//alert(datasetInfo['peer']);
+                    		
+                        	ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
+                    	
+                    	
+                    	} else {
+                        
+                    		//alert('peer should be undefined');
+                    		
+                    		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : 'undefined' , 'xlink' : evt.data.doc['xlink']};
+                    		
+                    		//alert('xlink: ' + datasetInfo['xlink']);
+                    		
+
+                    		//alert(datasetInfo['peer']);
+                    		
+                    		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
+                    	
+                    	
+                    	}
                 		
-                		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
-                	
-                	
                 	} else {
-                		//alert('peer should be undefined');
-                		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : 'undefined' , 'xlink' : 'undefined' };
-
-                		//alert(datasetInfo['peer']);
-                		
-                		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
+                		//alert('xlink undefined');
                 	
+                		//add to the datacart localstorage
+                    	if(evt.data.doc['index_node'] != undefined) {
+                        
+                    		
+                    		//alert('index defined');
+                    		
+                    		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : 'undefined' };
+
+                    		//alert(datasetInfo['peer']);
+                    		
+                    		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
+                    	
+                    	
+                    	} else {
+                    		//alert('peer should be undefined');
+                    		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : 'undefined' , 'xlink' : 'undefined' };
+
+                    		//alert(datasetInfo['peer']);
+                    		
+                    		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
+                    	
+                    	
+                    	}
                 	
                 	}
-            	
+                	
+                	
+                	
+                	//add to the datacart searchstates localstorage
+                	
+                    var key = ESGF.localStorage.toString('esgf_fq');
+                    var value = evt.data.doc.id;
+
+                	ESGF.localStorage.append('esgf_searchStates', key, value);
+                	
+                    this.innerHTML="Remove From Cart";
+            		
             	}
             	
-            	
-            	
-            	//add to the datacart searchstates localstorage
-            	
-                var key = ESGF.localStorage.toString('esgf_fq');
-                var value = evt.data.doc.id;
-
-            	ESGF.localStorage.append('esgf_searchStates', key, value);
-            	
-                this.innerHTML="Remove From Cart";
 
             } else {
             	//remove from super cookie
@@ -298,7 +297,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         } else {
             alert('Dataset: ' + doc.id + ' cannot be downloaded at this time');
         }
-
+    //}
 
         return false;
     });

@@ -135,6 +135,10 @@ ESGF.setting.fileCounter = 10;
 //dataset denomination counter
 ESGF.setting.datasetCounter = 10;
 
+//limit of datasets in datacart
+ESGF.setting.datacartMax = 100;
+
+
 /**
  * Proxy for creating the template for file downloads.
  *

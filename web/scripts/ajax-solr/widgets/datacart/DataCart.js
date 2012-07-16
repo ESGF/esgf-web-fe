@@ -218,9 +218,10 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	
 		//alert(self.selected_arr);
 		
-		var datasetList = '';
 		
 		for(var i=0;i<self.selected_arr.length;i++) {
+			var datasetList = '';
+			
 			datasetList += '<tr style="margin-top:50px;" class="top_level_data_item"  >'
 			
 			datasetList += '<td style="width: 40px;"><input class="topLevel" type="checkbox" checked="true" /> </td>';	
@@ -253,10 +254,12 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			datasetList += '</tr>';
 			datasetList += '<tr class="file_rows_' + replaceChars(self.selected_arr[i]) + '" style="">';
 			datasetList += '</tr>';
+			
+			$( "#datasetList").append(datasetList);
+			//alert('datasetList length: ' + datasetList.length);
 		}
 		
-		$( "#datasetList").append(datasetList);
-		
+		//$( "#datasetList").append(datasetList);
 		
 	},
 	

@@ -36,7 +36,17 @@
 								openid = openid.replace("http:","https:")
 								               .replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 								openidElement.value = openid;
-							}
+              }
+
+              function user(){
+                usernamefield = document.getElementById('username');
+                usernamefield.toggel();
+              }
+
+              function pass() {
+                passwordfield = document.getElementById('password');
+                passwordfield.toggel();
+              }
 						</script>															    				
 	                    <div class="panel">  	                         	
 	                    	<c:if test="${param['failed']==true}">
@@ -63,7 +73,13 @@
 	                <p/>
 	                <div align="center">Please enter your OpenID. You will be redirected to your registration web site to login.</div>
 	                <p/>
-	                <div align="center">Not a user? Register <a href='<c:url value="/createAccount"/>' >here</a>.</div>
+                  <div align="center">Not a user? Register <a href='<c:url value="/createAccount"/>' >here</a>.</div>
+                  <div align="center"><a href="#" onclick="user()">Forgot Username</a></div>
+                  <div align="center"><a href="#" onclick="pass()" >Forgot Password</a></div>
+
+                  <div align="center" id="username" style="display:none"> You Forgot your pass word </div>
+                  <div align="center" id="password" style="display:none"> You Forgot your pass word </div>
+
 	            </c:when>
 
                 <c:otherwise>

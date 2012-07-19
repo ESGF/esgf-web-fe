@@ -38,15 +38,6 @@
 								openidElement.value = openid;
               }
 
-              function user(){
-                usernamefield = document.getElementById('username');
-                usernamefield.toggel();
-              }
-
-              function pass() {
-                passwordfield = document.getElementById('password');
-                passwordfield.toggel();
-              }
 						</script>															    				
 	                    <div class="panel">  	                         	
 	                    	<c:if test="${param['failed']==true}">
@@ -74,13 +65,37 @@
 	                <div align="center">Please enter your OpenID. You will be redirected to your registration web site to login.</div>
 	                <p/>
                   <div align="center">Not a user? Register <a href='<c:url value="/createAccount"/>' >here</a>.</div>
-                  <div align="center"><a href="#" onclick="user()">Forgot Username</a></div>
-                  <div align="center"><a href="#" onclick="pass()" >Forgot Password</a></div>
+                  <div align="center"><a href="javascript:toggle()" id="user">Forgot Username</a></div>
+                  <div align="center"><a href="javascript:roggle()" id="pass">Forgot Password</a></div>
 
-                  <div align="center" id="username" style="display:none"> You Forgot your pass word </div>
-                  <div align="center" id="password" style="display:none"> You Forgot your pass word </div>
+                  <div align="center" id="username" style="display:none"> You Forgot your username </div>
+                  <div align="center" id="password" style="display:none"> You Forgot your password </div>
+                  
+                  <script language="javascript"> 
+                    // MBH: start of retrieve username or password
+                    function toggle() {
+	                    var ele = document.getElementById("username");
+	                    var text = document.getElementById("displayText");
+	                    if(ele.style.display == "block") {
+    		                ele.style.display = "none";		
+  	                  }
+	                    else {
+		                    ele.style.display = "block";
+	                    }
+                    } 
 
-	            </c:when>
+                    function roggle() {
+	                    var ele = document.getElementById("password");
+	                    var text = document.getElementById("displayText");
+	                    if(ele.style.display == "block") {
+    		                ele.style.display = "none";		
+  	                  }
+	                    else {
+		                    ele.style.displayisplay = "block";
+	                    }
+                    } 
+                  </script>
+                </c:when>
 
                 <c:otherwise>
 

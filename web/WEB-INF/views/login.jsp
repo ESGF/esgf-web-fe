@@ -63,37 +63,65 @@
 	                </form>
 	                <p/>
 	                <div align="center">Please enter your OpenID. You will be redirected to your registration web site to login.</div>
-	                <p/>
+                  <p/>
+                  
                   <div align="center">Not a user? Register <a href='<c:url value="/createAccount"/>' >here</a>.</div>
-                  <div align="center"><a href="javascript:toggle()" id="user">Forgot Username</a></div>
+                  
+                  <div align="center"><a href="javascript:toggle()" id="user">Forgot Openid</a></div>
+                  <div align="center" id="username" style="display:none">
+                    <div class="panel">
+                      <p> Please provide the email the misisng openid is associated with. You will recieve a email with all the openid's that are associated with this email.</p>
+                      <table><tr>
+                          <td><b>Email:</b></td>
+                          <td><input type="text" id="usnemail" name="usnemail" size="60" style="width:100%" /></td>
+                          <td><input type="submit" value="Submit" class="button" onclick="javascript:findusername()"/></td>
+                      </tr></table>
+                    </div>
+                  </div>
+                  
                   <div align="center"><a href="javascript:roggle()" id="pass">Forgot Password</a></div>
-
-                  <div align="center" id="username" style="display:none"> You Forgot your username </div>
-                  <div align="center" id="password" style="display:none"> You Forgot your password </div>
+                  <div align="center" id="password" style="display:none">
+                    <div class="panel">
+                      <p>Please provide the email associated with this usernames. You will recieve a temporary password by email. Please remember to change your password the next time you login.</p>
+                      <table><tr>
+                          <td><b>Email:</b></td>
+                          <td> <input type="text" id="pwdemail" name="pwdemail" size="60" style="width:100%" /></td>
+                          <td><input type="submit" value="Submit" class="button" onclick="javascript:findpassword()"/></td>
+                    </tr></table>
+                    </div>
+                  </div>
                   
                   <script language="javascript"> 
                     // MBH: start of retrieve username or password
                     function toggle() {
-	                    var ele = document.getElementById("username");
-	                    var text = document.getElementById("displayText");
-	                    if(ele.style.display == "block") {
-    		                ele.style.display = "none";		
+	                    var usr = document.getElementById("username");
+	                    if(usr.style.display == "block") {
+    		                usr.style.display = "none";		
   	                  }
 	                    else {
-		                    ele.style.display = "block";
+		                    usr.style.display = "block";
 	                    }
                     } 
 
                     function roggle() {
-	                    var ele = document.getElementById("password");
-	                    var text = document.getElementById("displayText");
-	                    if(ele.style.display == "block") {
-    		                ele.style.display = "none";		
+	                    var pwd = document.getElementById("password");
+	                    if(pwd.style.display == "block") {
+    		                pwd.style.display = "none";		
   	                  }
 	                    else {
-		                    ele.style.displayisplay = "block";
+		                    pwd.style.display = "block";
 	                    }
-                    } 
+                    }
+
+                    function findusername() {
+                      var email = document.getElementById("usnemail").value;
+                      alert(email);
+                    }
+
+                    function findpassword() {
+                      var email = document.getElementById("pwdemail").value;
+                      alert(email);
+                    }
                   </script>
                 </c:when>
 

@@ -12,6 +12,28 @@
 	background: #838943;
 	cursor: pointer;
 }
+
+
+.modal {
+	background-color:#fff;
+  	display:none;
+  	width:175px;
+  	padding:15px;
+  	text-align:left;
+  	border:2px solid #333;
+
+  	opacity:0.8;
+  	-moz-border-radius:6px;
+  	-webkit-border-radius:6px;
+  	-moz-box-shadow: 0 0 50px #ccc;
+  	-webkit-box-shadow: 0 0 50px #ccc;
+}
+
+.modal h2 {
+    margin:0px;
+    padding:10px 0 10px 45px;
+    font-size:20px;
+}
 </style>
 
 <div class="span-18 last" >
@@ -153,10 +175,37 @@
 	</div>
 </div>
  
+<!-- user input dialog -->
+<div class="modal" id="prompt" style="background-color:#ffffff;font-style:bold">
+  <img src='/esgf-web-fe/images/ajax-loader.gif' style="float:left;margin-right:20px"/> 
+  <div style="padding-left:20px">Processing...</div>
+
+  <!--  <button class="f">Close</button>  -->
+</div>
+ 
 
 <script type="text/javascript">
 
     $(function(){
+    	
+
+  	  $("#openoverlay").click(function() {
+  		  //alert('click');
+  	      $("#prompt").overlay().load();
+  	  });
+  	  
+  	  
+  	  /*var triggers =*/ 
+  	  $("#prompt").overlay({
+
+ 		 top: '40%',
+ 		 mask: '#000',
+ 		 speed: 'slow',
+ 	     closeOnClick: false
+ 	  	
+  	  });
+ 	  
+    	
     	
     	//event is trigger on both logout and login links (for now)
     	//there is a little disconnect with the header.jsp file so this can be seen as a temporary fix until a main page clean up is performed 

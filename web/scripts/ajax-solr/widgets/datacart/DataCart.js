@@ -97,6 +97,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	 */
 	afterRequest: function () {
 		
+
 		
 		//empty the tab
         $(this.target).empty();
@@ -196,6 +197,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
         
       //getter for the data cart tab
 		var selected = $( "#myTabs" ).tabs( "option", "selected" );
+		
 		
 		//create the data cart template
         //only create if the data cart tab is selected

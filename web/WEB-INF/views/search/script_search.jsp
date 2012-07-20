@@ -6,6 +6,7 @@
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/backbone-min.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery-ui-1.8.12.custom.min.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/overlay.js" /> '></script>
+    <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/expose.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/overlay.apple.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/toolbox.mousewheel.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/scrollable.js" /> '></script>

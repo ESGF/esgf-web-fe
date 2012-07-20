@@ -114,7 +114,9 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 	     */
 		$('#myTabs').live('tabsselect', function(event, ui) {
 			if (ui.index == 1) {
-								
+				
+				
+				
 				//leave the pagination on
 				ESGF.setting.paginationOn = 'true';	
 				

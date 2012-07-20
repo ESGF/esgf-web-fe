@@ -68,6 +68,8 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   {
       executeRequest: function (servlet) {
     	  
+    	  //alert('execute request for manager');
+    	  
           var self = this;
 
 
@@ -122,6 +124,14 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 
           LOG.debug("Manager's querystring: " + revisedQueryString);
 
+  			var selected = $( "#myTabs" ).tabs( "option", "selected" );
+          
+  			
+          if(revisedQueryString.indexOf('distrib=false') == -1) {
+        	  //alert('distributed search taking place...put in overlay');
+        	  $("#prompt").overlay().load();
+          }
+          
           /**
            * Ajax call to the search API
            */
@@ -131,7 +141,12 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
         	  type: 'GET',
         	  success: function(data) {   
         		  self.handleResponse(data);
-        		  
+
+                  if(revisedQueryString.indexOf('distrib=false') == -1) {
+                	  //alert('query done ... take down overlay here');
+                	  $("#prompt").overlay().close();
+                  }
+                  
         		  //for(var key in data.response) {
         			  //alert('key: ' + key);
         		  //}
@@ -156,7 +171,11 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
             	  //reset the localStorage searchStates map
             	  ESGF.localStorage.removeAll('searchStates');
             	  
-            	  
+
+                  if(revisedQueryString.indexOf('distrib=false') == -1) {
+                	  //alert('query done ... take down overlay here');
+                	  $("#prompt").overlay().close();
+                  }
             	  //legacy
             	  //reset the distributed search flag to local
             	  //localStorage['distrib'] == 'local';
@@ -169,7 +188,6 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
             	  //window.location.reload();
         	  }
           });
-          
           
           
           
@@ -333,5 +351,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
     	
     	return newQueryString;
     }
+  	
+  	
   	
 });

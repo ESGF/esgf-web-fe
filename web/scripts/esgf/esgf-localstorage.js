@@ -244,24 +244,30 @@ ESGF.localStorage.removeFromValue = function(category, key, value) {
  */
 ESGF.localStorage.toKeyArr = function(category) {
 	
-		
+		/*
 		if(localStorage.getItem(category) == null) {
 			ESGF.localStorage.initialize(category);
 		}
-		
+		*/
 	
-		var dataCartMap = ESGF.localStorage.getAll(category);
+		if(localStorage.getItem(category) != null) {
+			var dataCartMap = ESGF.localStorage.getAll(category);
 
-		var arr = new Array();
-		
-		for(var key in dataCartMap) {
+			var arr = new Array();
 			
-			if(key != '') {       			
-	    		arr.push(key);
+			for(var key in dataCartMap) {
+				
+				if(key != '') {       			
+		    		arr.push(key);
+				}
 			}
+			
+			return arr;
+		} else {
+			return null;
 		}
+	
 		
-		return arr;
 		
 
 	

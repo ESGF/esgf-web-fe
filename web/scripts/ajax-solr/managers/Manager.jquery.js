@@ -96,6 +96,11 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           queryString += self.loadFormat('json');
           //assemble the facet names
           queryString += self.loadFacetNames(namesArr);
+          
+          
+          self.loadCheckboxConstraints();
+          
+          
           //assemble the search constraints
           queryString += self.loadSearchConstraints();
           
@@ -198,6 +203,81 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           
       },
   
+      
+      loadCheckboxConstraints: function() {
+      	
+
+          /*
+			ESGF.setting.replicas = 'false';
+			ESGF.setting.versionsLatest = true;
+			ESGF.setting.distributed = 'false';
+			*/
+    	  
+    	  //if version is not null then it is true
+    	  if(ESGF.setting.versionsLatest != null) {
+    		  //remove any existing versions from queryString
+			  ESGF.localStorage.remove('esgf_queryString','latest:true');
+			  ESGF.localStorage.remove('esgf_queryString','latest:false');
+    		  
+			  //put in latest = true
+			  ESGF.localStorage.put('esgf_queryString','latest:true','latest=true');
+    	  } 
+    	  //else remove the versions argument
+    	  else {
+    		  //remove any existing versions from queryString
+			  ESGF.localStorage.remove('esgf_queryString','latest:true');
+			  ESGF.localStorage.remove('esgf_queryString','latest:false');
+
+				$('#versioncheckbox').attr('checked','checked');
+				
+    	  }
+    	  
+    	//if replica is not null then it is true
+    	  if(ESGF.setting.replicas != null) {
+    		  //remove any existing replicas from queryString
+			  ESGF.localStorage.remove('esgf_queryString','replica:true');
+			  ESGF.localStorage.remove('esgf_queryString','replica:false');
+    		  
+			  //put in replica = false
+			  ESGF.localStorage.put('esgf_queryString','replica:false','replica=false');
+    	  } 
+    	  //else remove the replicas argument
+    	  else {
+    		  
+    		  
+    		  
+    		  //remove any existing versions from queryString
+			  ESGF.localStorage.remove('esgf_queryString','replica:true');
+			  ESGF.localStorage.remove('esgf_queryString','replica:false');
+
+				$('#replicacheckbox').attr('checked','checked');
+    	  }
+    	  
+    	//if distrib is false 
+    	  if(ESGF.setting.distributed == 'false') {
+    		  //remove any existing versions from queryString
+			  ESGF.localStorage.remove('esgf_queryString','distrib');
+    		  
+			  //put in distrib=false
+			  ESGF.localStorage.put('esgf_queryString','distrib','distrib=false');
+    	  } 
+    	  //else distrib is true
+    	  else {
+    		  //remove any existing distrib from queryString
+			  ESGF.localStorage.remove('esgf_queryString','distrib');
+			  
+			  //put in distrib=true
+			  ESGF.localStorage.put('esgf_queryString','distrib','distrib=true');
+				$('#distribcheckbox').attr('checked','checked');
+			  
+    	  }
+    	  
+    	  
+    	  
+      },
+      
+      
+      
       
       /**
        * This property (private) loads any existing constraint from the localStorage into the search

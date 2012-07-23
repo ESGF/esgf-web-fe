@@ -91,8 +91,8 @@ AjaxSolr.VersionsWidget = AjaxSolr.AbstractWidget.extend({
 			if($("input#versioncheckbox").attr("checked")) { 
 				//alert('take the versions parameter out of the query');
 				
-				ESGF.localStorage.remove('esgf_queryString','latest:true');
-				
+				//ESGF.localStorage.remove('esgf_queryString','latest:true');
+				ESGF.setting.versionsLatest = null;
 				
 				
 		    	Manager.doRequest(0);
@@ -101,8 +101,9 @@ AjaxSolr.VersionsWidget = AjaxSolr.AbstractWidget.extend({
 
 				//alert('b4: ' + ESGF.localStorage.toString('esgf_queryString'));
 		  		//put in the replica type (which for results is "false")
-		        ESGF.localStorage.put('esgf_queryString','latest:true','latest=true');
+		        //ESGF.localStorage.put('esgf_queryString','latest:true','latest=true');
 				//alert('after: ' + ESGF.localStorage.toString('esgf_queryString'));
+				ESGF.setting.versionsLatest = 'true';
 				
 		    	Manager.doRequest(0);
 			}

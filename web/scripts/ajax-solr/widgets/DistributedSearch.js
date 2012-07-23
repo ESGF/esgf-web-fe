@@ -91,11 +91,17 @@ AjaxSolr.DistributedSearchWidget = AjaxSolr.AbstractWidget.extend({
 			if($("input#distribcheckbox").attr("checked")) { 
 				//ESGF.localStorage.remove('esgf_queryString','distrib');
 				//ESGF.localStorage.put('esgf_queryString','distrib','distrib=false');
-				ESGF.localStorage.remove('esgf_queryString','distrib');
-            	Manager.doRequest(0);
+				//ESGF.localStorage.remove('esgf_queryString','distrib');
+            	
+				ESGF.setting.distributed = 'true';
+				
+				Manager.doRequest(0);
 			} else {
-				ESGF.localStorage.put('esgf_queryString','distrib','distrib=false');
+				//ESGF.localStorage.put('esgf_queryString','distrib','distrib=false');
 
+
+				ESGF.setting.distributed = 'false';
+				
             	Manager.doRequest(0);
 			}
 		});	

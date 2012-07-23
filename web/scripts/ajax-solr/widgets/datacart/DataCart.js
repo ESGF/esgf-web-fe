@@ -182,28 +182,35 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     		$("input[id='datacart_filtered']").attr("checked","true");
     	}
     	
-    	//if there are no items in the datacart don't show the radio buttons
-    	if(self.selected_arr.length > 0) {
-    		$('div#radio').show();
+    	
+    	if(self.selected_arr != null) {
+    		
+    		//if there are no items in the datacart don't show the radio buttons
+        	if(self.selected_arr.length > 0) {
+        		$('div#radio').show();
+        	}
+        	
+    		//initialize the contents in the data cart
+        	$('#carts').append('<table style="width:100%;table-layout: fixed"><tbody id="datasetList"></tbody></table>');
+            $("#datasetList").empty();
+    		
+            
+            
+            
+            
+          //getter for the data cart tab
+    		var selected = $( "#myTabs" ).tabs( "option", "selected" );
+    		
+    		
+    		//create the data cart template
+            //only create if the data cart tab is selected
+    		if(selected == 1) {
+    	        self.createTemplateShort(self.selected_arr);
+    		}
+    		
+    		
     	}
     	
-		//initialize the contents in the data cart
-    	$('#carts').append('<table style="width:100%;table-layout: fixed"><tbody id="datasetList"></tbody></table>');
-        $("#datasetList").empty();
-		
-        
-        
-        
-        
-      //getter for the data cart tab
-		var selected = $( "#myTabs" ).tabs( "option", "selected" );
-		
-		
-		//create the data cart template
-        //only create if the data cart tab is selected
-		if(selected == 1) {
-	        self.createTemplateShort(self.selected_arr);
-		}
 		
 		
        

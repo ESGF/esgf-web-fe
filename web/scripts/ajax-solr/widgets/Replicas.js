@@ -92,7 +92,8 @@ AjaxSolr.ReplicasWidget = AjaxSolr.AbstractWidget.extend({
 
 				//alert('b4: ' + ESGF.localStorage.toString('esgf_queryString'));
 				
-				ESGF.localStorage.remove('esgf_queryString','replica:false');
+				//ESGF.localStorage.remove('esgf_queryString','replica:false');
+				ESGF.setting.replicas = null;
 				
 				//alert('after: ' + ESGF.localStorage.toString('esgf_queryString'));
 				
@@ -102,9 +103,10 @@ AjaxSolr.ReplicasWidget = AjaxSolr.AbstractWidget.extend({
 
 
 				//alert('b4: ' + ESGF.localStorage.toString('esgf_queryString'));
-		        ESGF.localStorage.put('esgf_queryString','replica:false','replica=false');
+		        //ESGF.localStorage.put('esgf_queryString','replica:false','replica=false');
 				//alert('after: ' + ESGF.localStorage.toString('esgf_queryString'));
 				
+				ESGF.setting.replicas = 'false';
 				
 				Manager.doRequest(0);
 			}

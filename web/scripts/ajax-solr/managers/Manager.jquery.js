@@ -115,7 +115,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           //queryString += '&shards=localhost:8983/solr';
           
           if(ESGF.localStorage.get('esgf_queryString','distrib') != 'distrib=false') {
-        	  //queryString += '&shards=localhost:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,dev.esg.anl.gov:8983/solr';
+        	  queryString += '&shards=localhost:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,dev.esg.anl.gov:8983/solr';
           }
           
           
@@ -127,6 +127,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   			var selected = $( "#myTabs" ).tabs( "option", "selected" );
           
   			
+  		  //if it is a distributed search ... mask the page so that user cannot initiate any more events 
           if(revisedQueryString.indexOf('distrib=false') == -1) {
         	  //alert('distributed search taking place...put in overlay');
         	  $("#prompt").overlay().load();
@@ -139,9 +140,11 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           jQuery.ajax({
         	  url: revisedQueryString,
         	  type: 'GET',
+        	  timeout: ESGF.setting.ajaxTimeout,
         	  success: function(data) {   
         		  self.handleResponse(data);
 
+        		  
                   if(revisedQueryString.indexOf('distrib=false') == -1) {
                 	  //alert('query done ... take down overlay here');
                 	  $("#prompt").overlay().close();

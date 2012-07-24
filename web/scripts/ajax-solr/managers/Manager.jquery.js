@@ -120,7 +120,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           //queryString += '&shards=localhost:8983/solr';
           
           if(ESGF.localStorage.get('esgf_queryString','distrib') != 'distrib=false') {
-        	  queryString += '&shards=localhost:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,dev.esg.anl.gov:8983/solr';
+        	  //queryString += '&shards=localhost:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,dev.esg.anl.gov:8983/solr';
           }
           
           

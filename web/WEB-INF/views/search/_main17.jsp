@@ -53,18 +53,7 @@
 -->	    	
 			<div id="temporal"><a href="#" id="temporal" style="font-size:10px">Temporal Search</a></div>
 			<div id="geo"><a href="#" id="geospatial" style="font-size:10px">Geospatial Search</a></div>
-			
-			<!--  <div id="geo"><a href="<c:url value="/scripts/esgf/overlays/geospatial_overlay.html" />" rel="#geospatial_overlay" style="font-size:10px" id="geo">Geospatial Search</a></div>-->
-	    	<!-- <div id="distributed"><a href="#" style="font-size:10px" id="distributed">Turn on Distributed Search</a></div>
-	    	 -->
-	    	
-	    	<!-- 
-	    	 <div id="facet_browser_overlay"><a href="#" rel="#facet_overlay" style="font-size:10px" >Browse Categories</a></div>
-	    	 --> 
-	    	<div id="facet_browser"><a href="#" id="facet_overlay" style="font-size:10px" >Browse Categories</a></div>
-	    	
-	    	<!-- <div><a href="#" style="font-size:10px">Advanced...&#9660;</a></div>  -->
-	    	<div id="search_help"><a href="http://www.esgf.org/wiki/ESGF_Web_Search_User_Guide" style="font-size:10px" >Search Help</a></div>
+			<div id="search_help"><a href="http://www.esgf.org/wiki/ESGF_Web_Search_User_Guide" style="font-size:10px" >Search Help</a></div>
 	    	<div id="search_cv"><a href="http://www.esgf.org/wiki/ESGF_Search_CV" style="font-size:10px" >Search Controlled Vocabulary</a></div>
 	    </div>
 	   	

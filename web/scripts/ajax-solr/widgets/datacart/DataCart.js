@@ -255,7 +255,10 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			datasetList += '<span class="wgetAllFiles_short" style="display:none;font-weight:bold;"> Downloading... </span>';
 			datasetList += '<a class="wgetAllFiles_short" style="cursor:pointer"> WGET </a> |';
 			datasetList += '<span class="globusOnlineAllFiles_short" style="display:none;font-weight:bold;"> Transferring to GO page...</span>';
-			datasetList += ' <a class="globusOnlineAllFiles_short" style="cursor:pointer">Globus Online</a> |';
+			
+			if(ESGF.setting.globusonline) {
+				datasetList += ' <a class="globusOnlineAllFiles_short" style="cursor:pointer">Globus Online</a> |';
+			}
 			datasetList += ' <a class="remove_dataset_short" style="cursor:pointer">Remove</a>'; 
 			datasetList += '</td>';	
 			

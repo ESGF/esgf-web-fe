@@ -277,7 +277,9 @@
 											service = 'HTTP';
 										}
 										if(service == 'GridFTP') {
-											appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a style="cursor:pointer" class="go_individual_gridftp_short">' + service + '</a> </span>';
+											if(ESGF.setting.globusonline) {
+												appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a style="cursor:pointer" class="go_individual_gridftp_short">' + service + '</a> </span>';
+											}
 										} else {
 											if(openid != 'anonymousUser') {
 												appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '?openid=' + openid +  '" ' + 'target="_blank">' + service + '</a> </span>';
@@ -450,12 +452,14 @@
 										newRow += '</span>';
 										//newRow += '</td>';
 									} else if(file.services.service[j] == 'GridFTP') {
-										//newRow += '<td style="float:right;font-size:11px;">';
-										newRow += '<span style="display:none" class="gridftp">' + file.urls.url[j] + '</span> ';
-										newRow += '<span style="word-wrap: break-word;vertical-align:middle">';
-										newRow += '<a style="cursor:pointer" class="go_individual_gridftp_short">GridFTP</a>';
-										newRow += '</span>';
-										//newRow += '</td>';
+										if(ESGF.setting.globusonline) {
+											//newRow += '<td style="float:right;font-size:11px;">';
+											newRow += '<span style="display:none" class="gridftp">' + file.urls.url[j] + '</span> ';
+											newRow += '<span style="word-wrap: break-word;vertical-align:middle">';
+											newRow += '<a style="cursor:pointer" class="go_individual_gridftp_short">GridFTP</a>';
+											newRow += '</span>';
+											//newRow += '</td>';
+										}
 									} else if(file.services.service[j] == 'OPENDAP') {
 										//newRow += '<td style="float:right;font-size:11px;">';
 										newRow += '<span style="word-wrap: break-word;vertical-align:middle">' ;

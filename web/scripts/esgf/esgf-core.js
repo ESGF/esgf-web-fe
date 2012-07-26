@@ -142,6 +142,8 @@ ESGF.setting.datacartMax = 100;
 //timeout in case of an ajax call not returning results
 ESGF.setting.ajaxTimeout = 20000;
 
+ESGF.setting.globusonline = false;
+
 /**
  * Proxy for creating the template for file downloads.
  *

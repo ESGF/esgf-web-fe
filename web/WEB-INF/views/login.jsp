@@ -67,7 +67,7 @@
                   
                   <div align="center">Not a user? Register <a href='<c:url value="/createAccount"/>' >here</a>.</div>
                   
-                  <div align="center"><a href="javascript:toggle()" id="user">Forgot Openid</a></div>
+                  <div align="center">Forgot Openid? Click <a href="javascript:toggle()" id="user">here</a>.</div>
                   <div align="center" id="username" style="display:none">
                     <div class="panel">
                       <p> Please provide the email the misisng openid is associated with. You will recieve a email with all the openid's that are associated with this email.</p>
@@ -79,10 +79,10 @@
                     </div>
                   </div>
                   
-                  <div align="center"><a href="javascript:roggle()" id="pass">Forgot Password</a></div>
+                  <div align="center">Forgot Password? Click <a href="javascript:roggle()" id="pass">here</a>.</div>
                   <div align="center" id="password" style="display:none">
                     <div class="panel">
-                      <p>Please provide the email associated with this usernames. You will recieve a temporary password by email. Please remember to change your password the next time you login.</p>
+                      <p>Please provide the email associated with this openid. You will recieve a temporary password by email. Please remember to change your password the next time you login.</p>
                       <table><tr>
                           <td><b>Email:</b></td>
                           <td> <input type="text" id="pwdemail" name="pwdemail" size="60" style="width:100%" /></td>

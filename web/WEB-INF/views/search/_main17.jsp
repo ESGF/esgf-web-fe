@@ -22,7 +22,7 @@
   	text-align:left;
   	border:2px solid #333;
 
-  	opacity:0.8;
+  	opacity:0.9;
   	-moz-border-radius:6px;
   	-webkit-border-radius:6px;
   	-moz-box-shadow: 0 0 50px #ccc;
@@ -188,7 +188,7 @@
   	  $("#prompt").overlay({
 
  		 top: '40%',
- 		 mask: '#000',
+ 		 mask: '#FFFFFF',
  		 speed: 'slow',
  	     closeOnClick: false
  	  	

@@ -74,6 +74,24 @@ AjaxSolr.CIMWidget = AjaxSolr.AbstractWidget.extend({
 	    
 		$('.cim-model').live('click', function() {
 			
+			if (cim.APP_VERSION === '0.7.1') {
+                cim.viewer.renderFromDRS({
+                    project : $(this).parent().find("a").attr("project"),
+                    model : $(this).parent().find("a").attr("model"),
+                    institute : $(this).parent().find("a").attr("institute"),
+                    experiment : $(this).parent().find("a").attr("experiment")
+                });
+
+            // New viewer.
+            } else {
+                cim.viewer.renderFromExternalID({
+                    project : $(this).parent().find("a").attr("project"),
+                    externalType : 'dataset',
+                    externalID : $(this).parent().find("a").attr("datasetID")
+                });
+            }
+			
+			/*
 			var project = $(this).parent().find("a").attr("project");
 			
         	var model = $(this).parent().find("a").attr("model");
@@ -90,6 +108,8 @@ AjaxSolr.CIMWidget = AjaxSolr.AbstractWidget.extend({
         	} catch(e) {
         		alert('There was error in rendering the CIM viewer. Contact your administrator');
         	}
+        	*/
+			
 		});
 	}
 

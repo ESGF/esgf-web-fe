@@ -51,6 +51,8 @@ $.ajax({
     		//alert('no item');
     	}
     	
+    	//default restriction "3hr time frequency"
+    	//(ESGF.setting.lasRestrictions).push('time_frequency=3hr');
     	
     },
 	error: function() {

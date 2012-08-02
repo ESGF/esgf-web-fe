@@ -146,7 +146,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     			for(var k=0;k<restrictions.length;k++) {
     				var regex = restrictions[k];
     				//alert('reg: ' + regex + ' search: ' + (doc.title).search(regex));
-    				if((doc.title).search(regex) > -1) {
+    				if((doc.id).search(regex) > -1) {
     					display = false;
     				}
     			}

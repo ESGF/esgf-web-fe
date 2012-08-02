@@ -144,6 +144,8 @@ ESGF.setting.ajaxTimeout = 20000;
 
 ESGF.setting.globusonline = false;
 
+
+ESGF.setting.lasRestrictions = new Array();
 /**
  * Proxy for creating the template for file downloads.
  *

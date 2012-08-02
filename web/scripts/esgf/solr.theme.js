@@ -137,8 +137,24 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     		
     		//alert('url: ' + url);
     		if(url.search("LAS") > -1) {
-    	    	var tuple = url.split("\|");
-        	    output += '<span class="actionitem ai_las"><a href="' + tuple[0] + '" target="_blank">Visualize and Analyze</a></span>';
+    			
+    			//alert('in las...doc title: ' + doc.title);
+    			
+    			var display = true;
+    			
+    			var restrictions = ESGF.setting.lasRestrictions;
+    			for(var k=0;k<restrictions.length;k++) {
+    				var regex = restrictions[k];
+    				//alert('reg: ' + regex + ' search: ' + (doc.title).search(regex));
+    				if((doc.title).search(regex) > -1) {
+    					display = false;
+    				}
+    			}
+    			//alert('dis: ' + display);
+    			if(display) {
+    				var tuple = url.split("\|");
+            	    output += '<span class="actionitem ai_las"><a href="' + tuple[0] + '" target="_blank">Visualize and Analyze</a></span>';	
+    			}
     	    } else if(url.search("OPENDAP") > -1) {
     	    	var tuple = url.split("\|");
         	    output += '<span class="actionitem ai_las"><a href="' + tuple[0] + '" target="_blank">OPENDAP</a></span>';

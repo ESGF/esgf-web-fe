@@ -49,6 +49,7 @@
 
 	
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Results.js" />'> </script>
+    <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Clear.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Pager.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/CurrentSearch.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Text.js" />'> </script>

@@ -18,7 +18,7 @@ $.ajax({
     	}
     },
 	error: function() {
-		alert('error in getting search params...setting defaults');
+		//alert('error in getting search params...setting defaults');
 	}
 
 });
@@ -56,7 +56,7 @@ $.ajax({
     	
     },
 	error: function() {
-		alert('error in getting las config params...setting defaults');
+		LOG.debug('error in getting las config params...setting defaults');
 		ESGF.setting.lasRestrictions = new Array();
 	}
 

@@ -115,7 +115,10 @@ p {
 				<input id="changepwd" value="Change password" class="button" type="button"/>
 			</p> 			
 		</fieldset>
-
+    <fieldset style="background: #F5F5E0">
+      <legend>Groups</legend>
+      <p> list all groups user belongs to here </p>
+    </fieldset>
 	</div>
 </div>
  

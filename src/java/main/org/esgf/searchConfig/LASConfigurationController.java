@@ -72,10 +72,16 @@ public class LASConfigurationController {
             
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            
+            LOG.debug("LAS configuration file not found - using default LAS configuration");
+            
+            //e.printStackTrace();
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+
+            LOG.debug("LAS configuration file not found - using default LAS configuration");
+            
+            //e.printStackTrace();
         }
         
         

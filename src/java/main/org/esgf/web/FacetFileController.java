@@ -152,6 +152,9 @@ public class FacetFileController {
         
         Properties properties = new Properties();
         String propertiesFile = FACET_PROPERTIES_FILE;
+        
+        boolean createDefault = false;
+        
         try {
             
             properties.load(new FileInputStream(propertiesFile));
@@ -171,8 +174,13 @@ public class FacetFileController {
                         facetTokens[index] = facetInfo;
                     }
                     
-                } catch(Exception e) {
-                    System.out.println("\nCOULD NOT INDEX: " + key + "\n");
+                } 
+                //Note: need to fix this.  This will only work if ALL facet readings are wrong
+                catch(Exception e) {
+                    System.out.println("COULD NOT INDEX: " + key);
+
+                    createDefault = true;
+                    
                 }
                 
             }
@@ -196,6 +204,11 @@ public class FacetFileController {
         } catch(Exception e) {
         
             e.printStackTrace();
+        }
+        
+        if(createDefault) {
+            System.out.println("Using default facet list");
+            facetTokens = getDefaultFacets();
         }
         
         return facetTokens;

@@ -15,6 +15,36 @@
 	 	</c:otherwise>
 	</c:choose>
 	
+	
+	
+	<%-- params given in url --%>
+	<span style="display:none" id="params">${model}</span>
+	<span style="display:none" id="searchBool">${search}</span>
+	<span style="display:none" id="datacartBool">${datacart}</span>
+	
+	<c:set var="j" value="0"/>
+	<c:forEach var="group" items="${search_constraints}">
+		<c:choose>
+	 		<c:when test="${url_facet_values[j]=='model'}">
+				<span style="display:none" id="search_constraints_model">${search_constraints[j]}</span>
+	 		</c:when>
+	 		<c:when test="${url_facet_values[j]=='project'}">
+				<span style="display:none" id="search_constraints_project">${search_constraints[j]}</span>
+	 		</c:when>
+	 		<c:when test="${url_facet_values[j]=='id'}">
+				<span style="display:none" id="search_constraints_id">${search_constraints[j]}</span>
+	 		</c:when>
+	 		<c:otherwise>
+				<span style="display:none" id="search_constraints_misc">${search_constraints[j]}</span>
+	 		</c:otherwise>
+		</c:choose>
+		
+		<c:set var="j" value="${j+1}"/>
+	</c:forEach>
+	
+	
+	
+	
 			<!-- <span id="principal_username" style="display:none">${principal}</span> -->
 	
 	<!-- <div class="span-24"></div> -->

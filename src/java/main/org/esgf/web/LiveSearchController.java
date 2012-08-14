@@ -56,24 +56,134 @@ package org.esgf.web;
  * @author Feiyi Wang (fwang2@ornl.gov)
  *
  */
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping(value="/live")
 
 public class LiveSearchController {
 
+
+    private final static String MODEL = "model";
+    private final static String SEARCH = "search";
+    private final static String DATACART = "datacart";
+    private final static String URL_FACET_VALUES = "url_facet_values";
+    private final static String SEARCH_CONSTRAINTS = "search_constraints";
+    
     private final static Logger LOG = Logger.getLogger(LiveSearchController.class);
 
-    @RequestMapping(method=RequestMethod.GET)
-    public String index(HttpServletRequest request, HttpServletResponse response) {
-        LOG.debug("Enter index");
-        return "live-search";
+    public static void main(String [] args) {
+        final MockHttpServletRequest mockRequest = new MockHttpServletRequest();
+
+        String openId = "openid1";
+
+        mockRequest.addParameter("openid", openId);
+
+        mockRequest.addParameter("model", "CAM5");
+        mockRequest.addParameter("project", "CMIP5");
+        
+        //mockRequest.addParameter("search", "true");
+        //mockRequest.addParameter("datacart", "true");
+        
+        LiveSearchController l = new LiveSearchController();
+        
+        l.index(mockRequest, null);
+        
+        
     }
+    
+    
+    @RequestMapping(method=RequestMethod.GET)
+    //public String index(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
+        LOG.debug("Enter index");
+        
+        
+        
+        Map<String,Object> model = getModel(request);
+
+
+        
+        //return "live-search";
+
+        return new ModelAndView("live-search", model);
+    }
+    
+    private Map<String,Object> getModel(HttpServletRequest request) {
+
+        Map<String,Object> model = new HashMap<String,Object>();
+        
+        
+        model.put(MODEL, "modelllll");
+
+        
+        
+        Enumeration<String> paramEnum = request.getParameterNames();
+        
+        List<String> list_constraints = new ArrayList<String>();
+        
+        String search = null;
+        String datacart = null;
+        
+        while(paramEnum.hasMoreElements()) { 
+            String content = (String) paramEnum.nextElement();
+            if(content.equals("search")) {
+                search = request.getParameter(content);
+            } else if(content.equals("datacart")) {
+                datacart = request.getParameter(content);
+            } else if(content.equals("model")) {
+                list_constraints.add("model=" + request.getParameter(content));
+            } else if(content.equals("project")) {
+                list_constraints.add("project=" + request.getParameter(content));
+            } else if(content.equals("id")) {
+                list_constraints.add("id=" + request.getParameter(content));
+            }
+            System.out.println(content+"-->"); 
+            System.out.println(request.getParameter(content));
+        }
+        
+        if(search == null) {
+            search = "false";
+        } 
+        if(datacart == null) {
+            datacart = "false";
+        }
+
+        String [] url_facets = new String[list_constraints.size()];
+        String [] search_constraints_values = new String[list_constraints.size()];
+        
+        System.out.println("---URL Search Constraints---");
+        for(int i=0;i<search_constraints_values.length;i++) {
+            search_constraints_values[i] = list_constraints.get(i);
+            url_facets[i] = list_constraints.get(i).split("=")[0];
+            System.out.println("fac: " + url_facets[i] + " sc: " + search_constraints_values[i]);
+        }
+        System.out.println("---END URL Search Constraints---");
+        
+        
+        model.put(SEARCH, search);
+        model.put(DATACART, datacart);
+        model.put(SEARCH_CONSTRAINTS, search_constraints_values);
+        model.put(URL_FACET_VALUES,url_facets);
+        
+        
+        
+        return model;
+    }
+    
+    
 }

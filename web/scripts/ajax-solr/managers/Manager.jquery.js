@@ -67,11 +67,13 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   /** @lends AjaxSolr.Manager.prototype */
   {
       executeRequest: function (servlet) {
+
+    	  
     	  
     	  //alert('execute request for manager');
     	  
           var self = this;
-
+          self.loadURLParams();
 
           //loads everything in the html5 'fq' store
           self.loadExistingQueries();
@@ -129,7 +131,8 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 
           LOG.debug("Manager's querystring: " + revisedQueryString);
 
-  			var selected = $( "#myTabs" ).tabs( "option", "selected" );
+          
+  		  var selected = $( "#myTabs" ).tabs( "option", "selected" );
           
   			
   		  //if it is a distributed search ... mask the page so that user cannot initiate any more events 
@@ -342,6 +345,60 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
         
   		
   	},
+  	
+  	/**
+  	 * DOCUMENT ME
+  	 * @returns {String}
+  	 */
+  	loadURLParams: function() {
+  		var searchBool = $('span#searchBool').html();
+  		var datacartBool = $('span#datacartBool').html();
+  		var search_constraints_model = $('span#search_constraints_model').html();
+  		var search_constraints_project = $('span#search_constraints_project').html();
+  		var search_constraints_id = $('span#search_constraints_id').html();
+  	  
+  		if(searchBool == 'true') {
+  			//alert('apply search constraints from url here...');
+  		  
+  			//wipe out the previous contents
+
+  			//reset the localStorage for search constraints
+  			ESGF.localStorage.removeAll('esgf_fq');
+
+  			//reset the localStorage esgf_queryString map
+  			ESGF.localStorage.removeAll('esgf_queryString');
+
+      	  
+  			if(search_constraints_model != null) {
+  				ESGF.localStorage.put('esgf_queryString',(new String(search_constraints_model)).replace("=",":"),(new String(search_constraints_model)));
+  				ESGF.localStorage.put('esgf_fq',(new String(search_constraints_model)).replace("=",":"),(new String(search_constraints_model)));
+  			} 
+      	  
+  			if(search_constraints_project != null) {
+  				ESGF.localStorage.put('esgf_queryString',(new String(search_constraints_project)).replace("=",":"),(new String(search_constraints_project)));
+  				ESGF.localStorage.put('esgf_fq',(new String(search_constraints_project)).replace("=",":"),(new String(search_constraints_project)));
+  			}
+      	  
+  			if(search_constraints_id != null) {
+  				ESGF.localStorage.put('esgf_queryString',(new String(search_constraints_id)).replace("=",":"),(new String(search_constraints_id)));
+  				ESGF.localStorage.put('esgf_fq',(new String(search_constraints_id)).replace("=",":"),(new String(search_constraints_id)));
+  			} 
+      	  
+  		  
+  		}
+  	  
+
+  		if(datacartBool == 'true') {
+  			//alert('apply datacart constraints from url here...');
+  		}
+  	  
+  		//alert('reset datacart and search bools to false here');
+  		$('span#params').html('smodel');
+  		$('span#searchBool').html('false');
+  		$('span#datacartBool').html('false');
+
+  	},
+  	
   	
   	/**
   	 * DOCUMENT ME

@@ -169,7 +169,10 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     var modelStr = 'model="' + doc.model + '" ';
     var instituteStr = 'institute="' + doc.institute + '" ';
     var experimentStr = 'experiment="' + doc.experiment + '" ';
-    var datasetIdStr = 'datasetID="' + doc.id + '" ';
+    
+    var datasetId = (new String(doc.id)).split('|')[0];
+    //alert('datasetIdparse: ' + datasetId);
+    var datasetIdStr = 'datasetID="' + datasetId + '" ';
     var cimStr = projectStr + modelStr + instituteStr + experimentStr + datasetIdStr;
     
     if(doc.project == 'CMIP5' || doc.project == 'cmip5') {

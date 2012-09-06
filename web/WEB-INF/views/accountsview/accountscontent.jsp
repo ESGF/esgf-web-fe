@@ -20,10 +20,6 @@ p {
 		Account Home for user ${accounts_userinfo.userName} 
 		</h2>
 	</div>
-	<div class="prepend-3 span-18 append-3 last">
-		<div class="error" style="display: none"></div>
-		<div class="success" style="display: none"></div>
-	</div>
 	<div class="prepend-3 span-18 append-3">
 		<fieldset style="background: #F5F5E0">
 			<legend>About</legend>
@@ -115,6 +111,10 @@ p {
 				<input id="changepwd" value="Change password" class="button" type="button"/>
 			</p> 			
 		</fieldset>
+    
+		  <div class="error" style="display: none"></div>
+		  <div class="success" style="display: none"></div>
+
     <fieldset style="background: #F5F5E0">
       <legend>Groups</legend>
       <p> list all groups user belongs to here </p>
@@ -134,7 +134,8 @@ $(document).ready(function(){
 		if (password1 != password2) {
 			error = true;
 			$("div .error").html("Password does not match!");
-			$("div .error").toggle();
+			$("div .error").show();
+      $("div .success").hide();
 			return;
 		} else {
 			var jsonObj = new Object;
@@ -156,7 +157,10 @@ $(document).ready(function(){
 	    		success: function(data) {
 	    			if (data.EditOutput.status == "success") {
 		    			$("div .success").html("The password reset is successful!");
-		    			$("div .success").show();
+		    			document.getElementById("oldpasswd").value="";
+              document.getElementById("password1").value="";
+              document.getElementById("password2").value="";
+              $("div .success").show();
 		    			$("div .error").hide();
 	    			} else {
 	    				$("div .error").html("The password reset is failed! " + data.EditOutput.comment);
@@ -165,9 +169,9 @@ $(document).ready(function(){
 	    			}
 	    		},
 				error: function(request, status, error) {
-					alert(status);
-					alert(request.responseText);
-					$("div .error").html("The password reset is failed!");
+					//alert(status);
+					//alert(request.responseText);
+					$("div .error").html("The password reset has failed!");
 					$("div .error").show();
 					$("div .success").hide();
 				}

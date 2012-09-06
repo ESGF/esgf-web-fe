@@ -33,6 +33,13 @@
 			<br/>A python-based client-side toolkit and server-side gateway components that allow the user to interact with remote ESGF holdings
 			as if they were local to his/her machine.
 		
+		<p/>
+			<a href='https://forge.ipsl.jussieu.fr/prodiguer/wiki/docs/synchro-data/' ><b>Synchro Data</b></a>
+			<br/>
+A python-based client-side command line tool that allow users to manage
+discovery/authentication/certificate/download of files hosted by the
+distributed digital repositories of the ESGF Federation.
+		
 		</div>
 	</ti:putAttribute>
 

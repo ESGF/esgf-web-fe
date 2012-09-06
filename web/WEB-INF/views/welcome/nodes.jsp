@@ -21,6 +21,10 @@
 		        	<a href='http://dev.esg.anl.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
 		        </li>
 		        <li>
+		        	<a href='http://esgf-index1.ceda.ac.uk/'><img src="images/flags/UK.png" class="icon"/>BADC Node</a>
+		        	<a href='http://esgf-index1.ceda.ac.uk/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
+		        </li>       
+		        <li>
 		        	<a href='http://adm07.cmcc.it/'><img src="images/flags/Italy.png" class="icon"/>CMCC Node</a>
 		        	<a href='http://adm07.cmcc.it/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
 		        </li>    

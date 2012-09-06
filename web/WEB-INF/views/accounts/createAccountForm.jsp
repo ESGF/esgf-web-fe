@@ -4,12 +4,11 @@
 
     <ti:putAttribute name="extrascript">
 
-		<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-	  	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
-	  	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+		<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+	  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+	  	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
         <%@ include file="createAccountData.jsp" %>
-        <script type='text/javascript' src='./createAccountData.js'></script>
 
         <script>
               $(document).ready(function() {
@@ -22,7 +21,7 @@
 
     <ti:putAttribute name="extrastyle">
         <link rel="stylesheet" href='<c:url value="/styles/security.css" />' type="text/css">
-        <link rel="stylesheet" type="text/css" href="http://view.jquery.com/trunk/plugins/autocomplete/jquery.autocomplete.css" />
+        <link rel="stylesheet" type="text/css" href="/styles/jquery.autocomplete.css" />
     </ti:putAttribute>
 
     <ti:putAttribute name="main">

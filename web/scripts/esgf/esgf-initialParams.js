@@ -2,7 +2,8 @@
 //checkbox settings
 ESGF.setting.replicas = 'false';
 ESGF.setting.versionsLatest = 'true';
-ESGF.setting.distributed = 'false';
+ESGF.setting.distributed = 'true';
+
 
 if(ESGF.localStorage.toKeyArr('esgf_queryString') != null) {
 		
@@ -16,9 +17,12 @@ if(ESGF.localStorage.toKeyArr('esgf_queryString') != null) {
 			ESGF.setting.replicas = null;
 		} 
 		
+		
+		
 		var distrib = ESGF.localStorage.get('esgf_queryString','distrib');
-		if(distrib == 'distrib=true') {
-			ESGF.setting.distributed = 'true';
+		
+		if(distrib == 'distrib=false') {
+			ESGF.setting.distributed = 'false';
 		} 
 		
 		

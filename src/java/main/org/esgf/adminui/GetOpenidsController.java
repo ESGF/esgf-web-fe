@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -99,17 +100,22 @@ public class GetOpenidsController {
             errormessage = "error in parsing the json text string :" + query;
             error = true;
         }
-        
-        /* method call for openids tied to passed email */
-        //List<String[]> openidList = UserInfoCredentialedDAO.getOpenidsForEmailQuery(email);
+
+        // method call for openids tied to passed email
         List<String[]> openidList = myUserInfoDAO.getOpenidsForEmail(email);
+        String ids = "";
 
-        //just for testing still need to send back List of Openids
-
-        // wrap into json string return
+        for(String[] strings : openidList){
+          //System.out.println(Arrays.toString(strings));
+          ids = ids + Arrays.toString(strings);
+        }
+        ids = ids + "[last]";
+        
+        //System.out.println("\n \n " + ids + "\n \n");
+        
         String xmlOutput = "<EditOutput>";
         xmlOutput += "<status>success</status>";
-        xmlOutput += "<comment></comment>";
+        xmlOutput += "<comment>" + ids + "</comment>";
         xmlOutput += "</EditOutput>";
         
         JSONObject jo = XML.toJSONObject(xmlOutput);

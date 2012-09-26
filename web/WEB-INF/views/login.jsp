@@ -82,12 +82,13 @@
                  	<div class="error" align="center" style="display: none"></div>
 		              <div class="success" align="center" style="display: none"></div>
 
-                  <div align="center">Forgot Password? Click <a href="javascript:roggle()" id="pass">here</a>.</div>
+                  <!--  
+                <div align="center">Forgot Password? Click <a href="javascript:roggle()" id="pass">here</a>.</div>
                   <div align="center" id="password" style="display:none">
                     <div class="panel">
                       <p>Please provide the email associated with this openid. You will recieve a temporary password by email. Please remember to change your password the next time you login.</p>
                       <table><tr>
-                          <td><b>Opinid:</b></td>
+                          <td><b>Openid:</b></td>
                           <td> <input type="text" id="pwdopenid" name="pwdopenid" size="60" style="width:100%" /></td>
                           <td> &nbsp; </td>
                           </tr><tr>
@@ -97,17 +98,22 @@
                     </tr></table>
                     </div>
                   </div>
-                  
+                 --> 
+
                   <script language="javascript"> 
                     // MBH: start of retrieve username or password
                     function toggle() {
 	                    var usr = document.getElementById("username");
 	                    if(usr.style.display == "block") {
-    		                usr.style.display = "none";		
+    		                usr.style.display = "none";
+                        $("div .success").hide();
+		    			          $("div .error").hide();
   	                  }
 	                    else {
 		                    usr.style.display = "block";
-	                    }
+	                      $("div .success").hide();
+  		    			        $("div .error").hide();
+                      }
                     } 
 
                     function roggle() {
@@ -121,36 +127,54 @@
                     }
 
                     function findusername() {
+                      $("div .success").hide();
+		    			        $("div .error").hide();
                       var email = document.getElementById("usnemail").value;
                       var jsonObj = new Object;
-			                jsonObj.email = email;
-			
+			                jsonObj.email = email;			
 			                var jsonStr = JSON.stringify(jsonObj);
-			                var userinfo_url = '/esgf-web-fe/getuseropenidproxy';
-			                $.ajax({
+                      var userinfo_url = '/esgf-web-fe/getopenidsproxy';
+                      $.ajax({
 	    		              type: "POST",
 	    		              url: userinfo_url,
 				                async: true,
 				                cache: false,
 	    		              data: {query:jsonStr},
 	    	  	            dataType: 'json',
+                        statusCode: {
+                          404: function(){
+                            alert("page note found");
+                          }},
 	    		              success: function(data) {
 	    			              if (data.EditOutput.status == "success") {
-		    			              $("div .success").html("The password reset is successful!");
+                            var split = data.EditOutput.comment.split('][');
+                            var size = split.length;
+                            if(size > 2){
+                              var print = "<u>These are all the Openids you have on this node:</u> <br/>";
+                              for(i = 1; i < (size - 1); i++){
+                                print = print + split[i] + "<br/>";
+                              }
+                            }
+                            else{
+                              var print = "<font color='red'>This email: " + email + " is not registered on this node</font>"; 
+                            }
+                            document.getElementById("usnemail").value="";
+		    			              $("div .success").html(print);
 		    			              $("div .success").show();
 		    			              $("div .error").hide();
 	    			              } else {
-	    				              $("div .error").html("The password reset is failed! " + data.EditOutput.comment);
+	    				              $("div .error").html("Error");
 	    				              $("div .error").show();
 	    				              $("div .success").hide();
 	    			              }
 	    		              },
 				                error: function(request, status, error) {
-					                $("div .error").html("The password reset is failed!");
+					                alert('request: ' + request + ' status: ' + status + ' error: ' + error);
+                          $("div .error").html("Error Three");
 					                $("div .error").show();
 					                $("div .success").hide();
 				                }
-			                });			
+			                });
                     }
 
                     function findpassword() {

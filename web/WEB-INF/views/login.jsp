@@ -70,25 +70,21 @@
                   <div align="center">Forgot Openid? Click <a href="javascript:toggle()" id="user">here</a>.</div>
                   <div align="center" id="username" style="display:none">
                     <div class="panel">
-                      <p> Please provide the email the misisng openid is associated with. You will recieve a email with all the openid's that are associated with this email.</p>
+                      <p> Please provide the email associated with the forgotten openid.</p>
                       <table><tr>
-                          <td><b>Email:</b></td>
-                          <td><input type="text" id="usnemail" name="usnemail" size="60" style="width:100%" /></td>
-                          <td><input type="submit" value="Submit" class="button" onclick="javascript:findusername()"/></td>
+                        <td><b>Email:</b></td>
+                        <td><input type="text" id="usnemail" name="usnemail" size="60" style="width:100%" /></td>
+                        <td><input type="submit" value="Submit" class="button" onclick="javascript:findusername()"/></td>
                       </tr></table>
-                    </div>
                   </div>
+                </div>
 
-                 	<div class="error" align="center" style="display: none"></div>
-		              <div class="success" align="center" style="display: none"></div>
-
-                  <!--  
                 <div align="center">Forgot Password? Click <a href="javascript:roggle()" id="pass">here</a>.</div>
                   <div align="center" id="password" style="display:none">
                     <div class="panel">
                       <p>Please provide the email associated with this openid. You will recieve a temporary password by email. Please remember to change your password the next time you login.</p>
                       <table><tr>
-                          <td><b>Openid:</b></td>
+                          <td><b>Openid:</b><font size="1">Please enter full Openid</font></td>
                           <td> <input type="text" id="pwdopenid" name="pwdopenid" size="60" style="width:100%" /></td>
                           <td> &nbsp; </td>
                           </tr><tr>
@@ -98,7 +94,9 @@
                     </tr></table>
                     </div>
                   </div>
-                 --> 
+
+                  <div class="error" align="center" style="display: none"></div>
+		              <div class="success" align="center" style="display: none"></div>
 
                   <script language="javascript"> 
                     // MBH: start of retrieve username or password
@@ -119,11 +117,15 @@
                     function roggle() {
 	                    var pwd = document.getElementById("password");
 	                    if(pwd.style.display == "block") {
-    		                pwd.style.display = "none";		
+    		                pwd.style.display = "none";
+                        $("div .success").hide();
+		    			          $("div .error").hide();    
   	                  }
 	                    else {
 		                    pwd.style.display = "block";
-	                    }
+	                      $("div .success").hide();
+		    			          $("div .error").hide();
+                      }
                     }
 
                     function findusername() {
@@ -178,10 +180,47 @@
                     }
 
                     function findpassword() {
+                      $("div .success").hide();
+		    			        $("div .error").hide();
                       var email = document.getElementById("pwdemail").value;
                       var openid = document.getElementById("pwdopenid").value;
-                      alert(email);
-                      alert(openid);
+                      var jsonObj = new Object;
+			                jsonObj.email = email;
+                      jsonObj.openid = openid;      
+			                var jsonStr = JSON.stringify(jsonObj);
+                      var userinfo_url = '/esgf-web-fe/forgotpasswordproxy';
+                      $.ajax({
+	    		              type: "POST",
+	    		              url: userinfo_url,
+				                async: true,
+				                cache: false,
+	    		              data: {query:jsonStr},
+	    	  	            dataType: 'json',
+                        statusCode: {
+                          404: function(){
+                            alert("page note found");
+                          }},
+	    		              success: function(data) {
+	    			              if (data.EditOutput.status == "success") {
+                            document.getElementById("pwdopenid").value="";
+                            document.getElementById("pwdemail").value="";
+		    			              $("div .success").html("worked");
+		    			              $("div .success").show();
+		    			              $("div .error").hide();
+	    			              } else {
+	    				              $("div .error").html("Error");
+	    				              $("div .error").show();
+	    				              $("div .success").hide();
+	    			              }
+	    		              },
+				                error: function(request, status, error) {
+					                alert('request: ' + request + ' status: ' + status + ' error: ' + error);
+                          $("div .error").html("Error Three");
+					                $("div .error").show();
+					                $("div .success").hide();
+				                }
+			                });
+
                     }
                   </script>
                 </c:when>

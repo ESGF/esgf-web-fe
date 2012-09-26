@@ -79,7 +79,7 @@
                   </div>
                 </div>
 
-                <div align="center">Forgot Password? Click <a href="javascript:roggle()" id="pass">here</a>.</div>
+               <!-- <div align="center">Forgot Password? Click <a href="javascript:roggle()" id="pass">here</a>.</div>
                   <div align="center" id="password" style="display:none">
                     <div class="panel">
                       <p>Please provide the email associated with this openid. You will recieve a temporary password by email. Please remember to change your password the next time you login.</p>
@@ -93,7 +93,7 @@
                           <td><input type="submit" value="Submit" class="button" onclick="javascript:findpassword()"/></td>
                     </tr></table>
                     </div>
-                  </div>
+                  </div> -->
 
                   <div class="error" align="center" style="display: none"></div>
 		              <div class="success" align="center" style="display: none"></div>

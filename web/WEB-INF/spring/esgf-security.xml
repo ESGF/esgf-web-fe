@@ -44,6 +44,10 @@
 		<security:intercept-url pattern="/adminview" requires-channel="http" access="hasRole('ROLE_ADMIN')"/>
 		<security:intercept-url pattern="/creategroups" requires-channel="http" access="hasRole('ROLE_ADMIN')"/>
 		 
+		<!-- other pages requiring HTTP -->
+		<security:intercept-url pattern="/live" requires-channel="http"/>
+		<security:intercept-url pattern="/tools/*" requires-channel="http"/>
+		
 		<!-- <security:intercept-url pattern="/**" requires-channel="http" /> -->
 		
 		<!-- The "openid-login" tag creates an OpenID login entry point and an OpenIDAuthenticationProvider, 

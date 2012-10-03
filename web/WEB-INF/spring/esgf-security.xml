@@ -32,7 +32,14 @@
 	
 		<!-- User registration view needs https -->
 		<security:intercept-url pattern="/createAccount" requires-channel="https"/>
-		<security:intercept-url pattern="/login" requires-channel="https"/>
+		
+		<!-- all other views require http -->
+		<security:intercept-url pattern="/" requires-channel="http"/>
+		<security:intercept-url pattern="/login" requires-channel="http"/>
+		<security:intercept-url pattern="/live" requires-channel="http"/>
+		<security:intercept-url pattern="/tools/*" requires-channel="http"/>
+		<security:intercept-url pattern="/accountsview" requires-channel="http"/>
+		
 
 		<!-- <security:intercept-url pattern="/login" requires-channel="http" />
 		<security:intercept-url pattern="/j_spring_openid_security_check" requires-channel="http" /> -->
@@ -43,11 +50,7 @@
 		<security:intercept-url pattern="/usermanagement" requires-channel="http" access="hasRole('ROLE_ADMIN')"/>
 		<security:intercept-url pattern="/adminview" requires-channel="http" access="hasRole('ROLE_ADMIN')"/>
 		<security:intercept-url pattern="/creategroups" requires-channel="http" access="hasRole('ROLE_ADMIN')"/>
-		 
-		<!-- other pages requiring HTTP -->
-		<security:intercept-url pattern="/live" requires-channel="http"/>
-		<security:intercept-url pattern="/tools/*" requires-channel="http"/>
-		
+		 		
 		<!-- <security:intercept-url pattern="/**" requires-channel="http" /> -->
 		
 		<!-- The "openid-login" tag creates an OpenID login entry point and an OpenIDAuthenticationProvider, 

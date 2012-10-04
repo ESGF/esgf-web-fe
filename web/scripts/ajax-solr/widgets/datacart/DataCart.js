@@ -150,7 +150,11 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     				 	 '</div>';
     	
     	
+    	//alert('datacart: ' + $('span#datacartOpen').html() + ' ' + $( "#myTabs" ).tabs( "option", "selected"));
     	
+    	if($('span#datacartOpen').html() == 'true') {
+    		$( "#myTabs" ).tabs({ selected: 1 });
+    	}
     	
     	//add the options to the page
     	$('#carts').append(optionsStr);

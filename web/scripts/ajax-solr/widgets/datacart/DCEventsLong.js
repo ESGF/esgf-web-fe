@@ -720,7 +720,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 							
 						}
 						
-						var globus_url = '/esgf-web-fe/goformview1';
+						var globus_url = '/esgf-web-fe/goauthview1';
 				        
 				        //begin assembling queryString
 				        var queryString = 'type=create&id=' + selectedDocId;
@@ -766,7 +766,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
             	});
             	
             	
-            	var globus_url = '/esgf-web-fe/goformview1';
+            	var globus_url = '/esgf-web-fe/goauthview1';
 		        
 		        //begin assembling queryString
 		        var queryString = 'type=create&id=' + selectedDocId;
@@ -811,7 +811,7 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 	        values.push(grid_url);
     		
 	    	
-    		var globus_url = '/esgf-web-fe/goformview1';
+    		var globus_url = '/esgf-web-fe/goauthview1';
 	        
 	        //begin assembling queryString
 	        var queryString = 'type=create&id=' + selectedDocId;

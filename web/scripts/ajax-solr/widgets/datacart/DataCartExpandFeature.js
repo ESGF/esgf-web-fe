@@ -273,12 +273,18 @@
 									for(var j=0;j<data.doc.files.file[i].services.service.length;j++) {
 										var service = data.doc.files.file[i].services.service[j];
 										var url = data.doc.files.file[i].urls.url[j];
+										var file_id = data.doc.files.file[i].fileId;
 										if(service == 'HTTPServer') {
 											service = 'HTTP';
 										}
 										if(service == 'GridFTP') {
 											if(ESGF.setting.globusonline) {
-												appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a style="cursor:pointer" class="go_individual_gridftp_short">' + service + '</a> </span>';
+												//appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a style="cursor:pointer" class="go_individual_gridftp_short">' + service + '</a> </span>';
+												appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
+												                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
+												                 '<span class="globus_url" style="display:none">' + url + '</span>' +
+												                 '<a style="cursor:pointer" class="go_individual_gridftp_short">' + service + '</a> </span>';
+												
 											}
 										} else {
 											if(openid != 'anonymousUser') {
@@ -310,6 +316,7 @@
 								appendedFiles += '<td></td>';
 								appendedFiles += '</tr>';
 								
+								
 								if(fileLength >= ESGF.setting.fileCounter) {
 									appendedFiles += '<tr class="view_files_' + '' + ' remove_' + tagid + '" style="">';
 									appendedFiles += '<td></td>';
@@ -330,6 +337,11 @@
 
 								parentElement.find('a.showAllFiles_short').show();
 								parentElement.find('span.showAllFiles_short').hide();
+
+
+								
+								
+								
 
 								self.innerHTML="Collapse";
 							}
@@ -394,6 +406,7 @@
 					
 			    	var appendedRows = $(this).parent().parent().parent().find('tr.file_append_' + replaceChars(selectedDocId));
 
+			    	
 			    	appendedRows.after('<tr id="spinner"><td></td><td><img src="images/ajax-loader.gif" /></td></tr>');
 			    	
 					$.ajax({
@@ -403,18 +416,27 @@
 						data: queryStr,
 						dataType: 'json',
 						success: function(data) {
-
+				
 							$('tr#spinner').remove();
 							
 							var newRows = '';
 							
 							data.docs = rewriteDocsObject(data.docs);
 							
-							
-							
+							for(var key in data.docs) {
+								var value = data.docs[key];
+								
+								for(var key2 in value) {
+
+									var value2 = value[key2]; 
+									for(var key3 in value2) {
+										//alert('key3: ' + key3);
+									}
+									//alert('key: ' + key + ' key2: ' + key2 + ' value2: ' + value2);
+								}
+							}
 							
 							var tagid = 'file_rows_' + replaceChars(idStr);
-							//' remove_' + tagid + '
 							
 							for(var i=0;i<data.docs.doc[0].files.file.length;i++){
 								var file = data.docs.doc[0].files.file[i];
@@ -439,41 +461,40 @@
 								newRow += '</td>';
 								
 
+								//services
+								
 								newRow += '<td style="float:right;font-size:11px;">';
+								
 								for(var j=0;j<file.services.service.length;j++) {
+									//var file = data.docs.doc[0].files.file[i];
+									
+									var service = file.services.service[j];
+									var url = file.urls.url[j];
+									var file_id = file.fileId;
+									
 									if(file.services.service[j] == 'HTTPServer') {
-										//newRow += '<td style="float:right;font-size:11px;">';
-										newRow += '<span style="word-wrap: break-word;vertical-align:middle"> ';
+										
+										newRow += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">';
 										newRow += '<a href="' + file.urls.url[j];
 										if(openid != 'anonymousUser') {
 											newRow += '?openid=' + openid;
 										}
-										newRow += '">HTTP </a>';
+										newRow += '">HTTP</a> ';
 										newRow += '</span>';
-										//newRow += '</td>';
+												  
+										
 									} else if(file.services.service[j] == 'GridFTP') {
+										
 										if(ESGF.setting.globusonline) {
-											//newRow += '<td style="float:right;font-size:11px;">';
-											newRow += '<span style="display:none" class="gridftp">' + file.urls.url[j] + '</span> ';
-											newRow += '<span style="word-wrap: break-word;vertical-align:middle">';
-											newRow += '<a style="cursor:pointer" class="go_individual_gridftp_short">GridFTP</a>';
-											newRow += '</span>';
-											//newRow += '</td>';
+											newRow += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
+													  '<span class="file_id" style="display:none">' + file_id + '</span>' + 
+							                          '<span class="globus_url" style="display:none">' + url + '</span>' +
+							                          '<a style="cursor:pointer" class="go_individual_gridftp_short">' + service + '</a> </span>';
 										}
-									} else if(file.services.service[j] == 'OPENDAP') {
-										//newRow += '<td style="float:right;font-size:11px;">';
-										newRow += '<span style="word-wrap: break-word;vertical-align:middle">' ;
-										newRow += '<a href="' + file.urls.url[j] + '">OPENDAP</a>';
-										newRow += '</span>';
-										//newRow += '</td>';
-									} else if(file.services.service[j] == 'SRM') {
-										//newRow += '<td style="float:right;font-size:11px;">';
-										newRow += '<span style="word-wrap: break-word;vertical-align:middle">' ;
-											newRow += '<a href="' + file.urls.url[j] + '">SRM</a>';
-										newRow += '</span>';
-										//newRow += '</td>';
 									}
+									
 								}
+								
 								newRow += '</td>';
 								
 								if(file.technote != 'NA') {
@@ -493,6 +514,7 @@
 							}
 
 							appendedRows.after(newRows);
+							
 							
 							self.innerHTML = 'Collapse files';
 							

@@ -61,7 +61,9 @@
               		<li class="resetLocalStorage"><a href="<c:url value='/j_spring_security_logout'/>" >Logout</a></li>
                 	
               	</c:otherwise>
+              	    
           	</c:choose>                                      
+               <li id="help"> <a href="<c:url value='/help/help.htm'/>">Help</a></li>  
            </ul>            
        </div>
    </div> 

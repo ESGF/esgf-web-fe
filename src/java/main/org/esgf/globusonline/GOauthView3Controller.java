@@ -184,6 +184,7 @@ public class GOauthView3Controller {
                         System.out.println("Auth3, session id is:" + session.getId());
         System.out.println("Your dataset name is: " + dataset_id);
         userCertificateFile = (String) session.getAttribute("usercertificatefile");
+	if (userCertificateFile.equals("undefined")){userCertificateFile = null;}
         goUserName = (String) session.getAttribute("gousername");
         goAccessTokenObj = (JSONObject) session.getAttribute("goaccesstoken");
 	try{
@@ -292,7 +293,7 @@ public class GOauthView3Controller {
         System.out.println("GOFORMView4Controller got Src Myproxy Pass ******");
 // +srcMyproxyUserPass);
         System.out.println("GOauthView4Controller got Src Myproxy Server " + myproxyServerStr);
-	if (userCertificateFile == null || userCertificateFile.isEmpty()){
+	if ((srcMyproxyUserPass != null)||(userCertificateFile == null || userCertificateFile.isEmpty())){
 	    try{
             JGOTransfer un = new JGOTransfer(
                 goUserName, myproxyServerStr, myproxyUserName,
@@ -314,7 +315,6 @@ public class GOauthView3Controller {
 
 	    //TODO: Iterate back to password page w/ invalid password error
                 model.put(GOFORMVIEW_ERROR, "autherror");
-                //model.put(GOFORMVIEW_ERROR_MSG, error);
             System.out.println("Failed to initialize transfer object to get user cert: " + e);
 		return new ModelAndView("goauthview3", model);
 	    }
@@ -446,21 +446,26 @@ System.out.println("constructed EndpointInfos ");
 	    System.out.println("userCertificateFile:" +userCertificateFile);
 		//I think this is the right spot to go back and ask for password if the cached credential fails
 		//
+	        model.put(GOFORMVIEW_ERROR, "crederror");
+	                   //model.put(GOFORMVIEW_ERROR_MSG, error);
+	        System.out.println("Failed to initialize transfer object to get user cert: " + e);
+	        return new ModelAndView("goauthview3", model);
+		   //                                                                        }
 		//
                 // if that failed, manually override myproxy server to match user's
                 // Create source endpoint matching first known Endpoint info
-                LOG.debug("[*] Attempting newly created EP with MyProxy Server " + myproxyServerStr);
-                System.out.println("[*] Attempting newly created EP with MyProxy Server " + myproxyServerStr);
-                EndpointInfo info = goEndpointInfos.get(0);
-                String srcEndpointInfo = info.getEPName() + "^^" + info.getHosts() +
-                    "^^" + myproxyServerStr + "^^" + info.isGlobusConnect();
-                goSourceEndpoint = Utils.createGlobusOnlineEndpointFromEndpointInfo(
-                    transfer, goUserName, srcEndpointInfo);
-                createdSrcEndpoint = goSourceEndpoint;
+                //LOG.debug("[*] Attempting newly created EP with MyProxy Server " + myproxyServerStr);
+                //jSystem.out.println("[*] Attempting newly created EP with MyProxy Server " + myproxyServerStr);
+                //EndpointInfo info = goEndpointInfos.get(0);
+                //String srcEndpointInfo = info.getEPName() + "^^" + info.getHosts() +
+                //    "^^" + myproxyServerStr + "^^" + info.isGlobusConnect();
+                //goSourceEndpoint = Utils.createGlobusOnlineEndpointFromEndpointInfo(
+                 //   transfer, goUserName, srcEndpointInfo);
+                //createdSrcEndpoint = goSourceEndpoint;
 
-                LOG.debug("Activating source endpoint " + goSourceEndpoint);
-                System.out.println("Activating source endpoint " + goSourceEndpoint);
-                transfer.activateEndpoint(goSourceEndpoint, myproxyUserName, srcMyproxyUserPass);
+                //LOG.debug("Activating source endpoint " + goSourceEndpoint);
+                //System.out.println("Activating source endpoint " + goSourceEndpoint);
+                //transfer.activateEndpoint(goSourceEndpoint, myproxyUserName, srcMyproxyUserPass);
             }
             errorStatus.append("Source Endpoint activated properly!<br>");
             System.out.println("pSource Endpoint activated properly!<br>");

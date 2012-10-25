@@ -15,6 +15,12 @@
 	Please try logging in again<br><br>
         <c:out value="${GoFormView_ErrorMsg}" escapeXml="false"/>
         </c:when>
+	<c:when test='${GoFormView_Error=="crederror"}' >
+        <b>Error authenticating with myProxy server.</b><br><br>
+	Credential cache has expired.<p>
+	Please try logging in again<br><br>
+        <c:out value="${GoFormView_ErrorMsg}" escapeXml="false"/>
+        </c:when>
 	</c:choose>
 <form id="new_user_form" action="goauthview3" method="post" >
 	<h3 style="" id="form_title">Globus Online Transfer</h3>

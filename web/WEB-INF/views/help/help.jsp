@@ -22,9 +22,9 @@
 		</div>
 		
 		<div style='margin-bottom:15px'>
-		<a href='http://www.esgf.org/wiki/fe-user-guide' style='font-weight:bold'>ESGF Web Interface User Guide</a>
-		<br/>A complete guide to using the ESGF web portal user interface.
-		<br/><span id="general_question" style="cursor:pointer"><img src='<c:url value="/images/help/moin-email.png" />' style="margin-right: 5px;"/><a>Have a question about using the UI?</a></span>
+		<a href='http://www.esgf.org/wiki/ESGF_User_FAQ' style='font-weight:bold'>ESGF User FAQ</a>
+		<br/>Commonly asked questions from the ESGF user community.
+		<br/><span id="userFAQ_question" style="cursor:pointer"><img src='<c:url value="/images/help/moin-email.png" />' style="margin-right: 5px;"/><a>Have a question about the User FAQs?</a></span>
 		</div>
 		
 		<div style='margin-bottom:15px'>
@@ -40,16 +40,17 @@
 		</div>
 		
 		<div style='margin-bottom:15px'>
+		<a href='http://www.esgf.org/wiki/fe-user-guide' style='font-weight:bold'>ESGF Web Interface User Guide</a>
+		<br/>A complete guide to using the ESGF web portal user interface.
+		<br/><span id="general_question" style="cursor:pointer"><img src='<c:url value="/images/help/moin-email.png" />' style="margin-right: 5px;"/><a>Have a question about using the UI?</a></span>
+		</div>
+		
+		<div style='margin-bottom:15px'>
 		<a href='http://www.esgf.org/wiki/ESGF_Web_Search_User_Guide' style='font-weight:bold'>ESGF Search User Guide</a>
 		<br/>A short user guide to discovering data within ESGF.  The <a href='http://www.esgf.org/wiki/ESGF_Search_REST_API' style='font-weight:bold'>ESGF Search API documentation</a> is also available for developers interested in writing their own clients. 
 		<br/><span id="searchAPI_question" style="cursor:pointer"><img src='<c:url value="/images/help/moin-email.png" />' style="margin-right: 5px;"/><a>Have a question about the search API?</a></span>
 		</div>
 		
-		<div style='margin-bottom:15px'>
-		<a href='http://www.esgf.org/wiki/ESGF_User_FAQ' style='font-weight:bold'>ESGF User FAQ</a>
-		<br/>Commonly asked questions from the ESGF user community.
-		<br/><span id="userFAQ_question" style="cursor:pointer"><img src='<c:url value="/images/help/moin-email.png" />' style="margin-right: 5px;"/><a>Have a question about the User FAQs?</a></span>
-		</div>
 		
 		<div style='margin-bottom:15px'>
 		<a class="mailto" href="mailto:cmip5-helpdesk@stfc.ac.uk" style='font-weight:bold'>Post scientific questions related to CMIP5</a>

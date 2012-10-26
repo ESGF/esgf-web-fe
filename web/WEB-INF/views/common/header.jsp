@@ -38,7 +38,7 @@
            <ul>                    
                <li><a href="<c:url value='/'/> ">Home</a></li>
                <li id="search"><a href="<c:url value='/live'/>">Search</a></li>                
-               <li id="tools"> <a href="<c:url value='/tools/tools.htm'/>">Tools</a></li>  
+               <li id="tools"> <a href="<c:url value='/tools'/>">Tools</a></li>  
            	<c:choose>
            		<c:when test="${principal=='anonymousUser'}">
            			<!-- guest users -->
@@ -61,7 +61,9 @@
               		<li class="resetLocalStorage"><a href="<c:url value='/j_spring_security_logout'/>" >Logout</a></li>
                 	
               	</c:otherwise>
+              	    
           	</c:choose>                                      
+               <li id="help"> <a href="<c:url value='/help'/>">Help</a></li>  
            </ul>            
        </div>
    </div> 

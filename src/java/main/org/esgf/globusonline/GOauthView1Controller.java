@@ -61,7 +61,8 @@
  *
  * For any redirect trouble, please refers to ROOT/urlrewrite.xml
  *
- * @author Neill Miller (neillm@mcs.anl.gov), Feiyi Wang (fwang2@ornl.gov)
+ * @author Neill Miller (neillm@mcs.anl.gov), Feiyi Wang (fwang2@ornl.gov),
+ *	   Eric Blau (blau@mcs.anl.gov)
  *
  */
 package org.esgf.globusonline;
@@ -70,10 +71,16 @@ import java.net.URI;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.*;
-//import javax.servlet.http.Cookie;
-//import javax.servlet.http.HttpServletRequest;
 import javax.servlet.ServletException;
 
 
@@ -105,15 +112,7 @@ public class GOauthView1Controller {
 
 
     private final static Logger LOG = Logger.getLogger(GOFormView1Controller.class);
-
-    private final static String GOFORMVIEW_MODEL = "GoFormView_model";
-    private final static String GOFORMVIEW_DATASET_NAME = "GoFormView_Dataset_Name";
-    private final static String GOFORMVIEW_FILE_URLS = "GoFormView_File_Urls";
-    private final static String GOFORMVIEW_FILE_NAMES = "GoFormView_File_Names";
-    private final static String GOFORMVIEW_ERROR = "GoFormView_Error";
-    private final static String GOFORMVIEW_ERROR_MSG = "GoFormView_ErrorMsg";
-    private final static String GOFORMVIEW_MYPROXY_SERVER = "GoFormView_Myproxy_Server";
-    private final static String GOFORMVIEW_SRC_MYPROXY_USER = "GoFormView_SrcMyproxyUser";
+    private final static String GLOBUSONLINE_PROPERTIES_FILE = "/esg/config/globusonline.properties";
 
     public GOauthView1Controller() {
     }
@@ -135,11 +134,11 @@ public class GOauthView1Controller {
 
 		StringBuffer currentURL = request.getRequestURL();
 		String currentURI = request.getRequestURI();
-	        System.out.println("current URL is: " + currentURL);
-	        System.out.println("current URI is: " + currentURI);
-		System.out.println("index is: " + currentURL.lastIndexOf(currentURI));
+	        //System.out.println("current URL is: " + currentURL);
+	        //System.out.println("current URI is: " + currentURI);
+		//System.out.println("index is: " + currentURL.lastIndexOf(currentURI));
 		String BaseURL = currentURL.substring(0, currentURL.lastIndexOf(currentURI));
-		System.out.println("BaseURL string is: " + BaseURL );
+		//System.out.println("BaseURL string is: " + BaseURL );
 
 //Create a session if it doesn't already exist, so we can save state.
   	HttpSession session = request.getSession(true);
@@ -151,10 +150,10 @@ public class GOauthView1Controller {
 	        System.out.println("Auth1, session id is:" + session.getId());
 
 		//session.setAttribute("myproxyUserName", myproxyUserName);
-System.out.println("fileURLS are:" + file_urls );
-System.out.println("fileURLS are:" + (String) file_names[0] );
-System.out.println("filenamess are:" + file_urls );
-System.out.println("filenames are:" + file_names[0] );
+//System.out.println("fileURLS are:" + file_urls );
+//System.out.println("fileURLS are:" + (String) file_names[0] );
+//System.out.println("filenamess are:" + file_urls );
+//System.out.println("filenames are:" + file_names[0] );
 		session.setAttribute("fileUrls", file_urls);
 		session.setAttribute("fileNames", file_names);
 		session.setAttribute("datasetName", dataset_name);
@@ -175,28 +174,49 @@ System.out.println("filenames are:" + file_names[0] );
             }
 
             LOG.debug("Got User OpenID: " + openId); 
-        Map<String,Object> model = new HashMap<String,Object>();
-// Create the client
-                //GoauthClient cli = new GoauthClient("graph.api.test.globuscs.info", "test.globuscs.info","esgfgo", "good4ESGF");
-                GoauthClient cli = new GoauthClient("nexus.api.globusonline.org", "globusonline.org","esgfgo", "good4ESGF");
+        	Map<String,Object> model = new HashMap<String,Object>();
+		// Create the client
+		// TODO: get values for GoauthClient constructor from 
+		// config file instead of hardcoded.
+		Properties GOProperties = getGOProperties();
+		String PortalID = (String) GOProperties.get("GOesgfPortalID");
+		String PortalPass = (String) GOProperties.get("GOesgfPortalPassword");
+		
+		String loginUri = "";
+		try{
+                GoauthClient cli = new GoauthClient("nexus.api.globusonline.org", "globusonline.org",PortalID, PortalPass);
+                //GoauthClient cli = new GoauthClient("nexus.api.globusonline.org", "globusonline.org","esgfgo", "good4ESGF");
                 cli.setIgnoreCertErrors(true);
-String loginUri = "";
-               try{ 
 		// Redirect the user agent to the globusonline log in page
-		//loginUri = cli.getLoginUrl(response.encodeURL("https://ericblau.dyndns.org/esgf-web-fe/goauthview2"));
 		loginUri = cli.getLoginUrl(response.encodeURL(BaseURL + "/esgf-web-fe/goauthview2"));
-		//String loginUri = cli.getLoginUrl(response.encodeURL("https://ericblau.dyndns.org/esgf-web-fe/goauthview2"));
-		//response.sendRedirect(loginUri);
 
- 		//} catch (UnsupportedEncodingException e) {
- 		} catch (NexusClientException e) {
-                        // TODO Auto-generated catch block
+		} catch (NexusClientException e) {
+		  System.out.println("ERROR:  GOesgfPortalID and/or GOesgfPortalPassword probably wrong.");
                         e.printStackTrace();
-                }
+		}
         String myproxyServerStr = null;
 
-        //return new ModelAndView("goauthview1", model);
         return new ModelAndView("redirect:" + loginUri, model);
     }
-}
 
+private Properties getGOProperties()
+  {
+ 	Properties properties = new Properties();
+
+        String propertiesFile = GLOBUSONLINE_PROPERTIES_FILE;
+
+        try {
+            properties.load(new FileInputStream(propertiesFile));
+
+        } catch(FileNotFoundException fe) {
+
+            System.out.println("---------------------------------------------------------------------");
+            System.out.println("GlobusOnline Configuration file not found. Please create /esg/config/globusonline.properties and populate it with");
+	    System.out.println("GOesgfPortalID and GOesgfPortalPassword");
+            System.out.println("---------------------------------------------------------------------");
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+  return properties;
+  }
+}

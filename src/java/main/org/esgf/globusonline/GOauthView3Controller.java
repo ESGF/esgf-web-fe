@@ -61,7 +61,8 @@
  *
  * For any redirect trouble, please refers to ROOT/urlrewrite.xml
  *
- * @author Neill Miller (neillm@mcs.anl.gov), Feiyi Wang (fwang2@ornl.gov)
+ * @author Neill Miller (neillm@mcs.anl.gov), Feiyi Wang (fwang2@ornl.gov),
+ * 	   Eric Blau (blau@mcs.anl.gov)
  *
  */
 package org.esgf.globusonline;
@@ -70,7 +71,6 @@ import java.util.Vector;
 import java.util.HashMap;
 import java.util.Map;
 
-//import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.*;
 
 import org.openid4java.discovery.yadis.YadisException;
@@ -123,30 +123,22 @@ public class GOauthView3Controller {
     public ModelAndView doPost(final HttpServletRequest request)
     {
         /* get model params here */
-        //String dataset_name = request.getParameter("id");
-        //String userCertificate = request.getParameter("usercertificate");
         String userCertificate = null;
-        //String goUserName = request.getParameter("gousername");
 	String goUserName = null;
         String target = request.getParameter("path");
         String folder = request.getParameter("folder[0]");
-	System.out.println("path from Parameters is: " + target);
-	System.out.println("folder from Parameters is: " + folder);
+	
+	//System.out.println("path from Parameters is: " + target);
+	//System.out.println("folder from Parameters is: " + folder);
 
-        //String [] file_names = request.getParameterValues("child_id");
-        //String [] file_urls = request.getParameterValues("child_url");
-        //String[] endpointInfos = request.getParameterValues("endpointinfos");
         String[] endpointInfos = null;
         String endpoint = request.getParameter("endpoint");
         String createdSrcEndpoint = null, createdDestEndpoint = null;
 
-        //if this request comes via go form view 3, then obtain the request parameters for myproxy username
+        //if this request comes via go form view 3 we can then obtain the request parameters for myproxy username
         String srcMyproxyUserName = request.getParameter("srcmyproxyuser");
         String srcMyproxyUserPass = request.getParameter("myProxyUserPass");
         String myProxyServerStr = request.getParameter("srcmyproxyserver");
-        //String srcMyproxyUserName = null;
-        //String srcMyproxyUserPass = null;
-        //String myProxyServerStr = null;
 
 
         StringBuffer errorStatus = new StringBuffer("Steps leading up to the error are shown below:<br><br>");
@@ -167,10 +159,7 @@ public class GOauthView3Controller {
         if (session == null)
         {}else
         {
-        //grab the dataset name, file names and urls from the query string
-        //file_names = (String []) session.getAttribute("fileNames");
-                //LOG.info("filenames are:" + file_names.length);
-	if (!(endpoint == null)){ session.setAttribute("endpoint", endpoint);}else{
+	   if (!(endpoint == null)){ session.setAttribute("endpoint", endpoint);}else{
 	endpoint = (String) session.getAttribute("endpoint");
 	}
 	if (!(target == null)){ session.setAttribute("target", target);}else{
@@ -193,7 +182,7 @@ public class GOauthView3Controller {
                         //logger.error("Error getting access_token", e);
                         //throw new ValueErrorException();
 	}
-        //goAccessToken = (String) session.getAttribute("goaccesstoken");
+
 	myproxyServerStr = (String) session.getAttribute("myproxyServerStr");
 	myproxyUserName = (String) session.getAttribute("myproxyUserName");
 	if (!(myproxyUserName == null)){System.out.println("Auth3, myproxyUserName is:" +myproxyUserName);}
@@ -201,9 +190,6 @@ public class GOauthView3Controller {
         }
         String esg_user="";
         String esg_password="";
-	//String userCertificateFile="";
-
-
 
         try
         {
@@ -236,12 +222,7 @@ public class GOauthView3Controller {
 		//it should never come here...
 	    }
 	    else {
-		//place the dataset name, file names and urls into the model
-	//	model.put(GOFORMVIEW_MYPROXY_SERVER, myproxyServerStr);
-	//	model.put(GOFORMVIEW_SRC_MYPROXY_USER, myproxyUserName);
-	//	model.put(GOFORMVIEW_FILE_URLS, file_urls);
-	//	model.put(GOFORMVIEW_FILE_NAMES, file_names);
-	//	model.put(GOFORMVIEW_DATASET_NAME, dataset_name);
+		//do we need this at all?  I don't think so
 	    }
         }
         catch(YadisException ye)
@@ -272,11 +253,10 @@ public class GOauthView3Controller {
         }
 
 	if ((userCertificateFile == null || userCertificateFile.isEmpty())&&(srcMyproxyUserPass == null)){
-	System.out.println("Auth3, srcMyproxyUserPass is null");
+	//System.out.println("Auth3, srcMyproxyUserPass is null");
 	return new ModelAndView("goauthview3", model);}
-	//return new ModelAndView("goauth_login", model);}
 	else{
-	System.out.println("Auth3, srcMyproxyUserPass is:"); // +srcMyproxyUserPass);
+	//System.out.println("Auth3, srcMyproxyUserPass is:"); // +srcMyproxyUserPass);
 	}
         //LOG.debug("GOFORMView4Controller got Certificate " + userCertificate);
         //LOG.debug("GOFORMView4Controller got Target " + target);
@@ -307,7 +287,7 @@ public class GOauthView3Controller {
 
             userCertificateFile = un.getUserCertificateFile();
             LOG.debug("Retrieved user credential file: " + userCertificateFile);
-            System.out.println("Retrieved user credential file: " + userCertificateFile);
+         //   System.out.println("Retrieved user credential file: " + userCertificateFile);
 	    model.put(GOFORMVIEW_USER_CERTIFICATE, userCertificateFile);
 	   }   catch(Exception e)
             {
@@ -319,14 +299,13 @@ public class GOauthView3Controller {
 		return new ModelAndView("goauthview3", model);
 	    }
 	}
- System.out.println("Retrieved user credential file: " + goUserName + goAccessToken + userCertificateFile + CA_CERTIFICATE_FILE);
+ //System.out.println("Retrieved user credential file: " + goUserName + goAccessToken + userCertificateFile + CA_CERTIFICATE_FILE);
 
         JGOTransfer transfer = new JGOTransfer(goUserName, goAccessToken, CA_CERTIFICATE_FILE);
         transfer.setVerbose(true);
+	//If we need to set vs. testing:
 	//transfer.setBaseUrl("https://transfer.test.api.globusonline.org/v0.10");
-	//transfer.setBaseUrl("https://transfer.api.globusonline.org/v0.10");
 
-	System.out.println("we've instantiated transfer object");
         try
         {
             String newURL = null, goEP = null;
@@ -334,22 +313,17 @@ public class GOauthView3Controller {
             Vector<String> fileList = null;
             HashMap<String, String> sourceEpToGFTPMap = new HashMap<String, String>();
             HashMap<String, Vector<String>> sourceMap = new HashMap<String, Vector<String>>();
-System.out.println("about to initialize transfer object");
             transfer.initialize();
-System.out.println("just did initialize transfer object");
 
  	    LOG.debug("About to retrieve available endpoints");
             Vector<EndpointInfo> endpoints = transfer.listEndpoints();
             LOG.debug("We pulled down " + endpoints.size() + " endpoints");
-            System.out.println("We pulled down " + endpoints.size() + " endpoints");
+            //System.out.println("We pulled down " + endpoints.size() + " endpoints");
             errorStatus.append("Endpoints retrieved<br>");
-            //String[] endpointInfos = constructEndpointInfos(endpoints);
             endpointInfos = constructEndpointInfos(endpoints);
-System.out.println("constructed EndpointInfos ");
             // find the endpointInfo line that matches the endpoint the user selected
-            System.out.println("endpoint is still: " + endpoint);
             String endpointInfo = Utils.getEndpointInfoFromEndpointStr(endpoint, endpointInfos);
-            System.out.println("User selected endpoint that has the info: " + endpointInfo);
+            //System.out.println("User selected endpoint that has the info: " + endpointInfo);
             LOG.debug("User selected endpoint that has the info: " + endpointInfo);
 
             //boolean isGlobusConnect = endpointInfo.endsWith("true");
@@ -363,7 +337,7 @@ System.out.println("constructed EndpointInfos ");
            
             for(String curURL : file_urls)
             {
-	System.out.println("curURL is:" +curURL);
+	//System.out.println("curURL is:" +curURL);
                 pieces = curURL.split("//");
                 if ((pieces != null) && (pieces.length > 1))
                 {
@@ -376,7 +350,7 @@ System.out.println("constructed EndpointInfos ");
                     if (!sourceMap.containsKey(goEP))
                     {
                         LOG.debug("Mapped GridFTP Server " + pieces[1] + " to GO EP " + goEP);
-                        System.out.println("Mapped GridFTP Server " + pieces[1] + " to GO EP " + goEP);
+                        //System.out.println("Mapped GridFTP Server " + pieces[1] + " to GO EP " + goEP);
                         sourceEpToGFTPMap.put(goEP, pieces[1]);
                         sourceMap.put(goEP, new Vector<String>());
                     }
@@ -385,13 +359,13 @@ System.out.println("constructed EndpointInfos ");
                     newURL = "//" + pieces[2];
 
                     LOG.debug("Transformed " + curURL + " into " + newURL);
-                    System.out.println("Transformed " + curURL + " into " + newURL);
+                    //System.out.println("Transformed " + curURL + " into " + newURL);
                     fileList.add(newURL);
                 }
                 else
                 {
                     LOG.debug("Failed to split URL on //: " + curURL);
-                    System.out.println("Failed to split URL on //: " + curURL);
+                    //System.out.println("Failed to split URL on //: " + curURL);
                 }
             }
 
@@ -404,8 +378,8 @@ System.out.println("constructed EndpointInfos ");
             Map.Entry<String, String> gftpEntry = sourceEpToGFTPMap.entrySet().iterator().next();
             String gftpServer = gftpEntry.getValue();
 
-            System.out.println("Got GO Source EP: " + goSourceEndpoint);
-            System.out.println("Got GFTP Server: " + gftpServer);
+            //System.out.println("Got GO Source EP: " + goSourceEndpoint);
+            //System.out.println("Got GFTP Server: " + gftpServer);
             if (goSourceEndpoint != null)
             {
                 fileList = entry.getValue();
@@ -421,7 +395,7 @@ System.out.println("constructed EndpointInfos ");
             }
 
             LOG.debug("Using GO Source EP: " + goSourceEndpoint);
-            System.out.println("Using GO Source EP: " + goSourceEndpoint);
+            //System.out.println("Using GO Source EP: " + goSourceEndpoint);
 
             errorStatus.append("Source endpoint resolved as \"");
             errorStatus.append(goSourceEndpoint);
@@ -429,46 +403,28 @@ System.out.println("constructed EndpointInfos ");
 
             // first activate the source endpoint
             LOG.debug("Activating source endpoint " + goSourceEndpoint);
-            System.out.println("Activating source endpoint " + goSourceEndpoint);
+            //System.out.println("Activating source endpoint " + goSourceEndpoint);
             errorStatus.append("Attempting to activate Source Endpoint " + goSourceEndpoint + " ...<br>");
             try
             {
                 // first try the activation as-is, with the 'original' myproxy info
                 //transfer.activateEndpoint(goSourceEndpoint, myproxyUserName, srcMyproxyUserPass);
                 transfer.activateEndpoint(goSourceEndpoint, userCertificateFile);
-	System.out.println("activated w/ certificate, now what?");
-//activateEndpoint(String logicalEPName, String credential)
-//
+	//System.out.println("activated w/ certificate, now what?");
             }
             catch(Exception e)
             {
-	    System.out.println("activation w/ userCert failed because:" + e.toString());
-	    System.out.println("userCertificateFile:" +userCertificateFile);
+	    //System.out.println("activation w/ userCert failed because:" + e.toString());
+	    //System.out.println("userCertificateFile:" +userCertificateFile);
 		//I think this is the right spot to go back and ask for password if the cached credential fails
 		//
 	        model.put(GOFORMVIEW_ERROR, "crederror");
-	                   //model.put(GOFORMVIEW_ERROR_MSG, error);
-	        System.out.println("Failed to initialize transfer object to get user cert: " + e);
+	        //model.put(GOFORMVIEW_ERROR_MSG, error);
+	        //System.out.println("Failed to initialize transfer object to get user cert: " + e);
 	        return new ModelAndView("goauthview3", model);
-		   //                                                                        }
-		//
-                // if that failed, manually override myproxy server to match user's
-                // Create source endpoint matching first known Endpoint info
-                //LOG.debug("[*] Attempting newly created EP with MyProxy Server " + myproxyServerStr);
-                //jSystem.out.println("[*] Attempting newly created EP with MyProxy Server " + myproxyServerStr);
-                //EndpointInfo info = goEndpointInfos.get(0);
-                //String srcEndpointInfo = info.getEPName() + "^^" + info.getHosts() +
-                //    "^^" + myproxyServerStr + "^^" + info.isGlobusConnect();
-                //goSourceEndpoint = Utils.createGlobusOnlineEndpointFromEndpointInfo(
-                 //   transfer, goUserName, srcEndpointInfo);
-                //createdSrcEndpoint = goSourceEndpoint;
-
-                //LOG.debug("Activating source endpoint " + goSourceEndpoint);
-                //System.out.println("Activating source endpoint " + goSourceEndpoint);
-                //transfer.activateEndpoint(goSourceEndpoint, myproxyUserName, srcMyproxyUserPass);
             }
             errorStatus.append("Source Endpoint activated properly!<br>");
-            System.out.println("pSource Endpoint activated properly!<br>");
+            //System.out.println("pSource Endpoint activated properly!<br>");
 
             String[] endpointPieces = endpointInfo.split("\\^\\^");
             String destEPName = endpointPieces[0];
@@ -478,10 +434,10 @@ System.out.println("constructed EndpointInfos ");
             errorStatus.append("Attempting to start Globus Online Transfer ...<br>");
 
 	    String destpath = target + folder;
-	    System.out.println("destpath is" + destpath);
-	    System.out.println("goSourceEndpoint is" + goSourceEndpoint);
-	    System.out.println("destEPName is" + destEPName);
-	    System.out.println("fileList is" + fileList);
+	    //System.out.println("destpath is" + destpath);
+	    //System.out.println("goSourceEndpoint is" + goSourceEndpoint);
+	    //System.out.println("destEPName is" + destEPName);
+	    //System.out.println("fileList is" + fileList);
             String taskID = transfer.transfer(goSourceEndpoint, destEPName, fileList, destpath);
             if (taskID != null)
             {
@@ -525,8 +481,6 @@ System.out.println("constructed EndpointInfos ");
             }
             System.out.println("Attempted endpoint removal complete");
         }
-        //return new ModelAndView("goauthview3", model);
-        //return new ModelAndView("goformview4", model);
         //make sure we put the cert back in the model so we can reuse it
 	model.put(GOFORMVIEW_USER_CERTIFICATE, userCertificateFile);
         return new ModelAndView("goauth_transfer", model);

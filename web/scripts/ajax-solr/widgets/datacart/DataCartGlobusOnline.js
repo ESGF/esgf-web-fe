@@ -116,18 +116,25 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 	    	var ids   = new Array();
 	        var values = new Array();
 	    	
-	    	var file_id = $(this).parent().parent().parent().find('input').attr('value');
-    		var grid_url = $(this).parent().parent().find('span.gridftp').html();
-    		
+	    	//var file_id = $(this).parent().parent().parent().find('input').attr('value');
+    		//var grid_url = $(this).parent().parent().find('span.gridftp').html();
+    		var file_id = $(this).parent().find('span.file_id').html();
+    		var grid_url = $(this).parent().find('span.globus_url').html();
+	        
     		ids.push(file_id);
 	        values.push(grid_url);
     		
 	    	
-    		var globus_url = '/esgf-web-fe/goformview1';
+    		var globus_url = '/esgf-web-fe/goauthview1';
 	        
+    		var openid = $('span.footer_openid').html();
+    		var go_credential = ESGF.localStorage.get('GO_Credential',openid);
+    		//alert('openid: ' + openid + ' GO credential: ' + go_credential);
+    		
 	        //begin assembling queryString
-	        var queryString = 'type=create&id=' + selectedDocId;
+	        var queryString = 'type=create&id=' + selectedDocId + '&credential=' + go_credential;
 
+  		  
 
 	        //assemble the input fields with the query string
 	        for(var i=0;i<ids.length;i++) {
@@ -187,9 +194,23 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 				dataType: 'json',
 				success: function(data) {
 					
+					var fileCount = data.docs.doc['count'];
+					
+					
 					if(data.docs.doc.files.file != undefined) {
 					
 						var gridFTPFound = false;
+//if there is only one file in the data set
+//
+if(data.docs.doc.files.file.length == undefined) {
+
+   var file_arr = new Array();
+
+      file_arr.push(data.docs.doc.files.file);
+
+         data.docs.doc.files['file'] = file_arr;
+
+         }
 						
 						for(var i=0;i<data.docs.doc.files.file.length;i++){
 							var file = data.docs.doc.files.file[i];
@@ -207,10 +228,62 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 						}
 						
 						if(gridFTPFound) {
-							var globus_url = '/esgf-web-fe/goformview1';
-					        
+							
+							//first need to check if more files are included with this dataset
+							if(fileCount > 10) {
+								
+								queryStr = {"idStr" : idStr, 
+										"peerStr" : peerStr, 
+										"technotesStr" : technoteStr, 
+										"showAllStr" : ESGF.setting.showAllContents, 
+										"fqStr" : fqParamStr, 
+										"initialQuery" : "false",
+			        					"fileCounter" : ESGF.setting.fileCounter};
+								
+								
+								
+								$.ajax({
+									url: '/esgf-web-fe/solrfileproxy2/datacart',
+									global: false,
+									type: "GET",
+									async: false,
+									data: queryStr,
+									dataType: 'json',
+									success: function(data) {
+										for(var i=0;i<data.docs.doc.files.file.length;i++){
+											var file = data.docs.doc.files.file[i];
+											file_ids.push(file.fileId);
+											
+											for(var j=0;j<file.services.service.length;j++) {
+												if(file.services.service[j] == 'GridFTP') {
+													grid_urls.push(file.urls.url[j]);
+												}
+											}
+											
+										}
+
+										
+										
+									},
+									error: function(jqXHR, textStatus, errorThrown) {
+										alert('error: ' + errorThrown);
+									}
+								});
+								
+								
+								
+							}
+							
+							
+							
+							var globus_url = '/esgf-web-fe/goauthview1';
+
+                var openid = $('span.footer_openid').html();
+                var go_credential = ESGF.localStorage.get('GO_Credential',openid);
 					        //begin assembling queryString
-					        var queryString = 'type=create&id=' + selectedDocId;
+                                                var queryString = 'type=create&id=' + selectedDocId + '&credential=' + go_credential;
+					        
+					        //var queryString = 'type=create&id=' + selectedDocId;
 
 
 					        //assemble the input fields with the query string

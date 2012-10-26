@@ -23,8 +23,8 @@
 			<p>
 			<sec:authentication property="principal" var="principal"/>
 			<c:choose>
-		    	<c:when test="${principal=='anonymousUser'}">Guest User</c:when>
-		   		<c:otherwise>User: <c:out value="${principal.username}"/></c:otherwise>
+		    	<c:when test="${principal=='anonymousUser'}"><span class="footer_openid">Guest User</span></c:when>
+		   		<c:otherwise>User: <span class="footer_openid"><c:out value="${principal.username}"/></span></c:otherwise>
 		   	</c:choose>
 		   	<br /> <span style="font-style:italics;font-size:10px">ESGF P2P Version <spring:message code="esgf.footer.version" /> </span>
 		   	</p> 

@@ -128,12 +128,14 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     				 	 '<input type="radio" id="datacart_filtered" name="datacart_filter" value="filtered" /> ' +
     				 	 'Filter over search constraints ' +
     				 	 '</td>' +
+    				 	 /*
     				 	 '<td class="sfileCounter" style="width:220;display:none;padding:0px">Show initial <select class="fileCounter" name="fileC">' +
     				 	 '<option id="fileCounter5" value="5">5</option>'+
     					 '<option id="fileCounter10" value="10" selected="selected">10</option>' +
     					 '<option id="fileCounter25" value="25" >25</option>' +
     					 '<option id="fileCounter50" value="50">50</option>' +
     					 '</select> files</td>' + 
+    				 	 */
     				 	 '<td style="font-size:12px;padding:0px">' +
     				 	 '<a id="remove_all_short" style="cursor:pointer">Remove All</a>' +
     				 	 //'<input class="datacart-buttons" type="submit" value="Remove All" />'+
@@ -143,6 +145,12 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     				 	 //'<input class="datacart-buttons" type="submit" value="WGET All Selected" />'+
 
     				 	 '<a id="uber_script_short" style="cursor:pointer">WGET All Selected</a>' +
+    				 	 //'<input id="uber_script_short" type="submit" value="WGET All Selected" /> ' +
+    				 	 '</td>' +
+    				 	 '<td style="font-size:12px;padding:0px">' +
+    				 	 //'<input class="datacart-buttons" type="submit" value="WGET All Selected" />'+
+
+    				 	 '<a id="uber_GO_script_short" style="cursor:pointer">Globus Online All Selected</a>' +
     				 	 //'<input id="uber_script_short" type="submit" value="WGET All Selected" /> ' +
     				 	 '</td>' +
     				 	 '</tr>' +

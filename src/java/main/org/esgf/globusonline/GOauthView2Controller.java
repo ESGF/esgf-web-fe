@@ -133,8 +133,8 @@ public class GOauthView2Controller {
                 //LOG.info("filenames are:" + file_names.length);
         file_urls = (String []) session.getAttribute("fileUrls");
         String dataset_id = (String ) session.getAttribute("datasetName");
-	                System.out.println("Auth2, session id is:" + session.getId());
-	System.out.println("Your dataset name is: " + dataset_id);
+	//System.out.println("Auth2, session id is:" + session.getId());
+	//System.out.println("Your dataset name is: " + dataset_id);
 	BaseURL = (String) session.getAttribute("baseurl");
 	}
 	String esg_user="";
@@ -145,11 +145,10 @@ public class GOauthView2Controller {
  		Properties GOProperties = getGOProperties();
                 String PortalID = (String) GOProperties.getProperty("GOesgfPortalID");
                 String PortalPass = (String) GOProperties.getProperty("GOesgfPortalPassword");
-System.out.println("user: " + PortalID + " pass: " + PortalPass);
-// Create the client object so we can use its methods
-                //GoauthClient cli = new GoauthClient("nexus.api.globusonline.org", "globusonline.org", PortalID, PortalPass);
+
 	    try {
-                GoauthClient cli = new GoauthClient("nexus.api.globusonline.org", "globusonline.org","esgfgo","good4ESGF");
+		// Create the client object so we can use its methods
+                GoauthClient cli = new GoauthClient("nexus.api.globusonline.org", "globusonline.org", PortalID, PortalPass);
                 cli.setIgnoreCertErrors(true);
 
                         //System.out.println("Your auth_code is: " + auth_code);
@@ -160,7 +159,7 @@ System.out.println("user: " + PortalID + " pass: " + PortalPass);
 
                         // We can validate the token by using this call:
                         JSONObject tokenInfo = cli.validateAccessToken(accessToken);
-                       System.out.println("Token is valid.");
+                       System.out.println("AccessToken from Globus Online is valid.");
 
 			//Put the go Username into the session
 			session.setAttribute("gousername", tokenInfo.getString("user_name"));

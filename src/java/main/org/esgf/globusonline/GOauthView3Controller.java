@@ -170,8 +170,9 @@ public class GOauthView3Controller {
 	}
         file_urls = (String []) session.getAttribute("fileUrls");
         String dataset_id = (String ) session.getAttribute("datasetName");
-                        System.out.println("Auth3, session id is:" + session.getId());
-        System.out.println("Your dataset name is: " + dataset_id);
+        //System.out.println("Auth3, session id is:" + session.getId());
+        //System.out.println("Your dataset name is: " + dataset_id);
+        
         userCertificateFile = (String) session.getAttribute("usercertificatefile");
 	if (userCertificateFile.equals("undefined")){userCertificateFile = null;}
         goUserName = (String) session.getAttribute("gousername");
@@ -185,7 +186,7 @@ public class GOauthView3Controller {
 
 	myproxyServerStr = (String) session.getAttribute("myproxyServerStr");
 	myproxyUserName = (String) session.getAttribute("myproxyUserName");
-	if (!(myproxyUserName == null)){System.out.println("Auth3, myproxyUserName is:" +myproxyUserName);}
+	//if (!(myproxyUserName == null)){System.out.println("Auth3, myproxyUserName is:" +myproxyUserName);}
 	if (srcMyproxyUserPass == null){srcMyproxyUserPass = (String) session.getAttribute("MyproxyUserPass");}
         }
         String esg_user="";
@@ -266,13 +267,14 @@ public class GOauthView3Controller {
         //LOG.debug("GOFORMView4Controller got Src Myproxy Server " + myproxyServerStr);
 
         //System.out.println("GOFORMView4Controller got Certificate " + userCertificate);
-        System.out.println("GOFORMView4Controller got Target " + target);
-        System.out.println("GOFORMView4Controller got selected endpoint " + endpoint);
-        System.out.println("GOauthView3Controller got Src Myproxy User " + myproxyUserName);
-        System.out.println("GOauthView3Controller got go User " + goUserName);
-        System.out.println("GOFORMView4Controller got Src Myproxy Pass ******");
+        //System.out.println("GOFORMView4Controller got Target " + target);
+        //System.out.println("GOFORMView4Controller got selected endpoint " + endpoint);
+        //System.out.println("GOauthView3Controller got Src Myproxy User " + myproxyUserName);
+        //System.out.println("GOauthView3Controller got go User " + goUserName);
+        //System.out.println("GOFORMView4Controller got Src Myproxy Pass ******");
 // +srcMyproxyUserPass);
-        System.out.println("GOauthView4Controller got Src Myproxy Server " + myproxyServerStr);
+        //System.out.println("GOauthView4Controller got Src Myproxy Server " + myproxyServerStr);
+        
 	if ((srcMyproxyUserPass != null)||(userCertificateFile == null || userCertificateFile.isEmpty())){
 	    try{
             JGOTransfer un = new JGOTransfer(
@@ -407,16 +409,13 @@ public class GOauthView3Controller {
             errorStatus.append("Attempting to activate Source Endpoint " + goSourceEndpoint + " ...<br>");
             try
             {
-                // first try the activation as-is, with the 'original' myproxy info
-                //transfer.activateEndpoint(goSourceEndpoint, myproxyUserName, srcMyproxyUserPass);
+		// try the activation with the userCertificateFile
                 transfer.activateEndpoint(goSourceEndpoint, userCertificateFile);
-	//System.out.println("activated w/ certificate, now what?");
             }
             catch(Exception e)
             {
 	    //System.out.println("activation w/ userCert failed because:" + e.toString());
 	    //System.out.println("userCertificateFile:" +userCertificateFile);
-		//I think this is the right spot to go back and ask for password if the cached credential fails
 		//
 	        model.put(GOFORMVIEW_ERROR, "crederror");
 	        //model.put(GOFORMVIEW_ERROR_MSG, error);

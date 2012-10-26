@@ -130,7 +130,8 @@ public class GOauthView1Controller {
 	//String e;
 	//grab the credential string
 	String credential = request.getParameter("credential");
-	System.out.println("\n\n\n\t\tGO Credential " + credential + "\n\n\n");
+	System.out.println("Starting GlobusOnline workflow");
+	//System.out.println("\n\n\n\t\tGO Credential " + credential + "\n\n\n");
 
 		StringBuffer currentURL = request.getRequestURL();
 		String currentURI = request.getRequestURI();
@@ -147,13 +148,8 @@ public class GOauthView1Controller {
 	  session = request.getSession(true);
 	}
 
-	        System.out.println("Auth1, session id is:" + session.getId());
+	        //System.out.println("Auth1, session id is:" + session.getId());
 
-		//session.setAttribute("myproxyUserName", myproxyUserName);
-//System.out.println("fileURLS are:" + file_urls );
-//System.out.println("fileURLS are:" + (String) file_names[0] );
-//System.out.println("filenamess are:" + file_urls );
-//System.out.println("filenames are:" + file_names[0] );
 		session.setAttribute("fileUrls", file_urls);
 		session.setAttribute("fileNames", file_names);
 		session.setAttribute("datasetName", dataset_name);
@@ -176,8 +172,6 @@ public class GOauthView1Controller {
             LOG.debug("Got User OpenID: " + openId); 
         	Map<String,Object> model = new HashMap<String,Object>();
 		// Create the client
-		// TODO: get values for GoauthClient constructor from 
-		// config file instead of hardcoded.
 		Properties GOProperties = getGOProperties();
 		String PortalID = (String) GOProperties.get("GOesgfPortalID");
 		String PortalPass = (String) GOProperties.get("GOesgfPortalPassword");
@@ -185,8 +179,8 @@ public class GOauthView1Controller {
 		String loginUri = "";
 		try{
                 GoauthClient cli = new GoauthClient("nexus.api.globusonline.org", "globusonline.org",PortalID, PortalPass);
-                //GoauthClient cli = new GoauthClient("nexus.api.globusonline.org", "globusonline.org","esgfgo", "good4ESGF");
                 cli.setIgnoreCertErrors(true);
+
 		// Redirect the user agent to the globusonline log in page
 		loginUri = cli.getLoginUrl(response.encodeURL(BaseURL + "/esgf-web-fe/goauthview2"));
 

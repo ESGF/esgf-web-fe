@@ -99,15 +99,19 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		var hasAccess = false;
 		
 		for(var key in datacart) {
-			
-			if(datacart[key]['access'] != undefined) {
+			//if(datacart[key]['access'] != undefined) {
+			if(datacart[key]['access'] == undefined) {
+				hasAccess = true;
+			} else {
 				var access = new String(datacart[key]['access']);
 				if(access.search(accessType) > -1) {
 					hasAccess = true;
 				}
 			}
-			
+				
+			//} 
 		}
+		
 		
 		return hasAccess;
 	},
@@ -126,6 +130,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 				if(access.search(accessType) > -1) {
 					hasAccess = true;
 				}
+			} else {
+				hasAccess = true;
 			}
 		
 		}

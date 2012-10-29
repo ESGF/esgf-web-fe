@@ -236,7 +236,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                     		//alert('index defined');
 
                     		
-                    		
+                    		//var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : undefined};//evt.data.doc['access']};
                     		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : evt.data.doc['access']};
 
                     		//alert(datasetInfo['peer']);
@@ -245,11 +245,12 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                     	
                     	
                     	} else {
-                        
+
                     		//alert('peer should be undefined');
                     		
-                    		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : 'undefined' , 'xlink' : evt.data.doc['xlink'], 'access' : evt.data.doc['access']};
-                    		
+                    		//var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : 'undefined' , 'xlink' : evt.data.doc['xlink'], 'access' : undefined};//evt.data.doc['access']};
+                    		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : evt.data.doc['access']};
+
                     		//alert('xlink: ' + datasetInfo['xlink']);
                     		
 
@@ -265,11 +266,12 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                 	
                 		//add to the datacart localstorage
                     	if(evt.data.doc['index_node'] != undefined) {
-                        
+
                     		
                     		//alert('index defined');
                     		
-                    		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : 'undefined',  'access' : evt.data.doc['access'] };
+                    		//var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : 'undefined',  'access' : undefined};//evt.data.doc['access'] };
+                    		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : evt.data.doc['access']};
 
                     		//alert(datasetInfo['peer']);
                     		
@@ -278,7 +280,8 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                     	
                     	} else {
                     		//alert('peer should be undefined');
-                    		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : 'undefined' , 'xlink' : 'undefined',  'access' : evt.data.doc['access'] };
+                    		//var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : 'undefined' , 'xlink' : 'undefined',  'access' : undefined };//evt.data.doc['access'] };
+                    		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : evt.data.doc['access']};
 
                     		//alert(datasetInfo['peer']);
                     		

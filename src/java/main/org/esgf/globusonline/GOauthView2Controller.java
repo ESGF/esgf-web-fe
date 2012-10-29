@@ -61,7 +61,8 @@
  *
  * For any redirect trouble, please refers to ROOT/urlrewrite.xml
  *
- * @author Neill Miller (neillm@mcs.anl.gov), Feiyi Wang (fwang2@ornl.gov)
+ * @author Neill Miller (neillm@mcs.anl.gov), Feiyi Wang (fwang2@ornl.gov),
+ * 	   Eric Blau (blau@mcs.anl.gov)
  *
  */
 package org.esgf.globusonline;
@@ -71,10 +72,13 @@ import java.net.URLEncoder;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.servlet.http.*;
-//import javax.servlet.http.Cookie;
-//import javax.servlet.http.HttpServletRequest;
 import javax.servlet.ServletException;
 
 
@@ -106,15 +110,7 @@ public class GOauthView2Controller {
 
 
     private final static Logger LOG = Logger.getLogger(GOFormView1Controller.class);
-
-    private final static String GOFORMVIEW_MODEL = "GoFormView_model";
-    private final static String GOFORMVIEW_DATASET_NAME = "GoFormView_Dataset_Name";
-    private final static String GOFORMVIEW_FILE_URLS = "GoFormView_File_Urls";
-    private final static String GOFORMVIEW_FILE_NAMES = "GoFormView_File_Names";
-    private final static String GOFORMVIEW_ERROR = "GoFormView_Error";
-    private final static String GOFORMVIEW_ERROR_MSG = "GoFormView_ErrorMsg";
-    private final static String GOFORMVIEW_MYPROXY_SERVER = "GoFormView_Myproxy_Server";
-    private final static String GOFORMVIEW_SRC_MYPROXY_USER = "GoFormView_SrcMyproxyUser";
+    private final static String GLOBUSONLINE_PROPERTIES_FILE = "/esg/config/globusonline.properties";
 
     public GOauthView2Controller() {
     }
@@ -137,8 +133,8 @@ public class GOauthView2Controller {
                 //LOG.info("filenames are:" + file_names.length);
         file_urls = (String []) session.getAttribute("fileUrls");
         String dataset_id = (String ) session.getAttribute("datasetName");
-	                System.out.println("Auth2, session id is:" + session.getId());
-	System.out.println("Your dataset name is: " + dataset_id);
+	//System.out.println("Auth2, session id is:" + session.getId());
+	//System.out.println("Your dataset name is: " + dataset_id);
 	BaseURL = (String) session.getAttribute("baseurl");
 	}
 	String esg_user="";
@@ -146,22 +142,24 @@ public class GOauthView2Controller {
 
 
         Map<String,Object> model = new HashMap<String,Object>();
+ 		Properties GOProperties = getGOProperties();
+                String PortalID = (String) GOProperties.getProperty("GOesgfPortalID");
+                String PortalPass = (String) GOProperties.getProperty("GOesgfPortalPassword");
 
-// Create the client object so we can use its methods
-                //GoauthClient cli = new GoauthClient("graph.api.test.globuscs.info", "test.globuscs.info","esgfgo", "good4ESGF");
-                GoauthClient cli = new GoauthClient("nexus.api.globusonline.org", "globusonline.org","esgfgo", "good4ESGF");
+	    try {
+		// Create the client object so we can use its methods
+                GoauthClient cli = new GoauthClient("nexus.api.globusonline.org", "globusonline.org", PortalID, PortalPass);
                 cli.setIgnoreCertErrors(true);
 
-                        System.out.println("Your auth_code is: " + auth_code);
-	    try {
+                        //System.out.println("Your auth_code is: " + auth_code);
 		JSONObject accessTokenJSON = cli.exchangeAuthCodeForAccessToken(auth_code);
 		String accessToken = accessTokenJSON.getString("access_token");
 
-                        System.out.println("Your access token is: " + accessToken);
+                        //System.out.println("Your access token is: " + accessToken);
 
                         // We can validate the token by using this call:
                         JSONObject tokenInfo = cli.validateAccessToken(accessToken);
-                       System.out.println("Token is valid.");
+                       System.out.println("AccessToken from Globus Online is valid.");
 
 			//Put the go Username into the session
 			session.setAttribute("gousername", tokenInfo.getString("user_name"));
@@ -169,59 +167,33 @@ public class GOauthView2Controller {
                 } catch (JSONException e) {
                         //logger.error("Error getting access_token", e);
                         //throw new ValueErrorException();
-		} catch (org.globusonline.nexus.exception.NexusClientException e){}
+		} catch (org.globusonline.nexus.exception.NexusClientException e){
+			System.out.println("Something wrong with GOesgfPortalID or Password, check your properties file");
+		 e.printStackTrace();
 
-                        // Now that we have exchanged the access token, we can do cool things
-                        // like get user info
-                        //JSONObject userInfo = cli.getUser(tokenInfo.getString("user_name"));
-//                        System.out.println("Your email is: " + userInfo.getString("email"));
+		}
 
-                        // We can also get client only credentials
-                        //accessTokenJSON = cli.getClientOnlyAccessToken();
-                        //accessToken = accessTokenJSON.getString("access_token");
-                        //System.out.println("Client only access token: " + accessToken);
- 		//} catch (UnsupportedEncodingException e) {
-                        // TODO Auto-generated catch block
-                 //       e.printStackTrace();
-                //} catch (IOException e) {
-                        // TODO Auto-generated catch block
-                 //       e.printStackTrace();
-                //} catch (NexusClientException e) {
-                        // TODO Auto-generated catch block
-                 //       e.printStackTrace();
-                //} catch (JSONException e) {
-                        // TODO Auto-generated catch block
-                 //       e.printStackTrace();
-                //}
-        String myproxyServerStr = null;
-                LOG.debug("Placing all info in the model");
-                //model.put(GOFORMVIEW_FILE_URLS, file_urls);
-                //model.put(GOFORMVIEW_FILE_NAMES, file_names);
-                //model.put(GOFORMVIEW_DATASET_NAME, dataset_id);
-                //model.put(GOFORMVIEW_USER_CERTIFICATE, userCertificateFile);
-                //model.put(GOFORMVIEW_GO_USERNAME, goUserName);
-                //model.put(GOFORMVIEW_SRC_MYPROXY_USER, myProxyUserName);
-                //model.put(GOFORMVIEW_SRC_MYPROXY_PASS, myProxyUserPass);
-                //model.put(GOFORMVIEW_MYPROXY_SERVER, myProxyServerStr);
-
-                //String[] endPointNames = getDestinationEndpointNames(endpoints);
-                //String[] endPointInfos = constructEndpointInfos(endpoints);
-
-                //LOG.debug("Retrieved an array of " + endPointNames.length + " Endpoint names");
-                //LOG.debug("Retrieved an array of " + endPointInfos.length + " EndpointInfo strings");
-
-                //model.put(GOFORMVIEW_ENDPOINTS, endPointNames);
-                //model.put(GOFORMVIEW_ENDPOINTINFOS, endPointInfos);
-
-                LOG.debug("All info placed in the model!");
-
-        //return new ModelAndView("goauthview2", model);
-        //return new ModelAndView("redirect:https://test.globuscs.info/xfer/SelectDestination" + "?method=post&action=" +URLEncoder.encode(response.encodeRedirectURL("http://ericblau.dyndns.org/esgf-web-fe/goauthview3"),"UTF-8"), model);
-        //return new ModelAndView("redirect:https://test.globuscs.info/xfer/SelectDestination" + "?method=post&action=" +URLEncoder.encode(response.encodeRedirectURL(BaseURL + "/esgf-web-fe/goauthview3"),"UTF-8"), model);
-        //return new ModelAndView("redirect:https://globusonline.org/xfer/SelectDestination" + "?method=post&action=" +URLEncoder.encode(response.encodeRedirectURL(BaseURL + "/esgf-web-fe/goauthview3"),"UTF-8"), model);
         return new ModelAndView("redirect:https://globusonline.org/xfer/SelectDestination" + "?method=post&ep=GC&title=Select Destination&message=Your Globus Connect endpoint has been selected by default. If you would prefer to transfer to a different endpoint, you can select it below.&button=Start Transfer&transferoptions=LBECG&action=" +URLEncoder.encode(response.encodeRedirectURL(BaseURL + "/esgf-web-fe/goauthview3"),"UTF-8"), model);
-//response.encodeURL("https://ericblau.dyndns.org/esgf-web-fe/goauthview2"
-//https://www.globusonline.org/xfer/SelectDestination?goUserName=blau&myProxyUserPass=good4ESGF&action=%2Fesgf-web-fe%2Fgoview4&id=pcmdi.UCArgonne_Devel_Test_Portal.Test_Portal.test.mytest.v1%7Cec2-50-19-138-138.compute-1.amazonaws.com&GoFormView_SrcMyproxyUser=blau&GoFormView_Myproxy_Server=pcmdi9.llnl.gov%3A7512&child_id=on&child_url=null
     }
+
+  private Properties getGOProperties()
+  {
+        Properties properties = new Properties();
+
+        String propertiesFile =  GLOBUSONLINE_PROPERTIES_FILE;
+
+        try {
+            properties.load(new FileInputStream(propertiesFile));
+        } catch(FileNotFoundException fe) {
+
+	    System.out.println("---------------------------------------------------------------------");
+            System.out.println("GlobusOnline Configuration file not found. Please create /esg/config/globusonline.properties and populate it with");
+            System.out.println("GOesgfPortalID and GOesgfPortalPassword");
+            System.out.println("---------------------------------------------------------------------");
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+  return properties;
+  }
 }
 

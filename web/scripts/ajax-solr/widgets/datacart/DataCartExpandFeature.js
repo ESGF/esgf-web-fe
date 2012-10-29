@@ -283,7 +283,8 @@
 												appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
 												                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
 												                 '<span class="globus_url" style="display:none">' + url + '</span>' +
-												                 '<a style="cursor:pointer" class="go_individual_gridftp_short">' + service + '</a> </span>';
+												                 '<a style="cursor:pointer" class="go_individual_gridftp_short">' + 'Globus Online' + '</a> </span>';
+												                 //'<a style="cursor:pointer" class="go_individual_gridftp_short">' + service + '</a> </span>';
 												
 											}
 										} else {

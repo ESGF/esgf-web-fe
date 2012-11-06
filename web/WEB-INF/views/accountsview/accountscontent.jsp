@@ -117,11 +117,31 @@ p {
 
     <fieldset style="background: #F5F5E0">
       <legend>Groups</legend>
-      <p> list all groups user belongs to here </p>
+        <table id="groups_admin_table_id">
+          <thead><tr><th>Group name</th><th>Role</th><th></th></tr></thead>
+          <tbody>
+          <tr><td>CMIP5 Research</td><td>User</td>
+            <td>
+              <input id='research' type="submit" value="Register" class="button" onclick="javascript:register('research')"/>
+            </td>
+          </tr>
+          <tr><td>CMIP5 Commercial</td><td>User</td>
+            <td>
+              <input id='commercial' type="submit" value="Register" class="button" onclick="javascript:register('commercial')"/>
+            </td>
+          </tr>
+          </tbody>
+        </table>
     </fieldset>
 	</div>
 </div>
  
+<script language="javascript"> 
+  function register(type){
+  alert(type);
+  }
+</script>  
+
 <script>
 
 $(document).ready(function(){
@@ -182,4 +202,3 @@ $(document).ready(function(){
 	
 });
 </script>
-	    						

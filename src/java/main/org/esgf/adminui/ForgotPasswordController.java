@@ -103,19 +103,40 @@ public class ForgotPasswordController {
             error = true;
         }
 
-        // check openid has same email
-        
-        // create new password for openid
-        
-        // method call for changing a users password
-
-        //email user their new password
+        // get userInfo for username
+        LOG.debug("ForgotPasswordController -->" + openid);
+        try {
+            UserInfo userInfo = myUserInfoDAO.getUserById(openid);
+            // create new password for openid
+            String password = "password";
+            // method call for changing a users password
+            if (myUserInfoDAO.setPassword(userInfo, password)) {
+              error = false;
+            } else {
+              error = true;
+              LOG.debug("Error happened in changing the user password.");
+            }
+        } catch(Exception e) {
+            error = true;
+            LOG.debug("Error in getGroupsFromUser");
+        }
         
         String xmlOutput = "<EditOutput>";
-        xmlOutput += "<status>success</status>";
-        xmlOutput += "<comment>" + "</comment>";
-        xmlOutput += "</EditOutput>";
-        
+        if(error){
+          //password did not set
+          xmlOutput += "<status>fail</status>";
+          xmlOutput += "<comment>" + error + "</comment>";
+          xmlOutput += "</EditOutput>";
+
+        } else {
+          //password has reset 
+          //email user their new password
+          xmlOutput += "<status>success</status>";
+          xmlOutput += "<comment>" + "</comment>";
+          xmlOutput += "</EditOutput>";
+
+        }
+                
         JSONObject jo = XML.toJSONObject(xmlOutput);
 
         String jsonContent = jo.toString();        

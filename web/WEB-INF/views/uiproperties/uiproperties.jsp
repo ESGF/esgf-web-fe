@@ -198,26 +198,29 @@
 		$('input#update_facets').click(function() {
 
 			var table = $(this).parent().find('#t1');
-			
+
 			var short_names = new Array();
+			var long_names = new Array();
+			var descriptions = new Array();
+			
 			table.find('td.short_names').each( function(index) {
 				var shortName = $(this).find('input').val();
 				short_names.push(shortName);
 			});
 			
 			table.find('td.long_names').each( function(index) {
-				var shortName = $(this).find('input').val();
-				short_names.push(shortName);
+				var longName = $(this).find('input').val();
+				long_names.push(longName);
 			});
 			
 			table.find('td.descriptions').each( function(index) {
-				var shortName = $(this).find('input').val();
-				short_names.push(shortName);
+				var description = $(this).find('input').val();
+				descriptions.push(description);
 			});
 			
 			alert('short_names: ' + short_names);
 			
-			var queryStr = {'short_names' : short_names};
+			var queryStr = {'short_names' : short_names, 'long_names' : long_names, 'descriptions' : descriptions};
 			
 			$.ajax({
 				data: queryStr, 

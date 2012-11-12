@@ -138,33 +138,33 @@
             	<c:set var="j" value="0"/>
 
  
-		        <%-- <c:forEach var="user" items="${Facet_Short_Names}"> --%>
+		        <c:forEach var="user" items="${Help_Subject_Ids}"> 
 					 <tr  
 					 	 style="">  
 					 	<td style="border-left: 1px solid black;">
                         	<img class="drag-handle" src="images/drag.png" alt="click and drag to rearrange" /> 
                         </td>
                     	<td class="subjects">
-                        	<input class="drag-handle" id="tf1" style="width:100px" type="text" value="dd" /> 
+                        	<input class="drag-handle" id="tf1" style="width:100px" type="text" value="${Help_Subject_Ids[j]}" /> 
                     	</td>
                     	<td class="header_names">
-                        	<input class="drag-handle" id="tf2" style="width:100px" type="text" value="ff" /> 
+                        	<input class="drag-handle" id="tf2" style="width:100px" type="text" value="${Help_Header_Names[j]}" /> 
                     	</td>
                     	<td class="header_links">
-                        	<input class="drag-handle" id="tf3" style="width:100px" type="text" value="gg" /> 
+                        	<input class="drag-handle" id="tf3" style="width:100px" type="text" value="${Help_Header_Links[j]}" /> 
                     	</td>
                     	<td class="emails">
-                        	<input class="drag-handle" id="tf4" style="width:100px" type="text" value="hh" /> 
+                        	<input class="drag-handle" id="tf4" style="width:100px" type="text" value="${Help_Emails[j]}" /> 
                     	</td>
                     	<td class="descriptions">
-                        	<input class="drag-handle" id="tf5" style="width:100px" type="text" value="ii" /> 
+                        	<input class="drag-handle" id="tf5" style="width:100px" type="text" value="${Help_Descriptions[j]}" /> 
                     	</td>
                     	<td  style="border-right: 1px solid black;" style="width:50px">
                        		 <img class="row-remover" src="images/deleterow.gif" alt="Remove Row" />
                     	</td>
 		            </tr> 
-				<%--	<c:set var="j" value="${j+1}"/>
-				</c:forEach> --%>
+					<c:set var="j" value="${j+1}"/>
+				</c:forEach> 
             	
             	
                 <tr id="add-template">
@@ -172,19 +172,19 @@
                         	<img class="drag-handle" src="images/drag.png" alt="click and drag to rearrange" /> 
                         </td>
                     	<td class="subjects">
-                        	<input class="drag-handle" id="tf1" style="width:100px" type="text" value="dd" /> 
+                        	<input class="drag-handle" id="tf1" style="width:100px" type="text" value="" /> 
                     	</td>
                     	<td class="header_names">
-                        	<input class="drag-handle" id="tf2" style="width:100px" type="text" value="ff" /> 
+                        	<input class="drag-handle" id="tf2" style="width:100px" type="text" value="" /> 
                     	</td>
                     	<td class="header_links">
-                        	<input class="drag-handle" id="tf3" style="width:100px" type="text" value="gg" /> 
+                        	<input class="drag-handle" id="tf3" style="width:100px" type="text" value="" /> 
                     	</td>
                     	<td class="emails">
-                        	<input class="drag-handle" id="tf4" style="width:100px" type="text" value="hh" /> 
+                        	<input class="drag-handle" id="tf4" style="width:100px" type="text" value="" /> 
                     	</td>
                     	<td class="descriptions">
-                        	<input class="drag-handle" id="tf5" style="width:100px" type="text" value="ii" /> 
+                        	<input class="drag-handle" id="tf5" style="width:100px" type="text" value="" /> 
                     	</td>
                     	<td style="width:50px;border-right: 1px solid black;" >
                        		 <img class="row-remover" src="images/deleterow.gif" alt="Remove Row" />
@@ -208,7 +208,6 @@
 		
      	<input style="" id="add-row" class="" type="submit" value="Add New Facet">
      	<input id="update_facets" style="" class="" type="submit" value="Update Facet Sidebar">
-     	<input id="reset_facets"  style="" class="" type="submit" value="Reset">
      	<input id="restore_facets"  style="margin-bottom:20px" class="" type="submit" value="Restore Default Facets">
      	<%--  <input style="" class="" type="submit" value="Preview"> --%>
 		</div>
@@ -236,7 +235,26 @@
 		
 		$('input#restore_facets').click(function() {
 
-			$('div#restore_disclaimer').show();
+			var retVal = confirm("Restoring default help page will undo any changes you have done previously.  Do you want to continue Restore?");
+			if( retVal == true ){
+	          $.ajax({
+			    url: "helpproperties/restore",
+			    type: "POST",
+			    //async: false,
+			    success: function() {
+			      location.href=window.location;
+			    },
+			    error: function(request, status, error) {
+			      alert(request.responseText);
+			      alert('error in updating facets');				
+			    }
+			  });
+		   	}else{
+			    alert("Restoration cancelled");
+				return false;
+			}
+			
+			
 			
 			
 		}),
@@ -244,42 +262,64 @@
 		
 		$('input#update_facets').click(function() {
 
+			var help_subject_ids = new Array();
+			var help_header_names = new Array();
+			var help_header_links = new Array();
+			var help_emails = new Array();
+			var help_descriptions = new Array();
+
+			
+			
 			var table = $(this).parent().find('#t1');
 
-			var short_names = new Array();
-			var long_names = new Array();
-			var descriptions = new Array();
-			
-			table.find('td.short_names').each( function(index) {
-				var shortName = $(this).find('input').val();
-				short_names.push(shortName);
+			table.find('td.subjects').each( function(index) {
+				var subject = $(this).find('input').val();
+				help_subject_ids.push(subject);
 			});
-			
-			table.find('td.long_names').each( function(index) {
-				var longName = $(this).find('input').val();
-				long_names.push(longName);
+
+			table.find('td.header_names').each( function(index) {
+				var header_name = $(this).find('input').val();
+				help_header_names.push(header_name);
 			});
-			
+
+			table.find('td.header_links').each( function(index) {
+				var header_link = $(this).find('input').val();
+				help_header_links.push(header_link);
+			});
+
+			table.find('td.emails').each( function(index) {
+				var email = $(this).find('input').val();
+				help_emails.push(email);
+			});
+
 			table.find('td.descriptions').each( function(index) {
 				var description = $(this).find('input').val();
-				descriptions.push(description);
+				help_descriptions.push(description);
 			});
 			
 			
-			var queryStr = {'short_names' : short_names, 'long_names' : long_names, 'descriptions' : descriptions};
 			
+			
+			var queryStr = {'help_subject_ids' : help_subject_ids, 
+							'help_header_names' : help_header_names,
+							'help_header_links' : help_header_links,
+							'help_emails' : help_emails,
+							'help_descriptions' : help_descriptions};
+			
+			alert('quer: ' + queryStr.help_subject_ids);
 			
 			
 			$.ajax({
 				data: queryStr, 
-			    url: "facetproperties/update",
+			    url: "helpproperties/update",
 			    type: "POST",
 			    //async: false,
 			    success: function() {
 			    	alert('success');
 					$('div.update_disclaimer').show();
 			    },
-				error: function() {
+				error: function(request, status, error) {
+			        alert(request.responseText);
 					alert('error in updating facets');
 				}
 

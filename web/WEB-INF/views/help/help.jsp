@@ -14,6 +14,7 @@
 		<p/>
 		
 		<h1 style="margin-bottom:15px">ESGF Help</h1>
+		
 		<div style="margin-bottom:15px">
 		Welcome to the ESGF User Help Page!  
 		We have listed several resources below to improve the User experience.
@@ -21,72 +22,24 @@
 		For general questions or feedback, please email us at <a href="mailto:esgf-user@lists.llnl.gov?subject=ESGF General Question">esgf-user@lists.llnl.gov</a>.
 		</div>
 		
+		<c:set var="j" value="0"/>
+		
+		<c:forEach var="user" items="${Help_Subject_Ids}"> 
+				
 		<div style='margin-bottom:15px'>
-		<a href='http://www.esgf.org/wiki/ESGF_User_FAQ' style='font-weight:bold'>ESGF User FAQ</a>
-		<br/>Commonly asked questions from the ESGF user community.
-		<br/><span id="userFAQ_question" style="cursor:pointer"><img src='<c:url value="/images/help/moin-email.png" />' style="margin-right: 5px;"/><a>Have a question about the User FAQs?</a></span>
+		<a href='${Help_Header_Links[j]}' style='font-weight:bold' target="_blank">${Help_Header_Names[j]}</a>
+		<br/>${Help_Descriptions[j]}		
+		<br/>
+		<img src='<c:url value="/images/help/moin-email.png" />' style="margin-right: 5px;"/><a href="mailto:esgf-user@lists.llnl.gov?subject=${Help_Emails[j]}">Have a question about the ${Help_Header_Names[j]}?</a>
 		</div>
-		
-		<div style='margin-bottom:15px'>
-		<a href='http://www.esgf.org/wiki/ESGF_Data_Download'  style='font-weight:bold'>User registration at ESGF</a>
-		<br/>A quick tutorial on how to register as a user and join scientific working groups.
-		<br/><span id="registration_question" style="cursor:pointer"><img src='<c:url value="/images/help/moin-email.png" />' style="margin-right: 5px;"/><a>Have a question about registration?</a></span>
-		</div>
-		
-		<div style='margin-bottom:15px'>
-		<a href='http://www.esgf.org/wiki/ESGF_Data_Download'  style='font-weight:bold'>Data download from ESGF</a>
-		<br/>A description of how to extract data files from the ESGF portal.
-		<br/><span id="download_question" style="cursor:pointer"><img src='<c:url value="/images/help/moin-email.png" />' style="margin-right: 5px;"/><a>Have a question about downloading data?</a></span>
-		</div>
-		
-		<div style='margin-bottom:15px'>
-		<a href='http://www.esgf.org/wiki/fe-user-guide' style='font-weight:bold'>ESGF Web Interface User Guide</a>
-		<br/>A complete guide to using the ESGF web portal user interface.
-		<br/><span id="general_question" style="cursor:pointer"><img src='<c:url value="/images/help/moin-email.png" />' style="margin-right: 5px;"/><a>Have a question about using the UI?</a></span>
-		</div>
-		
-		<div style='margin-bottom:15px'>
-		<a href='http://www.esgf.org/wiki/ESGF_Web_Search_User_Guide' style='font-weight:bold'>ESGF Search User Guide</a>
-		<br/>A short user guide to discovering data within ESGF.  The <a href='http://www.esgf.org/wiki/ESGF_Search_REST_API' style='font-weight:bold'>ESGF Search API documentation</a> is also available for developers interested in writing their own clients. 
-		<br/><span id="searchAPI_question" style="cursor:pointer"><img src='<c:url value="/images/help/moin-email.png" />' style="margin-right: 5px;"/><a>Have a question about the search API?</a></span>
+			<c:set var="j" value="${j+1}"/>
+		</c:forEach> 
 		</div>
 		
 		
-		<div style='margin-bottom:15px'>
-		<a class="mailto" href="mailto:cmip5-helpdesk@stfc.ac.uk" style='font-weight:bold'>Post scientific questions related to CMIP5</a>
-		<br/>Send any CMIP5-related questions here.
-		<br/><span id="CMIP5_question" style="cursor:pointer"><img src='<c:url value="/images/help/moin-email.png" />' style="margin-right: 5px;"/><a>Have a question related to CMIP5?</a></span>
-		</div>
-		
-		
-		</div>
 		
 		<script type="text/javascript">
 		$(function(){
-			$('span#general_question').click(function() {
-				location.href="mailto:esgf-user@lists.llnl.gov?subject=ESGF Web User Interface Question";
-			});
-
-			$('span#registration_question').click(function() {
-				location.href="mailto:esgf-user@lists.llnl.gov?subject=Registration Question";
-			});
-			
-			$('span#download_question').click(function() {
-				location.href="mailto:esgf-user@lists.llnl.gov?subject=Download Question";
-			});
-			
-			$('span#searchAPI_question').click(function() {
-				location.href="mailto:esgf-user@lists.llnl.gov?subject=Search API Question";
-			});	
-			
-			$('span#userFAQ_question').click(function() {
-				location.href="mailto:esgf-user@lists.llnl.gov?subject=User FAQ Question";
-			});
-			
-			$('span#CMIP5_question').click(function() {
-				location.href="mailto:cmip5-helpdesk@stfc.ac.uk?subject=CMIP5 Question";
-			});
-			
 
 			
 			

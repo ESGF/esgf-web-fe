@@ -256,14 +256,15 @@
 			
 			$.ajax({
 				data: queryStr, 
-			    url: "facetproperties/update",
+			    url: "facetpropertie/update",
 			    type: "POST",
 			    //async: false,
 			    success: function() {
 			    	alert('success');
 					$('div.update_disclaimer').show();
 			    },
-				error: function() {
+				error: function(request, status, error) {
+			        alert(request.responseText);
 					alert('error in updating facets');
 				}
 

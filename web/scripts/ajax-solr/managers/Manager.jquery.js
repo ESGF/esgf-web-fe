@@ -100,10 +100,12 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           
           self.loadCheckboxConstraints();
           
+          alert('queryString1: ' + queryString);
           
           //assemble the search constraints
           queryString += self.loadSearchConstraints();
-          
+
+          alert('queryString2: ' + queryString);
           
           //for local development
           //queryString += '&shards=dev.esg.anl.gov:8983/solr,localhost:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,pcmdi9.llnl.gov:8983/solr';
@@ -117,6 +119,9 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           
           var revisedQueryString = self.rewriteTextQuery(queryString);
 
+
+          alert('queryString3: ' + queryString);
+          
           LOG.debug("Manager's querystring: " + revisedQueryString);
 
   			var selected = $( "#myTabs" ).tabs( "option", "selected" );
@@ -373,16 +378,16 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
         for(var key in searchStringMap) {
         	
         	
-        	if(key.search('model:') > -1) {
-        		modelFound = 'true';
-        		oldModelKey = key;
-        	} else {
+        	//if(key.search('model:') > -1) {
+        	//	modelFound = 'true';
+        	//	oldModelKey = key;
+        	//} else {
         		searchConstraints += searchStringMap[key] +'&';
-        	}
+        	//}
         	
       	  
         }
-        
+        /*
         //check the params
     	var modelNameParam = $('span#modelName').html();
     	
@@ -409,7 +414,9 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
         	//ESGF.localStorage.remove('esgf_queryString',key);
 	      	
         	
-        } else {
+        } else
+        	
+        {
         	
         	//alert('modelNameParam: ' + modelNameParam);
         	
@@ -423,7 +430,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 	            searchConstraints += modelValue +'&';
 	      	}
         }
-        
+        */
         //searchConstraints += searchStringMap[key] +'&';
     	
         return searchConstraints;

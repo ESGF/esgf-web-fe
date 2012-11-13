@@ -56,7 +56,9 @@ package org.esgf.web;
  * @author Feiyi Wang (fwang2@ornl.gov)
  *
  */
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -77,6 +79,7 @@ public class LiveSearchController {
 
     private final static String MODEL_NAME = "Model_Name";
     private final static String DATACART_OPEN = "Datacart_Open";
+    private final static String FACET_PARAM_LIST = "Facet_Params";
     
     @RequestMapping(method=RequestMethod.GET)
     public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
@@ -96,11 +99,37 @@ public class LiveSearchController {
         } 
         
 
-        model.put(MODEL_NAME,modelName);
+        //model.put(MODEL_NAME,modelName);
         model.put(DATACART_OPEN,datacartOpen);
         
+
+        //List<String> facetParams = getFacetParamList(request);
+        //model.put(FACET_PARAM_LIST, facetParams);
+        
+        
+        /*
+        String [] facet_params = (String []) facetParams.toArray(new String[0]);
+        
+        System.out.println("facet_params len: " + facet_params.length);
+        */
         LOG.debug("Enter index with modelName " + modelName + " and datacart open " + datacartOpen);
         
         return new ModelAndView("live-search",model);
     }
+    
+    private static List<String> getFacetParamList(HttpServletRequest request) {
+        
+        List<String> facetParams = new ArrayList<String>();
+        
+        for(Object key : request.getParameterMap().keySet()) {
+            String keyStr = (String)key;
+            
+            System.out.println("Param: " + keyStr);
+        }
+        
+        
+        return facetParams;
+        
+    }
+    
 }

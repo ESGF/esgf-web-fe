@@ -82,14 +82,10 @@
                <div align="center">Forgot Password? Click <a href="javascript:roggle()" id="pass">here</a>.</div>
                   <div align="center" id="password" style="display:none">
                     <div class="panel">
-                      <p>Please provide the email associated with this openid. You will recieve a temporary password by email. Please remember to change your password the next time you login.</p>
+                      <p>Please provide your openid. You will recieve a temporary password by email. Please remember to change your password the next time you login.</p>
                       <table><tr>
-                          <td><b>Openid:</b><font size="1">Please enter full Openid</font></td>
+                          <td><b>Openid:</b></td>
                           <td> <input type="text" id="pwdopenid" name="pwdopenid" size="60" style="width:100%" /></td>
-                          <td> &nbsp; </td>
-                          </tr><tr>
-                          <td><b>Email:</b></td>
-                          <td> <input type="text" id="pwdemail" name="pwdemail" size="60" style="width:100%" /></td>
                           <td><input type="submit" value="Submit" class="button" onclick="javascript:findpassword()"/></td>
                     </tr></table>
                     </div>
@@ -182,10 +178,8 @@
                     function findpassword() {
                       $("div .success").hide();
 		    			        $("div .error").hide();
-                      var email = document.getElementById("pwdemail").value;
                       var openid = document.getElementById("pwdopenid").value;
                       var jsonObj = new Object;
-			                jsonObj.email = email;
                       jsonObj.openid = openid;      
 			                var jsonStr = JSON.stringify(jsonObj);
                       var userinfo_url = '/esgf-web-fe/forgotpasswordproxy';
@@ -203,8 +197,7 @@
 	    		              success: function(data) {
 	    			              if (data.EditOutput.status == "success") {
                             document.getElementById("pwdopenid").value="";
-                            document.getElementById("pwdemail").value="";
-		    			              $("div .success").html("worked");
+		    			              $("div .success").html(data.EditOutput.comment);
 		    			              $("div .success").show();
 		    			              $("div .error").hide();
 	    			              } else {

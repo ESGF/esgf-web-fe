@@ -77,7 +77,7 @@ p {
 							<th>Role</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody class="updatable">
 				        <c:set var="j" value="0"/>
 				        <c:forEach var="group" items="${accounts_groupinfo}">
 							 <tr class="group_rows" 
@@ -85,14 +85,38 @@ p {
 							 	 style="cursor:pointer">  
 				                <td>${accounts_groupinfo[j].name}</td>  
 				                <td>${accounts_groupinfo[j].description}</td> 
-				                <td>${accounts_roleinfo[j]}</td>${accounts_userinfo.userName}  
+				                <td>${accounts_roleinfo[j]}</td>  
 				            </tr> 
 				            <c:set var="j" value="${j+1}"/>
 						</c:forEach>
 					</tbody>					
 				</table>
 			</p>
-		</fieldset>		
+		</fieldset>
+
+    <fieldset style="background: #F5F5E0">
+      <legend>Groups Available</legend>
+        <table id="groups_admin_table_id">
+          <thead><tr><th>Group name</th><th>Role</th><th></th></tr></thead>
+          <tbody>
+          <tr><td>CMIP5 Research</td><td>User</td>
+            <td>
+              <input id='research' type="submit" value="Register" class="button" onclick="javascript:register('cmip5research')"/>
+            </td>
+          </tr>
+          <tr><td>CMIP5 Commercial</td><td>User</td>
+            <td>
+              <input id='commercial' type="submit" value="Register" class="button" onclick="javascript:register('cmip5commercial')"/>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <p> Need help registering for other groups? <a href="http://www.esgf.org/wiki/ESGF_Data_Download">ESGF_Wiki</a></p>
+    </fieldset>
+
+    <div class="error" style="display: none"></div>
+		<div class="success" style="display: none"></div>
+
 		<fieldset style="background: #F5F5E0">
 			<legend>Change password</legend>
 			<p>
@@ -112,33 +136,46 @@ p {
 			</p> 			
 		</fieldset>
     
-		  <div class="error" style="display: none"></div>
-		  <div class="success" style="display: none"></div>
-
-    <fieldset style="background: #F5F5E0">
-      <legend>Groups</legend>
-        <table id="groups_admin_table_id">
-          <thead><tr><th>Group name</th><th>Role</th><th></th></tr></thead>
-          <tbody>
-          <tr><td>CMIP5 Research</td><td>User</td>
-            <td>
-              <input id='research' type="submit" value="Register" class="button" onclick="javascript:register('research')"/>
-            </td>
-          </tr>
-          <tr><td>CMIP5 Commercial</td><td>User</td>
-            <td>
-              <input id='commercial' type="submit" value="Register" class="button" onclick="javascript:register('commercial')"/>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-    </fieldset>
+		 
 	</div>
 </div>
  
 <script language="javascript"> 
   function register(type){
-  alert(type);
+    var userName = "${accounts_userinfo.userName}";
+    var group = type;
+    var jsonObj = new Object;
+		jsonObj.userName = userName;
+		jsonObj.group = group;
+		jsonObj.role = "user";
+			
+		var jsonStr = JSON.stringify(jsonObj);
+		var userinfo_url = '/esgf-web-fe/addgroupproxy';
+		$.ajax({
+	    type: "POST",
+	    url: userinfo_url,
+			async: true,
+			cache: false,
+	    data: {query:jsonStr},
+	    dataType: 'json',
+	    success: function(data) {
+	      if (data.EditOutput.status == "success") {
+		      $("div .success").html(data.EditOutput.comment);
+          $("div .success").show();
+		    	$("div .error").hide();
+          $('.updatable').append('<tr><td>' + group + '</td><td></td><td>user</td></tr>');
+        } else {
+	    	  $("div .error").html(data.EditOutput.comment);
+	    		$("div .error").show();
+	    		$("div .success").hide();
+	    	}
+	    },
+			error: function(request, status, error) {
+			  $("div .error").html(request + " " + status + " " + error);
+				$("div .error").show();
+				$("div .success").hide();
+			}
+		});	
   }
 </script>  
 
@@ -168,10 +205,10 @@ $(document).ready(function(){
 			var jsonStr = JSON.stringify(jsonObj);
 			var userinfo_url = '/esgf-web-fe/edituserinfoproxy';
 			$.ajax({
-	    		type: "POST",
-	    		url: userinfo_url,
-				async: true,
-				cache: false,
+	    	  type: "POST",
+	    	  url: userinfo_url,
+				  async: true,
+				  cache: false,
 	    		data: {query:jsonStr},
 	    		dataType: 'json',
 	    		success: function(data) {
@@ -189,8 +226,6 @@ $(document).ready(function(){
 	    			}
 	    		},
 				error: function(request, status, error) {
-					//alert(status);
-					//alert(request.responseText);
 					$("div .error").html("The password reset has failed!");
 					$("div .error").show();
 					$("div .success").hide();

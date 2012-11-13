@@ -28,17 +28,41 @@
 	             	<h1>ESGF Login</h1>
 	                                        
 				    <!-- the value of the action attribute must be the same as the URL intercepted by the spring security filter  -->
-	                <form name="loginForm" action='<c:url value="/j_spring_openid_security_check"/>' >
+	                <form name="loginForm" action='<c:url value="/j_spring_openid_security_check"/>' > 
+<%-- 					<form name="loginForm"> --%>
 						<script language="javascript">
 							function sanitize() {
 								openidElement = document.getElementById("openid_identifier");
 								openid = openidElement.value;
 								openid = openid.replace("http:","https:")
 								               .replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-								openidElement.value = openid;
-              }
+								openidElement.value = openid;								
+								var credential_controller_url = '/esgf-web-fe/credential_proxy';
+								
+								var queryStr = {'openid' : openid};
+								
+						        jQuery.ajax({
+						        	  url: credential_controller_url,
+						        	  query: queryStr,
+						        	  async: false,
+						        	  type: 'GET',
+						        	  success: function(data) {   
 
-						</script>															    				
+						        		  ESGF.localStorage.remove('GO_Credential',data.credential['openid_str']);
+						        		  
+						        		  
+						        		  ESGF.localStorage.put('GO_Credential',data.credential['openid_str'],data.credential['credential_str']);
+						        		  
+						        		  ESGF.localStorage.printMap('GO_Credential');
+
+										// alert('openid: ' + data.credential['openid_str'] + ' credential: ' + data.credential['credential_str']);
+						        	  },
+						          	  error: function() {
+						          		  // alert('error in getting globus online credential');
+						          	  }
+						        });
+							}
+            </script>															    				
 	                    <div class="panel">  	                         	
 	                    	<c:if test="${param['failed']==true}">
 	                    		<span class="myerror">Error: unable to resolve OpenID identifier.</span>

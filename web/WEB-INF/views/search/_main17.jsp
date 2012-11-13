@@ -36,6 +36,8 @@
 }
 </style>
 
+
+
 <div class="span-18 last" >
         <div class="span-15">
 	       <span id="search-box">
@@ -209,6 +211,9 @@
 
       	  	//reset the contents of the datacart
       	  	ESGF.localStorage.removeAll('esgf_queryString');
+
+      	  	//reset the contents of the GO_Credential 
+      	  	ESGF.localStorage.removeAll('GO_Credential');
       	  	
     	});
     	

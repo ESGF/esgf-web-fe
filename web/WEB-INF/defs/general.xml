@@ -207,6 +207,27 @@
         <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
        <put-attribute name="main" value="/WEB-INF/views/goformview/go_form_view3.jsp" />
     </definition>
+
+    <definition name="goauth-layout3" extends="base-layout">
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+       <put-attribute name="layoutType" type="string" value="goauthview3"/>
+    </definition>
+    
+    <!-- go template -->
+    <definition name="goauthview3" extends="goauth-layout3">
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+       <put-attribute name="main" value="/WEB-INF/views/goauthview/goauth_login.jsp" />
+    </definition>
+    <definition name="goauth-transfer-layout" extends="base-layout">
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+       <put-attribute name="layoutType" type="string" value="goauth_transfer"/>
+    </definition>
+    
+    <!-- go template -->
+    <definition name="goauth_transfer" extends="goauth-layout3">
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+       <put-attribute name="main" value="/WEB-INF/views/goauthview/goauth_transfer.jsp" />
+    </definition>
     
     <definition name="go-layout4" extends="base-layout">
         <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />

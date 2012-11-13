@@ -85,6 +85,16 @@
                          <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
+                <c:when test="${layoutType=='goauthview3'}">
+                    <div class="span-24 last" id="main">
+                         <ti:insertAttribute name="main" />
+                    </div>
+                </c:when>
+                <c:when test="${layoutType=='goauth_transfer'}">
+                    <div class="span-24 last" id="main">
+                         <ti:insertAttribute name="main" />
+                    </div>
+                </c:when>
                 <c:when test="${layoutType=='metadataview'}">
                     <div class="span-24 last" id="main">
                          <ti:insertAttribute name="main" />

@@ -101,12 +101,17 @@ p {
           <tbody>
           <tr><td>CMIP5 Research</td><td>User</td>
             <td>
-              <input id='research' type="submit" value="Register" class="button" onclick="javascript:register('cmip5research')"/>
+              <input id='research' type="submit" value="Register" class="button" onclick="javascript:register('CMIP5 Research')"/>
             </td>
           </tr>
           <tr><td>CMIP5 Commercial</td><td>User</td>
             <td>
-              <input id='commercial' type="submit" value="Register" class="button" onclick="javascript:register('cmip5commercial')"/>
+              <input id='commercial' type="submit" value="Register" class="button" onclick="javascript:register('CMIP5 Commercial')"/>
+            </td>
+          </tr>
+          <tr><td>CSSEF</td><td>User</td>
+            <td>
+              <input id='cssef' type="submit" value="Register" class="button" onclick="javascript:register('CSSER-Group')"/>
             </td>
           </tr>
           </tbody>

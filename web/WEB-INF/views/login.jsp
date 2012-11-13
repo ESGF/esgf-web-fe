@@ -82,7 +82,7 @@
                <div align="center">Forgot Password? Click <a href="javascript:roggle()" id="pass">here</a>.</div>
                   <div align="center" id="password" style="display:none">
                     <div class="panel">
-                      <p>Please provide your openid. You will recieve a temporary password by email. Please remember to change your password the next time you login.</p>
+                      <p>Please provide your openid. You will recieve a temporary password by email.<br/>Please remember to change your password the next time you login.</p>
                       <table><tr>
                           <td><b>Openid:</b></td>
                           <td> <input type="text" id="pwdopenid" name="pwdopenid" size="60" style="width:100%" /></td>

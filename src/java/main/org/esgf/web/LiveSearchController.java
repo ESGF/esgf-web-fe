@@ -56,6 +56,9 @@ package org.esgf.web;
  * @author Feiyi Wang (fwang2@ornl.gov)
  *
  */
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -63,6 +66,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping(value="/live")
@@ -71,9 +75,32 @@ public class LiveSearchController {
 
     private final static Logger LOG = Logger.getLogger(LiveSearchController.class);
 
+    private final static String MODEL_NAME = "Model_Name";
+    private final static String DATACART_OPEN = "Datacart_Open";
+    
     @RequestMapping(method=RequestMethod.GET)
-    public String index(HttpServletRequest request, HttpServletResponse response) {
-        LOG.debug("Enter index");
-        return "live-search";
+    public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
+        
+        Map<String,Object> model = new HashMap<String,Object>();
+
+        String datacartOpen = request.getParameter("datacart");
+        if(datacartOpen == null) {
+            datacartOpen = "false";
+        } else if(!datacartOpen.equals("true")) {
+            datacartOpen = "false";
+        }
+        
+        String modelName = request.getParameter("model");
+        if(modelName == null) {
+            modelName = "null";
+        } 
+        
+
+        model.put(MODEL_NAME,modelName);
+        model.put(DATACART_OPEN,datacartOpen);
+        
+        LOG.debug("Enter index with modelName " + modelName + " and datacart open " + datacartOpen);
+        
+        return new ModelAndView("live-search",model);
     }
 }

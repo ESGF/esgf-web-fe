@@ -108,16 +108,6 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           //for local development
           //queryString += '&shards=dev.esg.anl.gov:8983/solr,localhost:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,pcmdi9.llnl.gov:8983/solr';
           //queryString += '&shards=dev.esg.anl.gov:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,localhost:8983/solr';
-          //queryString += '&shards=localhost:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,pcmdi9.llnl.gov:8983/solr';
-          //queryString += '&shards=localhost:8983/solr,pcmdi9.llnl.gov:8983/solr';
-          //queryString += '&shards=localhost:8983/solr,test-datanode.jpl.nasa.gov:8983/solr';
-          //queryString += '&shards=localhost:8983/solr,localhost:18983/solr,localhost:28983/solr';
-          /* http://esg-datanode.jpl.nasa.gov/thredds/esgcet/1/obs4MIPs.CNES.AVISO.mon.v1.html */
-          //alert(ESGF.localStorage.get('esgf_queryString','distrib'));
-
-          //queryString += '&shards=esg-datanode.jpl.nasa.gov:8983/solr,pcmdi9.llnl.gov:8983/solr';
-          
-          //queryString += '&shards=localhost:8983/solr';
           
           if(ESGF.localStorage.get('esgf_queryString','distrib') != 'distrib=false') {
         	  //queryString += '&shards=localhost:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,dev.esg.anl.gov:8983/solr';
@@ -207,11 +197,6 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
       loadCheckboxConstraints: function() {
       	
 
-          /*
-			ESGF.setting.replicas = 'false';
-			ESGF.setting.versionsLatest = true;
-			ESGF.setting.distributed = 'false';
-			*/
     	  
     	  //if version is not null then it is true
     	  if(ESGF.setting.versionsLatest != null) {
@@ -379,11 +364,68 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   		var searchConstraints = '';
   		
   		var searchStringMap = ESGF.localStorage.getAll('esgf_queryString');
-        
+
+  		
+    	
+    	var modelFound = 'false';
+    	var oldModelKey = '';
+    	
         for(var key in searchStringMap) {
-      	  value = searchStringMap[key];
-      	  searchConstraints += value +'&';
+        	
+        	
+        	if(key.search('model:') > -1) {
+        		modelFound = 'true';
+        		oldModelKey = key;
+        	} else {
+        		searchConstraints += searchStringMap[key] +'&';
+        	}
+        	
+      	  
         }
+        
+        //check the params
+    	var modelNameParam = $('span#modelName').html();
+    	
+    	//alert('modelFound: ' + modelFound);
+        if(modelFound == 'true') {
+        	
+        	//alert('modelNameParam: ' + modelNameParam);
+        	
+        	var modelKey = 'model:' + modelNameParam; 
+	      	var modelValue = 'model=' + modelNameParam;  
+	      	
+        	if(modelNameParam != 'null') {
+        		
+        		
+        		
+        		ESGF.localStorage.remove('esgf_queryString',oldModelKey);
+        		ESGF.localStorage.put('esgf_queryString',modelKey,modelValue);
+
+	            searchConstraints += modelValue +'&';
+        	} else {
+        		searchConstraints += searchStringMap[oldModelKey] +'&';
+        	}
+        	
+        	//ESGF.localStorage.remove('esgf_queryString',key);
+	      	
+        	
+        } else {
+        	
+        	//alert('modelNameParam: ' + modelNameParam);
+        	
+        	var modelKey = 'model:' + modelNameParam; 
+	      	var modelValue = 'model=' + modelNameParam;  
+	      	
+	      	if(modelNameParam != 'null') {
+	        	
+	      		ESGF.localStorage.put('esgf_queryString',modelKey,modelValue);
+
+	            searchConstraints += modelValue +'&';
+	      	}
+        }
+        
+        //searchConstraints += searchStringMap[key] +'&';
+    	
         return searchConstraints;
   	},
   	

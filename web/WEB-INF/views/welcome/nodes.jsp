@@ -23,7 +23,11 @@
 		        <li>
 		        	<a href='http://esgf-index1.ceda.ac.uk/'><img src="images/flags/UK.png" class="icon"/>BADC Node</a>
 		        	<a href='http://esgf-index1.ceda.ac.uk/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
-		        </li>       
+		        </li>     
+		        <li>
+                     <a href='http://esg.bnu.edu.cn/'><img src="images/flags/China.png" class="icon"/>BNU Node</a>
+                     <a href='http://esg.bnu.edu.cn/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
+                </li>   		          
 		        <li>
 		        	<a href='http://adm07.cmcc.it/'><img src="images/flags/Italy.png" class="icon"/>CMCC Node</a>
 		        	<a href='http://adm07.cmcc.it/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
@@ -35,7 +39,11 @@
 		        <li>
 		        	<a href='http://esgf-data.dkrz.de/'><img src="images/flags/Germany.png" class="icon"/>DKRZ CMIP5 Node</a>
 		        	<a href='http://esgf-data.dkrz.de/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
-		        </li>       
+		        </li>      
+		        <li>
+                     <a href='http://esgdata.gfdl.noaa.gov/'><img src="images/flags/USA.png" class="icon"/>NOAA-GFDL Node</a>
+                     <a href='http://esgdata.gfdl.noaa.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
+                 </li>		         
 		        <li>
 		        	<a href='http://esgf-node.ipsl.fr/'><img src="images/flags/France.png" class="icon"/>IPSL Node</a>
 		        	<a href='http://esgf-node.ipsl.fr/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>

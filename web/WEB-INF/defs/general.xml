@@ -174,69 +174,93 @@
 
 <!-- go page layout  -->
     <definition name="go-layout1" extends="base-layout">
+<!--
         <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+-->
        <put-attribute name="layoutType" type="string" value="goformview1"/>
     </definition>
     
     <!-- go template -->
     <definition name="goformview1" extends="go-layout1">
+<!--
         <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+-->
        <put-attribute name="main" value="/WEB-INF/views/goformview/go_form_view1.jsp" />
     </definition>
 
 
     <definition name="go-layout2" extends="base-layout">
+<!--
         <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+-->
        <put-attribute name="layoutType" type="string" value="goformview2"/>
     </definition>
     
     <!-- go template -->
     <definition name="goformview2" extends="go-layout2">
+<!--
         <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+-->
        <put-attribute name="main" value="/WEB-INF/views/goformview/go_form_view2.jsp" />
     </definition>
     
     
     <definition name="go-layout3" extends="base-layout">
+<!--
         <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+-->
        <put-attribute name="layoutType" type="string" value="goformview3"/>
     </definition>
     
     <!-- go template -->
     <definition name="goformview3" extends="go-layout3">
+<!--
         <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+-->
        <put-attribute name="main" value="/WEB-INF/views/goformview/go_form_view3.jsp" />
     </definition>
 
     <definition name="goauth-layout3" extends="base-layout">
+<!--
         <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+-->
        <put-attribute name="layoutType" type="string" value="goauthview3"/>
     </definition>
     
     <!-- go template -->
     <definition name="goauthview3" extends="goauth-layout3">
+<!--
         <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+-->
        <put-attribute name="main" value="/WEB-INF/views/goauthview/goauth_login.jsp" />
     </definition>
     <definition name="goauth-transfer-layout" extends="base-layout">
+<!--
         <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+-->
        <put-attribute name="layoutType" type="string" value="goauth_transfer"/>
     </definition>
     
     <!-- go template -->
     <definition name="goauth_transfer" extends="goauth-layout3">
+<!--
         <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+-->
        <put-attribute name="main" value="/WEB-INF/views/goauthview/goauth_transfer.jsp" />
     </definition>
     
     <definition name="go-layout4" extends="base-layout">
+<!--
         <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+-->
        <put-attribute name="layoutType" type="string" value="goformview4"/>
     </definition>
     
     <!-- go template -->
     <definition name="goformview4" extends="go-layout4">
+<!--
         <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+-->
        <put-attribute name="main" value="/WEB-INF/views/goformview/go_form_view4.jsp" />
     </definition>
 

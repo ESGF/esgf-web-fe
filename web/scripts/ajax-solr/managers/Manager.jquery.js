@@ -66,15 +66,118 @@
 AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   /** @lends AjaxSolr.Manager.prototype */
   {
+	  
+	  get_param_arr: function () {
+		  
+		  //first check if completely empty,
+		  //if so, then load type and offset params
+		  if(ESGF.localStorage.get('esgf_queryString', 'offset') == undefined) {
+	  		  ESGF.localStorage.put('esgf_queryString', 'offset', 'offset=' + 0);
+
+		      //put in the dataset type
+		      ESGF.localStorage.put('esgf_queryString','type:Dataset','type=Dataset');
+	  	  } 
+	        
+	  		
+		  
+		  
+		  
+		  var useURLParams = false;
+    	  
+    	  if($('#urlparamscheckbox').attr('checked') == 'checked') {
+    		  useURLParams = true;
+    	  }
+		  
+		  if(useURLParams) {
+    		  //alert('useURLParams is true');
+    	  } else {
+    		  //alert('useURLParams is false');
+    	  }
+		  
+		  
+		  var searchConstraints = '';
+
+		  var searchStringMap = ESGF.localStorage.getAll('esgf_queryString');
+
+		  for(var key in searchStringMap) {
+			  searchConstraints += searchStringMap[key] +'&';
+		  }
+
+		  // get querystring as an array split on "&"
+		  var querystringparams = location.search.replace( '?', '' ).split( '&' );
+  	      var queryStr = new String('');
+  	      // declare object
+  	      var queryObj = {};
+  	    
+  	      // loop through each name-value pair and populate object
+  	    
+  	      for ( var i=0; i<querystringparams.length; i++ ) {
+  	          // get name and value
+  	          var name = querystringparams[i].split('=')[0];
+  	          var value = querystringparams[i].split('=')[1];
+  	          // populate object
+  	          queryObj[name] = value;
+  	          queryStr += querystringparams[i] + '&';
+  	      }
+
+  	    
+          
+  	      
+  	      
+  	      LOG.debug('queryStr: ' + queryStr);
+  	      LOG.debug('searchConstraints: ' + searchConstraints);
+  	      
+  	      var facet_param_arr = new Array();
+  	    
+  	      var dataObj = {'facet_param_list' : queryStr, 'search_constraint_list' : searchConstraints, 'useURLParams' : useURLParams};//queryObj};
+  	    
+  	      //get only the facets that matter
+  	      jQuery.ajax({
+        	  url: '/esgf-web-fe/live/facetList',
+        	  type: 'GET',
+        	  data: dataObj,
+        	  async: false,
+        	  success: function(data) {   
+        		  facet_param_arr = data;
+        	  },
+        	  error: function() {
+        		  alert('error');
+        	  }
+  	    
+  	      });
+  	    
+  	      
+  	      var oldMap = ESGF.localStorage.getAll('esgf_queryString');
+  		
+  		
+  		for(var key in oldMap) {
+  			var value = oldMap[key];
+  			
+  			//alert('key: ' + key + ' value: ' + value);
+  		}
+  	    
+  	      return facet_param_arr;
+		  
+	  },
+	  
       executeRequest: function (servlet) {
     	  
-    	  //alert('execute request for manager');
+    	  
+    	  
+    	  //alert('latest versions: ' + ESGF.setting.versionsLatest);
+    	  
     	  
           var self = this;
 
+          self.loadCheckboxConstraints();
+          
+          
+          //get all of the facets here
+          var facet_param_arr = self.get_param_arr();
+          
 
           //loads everything in the html5 'fq' store
-          self.loadExistingQueries();
+          //self.loadExistingQueries();
           
           var sidebarWidget = Manager.widgets['facet-sidebar'];
           
@@ -98,33 +201,22 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           queryString += self.loadFacetNames(namesArr);
           
           
-          self.loadCheckboxConstraints();
           
-          alert('queryString1: ' + queryString);
+          
+          
+          
           
           //assemble the search constraints
-          queryString += self.loadSearchConstraints();
+          queryString += self.loadSearchConstraints(facet_param_arr);
 
-          alert('queryString2: ' + queryString);
-          
-          //for local development
-          //queryString += '&shards=dev.esg.anl.gov:8983/solr,localhost:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,pcmdi9.llnl.gov:8983/solr';
-          //queryString += '&shards=dev.esg.anl.gov:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,localhost:8983/solr';
-          
-          if(ESGF.localStorage.get('esgf_queryString','distrib') != 'distrib=false') {
-        	  //queryString += '&shards=localhost:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr,dev.esg.anl.gov:8983/solr';
-          }
-          
           
           
           var revisedQueryString = self.rewriteTextQuery(queryString);
 
-
-          alert('queryString3: ' + queryString);
           
           LOG.debug("Manager's querystring: " + revisedQueryString);
 
-  			var selected = $( "#myTabs" ).tabs( "option", "selected" );
+  		var selected = $( "#myTabs" ).tabs( "option", "selected" );
           
   			
   		  //if it is a distributed search ... mask the page so that user cannot initiate any more events 
@@ -150,10 +242,6 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
                 	  $("#prompt").overlay().close();
                   }
                   
-        		  //for(var key in data.response) {
-        			  //alert('key: ' + key);
-        		  //}
-        		  //alert(data.response.docs.length);
         		  
         	  },
         	  error: function() {
@@ -201,7 +289,12 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
       
       loadCheckboxConstraints: function() {
       	
-
+    	  
+    	  LOG.debug('ESGF.setting.versionsLatest: ' + ESGF.setting.versionsLatest + 
+    			  'ESGF.setting.replicas: ' + ESGF.setting.replicas + 
+    			  'ESGF.setting.distributed: ' + ESGF.setting.distributed);
+    	  
+    	  //alert('in loadCheckbox constraints versionslatest: ' + ESGF.setting.versionsLatest);
     	  
     	  //if version is not null then it is true
     	  if(ESGF.setting.versionsLatest != null) {
@@ -209,11 +302,15 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 			  ESGF.localStorage.remove('esgf_queryString','latest:true');
 			  ESGF.localStorage.remove('esgf_queryString','latest:false');
     		  
+			  //alert('putting latest=true');
 			  //put in latest = true
 			  ESGF.localStorage.put('esgf_queryString','latest:true','latest=true');
     	  } 
     	  //else remove the versions argument
     	  else {
+    		  
+    		  //alert('removing latest= from the querystring');
+    		  
     		  //remove any existing versions from queryString
 			  ESGF.localStorage.remove('esgf_queryString','latest:true');
 			  ESGF.localStorage.remove('esgf_queryString','latest:false');
@@ -240,7 +337,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 			  ESGF.localStorage.remove('esgf_queryString','replica:true');
 			  ESGF.localStorage.remove('esgf_queryString','replica:false');
 
-				$('#replicacheckbox').attr('checked','checked');
+			  $('#replicacheckbox').attr('checked','checked');
     	  }
     	  
     	//if distrib is false 
@@ -258,10 +355,14 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 			  
 			  //put in distrib=true
 			  ESGF.localStorage.put('esgf_queryString','distrib','distrib=true');
-				$('#distribcheckbox').attr('checked','checked');
+			  $('#distribcheckbox').attr('checked','checked');
 			  
     	  }
     	  
+    	  
+    	  LOG.debug('distrib: ' + $('#distribcheckbox').attr('checked') + 
+    			    ' replica: ' + $('#replicacheckbox').attr('checked') + 
+    			    ' version: ' + $('#versioncheckbox').attr('checked'));;
     	  
     	  
       },
@@ -365,76 +466,83 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   	 * DOCUMENT ME
   	 * @returns {String}
   	 */
-  	loadSearchConstraints: function() {
+  	loadSearchConstraints: function(facet_param_arr) {
+  		
+
+  	  //alert('in load search constraints len ' + facet_param_arr.length);
+  		
+  		var self = this;
+  		
   		var searchConstraints = '';
+  		
+  		
+  		//alert('in loadSearchConstraints: ' + facet_param_arr);
+  		
+  		
+  		var oldMap = ESGF.localStorage.getAll('esgf_queryString');
+  		
+  		
+  		for(var key in oldMap) {
+  			var value = oldMap[key];
+  			
+  			//alert('keyy: ' + key + ' value: ' + value);
+  		}
+  		
+  		
+  		
+  		//need to remove the entire esgf_querystring map and refresh
+  		//for each param in the facet array, add to the cookie
+
+		//ESGF.localStorage.put('esgf_queryString','model:kkk1','model=kkk1');
+  		
+		//ESGF.localStorage.remove('esgf_queryString','model:kkk1');
+		
+  		
+  		ESGF.localStorage.removeAll('esgf_queryString');
+  		
+  		
+  		/*
+  		for(var key in oldMap) {
+  			var value = oldMap[key];
+  			
+  			ESGF.localStorage.put('esgf_queryString',key,value);
+  		}
+  		*/
+  		for(var i=0;i<facet_param_arr.length;i++) {
+  			//alert('i: ' + facet_param_arr[i]);
+  			var key = '';
+  			var value = '';
+  			if(facet_param_arr[i].search('distrib') > -1) {
+  				//alert('keyy: ' + 'distrib' + ' valuey: ' + facet_param_arr[i]);
+  				key = 'distrib';
+  				value = facet_param_arr[i];
+  			} else if(facet_param_arr[i].search('offset') > -1) {
+  				//alert('keyy: ' + 'offset' + ' valuey: ' + facet_param_arr[i]);
+  				key = 'offset';
+  				value = facet_param_arr[i];
+  			} else {
+  				//alert('keyy: ' + facet_param_arr[i].replace('=',':') + ' valuey: ' + facet_param_arr[i]);
+  				key = facet_param_arr[i].replace('=',':');
+  				value = facet_param_arr[i];
+  			}
+
+  			ESGF.localStorage.put('esgf_queryString',key,value);
+  		}
   		
   		var searchStringMap = ESGF.localStorage.getAll('esgf_queryString');
 
-  		
-    	
-    	var modelFound = 'false';
-    	var oldModelKey = '';
     	
         for(var key in searchStringMap) {
-        	
-        	
-        	//if(key.search('model:') > -1) {
-        	//	modelFound = 'true';
-        	//	oldModelKey = key;
-        	//} else {
-        		searchConstraints += searchStringMap[key] +'&';
-        	//}
-        	
-      	  
+        	searchConstraints += searchStringMap[key] +'&';        	
         }
-        /*
-        //check the params
-    	var modelNameParam = $('span#modelName').html();
-    	
-    	//alert('modelFound: ' + modelFound);
-        if(modelFound == 'true') {
-        	
-        	//alert('modelNameParam: ' + modelNameParam);
-        	
-        	var modelKey = 'model:' + modelNameParam; 
-	      	var modelValue = 'model=' + modelNameParam;  
-	      	
-        	if(modelNameParam != 'null') {
-        		
-        		
-        		
-        		ESGF.localStorage.remove('esgf_queryString',oldModelKey);
-        		ESGF.localStorage.put('esgf_queryString',modelKey,modelValue);
 
-	            searchConstraints += modelValue +'&';
-        	} else {
-        		searchConstraints += searchStringMap[oldModelKey] +'&';
-        	}
-        	
-        	//ESGF.localStorage.remove('esgf_queryString',key);
-	      	
-        	
-        } else
-        	
-        {
-        	
-        	//alert('modelNameParam: ' + modelNameParam);
-        	
-        	var modelKey = 'model:' + modelNameParam; 
-	      	var modelValue = 'model=' + modelNameParam;  
-	      	
-	      	if(modelNameParam != 'null') {
-	        	
-	      		ESGF.localStorage.put('esgf_queryString',modelKey,modelValue);
-
-	            searchConstraints += modelValue +'&';
-	      	}
-        }
-        */
-        //searchConstraints += searchStringMap[key] +'&';
-    	
+        var searchConstraintsArr = searchConstraints.split('&');
+        LOG.debug('searchConstraintsArr: ' + searchConstraintsArr);
+        
+        
         return searchConstraints;
   	},
+  	
   	
   	/**
   	 * DOCUMENT ME

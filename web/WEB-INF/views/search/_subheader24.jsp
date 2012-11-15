@@ -30,6 +30,13 @@
 	</div>
 	
 	-->
-	<div style="color:red">DataCartOpen: ${Datacart_Open}</div>
-
 </div>
+
+<script type="text/javascript">
+$(function(){
+
+	
+	
+});
+
+</script>

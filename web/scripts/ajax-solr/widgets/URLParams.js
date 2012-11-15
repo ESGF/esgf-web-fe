@@ -59,68 +59,68 @@
 
 (function ($) {
 
-AjaxSolr.VersionsWidget = AjaxSolr.AbstractWidget.extend({
+AjaxSolr.URLParamsWidget = AjaxSolr.AbstractWidget.extend({
 	
 	init: function() {
-		//alert('init version');
-
-		//alert('b4: ' + ESGF.localStorage.toString('esgf_queryString'));
-        ESGF.localStorage.put('esgf_queryString','latest:true','latest=true');
-
 		
-		if($("input#versioncheckbox").attr("checked")) { 
+        //ESGF.localStorage.put('esgf_queryString','replica:false','replica=false');
+        
+		//if($("input#urlparamscheckbox").attr("checked")) { 
 			//attr('checked','true');
-			//alert('reset the replica checkbox to false');
-			$("input#versioncheckbox").removeAttr('checked');
+		
+		//alert('setting checkbox here');
+			$("input#urlparamscheckbox").attr('checked','checked');
+
+			//alert('end setting checkbox');
 			
-		}
+		//}
+		
 	},
 	
 	beforeRequest: function () {
-		
-		$("input#versioncheckbox").unbind('change');
+		$("input#urlparamscheckbox").unbind('change');
 	},
 	
 	afterRequest: function () {
 		
 		var self = this;
-    
-		//alert('checked: ' + $("input#versioncheckbox").attr("checked"));
+	    
 		
 		
-		$('input#versioncheckbox').bind('change',function () {
+		$('input#urlparamscheckbox').bind('change',function () {
 			
 
-			if($("input#versioncheckbox").attr("checked")) { 
-				alert('setVersionsLatest to null');
-				//alert('take the versions parameter out of the query');
+			if($("input#urlparamscheckbox").attr("checked")) { 
 				
-				//ESGF.localStorage.remove('esgf_queryString','latest:true');
-				ESGF.setting.versionsLatest = null;
-				
-				
-		    	Manager.doRequest(0);
-			} else {
-				alert('setVersionsLatest to true');
+				//alert('checked');
+				//alert('take the replicas parameter out of the query');
 
 				//alert('b4: ' + ESGF.localStorage.toString('esgf_queryString'));
-		  		//put in the replica type (which for results is "false")
-		        //ESGF.localStorage.put('esgf_queryString','latest:true','latest=true');
-				//alert('after: ' + ESGF.localStorage.toString('esgf_queryString'));
-				ESGF.setting.versionsLatest = 'true';
 				
-		    	Manager.doRequest(0);
+				//ESGF.localStorage.remove('esgf_queryString','replica:false');
+				//ESGF.setting.replicas = null;
+				
+				//alert('after: ' + ESGF.localStorage.toString('esgf_queryString'));
+				
+            	Manager.doRequest(0);
+			} else {
+				//alert('put the replicas parameter in the query');
+
+
+				//alert('b4: ' + ESGF.localStorage.toString('esgf_queryString'));
+		        //ESGF.localStorage.put('esgf_queryString','replica:false','replica=false');
+				//alert('after: ' + ESGF.localStorage.toString('esgf_queryString'));
+				
+				//ESGF.setting.replicas = 'false';
+				
+				Manager.doRequest(0);
 			}
 			
-		})
+		});
+    
 		
 	}
-	
-	
-	
 
 });
-
-
 
 }(jQuery));

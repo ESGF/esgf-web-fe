@@ -82,6 +82,10 @@
              id: 'replicas'
            }));
          
+         Manager.addWidget(new AjaxSolr.URLParamsWidget({
+             id: 'urlparams'
+           }));
+         
          Manager.addWidget(new AjaxSolr.DatasetSelectionWidget({
              id: 'datasetSelection'
            }));

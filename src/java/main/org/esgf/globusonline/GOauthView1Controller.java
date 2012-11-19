@@ -113,6 +113,8 @@ public class GOauthView1Controller {
 
     private final static Logger LOG = Logger.getLogger(GOFormView1Controller.class);
     private final static String GLOBUSONLINE_PROPERTIES_FILE = "/esg/config/globusonline.properties";
+    private final static String GOFORMVIEW_ERROR = "GoFormView_Error";
+    private final static String GOFORMVIEW_ERROR_MSG = "GoFormView_ErrorMsg";
 
     public GOauthView1Controller() {
     }
@@ -173,8 +175,8 @@ public class GOauthView1Controller {
         	Map<String,Object> model = new HashMap<String,Object>();
 		// Create the client
 		Properties GOProperties = getGOProperties();
-		String PortalID = (String) GOProperties.get("GOesgfPortalID");
-		String PortalPass = (String) GOProperties.get("GOesgfPortalPassword");
+		String PortalID = (String) GOProperties.getProperty("GOesgfPortalID", "bogususer");
+		String PortalPass = (String) GOProperties.getProperty("GOesgfPortalPassword", "boguspassword");
 		
 		String loginUri = "";
 		try{
@@ -185,8 +187,12 @@ public class GOauthView1Controller {
 		loginUri = cli.getLoginUrl(response.encodeURL(BaseURL + "/esgf-web-fe/goauthview2"));
 
 		} catch (NexusClientException e) {
-		  System.out.println("ERROR:  GOesgfPortalID and/or GOesgfPortalPassword probably wrong.");
-                        e.printStackTrace();
+		  System.out.println("ERROR:  GOesgfPortalID and/or GOesgfPortalPassword wrong or not set.");
+            //            e.printStackTrace();
+            	  model.put(GOFORMVIEW_ERROR, "error");
+String error_msg = "GlobusOnline Configuration file not found. Please create /esg/config/globusonline.properties and populate it with GOesgfPortalID and GOesgfPortalPassword";
+            	  model.put(GOFORMVIEW_ERROR_MSG, error_msg);
+	    	  return new ModelAndView("goauthview3", model);
 		}
         String myproxyServerStr = null;
 
@@ -204,10 +210,12 @@ private Properties getGOProperties()
 
         } catch(FileNotFoundException fe) {
 
+	    String error_msg = "GlobusOnline Configuration file not found. Please create /esg/config/globusonline.properties and populate it with GOesgfPortalID and GOesgfPortalPassword";
+
             System.out.println("---------------------------------------------------------------------");
-            System.out.println("GlobusOnline Configuration file not found. Please create /esg/config/globusonline.properties and populate it with");
-	    System.out.println("GOesgfPortalID and GOesgfPortalPassword");
+	    System.out.println(error_msg);
             System.out.println("---------------------------------------------------------------------");
+
         } catch(Exception e) {
             e.printStackTrace();
         }

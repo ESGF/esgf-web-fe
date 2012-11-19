@@ -78,37 +78,19 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 			
 			if(value.length > 0) {
 				
-				/*
-				var multiString = value.split('\+');
-				
-				for(var i=0;i<multiString.length;i++) {
-					self.add(multiString[i]);
-					
-					// If the field value has a space or a colon in it, wrap it in quotes,
-				    // unless it is a range query.
-				    if (multiString[i].match(/[ :]/) && !multiString[i].match(/[\[\{]\S+ TO \S+[\]\}]/)) {
-				    	multiString[i] = '"' + multiString[i] + '"';
-				    }
-					ESGF.localStorage.put('esgf_fq','text:'+multiString[i],'text:'+multiString[i]);
-					ESGF.localStorage.put('esgf_queryString','text:'+multiString[i],'query='+multiString[i]);
-				}
-				*/
 				//remove previous text
 				var queryStringMap = ESGF.localStorage.getAll('esgf_queryString');
 				
-				alert('queryStringMap? ' + queryStringMap);
 				
 				for(var key in queryStringMap) {
 					var keyStr = key;
-					LOG.debug('KEEEEEYYYYY: ' + keyStr);
 					if(keyStr.search('query') > -1) {
-						alert('remove ' + key + ' ' + queryStringMap[key]);
 						ESGF.localStorage.remove('esgf_queryString',keyStr);
 						ESGF.localStorage.remove('esgf_fq',keyStr);
 					}
 				}
 				
-				alert('put the text query here');
+				//alert('put the text query here');
 				
 				ESGF.localStorage.put('esgf_queryString','text:'+value,'query='+value);
 				ESGF.localStorage.put('esgf_fq', 'text:'+value,'query='+value);
@@ -132,41 +114,24 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 				ESGF.setting.textbox = value;
 				
 				if(value.length > 0) {
-					/*
-					var multiString = value.split('\+');
-					
-					for(var i=0;i<multiString.length;i++) {
-						self.add(multiString[i]);
-						
-						// If the field value has a space or a colon in it, wrap it in quotes,
-					    // unless it is a range query.
-					    if (multiString[i].match(/[ :]/) && !multiString[i].match(/[\[\{]\S+ TO \S+[\]\}]/)) {
-					    	multiString[i] = '"' + multiString[i] + '"';
-					    }
-						ESGF.localStorage.put('esgf_fq','text:'+multiString[i],'text:'+multiString[i]);
-						
-						ESGF.localStorage.put('esgf_queryString','text:'+multiString[i],'query='+multiString[i]);
-						
-					}
-					*/
 					
 					//remove previous text
 					var queryStringMap = ESGF.localStorage.getAll('esgf_queryString');
 
-					alert('queryStringMap? ' + queryStringMap);
+					//alert('queryStringMap? ' + queryStringMap);
 					
 					for(var key in queryStringMap) {
 						var keyStr = key;
-						LOG.debug('KEEEEEYYYYY: ' + keyStr);
+						//LOG.debug('KEEEEEYYYYY: ' + keyStr);
 						if(keyStr.search('query') > -1) {
-							alert('remove ' + keyStr + ' ' + queryStringMap[key]);
+							//alert('remove ' + keyStr + ' ' + queryStringMap[key]);
 							ESGF.localStorage.remove('esgf_queryString',keyStr);
 							ESGF.localStorage.remove('esgf_fq',keyStr);
 						}
 					}
 					
 
-					alert('put the text query here');
+					//alert('put the text query here');
 					
 					ESGF.localStorage.put('esgf_queryString','text:'+value,'query='+value);
 					ESGF.localStorage.put('esgf_fq', 'text:'+value,'query='+value);
@@ -192,9 +157,7 @@ AjaxSolr.AutocompleteWidget = AjaxSolr.AbstractFacetWidget.extend({
 	 */
   afterRequest: function () {
 
-		//alert('textBox: ' + ESGF.setting.textbox);
 	  $(this.target).find('input').val(ESGF.setting.textbox);
-		//alert('textBox: ' + ESGF.setting.textbox);
 	  
 	  var self = this;
 	  

@@ -130,8 +130,8 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   	      var facet_param_arr = new Array();
   	    
   	      var dataObj = {'facet_param_list' : queryStr, 'search_constraint_list' : searchConstraints, 'useURLParams' : useURLParams};//queryObj};
-  	    
-  	      //get only the facets that matter
+
+			 //get only the facets that matter
   	      jQuery.ajax({
         	  url: '/esgf-web-fe/live/facetList',
         	  type: 'GET',
@@ -235,8 +235,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
         	  timeout: ESGF.setting.ajaxTimeout,
         	  success: function(data) {   
         		  self.handleResponse(data);
-
-        		  
+        	   	     
                   if(revisedQueryString.indexOf('distrib=false') == -1) {
                 	  //alert('query done ... take down overlay here');
                 	  $("#prompt").overlay().close();
@@ -520,6 +519,12 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   				//alert('keyy: ' + 'offset' + ' valuey: ' + facet_param_arr[i]);
   				key = 'offset';
   				value = facet_param_arr[i];
+  			} else if(facet_param_arr[i].search('query') > -1) {
+  				key = facet_param_arr[i].replace('=',':');
+  				value = facet_param_arr[i];
+  				var text_value = value.split('=')[1]; 
+  				$('input#query').val(text_value);
+  				ESGF.setting.textbox = text_value;
   			} else {
   				//alert('keyy: ' + facet_param_arr[i].replace('=',':') + ' valuey: ' + facet_param_arr[i]);
   				key = facet_param_arr[i].replace('=',':');
@@ -538,8 +543,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
 
         var searchConstraintsArr = searchConstraints.split('&');
         LOG.debug('searchConstraintsArr: ' + searchConstraintsArr);
-        
-        
+
         return searchConstraints;
   	},
   	

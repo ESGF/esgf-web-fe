@@ -96,12 +96,12 @@ public class LiveSearchController {
     public static void main(String [] args) {
         final MockHttpServletRequest mockRequest = new MockHttpServletRequest();
         
-        String queryStr = "model=kkk1&project=jjj&institute=ll&search=true";
-        String searchConstraints = "&offset=0&type=Dataset&project=CMIP5&institute=INM&latest=true&replica=false&distrib=false&";
+        String queryStr = "model=kkk1&project=jjj&institute=ll&search=true&variable";
+        String searchConstraints = "&offset=0&type=Dataset&project=CMIP5&institute=INM&latest=true&replica=false&distrib=false";
         
         mockRequest.addParameter("facet_param_list", queryStr);
         mockRequest.addParameter("search_constraint_list", searchConstraints);
-        
+        mockRequest.addParameter("useURLParams", "true");
         
         LiveSearchController fc = new LiveSearchController();
         
@@ -111,13 +111,18 @@ public class LiveSearchController {
         
     }
     
+    
+    /**
+     * 
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping(method=RequestMethod.GET)
     public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
         
         //first we must check if the properties file exists...
         //if it doesn't then we must create a default one
-        
-        
         
         File f = new File(FACET_PROPERTIES_FILE);
         if(!f.exists()) { 
@@ -167,12 +172,6 @@ public class LiveSearchController {
         model.put(FACET_PARAM_VALUES_LIST, facetParamValuesList);
         
         
-        
-        /*
-        String [] facet_params = (String []) facetParams.toArray(new String[0]);
-        
-        System.out.println("facet_params len: " + facet_params.length);
-        */
         LOG.debug("Enter index with modelName " + modelName + " and datacart open " + datacartOpen);
         
         return new ModelAndView("live-search",model);
@@ -185,7 +184,6 @@ public class LiveSearchController {
         for(Object key : request.getParameterMap().keySet()) {
             String keyStr = (String)key;
             
-//           System.out.println("Param: " + keyStr);
             facetParams.add(keyStr);
         }
         
@@ -194,6 +192,11 @@ public class LiveSearchController {
         
     }
     
+    /**
+     * 
+     * @param request
+     * @return
+     */
     @RequestMapping(method=RequestMethod.GET, value="/facetList")
     public @ResponseBody List<String> getFacetList(HttpServletRequest request) {
 
@@ -203,6 +206,12 @@ public class LiveSearchController {
         return facetList;
     }
     
+    
+    /**
+     * 
+     * @param request
+     * @return
+     */
     private List<String> getFacetListHelper(HttpServletRequest request) {
         List<String> facetList = new ArrayList<String>();
         
@@ -211,7 +220,6 @@ public class LiveSearchController {
         
         String useURLParams = request.getParameter("useURLParams");
         
-        System.out.println("\t\t\tUSEURLPARAMS: " + useURLParams);
         
         String [] search_constraint_list = scl.split("&");
         String [] facet_param_list = fpl.split("&");
@@ -223,23 +231,21 @@ public class LiveSearchController {
         
         List<String> validFacetList = getValidFacetList(facetList);
         
-        System.out.println("helper: " + validFacetList);
+        System.out.println("validFacetList: " + validFacetList);
         
         return validFacetList;
     }
     
+    /**
+     * 
+     * @param facetList
+     * @return
+     */
     private List<String> getValidFacetList(List<String> facetList) {
         List<String> validFacetList = new ArrayList<String>();
         
-        System.out.println("In getValidFacetList");
-        
-        
         for(int i=0;i<facetList.size();i++) {
             String facetItem = facetList.get(i);
-            System.out.println("Checking facet..." + facetItem.split("=")[0]);
-            
-            System.out.println("\t\t\tfacetItem: " + facetItem);
-            
             if(isFacet(facetItem.split("=")[0]) || 
                     facetList.get(i).contains("offset=") ||
                     facetList.get(i).contains("type=") ||
@@ -257,56 +263,80 @@ public class LiveSearchController {
         return validFacetList;
     }
     
+    
+    /**
+     * 
+     * @param search_constraint_list
+     * @param facet_param_list
+     * @param useURLParams
+     * @return
+     */
     private List<String> overwriteDuplicate(String [] search_constraint_list,String [] facet_param_list,String useURLParams) {
         
         List<String> newList = new ArrayList<String>();
         
         for(int i=0;i<search_constraint_list.length;i++) {
             String searchConstraint = search_constraint_list[i];
-            String facet_name = searchConstraint.split("=")[0];
-            String facet_value = "";
-            if(!facet_name.equals("")) {
-                facet_value = searchConstraint.split("=")[1];
-                //System.out.println(facet_name + "=" + facet_value);
+            if(searchConstraint.split("=").length == 2) {
+                String facet_name = searchConstraint.split("=")[0];
+                String facet_value = "";
+                if(!facet_name.equals("")) {
+                    facet_value = searchConstraint.split("=")[1];
+                    //System.out.println(facet_name + "=" + facet_value);
+                }
             }
+            
         }
         
         for(int i=0;i<search_constraint_list.length;i++) {
             String searchConstraint = search_constraint_list[i];
-            String facet_name = searchConstraint.split("=")[0];
-            String facet_value = "";
-            if(!facet_name.equals("")) {
-                facet_value = searchConstraint.split("=")[1];
-            }
-//            System.out.println("searchConstraint: " + searchConstraint);
-            boolean facetFound = false;
-            if(useURLParams.equals("true")) {
-                for(int j=0;j<facet_param_list.length;j++) {
-                    String param = facet_param_list[j];
-                    String param_name = param.split("=")[0];
-                    String param_value = param.split("=")[1];
-//                    System.out.println("\tParam_name: " + param_name + " param_value: " + param_value);
-                    if(searchConstraint.contains(param_name) && !facet_name.equals("")) {
-                        facetFound = true;
-                        newList.add(param_name + "=" + param_value);
-//                        System.out.println("\t\t\tContaints");
+            if(searchConstraint.split("=").length == 2) {
+                String facet_name = searchConstraint.split("=")[0];
+                String facet_value = "";
+                if(!facet_name.equals("")) {
+                    facet_value = searchConstraint.split("=")[1];
+                }
+//                System.out.println("searchConstraint: " + searchConstraint);
+                boolean facetFound = false;
+                if(useURLParams.equals("true")) {
+                    for(int j=0;j<facet_param_list.length;j++) {
+                        String param = facet_param_list[j];
+                        if(param.split("=").length == 2) {
+                            String param_name = param.split("=")[0];
+                            String param_value = param.split("=")[1];
+//                            System.out.println("\tParam_name: " + param_name + " param_value: " + param_value);
+                            if(searchConstraint.contains(param_name) && !facet_name.equals("")) {
+                                facetFound = true;
+                                newList.add(param_name + "=" + param_value);
+//                                System.out.println("\t\t\tContaints");
+                            }
+                        }
+                        
                     }
+                    
                 }
                 
-            }
-            
-            if(!facetFound  && !facet_name.equals("")) {
-                newList.add(facet_name + "=" + facet_value);
+                if(!facetFound  && !facet_name.equals("")) {
+                    newList.add(facet_name + "=" + facet_value);
+                }
+                
             }
             
         }
         
         
-        System.out.println("overwrite newList: " + newList);
         return newList;
         
     }
     
+    
+    /**
+     * 
+     * @param search_constraint_list
+     * @param facet_param_list
+     * @param useURLParams
+     * @return
+     */
     private List<String> enhanceParamList(String [] search_constraint_list,String [] facet_param_list,String useURLParams) {
         
         List<String> newList = new ArrayList<String>();
@@ -314,52 +344,65 @@ public class LiveSearchController {
         
         for(int i=0;i<search_constraint_list.length;i++) {
             String searchConstraint = search_constraint_list[i];
-            String facet_name = searchConstraint.split("=")[0];
-            String facet_value = "";
-            if(!facet_name.equals("")) {
-                facet_value = searchConstraint.split("=")[1];
-                //System.out.println(facet_name + "=" + facet_value);
+            if(searchConstraint.split("=").length == 2) {
+                String facet_name = searchConstraint.split("=")[0];
+                String facet_value = "";
+                if(!facet_name.equals("")) {
+                    facet_value = searchConstraint.split("=")[1];
+                    //System.out.println(facet_name + "=" + facet_value);
+                }
+                newList.add(searchConstraint);
             }
-            newList.add(searchConstraint);
+            
         }
         
 
         if(useURLParams.equals("true")) {
             for(int i=0;i<facet_param_list.length;i++) {
                 String param = facet_param_list[i];
-                String param_name = param.split("=")[0];
-                String param_value = param.split("=")[1];
-//              
-                boolean facetFound = false;
-                for(int j=0;j<search_constraint_list.length;j++) {
-                    String searchConstraint = search_constraint_list[j];
-                    String facet_name = searchConstraint.split("=")[0];
-                    String facet_value = "";
-                    if(!facet_name.equals("")) {
-                        facet_value = searchConstraint.split("=")[1];
+                
+                if(param.split("=").length == 2) {
+                    String param_name = param.split("=")[0];
+                    String param_value = param.split("=")[1];
+//                  
+                    boolean facetFound = false;
+                    for(int j=0;j<search_constraint_list.length;j++) {
+                        String searchConstraint = search_constraint_list[j];
+                        if(searchConstraint.split("=").length == 2) {
+                            String facet_name = searchConstraint.split("=")[0];
+                            String facet_value = "";
+                            if(!facet_name.equals("")) {
+                                facet_value = searchConstraint.split("=")[1];
+                            }
+                            //System.out.println("searchConstraint: " + searchConstraint + " param_name: " + param_name);
+                            if(searchConstraint.contains(param_name) && !facet_name.equals("")) {
+                                facetFound = true;
+                                //newList.add(facet_name + "=" + facet_value);
+                            }
+                        }
+                        
                     }
-                    //System.out.println("searchConstraint: " + searchConstraint + " param_name: " + param_name);
-                    if(searchConstraint.contains(param_name) && !facet_name.equals("")) {
-                        facetFound = true;
-                        //newList.add(facet_name + "=" + facet_value);
+                    if(!facetFound) {
+                        //System.out.println("facet not found...adding");
+                        newList.add(param_name + "=" + param_value);
+                        
                     }
                 }
-                if(!facetFound) {
-                    //System.out.println("facet not found...adding");
-                    newList.add(param_name + "=" + param_value);
-                    
-                }
+                
             }
         }
         
         
         
-        
-        //System.out.println("enhance newList: " + newList);
-        
         return newList;
     }
     
+    
+    /**
+     * 
+     * @param facet
+     * @return
+     */
     private static boolean isFacet(String facet) {
         boolean isFacet = false;
         
@@ -386,31 +429,6 @@ public class LiveSearchController {
         return isFacet;
     }
     
-    private static List<String> getCurrentFacets() {
-        
-        List<String> currentFacets = new ArrayList<String>();
-        
-        
-        Properties properties = new Properties();
-        try {
-            
-            properties.load(new FileInputStream(FACET_PROPERTIES_FILE));
-        
-            for(Object key : properties.keySet()) {
-
-                String keyStr = (String)key;
-                System.out.println("key: " + keyStr);
-            }
-            
-        } catch(Exception e) {
-            
-            System.out.println("Problem removing all properties");
-            e.printStackTrace();
-            
-        }
-        
-        return currentFacets;
-        
-    }
+   
     
 }

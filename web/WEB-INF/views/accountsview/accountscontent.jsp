@@ -15,11 +15,15 @@ p {
 
 <!--  header info -->
 <div class="container">
-	<div class="span-24 last" style="margin-top:20px">
+
+<!--	
+  <div class="span-24 last" style="margin-top:20px">
 		<h2 style="text-align:center">
 		Account Home for user ${accounts_userinfo.userName} 
 		</h2>
 	</div>
+-->
+
 	<div class="prepend-3 span-18 append-3">
 		<fieldset style="background: #F5F5E0">
 			<legend>About</legend>
@@ -72,7 +76,7 @@ p {
 				<table id="groups_admin_table_id">
 					<thead>
 						<tr>
-							<th>Group name</th>
+							<th>Group Name</th>
 							<th>Description</th>
 							<th>Role</th>
 						</tr>
@@ -92,38 +96,50 @@ p {
 					</tbody>					
 				</table>
 			</p>
+      <p>
+      <div class="loading"> <input id='showMore' type="submit" value="Show All" class="button" onclick="javascript:showmore()"/> </div>
+      <div class="loaded" style="display: none"> <input id='showMore' type="submit" value="Show All" class="button" onclick="javascript:showmoregroups()"/> </div>
+      </p>
 		</fieldset>
 
+    <div class="groups" style="display: none">
     <fieldset style="background: #F5F5E0">
       <legend>Groups Available</legend>
-        <table id="groups_admin_table_id">
-          <thead><tr><th>Group name</th><th>Role</th><th></th></tr></thead>
-          <tbody>
-          <tr><td>CMIP5 Research</td><td>User</td>
+      <p class="grouping">  
+      <table id="groups_admin_table_id">
+        <thead><tr><th>Group Name</th><th>Description</th><th>Role</th><th></th></tr></thead>
+          <tbody class="allgroups">
+          <tr><td>CMIP5 Research</td><td>User</td><td>Description</td>
             <td>
               <input id='research' type="submit" value="Register" class="button" onclick="javascript:register('CMIP5 Research')"/>
             </td>
           </tr>
-          <tr><td>CMIP5 Commercial</td><td>User</td>
+          <tr><td>CMIP5 Commercial</td><td>User</td><td>Description</td>
             <td>
               <input id='commercial' type="submit" value="Register" class="button" onclick="javascript:register('CMIP5 Commercial')"/>
             </td>
           </tr>
-          <tr><td>CSSEF</td><td>User</td>
+          <tr><td>CSSEF</td><td>User</td><td>Description</td>
             <td>
               <input id='cssef' type="submit" value="Register" class="button" onclick="javascript:register('CSSER-Group')"/>
             </td>
           </tr>
           </tbody>
         </table>
-        <p> Need help registering for other groups? <a href="http://www.esgf.org/wiki/ESGF_Data_Download">ESGF_Wiki</a></p>
+        </p>
+        <p>
+          <input id='showMore' type="submit" value="Hide" class="button" onclick="javascript:showless()"/> 
+           &nbsp; Need help registering for other groups? Check the ESGF
+           <a href="http://www.esgf.org/wiki/ESGF_Data_Download">Wiki</a>
+        </p>
     </fieldset>
+  </div>
 
     <div class="error" style="display: none"></div>
 		<div class="success" style="display: none"></div>
 
 		<fieldset style="background: #F5F5E0">
-			<legend>Change password</legend>
+			<legend>Change Password</legend>
 			<p>
 				<label for="oldpasswd">Old password:</label>
 				<input id="oldpasswd" name="oldpasswd" type="password"/>
@@ -145,7 +161,8 @@ p {
 	</div>
 </div>
  
-<script language="javascript"> 
+<script language="javascript">
+
   function register(type){
     var userName = "${accounts_userinfo.userName}";
     var group = type;
@@ -165,10 +182,10 @@ p {
 	    dataType: 'json',
 	    success: function(data) {
 	      if (data.EditOutput.status == "success") {
-		      $("div .success").html(data.EditOutput.comment);
-          $("div .success").show();
 		    	$("div .error").hide();
           $('.updatable').append('<tr><td>' + group + '</td><td></td><td>user</td></tr>');
+		      $("div .success").html(data.EditOutput.comment);
+          $("div .success").show();
         } else {
 	    	  $("div .error").html(data.EditOutput.comment);
 	    		$("div .error").show();
@@ -182,10 +199,73 @@ p {
 			}
 		});	
   }
+
+  function showmore(){
+    $("div .loading").hide();
+    $("div .loaded").show();
+    var userName = "${accounts_userinfo.userName}";
+    var jsonObj = new Object;
+		jsonObj.userName = userName;
+			
+		var jsonStr = JSON.stringify(jsonObj);
+		var userinfo_url = '/esgf-web-fe/showallgroupsproxy';
+		$.ajax({
+	    type: "POST",
+	    url: userinfo_url,
+			async: true,
+			cache: false,
+	    data: {query:jsonStr},
+	    dataType: 'json',
+	    success: function(data) {
+	      if (data.EditOutput.status == "success") {
+          var output = data.EditOutput.comment;
+          //alert(output);
+          var rows = output.split("?");
+          var name = "";
+          var desc = "";
+          alert(rows.length);
+          for(var i = 0; i < rows.length; i++){
+            if( (i % 2) == 0){
+              name = rows[i];  
+            }
+            else{
+              desc = rows[i];
+              alert(name + " " + desc);
+              $('.allgroups').append('<tr><td>' + name + '</td><td>' + desc + '</td><td>User</td><td> <input id="commercial" type="submit" value="Register" class="button" onclick="javascript:register(' + name + ')"/></td></tr>');
+            }
+          }
+
+          $("div .groups").show();
+        } else {
+	    	  $("div .error").html(data.EditOutput.comment);
+	    		$("div .error").show();
+	    		$("div .success").hide();
+	    	}
+	    },
+			error: function(request, status, error) {
+			  $("div .error").html(request + " | " + status + " | " + error);
+				$("div .error").show();
+				$("div .success").hide();
+			}
+		});	
+
+  }
+
+  function showless(){
+    $("div .groups").hide();
+    $("div .error").hide();
+    $("div .success").hide();
+  }
+
+  function showmoregroups(){
+    $("div .groups").show();
+    $("div .error").hide();
+    $("div .success").hide();
+  }
+
 </script>  
 
 <script>
-
 $(document).ready(function(){
 	$("#changepwd").click(function() {
 		var oldpassword = $("input[name=oldpasswd]").val();

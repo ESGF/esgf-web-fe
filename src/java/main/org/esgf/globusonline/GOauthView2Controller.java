@@ -111,6 +111,8 @@ public class GOauthView2Controller {
 
     private final static Logger LOG = Logger.getLogger(GOFormView1Controller.class);
     private final static String GLOBUSONLINE_PROPERTIES_FILE = "/esg/config/globusonline.properties";
+    private final static String GOFORMVIEW_ERROR = "GoFormView_Error";
+    private final static String GOFORMVIEW_ERROR_MSG = "GoFormView_ErrorMsg";
 
     public GOauthView2Controller() {
     }
@@ -143,8 +145,8 @@ public class GOauthView2Controller {
 
         Map<String,Object> model = new HashMap<String,Object>();
  		Properties GOProperties = getGOProperties();
-                String PortalID = (String) GOProperties.getProperty("GOesgfPortalID");
-                String PortalPass = (String) GOProperties.getProperty("GOesgfPortalPassword");
+                String PortalID = (String) GOProperties.getProperty("GOesgfPortalID","bogususer");
+                String PortalPass = (String) GOProperties.getProperty("GOesgfPortalPassword","boguspassword");
 
 	    try {
 		// Create the client object so we can use its methods
@@ -168,8 +170,12 @@ public class GOauthView2Controller {
                         //logger.error("Error getting access_token", e);
                         //throw new ValueErrorException();
 		} catch (org.globusonline.nexus.exception.NexusClientException e){
-			System.out.println("Something wrong with GOesgfPortalID or Password, check your properties file");
-		 e.printStackTrace();
+                 String error_msg = "GlobusOnline Configuration error. The administrator must create /esg/config/globusonline.properties and populate it with GOesgfPortalID and GOesgfPortalPassword";
+		 System.out.println(error_msg);
+		 //e.printStackTrace();
+                 model.put(GOFORMVIEW_ERROR, "error");
+                 model.put(GOFORMVIEW_ERROR_MSG, error_msg);
+                 return new ModelAndView("goauthview3", model);
 
 		}
 

@@ -131,6 +131,8 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
     	//remove everything from ajax-solr parameter store  
     	self.manager.store.remove('fq');
         
+    	
+    	
     	var esgf_q = ESGF.localStorage.getAll('esgf_queryString');
         
     	for(var key in esgf_q) {

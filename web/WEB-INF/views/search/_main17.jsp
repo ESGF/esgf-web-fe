@@ -75,13 +75,19 @@
 			<!--  
 		    <input type="checkbox" class="distribcheckbox1" id="distribcheckbox" style="margin-left:20px"/> <span style="font-weight:bold">Search All Sites</span>
 			-->
-			<input type="checkbox" class="distribcheckbox1" id="distribcheckbox" style="margin-left:20px"/><span style="font-weight:bold">Search All Sites</span>
-			<input type="checkbox" class="replicacheckbox1" id="replicacheckbox" style="margin-left:20px"/> <span style="font-weight:bold">Show All Replicas</span>
-			<input type="checkbox" class="versioncheckbox1" id="versioncheckbox" style="margin-left:20px"/> <span style="font-weight:bold">Show All Versions</span>
-			
+			<!--   <label style="display: block;float: left;padding-right: 10px;white-space: nowrap;"> -->
+				<input type="checkbox" class="distribcheckbox1" id="distribcheckbox" style="vertical-align: middle;margin-left:10px;padding-bottom:10px"/><span style="font-weight:bold;padding-top:10px;vertical-align: middle;">Search All Sites</span>
+				<input type="checkbox" class="replicacheckbox1" id="replicacheckbox" style="vertical-align: middle;margin-left:10px;padding-bottom:10px"/> <span style="font-weight:bold;padding-top:10px;vertical-align: middle;">Show All Replicas</span>
+				<input type="checkbox" class="versioncheckbox1" id="versioncheckbox" style="vertical-align: middle;margin-left:10px;padding-bottom:10px"/> <span style="font-weight:bold;padding-top:10px;vertical-align: middle;">Show All Versions</span>
+				<!--  </label> -->
+			<!--  
+			jQuery(list).append('<div><label style="display: block;float: left;padding-right: 10px;white-space: nowrap;"><input type="checkbox" id="read_params" style="vertical-align: middle;padding-bottom:10px" name="checkBox"><span style="font-size:12px;padding-top:5px;vertical-align: middle;">Include URL Parameters</span></label></div>');
+			-->
 		
 		</div>
-		
+		<div class="span-12 last">
+		<input type="checkbox" class="urlparamscheckbox1" id="urlparamscheckbox" style="vertical-align: middle;margin-left:10px;padding-bottom:10px"/> <span style="font-weight:bold;padding-top:10px;vertical-align: middle;">Include URL Parameters</span>		
+		</div>
 </div>
 
 <div class="span-20 last" id="search-summary" style="margin-top:0px;">
@@ -214,6 +220,8 @@
 
       	  	//reset the contents of the GO_Credential 
       	  	ESGF.localStorage.removeAll('GO_Credential');
+      	  	
+      	  	
       	  	
     	});
     	

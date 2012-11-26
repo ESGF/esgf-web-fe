@@ -6,8 +6,6 @@
 
 <div class="span-24 last headertop" style="border-top: 3px solid #18638a;padding-top: 5px;padding-bottom: 5px">
 	
-	<span id="modelName" style="display:none">${Model_Name}</span>
-	<span id="datacartOpen" style="display:none">${Datacart_Open}</span>
 	
 	
 	<c:choose>

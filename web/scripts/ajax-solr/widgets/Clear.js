@@ -10,10 +10,15 @@
 		},
 		
 		afterRequest: function() {
+			
+			
 			$("a#clearcache").live('click', function() {
 				
+			
+			  alert('in clear cache');
+				
           	  //remove the existing parameter store
-          	  Manager.store.remove('fq');
+          	  //Manager.store.remove('fq');
           	  
           	  //reset the localStorage for search constraints
           	  ESGF.localStorage.removeAll('esgf_fq');
@@ -28,6 +33,16 @@
           	  ESGF.localStorage.removeAll('searchStates');
           	  
 
+        	  	//reset the contents of the GO_Credential 
+        	  	ESGF.localStorage.removeAll('GO_Credential');
+        	  	
+        	  	
+          	  /*
+          	  ESGF.setting.replicas = 'false';
+          	  ESGF.setting.versionsLatest = 'true';
+          	  ESGF.setting.distributed = 'true';
+			  */
+          	  
 			  Manager.doRequest(0);
 			
 			});

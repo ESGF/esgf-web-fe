@@ -120,7 +120,7 @@ public class GetAllGroupsController {
         pass = true;
         //allGroupsTable = "this is a success message";
         
-          List<String[]> results = myGroupRoleDAO.getGroupEntriesNotFor(myUserInfoDAO.getUserById(userName).getOpenid());
+          //List<String[]> results = myGroupRoleDAO.getGroupEntriesNotFor(myUserInfoDAO.getUserById(userName).getOpenid());
         
         
         allGroupsTable = "group name?description?group name 1?description 1";

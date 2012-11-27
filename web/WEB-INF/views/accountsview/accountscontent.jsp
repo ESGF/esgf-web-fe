@@ -109,21 +109,6 @@ p {
       <table id="groups_admin_table_id">
         <thead><tr><th>Group Name</th><th>Description</th><th>Role</th><th></th></tr></thead>
           <tbody class="allgroups">
-          <tr><td>CMIP5 Research</td><td>User</td><td>Description</td>
-            <td>
-              <input id='research' type="submit" value="Register" class="button" onclick="javascript:register('CMIP5 Research')"/>
-            </td>
-          </tr>
-          <tr><td>CMIP5 Commercial</td><td>User</td><td>Description</td>
-            <td>
-              <input id='commercial' type="submit" value="Register" class="button" onclick="javascript:register('CMIP5 Commercial')"/>
-            </td>
-          </tr>
-          <tr><td>CSSEF</td><td>User</td><td>Description</td>
-            <td>
-              <input id='cssef' type="submit" value="Register" class="button" onclick="javascript:register('CSSER-Group')"/>
-            </td>
-          </tr>
           </tbody>
         </table>
         </p>
@@ -184,6 +169,7 @@ p {
 	      if (data.EditOutput.status == "success") {
 		    	$("div .error").hide();
           $('.updatable').append('<tr><td>' + group + '</td><td></td><td>user</td></tr>');
+          $('.' + group).hide();
 		      $("div .success").html(data.EditOutput.comment);
           $("div .success").show();
         } else {
@@ -202,7 +188,7 @@ p {
 
   function showmore(){
     $("div .loading").hide();
-    $("div .loaded").show();
+    $("div .loaded").hide();
     var userName = "${accounts_userinfo.userName}";
     var jsonObj = new Object;
 		jsonObj.userName = userName;
@@ -219,23 +205,25 @@ p {
 	    success: function(data) {
 	      if (data.EditOutput.status == "success") {
           var output = data.EditOutput.comment;
-          //alert(output);
-          var rows = output.split("?");
+          var rows = output.split("][");
           var name = "";
           var desc = "";
-          alert(rows.length);
-          for(var i = 0; i < rows.length; i++){
-            if( (i % 2) == 0){
-              name = rows[i];  
+          if(rows.length > 2){
+            for(var i = 0; i < rows.length; i++){
+              var groupInfo = rows[i].split(", ");
+              if(groupInfo[4] == "t"){
+                $('.allgroups').append('<tr class ="' + groupInfo[1] + '"><td>' + groupInfo[1] + '</td><td>' + groupInfo[2] + '</td><td>User</td><td><input id="' + groupInfo[1] + '" type="submit" value="Register" class="button" onclick="javascript:register(\'' + groupInfo[1] + '\')"/></td></tr>');
+              }
             }
-            else{
-              desc = rows[i];
-              alert(name + " " + desc);
-              $('.allgroups').append('<tr><td>' + name + '</td><td>' + desc + '</td><td>User</td><td> <input id="commercial" type="submit" value="Register" class="button" onclick="javascript:register(' + name + ')"/></td></tr>');
-            }
+            $("div .groups").show();
           }
-
-          $("div .groups").show();
+          else{
+            $("div .error").html("You are already a member of all groups on this node.");
+	    		  $("div .error").show();
+	    		  $("div .success").hide();
+            $("div .loading").hide();
+            $("div .loaded").hide();
+          }
         } else {
 	    	  $("div .error").html(data.EditOutput.comment);
 	    		$("div .error").show();
@@ -252,6 +240,7 @@ p {
   }
 
   function showless(){
+    $("div .loaded").show();
     $("div .groups").hide();
     $("div .error").hide();
     $("div .success").hide();
@@ -259,6 +248,7 @@ p {
 
   function showmoregroups(){
     $("div .groups").show();
+    $("div .loaded").hide();
     $("div .error").hide();
     $("div .success").hide();
   }

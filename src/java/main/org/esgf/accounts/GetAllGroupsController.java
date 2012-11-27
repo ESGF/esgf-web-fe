@@ -103,9 +103,9 @@ public class GetAllGroupsController {
         System.out.println("ADF I'm in");
         String query = (String)request.getParameter("query");
         String userName = "";
-        boolean pass = false;
+        boolean pass = true;
         String errormessage = "";
-        String allGroupsTable = "";        
+        String groups = "";
         JSONObject jsonObj = null;
         
         try {
@@ -116,24 +116,22 @@ public class GetAllGroupsController {
             errormessage = "error in parsing the json text string :" + query;
             pass = false;
         }
-        // Call group method to get list of all groups
-        pass = true;
-        //allGroupsTable = "this is a success message";
         
-          //List<String[]> results = myGroupRoleDAO.getGroupEntriesNotFor(myUserInfoDAO.getUserById(userName).getOpenid());
-        
-        
-        allGroupsTable = "group name?description?group name 1?description 1";
-        errormessage = "this is the error message";
+        List<String[]> results = myGroupRoleDAO.getGroupEntriesNotFor(myUserInfoDAO.getUserById(userName).getOpenid());
 
-        System.out.println("MBH ---> " + errormessage);
+        for(String[] string : results){
+          groups = groups + Arrays.toString(string);
+        }
+        groups = groups + "[0, 1, 2, 3, 4]";
+
         LOG.debug("GetAllGroupsController -->" + userName);
-        
+        System.out.println("groups --> " + groups);
+
         String xmlOutput = "<EditOutput>";
         if(pass){
           //Returning list of all groups
           xmlOutput += "<status>success</status>";
-          xmlOutput += "<comment>" + allGroupsTable + "</comment>";
+          xmlOutput += "<comment>" + groups + "</comment>";
           xmlOutput += "</EditOutput>";
          
         } else {

@@ -1,4 +1,4 @@
-package org.esgf.adminui;
+package org.esgf.accounts;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -98,7 +98,6 @@ public class RegisterForGroupsController {
     @RequestMapping(method=RequestMethod.POST)
     public @ResponseBody String doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException, JDOMException {
         LOG.debug("ExtractUserInfoController doPost");
-        System.out.println("ADF I'm in");
         String query = (String)request.getParameter("query");
         String userName = "";
         String group = "";
@@ -117,12 +116,8 @@ public class RegisterForGroupsController {
             errormessage = "error in parsing the json text string :" + query;
             pass = false;
         }
-
-        // Is user in group already?
-        // If not add to group.
-        // If so report back no changes made.
+        
         pass = myUserInfoDAO.addPermission(userName, group, role);
-         
         errormessage = "You are already a member of this group.";
 
         LOG.debug("RegisterForGroupsController -->" + userName);

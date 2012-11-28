@@ -1,4 +1,4 @@
-package org.esgf.adminui;
+package org.esgf.accounts;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -125,7 +125,6 @@ public class GetAllGroupsController {
         groups = groups + "[0, 1, 2, 3, 4]";
 
         LOG.debug("GetAllGroupsController -->" + userName);
-        System.out.println("groups --> " + groups);
 
         String xmlOutput = "<EditOutput>";
         if(pass){

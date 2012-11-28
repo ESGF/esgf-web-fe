@@ -1,4 +1,4 @@
-package org.esgf.adminui;
+package org.esgf.accounts;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -44,8 +44,8 @@ import esg.node.security.UserInfo;
 import esg.node.security.UserInfoCredentialedDAO;
 
 /**
- * Implementation of this controller will add a user to the group and roll
- * The controller searches user records, and then adds them to a group
+ * Implementation of this controller will remove a user from a group
+ * The controller searches user records, and then removes them from the group
  * @author Matthew Harris 
  */
 @Controller
@@ -117,10 +117,7 @@ public class UnRegisterForGroupsController {
             pass = false;
         }
         
-        System.out.println("\n\n\n BEFORE \n\n\n ");
-        //UserInfo thisUser = myUserInfoDAO.getUserByOpenid(userName);
         UserInfo userInfo = myUserInfoDAO.getUserById(userName);
-        System.out.println("\n\n\n After \n\n\n ");
         pass = myUserInfoDAO.deletePermission(userInfo, group, role);
         errormessage = "You are already not a member of this group.";
 

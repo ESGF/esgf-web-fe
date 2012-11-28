@@ -60,6 +60,10 @@
 		        	<a href='http://esg2.nci.org.au/'><img src="images/flags/Australia.png" class="icon"/>NCI Node</a>
 		        	<a href='http://esg2.nci.org.au/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
 		        </li>				
+                        <li>
+                                <a href='http://esg01.nersc.gov/'><img src="images/flags/USA.png" class="icon"/>NERSC Node</a>  
+                                <a href='http://esg01.nersc.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
+                        </li>
 		        <li>
 		        	<a href='http://esg.ccs.ornl.gov/'><img src="images/flags/USA.png" class="icon"/>ORNL Node</a>
 		        	<a href='http://esg.ccs.ornl.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>

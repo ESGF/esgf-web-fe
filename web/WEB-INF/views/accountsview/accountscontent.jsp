@@ -16,14 +16,6 @@ p {
 <!--  header info -->
 <div class="container">
 
-<!--	
-  <div class="span-24 last" style="margin-top:20px">
-		<h2 style="text-align:center">
-		Account Home for user ${accounts_userinfo.userName} 
-		</h2>
-	</div>
--->
-
 	<div class="prepend-3 span-18 append-3">
 		<fieldset style="background: #F5F5E0">
 			<legend>About</legend>
@@ -71,7 +63,7 @@ p {
 			</p>
 		</fieldset>
 		<fieldset style="background: #F5F5E0">
-			<legend>Group Administered</legend>
+			<legend>Groups Registered</legend>
 			<p>
 				<table id="groups_admin_table_id">
 					<thead>
@@ -79,17 +71,19 @@ p {
 							<th>Group Name</th>
 							<th>Description</th>
 							<th>Role</th>
+              <th></th>
 						</tr>
 					</thead>
 					<tbody class="updatable">
 				        <c:set var="j" value="0"/>
 				        <c:forEach var="group" items="${accounts_groupinfo}">
-							 <tr class="group_rows" 
+							 <tr class="${accounts_groupinfo[j].name}" 
 							 	 id="${accounts_groupinfo[j].name}" 
 							 	 style="cursor:pointer">  
 				                <td>${accounts_groupinfo[j].name}</td>  
 				                <td>${accounts_groupinfo[j].description}</td> 
-				                <td>${accounts_roleinfo[j]}</td>  
+				                <td>${accounts_roleinfo[j]}</td> 
+                        <td><input id="${accounts_groupinfo[j].name}" type="submit" value="UnRegister" class="button" onclick="javascript:unregister('${accounts_groupinfo[j].name}', '${accounts_groupinfo[j].description}')"/></td> 
 				            </tr> 
 				            <c:set var="j" value="${j+1}"/>
 						</c:forEach>
@@ -102,6 +96,9 @@ p {
       </p>
 		</fieldset>
 
+    <div class="error" style="display: none"></div>
+		<div class="success" style="display: none"></div>
+    
     <div class="groups" style="display: none">
     <fieldset style="background: #F5F5E0">
       <legend>Groups Available</legend>
@@ -113,15 +110,12 @@ p {
         </table>
         </p>
         <p>
-          <input id='showMore' type="submit" value="Hide" class="button" onclick="javascript:showless()"/> 
+          <input id="showMore" type="submit" value="Hide" class="button" onclick="javascript:showless()"/> 
            &nbsp; Need help registering for other groups? Check the ESGF
            <a href="http://www.esgf.org/wiki/ESGF_Data_Download">Wiki</a>
         </p>
     </fieldset>
   </div>
-
-    <div class="error" style="display: none"></div>
-		<div class="success" style="display: none"></div>
 
 		<fieldset style="background: #F5F5E0">
 			<legend>Change Password</legend>
@@ -148,9 +142,49 @@ p {
  
 <script language="javascript">
 
-  function register(type){
+  function unregister(name, desc){
+    var groupName = name;
+    var groupDesc = desc;
+    var userName = "${accounts_userinfo.userName}";
+    
+    var jsonObj = new Object;
+		jsonObj.userName = userName;
+		jsonObj.group = groupName;
+		jsonObj.role = "user";
+
+    var jsonStr = JSON.stringify(jsonObj);
+		var userinfo_url = '/esgf-web-fe/leavegroupproxy';
+		$.ajax({
+	    type: "POST",
+	    url: userinfo_url,
+			async: true,
+			cache: false,
+	    data: {query:jsonStr},
+	    dataType: 'json',
+	    success: function(data) {
+	      if (data.EditOutput.status == "success") {
+          $('.' + groupName).hide();
+          $('.allgroups').append('<tr class="' + groupName + '"><td>' + groupName + '</td><td>' + groupDesc + '</td><td>user</td><td><input id="' + groupName + '" type="submit" value="Register" class="button" onclick="javascript:register(\'' + groupName + '\', \'' + groupDesc + '\')"/></td></tr>');
+          $("div .success").html(data.EditOutput.comment);
+          $("div .success").show();
+        } else {
+	    	  $("div .error").html(data.EditOutput.comment);
+	    		$("div .error").show();
+	    		$("div .success").hide();
+	    	}
+	    },
+			error: function(request, status, error) {
+			  $("div .error").html(request + " " + status + " " + error);
+				$("div .error").show();
+				$("div .success").hide();
+			}
+		});
+  }
+
+  function register(type, desc){
     var userName = "${accounts_userinfo.userName}";
     var group = type;
+    var info = desc;
     var jsonObj = new Object;
 		jsonObj.userName = userName;
 		jsonObj.group = group;
@@ -167,9 +201,8 @@ p {
 	    dataType: 'json',
 	    success: function(data) {
 	      if (data.EditOutput.status == "success") {
-		    	$("div .error").hide();
-          $('.updatable').append('<tr><td>' + group + '</td><td></td><td>user</td></tr>');
           $('.' + group).hide();
+          $('.updatable').append('<tr class="' + group + '"><td>' + group + '</td><td>' + info + '</td><td>user</td><td><input id="' + group + '" type="submit" value="UnRegister" class="button" onclick="javascript:unregister(\'' + group + '\', \'' + info + '\')"/></td></tr>');
 		      $("div .success").html(data.EditOutput.comment);
           $("div .success").show();
         } else {
@@ -212,7 +245,10 @@ p {
             for(var i = 0; i < rows.length; i++){
               var groupInfo = rows[i].split(", ");
               if(groupInfo[4] == "t"){
-                $('.allgroups').append('<tr class ="' + groupInfo[1] + '"><td>' + groupInfo[1] + '</td><td>' + groupInfo[2] + '</td><td>User</td><td><input id="' + groupInfo[1] + '" type="submit" value="Register" class="button" onclick="javascript:register(\'' + groupInfo[1] + '\')"/></td></tr>');
+                $('.allgroups').append('<tr class ="' + groupInfo[1] + '"><td>' + groupInfo[1] + '</td><td>' + groupInfo[2] + '</td><td>user</td><td><input id="' + groupInfo[1] + '" type="submit" value="Register" class="button" onclick="javascript:register(\'' + groupInfo[1] + '\', \'' + groupInfo[2] + '\')"/></td></tr>');
+              }
+              else if (groupInfo == "f"){
+                $('.allgroups').append('<tr class ="' + groupInfo[1] + '"><td>' + groupInfo[1] + '</td><td>' + groupInfo[2] + '</td><td>user</td><td>Please Contact Admin</td></tr>');
               }
             }
             $("div .groups").show();
@@ -277,6 +313,7 @@ $(document).ready(function(){
 			jsonObj.newpasswd = password1;
 			jsonObj.verifypasswd = password2;
 			
+      //TODO new password must conform to our rules
 			var jsonStr = JSON.stringify(jsonObj);
 			var userinfo_url = '/esgf-web-fe/edituserinfoproxy';
 			$.ajax({

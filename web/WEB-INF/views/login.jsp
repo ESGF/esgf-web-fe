@@ -240,13 +240,13 @@
 
                     }
                   </script>
+            <p/>
                 </c:when>
 
                 <c:otherwise>
-
-					<p/>
-                    <h1>ESGF Logout</h1>
-
+                  <c:redirect url="/accountsview"/>
+					        
+                  <h1>ESGF Logout</h1>
                     <!-- User is authenticated -->
                     <table align="center">
                         <tr>

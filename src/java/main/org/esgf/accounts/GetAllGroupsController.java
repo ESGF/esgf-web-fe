@@ -100,7 +100,6 @@ public class GetAllGroupsController {
      */
     @RequestMapping(method=RequestMethod.POST)
     public @ResponseBody String doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException, JDOMException {
-        System.out.println("ADF I'm in");
         String query = (String)request.getParameter("query");
         String userName = "";
         boolean pass = true;
@@ -123,9 +122,11 @@ public class GetAllGroupsController {
           groups = groups + Arrays.toString(string);
         }
         groups = groups + "[0, 1, 2, 3, 4]";
-
         LOG.debug("GetAllGroupsController -->" + userName);
 
+        
+        //List<String[]> resultsFederation = myGroupRoleDAO.getFederationGroupEntriesNotFor(myUserInfoDAO.getUserById(userName).getOpenid());
+        
         String xmlOutput = "<EditOutput>";
         if(pass){
           //Returning list of all groups

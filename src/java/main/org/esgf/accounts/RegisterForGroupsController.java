@@ -116,9 +116,12 @@ public class RegisterForGroupsController {
             errormessage = "error in parsing the json text string :" + query;
             pass = false;
         }
-        
+        // if local group
         pass = myUserInfoDAO.addPermission(userName, group, role);
         errormessage = "You are already a member of this group.";
+
+        //else federation group
+        //pass = myUserInfoDAO.addPermissionFederation(userName, group, role, where);
 
         LOG.debug("RegisterForGroupsController -->" + userName);
         

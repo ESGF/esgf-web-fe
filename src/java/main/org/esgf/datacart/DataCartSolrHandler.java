@@ -21,6 +21,7 @@ import org.esgf.metadata.JSONException;
 import org.esgf.metadata.JSONObject;
 
 
+@SuppressWarnings("unused")
 public class DataCartSolrHandler {
 
     private static String searchAPIURL = "http://localhost/esg-search/search?";//

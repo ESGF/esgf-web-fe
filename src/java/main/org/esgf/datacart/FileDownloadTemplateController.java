@@ -18,6 +18,7 @@ public class FileDownloadTemplateController {
     private final static boolean writeToXMLFile = false;
     private final static String testInitializationFile = "C:\\Users\\8xo\\esgf-web-fe\\docselement.xml";
 
+    @SuppressWarnings("unused")
     public static void main(String [] args) {
         final MockHttpServletRequest mockRequest = new MockHttpServletRequest();
         
@@ -119,6 +120,7 @@ public class FileDownloadTemplateController {
      * @param request
      * @return
      */
+    @SuppressWarnings("unused")
     @RequestMapping(method=RequestMethod.POST, value="/datacart/{datasetId}")
     public @ResponseBody String getDoc(@PathVariable String datasetId,HttpServletRequest request) {
     
@@ -199,6 +201,7 @@ public class FileDownloadTemplateController {
     
     
     
+    @SuppressWarnings("unchecked")
     public static void queryStringInfo(HttpServletRequest request) {
         System.out.println("--------Utils Query String Info--------");
         Enumeration<String> paramEnum = request.getParameterNames();

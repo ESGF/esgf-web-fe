@@ -234,6 +234,7 @@ public class FileElement implements DataCartElement{
     }
     
     
+    @SuppressWarnings("rawtypes")
     public void fromSolr(JSONObject solrResponse) {
         Iterator iter = solrResponse.sortedKeys();
         

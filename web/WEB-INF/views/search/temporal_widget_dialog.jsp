@@ -17,8 +17,8 @@
 											</div>  
 											<div id="temporal_content1">  	
 												<div id="time_range">  
-													Search from: <input type="text" id="from" name="from" size="10" />  
-													to: <input type="text" id="to" name="to" size="10" />   
+													Search from: <input type="text" id="from" name="from" size="10" alt="search text" />  
+													to: <input type="text" id="to" name="to" size="10" alt="search submit" />   
 												</div> 
 												<br />  
 												<div id="adv_temp1">  

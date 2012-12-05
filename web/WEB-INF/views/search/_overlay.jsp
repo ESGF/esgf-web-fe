@@ -41,8 +41,8 @@
         <div class="overlay_header_buttons">
         <!--  
             <div id="facetSort">
-                <input type="radio" id="sortbycount" name="sorter" checked="checked" value="sortbycount" /><label for="sortbycount">Sort By Count</label>
-                <input type="radio" id="sortbyabc" name="sorter" value="sortbyabc" /><label for="sortbyabc">Sort By ABC</label>
+                <input type="radio" alt="sortbycount radio" id="sortbycount" name="sorter" checked="checked" value="sortbycount" /><label for="sortbycount">Sort By Count</label>
+                <input type="radio" alt="sortbyabc radio" id="sortbyabc" name="sorter" value="sortbyabc" /><label for="sortbyabc">Sort By ABC</label>
             </div>
         -->
         </div>

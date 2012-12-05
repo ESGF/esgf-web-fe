@@ -7,9 +7,9 @@
 	{{if count > 0}}
 		<tr style="margin-top:50px;" class="top_level_data_item"  >
 			{{if count > 0}}
-				<td style="width: 40px;"><input class="topLevel" type="checkbox" checked="true" /> </td>
+				<td style="width: 40px;"><input class="topLevel" type="checkbox" checked="true" alt="checkbox" /> </td>
 			{{else}}
-				<td style="width: 40px;"><input class="topLevel" disabled="true" type="checkbox" checked="true" /> </td>
+				<td style="width: 40px;"><input class="topLevel" disabled="true" type="checkbox" checked="true" alt="checkbox" /> </td>
 			{{/if}}	
 
 			<td style="width: 300px;font-size:13px">
@@ -43,7 +43,7 @@
 		
 	{{else}}
 		<tr style="margin-top:50px;" class="top_level_data_item"  >
-			<td style="width: 40px;"><input class="topLevel" disabled="true" type="checkbox" checked="true" /> </td>
+			<td style="width: 40px;"><input class="topLevel" disabled="true" type="checkbox" checked="true" alt="checkbox" /> </td>
 			<td style="width: 300px;font-size:13px">
 				
 				<div style="word-wrap: break-word;font-weight:bold;color:gray"><span class="datasetId">${datasetId}</span> 
@@ -68,6 +68,7 @@
 					<input style="margin-left: 10px;display:none" 
 						   class="fileLevel" 
 						   type="checkbox" 
+						   alt="checkbox"
                            class="fileId" 
                            id="${fileId}" 
                            checked="true" 
@@ -160,7 +161,7 @@
 
 <%--
 			<tr class="rows_${$item.replacePeriods(datasetId)}" style="display:none">
-				<td style="width: 40px;"><input style="margin-left: 10px;" class="fileLevel" type="checkbox" class="fileId" id="${fileId}" checked="true" value="${urls.url[1]}"/></td>
+				<td style="width: 40px;"><input style="margin-left: 10px;" class="fileLevel" type="checkbox" alt="checkbox" class="fileId" id="${fileId}" checked="true" value="${urls.url[1]}"/></td>
 				
 				<td style="width: 325px;padding-left:10px;font-size:11px;">
 					<div style="word-wrap: break-word;"> 

@@ -10,9 +10,9 @@
 	</div>
 	<div class="span-17 last">
 		<span id="search-box">
-	    <input id="query" name="text" type="text" value="" />
+	    <input id="query" name="text" type="text" value="" alt="query text"/>
 	    </span>
-	    <input id="search-button" type="submit" value="Search" />
+	    <input id="search-button" type="submit" value="Search" alt="query submit" />
 		  
 	    <div class="span-20 last" id="search-summary">
 		

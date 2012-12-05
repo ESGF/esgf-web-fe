@@ -175,7 +175,7 @@
  
 <!-- user input dialog -->
 <div class="modal" id="prompt" style="background-color:#ffffff;font-style:bold">
-  <img src='/esgf-web-fe/images/ajax-loader.gif' style="float:left;margin-right:20px"/> 
+  <img src='/esgf-web-fe/images/ajax-loader.gif' style="float:left;margin-right:20px" alt="loader" /> 
   <div style="padding-left:20px">Processing...</div>
 
   <!--  <button class="f">Close</button>  -->

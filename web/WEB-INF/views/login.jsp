@@ -76,14 +76,14 @@
 	                            <tr>
 	                                <td align="right" class="required"><b>Openid:</b></td>
 	                                <td align="left" style="width:100%">
-	                                 	<input type="text" name="openid_identifier" id="openid_identifier" size="60" value="${cookie[openid_cookie].value}" style="width:100%"/ >
+	                                 	<input type="text" name="openid_identifier" alt="openid text" id="openid_identifier" size="60" value="${cookie[openid_cookie].value}" style="width:100%"/ >
 	                                 </td>
-	                                <td><input type="submit" value="Login" class="button" onclick="javascript:sanitize()"/></td>
+	                                <td><input type="submit" alt="openid submit" value="Login" class="button" onclick="javascript:sanitize()"/></td>
 	                            </tr>
 	                            <tr>
 	                                <td>&nbsp;</td>
 	                                <td align="center" colspan="2">
-	                                    <input type="checkbox" name="remember_openid" checked="checked" /> <span class="strong">Remember my OpenID</span> on this computer
+	                                    <input type="checkbox" name="remember_openid" checked="checked" alt="openid checkbox" /> <span class="strong">Remember my OpenID</span> on this computer
 	                                </td>
 	                            </tr>
 	                       </table>

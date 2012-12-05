@@ -3,7 +3,7 @@
 <div class="span-7 last">
 	<div class="span-7 last infoheader">
 		<div class="infoheadericon">
-           	<img src="images/image001.jpg" />
+           	<img src="images/image001.jpg" alt="search icon" />
        	</div>
        	<div class="infoheadertxt">
                <h1>Quick Search</h1>

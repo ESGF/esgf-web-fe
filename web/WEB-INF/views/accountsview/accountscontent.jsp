@@ -110,7 +110,9 @@ p {
                     var info = "${accounts_groupinfo[j].description}";
                     var role = "${accounts_roleinfo[j]}";
                     var autoReg = "t";
-                    $('.updatable').append('<tr class="' + classId + '"><td>' + group + '</td><td>' + info + '</td><td>' + role + '</td><td><input id="' + group + '" type="submit" value="Leave" class="button" onclick="javascript:unregister(\'' + group + '\', \'' + info + '\', \'' + role + '\', \'' + autoReg + '\')"/></td></tr>');
+                    if(group != "wheel"){
+                      $('.updatable').append('<tr class="' + classId + '"><td>' + group + '</td><td>' + info + '</td><td>' + role + '</td><td><input id="' + group + '" type="submit" value="Leave" class="button" onclick="javascript:unregister(\'' + group + '\', \'' + info + '\', \'' + role + '\', \'' + autoReg + '\')"/></td></tr>');
+                    }
                   </script>
 
 				          <c:set var="j" value="${j+1}"/>
@@ -133,7 +135,7 @@ p {
       <legend>Groups Available</legend>
       <p class="grouping"> 
         <strong>Local Groups</strong> 
-        <table id="groups_admin_table_id">
+        <table id="groups_table_id">
          <thead><tr><th>Group Name</th><th>Description</th><th>Role</th><th>Register</th></tr></thead>
          <tbody class="allgroups">
          </tbody>
@@ -276,6 +278,12 @@ p {
     $("div .loading").hide();
     $("div .loaded").hide();
     hideAll();
+    
+    var Parent = document.getElementById('groups_table_id');
+    for(var i = Parent.rows.length - 1; i > 0; i--){
+      Parent.deleteRow(i);
+    }
+
     var userName = "${accounts_userinfo.userName}";
     var jsonObj = new Object;
 		jsonObj.userName = userName;
@@ -302,7 +310,7 @@ p {
               var classId = groupInfo[1];
               classId = classId.replace(/\s/g,"");
               if(groupInfo[1] == "wheel"){
-              
+                //logic?
               }
               else if(groupInfo[4] == "t"){
                 $('.allgroups').append('<tr class ="' + classId + '"><td>' + groupInfo[1] + '</td><td>' + groupInfo[2] + '</td><td>' + role  + '</td><td><input id="' + groupInfo[1] + '" type="submit" value="Join" class="button" onclick="javascript:register(\'' + groupInfo[1] + '\', \'' + groupInfo[2] + '\', \'' + role + '\', \'' + groupInfo[4] + '\')"/></td></tr>');

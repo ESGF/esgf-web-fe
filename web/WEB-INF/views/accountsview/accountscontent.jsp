@@ -99,20 +99,23 @@ p {
 						</tr>
 					</thead>
 					<tbody class="updatable">
+          </tbody>					
+				</table>
 				        <c:set var="j" value="0"/>
 				        <c:forEach var="group" items="${accounts_groupinfo}">
-							 <tr class="${accounts_groupinfo[j].name}" 
-							 	 id="${accounts_groupinfo[j].name}" 
-							 	 style="cursor:pointer">  
-				                <td>${accounts_groupinfo[j].name}</td>  
-				                <td>${accounts_groupinfo[j].description}</td> 
-				                <td>${accounts_roleinfo[j]}</td> 
-                        <td><input id='${accounts_groupinfo[j].name}' type="submit" value="Leave" class="button" onclick="javascript:unregister('${accounts_groupinfo[j].name}', '${accounts_groupinfo[j].description}', 't')"/></td> 
-				            </tr> 
-				            <c:set var="j" value="${j+1}"/>
+                  <script language="javascript">
+                    var className = "${accounts_groupinfo[j].name}";
+                    var classId = className.replace(/\s/g,"");
+                    var group = "${accounts_groupinfo[j].name}";
+                    var info = "${accounts_groupinfo[j].description}";
+                    var role = "${accounts_roleinfo[j]}";
+                    var autoReg = "t";
+                    $('.updatable').append('<tr class="' + classId + '"><td>' + group + '</td><td>' + info + '</td><td>' + role + '</td><td><input id="' + group + '" type="submit" value="Leave" class="button" onclick="javascript:unregister(\'' + group + '\', \'' + info + '\', \'' + role + '\', \'' + autoReg + '\')"/></td></tr>');
+                  </script>
+
+				          <c:set var="j" value="${j+1}"/>
 						</c:forEach>
-					</tbody>					
-				</table>
+					
 			</p>
       <p>
       <div class="loading"> <input id='showMore' type="submit" value="Show All" class="button" onclick="javascript:showmore()"/> </div>
@@ -177,18 +180,18 @@ p {
  
 <script language="javascript">
 
-  function unregister(name, desc, auto){
+  function unregister(name, desc, role, auto){
     hideAll();
     var groupName = name;
     var groupDesc = desc;
+    var groupRole = role;
     var groupAuto = auto;
-    //alert(name + " | " + desc + " | " + auto);
     var userName = "${accounts_userinfo.userName}";
-    
+     
     var jsonObj = new Object;
 		jsonObj.userName = userName;
 		jsonObj.group = groupName;
-		jsonObj.role = "user";
+		jsonObj.role = groupRole;
 
     var jsonStr = JSON.stringify(jsonObj);
 		var userinfo_url = '/esgf-web-fe/leavegroupproxy';
@@ -204,10 +207,10 @@ p {
           var classId = groupName.replace(/\s/g,"");
           $('.' + classId).hide();
           if(groupAuto == "t"){
-            $('.allgroups').append('<tr class="' + classId + '"><td>' + groupName + '</td><td>' + groupDesc + '</td><td>user</td><td><input id="' + groupName + '" type="submit" value="Join" class="button" onclick="javascript:register(\'' + groupName + '\', \'' + groupDesc + '\', \'' + groupAuto + '\')"/></td></tr>');
+            $('.allgroups').append('<tr class="' + classId + '"><td>' + groupName + '</td><td>' + groupDesc + '</td><td>' + groupRole + '</td><td><input id="' + groupName + '" type="submit" value="Join" class="button" onclick="javascript:register(\'' + groupName + '\', \'' + groupDesc + '\', \'' + groupRole + '\', \'' + groupAuto + '\')"/></td></tr>');
           }
           else if(groupAuto == "f"){
-            $('.allgroups').append('<tr class="' + classId + '"><td>' + groupName + '</td><td>' + groupDesc + '</td><td>user</td><td><input id="' + groupName + '" type="submit" value="Request" class="button" onclick="javascript:register(\'' + groupName + '\', \'' + groupDesc + '\', \'' + groupAuto + '\')"/></td></tr>');
+            $('.allgroups').append('<tr class="' + classId + '"><td>' + groupName + '</td><td>' + groupDesc + '</td><td>' + groupRole + '</td><td><input id="' + groupName + '" type="submit" value="Request" class="button" onclick="javascript:register(\'' + groupName + '\', \'' + groupDesc + '\', \'' + groupRole + '\', \'' + groupAuto + '\')"/></td></tr>');
           }
           $("div .success").html(data.EditOutput.comment);
           $("div .middle").append($("div .success"));
@@ -226,16 +229,17 @@ p {
 		});
   }
 
-  function register(type, desc, auto){
+  function register(type, desc, role, auto){
     hideAll();
     var userName = "${accounts_userinfo.userName}";
     var group = type;
     var info = desc;
+    var role = role;
     var autoReg = auto;
     var jsonObj = new Object;
 		jsonObj.userName = userName;
 		jsonObj.group = group;
-		jsonObj.role = "user";
+		jsonObj.role = role;
 			
 		var jsonStr = JSON.stringify(jsonObj);
 		var userinfo_url = '/esgf-web-fe/addgroupproxy';
@@ -250,7 +254,7 @@ p {
 	      if (data.EditOutput.status == "success") {
           var classId = group.replace(/\s/g,"");
           $('.' + classId).hide();
-          $('.updatable').append('<tr class="' + classId + '"><td>' + group + '</td><td>' + info + '</td><td>user</td><td><input id="' + group + '" type="submit" value="Leave" class="button" onclick="javascript:unregister(\'' + group + '\', \'' + info + '\', \'' + autoReg + '\')"/></td></tr>');
+          $('.updatable').append('<tr class="' + classId + '"><td>' + group + '</td><td>' + info + '</td><td>' + role + '</td><td><input id="' + group + '" type="submit" value="Leave" class="button" onclick="javascript:unregister(\'' + group + '\', \'' + info + '\', \'' + role + '\', \'' + autoReg + '\')"/></td></tr>');
 		      $("div .success").html(data.EditOutput.comment);
           $("div .middle").append($("div .success"));
           $("div .success").show();
@@ -291,6 +295,7 @@ p {
           var rows = output.split("][");
           var name = "";
           var desc = "";
+          var role = "user";
           if(rows.length > 2){
             for(var i = 0; i < rows.length; i++){
               var groupInfo = rows[i].split(", ");
@@ -300,11 +305,11 @@ p {
               
               }
               else if(groupInfo[4] == "t"){
-                $('.allgroups').append('<tr class ="' + classId + '"><td>' + groupInfo[1] + '</td><td>' + groupInfo[2] + '</td><td>user</td><td><input id="' + groupInfo[1] + '" type="submit" value="Join" class="button" onclick="javascript:register(\'' + groupInfo[1] + '\', \'' + groupInfo[2] + '\', \'' + groupInfo[4] + '\')"/></td></tr>');
+                $('.allgroups').append('<tr class ="' + classId + '"><td>' + groupInfo[1] + '</td><td>' + groupInfo[2] + '</td><td>' + role  + '</td><td><input id="' + groupInfo[1] + '" type="submit" value="Join" class="button" onclick="javascript:register(\'' + groupInfo[1] + '\', \'' + groupInfo[2] + '\', \'' + role + '\', \'' + groupInfo[4] + '\')"/></td></tr>');
               }
               //todo change Z to f when logic is in place
               else if (groupInfo[4] == "Z"){
-                $('.allgroups').append('<tr class ="' + classId + '"><td>' + groupInfo[1] + '</td><td>' + groupInfo[2] + '</td><td>user</td><td><input id="' + groupInfo[1] + '" type="submit" value="Request" class="button" onclick="javascript:register(\'' + groupInfo[1] + '\', \'' + groupInfo[2] + '\', \'' + groupInfo[4] +'\')"/></td></tr>');
+                $('.allgroups').append('<tr class ="' + classId + '"><td>' + groupInfo[1] + '</td><td>' + groupInfo[2] + '</td><td>' + role + '</td><td><input id="' + groupInfo[1] + '" type="submit" value="Request" class="button" onclick="javascript:register(\'' + groupInfo[1] + '\', \'' + groupInfo[2] + '\', \'' + role + '\', \'' + groupInfo[4] +'\')"/></td></tr>');
               }
             }
             $("div .groups").show();

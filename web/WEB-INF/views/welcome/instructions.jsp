@@ -4,7 +4,7 @@
 	<div class="span-7 last">
 		<div class="projectitemtop" style="margin-top:10px;margin-left:10px;margin-bottom:20px">
 			<div class="projectitemicon" style="float:left">
-				<a href="#"><img src="images/image004.jpg" /></a>
+				<a href="#"><img src="images/image004.jpg" alt="project item icon" /></a>
 			</div>
 			<div class="projectitemtitle" style="float:left;margin-left:10px">
 				<h3>Instructions</h3>

@@ -4,7 +4,7 @@
 
     <span class="headline_tabs">
     <a id="create" href="#">
-    <img src='<c:url value="/images/add-24.png" />' width="16">
+    <img src='<c:url value="/images/add-24.png" />' width="16" alt='create news'>
      Create New Headlines </a>
     </span>
 
@@ -23,9 +23,9 @@
 
         <tr>
             <td> ${news.title} </td>
-            <td> <a class="edit" href="#"><img src='<c:url value="/images/edit-32.png" />' width="24"> </a></td>
+            <td> <a class="edit" href="#"><img src='<c:url value="/images/edit-32.png" />' width="24" alt='edit news'> </a></td>
             <td> <a class="remove" href="<c:out value="${news.id}" />">
-            <img src='<c:url value="/images/delete-24.png" />' width="24"></a></td>
+            <img src='<c:url value="/images/delete-24.png" />' width="24" alt='delete news'></a></td>
         </tr>
 
     </c:forEach>

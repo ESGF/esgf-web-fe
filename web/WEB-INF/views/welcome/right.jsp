@@ -6,7 +6,7 @@
 		<!-- Resources header -->
 		<div class="span-7 last infoheader">
 			<div class="infoheadericon">
-				<img src="images/image003.jpg" />
+				<img src="images/image003.jpg" alt="document icon"/>
 			</div>
 			<div class="infoheadertxt">
 				<h1>Resources</h1>

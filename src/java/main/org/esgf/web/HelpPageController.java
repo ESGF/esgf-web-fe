@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+@SuppressWarnings("unused")
 @Controller
 @RequestMapping(value="/help")
 public class HelpPageController {

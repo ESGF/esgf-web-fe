@@ -24,7 +24,7 @@ import java.io.Writer;
  * </code>
  */
 
-@SuppressWarnings("all")
+@SuppressWarnings("deprecation")
 public class XmlFormatter {
 
     public XmlFormatter() {

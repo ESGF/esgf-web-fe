@@ -107,7 +107,7 @@ p {
 				                <td>${accounts_groupinfo[j].name}</td>  
 				                <td>${accounts_groupinfo[j].description}</td> 
 				                <td>${accounts_roleinfo[j]}</td> 
-                        <td><input id="${accounts_groupinfo[j].name}" type="submit" value="Leave" class="button" onclick="javascript:unregister('${accounts_groupinfo[j].name}', '${accounts_groupinfo[j].description}')"/></td> 
+                        <td><input id='${accounts_groupinfo[j].name}' type="submit" value="Leave" class="button" onclick="javascript:unregister('${accounts_groupinfo[j].name}', '${accounts_groupinfo[j].description}', 't')"/></td> 
 				            </tr> 
 				            <c:set var="j" value="${j+1}"/>
 						</c:forEach>
@@ -182,6 +182,7 @@ p {
     var groupName = name;
     var groupDesc = desc;
     var groupAuto = auto;
+    //alert(name + " | " + desc + " | " + auto);
     var userName = "${accounts_userinfo.userName}";
     
     var jsonObj = new Object;
@@ -200,12 +201,13 @@ p {
 	    dataType: 'json',
 	    success: function(data) {
 	      if (data.EditOutput.status == "success") {
-          $('.' + groupName).hide();
+          var classId = groupName.replace(/\s/g,"");
+          $('.' + classId).hide();
           if(groupAuto == "t"){
-            $('.allgroups').append('<tr class="' + groupName + '"><td>' + groupName + '</td><td>' + groupDesc + '</td><td>user</td><td><input id="' + groupName + '" type="submit" value="Join" class="button" onclick="javascript:register(\'' + groupName + '\', \'' + groupDesc + '\', \'' + groupAuto + '\')"/></td></tr>');
+            $('.allgroups').append('<tr class="' + classId + '"><td>' + groupName + '</td><td>' + groupDesc + '</td><td>user</td><td><input id="' + groupName + '" type="submit" value="Join" class="button" onclick="javascript:register(\'' + groupName + '\', \'' + groupDesc + '\', \'' + groupAuto + '\')"/></td></tr>');
           }
           else if(groupAuto == "f"){
-            $('.allgroups').append('<tr class="' + groupName + '"><td>' + groupName + '</td><td>' + groupDesc + '</td><td>user</td><td><input id="' + groupName + '" type="submit" value="Request" class="button" onclick="javascript:register(\'' + groupName + '\', \'' + groupDesc + '\', \'' + groupAuto + '\')"/></td></tr>');
+            $('.allgroups').append('<tr class="' + classId + '"><td>' + groupName + '</td><td>' + groupDesc + '</td><td>user</td><td><input id="' + groupName + '" type="submit" value="Request" class="button" onclick="javascript:register(\'' + groupName + '\', \'' + groupDesc + '\', \'' + groupAuto + '\')"/></td></tr>');
           }
           $("div .success").html(data.EditOutput.comment);
           $("div .middle").append($("div .success"));
@@ -246,8 +248,9 @@ p {
 	    dataType: 'json',
 	    success: function(data) {
 	      if (data.EditOutput.status == "success") {
-          $('.' + group).hide();
-          $('.updatable').append('<tr class="' + group + '"><td>' + group + '</td><td>' + info + '</td><td>user</td><td><input id="' + group + '" type="submit" value="Leave" class="button" onclick="javascript:unregister(\'' + group + '\', \'' + info + '\', \'' + autoReg + '\')"/></td></tr>');
+          var classId = group.replace(/\s/g,"");
+          $('.' + classId).hide();
+          $('.updatable').append('<tr class="' + classId + '"><td>' + group + '</td><td>' + info + '</td><td>user</td><td><input id="' + group + '" type="submit" value="Leave" class="button" onclick="javascript:unregister(\'' + group + '\', \'' + info + '\', \'' + autoReg + '\')"/></td></tr>');
 		      $("div .success").html(data.EditOutput.comment);
           $("div .middle").append($("div .success"));
           $("div .success").show();
@@ -291,15 +294,17 @@ p {
           if(rows.length > 2){
             for(var i = 0; i < rows.length; i++){
               var groupInfo = rows[i].split(", ");
+              var classId = groupInfo[1];
+              classId = classId.replace(/\s/g,"");
               if(groupInfo[1] == "wheel"){
               
               }
               else if(groupInfo[4] == "t"){
-                $('.allgroups').append('<tr class ="' + groupInfo[1] + '"><td>' + groupInfo[1] + '</td><td>' + groupInfo[2] + '</td><td>user</td><td><input id="' + groupInfo[1] + '" type="submit" value="Join" class="button" onclick="javascript:register(\'' + groupInfo[1] + '\', \'' + groupInfo[2] + '\', \'' + groupInfo[4] + '\')"/></td></tr>');
+                $('.allgroups').append('<tr class ="' + classId + '"><td>' + groupInfo[1] + '</td><td>' + groupInfo[2] + '</td><td>user</td><td><input id="' + groupInfo[1] + '" type="submit" value="Join" class="button" onclick="javascript:register(\'' + groupInfo[1] + '\', \'' + groupInfo[2] + '\', \'' + groupInfo[4] + '\')"/></td></tr>');
               }
               //todo change Z to f when logic is in place
               else if (groupInfo[4] == "Z"){
-                $('.allgroups').append('<tr class ="' + groupInfo[1] + '"><td>' + groupInfo[1] + '</td><td>' + groupInfo[2] + '</td><td>user</td><td><input id="' + groupInfo[1] + '" type="submit" value="Request" class="button" onclick="javascript:register(\'' + groupInfo[1] + '\', \'' + groupInfo[2] + '\', \'' + groupInfo[4] +'\')"/></td></tr>');
+                $('.allgroups').append('<tr class ="' + classId + '"><td>' + groupInfo[1] + '</td><td>' + groupInfo[2] + '</td><td>user</td><td><input id="' + groupInfo[1] + '" type="submit" value="Request" class="button" onclick="javascript:register(\'' + groupInfo[1] + '\', \'' + groupInfo[2] + '\', \'' + groupInfo[4] +'\')"/></td></tr>');
               }
             }
             $("div .groups").show();

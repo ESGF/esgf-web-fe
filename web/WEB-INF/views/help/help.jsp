@@ -51,6 +51,12 @@
 		<br/><span id="searchAPI_question" style="cursor:pointer"><img src='<c:url value="/images/help/moin-email.png" />' style="margin-right: 5px;" alt="email icon" /><a>Have a question about the search API?</a></span>
 		</div>
 		
+		<div style='margin-bottom:15px'>
+		<a href='https://www.globusonline.org/esgf/' style='font-weight:bold'>Globus Online User Guide</a>
+		<br/>A complete guide for using Globus Online for data movement within ESGF.  
+		<br/><span id="go_question" style="cursor:pointer"><img src='<c:url value="/images/help/moin-email.png" />' style="margin-right: 5px;" alt="email icon" /><a>Have a question about Globus Online?</a></span>
+		</div>
+		
 		
 		<div style='margin-bottom:15px'>
 		<a class="mailto" href="mailto:cmip5-helpdesk@stfc.ac.uk" style='font-weight:bold'>Post scientific questions related to CMIP5</a>
@@ -81,6 +87,10 @@
 			
 			$('span#userFAQ_question').click(function() {
 				location.href="mailto:esgf-user@lists.llnl.gov?subject=User FAQ Question";
+			});
+
+			$('span#go_question').click(function() {
+				location.href="mailto:esgf-user@lists.llnl.gov?subject=Globus Online Question";
 			});
 			
 			$('span#CMIP5_question').click(function() {

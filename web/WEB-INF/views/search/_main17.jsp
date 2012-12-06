@@ -85,9 +85,11 @@
 			-->
 		
 		</div>
+		<!--  
 		<div class="span-12 last">
 		<input type="checkbox" alt="param checkbox" class="urlparamscheckbox1" id="urlparamscheckbox" style="vertical-align: middle;margin-left:10px;padding-bottom:10px"/> <span style="font-weight:bold;padding-top:10px;vertical-align: middle;">Include URL Parameters</span>		
 		</div>
+		-->
 </div>
 
 <div class="span-20 last" id="search-summary" style="margin-top:0px;">

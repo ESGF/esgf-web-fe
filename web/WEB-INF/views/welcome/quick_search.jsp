@@ -3,7 +3,7 @@
 <div class="span-7 last">
 	<div class="span-7 last infoheader">
 		<div class="infoheadericon">
-           	<img src="images/image001.jpg" />
+           	<img src="images/image001.jpg" alt="search icon" />
        	</div>
        	<div class="infoheadertxt">
                <h1>Quick Search</h1>
@@ -12,8 +12,8 @@
 	<div class="span-7 last infocontent">
 		<h3 style="font-size:14px;color:#7d5f45;font-weight:bold;">Keyword:</h3> 
 		<div class="span-7 last">
-      			<input id="home_query" name="text" type="text" value="" />
-           	<input id="home_search-button" type="submit" value="Search" />
+      			<input id="home_query" name="text" type="text" value="" alt="query text" />
+           	<input id="home_search-button" type="submit" value="Search" alt="query submit" />
       		</div>
       		<div class="span-7 last">
 			&nbsp;

@@ -1,7 +1,7 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
 <div class="push-1 span-3">
-    <img src="<c:url value="/images/search2.png" />" >
+    <img src="<c:url value="/images/search2.png" />" alt="search" >
 </div>
 
 <div class="span-20 last"">

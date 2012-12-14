@@ -4,7 +4,9 @@ ESGF.setting.replicas = 'false';
 ESGF.setting.versionsLatest = 'true';
 ESGF.setting.distributed = 'true';
 
-
+/**
+ * 
+ */
 if(ESGF.localStorage.toKeyArr('esgf_queryString') != null) {
 		
 		var latest = ESGF.localStorage.get('esgf_queryString','latest:true');

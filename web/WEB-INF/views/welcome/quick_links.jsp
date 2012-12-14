@@ -5,7 +5,7 @@
 	<div class="span-7 last">
 		<div class="projectitemtop" style="margin-top:10px;margin-left:10px;margin-bottom:20px">
 			<div class="projectitemicon" style="float:left">
-				<a href="#"><img src="images/image004.jpg" /></a>
+				<a href="#"><img src="images/image004.jpg" alt="document icon" /></a>
 			</div>
 			<div class="projectitemtitle" style="float:left;margin-left:10px">
 				<h3 style="font-size:14px;color:#7d5f45;font-weight:bold;">Quick Links</h3>
@@ -20,7 +20,7 @@
 				<li><a href='http://${pageContext.request.serverName}/esg-search/search'>Expert Search (XML)</a></li>
 				<li><a href='http://${pageContext.request.serverName}/esg-search/wget'>Wget Script Generator</a></li>
 				<li><a href='http://${pageContext.request.serverName}/esg-search/feed/nodes.rss'>ESGF aggregated RSS feed</a>
-				    <a href='http://${pageContext.request.serverName}/esg-search/feed/nodes.rss'><img src='images/rss_icon.png'/ align="bottom"></a></li>
+				    <a href='http://${pageContext.request.serverName}/esg-search/feed/nodes.rss'><img src='images/rss_icon.png'/ align="bottom" alt="RSS icon" ></a></li>
 				<li>
 					<a href="mailto:esgf-user@lists.llnl.gov?subject=ESGF Portal Feedback">Contact ESGF</a>
 				</li>

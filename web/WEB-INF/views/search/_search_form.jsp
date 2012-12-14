@@ -8,14 +8,14 @@
 
     <!-- create hidden facet fields, set value to search constraint if available -->                        
     <c:forEach var="entry" items="${search_output.facets}">
-        <input type="hidden" 
+        <input type="hidden" alt="hidden facet"
             name="${entry.key}" value="${search_input.constraints[entry.key][0]}"/>
     </c:forEach>
 
 
     <!--  More hidden values -->
-    <input type="hidden" name="offset" value="${search_input.offset}" />
-    <input type="hidden" name="limit" value="${search_input.limit}" />
+    <input type="hidden" name="offset" value="${search_input.offset}" alt="hidden offset"/>
+    <input type="hidden" name="limit" value="${search_input.limit}" alt="hidden limit" />
 
     
     <!--  Search Box -->
@@ -23,15 +23,15 @@
 		<tr align="center">
 			<td>
 			<input class="searchbox" name="text" type="text"
-				size="70" value="${search_input.text}" /></td>	
+				size="70" value="${search_input.text}" alt="search text" /></td>	
 	        <!--  	
 	        <td valign="middle">    	        
 	        <input type="image" 
-	           src="<c:url value="/images/search.png" />" height="34px"/>
+	           src="<c:url value="/images/search.png" />" height="34px" alt="search text"/>
 	    	</td>
 	    	-->
 	    	
-	    	<td> <input class="button" type="submit" value="Search" />
+	    	<td> <input class="button" type="submit" value="Search" alt="search submit" />
 	
 		</tr>
 		
@@ -77,9 +77,9 @@
 
 		<div id="dataScope"><label for="dataScope"> Scope: </label>
 		<div>
-			<input type="radio" name="modelGroup" value="model" /> Model 
-			<input type="radio" name="modelGroup" value="obs" /> Observational 
-			<input type="radio" name="modelGroup" value="all" Checked/> All
+			<input type="radio" name="modelGroup" value="model" alt="model radio" /> Model 
+			<input type="radio" name="modelGroup" value="obs" alt="obs radio" /> Observational 
+			<input type="radio" name="modelGroup" value="all" alt="all radio" Checked/> All
 		</div>
 	</div>
 	
@@ -87,7 +87,7 @@
 	
 		
 	<div id="withMap"><label for="dataMap">Show Map: </label>
-	  <input type="checkbox" name="mapGroup" value="2dmap" /> 2D 
+	  <input type="checkbox" name="mapGroup" value="2dmap" alt="map checkbox" /> 2D 
 	</div>
 
 
@@ -107,8 +107,8 @@
 	<fieldset id="area1">
     	<p class=legend> Search Type: </p>
     
-	    <input type="radio" name="searchType" value="Encloses" checked /> Encloses 
-	    <input type="radio" name="searchType" value="Overlaps" /> Overlaps 
+	    <input type="radio" name="searchType" value="Encloses" checked alt="encloses radio" /> Encloses 
+	    <input type="radio" name="searchType" value="Overlaps" alt="overlaps radio" /> Overlaps 
        
     </fieldset>
 
@@ -117,10 +117,10 @@
     
 	    <p class=legend> Enter address: </p>
 	    <div id="geoloc">    
-	    	<input type="text" name="location" size="20" /> <br />
+	    	<input type="text" name="location" size="20" alt="address text" /> <br />
 	    </div>
 	    
-	    <input type="button" name="clear_markers" value="Clear Markers" />
+	    <input type="button" name="clear_markers" value="Clear Markers" alt="clear submit" />
 	   
 	    <div id="markers" style="display:none"></div>
     
@@ -130,14 +130,14 @@
     <fieldset id="area">
     	<p class=legend> Define Area: </p>
     
-	    <input type="radio" name="areaGroup" value="square" /> Square 
-	    <input type="radio" name="areaGroup" value="circle" /> Circle 
+	    <input type="radio" name="areaGroup" value="square" alt="square radio" /> Square 
+	    <input type="radio" name="areaGroup" value="circle" alt="circle raio" /> Circle 
 	    
     	<div id="circleInputs" style="display:none">
-	        <label> Radius (km):</label><input type="text" name="radius" size="3" value="5" />
-	        <label> Quality:</label><input type="text" size="3" name="quality" value="40" />
+	        <label> Radius (km):</label><input type="text" name="radius" size="3" value="5" alt="radius text" />
+	        <label> Quality:</label><input type="text" size="3" name="quality" value="40" alt="quality text" />
 	     	<br />  
-     		<input type="button" name="redraw_circle" value="Redraw" />
+     		<input type="button" name="redraw_circle" value="Redraw" alt="redraw submit" />
      
     	</div>
     
@@ -155,19 +155,19 @@
     
     
     
-     <input type="hidden" 
+     <input type="hidden" alt="west_degrees hidden"
             name="west_degrees"/>
  		
-     <input type="hidden" 
+     <input type="hidden" alt="east_degrees hidden"
             name="east_degrees"/>
             
- 	 <input type="hidden" 
+ 	 <input type="hidden" alt="south_degrees hidden"
             name="south_degrees"/>
  		
-     <input type="hidden" 
+     <input type="hidden" alt="north_degrees hidden"
             name="north_degrees"/>
             
-     <input type="hidden"
+     <input type="hidden" alt="BoundingBox hidden"
      		name="whichGeo" value="BoundingBox" /> 
            
     </div> 

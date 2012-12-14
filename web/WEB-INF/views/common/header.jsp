@@ -6,6 +6,8 @@
 
 <div class="span-24 last headertop" style="border-top: 3px solid #18638a;padding-top: 5px;padding-bottom: 5px">
 	
+	
+	
 	<c:choose>
 	 	<c:when test="${principal=='anonymousUser'}">
 			<span id="principal_username" style="display:none">${principal}</span>
@@ -19,11 +21,11 @@
 	
 	<!-- <div class="span-24"></div> -->
 	<div class="span-11 prepend-1">
-		<img src='<c:url value="/images/esgf.png"/>' height="92px" />
+		<img src='<c:url value="/images/esgf.png"/>' height="92px" alt='ESGF logo' />
 	</div>
 	<div class="span-12 last">
 		<c:set var="logo"><spring:message code="esgf.homepage.institutionLogo" /></c:set>
-		<img src='<c:url value="${logo}" />' style="padding-top:5px;margin-right:15px;float:right" alt="institution" title="institution icon"/>
+		<img src='<c:url value="${logo}" />' style="padding-top:5px;margin-right:15px;float:right" alt="institution logo" title="institution icon"/>
 	</div>
 </div>
 <div class="span-24 last headerbottom" style="background-color:#18638a">
@@ -34,7 +36,7 @@
            <ul>                    
                <li><a href="<c:url value='/'/> ">Home</a></li>
                <li id="search"><a href="<c:url value='/live'/>">Search</a></li>                
-               <li id="tools"> <a href="<c:url value='/tools/tools.htm'/>">Tools</a></li>  
+               <li id="tools"> <a href="<c:url value='/tools'/>">Tools</a></li>  
            	<c:choose>
            		<c:when test="${principal=='anonymousUser'}">
            			<!-- guest users -->
@@ -57,7 +59,9 @@
               		<li class="resetLocalStorage"><a href="<c:url value='/j_spring_security_logout'/>" >Logout</a></li>
                 	
               	</c:otherwise>
+              	    
           	</c:choose>                                      
+               <li id="help"> <a href="<c:url value='/help'/>">Help</a></li>  
            </ul>            
        </div>
    </div> 

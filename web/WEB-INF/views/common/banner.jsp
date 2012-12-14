@@ -1,7 +1,7 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
 
 <div class="span-24 last">
-	<img src='<spring:message code="esgf.homepage.banner" />' style='width:950px'/>
+	<img src='<spring:message code="esgf.homepage.banner" />' style='width:950px' alt='ESGF banner' />
 </div>
 
 <div class="span-24 last infotitle">

@@ -141,10 +141,11 @@ $(document).ready(function(){
 		var country = data.userinfo.user.country;
 		
 		content = '<h5 style="margin-top:10px;">User Information</h5>';
-		content = content + '<div style="margin-bottom:5px;margin-left:10px">First Name: ' + firstName + ' Middle Name: ' + middleName + ' Last Name: ' + lastName + '</div>' +
-					  '<div style="margin-bottom:5px;margin-left:10px">Email: ' + emailAddress + ' Organization ' + organization + '</div>' +
-					  '<div style="margin-bottom:5px;margin-left:10px">City: ' + city + ' State: ' + state + ' Country: ' + country + '</div>'
-					  ;
+		content = content + '<div style="margin-bottom:5px;margin-left:10px"><table>' +
+            '<tr><td><strong>First Name:</strong></td><td> ' + firstName + '</td><td> <strong>Middle Name:</strong></td><td> ' + middleName + '</td><td> <strong>Last Name:</strong></td><td> ' + lastName + '</td></tr>' +
+					  '<tr><td><strong>Email:</strong></td><td> ' + emailAddress + ' </td><td><strong>Organization:</strong></td><td> ' + organization + '</td><td></td><td></td></tr>' +
+					  '<tr><td><strong>City:</strong></td><td> ' + city + '</td><td> <strong>State:</strong> </td><td>' + state + '</td><td> <strong>Country:</strong></td><td> ' + country + '</td></tr>' +
+					  '</table></div>';
 		content = content + '<div style="margin-bottom:10px"></div><hr /><h5 style="margin-top:10px;">Group Memberships</h5>';
 		
 		var roleType = '';
@@ -155,14 +156,14 @@ $(document).ready(function(){
 		}
 		
 		if(typeof data.userinfo.groups.group != 'undefined') {
+      content = content + '<table><tr><td><strong>Group:</strong></td><td><strong>Description:</strong></td><td><strong>Role:</strong></td></tr>';
 			if(data.userinfo.groups.group instanceof Array) {
 				for(var i=0;i<data.userinfo.groups.group.length;i++) {
 					var groupId = data.userinfo.groups.group[i].groupid;
 					var groupName = data.userinfo.groups.group[i].groupname;
 					var groupDescription = data.userinfo.groups.group[i].groupdescription;
 					
-					content = content + '<div style="border: 1px dotted #eee;margin-top:5px;margin-left:10px" id="userListing_' + 
-										groupName + '"">Group: ' + groupName + ' Description: ' + groupDescription + ' Role: ' + roleType + '</div>';
+					content = content + '<tr><td>' + groupName + '</td><td>' + groupDescription + '</td><td>' + roleType + '</td><tr>';
 					
 				}
 			} else {
@@ -171,10 +172,10 @@ $(document).ready(function(){
 				var groupName = data.userinfo.groups.group.groupname;
 				var groupDescription = data.userinfo.groups.group.groupdescription;
 				
-				content = content + '<div style="border: 1px dotted #eee;margin-top:5px;margin-left:10px" id="userListing_' + 
-				groupName + '"">Group: ' + groupName + ' Description: ' + groupDescription + ' Role: ' + roleType + '</div>';
+				content = content + '<tr><td>' + groupName + '</td><td> ' + groupDescription + '</td><td>' + roleType + '</td><tr>';
 
 			}
+      content = content + '</table>';
 		} else {
 			content = content + '<div style="margin-left:10px">' + 'No group memberships</div>';
 		}

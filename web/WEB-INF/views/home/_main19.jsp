@@ -14,7 +14,7 @@
 <div>
     <h3>${news.title}</h3>
     <c:if test="${news.imageFile != null}" >
-        <img src="news/image/${news.id}" style="float:left;margin:0 30px 20px 0" />
+        <img src="news/image/${news.id}" style="float:left;margin:0 30px 20px 0" alt="news" />
     </c:if>
 
     <p> ${news.body} </p>

@@ -23,6 +23,8 @@ import java.io.Writer;
  * String formattedXml = new XmlFormatter().format("<tag><nested>hello</nested></tag>");
  * </code>
  */
+
+@SuppressWarnings("deprecation")
 public class XmlFormatter {
 
     public XmlFormatter() {

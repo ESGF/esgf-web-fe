@@ -92,13 +92,126 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	
 	},
 	
+	checkUberAccess: function (accessType) {
+		
+		var datacart = ESGF.localStorage.getAll('dataCart');
+		
+		var hasAccess = false;
+		
+		for(var key in datacart) {
+			//if(datacart[key]['access'] != undefined) {
+			if(datacart[key]['access'] == undefined) {
+				hasAccess = true;
+			} else {
+				var access = new String(datacart[key]['access']);
+				if(access.search(accessType) > -1) {
+					hasAccess = true;
+				}
+			}
+				
+			//} 
+		}
+		
+		
+		return hasAccess;
+	},
+	
+	checkDatasetAccess: function (accessType,datasetId) {
+		
+		
+		var datacart = ESGF.localStorage.getAll('dataCart');
+	
+		
+		var hasAccess = false;
+		
+		if(datacart[datasetId] != undefined) {
+			if(datacart[datasetId]['access'] != undefined) {
+				var access = new String(datacart[datasetId]['access']);
+				if(access.search(accessType) > -1) {
+					hasAccess = true;
+				}
+			} else {
+				hasAccess = true;
+			}
+		
+		}
+		
+		
+		return hasAccess;
+		
+	},
+	
+	writeTopMenuMarkup: function () {
+	
+		var self = this;
+		
+		//this string represents the options for the data cart
+    	//as of now, the options are:
+    	// - radio box that the user chooses to show files
+    	// - the "uber" script option
+    	var optionsStr = '<div id="radio" style="margin-bottom:30px;display:none">' + 
+    				 	 '<table>' +
+    				 	 '<tr>' +
+    				 	 '<td style="width:80px;font-size:12px;padding:0px; ">' +
+    				 	 '<input type="radio" id="datacart_filter_all" name="datacart_filter" value="all" /> ' +
+    				 	 'Show all ' +
+    				 	 '</td>' +
+    				 	 '<td style="width:150px;font-size:12px;padding:0px; ">' +
+    				 	 '<input type="radio" id="datacart_filtered" name="datacart_filter" value="filtered" /> ' +
+    				 	 'Filter over search constraints ' +
+    				 	 '</td>';
+    				 	 /*
+    				 	 '<td class="sfileCounter" style="width:220;display:none;padding:0px">Show initial <select class="fileCounter" name="fileC">' +
+    				 	 '<option id="fileCounter5" value="5">5</option>'+
+    					 '<option id="fileCounter10" value="10" selected="selected">10</option>' +
+    					 '<option id="fileCounter25" value="25" >25</option>' +
+    					 '<option id="fileCounter50" value="50">50</option>' +
+    					 '</select> files</td>' + 
+    				 	 */
+    	
+    	optionsStr += '<td style="font-size:12px;width:20px;">' +
+		  '</td>';
+    	
+		
+    	var hasGridFTP = self.checkUberAccess('GridFTP');
+    	if(hasGridFTP) {
+    		optionsStr += '<td style="font-size:12px;width:80px;">' +
+		 	 			  '<a id="uber_GO_script_short" style="cursor:pointer">Globus Online All Selected</a>' +
+		 	 			  '</td>';
+    	} else {
+    		optionsStr += '<td style="font-size:12px;width:80px">' +
+			  '</td>';
+    	}
+    	
+    	var hasHTTP = self.checkUberAccess('HTTPServer');
+    	if(hasHTTP) {
+        	optionsStr += '<td style="font-size:12px;width:60px;">' +
+        				  '<a id="uber_script_short" style="cursor:pointer">WGET All Selected</a>' +
+        				  '</td>';
+    	} else {
+    		optionsStr += '<td style="font-size:12px;width:60px;">' +
+			  '</td>';
+    	}
+    	
+	 	optionsStr += '<td style="font-size:12px;width:40px; ">' +
+	 	 '<a id="remove_all_short" style="cursor:pointer">Remove All</a>' +
+	 	 '</td>';
+    	
+    	optionsStr +=	 '</tr>' +
+    				 	 '</table>' +
+    				 	 '</div>';
+    	
+    	return optionsStr;
+		
+	},
+	
+	
 	/**
 	 * DOCUMENT ME
 	 */
 	afterRequest: function () {
 		
 
-		
 		//empty the tab
         $(this.target).empty();
 
@@ -107,54 +220,22 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		//getter for the data cart tab
 		var selected = $( "#myTabs" ).tabs( "option", "selected" );
 		
-		
-		
     	//empty the carts tab and append/initialize the datacart table 
     	$('#carts').empty();
     	
     	
-    	//this string represents the options for the data cart
-    	//as of now, the options are:
-    	// - radio box that the user chooses to show files
-    	// - the "uber" script option
-    	var optionsStr = '<div id="radio" style="margin-bottom:30px;display:none">' + 
-    				 	 '<table>' +
-    				 	 '<tr>' +
-    				 	 '<td style="width:80px;font-size:12px;padding:0px">' +
-    				 	 '<input type="radio" id="datacart_filter_all" name="datacart_filter" value="all" /> ' +
-    				 	 'Show all ' +
-    				 	 '</td>' +
-    				 	 '<td style="width:200px;font-size:12px;padding:0px">' +
-    				 	 '<input type="radio" id="datacart_filtered" name="datacart_filter" value="filtered" /> ' +
-    				 	 'Filter over search constraints ' +
-    				 	 '</td>' +
-    				 	 '<td class="sfileCounter" style="width:220;display:none;padding:0px">Show initial <select class="fileCounter" name="fileC">' +
-    				 	 '<option id="fileCounter5" value="5">5</option>'+
-    					 '<option id="fileCounter10" value="10" selected="selected">10</option>' +
-    					 '<option id="fileCounter25" value="25" >25</option>' +
-    					 '<option id="fileCounter50" value="50">50</option>' +
-    					 '</select> files</td>' + 
-    				 	 '<td style="font-size:12px;padding:0px">' +
-    				 	 '<a id="remove_all_short" style="cursor:pointer">Remove All</a>' +
-    				 	 //'<input class="datacart-buttons" type="submit" value="Remove All" />'+
-    			      	//'<input id="remove_all_short" type="submit" value="Remove All" /> ' +
-    				 	 '</td>' +
-    				 	 '<td style="font-size:12px;padding:0px">' +
-    				 	 //'<input class="datacart-buttons" type="submit" value="WGET All Selected" />'+
+    	var optionsStr = self.writeTopMenuMarkup();
 
-    				 	 '<a id="uber_script_short" style="cursor:pointer">WGET All Selected</a>' +
-    				 	 //'<input id="uber_script_short" type="submit" value="WGET All Selected" /> ' +
-    				 	 '</td>' +
-    				 	 '</tr>' +
-    				 	 '</table>' +
-    				 	 '</div>';
     	
-    	
-    	
+    	if($('span#datacartOpen').html() == 'true') {
+    		$( "#myTabs" ).tabs({ selected: 1 });
+    	}
     	
     	//add the options to the page
     	$('#carts').append(optionsStr);
 
+    	
+    	
 		$("select[name='fileC']").attr("selectedIndex",3);
     	
 		
@@ -169,8 +250,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		}
     	
     	$('td.sfileCounter').show();
-    	
-    	
     	
     	
     	//toggle the "checked" attribute of the showAllContents radio button
@@ -195,9 +274,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
             $("#datasetList").empty();
     		
             
-            
-            
-            
           //getter for the data cart tab
     		var selected = $( "#myTabs" ).tabs( "option", "selected" );
     		
@@ -210,8 +286,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     		
     		
     	}
-    	
-		
 		
        
 		
@@ -224,60 +298,65 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		
 		var self = this;
 		
-    	
-		//alert(self.selected_arr);
-		
-		
 		for(var i=0;i<self.selected_arr.length;i++) {
-			var datasetList = '';
-			
-			datasetList += '<tr style="margin-top:50px;" class="top_level_data_item"  >'
-			
-			datasetList += '<td style="width: 40px;"><input class="topLevel" type="checkbox" checked="true" /> </td>';	
-			
-			datasetList += '<td style="width: 325px;font-size:13px">';
-			
-			//alert(ESGF.localStorage.get('dataCart',self.selected_arr[i])['numFiles']);
-			
-			datasetList += '<div style="word-wrap: break-word;font-weight:bold"  ><span class="datasetId">' + self.selected_arr[i] + '</span></div>';
-			datasetList += '<span>' + ' (Total Number of Files: ' +  ESGF.localStorage.get('dataCart',self.selected_arr[i])['numFiles'] + ')</span>';
-			//<span class="datasetId">${datasetId}</span>
-			//(<span class="datasetCount_${$item.replaceChars(datasetId)}">${count}</span> files) 
-		    //</div>
-			
-			
-			datasetList += '</td>';
-			
-			datasetList += '<td style="font-size:11px;float:right" >';
-			
-			datasetList += '<span class="showAllFiles_short" style="display:none;font-weight:bold;"> Expanding... </span>';
-			datasetList += '<a class="showAllFiles_short" style="cursor:pointer">Expand</a> | ';
-			datasetList += '<span class="wgetAllFiles_short" style="display:none;font-weight:bold;"> Downloading... </span>';
-			datasetList += '<a class="wgetAllFiles_short" style="cursor:pointer"> WGET </a> |';
-			datasetList += '<span class="globusOnlineAllFiles_short" style="display:none;font-weight:bold;"> Transferring to GO page...</span>';
-			
-			if(ESGF.setting.globusonline) {
-				datasetList += ' <a class="globusOnlineAllFiles_short" style="cursor:pointer">Globus Online</a> |';
-			}
-			datasetList += ' <a class="remove_dataset_short" style="cursor:pointer">Remove</a>'; 
-			datasetList += '</td>';	
-			
-			
-			datasetList += '</tr>';
-			datasetList += '<tr class="file_rows_' + replaceChars(self.selected_arr[i]) + '" style="">';
-			datasetList += '</tr>';
-			
+			var datasetList = self.writeDatasetMarkup(i);
 			$( "#datasetList").append(datasetList);
-			//alert('datasetList length: ' + datasetList.length);
 		}
 		
-		//$( "#datasetList").append(datasetList);
 		
 	},
 	
     
 	
-	
+	writeDatasetMarkup: function (i) {
+		var self = this;
+		
+		var datasetList = '';
+		
+		datasetList += '<tr style="margin-top:50px;" class="top_level_data_item"  >';
+		
+		datasetList += '<td style="width: 40px;"><input class="topLevel" type="checkbox" checked="true" /> </td>';	
+		
+		datasetList += '<td style="width: 325px;font-size:13px">';
+		
+		
+		datasetList += '<div style="word-wrap: break-word;font-weight:bold"  ><span class="datasetId">' + self.selected_arr[i] + '</span></div>';
+		datasetList += '<span>' + ' (Total Number of Files: ' +  ESGF.localStorage.get('dataCart',self.selected_arr[i])['numFiles'] + ')</span>';
+		
+		
+		datasetList += '</td>';
+		
+		datasetList += '<td style="font-size:11px;float:right" >';
+		
+		datasetList += '<span class="showAllFiles_short" style="display:none;font-weight:bold;"> Expanding... </span>';
+		datasetList += '<a class="showAllFiles_short" style="cursor:pointer">Expand</a> | ';
+		
+		var datasetId = self.selected_arr[i];
+		var accessType = 'HTTPServer';
+		var hasHTTP = self.checkDatasetAccess(accessType,datasetId);
+		if(hasHTTP) {
+			datasetList += '<span class="wgetAllFiles_short" style="display:none;font-weight:bold;"> Downloading... </span>';
+			datasetList += '<a class="wgetAllFiles_short" style="cursor:pointer"> WGET </a> |';
+		}
+		accessType = 'GridFTP';
+		var hasGridFTP = self.checkDatasetAccess(accessType, datasetId);
+		if(hasGridFTP) {
+			if(ESGF.setting.globusonline) {
+				datasetList += '<span class="globusOnlineAllFiles_short" style="display:none;font-weight:bold;"> Transferring to GO page...</span>';	
+				datasetList += ' <a class="globusOnlineAllFiles_short" style="cursor:pointer">Globus Online</a> |';
+			}
+		}
+		
+		datasetList += ' <a class="remove_dataset_short" style="cursor:pointer">Remove</a>'; 
+		datasetList += '</td>';	
+		
+		
+		datasetList += '</tr>';
+		datasetList += '<tr class="file_rows_' + replaceChars(self.selected_arr[i]) + '" style="">';
+		datasetList += '</tr>';
+		
+		return datasetList;
+	},
 	
     
 	
@@ -297,7 +376,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	for(var i=0;i<paramArr.length;i++) {
     		var constraint = paramArr[i];
     		if(constraint != '' && constraint != ' ') {
-    			//alert('constraint: ' + constraint);
         		if(constraint.search('query=') > -1) {
             		var queryClause = constraint.split('=');
             		fullText = fullText + queryClause[1] + ' ';
@@ -671,8 +749,6 @@ function rewriteDocsObject(docs) {
 		for(var i=0;i<docs.doc.length;i++) {
 				
 			if(docs.doc[i].count > 0) {
-				//alert('doc id: ' + data.docs.doc[i].datasetId);
-				//alert(data.docs.doc[i].files.file.length);
 				var fileLength = docs.doc[i].files.file.length;
 					
 				if(fileLength == undefined) {

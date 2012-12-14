@@ -4,7 +4,7 @@
 	<!-- info header -->
 	<div class="span-8 last infoheader">
 		<div class="infoheadericon">
-            <img src="images/image002.jpg" />
+            <img src="images/image002.jpg" alt="info icon"/>
         </div>
         <div class="infoheadertxt">
             <h1>About <spring:message code="esgf.datanode.name" /></h1>

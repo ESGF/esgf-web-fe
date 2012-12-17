@@ -61,7 +61,7 @@ p {
 				<label for="DN">Domain Name:</label>
 				${accounts_userinfo.DN}
 			</p>
-      <div class="editUserInfo"><input id="userUpdate" type="submit" value="Edit" class="button" onclick="javascript:editUserInfo()"/></div> 
+      <input id="userUpdate" type="submit" value="Edit" class="button" onclick="javascript:editUserInfo()"/> 
 		</fieldset>
     </div>
       
@@ -157,7 +157,7 @@ p {
   </div>
 
   <div class="bottom" id="bottom"> </div>
-  <div id="changePassword" class="changePassword">	
+
   <fieldset style="background: #F5F5E0">
 			<legend>Change Password</legend>
 			<p>
@@ -176,7 +176,6 @@ p {
 				<input id="changepwd" value="Change password" class="button" type="button"/>
 			</p> 			
 		</fieldset>
-  </div>
 		 
 	</div>
 </div>

@@ -78,7 +78,7 @@
 							<th>Group Name</th>
 							<th>Description</th>
 							<th>Role</th>
-              <th>UnRigister</th>
+              <th>UnRegister</th>
 						</tr>
 					</thead>
 					<tbody class="updatable">

@@ -207,7 +207,7 @@ public class AccountsController {
             LOG.debug("userInfo:" + userInfo);
             
             if(userInfo == null){
-              String error = "Your openId " + openId + " is from another node, to view and/or edit your info please visit your home node.";
+              String error = "true";
               model.put(ACCOUNTS_ERROR, error);
             }
             else {

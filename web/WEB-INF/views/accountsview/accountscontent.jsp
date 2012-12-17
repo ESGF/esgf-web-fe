@@ -441,14 +441,7 @@ p {
       //do nothing page will load normal
     }
     else{
-      $("div .error").html(error);
-      $("div .top").append($("div .error"));
-	    $("div .error").show();
-      $("div .changePassword").hide();
-      $("div .loading").hide();
-      $("div .loaded").hide();
-      $("div .editUserInfo").hide();
-
+      window.location="/"
     }
   }
 

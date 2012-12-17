@@ -100,6 +100,7 @@ public class AccountsController {
     private final static String ACCOUNTS_GROUPINFO = "accounts_groupinfo";
     private final static String ACCOUNTS_ROLEINFO = "accounts_roleinfo";
     private final static String ACCOUNTS_MODEL = "accounts_model";
+    private final static String ACCOUNTS_ERROR = "accounts_error";
 
     private final static Logger LOG = Logger.getLogger(AccountsController.class);
     private UserOperationsInterface uoi;
@@ -204,17 +205,23 @@ public class AccountsController {
             // get user info from DAO
             User userInfo = uoi.getUserObjectFromUserOpenID(openId);
             LOG.debug("userInfo:" + userInfo);
+            
+            if(userInfo == null){
+              String error = "Your openId " + openId + " is from another node, to view and/or edit your info please visit your home node.";
+              model.put(ACCOUNTS_ERROR, error);
+            }
+            else {
 
-            // get group info from DAO
-            List<Group> groups = uoi.getGroupsFromUser(userInfo.getUserName());
+              // get group info from DAO
+              List<Group> groups = uoi.getGroupsFromUser(userInfo.getUserName());
             
-            // Get roles for each group as concatenated strings
-            List<String> roles = new ArrayList<String>();
-            Map<String,Set<String>> userperms = uoi.getUserPermissionsFromOpenID(openId);
-            LOG.debug("userperms = " + userperms);
+              // Get roles for each group as concatenated strings
+              List<String> roles = new ArrayList<String>();
+              Map<String,Set<String>> userperms = uoi.getUserPermissionsFromOpenID(openId);
+              LOG.debug("userperms = " + userperms);
             
-            // TODO: this should be added to GroupOperationsESGFDBImpl or better yet, create a combined GroupRole (or Permissions) OperationsESGFDBImpl
-            for (Group g : groups) {
+              // TODO: this should be added to GroupOperationsESGFDBImpl or better yet, create a combined GroupRole (or Permissions) OperationsESGFDBImpl
+              for (Group g : groups) {
                 // iterate through role set
                 String roleNames = "";
                 Set<String> roleSet = userperms.get(g.getname());
@@ -227,17 +234,18 @@ public class AccountsController {
                     }
                 }
                 roles.add(roleNames);
+              }
+            
+              // populate model
+              model.put(ACCOUNTS_INPUT, accountsInput);
+              model.put(ACCOUNTS_USERINFO, userInfo);
+              Group [] groupArray = groups.toArray(new Group[groups.size()]);
+              model.put(ACCOUNTS_GROUPINFO, groupArray);
+              String [] roleArray = roles.toArray(new String[roles.size()]);
+              model.put(ACCOUNTS_ROLEINFO, roleArray);
+              request.getSession().setAttribute(ACCOUNTS_MODEL, model);
+              model.put(ACCOUNTS_ERROR, "false");
             }
-            
-            // populate model
-            model.put(ACCOUNTS_INPUT, accountsInput);
-            model.put(ACCOUNTS_USERINFO, userInfo);
-            Group [] groupArray = groups.toArray(new Group[groups.size()]);
-            model.put(ACCOUNTS_GROUPINFO, groupArray);
-            String [] roleArray = roles.toArray(new String[roles.size()]);
-            model.put(ACCOUNTS_ROLEINFO, roleArray);
-            request.getSession().setAttribute(ACCOUNTS_MODEL, model);
-            
         }
 
         LOG.debug("------End AccountsController getModel------");

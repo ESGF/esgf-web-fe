@@ -61,7 +61,7 @@ p {
 				<label for="DN">Domain Name:</label>
 				${accounts_userinfo.DN}
 			</p>
-      <input id="userUpdate" type="submit" value="Edit" class="button" onclick="javascript:editUserInfo()"/> 
+      <div class="editUserInfo"><input id="userUpdate" type="submit" value="Edit" class="button" onclick="javascript:editUserInfo()"/></div> 
 		</fieldset>
     </div>
       
@@ -157,7 +157,8 @@ p {
   </div>
 
   <div class="bottom" id="bottom"> </div>
-		<fieldset style="background: #F5F5E0">
+  <div id="changePassword" class="changePassword">	
+  <fieldset style="background: #F5F5E0">
 			<legend>Change Password</legend>
 			<p>
 				<label for="oldpasswd">Old password:</label>
@@ -175,7 +176,7 @@ p {
 				<input id="changepwd" value="Change password" class="button" type="button"/>
 			</p> 			
 		</fieldset>
-    
+  </div>
 		 
 	</div>
 </div>
@@ -433,6 +434,25 @@ p {
     $("div .error").hide();
     $("div .success").hide();
   }
+
+  function errorCheck(){
+    var error = "${accounts_error}";
+    if (error == "false"){
+      //do nothing page will load normal
+    }
+    else{
+      $("div .error").html(error);
+      $("div .top").append($("div .error"));
+	    $("div .error").show();
+      $("div .changePassword").hide();
+      $("div .loading").hide();
+      $("div .loaded").hide();
+      $("div .editUserInfo").hide();
+
+    }
+  }
+
+  window.onload = errorCheck;
 </script>  
 
 <script>

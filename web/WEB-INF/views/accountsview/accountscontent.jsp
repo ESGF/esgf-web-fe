@@ -145,12 +145,11 @@
 	</div>
 </div>
 
-<script type="test/javascrtipt">
+<script language="javascript">
   window.onload = errorCheck;
   
   function errorCheck(){
     var error = "${accounts_error}";
-    alert(error);
     if (error == "false"){
       //do nothing page will load normal
     }

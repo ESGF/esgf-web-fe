@@ -204,9 +204,9 @@ public class AccountsController {
             
             // get user info from DAO
             User userInfo = uoi.getUserObjectFromUserOpenID(openId);
-            LOG.debug("userInfo:" + userInfo);
             
             if(userInfo == null){
+              //LOG.debug("userInfo:" + userInfo);
               String error = "true";
               model.put(ACCOUNTS_ERROR, error);
             }

@@ -6,8 +6,8 @@
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.7.2/jquery.min.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-search.js" />'> </script>
 
-    <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/underscore-min.js" />'> </script>
-    <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/backbone-min.js" />'> </script>
+    <script type="text/javascript" src='http://purl.org/org/es-doc/plugins/jscim/underscore'> </script>
+    <script type="text/javascript" src='http://purl.org/org/es-doc/plugins/jscim/backbone'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery-ui-1.8.12.custom.min.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/overlay.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/expose.js" /> '></script>

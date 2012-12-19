@@ -19,7 +19,7 @@
 		
 		<p/>
 		<p/>
-			<a href='http://esg.llnl.gov/cdat/' ><b>CDAT (Climate Data Analysis Tools)</b></a>
+			<a href='http://uv-cdat.org/' ><b>Ultra-scale Visualization Climate Data Analysis Tools (UV-CDAT)</b></a>
 			<br/>An open source, python-based framework of client-side tools, 
 			     including a GUI front-end, for retrieval, analysis and visualization of Earth System data.
 			                              		

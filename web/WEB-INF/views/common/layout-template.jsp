@@ -20,7 +20,9 @@
     </head>
 
     <body>
-
+    	<!-- This code allows screen readers to skip the top navigation buttons and go directly to the main part of the page. It is an anchor tag. -->
+		<a href="#maincontent"><img src="images/spacer.gif" alt="Follow this link to skip to the main content"> </a>
+		
         <!-- the banner spans the whole page so it is outside the blueprint container -->
         
 		
@@ -42,61 +44,73 @@
 	                		<ti:insertAttribute name="banner" />
 	            	</div>
                     <div class="span-24 last" id="main">
+                    	 <a name="maincontent"></a>
                          <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
                 <c:when test="${layoutType=='accountsview'}">
                     <div class="span-24 last" id="main">
+                         <a name="maincontent"></a>
                          <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
                 <c:when test="${layoutType=='adminview'}">
-                    <div class="span-24 last" id="main">
+                    <div class="span-24 last" id="main"> 
+                         <a name="maincontent"></a>
                          <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
                 <c:when test="${layoutType=='usermanagement'}">
                     <div class="span-24 last" id="main">
+                         <a name="maincontent"></a>
                          <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
                 <c:when test="${layoutType=='creategroups'}">
                     <div class="span-24 last" id="main">
+                         <a name="maincontent"></a>
                          <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
                 <c:when test="${layoutType=='goformview1'}">
                     <div class="span-24 last" id="main">
+                         <a name="maincontent"></a>
                          <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
                 <c:when test="${layoutType=='goformview2'}">
                     <div class="span-24 last" id="main">
+                         <a name="maincontent"></a>
                          <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
                 <c:when test="${layoutType=='goformview3'}">
                     <div class="span-24 last" id="main">
+                         <a name="maincontent"></a>
                          <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
                 <c:when test="${layoutType=='goformview4'}">
                     <div class="span-24 last" id="main">
+                         <a name="maincontent"></a>
                          <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
                 <c:when test="${layoutType=='goauthview3'}">
                     <div class="span-24 last" id="main">
+                         <a name="maincontent"></a>
                          <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
                 <c:when test="${layoutType=='goauth_transfer'}">
                     <div class="span-24 last" id="main">
+                         <a name="maincontent"></a>
                          <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
                 <c:when test="${layoutType=='metadataview'}">
                     <div class="span-24 last" id="main">
+                         <a name="maincontent"></a>
                          <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
@@ -109,6 +123,7 @@
 	                        <ti:insertAttribute name="left" />
 	                    </div>
 	                    <div class="span-18 last" id="main" style="width:708px;" >
+	                        <a name="maincontent"></a>
 	                        <ti:insertAttribute name="main" />
 	                    </div>
                 	</div>

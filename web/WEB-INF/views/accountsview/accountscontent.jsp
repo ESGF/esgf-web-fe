@@ -43,10 +43,12 @@
 				<label for="openid">Openid:</label>
 				${accounts_userinfo.openId}
 			</p>
-			<p>
+			<!-- /* Never entered by a user */
+      <p>
 				<label for="DN">Domain Name:</label>
 				${accounts_userinfo.DN}
 			</p>
+      -->
       <input id="userUpdate" type="submit" value="Edit" class="button" onclick="javascript:editUserInfo()"/> 
 		</fieldset>
     </div>

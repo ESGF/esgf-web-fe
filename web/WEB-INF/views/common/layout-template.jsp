@@ -72,6 +72,12 @@
                          <ti:insertAttribute name="main" />
                     </div>
                 </c:when>
+                <c:when test="${layoutType=='srmview'}">
+                    <div class="span-24 last" id="main">
+                         <a name="maincontent"></a>
+                         <ti:insertAttribute name="main" />
+                    </div>
+                </c:when>
                 <c:when test="${layoutType=='goformview1'}">
                     <div class="span-24 last" id="main">
                          <a name="maincontent"></a>

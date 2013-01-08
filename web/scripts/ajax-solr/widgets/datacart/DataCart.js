@@ -347,6 +347,15 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			}
 		}
 		
+		
+		accessType = 'SRM';
+		var hasSRM = self.checkDatasetAccess(accessType, datasetId);
+		if(hasSRM) {
+			datasetList += '<span class="srm_dataset_event" style="display:none;font-weight:bold;"> Transferring to SRM page... </span>';
+			datasetList += '<a class="srm_dataset_event" style="cursor:pointer"> SRM </a> |';
+		}
+		
+		
 		datasetList += ' <a class="remove_dataset_short" style="cursor:pointer">Remove</a>'; 
 		datasetList += '</td>';	
 		
@@ -672,7 +681,12 @@ function getIndividualPeer(id) {
 	
 	var datasetInfo = ESGF.localStorage.get('dataCart',id);
 	
-	peerStr = datasetInfo['peer'];
+	
+	if(datasetInfo['peer'] == null || datasetInfo['peer'] == undefined) {
+		peerStr = '';
+	} else {
+		peerStr = datasetInfo['peer'];
+	}
 	
 	
 	return peerStr.toString();

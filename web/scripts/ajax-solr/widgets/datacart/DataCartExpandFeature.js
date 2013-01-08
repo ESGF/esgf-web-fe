@@ -91,7 +91,8 @@
 			//kill the view more files link
 			$('a.view_more_files_short').die('click');
 			
-			
+			$('a.srm_event').die('click');
+			$('a.srm_dataset_event').die('click');
 			
 		},
 		
@@ -277,6 +278,9 @@
 										if(service == 'HTTPServer') {
 											service = 'HTTP';
 										}
+										
+										
+										
 										if(service == 'GridFTP') {
 											if(ESGF.setting.globusonline) {
 												//appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a style="cursor:pointer" class="go_individual_gridftp_short">' + service + '</a> </span>';
@@ -288,11 +292,22 @@
 												
 											}
 										} else {
-											if(openid != 'anonymousUser') {
-												appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '?openid=' + openid +  '" ' + 'target="_blank">' + service + '</a> </span>';
-											} else {
-												appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '" ' + 'target="_blank">' + service + '</a> </span>';
+											
+											if(service == 'SRM') {
+												if(openid != 'anonymousUser') {
+													appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a class="srm_event"><span style="display:none">' + url + '</span>' + 'srm service: ' + service + '</a> </span>';
+												} else {
+													appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a class="srm_event"><span style="display:none">' + url + '</span>' + 'srm service: ' + service + '</a> </span>';
+												}
 											}
+											else {
+												if(openid != 'anonymousUser') {
+													appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '?openid=' + openid +  '" ' + 'target="_blank">' + service + '</a> </span>';
+												} else {
+													appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '" ' + 'target="_blank">' + service + '</a> </span>';
+												}
+											}
+											
 										}
 										
 									}
@@ -536,7 +551,61 @@
 				
 			});
 			
+			$('a.srm_event').live('click',function() {
+				//alert('launch srm workflow here');
+				
+				//alert($(this).parent().find('span').html());
+				var selectedDocId = ($(this).parent().find('span').html());
+				
+				var srm_url = '/esgf-web-fe/srmview?datasetId=' + selectedDocId + '&type=File';
+		    	
+				var input = '';
+				
+				//send request
+		        jQuery('<form action="'+ srm_url +'" method="post">'+input+'</form>')
+		        .appendTo('body').submit().remove();
+				//alert($(this).parent().find('span').html());
+				
+			});
 			
+			$('a.srm_dataset_event').live('click',function() {
+				//alert('launch srm dataset workflow here');
+				
+				//extract the dataset Id from the span tag
+				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
+				
+				//alert('selectedDocId: ' + selectedDocId);
+
+		    	var srm_url = '/esgf-web-fe/srmview?datasetId=' + selectedDocId + '&type=Dataset';
+		    	
+		    	
+		    	
+		    	
+				//var openid = $('span.footer_openid').html();
+
+		        var input = '';
+				
+		        //begin assembling queryString
+	            //var queryString = 'type=create&id=' + datasetId + '&credential=' + go_credential;
+		        
+	            /*
+		        //assemble the input fields with the query string
+		        for(var i=0;i<self.file_ids_arr.length;i++) {
+		        	queryString += '&child_url=' + self.grid_urls_arr[i] + '&child_id=' + self.file_ids_arr[i];
+		        }
+		        jQuery.each(queryString.split('&'), function(){
+		          var pair = this.split('=');
+		          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
+		        });
+		        */
+		        
+		        
+		        //send request
+		        jQuery('<form action="'+ srm_url +'" method="post">'+input+'</form>')
+		        .appendTo('body').submit().remove();
+				//alert($(this).parent().find('span').html());
+				
+			});
 			
 		}
 		

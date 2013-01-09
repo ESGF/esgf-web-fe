@@ -23,7 +23,7 @@ function register(user, type, desc, role, auto){
 	    if (data.EditOutput.status == "success") {
         var classId = group.replace(/\s/g,"");
         $('.' + classId).hide();
-        $('.updatable').append('<tr class="' + classId + '"><td>' + group + '</td><td>' + info + '</td><td>' + role + '</td><td><input id="' + group + '" type="submit" value="Leave" class="button" onclick="javascript:unregister(\'' + user + '\', \'' + group + '\', \'' + info + '\', \'' + role + '\', \'' + autoReg + '\')"/></td></tr>');
+        $('.updatable').append('<tr class="' + classId + '"><td>' + group + '</td><td>' + info + '</td><td>' + role + '</td><td><input alt="" id="' + group + '" type="submit" value="Leave" class="button" onclick="javascript:unregister(\'' + user + '\', \'' + group + '\', \'' + info + '\', \'' + role + '\', \'' + autoReg + '\')"/></td></tr>');
 		    $("div .success").html(data.EditOutput.comment);
         $("div .middle").append($("div .success"));
         $("div .success").show();

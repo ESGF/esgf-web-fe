@@ -25,10 +25,10 @@ function unregister(user, name, desc, role, auto){
         var classId = groupName.replace(/\s/g,"");
         $('.' + classId).hide();
         if(groupAuto == "t"){
-          $('.allgroups').append('<tr class="' + classId + '"><td>' + groupName + '</td><td>' + groupDesc + '</td><td>' + groupRole + '</td><td><input id="' + groupName + '" type="submit" value="Join" class="button" onclick="javascript:register(\'' + user + '\', \'' + groupName + '\', \'' + groupDesc + '\', \'' + groupRole + '\', \'' + groupAuto + '\')"/></td></tr>');
+          $('.allgroups').append('<tr class="' + classId + '"><td>' + groupName + '</td><td>' + groupDesc + '</td><td>' + groupRole + '</td><td><input alt="" id="' + groupName + '" type="submit" value="Join" class="button" onclick="javascript:register(\'' + user + '\', \'' + groupName + '\', \'' + groupDesc + '\', \'' + groupRole + '\', \'' + groupAuto + '\')"/></td></tr>');
         }
         else if(groupAuto == "f"){
-          $('.allgroups').append('<tr class="' + classId + '"><td>' + groupName + '</td><td>' + groupDesc + '</td><td>' + groupRole + '</td><td><input id="' + groupName + '" type="submit" value="Request" class="button" onclick="javascript:register(\'' + user + '\', \'' + groupName + '\', \'' + groupDesc + '\', \'' + groupRole + '\', \'' + groupAuto + '\')"/></td></tr>');
+          $('.allgroups').append('<tr class="' + classId + '"><td>' + groupName + '</td><td>' + groupDesc + '</td><td>' + groupRole + '</td><td><input alt="" id="' + groupName + '" type="submit" value="Request" class="button" onclick="javascript:register(\'' + user + '\', \'' + groupName + '\', \'' + groupDesc + '\', \'' + groupRole + '\', \'' + groupAuto + '\')"/></td></tr>');
         }
         $("div .success").html(data.EditOutput.comment);
         $("div .middle").append($("div .success"));

@@ -97,8 +97,8 @@
                       <p> Please provide the email associated with the forgotten openid.</p>
                       <table><tr>
                         <td><b>Email:</b></td>
-                        <td><input type="text" id="usnemail" name="usnemail" size="60" style="width:100%" /></td>
-                        <td><input type="submit" value="Submit" class="button" onclick="javascript:findusername()"/></td>
+                        <td><input type="text" id="usnemail" alt="user email" name="usnemail" size="60" style="width:100%" /></td>
+                        <td><input type="submit" value="Submit" alt="submit user email" class="button" onclick="javascript:findusername()"/></td>
                       </tr></table>
                   </div>
                 </div>
@@ -109,8 +109,8 @@
                       <p>Please provide your openid. You will recieve a temporary password by email.<br/>Please remember to change your password the next time you login.</p>
                       <table><tr>
                           <td><b>Openid:</b></td>
-                          <td> <input type="text" id="pwdopenid" name="pwdopenid" size="60" style="width:100%" /></td>
-                          <td><input type="submit" value="Submit" class="button" onclick="javascript:findpassword()"/></td>
+                          <td> <input type="text" id="pwdopenid" alt="user openid" name="pwdopenid" size="60" style="width:100%" /></td>
+                          <td><input type="submit" value="Submit" alt="submit user openid" class="button" onclick="javascript:findpassword()"/></td>
                     </tr></table>
                     </div>
                   </div>

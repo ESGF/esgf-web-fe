@@ -576,7 +576,38 @@
 				
 				//alert('selectedDocId: ' + selectedDocId);
 
-		    	var srm_url = '/esgf-web-fe/srmview?datasetId=' + selectedDocId + '&type=Dataset';
+				var peerStr = getIndividualPeer(selectedDocId);
+				var technoteStr = getTechnoteStr();
+				var fqParamStr = getFqParamStr();
+				
+/*
+				var idStr = selectedDocId;
+				
+				var peerStr = getIndividualPeer(idStr);//getPeerStr();
+				
+				
+				var technoteStr = getTechnoteStr();
+								
+		    	var fqParamStr = getFqParamStr();
+		    	
+		    	
+		    	
+		    	var queryStr = {"idStr" : idStr, 
+						"peerStr" : peerStr, 
+						"technotesStr" : technoteStr, 
+						"showAllStr" : ESGF.setting.showAllContents, 
+						"fqStr" : fqParamStr, 
+						"initialQuery" : "true",
+    					"fileCounter" : ESGF.setting.fileCounter};
+*/				
+				
+		    	var srm_url = '/esgf-web-fe/srmview?';
+		    	srm_url += 'datasetId=' + selectedDocId;
+		    	srm_url += '&type=Dataset';
+		    	srm_url += '&peerStr=' + peerStr;
+		    	srm_url += '&technoteStr=' + technoteStr;
+		    	srm_url += '&fqParamStr=' + fqParamStr;
+		    	
 		    	
 		    	
 		    	

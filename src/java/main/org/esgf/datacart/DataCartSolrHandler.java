@@ -27,6 +27,7 @@ public class DataCartSolrHandler {
     private static String searchAPIURL = "http://localhost:8080/esg-search/search?";//
     private static String queryPrefix = "format=application%2Fsolr%2Bjson&type=File";
     private final static Logger LOG = Logger.getLogger(DataCartSolrHandler.class);
+    private static final boolean queryStringPrintFlag = true;
     
     private static int initialLimit = 10;
     private static int totalLimit = 10000;
@@ -365,8 +366,11 @@ public class DataCartSolrHandler {
         //add the dataset to the query string
         try {
             this.solrQueryString += "&dataset_id=" + URLEncoder.encode(dataset_id,"UTF-8").toString();
+            
+            if(queryStringPrintFlag) {
+                System.out.println("\n\tthis.solrQueryString->\t" + this.solrQueryString);
+            }
             //System.out.println("\nthis.solrQueryString->\t" + URLEncoder.encode(dataset_id,"UTF-8").toString());
-            //System.out.println("\n\tthis.solrQueryString->\t" + this.solrQueryString);
             
         } catch (UnsupportedEncodingException e1) {
             // TODO Auto-generated catch block

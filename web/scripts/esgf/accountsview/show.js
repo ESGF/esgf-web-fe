@@ -47,12 +47,8 @@ function showmore(user){
             if(groupInfo[1] == "wheel"){
               //logic?
             }
-            else if(groupInfo[4] == "t"){
+            else{
               $('.allgroups').append('<tr class ="' + classId + '"><td>' + groupInfo[1] + '</td><td>' + groupInfo[2] + '</td><td>' + role  + '</td><td><input alt="" id="' + groupInfo[1] + '" type="submit" value="Join" class="button" onclick="javascript:register(\'' + user + '\', \'' + groupInfo[1] + '\', \'' + groupInfo[2] + '\', \'' + role + '\', \'' + groupInfo[4] + '\')"/></td></tr>');
-            }
-            //todo change Z to f when logic is in place
-            else if (groupInfo[4] == "Z"){
-              $('.allgroups').append('<tr class ="' + classId + '"><td>' + groupInfo[1] + '</td><td>' + groupInfo[2] + '</td><td>' + role + '</td><td><input alt="" id="' + groupInfo[1] + '" type="submit" value="Request" class="button" onclick="javascript:register(\'' + user + '\', \'' + groupInfo[1] + '\', \'' + groupInfo[2] + '\', \'' + role + '\', \'' + groupInfo[4] +'\')"/></td></tr>');
             }
           }
           $("div .groups").show();

@@ -1,10 +1,18 @@
 package org.esgf.accounts;
 
+import java.io.DataInputStream;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.File;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
 
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
@@ -39,6 +47,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import esg.common.util.ESGFProperties;
+
+import esg.security.registry.service.api.RegistryService;
 
 import esg.node.security.UserInfo;
 import esg.node.security.UserInfoCredentialedDAO;
@@ -127,6 +137,38 @@ public class GetAllGroupsController {
         
         //List<String[]> resultsFederation = myGroupRoleDAO.getFederationGroupEntriesNotFor(myUserInfoDAO.getUserById(userName).getOpenid());
         
+        /* Start of Testing */ 
+          //String fileName = System.getenv().get("ESGF_HOME")+"/config/esgf_ats_static.xml";
+          String fileName = System.getenv().get("ESGF_HOME")+"/config/esgf_ats.xml";
+          String strFile = "";
+          String newLine[];
+          String strLine;
+          int count = 1;
+          try{
+            FileInputStream fstream = new FileInputStream(fileName);
+            DataInputStream in = new DataInputStream(fstream);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            while ((strLine = in.readLine()) != null)   {
+              newLine = strLine.split("\"");
+              if(count > 2 && newLine.length > 2){
+                String temp = "";
+                for(int i = 0; i < newLine.length; i++){
+                  if ( i % 2 != 0){
+                    temp = temp + newLine[i] + ",";
+                  }  
+                }
+                strFile = strFile  + temp + "][";
+              }
+              count++;
+            }
+            in.close();
+          }
+          catch (Exception e){
+            System.err.println("Error: " + e.getMessage());
+          }
+          strFile = strFile.substring(0, strFile.length() - 3);
+        /* End of testing */
+
         String xmlOutput = "<EditOutput>";
         if(pass){
           //Returning list of all groups

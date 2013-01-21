@@ -224,6 +224,8 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             		alert('Data cart contents exceeded.  Please remove a dataset from the datacart before adding a new one');
             	} else {
 
+            		alert('xlink: ' + evt.data.doc['xlink'] + ' index: ' + evt.data.doc['index_node']);
+            		
                 	//alert('adding to cart');
                 	if(evt.data.doc['xlink'] != undefined) {
                 		//alert('xlink defined');

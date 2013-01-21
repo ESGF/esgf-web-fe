@@ -58,6 +58,7 @@ public class FileDownloadTemplateController {
         
         //this.printParameters(request);
         
+        System.out.println("\n\n\n\n\nHere:\n\n\n\n");
         
         String peerStr = request.getParameter("peerStr");
         String [] peers = peerStr.split(";");

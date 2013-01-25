@@ -1,14 +1,18 @@
-function register(user, type, desc, role, auto){
+function register(user, name, attURL, desc, regURL){
+  
   hideAll();
+  
   var userName = user;
-  var group = type;
+  var group = name;
+  var reg = regURL;
+  var att = attURL;
   var info = desc;
-  var role = role;
-  var autoReg = auto;
+  
   var jsonObj = new Object;
-  jsonObj.userName = userName;
-	jsonObj.group = group;
-	jsonObj.role = role;
+    jsonObj.userName = userName;
+	  jsonObj.group = group;
+	  jsonObj.reg = reg;
+    jsonObj.att = att;
 			
 	var jsonStr = JSON.stringify(jsonObj);
 	var userinfo_url = '/esgf-web-fe/addgroupproxy';
@@ -23,11 +27,13 @@ function register(user, type, desc, role, auto){
 	    if (data.EditOutput.status == "success") {
         var classId = group.replace(/\s/g,"");
         $('.' + classId).hide();
-        $('.updatable').append('<tr class="' + classId + '"><td>' + group + '</td><td>' + info + '</td><td>' + role + '</td><td><input alt="" id="' + group + '" type="submit" value="Leave" class="button" onclick="javascript:unregister(\'' + user + '\', \'' + group + '\', \'' + info + '\', \'' + role + '\', \'' + autoReg + '\')"/></td></tr>');
+        $('.updatable').append('<tr class="' + classId + '"><td>' + group + '</td><td>' + info + '</td><td>' + role + '</td><td></td></tr>');
+        //unregister button
+        //<input alt="" id="' + group + '" type="submit" value="Leave" class="button" onclick="javascript:unregister(\'' + user + '\', \'' + group + '\', \'' + info + '\', \'' + role + '\', \'' + autoReg + '\')"/>
 		    $("div .success").html(data.EditOutput.comment);
         $("div .middle").append($("div .success"));
         $("div .success").show();
-      } 
+        } 
       else {
 	      $("div .error").html(data.EditOutput.comment);
         $("div .middle").append($("div .error"));

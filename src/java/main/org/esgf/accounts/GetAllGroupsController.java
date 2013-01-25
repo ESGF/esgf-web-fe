@@ -14,10 +14,12 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,7 +50,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import esg.common.util.ESGFProperties;
 
+import esg.security.attr.service.api.FederatedAttributeService;
+import esg.security.attr.service.impl.FederatedAttributeServiceImpl;
 import esg.security.registry.service.api.RegistryService;
+import esg.security.registry.service.impl.RegistryServiceLocalXmlImpl;
 
 import esg.node.security.UserInfo;
 import esg.node.security.UserInfoCredentialedDAO;
@@ -108,13 +113,13 @@ public class GetAllGroupsController {
      * @throws JDOMException 
      *
      */
+    @SuppressWarnings("deprecation")
     @RequestMapping(method=RequestMethod.POST)
-    public @ResponseBody String doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException, JDOMException {
+    public @ResponseBody String doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException, JDOMException, Exception{
         String query = (String)request.getParameter("query");
         String userName = "";
         boolean pass = true;
         String errormessage = "";
-        String groups = "";
         JSONObject jsonObj = null;
         
         try {
@@ -126,54 +131,100 @@ public class GetAllGroupsController {
             pass = false;
         }
         
-        List<String[]> results = myGroupRoleDAO.getGroupEntriesNotFor(myUserInfoDAO.getUserById(userName).getOpenid());
+        /* Returning only Groups from this.node */
+          /*
+            String groups = "";
+            List<String[]> results = myGroupRoleDAO.getGroupEntriesNotFor(myUserInfoDAO.getUserById(userName).getOpenid());
 
-        for(String[] string : results){
-          groups = groups + Arrays.toString(string);
-        }
-        groups = groups + "[0, 1, 2, 3, 4]";
-        LOG.debug("GetAllGroupsController -->" + userName);
+            for(String[] string : results){
+              groups = groups + Arrays.toString(string);
+            }
+            groups = groups + "[0, 1, 2, 3, 4]";
+            LOG.debug("GetAllGroupsController -->" + userName);
+          */
 
+        /* Wish List */ 
+          //List<String[]> resultsFederation = myGroupRoleDAO.getFederationGroupEntriesNotFor(myUserInfoDAO.getUserById(userName).getOpenid());
+          
+        /* Start of Luca's Test code */ 
+          /*
+            // set certificates for client-server handshake
+            //CertUtils.setTruststore("/Users/cinquini/myApplications/apache-tomcat/esg-truststore.ts");
+            //CertUtils.setKeystore("/Users/cinquini/myApplications/apache-tomcat/esg-datanode-rapidssl.ks");
+          
+            // initialize service
+            final String ESGF_ATS = "/esg/config/esgf_ats.xml";
+            final RegistryService registryService = new RegistryServiceLocalXmlImpl(ESGF_ATS);
+            final String issuer = "ESGF Attribute Service";
+            final FederatedAttributeService self = new FederatedAttributeServiceImpl(issuer, registryService);
+                  
+            // execute invocation
+            String identifier = "https://esg-datanode.jpl.nasa.gov/esgf-idp/openid/lucacinquini";
+            Map<String, Set<String>> attributes = self.getAttributes(identifier);
+            for (String atype : attributes.keySet()) {
+              for (String avalue : attributes.get(atype)) {
+                  System.out.println("ATTRIBUTE TYPE="+atype+" VALUE="+avalue);
+              }
+            }
+          */
         
-        //List<String[]> resultsFederation = myGroupRoleDAO.getFederationGroupEntriesNotFor(myUserInfoDAO.getUserById(userName).getOpenid());
-        
-        /* Start of Testing */ 
-          //String fileName = System.getenv().get("ESGF_HOME")+"/config/esgf_ats_static.xml";
-          String fileName = System.getenv().get("ESGF_HOME")+"/config/esgf_ats.xml";
+          /* Matthews Work Around Code */
+          String fileNameStatic = System.getenv().get("ESGF_HOME")+"/config/esgf_ats_static.xml";
+          String fileNameDynamic = System.getenv().get("ESGF_HOME")+"/config/esgf_ats.xml";
+          ArrayList<String> fileStatic = new ArrayList<String>();
+          ArrayList<String> fileDynamic = new ArrayList<String>();
           String strFile = "";
           String newLine[];
-          String strLine;
-          int count = 1;
+          String strLine = "";
+        
           try{
-            FileInputStream fstream = new FileInputStream(fileName);
-            DataInputStream in = new DataInputStream(fstream);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            while ((strLine = in.readLine()) != null)   {
-              newLine = strLine.split("\"");
-              if(count > 2 && newLine.length > 2){
-                String temp = "";
-                for(int i = 0; i < newLine.length; i++){
-                  if ( i % 2 != 0){
-                    temp = temp + newLine[i] + ",";
-                  }  
+            //TODO: should be looking at whats in this file too
+            /*
+              FileInputStream fstream = new FileInputStream(fileNameStatic);
+              DataInputStream in = new DataInputStream(fstream);
+              while ((strLine = in.readLine()) != null)   {
+                strLine = strLine.trim();
+                String finder[] = strLine.split(" ");
+                if(finder[0] == "<attribute"){
+                  fileStatic.add(strLine);
                 }
-                strFile = strFile  + temp + "][";
               }
-              count++;
+              in.close();
+            */
+  
+            FileInputStream dstream = new FileInputStream(fileNameDynamic);
+            DataInputStream get = new DataInputStream(dstream);
+            while ((strLine = get.readLine()) != null)   {
+              strLine = strLine.trim();
+              String finder[] = strLine.split(" ");
+              if(finder[0].toString().equals("<attribute")){  
+                fileDynamic.add(strLine);
+          
+                newLine = strLine.split("\"");
+                if(newLine.length > 2){
+                  String temp = "";
+                  for(int i = 0; i < newLine.length; i++){
+                    if ( i % 2 != 0){
+                      temp = temp + newLine[i] + ",";
+                    }  
+                  }
+                  strFile = strFile  + temp + "][";
+                }
+              }
             }
-            in.close();
-          }
-          catch (Exception e){
-            System.err.println("Error: " + e.getMessage());
-          }
-          strFile = strFile.substring(0, strFile.length() - 3);
-        /* End of testing */
+          get.close();
+        }
+        catch (Exception e){
+          System.err.println("Error: " + e.getMessage());
+          pass = false;
+          errormessage = "Can't get groups at this time";
+        }
 
         String xmlOutput = "<EditOutput>";
         if(pass){
           //Returning list of all groups
           xmlOutput += "<status>success</status>";
-          xmlOutput += "<comment>" + groups + "</comment>";
+          xmlOutput += "<comment>" + strFile + "</comment>";
           xmlOutput += "</EditOutput>";
          
         } else {

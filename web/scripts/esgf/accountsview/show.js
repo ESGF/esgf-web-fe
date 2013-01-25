@@ -35,20 +35,32 @@ function showmore(user){
 	  success: function(data) {
 	    if (data.EditOutput.status == "success") {
         var output = data.EditOutput.comment;
-        var rows = output.split("][");
+        var rows = output.split(",][");
         var name = "";
         var desc = "";
         var role = "user";
-        if(rows.length > 2){
+        if(rows.length > 1){
           for(var i = 0; i < rows.length; i++){
-            var groupInfo = rows[i].split(", ");
-            var classId = groupInfo[1];
-            classId = classId.replace(/\s/g,"");
-            if(groupInfo[1] == "wheel"){
+            var groupInfo = rows[i].split(",");
+            if(groupInfo[0] == "wheel" || groupInfo[0] == ""){
               //logic?
             }
             else{
-              $('.allgroups').append('<tr class ="' + classId + '"><td>' + groupInfo[1] + '</td><td>' + groupInfo[2] + '</td><td>' + role  + '</td><td><input alt="" id="' + groupInfo[1] + '" type="submit" value="Join" class="button" onclick="javascript:register(\'' + user + '\', \'' + groupInfo[1] + '\', \'' + groupInfo[2] + '\', \'' + role + '\', \'' + groupInfo[4] + '\')"/></td></tr>');
+              var table = document.getElementById('groups_admin_table_id');
+              var bool = true;
+              //don't show groups user is registered in
+              for(var r = 1, n = table.rows.length; r < n; r++){
+                var groupsIn = table.rows[r].cells[0].innerHTML;
+                if(groupsIn == groupInfo[0]){
+                  bool = false;
+                }
+              }
+              if(bool){
+                var classId = groupInfo[0];
+                classId = classId.replace(/\s/g,"");
+                $('.allgroups').append('<tr class ="' + classId + '"><td>' + groupInfo[0] + '</td><td>' + groupInfo[2] + '</td><td>' + role  + '</td><td><input alt="" id="' + classId + '" type="submit" value="Join" class="button" onclick="javascript:register(\'' + user + '\', \'' + groupInfo[0] + '\', \'' + groupInfo[1] + '\', \'' + groupInfo[2] + '\', \'' + groupInfo[3] + '\')"/></td></tr>');
+                //registration button!
+              }
             }
           }
           $("div .groups").show();

@@ -80,7 +80,7 @@
 							<th>Group Name</th>
 							<th>Description</th>
 							<th>Role</th>
-              <th>UnRegister</th>
+              <th></th>
 						</tr>
 					</thead>
 					<tbody class="updatable">
@@ -96,13 +96,15 @@
                     var role = "${accounts_roleinfo[j]}";
                     var autoReg = "t";
                     if(group != "wheel"){
-                      $('.updatable').append('<tr class="' + classId + '"><td>' + group + '</td><td>' + info + '</td><td>' + role + '</td><td><input alt="" id="' + group + '" type="submit" value="Leave" class="button" onclick="javascript:unregister(\'${accounts_userinfo.userName}\', \'' + group + '\', \'' + info + '\', \'' + role + '\', \'' + autoReg + '\')"/></td></tr>');
+                      $('.updatable').append('<tr class="' + classId + '"><td>' + group + '</td><td>' + info + '</td><td>' + role + '</td><td></td></tr>');
+                      // unregister button
+                      //<input alt="" id="' + group + '" type="submit" value="Leave" class="button" onclick="javascript:unregister(\'${accounts_userinfo.userName}\', \'' + group + '\', \'' + info + '\', \'' + role + '\', \'' + autoReg + '\')"/>                    
                     }
                   </script>
 
 				          <c:set var="j" value="${j+1}"/>
 						</c:forEach>
-      <div class="loading"> <input alt="" id='showMore' type="submit" value="Show All" class="button" onclick="javascript:showmore('${accounts_userinfo.userName}')"/> </div>
+      <div class="loading"> <input alt="" id='showMore' type="submit" value="Show All" class="button" onclick="javascript:showmore('${accounts_userinfo.openId}')"/> </div>
       <div class="loaded" style="display: none"> <input alt="" id='showMore' type="submit" value="Show All" class="button" onclick="javascript:showmoregroups()"/> </div>
 		</fieldset>
 

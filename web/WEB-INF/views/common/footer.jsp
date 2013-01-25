@@ -34,7 +34,7 @@
 	
 	<div class="prepend-1 span-8 last">
 		<div class="footerright">
-        	<a href="https://www.llnl.gov/disclaimer.html">Privacy Policy & Legal Notice</a> | <a href="mailto:esgf-user@lists.llnl.gov?subject=ESGF Portal Feedback">Contact ESGF</a>
+      <a href="https://www.llnl.gov/disclaimer.html">Privacy & Legal Notices</a> | <a href="mailto:esgf-user@lists.llnl.gov?subject=ESGF Portal Feedback">Contact ESGF</a> | <a href="http://esgf.org">ESGF.org</a> 
         </div>
 	</div>
 </div>  

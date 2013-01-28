@@ -54,10 +54,11 @@ function showmore(user){
                 if(groupsIn == groupInfo[0]){
                   bool = false;
                 }
-              }
+              }i
               if(bool){
                 var classId = groupInfo[0];
                 classId = classId.replace(/\s/g,"");
+                var groupLocation = groupInfo[3].split("/");
                 $('.allgroups').append('<tr class ="' + classId + '"><td>' + groupInfo[0] + '</td><td>' + groupInfo[2] + '</td><td>' + role  + '</td><td><input alt="" id="' + classId + '" type="submit" value="Join" class="button" onclick="javascript:register(\'' + user + '\', \'' + groupInfo[0] + '\', \'' + groupInfo[1] + '\', \'' + groupInfo[2] + '\', \'' + groupInfo[3] + '\')"/></td></tr>');
                 //registration button!
               }

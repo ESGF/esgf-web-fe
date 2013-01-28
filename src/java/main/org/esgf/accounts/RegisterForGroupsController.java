@@ -110,6 +110,7 @@ public class RegisterForGroupsController {
         String attURL = "";
 
         boolean pass = true;
+        String retunedStatus = "";
         String retunedMessage = "";        
         JSONObject jsonObj = null;
         
@@ -162,23 +163,26 @@ public class RegisterForGroupsController {
                 //TODO -> what are all the results?
                 System.out.println(parseOut[0]);
                 if(parseOut[0].equals("SUCCESS")){
-                  retunedMessage = "You have been added to the group " + group + ".";
+                  pass = true;
+                  retunedMessage = "success[]You have been added to the group " + group + ".";
                 }
                 else if(parseOut[0].equals("EXISTING")){
-                  pass = false;
-                  retunedMessage = "You are already a member of the group " + group + ".";
+                  pass = true;
+                  retunedMessage = "existing[]You are already a member of the group " + group + ".";
+                  
                 }
                 else if(parseOut[0].equals("PENDING")){
-                  retunedMessage = "We have contacted the System Admin for " + group + ". Your membership is pending, you will recieve a email once your request has been reviewed."; 
+                  pass = true;
+                  retunedMessage = "pending[]We have contacted the System Admin for " + group + ". Your membership is pending, you will recieve a email once your request has been reviewed."; 
                 }
                 else{
-                    pass = false;
-                    retunedMessage = "You are unbale to be added to the group " + group + " at this time.";
+                  pass = false;  
+                  retunedMessage = "You are unbale to be added to the group " + group + " at this time.";
                 }
             }
             else{
-                pass = false;
-                retunedMessage = "Could not conntact host node for the group " + group + "\n Please try again at a later time.";                
+              pass = false;  
+              retunedMessage = "Could not conntact host node for the group " + group + "\n Please try again at a later time.\nStatus Code: " + result;                
             }
         }
         finally{
@@ -194,17 +198,14 @@ public class RegisterForGroupsController {
         */
         String xmlOutput = "<EditOutput>";
         if(pass){
-          //user has been added to group
           xmlOutput += "<status>success</status>";
           xmlOutput += "<comment>" + retunedMessage + "</comment>";
-          xmlOutput += "</EditOutput>";
-         
-        } else {
-          //user not added to group
+        }
+        else{
           xmlOutput += "<status>fail</status>";
           xmlOutput += "<comment>" + retunedMessage + "</comment>";
-          xmlOutput += "</EditOutput>";
         }
+        xmlOutput += "</EditOutput>";
         JSONObject jo = XML.toJSONObject(xmlOutput);
         String jsonContent = jo.toString();        
         return jsonContent;

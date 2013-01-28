@@ -77,7 +77,7 @@
 				<table id="groups_admin_table_id">
 					<thead>
 						<tr>
-							<th>Group Name</th>
+							<th>Name</th>
 							<th>Description</th>
 							<th>Role</th>
               <th></th>
@@ -116,9 +116,9 @@
     <div class="groups" style="display: none">
     <fieldset style="background: #F5F5E0">
       <legend>Groups Available</legend>
-        <strong>Showing All Groups (Federation Wide)</strong> 
+        <strong>Federation Wide</strong> 
         <table id="groups_table_id">
-         <thead><tr><th>Group Name</th><th>Description</th><th>Role</th><th>Register</th></tr></thead>
+          <thead><tr><th>Name</th><th>Description</th><th>Role</th><th>Register</th></tr></thead>
          <tbody class="allgroups">
          </tbody>
         </table>

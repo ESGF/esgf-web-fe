@@ -239,7 +239,7 @@ public class GetAllGroupsController {
           for(int c = 0; c < fileDynamic.size(); c++){
             strLine = fileDynamic.get(c);
             newLine = strLine.split("\"");
-            if(newLine.length > 2){
+            if(newLine.length == 9){
               String temp = "";
               for(int i = 0; i < newLine.length; i++){
                 if ( i % 2 != 0){

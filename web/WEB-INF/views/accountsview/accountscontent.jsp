@@ -116,17 +116,12 @@
     <div class="groups" style="display: none">
     <fieldset style="background: #F5F5E0">
       <legend>Groups Available</legend>
-        <strong>Local Groups</strong> 
+        <strong>Showing All Groups (federation Wide)</strong> 
         <table id="groups_table_id">
          <thead><tr><th>Group Name</th><th>Description</th><th>Role</th><th>Register</th></tr></thead>
          <tbody class="allgroups">
          </tbody>
         </table>
-<!--
-      <strong>Federation Groups</strong>
-      
-
--->
         <input alt="" id="showMore" type="submit" value="Hide" class="button" onclick="javascript:showless()"/> 
          &nbsp; Need help registering for other groups? Check the ESGF
          <a href="http://www.esgf.org/wiki/ESGF_Data_Download">Wiki</a>

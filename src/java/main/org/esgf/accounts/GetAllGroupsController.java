@@ -168,7 +168,7 @@ public class GetAllGroupsController {
             }
           */
         
-          /* Matthews Work Around Code */
+          /* Matthews Code */
           String fileNameStatic = System.getenv().get("ESGF_HOME")+"/config/esgf_ats_static.xml";
           String fileNameDynamic = System.getenv().get("ESGF_HOME")+"/config/esgf_ats.xml";
           ArrayList<String> fileStatic = new ArrayList<String>();
@@ -176,22 +176,40 @@ public class GetAllGroupsController {
           String strFile = "";
           String newLine[];
           String strLine = "";
+          String tmp = "";
         
           try{
-            //TODO: should be looking at whats in this file too
-            /*
-              FileInputStream fstream = new FileInputStream(fileNameStatic);
-              DataInputStream in = new DataInputStream(fstream);
-              while ((strLine = in.readLine()) != null)   {
-                strLine = strLine.trim();
+            FileInputStream fstream = new FileInputStream(fileNameStatic);
+            DataInputStream in = new DataInputStream(fstream);
+            while ((strLine = in.readLine()) != null ){
+              strLine = strLine.trim();
+              if(strLine.length() == 0){
+                continue;
+              }
+              else if(strLine.charAt(0) == '<' && strLine.charAt(strLine.length() - 1) == '>'){
                 String finder[] = strLine.split(" ");
-                if(finder[0] == "<attribute"){
-                  fileStatic.add(strLine);
+                if(finder[0].toString().equals("<attribute")){
+                  fileStatic.add(strLine);  
                 }
               }
-              in.close();
-            */
-  
+              else if(strLine.charAt(0) == '<'){
+                tmp = strLine;
+              }
+              else if(strLine.charAt(strLine.length() - 1) == '>'){
+                tmp = tmp + strLine;
+                tmp = tmp.replace("\n", " ");
+                String finder[] = tmp.split(" ");
+                if(finder[0].toString().equals("<attribute")){
+                  fileStatic.add(tmp);
+                }
+                tmp = "";
+              }
+              else{
+                tmp = tmp + strLine;
+              }
+            }
+            in.close();
+            /* ******************************************************** */
             FileInputStream dstream = new FileInputStream(fileNameDynamic);
             DataInputStream get = new DataInputStream(dstream);
             while ((strLine = get.readLine()) != null)   {
@@ -199,43 +217,55 @@ public class GetAllGroupsController {
               String finder[] = strLine.split(" ");
               if(finder[0].toString().equals("<attribute")){  
                 fileDynamic.add(strLine);
-          
-                newLine = strLine.split("\"");
-                if(newLine.length > 2){
-                  String temp = "";
-                  for(int i = 0; i < newLine.length; i++){
-                    if ( i % 2 != 0){
-                      temp = temp + newLine[i] + ",";
-                    }  
-                  }
-                  strFile = strFile  + temp + "][";
-                }
               }
             }
-          get.close();
-        }
-        catch (Exception e){
-          System.err.println("Error: " + e.getMessage());
-          pass = false;
-          errormessage = "Can't get groups at this time";
-        }
+            get.close();
+          }
+          catch (Exception e){
+            System.err.println("Error: " + e.getMessage());
+            pass = false;
+            errormessage = "Can't get groups at this time";
+          }
 
-        String xmlOutput = "<EditOutput>";
-        if(pass){
-          //Returning list of all groups
-          xmlOutput += "<status>success</status>";
-          xmlOutput += "<comment>" + strFile + "</comment>";
-          xmlOutput += "</EditOutput>";
+          for(int e = 0; e < fileDynamic.size(); e++){
+            for(int r = 0; r < fileStatic.size(); r++){
+              if(fileDynamic.get(e) == fileStatic.get(r)){
+                fileStatic.remove(r);
+              }
+            }
+          }
+
+          fileDynamic.addAll(fileStatic);
+          for(int c = 0; c < fileDynamic.size(); c++){
+            strLine = fileDynamic.get(c);
+            newLine = strLine.split("\"");
+            if(newLine.length > 2){
+              String temp = "";
+              for(int i = 0; i < newLine.length; i++){
+                if ( i % 2 != 0){
+                  temp = temp + newLine[i] + ",";
+                }  
+              }
+              strFile = strFile  + temp + "][";
+            }
+          }
+
+          String xmlOutput = "<EditOutput>";
+          if(pass){
+            //Returning list of all groups
+            xmlOutput += "<status>success</status>";
+            xmlOutput += "<comment>" + strFile + "</comment>";
+            xmlOutput += "</EditOutput>";
          
-        } else {
-          //warning warning error warning warning
-          xmlOutput += "<status>fail</status>";
-          xmlOutput += "<comment>" + errormessage + "</comment>";
-          xmlOutput += "</EditOutput>";
-        }
-        JSONObject jo = XML.toJSONObject(xmlOutput);
-        String jsonContent = jo.toString();        
-        return jsonContent;
+          } else {
+            //warning warning error warning warning
+            xmlOutput += "<status>fail</status>";
+            xmlOutput += "<comment>" + errormessage + "</comment>";
+            xmlOutput += "</EditOutput>";
+          }
+          JSONObject jo = XML.toJSONObject(xmlOutput);
+          String jsonContent = jo.toString();        
+          return jsonContent;
     }
 }
 

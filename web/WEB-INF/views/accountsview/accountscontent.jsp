@@ -116,7 +116,7 @@
     <div class="groups" style="display: none">
     <fieldset style="background: #F5F5E0">
       <legend>Groups Available</legend>
-        <strong>Showing All Groups (federation Wide)</strong> 
+        <strong>Showing All Groups (Federation Wide)</strong> 
         <table id="groups_table_id">
          <thead><tr><th>Group Name</th><th>Description</th><th>Role</th><th>Register</th></tr></thead>
          <tbody class="allgroups">

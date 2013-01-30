@@ -290,7 +290,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		
 		for(var i=0;i<self.selected_arr.length;i++) {
 			var datasetList = self.writeDatasetMarkup(i);
-			//alert('datasetList: ' + datasetList);
 			$( "#datasetList").append(datasetList);
 		}
 		
@@ -314,10 +313,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		
 		
 		datasetList += '<div style="word-wrap: break-word;font-weight:bold"  ><span class="datasetId">' + self.selected_arr[i] + '</span></div>';
-		
-		for(var key in ESGF.localStorage.get('dataCart',self.selected_arr[i])) {
-			alert("key: " + key + " ESGF.localStorage.get('dataCart',self.selected_arr[i]) " + ESGF.localStorage.get('dataCart',self.selected_arr[i])[key]);
-		}
 		
 		datasetList += '<span>' + ' (Total Number of Files: ' +  ESGF.localStorage.get('dataCart',self.selected_arr[i])['numFiles'] + ')</span>';
 		
@@ -669,14 +664,6 @@ function getIndividualPeer(id) {
 	
 	var datasetInfo = ESGF.localStorage.get('dataCart',id);
 	
-	/*
-	alert('datasetInfo: ' + datasetInfo);
-	
-	for(var key in datasetInfo) {
-		alert('key: ' + key + ' value: ' + datasetInfo[key]);
-	}
-	*/
-	
 	peerStr = datasetInfo['peer'];
 	
 	if(peerStr == undefined) {
@@ -798,7 +785,6 @@ function rewriteDocsObject(docs) {
 		
 		
 	} else {
-		//alert('No data sets have been added to your cart');
 	}
 	
 	

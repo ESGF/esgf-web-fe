@@ -69,6 +69,10 @@
 		no_files_message: 'NOTE: There are no files in this dataset that match the search criteria',
 		
 		
+		td_file_left: 'width: 40px',
+		td_file_middle: '',
+		td_right_middle: '',
+		
 		/**
 		 * 
 		 */
@@ -114,7 +118,8 @@
 			var appendedFiles = '';
 			
 			appendedFiles = '<tr class="' + view_first_files_tag + '">';
-			appendedFiles += '<td style="width: 40px"></td>';
+			//appendedFiles += '<td style="width: 40px"></td>';
+			appendedFiles += '<td style="' + self.td_file_left + '"></td>';
 			appendedFiles += '<td style="width: 300px;font-size:13px">';
 			appendedFiles += '	<div style="word-wrap: break-word;font-weight:bold;color:gray;font-style:italic;font-weight:bold;color:gray;margin-top:5px" class="datasetId">';
 			
@@ -123,10 +128,6 @@
 			appendedFiles += '</div>';
 			appendedFiles += '</td>';
 			appendedFiles += '</tr>';
-			/*
-			appendedFiles += '<tr class="remove_' + data.doc.datasetId + '">';
-			
-			*/
 			
 			return appendedFiles;
 			
@@ -181,12 +182,10 @@
 					
 				appendedFiles += '<tr class="' + displayed_files_tag + '">';
 				
-				appendedFiles += '<td style="width: 40px">' +
+				//appendedFiles += '<td style="width: 40px">' +
+				appendedFiles += '<td style="' + self.td_file_left + '">' +
 				 '<input style="margin-left: 10px;display:none"' + 
-	  					'class="fileLevel"' + 
 	  					'type="checkbox"' + 
-	  					'class="fileId"' + 
-	  					'id="${fileId}"' + 
 	  					'checked="true"' + 
 	  					'/>' +
 	  					'</td>';
@@ -373,7 +372,6 @@
 			$('a.view_more_files_short').live('click',function() {
 
 				
-				//alert('in view more files short');
 				if(this.innerHTML == "View more files") {
 				
 
@@ -415,9 +413,6 @@
 						success: function(data) {
 							
 							var fileLength = data.doc.files.file.length;
-							
-							alert('fileLenght: ' + fileLength);
-							
 							
 							var tagid = self.view_files_tag + replaceChars(idStr);//'view_more_files_' + replaceChars(idStr);
 							

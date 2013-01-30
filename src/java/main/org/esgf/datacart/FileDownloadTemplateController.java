@@ -128,9 +128,6 @@ public class FileDownloadTemplateController {
         
         String idStr = request.getParameter("idStr");
         
-        //System.out.println("\n\n\n\nDATASET ID: " + idStr + "\n\n\n\n");
-        
-        
         String peerStr = request.getParameter("peerStr");
         //String [] peers = peerStr.split(";");
 

@@ -238,6 +238,8 @@
 	            
 	            queryString += '&shards=' + peerAppend;
 	            
+	            
+	            
 	            submitWGETScriptForm(queryString,file_ids,dataset_ids);
 				
 				

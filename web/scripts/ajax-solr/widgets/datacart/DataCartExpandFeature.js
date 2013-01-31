@@ -112,8 +112,9 @@
 			
 			var self = this;
 			
-			var view_first_files_tag = self.view_first_files_tag + replaceChars(data.doc.datasetId);
+			var view_first_files_tag = self.view_first_files_tag + 'initial_true_' + replaceChars(data.doc.datasetId);
 			
+			//alert('view_first_files_tag: ' + view_first_files_tag);
 	    	
 			var appendedFiles = '';
 			
@@ -270,7 +271,7 @@
 					var view_more_files_tag = self.view_files_tag + replaceChars(idStr);//'view_more_files_' + replaceChars(idStr);
 					$('.' + view_more_files_tag).remove();
 					
-					
+					//alert('view_next: ' + view_next_files_tag + ' view_first: ' + view_first_files_tag + ' view_more: ' + view_more_files_tag);
 	                this.innerHTML="Expand";
 
 					
@@ -300,8 +301,10 @@
 
 			    	
 			    	//CHANGE ME!
-			    	queryStr['peerStr'] = 'localhost';
+			    	//queryStr['peerStr'] = 'localhost';
 					
+			    	//alert('initial queryStr: ' + queryStr['peerStr']);
+			    	
 			    	//initial ajax call for first x number of files in dataset
 					$.ajax({
 						url: url,
@@ -311,7 +314,9 @@
 						dataType: 'json',
 						success: function(data) {
 							
-							var fileLength = data.doc.files.file.length;
+							//alert('data: ' + data);
+							
+							
 							
 							//no files
 							if(data.doc.files.file == undefined) {
@@ -326,6 +331,8 @@
 								
 								
 							} else {
+
+								var fileLength = data.doc.files.file.length;
 								
 								var tagid = 'file_rows_' + replaceChars(data.doc.datasetId);
 								
@@ -354,7 +361,7 @@
 							}
 						},
 						error: function() {
-								
+							alert('Error in expanding files for dataset ' + data.doc.datasetId);
 						}
 					});
 					
@@ -399,10 +406,12 @@
 			    	var url = '/esgf-web-fe/solrfileproxy2/datacart/'+selectedDocId;
 
 			    	//CHANGE ME!
-			    	queryStr['peerStr'] = 'localhost';
+			    	//queryStr['peerStr'] = 'localhost';
 					
 			    	var tagid = 'file_rows_' + replaceChars(idStr);
 					
+			    	//alert('after queryStr: ' + queryStr['peerStr']);
+			    	
 			    	//initial ajax call for first x number of files in dataset
 					$.ajax({
 						url: url,
@@ -412,7 +421,7 @@
 						dataType: 'json',
 						success: function(data) {
 							
-							var fileLength = data.doc.files.file.length;
+							//var fileLength = data.doc.files.file.length;
 							
 							var tagid = self.view_files_tag + replaceChars(idStr);//'view_more_files_' + replaceChars(idStr);
 							
@@ -422,7 +431,7 @@
 							
 						},
 						error: function() {
-							alert('error');
+							alert('Error in expanding files for dataset ' + data.doc.datasetId);
 						}
 					});
 					

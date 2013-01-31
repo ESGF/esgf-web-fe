@@ -75,13 +75,16 @@ public class FileDownloadTemplateController {
 
         //NOTE: ID and PEERS SHOULD BE THE SAME LENGTH!!!!
         
+//if(id != null)
+//        System.out.println("\n\n\n\n\nID: " + id[0] + "\n\n\n\n");
+        
         //get the fq string and convert to an array of peers
         String fqStr = request.getParameter("fqStr");
         String [] fq = fqStr.split(";");
         
         
         String technotes = request.getParameter("technotesStr");
-        System.out.println("Technotes: " + technotes);
+        //System.out.println("Technotes: " + technotes);
         
         
         //get the search constraints togggle parameter
@@ -112,6 +115,9 @@ public class FileDownloadTemplateController {
         if(writeToXMLFile){
             docs.toFile(testInitializationFile);
         }
+
+        //System.out.println(docs.toJSON());
+        
         return docs.toJSON();
         
     }
@@ -166,7 +172,7 @@ public class FileDownloadTemplateController {
         
         DocElement doc = getDocElement(datasetId,peerStr,initialQuery,fq,showAllStr,fileCounter);
         
-        //System.out.println(doc.toXML());
+        //System.out.println(doc.toJSON());
         
        
         

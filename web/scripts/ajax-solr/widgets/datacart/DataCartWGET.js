@@ -238,6 +238,8 @@
 	            
 	            queryString += '&shards=' + peerAppend;
 	            
+	            
+	            
 	            submitWGETScriptForm(queryString,file_ids,dataset_ids);
 				
 				
@@ -391,6 +393,8 @@
 				            	
 				                queryString = addConstraintsToWGETQueryString(queryString);
 				            	
+				                alert('queryString: ' + queryString);
+				                
 				                submitWGETScriptForm(queryString,file_ids,dataset_ids);
 				    			
 										parentElement.find('a.wgetAllFiles_short').show();

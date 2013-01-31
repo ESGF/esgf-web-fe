@@ -366,7 +366,7 @@ public class DataCartSolrHandler {
         try {
             this.solrQueryString += "&dataset_id=" + URLEncoder.encode(dataset_id,"UTF-8").toString();
             //System.out.println("\nthis.solrQueryString->\t" + URLEncoder.encode(dataset_id,"UTF-8").toString());
-            //System.out.println("\n\tthis.solrQueryString->\t" + this.solrQueryString);
+            //System.out.println("\n\n\n\tthis.solrQueryString->\t" + this.solrQueryString + "\n\n\n");
             
         } catch (UnsupportedEncodingException e1) {
             // TODO Auto-generated catch block
@@ -385,6 +385,8 @@ public class DataCartSolrHandler {
             // execute the method
             int statusCode = client.executeMethod(method);
 
+            System.out.println("statusCode: " + statusCode);
+            
             if (statusCode != HttpStatus.SC_OK) {
                     LOG.error("Method failed: " + method.getStatusLine());
 

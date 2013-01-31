@@ -135,11 +135,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     		
     		var url = doc.url[i];
     		
-    		//alert('url: ' + url);
     		if(url.search("LAS") > -1) {
-    			
-    			//alert('in las...doc title: ' + doc.title);
-    			
     			var display = true;
     			
     			var restrictions = ESGF.setting.lasRestrictions;
@@ -150,7 +146,6 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     					display = false;
     				}
     			}
-    			//alert('dis: ' + display);
     			if(display) {
     				var tuple = url.split("\|");
             	    output += '<span class="actionitem ai_las"><a href="' + tuple[0] + '" target="_blank">Visualize and Analyze</a></span>';	
@@ -224,6 +219,8 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             		alert('Data cart contents exceeded.  Please remove a dataset from the datacart before adding a new one');
             	} else {
 
+            		//alert('dataset has index: ' + evt.data.doc['index_node']);
+            		
                 	//alert('adding to cart');
                 	if(evt.data.doc['xlink'] != undefined) {
                 		//alert('xlink defined');

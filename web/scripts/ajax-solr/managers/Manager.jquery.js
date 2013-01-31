@@ -141,7 +141,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
         		  facet_param_arr = data;
         	  },
         	  error: function() {
-        		  alert('error');
+        		  alert('error in getting facetlist');
         	  }
   	    
   	      });
@@ -201,7 +201,8 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           queryString += self.loadFacetNames(namesArr);
           
           
-          
+          //add shards
+          //queryString += '&shards=esgf.nccs.nasa.gov:8983/solr';
           
           
           
@@ -229,6 +230,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
            * Ajax call to the search API
            */
           
+          
           jQuery.ajax({
         	  url: revisedQueryString,
         	  type: 'GET',
@@ -243,9 +245,11 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
                   
         		  
         	  },
-        	  error: function() {
-        		  alert("There was an error in processing your query.  Try your search again.");
+        	  error: function(jqXHR,textStatus,errorThrown) {
+        		  
+        		  alert("There was an error (" + textStatus + " - " + errorThrown + ") in processing your query.  Try your search again.");
             	  
+        		  
             	  //remove the existing parameter store
             	  Manager.store.remove('fq');
             	  

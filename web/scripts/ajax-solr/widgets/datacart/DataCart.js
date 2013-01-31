@@ -160,14 +160,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     				 	 '<input type="radio" id="datacart_filtered" name="datacart_filter" value="filtered" /> ' +
     				 	 'Filter over search constraints ' +
     				 	 '</td>';
-    				 	 /*
-    				 	 '<td class="sfileCounter" style="width:220;display:none;padding:0px">Show initial <select class="fileCounter" name="fileC">' +
-    				 	 '<option id="fileCounter5" value="5">5</option>'+
-    					 '<option id="fileCounter10" value="10" selected="selected">10</option>' +
-    					 '<option id="fileCounter25" value="25" >25</option>' +
-    					 '<option id="fileCounter50" value="50">50</option>' +
-    					 '</select> files</td>' + 
-    				 	 */
     	
     	optionsStr += '<td style="font-size:12px;width:20px;">' +
 		  '</td>';
@@ -222,20 +214,18 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		
     	//empty the carts tab and append/initialize the datacart table 
     	$('#carts').empty();
-    	
-    	
+
     	var optionsStr = self.writeTopMenuMarkup();
 
-    	
+
     	if($('span#datacartOpen').html() == 'true') {
     		$( "#myTabs" ).tabs({ selected: 1 });
     	}
     	
     	//add the options to the page
     	$('#carts').append(optionsStr);
+    	
 
-    	
-    	
 		$("select[name='fileC']").attr("selectedIndex",3);
     	
 		
@@ -251,7 +241,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	
     	$('td.sfileCounter').show();
     	
-    	
     	//toggle the "checked" attribute of the showAllContents radio button
     	if(ESGF.setting.showAllContents == 'true') {
     		$("input[id='datacart_filtered']").attr("checked","false");
@@ -261,8 +250,9 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     		$("input[id='datacart_filtered']").attr("checked","true");
     	}
     	
-    	
+
     	if(self.selected_arr != null) {
+    		
     		
     		//if there are no items in the datacart don't show the radio buttons
         	if(self.selected_arr.length > 0) {
@@ -272,9 +262,9 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     		//initialize the contents in the data cart
         	$('#carts').append('<table style="width:100%;table-layout: fixed"><tbody id="datasetList"></tbody></table>');
             $("#datasetList").empty();
-    		
             
-          //getter for the data cart tab
+            
+            //getter for the data cart tab
     		var selected = $( "#myTabs" ).tabs( "option", "selected" );
     		
     		
@@ -286,8 +276,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     		
     		
     	}
-		
-       
+    	
 		
 	},
 
@@ -297,6 +286,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	createTemplateShort: function() {
 		
 		var self = this;
+		
 		
 		for(var i=0;i<self.selected_arr.length;i++) {
 			var datasetList = self.writeDatasetMarkup(i);
@@ -309,6 +299,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     
 	
 	writeDatasetMarkup: function (i) {
+		
+		
 		var self = this;
 		
 		var datasetList = '';
@@ -321,6 +313,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		
 		
 		datasetList += '<div style="word-wrap: break-word;font-weight:bold"  ><span class="datasetId">' + self.selected_arr[i] + '</span></div>';
+		
 		datasetList += '<span>' + ' (Total Number of Files: ' +  ESGF.localStorage.get('dataCart',self.selected_arr[i])['numFiles'] + ')</span>';
 		
 		
@@ -349,9 +342,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		
 		datasetList += ' <a class="remove_dataset_short" style="cursor:pointer">Remove</a>'; 
 		datasetList += '</td>';	
-		
-		
 		datasetList += '</tr>';
+		
 		datasetList += '<tr class="file_rows_' + replaceChars(self.selected_arr[i]) + '" style="">';
 		datasetList += '</tr>';
 		
@@ -674,6 +666,9 @@ function getIndividualPeer(id) {
 	
 	peerStr = datasetInfo['peer'];
 	
+	if(peerStr == undefined) {
+		peerStr = 'localhost';
+	}
 	
 	return peerStr.toString();
 	
@@ -790,7 +785,6 @@ function rewriteDocsObject(docs) {
 		
 		
 	} else {
-		//alert('No data sets have been added to your cart');
 	}
 	
 	

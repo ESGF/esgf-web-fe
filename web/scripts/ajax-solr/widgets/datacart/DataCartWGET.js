@@ -132,25 +132,25 @@
 		    	self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
 
             	//get the peers
-            	var peerStr = getPeerStr();
+            	var peerStr = ESGF.datacart.getPeerStr();
 	        	
 	            for(var i=0;i<self.selected_arr.length;i++) {
 	            
 	            	var selectedDocId = self.selected_arr[i];//self.selected_arr[i];
 	            	
 	            	
-	            	var selectedDocCount = $('span.datasetCount_'+replaceChars(selectedDocId)).html();
+	            	var selectedDocCount = $('span.datasetCount_'+ESGF.datacart.replaceChars(selectedDocId)).html();
 	            	
 	            	//if the count is greater than 10, check to see if the additional rows have been not been expanded for this dataset
 	            	//if not (null) then need an extra ajax call to get the rest of the file ids
-	            	var isAdded = $('tr.addedrow_' + replaceChars(selectedDocId)).html();//$(this).parent().parent().parent().find('tr.addedrow_' + replaceChars(selectedDocId)).html();
+	            	var isAdded = $('tr.addedrow_' + ESGF.datacart.replaceChars(selectedDocId)).html();//$(this).parent().parent().parent().find('tr.addedrow_' + replaceChars(selectedDocId)).html();
 	            	
 	            	dataset_ids.push(selectedDocId);
 	            	
 	            	if(isAdded == null && selectedDocCount > ESGF.setting.fileCounter) {
 	            	
 	            		
-	            		$('tr.file_rows_'+ replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
+	            		$('tr.file_rows_'+ ESGF.datacart.replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
 	            			var file_id = $(this).parent().find('input').attr('value');
 	            			file_ids.push(file_id);
 	            		});
@@ -158,11 +158,11 @@
 	            		
 	            		
 	            		//get all of the search constraints (fq params)
-	                	var fqParamStr = getFqParamStr();
+	                	var fqParamStr = ESGF.datacart.getFqParamStr();
 	                	
 	                	
 	                	//get the technotes
-	                	var technoteStr = getTechnoteStr();
+	                	var technoteStr = ESGF.datacart.getTechnoteStr();
 	            		
 	                	//the id str is only one file
 	                	var idStr = selectedDocId;
@@ -200,7 +200,7 @@
 	            		
 	            	
 	            	} else {
-	            		$('tr.file_rows_'+ replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
+	            		$('tr.file_rows_'+ ESGF.datacart.replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
 	            			var file_id = $(this).parent().find('input').attr('value');
 	            			file_ids.push(file_id);
 	            		});
@@ -232,13 +232,16 @@
 	            
 	            //alert('peerAppend: ' + peerAppend);
 	            
-	            queryString = addConstraintsToWGETQueryString(queryString);
+	            queryString = ESGF.datacart.addConstraintsToWGETQueryString(queryString);
 	        	
 	            //alert('peerStr: ' + peerStr + ' queryString: ' + queryString);
 	            
 	            queryString += '&shards=' + peerAppend;
 	            
-	            submitWGETScriptForm(queryString,file_ids,dataset_ids);
+	            //alert('queryStringUber: ' + queryString);
+                
+	            
+	            ESGF.datacart.submitWGETScriptForm(queryString,file_ids,dataset_ids);
 				
 				
 			});
@@ -289,11 +292,11 @@
 				
 				//alert('idStr ' + idStr);
 				
-				var peerStr = getIndividualPeer(idStr);//getPeerStr();
+				var peerStr = ESGF.datacart.getIndividualPeer(idStr);//getPeerStr();
 				
-				var technoteStr = getTechnoteStr();
+				var technoteStr = ESGF.datacart.getTechnoteStr();
 								
-		    	var fqParamStr = getFqParamStr();
+		    	var fqParamStr = ESGF.datacart.getFqParamStr();
 		    	
 		    	
 		    	
@@ -353,11 +356,12 @@
 						            	
 										//var queryString = '/esg-search/wget/?';
 						            	
+										//alert('queryStringShort: ' + queryString);
+						                
 										
-										
-						                queryString = addConstraintsToWGETQueryString(queryString);
+						                queryString = ESGF.datacart.addConstraintsToWGETQueryString(queryString);
 						            	
-						                submitWGETScriptForm(queryString,file_ids,dataset_ids);
+						                ESGF.datacart.submitWGETScriptForm(queryString,file_ids,dataset_ids);
 										
 
 						    			
@@ -389,9 +393,11 @@
 								peerStr += ':8983/solr';
 								var queryString = '/esg-search/wget/?' + 'shards=' + peerStr + '&';
 				            	
-				                queryString = addConstraintsToWGETQueryString(queryString);
+				                queryString = ESGF.datacart.addConstraintsToWGETQueryString(queryString);
 				            	
-				                submitWGETScriptForm(queryString,file_ids,dataset_ids);
+				                //alert('queryString: ' + queryString);
+				                
+				                ESGF.datacart.submitWGETScriptForm(queryString,file_ids,dataset_ids);
 				    			
 										parentElement.find('a.wgetAllFiles_short').show();
 										parentElement.find('span.wgetAllFiles_short').hide();

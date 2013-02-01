@@ -24,7 +24,7 @@ import org.esgf.metadata.JSONObject;
 @SuppressWarnings("unused")
 public class DataCartSolrHandler {
 
-    private static String searchAPIURL = "http://localhost:8080/esg-search/search?";//
+    private static String searchAPIURL = "http://localhost/esg-search/search?";//
     private static String queryPrefix = "format=application%2Fsolr%2Bjson&type=File";
     private final static Logger LOG = Logger.getLogger(DataCartSolrHandler.class);
     private static final boolean queryStringPrintFlag = true;
@@ -371,6 +371,9 @@ public class DataCartSolrHandler {
                 System.out.println("\n\tthis.solrQueryString->\t" + this.solrQueryString);
             }
             //System.out.println("\nthis.solrQueryString->\t" + URLEncoder.encode(dataset_id,"UTF-8").toString());
+
+            //System.out.println("\n\n\n\tthis.solrQueryString->\t" + this.solrQueryString + "\n\n\n");
+
             
         } catch (UnsupportedEncodingException e1) {
             // TODO Auto-generated catch block
@@ -389,6 +392,8 @@ public class DataCartSolrHandler {
             // execute the method
             int statusCode = client.executeMethod(method);
 
+            System.out.println("statusCode: " + statusCode);
+            
             if (statusCode != HttpStatus.SC_OK) {
                     LOG.error("Method failed: " + method.getStatusLine());
 

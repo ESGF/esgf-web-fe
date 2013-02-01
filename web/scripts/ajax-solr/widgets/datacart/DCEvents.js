@@ -224,62 +224,6 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 }(jQuery));
 
 
-function addConstraintsToWGETQueryString(queryString) {
-	//if filtering over search constraints...then add the search constraints to the wget
-    if(ESGF.setting.showAllContents == 'false') {
-    	
-    	// traverse through the constraints and add to the querystring
-		//for(var i in self.searchConstraints) {
-    	var searchConstraints = ESGF.localStorage.toKeyArr('esgf_fq');
-		for(var i=0;i<searchConstraints.length;i++) {
-			if(searchConstraints[i].search('replica') == -1 && 
-			   searchConstraints[i].search('type') == -1) {
-			   //constraintCount = constraintCount + 1;
-			   
-			   //replace the : with =
-			   var constraint = searchConstraints[i].replace(':','=');
-			   
-			   //replace 'text' with 'query' for free text searches
-			   constraint = constraint.replace('text','query');
-			   queryString += constraint + '&';
-			   
-			}
-		}
-    }
-    
-    return queryString;
-}
-
-function submitWGETScriptForm(queryString,file_ids,dataset_ids) {
-	var form = '<form action="'+ queryString +'" method="post" >';
-    
-	
-    //iterate over the file_ids and add to query string
-    //this can probably be collapsed into the loop above
-	/*
-    for(var i=0;i<file_ids.length;i++) {
-		var id = file_ids[i];
-		id.replace("\\|","%7C");
-		form += '<input type="hidden" name="id" value="' + id + '">';
-	}
-    form += '</form>';
-    */
-	
-	for(var i=0;i<dataset_ids.length;i++) {
-		var id = dataset_ids[i];
-		id.replace("\\|","%7C");
-		form += '<input type="hidden" name="dataset_id" value="' + id + '">';
-	}
-    form += '</form>';
-	
-    //send request using a dynamically generated form with the query string as the action
-    //the method should be post because the query string may be long
-    //jQuery('<form action="'+ queryString +'" method="post" >'+ '' +'</form>')
-    jQuery(form).appendTo('body').submit().remove();
-}
-
-
-
 /**
 *
 *  URL encode / decode

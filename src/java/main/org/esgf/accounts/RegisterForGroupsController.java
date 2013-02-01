@@ -16,6 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.FileRequestEntity;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -101,43 +106,106 @@ public class RegisterForGroupsController {
         String query = (String)request.getParameter("query");
         String userName = "";
         String group = "";
-        String role = "";
-        boolean pass = false;
-        String errormessage = "";        
+        String regURL = "";
+        String attURL = "";
+
+        boolean pass = true;
+        String retunedStatus = "";
+        String retunedMessage = "";        
         JSONObject jsonObj = null;
         
         try {
             jsonObj = new JSONObject(query);
             userName = jsonObj.getString("userName");
             group = jsonObj.getString("group");
-            role = jsonObj.getString("role");
+            regURL = jsonObj.getString("reg");
+            attURL = jsonObj.getString("att");
         } catch (JSONException e) {
             LOG.debug("error in parsing the json text string :" + query);
-            errormessage = "error in parsing the json text string :" + query;
+            retunedMessage = "error in parsing the json text string :" + query;
             pass = false;
-        }
-        // if local group
-        pass = myUserInfoDAO.addPermission(userName, group, role);
-        errormessage = "You are already a member of this group.";
-
-        //else federation group
-        //pass = myUserInfoDAO.addPermissionFederation(userName, group, role, where);
-
+        }        
+        
         LOG.debug("RegisterForGroupsController -->" + userName);
         
+        String startOF = "<esgf:registrationRequest xmlns:esgf=\"http://www.esgf.org/\">";
+        String userStart = "<esgf:user>";
+        String userEnd = "</esgf:user>";
+        String groupStart = "<esgf:group>";
+        String groupEnd = "</esgf:group>";
+        String role = "<esgf:role>user</esgf:role>";
+        String endOF = "</esgf:registrationRequest>";
+
+        String xmlString = startOF + userStart + userName + userEnd + groupStart + group + groupEnd + role + endOF;
+        
+        PostMethod post = new PostMethod(regURL);
+        StringRequestEntity xml = new StringRequestEntity(xmlString, "application/xml", "UTF-8");
+        post.setRequestEntity(xml);
+        post.setParameter("xml", xmlString);
+        HttpClient httpclient = new HttpClient();
+      
+        try{
+            System.out.println("About to call: " + regURL + "\n");
+            int result = httpclient.executeMethod(post);
+            /* status code: 200 -> ok; 500 -> internal server error */
+            /* <esgf:registrationResponse xmlns:esgf="http://www.esgf.org/" >
+             * <esgf:result >
+             * SUCCESS</esgf:result >
+             * <esgf:message >
+             * Registration outcome: user=https://patrick.llnl.gov/esgf-idp/openid/frank, group=cmip5research, role=user</esgf:message >
+             * </esgf:registrationResponse > 
+             * \n
+            */
+            if(result == 200){
+                String retunedXML = post.getResponseBodyAsString();
+                String parseXML[] = retunedXML.split(">");
+                String parseOut[] = parseXML[2].split("<");
+                //TODO -> what are all the results?
+                System.out.println(parseOut[0]);
+                if(parseOut[0].equals("SUCCESS")){
+                  pass = true;
+                  retunedMessage = "success[]You have been added to the group " + group + ".";
+                }
+                else if(parseOut[0].equals("EXISTING")){
+                  pass = true;
+                  retunedMessage = "existing[]You are already a member of the group " + group + ".";
+                  
+                }
+                else if(parseOut[0].equals("PENDING")){
+                  pass = true;
+                  retunedMessage = "pending[]We have contacted the System Admin for " + group + ". Your membership is pending, you will recieve a email once your request has been reviewed."; 
+                }
+                else{
+                  pass = false;  
+                  retunedMessage = "You are unbale to be added to the group " + group + " at this time.";
+                }
+            }
+            else{
+              pass = false;  
+              retunedMessage = "Could not conntact host node for the group " + group + "\n Please try again at a later time.\nStatus Code: " + result;                
+            }
+        }
+        finally{
+            post.releaseConnection();
+        }
+        
+        /* for local node group registration only */
+        /*  pass = myUserInfoDAO.addPermission(userName, group, role);
+            retunedMessage = "You are already a member of this group.";
+
+            else federation group
+            pass = myUserInfoDAO.addPermissionFederation(userName, group, role, where);
+        */
         String xmlOutput = "<EditOutput>";
         if(pass){
-          //user has been added to group
           xmlOutput += "<status>success</status>";
-          xmlOutput += "<comment>You have been added to " + group + " in the role of " + role + ".</comment>";
-          xmlOutput += "</EditOutput>";
-         
-        } else {
-          //user not added to group
-          xmlOutput += "<status>fail</status>";
-          xmlOutput += "<comment>" + errormessage + "</comment>";
-          xmlOutput += "</EditOutput>";
+          xmlOutput += "<comment>" + retunedMessage + "</comment>";
         }
+        else{
+          xmlOutput += "<status>fail</status>";
+          xmlOutput += "<comment>" + retunedMessage + "</comment>";
+        }
+        xmlOutput += "</EditOutput>";
         JSONObject jo = XML.toJSONObject(xmlOutput);
         String jsonContent = jo.toString();        
         return jsonContent;

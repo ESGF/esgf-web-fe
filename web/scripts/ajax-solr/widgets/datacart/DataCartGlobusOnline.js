@@ -140,10 +140,10 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 		var hasAccess = false;
 
     	var idStr = selectedDocId;
-    	var peerStr = getPeerStr();
-		var technoteStr = getTechnoteStr();
+    	var peerStr = ESGF.datacart.getPeerStr();
+		var technoteStr = ESGF.datacart.getTechnoteStr();
 						
-    	var fqParamStr = getFqParamStr();
+    	var fqParamStr = ESGF.datacart.getFqParamStr();
     	
     	var queryStr = {"idStr" : idStr, 
 				"peerStr" : peerStr, 
@@ -221,10 +221,10 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 		var self = this;
 		
 		var idStr = datasetId;
-    	var peerStr = getPeerStr();
-		var technoteStr = getTechnoteStr();
+    	var peerStr = ESGF.datacart.getPeerStr();
+		var technoteStr = ESGF.datacart.getTechnoteStr();
 						
-    	var fqParamStr = getFqParamStr();
+    	var fqParamStr = ESGF.datacart.getFqParamStr();
     	
     	var queryStr = {"idStr" : idStr, 
 				"peerStr" : peerStr, 

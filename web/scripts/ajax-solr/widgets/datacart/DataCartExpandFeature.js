@@ -248,7 +248,8 @@
 		    	
 		    	//extract the dataset Id from the span tag
 				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
-				
+
+				alert('show all files');
 				
 				//change verbage of the expand link
 				if(this.innerHTML === "Collapse") {
@@ -315,8 +316,8 @@
 						dataType: 'json',
 						success: function(data) {
 							
-							/*
-							//alert('data: ' + data);
+							
+							alert('data: ' + data);
 							
 							
 							
@@ -341,7 +342,12 @@
 								//add the initial flag
 								var initial = true;
 								
+								
+
 								var appendedFiles = self.appendFileData(data, openid, initial);
+								
+								
+								/*
 								
 
 <<<<<<< HEAD
@@ -454,12 +460,12 @@
 								}
 
 								$('.'+tagid).after(appendedFiles);
-								
+								*/
 								self.innerHTML="Collapse";
 								
 								
 							}
-							*/
+							
 						},
 						error: function() {
 							alert('Error in expanding files for dataset ' + data.doc.datasetId);

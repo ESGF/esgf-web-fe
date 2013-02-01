@@ -83,6 +83,7 @@ ESGF.namespace = function (ns_string) {
 var esgf_core    = ESGF.namespace("ESGF.core");
 var esgf_search  = ESGF.namespace("ESGF.search");
 var esgf_setting = ESGF.namespace("ESGF.setting");
+var esgf_datacart = ESGF.namespace("ESGF.datacart");
 var esgf_util    = ESGF.namespace("ESGF.util");
 var esgf_localStorage = ESGF.namespace("ESGF.localStorage");
 

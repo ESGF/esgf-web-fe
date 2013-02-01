@@ -112,7 +112,7 @@
 			
 			var self = this;
 			
-			var view_first_files_tag = self.view_first_files_tag + 'initial_true_' + replaceChars(data.doc.datasetId);
+			var view_first_files_tag = self.view_first_files_tag + 'initial_true_' + ESGF.datacart.replaceChars(data.doc.datasetId);
 			
 			//alert('view_first_files_tag: ' + view_first_files_tag);
 	    	
@@ -179,7 +179,7 @@
 			//loop over the number of files
 			for(var i=0;i<fileLength;i++) 
 			{
-				var displayed_files_tag = self.view_first_files_tag + initialStr + '_' + replaceChars(data.doc.datasetId);
+				var displayed_files_tag = self.view_first_files_tag + initialStr + '_' + ESGF.datacart.replaceChars(data.doc.datasetId);
 					
 				appendedFiles += '<tr class="' + displayed_files_tag + '">';
 				
@@ -260,15 +260,15 @@
 					//need to remove all of the content displayed within this dataset
 					
 					//remove all the files from the additional list
-					var view_next_files_tag = self.view_first_files_tag + 'initial_false' + '_' + replaceChars(idStr);
+					var view_next_files_tag = self.view_first_files_tag + 'initial_false' + '_' + ESGF.datacart.replaceChars(idStr);
 					$('.' + view_next_files_tag).remove();
 					
 					//remove all the files from the initial list 
-					var view_first_files_tag = self.view_first_files_tag + 'initial_true' + '_' + replaceChars(idStr);
+					var view_first_files_tag = self.view_first_files_tag + 'initial_true' + '_' + ESGF.datacart.replaceChars(idStr);
 					$('.' + view_first_files_tag).remove();
 					
 					//remove the "view files"
-					var view_more_files_tag = self.view_files_tag + replaceChars(idStr);//'view_more_files_' + replaceChars(idStr);
+					var view_more_files_tag = self.view_files_tag + ESGF.datacart.replaceChars(idStr);//'view_more_files_' + replaceChars(idStr);
 					$('.' + view_more_files_tag).remove();
 					
 					//alert('view_next: ' + view_next_files_tag + ' view_first: ' + view_first_files_tag + ' view_more: ' + view_more_files_tag);
@@ -282,9 +282,9 @@
 	                var idStr = selectedDocId;
 	                
 	                
-					var peerStr = getIndividualPeer(idStr);//getPeerStr();
-					var technoteStr = getTechnoteStr();
-			    	var fqParamStr = getFqParamStr();
+					var peerStr = ESGF.datacart.getIndividualPeer(idStr);//getPeerStr();
+					var technoteStr = ESGF.datacart.getTechnoteStr();
+			    	var fqParamStr = ESGF.datacart.getFqParamStr();
 			    	
 			    	var queryStr = {"idStr" : idStr, 
 							"peerStr" : peerStr, 
@@ -321,7 +321,7 @@
 							//no files
 							if(data.doc.files.file == undefined) {
 								
-								var tagid = 'file_rows_' + replaceChars(data.doc.datasetId);
+								var tagid = 'file_rows_' + ESGF.datacart.replaceChars(data.doc.datasetId);
 								
 								var appendedFiles = self.writeEmptyFileMessage(data);
 
@@ -334,7 +334,7 @@
 
 								var fileLength = data.doc.files.file.length;
 								
-								var tagid = 'file_rows_' + replaceChars(data.doc.datasetId);
+								var tagid = 'file_rows_' + ESGF.datacart.replaceChars(data.doc.datasetId);
 								
 								//add the initial flag
 								var initial = true;
@@ -342,7 +342,7 @@
 								var appendedFiles = self.appendFileData(data, openid, initial);
 								
 
-								var view_more_tag = '<tr class="' + self.view_files_tag + replaceChars(idStr) + '">';
+								var view_more_tag = '<tr class="' + self.view_files_tag + ESGF.datacart.replaceChars(idStr) + '">';
 								
 								if(fileLength >= ESGF.setting.fileCounter) {
 									appendedFiles += view_more_tag;
@@ -388,9 +388,9 @@
 					var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
 					
 					var idStr = selectedDocId;
-					var peerStr = getIndividualPeer(idStr);
-					var technoteStr = getTechnoteStr();
-			    	var fqParamStr = getFqParamStr();
+					var peerStr = ESGF.datacart.getIndividualPeer(idStr);
+					var technoteStr = ESGF.datacart.getTechnoteStr();
+			    	var fqParamStr = ESGF.datacart.getFqParamStr();
 					
 			    	var queryStr = {"idStr" : idStr, 
 							"peerStr" : peerStr, 
@@ -408,7 +408,7 @@
 			    	//CHANGE ME!
 			    	//queryStr['peerStr'] = 'localhost';
 					
-			    	var tagid = 'file_rows_' + replaceChars(idStr);
+			    	var tagid = 'file_rows_' + ESGF.datacart.replaceChars(idStr);
 					
 			    	//alert('after queryStr: ' + queryStr['peerStr']);
 			    	
@@ -423,7 +423,7 @@
 							
 							//var fileLength = data.doc.files.file.length;
 							
-							var tagid = self.view_files_tag + replaceChars(idStr);//'view_more_files_' + replaceChars(idStr);
+							var tagid = self.view_files_tag + ESGF.datacart.replaceChars(idStr);//'view_more_files_' + replaceChars(idStr);
 							
 							var initial = false;
 							var appendedFiles = self.appendFileData(data, openid,initial);
@@ -451,7 +451,7 @@
 					
 					//var tagid = 'remove_' + initialStr + '_' + replaceChars(idStr);
 					//remove all the files from the additional list
-					var view_first_files_tag = self.view_first_files_tag + 'initial_false' + '_' + replaceChars(idStr);
+					var view_first_files_tag = self.view_first_files_tag + 'initial_false' + '_' + ESGF.datacart.replaceChars(idStr);
 					$('.' + view_first_files_tag).remove();
 					
 					//set collapsing files

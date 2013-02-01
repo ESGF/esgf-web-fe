@@ -344,7 +344,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		datasetList += '</td>';	
 		datasetList += '</tr>';
 		
-		datasetList += '<tr class="file_rows_' + replaceChars(self.selected_arr[i]) + '" style="">';
+		datasetList += '<tr class="file_rows_' + ESGF.datacart.replaceChars(self.selected_arr[i]) + '" style="">';
 		datasetList += '</tr>';
 		
 		return datasetList;
@@ -469,93 +469,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     
     
     
-    // old version of the data cart template
-
-    /**
-     * Create the template for the datacart
-     * 
-     * There is a new procedure for creating the datacart template because the search API is now called
-     * 
-     * 
-     * 
-     */
-    /*
-    createTemplate: function() {
-
-    	var self = this;
-    	
-    	//get all of the search constraints (fq params)
-    	var fqParamStr = getFqParamStr();
-    	
-    	//get the peers
-    	var peerStr = getPeerStr();
-    	
-    	//get the technotes
-    	var technoteStr = getTechnoteStr();
-    	
-    	//get the ids
-    	var idStr = getIdStr();
-    	
-    	//assemble the query string
-    	var queryStr = {"idStr" : idStr, 
-    					"peerStr" : peerStr, 
-    					"technotesStr" : technoteStr, 
-    					"showAllStr" : ESGF.setting.showAllContents, 
-    					"fqStr" : fqParamStr, 
-    					"initialQuery" : "true"};
-		
-    	
-    	//getter for the data cart tab
-		var selected = $( "#myTabs" ).tabs( "option", "selected" );
-		
-		//only make the ajax call when the data cart is selected
-		if(selected == 1) {
-			
-			self.addDataCartSpinWheel();
-			
-			$.ajax({
-				url: '/esgf-web-fe/solrfileproxy2/datacart',
-				global: false,
-				type: "GET",
-				data: queryStr,
-				dataType: 'json',
-				success: function(data) {
-					
-					self.removeDataCartSpinWheel();
-					
-					var fileDownloadTemplate = rewriteDocsObject(data.docs);
-					
-					$( "#cartTemplateStyledNew2").tmpl(fileDownloadTemplate, {
-						
-						replaceChars : function (word) {
-							LOG.debug("Replacing Char: " + word + " " + word.length);
-							return replaceChars(word);
-			            },
-			            abbreviate : function (word) {
-			            },
-			            addOne: function(num) {
-			            },
-			            sizeConversion : function(size) {
-			            	return sizeConversion(size);
-			            }
-			            
-			        })
-			        .appendTo("#datasetList")
-			        .find( "a.showAllChildren" ).click(function() {
-
-			        });
-					
-				},
-				error: function() {
-					alert('Error loading data cart');
-				}
-			})
-		}
-    	
-	}
-    */
-    
-    
     
     
     
@@ -565,229 +478,99 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 
 }(jQuery));
 
-function formatPrice(price) {
-    return "ZZZZ" + price;
-}
-
-function replaceChars(word) {
-
-    var newWord = word.replace(/\./g,"_");
-    newWord = newWord.replace(":","_");
-    newWord = newWord.replace("|","_");
-    
-    return newWord;
-}
-
-function sizeConversion(size) {
-	var convSize;
-	if(size == null) {
-	    convSize = 'N/A';
-	} else {
-	    var sizeFlt = parseFloat(size,10);
-	    if(sizeFlt > 1000000000) {
-	        var num = 1000000000;
-	        convSize = (sizeFlt / num).toFixed(2) + ' GB';
-	    } else if (sizeFlt > 1000000) {
-	        var num = 1000000;
-	        convSize = (sizeFlt / num).toFixed(2) + ' MB';
-	    } else {
-	        var num = 1000;
-	        convSize = (sizeFlt / num).toFixed(2) + ' KB';
-	    }
-	}
-	return convSize;
-}
 
 
-function replacePeriodGlobal(word)
-{
-    var newWord = word.replace(/\./g,"_");
-    var newNewWord = newWord.replace(":","_");
-    var newNewNewWord = newWord.replace("|","_");
-    return newNewNewWord;
-}
 
-function abbreviateWordGlobal(word) {
-	var abbreviation = word;
-    if(word.length > 25) {
-        abbreviation = word.slice(0,10) + '...' + word.slice(word.length-11,word.length);
-    }
-    return abbreviation;
-}
 
-function sizeConversionGlobal(size) {
-	var convSize;
-    if(size == null) {
-        convSize = 'N/A';
-    } else {
-        var sizeFlt = parseFloat(size,10);
-        if(sizeFlt > 1000000000) {
-            var num = 1000000000;
-            convSize = (sizeFlt / num).toFixed(2) + ' GB';
-        } else if (sizeFlt > 1000000) {
-            var num = 1000000;
-            convSize = (sizeFlt / num).toFixed(2) + ' MB';
-        } else {
-            var num = 1000;
-            convSize = (sizeFlt / num).toFixed(2) + ' KB';
-        }
-    }
-    return convSize;
-}
 
-function getFqParamStr() {
-	var fqParamStr = '';
-	var fqParams = ESGF.localStorage.getAll('esgf_queryString');
-	for(var key in fqParams) {
-		if(key != 'type:Dataset' && (key.search('distrib') < 0)) {
-			fqParamStr += fqParams[key] + ';';
-		}
-	}
-	return fqParamStr;
-}
 
-function getIdStr () {
-	var idStr = '';
-	var selected_arr = ESGF.localStorage.toKeyArr('dataCart');;
-	for(var i=0;i<selected_arr.length;i++) {
-		if(i != (selected_arr.length - 1)) {
-    		idStr += selected_arr[i] + ';';
-		} else {
-			idStr += selected_arr[i];
-		}
-	}
-	return idStr;
-}
 
-function getIndividualPeer(id) {
-	var peerStr = '';
+
+
+// old version of the data cart template
+
+/**
+ * Create the template for the datacart
+ * 
+ * There is a new procedure for creating the datacart template because the search API is now called
+ * 
+ * 
+ * 
+ */
+/*
+createTemplate: function() {
+
+	var self = this;
 	
-	var datasetInfo = ESGF.localStorage.get('dataCart',id);
+	//get all of the search constraints (fq params)
+	var fqParamStr = getFqParamStr();
 	
-	peerStr = datasetInfo['peer'];
+	//get the peers
+	var peerStr = getPeerStr();
 	
-	if(peerStr == undefined) {
-		peerStr = 'localhost';
-	}
+	//get the technotes
+	var technoteStr = getTechnoteStr();
 	
-	return peerStr.toString();
+	//get the ids
+	var idStr = getIdStr();
 	
-}
-
-function getPeerStr() {
-	var peerStr = '';
-	
-	//the datasetInfo object will have a 'peer' and 'xlink' property
-	var selected_arr = ESGF.localStorage.toKeyArr('dataCart');
-	for(var i=0;i<selected_arr.length;i++) {
-		var datasetInfo = ESGF.localStorage.get('dataCart',selected_arr[i]);
-
-		//extract the peer and 'xlink' and add it to the arrs
-		if(i!=0) {
-			peerStr += ';'+datasetInfo.peer;
-			//technoteArr += ';'+datasetInfo.xlink;
-		} else {
-			peerStr += datasetInfo.peer;
-			//technoteArr += datasetInfo.xlink;
-		};
-	}
-	
-	return peerStr;
-}
-
-function getTechnoteStr() {
-	
-	var technoteStr = '';
-	
-	//the datasetInfo object will have a 'peer' and 'xlink' property
-	var selected_arr = ESGF.localStorage.toKeyArr('dataCart');
+	//assemble the query string
+	var queryStr = {"idStr" : idStr, 
+					"peerStr" : peerStr, 
+					"technotesStr" : technoteStr, 
+					"showAllStr" : ESGF.setting.showAllContents, 
+					"fqStr" : fqParamStr, 
+					"initialQuery" : "true"};
 	
 	
-	for(var i=0;i<selected_arr.length;i++) {
-		var datasetInfo = ESGF.localStorage.get('dataCart',selected_arr[i]);
-
+	//getter for the data cart tab
+	var selected = $( "#myTabs" ).tabs( "option", "selected" );
+	
+	//only make the ajax call when the data cart is selected
+	if(selected == 1) {
 		
-		//extract the peer and 'xlink' and add it to the arrs
-		if(i!=0) {
-			//peerArr += ';'+datasetInfo.peer;
-			technoteStr += ';'+datasetInfo.xlink;
-		} else {
-			//peerArr += datasetInfo.peer;
-			technoteStr += datasetInfo.xlink;
-		};
-	}
-	
-	return technoteStr;
-}
-
-
-
-
-function rewriteDocsObject(docs) {
-	
-	
-	if(docs.doc != undefined) {
-		var docLength = docs.doc.length;
+		self.addDataCartSpinWheel();
 		
-		//if the doc length is undefined, then the number of docs returned may be one
-		//there is a bug in the json java code that will automatically convert this to a json object
-		if(docLength == undefined) {
-			var docArray = new Array();
-			docArray.push(docs.doc);
-			docs['doc'] = docArray;
-			docLength = docs.doc.length;
-		}
-		
-		//if the file length is zero
-		//if the file length is undefined then the number of files returned may be one
-		//if(data.docs.doc.count > 0) {
-		for(var i=0;i<docs.doc.length;i++) {
+		$.ajax({
+			url: '/esgf-web-fe/solrfileproxy2/datacart',
+			global: false,
+			type: "GET",
+			data: queryStr,
+			dataType: 'json',
+			success: function(data) {
 				
-			if(docs.doc[i].count > 0) {
-				var fileLength = docs.doc[i].files.file.length;
-					
-				if(fileLength == undefined) {
-					var fileArray = new Array();
-					fileArray.push(docs.doc[i].files.file);
-					docs.doc[i].files['file'] = fileArray;
-				} 
-			}
+				self.removeDataCartSpinWheel();
 				
-		}
-		
-		//This code ensures that the services are arrays
-		//Why is this code needed? Bug in the JSON java code
-		for(var i=0;i<docs.doc.length;i++) {
-			if(docs.doc[i].count > 0) {
+				var fileDownloadTemplate = rewriteDocsObject(data.docs);
+				
+				$( "#cartTemplateStyledNew2").tmpl(fileDownloadTemplate, {
 					
-				for(var j=0;j<docs.doc[i].files.file.length;j++) {
-					if(docs.doc[i].files.file[j].services.service == 'HTTPServer' ||
-    					docs.doc[i].files.file[j].services.service == 'OPENDAP' || 
-    					docs.doc[i].files.file[j].services.service == 'SRM' ||
-    					docs.doc[i].files.file[j].services.service == 'GridFTP') {
-    						
-    					var serviceArray = new Array();
-    					serviceArray.push(docs.doc[i].files.file[j].services.service);
-    					docs.doc[i].files.file[j].services['service'] = serviceArray;
-    					
-    					var urlsArray = new Array();
-    					urlsArray.push(docs.doc[i].files.file[j].urls.url);
-    					docs.doc[i].files.file[j].urls['url'] = urlsArray;
-    					
-    					var mimesArray = new Array();
-    					mimesArray.push(docs.doc[i].files.file[j].mimes.mime);
-    					docs.doc[i].files.file[j].mimes['mime'] = mimesArray;
-    					
-    				}
-				}
+					replaceChars : function (word) {
+						LOG.debug("Replacing Char: " + word + " " + word.length);
+						return replaceChars(word);
+		            },
+		            abbreviate : function (word) {
+		            },
+		            addOne: function(num) {
+		            },
+		            sizeConversion : function(size) {
+		            	return sizeConversion(size);
+		            }
+		            
+		        })
+		        .appendTo("#datasetList")
+		        .find( "a.showAllChildren" ).click(function() {
+
+		        });
+				
+			},
+			error: function() {
+				alert('Error loading data cart');
 			}
-		}
-		
-		
-	} else {
+		})
 	}
 	
-	
-	return docs;
-	
 }
+*/
+
+

@@ -5,9 +5,10 @@
     -->
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.7.2/jquery.min.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-search.js" />'> </script>
-
+<!--  
     <script type="text/javascript" src='http://purl.org/org/es-doc/plugins/jscim/underscore'> </script>
     <script type="text/javascript" src='http://purl.org/org/es-doc/plugins/jscim/backbone'> </script>
+-->
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery-ui-1.8.12.custom.min.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/overlay.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/expose.js" /> '></script>
@@ -26,17 +27,19 @@
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.autocomplete.js" /> '></script>
 
 
-
+<!--  
 	<script type="text/javascript" src='http://purl.org/org/es-doc/plugins/jscim-esgf-web-fe.js'> </script>
-
+-->
 <!--  
 	<script type="text/javascript" src='<c:url value="/scripts/cim/jscim-min.js" />'> </script>
 	-->
 	<!--  
     <script type="text/javascript" src='<c:url value="/scripts/esgf/esgf-download.js" /> '></script>
 	-->
+	
+<!--  
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-
+-->
     <script type="text/javascript" src='<c:url value="/scripts/esgf/solr.js" />'> </script>
     
       
@@ -60,9 +63,9 @@
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/AutoComplete.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/FacetBrowser3.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/TagClouds.js" />'> </script>
-
+<!--  
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Geospatial3.js" />'> </script>
-
+-->
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Temporal3.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/Metadata.js" />'> </script>
     <script type="text/javascript" src='<c:url value="/scripts/ajax-solr/widgets/FacetSidebar.js" />'> </script>

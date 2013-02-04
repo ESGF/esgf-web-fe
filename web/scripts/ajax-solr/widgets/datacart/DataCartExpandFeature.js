@@ -61,6 +61,18 @@
 	
 	AjaxSolr.DataCartExpandFeatureWidget = AjaxSolr.AbstractWidget.extend({
 
+		
+		view_more_files_tag: 'view_more_files_',
+		
+		view_first_files_tag: 'view_first_files_',
+		
+		no_files_message: 'NOTE: There are no files in this dataset that match the search criteria',
+		
+		
+		td_file_left: 'width: 40px',
+		td_file_middle: '',
+		td_right_middle: '',
+		
 		/**
 		 * 
 		 */
@@ -78,7 +90,7 @@
 			
 			var self = this;
 
-	    	//grab the search constraints
+			//grab the search constraints
 	    	self.searchConstraints = ESGF.localStorage.toKeyArr('esgf_fq');
 	    	
 	    	
@@ -95,18 +107,146 @@
 			
 		},
 		
+		
+		writeEmptyFileMessage: function(data) {
+			
+			var self = this;
+			
+			var view_first_files_tag = self.view_first_files_tag + 'initial_true_' + ESGF.datacart.replaceChars(data.doc.datasetId);
+			
+			//alert('view_first_files_tag: ' + view_first_files_tag);
+	    	
+			var appendedFiles = '';
+			
+			appendedFiles = '<tr class="' + view_first_files_tag + '">';
+			//appendedFiles += '<td style="width: 40px"></td>';
+			appendedFiles += '<td style="' + self.td_file_left + '"></td>';
+			appendedFiles += '<td style="width: 300px;font-size:13px">';
+			appendedFiles += '	<div style="word-wrap: break-word;font-weight:bold;color:gray;font-style:italic;font-weight:bold;color:gray;margin-top:5px" class="datasetId">';
+			
+			appendedFiles += self.no_files_message;
+			
+			appendedFiles += '</div>';
+			appendedFiles += '</td>';
+			appendedFiles += '</tr>';
+			
+			return appendedFiles;
+			
+		},
+		
+		
+		appendFileData: function (data,openid,initial) {
+
+			
+			var self = this;
+			
+			var initialStr = 'initial_' + new String(initial);
+			
+			var appendedFiles = '';
+			
+			//get the file length from the data retrieved
+			var fileLength = data.doc.files.file.length;
+
+			//if there is one and only one file in the dataset
+			if(fileLength == undefined) {
+				var fileArray = new Array();
+				fileArray.push(data.doc.files.file);
+				data.doc.files['file'] = fileArray;
+				fileLength = data.doc.files.file.length;
+			}
+
+			//traverse all the files names retrieved and find the associated service,url,and mime
+			for(var j=0;j<data.doc.files.file.length;j++) {
+				if(data.doc.files.file[j].services.service == 'HTTPServer' ||
+    					data.doc.files.file[j].services.service == 'OPENDAP' || 
+    					data.doc.files.file[j].services.service == 'SRM' ||
+    					data.doc.files.file[j].services.service == 'GridFTP') {
+					
+					var serviceArray = new Array();
+					serviceArray.push(data.doc.files.file[j].services.service);
+					data.doc.files.file[j].services['service'] = serviceArray;
+					
+					var urlsArray = new Array();
+					urlsArray.push(data.doc.files.file[j].urls.url);
+					data.doc.files.file[j].urls['url'] = urlsArray;
+					
+					var mimesArray = new Array();
+					mimesArray.push(data.doc.files.file[j].mimes.mime);
+					data.doc.files.file[j].mimes['mime'] = mimesArray;
+					
+				}
+			}
+			//loop over the number of files
+			for(var i=0;i<fileLength;i++) 
+			{
+				var displayed_files_tag = self.view_first_files_tag + initialStr + '_' + ESGF.datacart.replaceChars(data.doc.datasetId);
+					
+				appendedFiles += '<tr class="' + displayed_files_tag + '">';
+				
+				//appendedFiles += '<td style="width: 40px">' +
+				appendedFiles += '<td style="' + self.td_file_left + '">' +
+				 '<input style="margin-left: 10px;display:none"' + 
+	  					'type="checkbox"' + 
+	  					'checked="true"' + 
+	  					'/>' +
+	  					'</td>';
+
+				appendedFiles += '<td style="width: 425px;padding-left:10px;font-size:11px;">' +
+				 '<div style="word-wrap: break-word;">' + 
+				 '<span style="font-weight:bold">' + data.doc.files.file[i].fileId + '</span>' +
+				 '	<br />' + 
+				 '<span style="font-style:italic">' + 'tracking_id: ' + data.doc.files.file[i].tracking_id + '</span>' +
+				 '  <br />' +
+				 '<span style="font-style:italic">checksum: ' + data.doc.files.file[i].checksum + ' (' + data.doc.files.file[i].checksum_type + ')' + '</span>' +
+				 '</div>' +
+				 '</td>';
+							
+				appendedFiles += '<td style="float-right;font-size:11px;text-align:right">';
+			
+				for(var j=0;j<data.doc.files.file[i].services.service.length;j++) {
+					var service = data.doc.files.file[i].services.service[j];
+					var url = data.doc.files.file[i].urls.url[j];
+					var file_id = data.doc.files.file[i].fileId;
+					if(service == 'HTTPServer') {
+						service = 'HTTP';
+					}
+					if(service == 'GridFTP') {
+						if(ESGF.setting.globusonline) {
+							appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
+							                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
+							                 '<span class="globus_url" style="display:none">' + url + '</span>' +
+							                 '<a style="cursor:pointer" class="go_individual_gridftp_short">' + 'Globus Online' + '</a> </span>';
+							
+						}
+					} else {
+						if(openid != 'anonymousUser') {
+							appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '?openid=' + openid +  '" ' + 'target="_blank">' + service + '</a> </span>';
+						} else {
+							appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '" ' + 'target="_blank">' + service + '</a> </span>';
+						}
+					}
+					
+				}
+				appendedFiles += '</tr>';
+			
+			}
+			return appendedFiles;
+			
+			
+		},
+		
+		
 		afterRequest: function() {
 			
 
+			var self = this;
 			
 		    $('a.showAllFiles_short').live('click',function() {
 
 				var openid = $('span#principal_username').html();
-				//alert('openid: ' + $('span#principal_username').html());
 		    	
 		    	//extract the dataset Id from the span tag
 				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
-				
 				
 				
 				//change verbage of the expand link
@@ -116,38 +256,35 @@
 					var idStr = selectedDocId;
 					
 					
-					//collapse the first 10
-					var removeTag = 'remove_' + 'file_rows_' + replaceChars(idStr);
-					$('.'+removeTag).remove();
 					
-					var removeExtraTag = 'addedrow_' + replaceChars(selectedDocId);
+					//need to remove all of the content displayed within this dataset
 					
-
+					//remove all the files from the additional list
+					var view_next_files_tag = self.view_first_files_tag + 'initial_false' + '_' + ESGF.datacart.replaceChars(idStr);
+					$('.' + view_next_files_tag).remove();
+					
+					//remove all the files from the initial list 
+					var view_first_files_tag = self.view_first_files_tag + 'initial_true' + '_' + ESGF.datacart.replaceChars(idStr);
+					$('.' + view_first_files_tag).remove();
+					
+					//remove the "view files"
+					var view_more_files_tag = self.view_files_tag + ESGF.datacart.replaceChars(idStr);//'view_more_files_' + replaceChars(idStr);
+					$('.' + view_more_files_tag).remove();
+					
+					//alert('view_next: ' + view_next_files_tag + ' view_first: ' + view_first_files_tag + ' view_more: ' + view_more_files_tag);
 	                this.innerHTML="Expand";
 
 					
 				} else {
 
-					var self = this;
+	                this.innerHTML="Collapse";
 
-					var parentElement = $(this).parent();
-					
-
-					parentElement.find('a.showAllFiles_short').hide();
-					parentElement.find('span.showAllFiles_short').show();
-					
-
-					
-					var idStr = selectedDocId;
-					
-					var peerStr = getIndividualPeer(idStr);//getPeerStr();
-					
-					
-					var technoteStr = getTechnoteStr();
-									
-			    	var fqParamStr = getFqParamStr();
-			    	
-			    	
+	                var idStr = selectedDocId;
+	                
+	                
+					var peerStr = ESGF.datacart.getIndividualPeer(idStr);//getPeerStr();
+					var technoteStr = ESGF.datacart.getTechnoteStr();
+			    	var fqParamStr = ESGF.datacart.getFqParamStr();
 			    	
 			    	var queryStr = {"idStr" : idStr, 
 							"peerStr" : peerStr, 
@@ -156,14 +293,19 @@
 							"fqStr" : fqParamStr, 
 							"initialQuery" : "true",
         					"fileCounter" : ESGF.setting.fileCounter};
-					
 			    	
 			    	//NEED TO FIX THIS!!!!
 			    	selectedDocId = 'aa.gov';
 			    	selectedDocId = Url.encode(selectedDocId);
 			    	var url = '/esgf-web-fe/solrfileproxy2/datacart/'+selectedDocId;
+
+			    	
+			    	//CHANGE ME!
+			    	//queryStr['peerStr'] = 'localhost';
 					
-					
+			    	//alert('initial queryStr: ' + queryStr['peerStr']);
+			    	
+			    	//initial ajax call for first x number of files in dataset
 					$.ajax({
 						url: url,
 						global: false,
@@ -171,202 +313,63 @@
 						data: queryStr,
 						dataType: 'json',
 						success: function(data) {
-
 							
-							var tagid = 'file_rows_' + replaceChars(idStr);
+							//alert('data: ' + data);
 							
 							
+							
+							//no files
 							if(data.doc.files.file == undefined) {
 								
-								var appendedFiles = '';
-								appendedFiles += '<tr class="remove_' + tagid + '">';
-								appendedFiles += '<td style="width: 40px"></td>';
-								appendedFiles += '<td style="width: 300px;font-size:13px">'
-								appendedFiles += '	<div style="word-wrap: break-word;font-weight:bold;color:gray;font-style:italic;font-weight:bold;color:gray;margin-top:5px" class="datasetId">';
+								var tagid = 'file_rows_' + ESGF.datacart.replaceChars(data.doc.datasetId);
 								
-								appendedFiles += 'NOTE: There are no files in this dataset that match the search criteria';
-								
-								appendedFiles += '</div>';
-								appendedFiles += '</td>';
-								appendedFiles += '</tr>';
-									
+								var appendedFiles = self.writeEmptyFileMessage(data);
+
 								$('.'+tagid).after(appendedFiles);
 								
-
-								parentElement.find('a.showAllFiles_short').show();
-								parentElement.find('span.showAllFiles_short').hide();
-
 								self.innerHTML="Collapse";
 								
 								
 							} else {
+
 								var fileLength = data.doc.files.file.length;
-
 								
-								if(fileLength == undefined) {
-									var fileArray = new Array();
-									fileArray.push(data.doc.files.file);
-									data.doc.files['file'] = fileArray;
-									fileLength = data.doc.files.file.length;
-								}
-
+								var tagid = 'file_rows_' + ESGF.datacart.replaceChars(data.doc.datasetId);
 								
-								var fileDownloadTemplate = data.doc;
+								//add the initial flag
+								var initial = true;
 								
-								
-								for(var j=0;j<data.doc.files.file.length;j++) {
-									if(data.doc.files.file[j].services.service == 'HTTPServer' ||
-					    					data.doc.files.file[j].services.service == 'OPENDAP' || 
-					    					data.doc.files.file[j].services.service == 'SRM' ||
-					    					data.doc.files.file[j].services.service == 'GridFTP') {
-										
-										var serviceArray = new Array();
-				    					serviceArray.push(data.doc.files.file[j].services.service);
-				    					data.doc.files.file[j].services['service'] = serviceArray;
-				    					
-				    					var urlsArray = new Array();
-				    					urlsArray.push(data.doc.files.file[j].urls.url);
-				    					data.doc.files.file[j].urls['url'] = urlsArray;
-				    					
-				    					var mimesArray = new Array();
-				    					mimesArray.push(data.doc.files.file[j].mimes.mime);
-				    					data.doc.files.file[j].mimes['mime'] = mimesArray;
-										
-									}
-								}
+								var appendedFiles = self.appendFileData(data, openid, initial);
 								
 
-								//alert('technote: ' + data.doc.files.file[3].technote);
-								
-								var appendedFiles = '';
-								
-								for(var i=0;i<fileLength;i++) {
-									
-									
-									appendedFiles += '<tr class="remove_' + tagid + '">';
-										
-									//appendedFiles += '<td>a</td>';
-									appendedFiles += '<td style="width: 40px">' +
-													 '<input style="margin-left: 10px;display:none"' + 
-										   					'class="fileLevel"' + 
-										   					'type="checkbox"' + 
-										   					'class="fileId"' + 
-										   					'id="${fileId}"' + 
-										   					'checked="true"' + 
-										   					'/>' +
-										   					'</td>';
-									
-									
-									appendedFiles += '<td style="width: 425px;padding-left:10px;font-size:11px;">' +
-													 '<div style="word-wrap: break-word;">' + 
-													 '<span style="font-weight:bold">' + data.doc.files.file[i].fileId + '</span>' +
-													 '	<br />' + 
-													 '<span style="font-style:italic">' + 'tracking_id: ' + data.doc.files.file[i].tracking_id + '</span>' +
-													 '  <br />' +
-													 '<span style="font-style:italic">checksum: ' + data.doc.files.file[i].checksum + ' (' + data.doc.files.file[i].checksum_type + ')' + '</span>' +
-													 '</div>' +
-													 '</td>';
-									
-									
-									appendedFiles += '<td style="float-right;font-size:11px;text-align:right">';
-									
-									for(var j=0;j<data.doc.files.file[i].services.service.length;j++) {
-										var service = data.doc.files.file[i].services.service[j];
-										var url = data.doc.files.file[i].urls.url[j];
-										var file_id = data.doc.files.file[i].fileId;
-										if(service == 'HTTPServer') {
-											service = 'HTTP';
-										}
-										if(service == 'GridFTP') {
-											if(ESGF.setting.globusonline) {
-												//appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a style="cursor:pointer" class="go_individual_gridftp_short">' + service + '</a> </span>';
-												appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
-												                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
-												                 '<span class="globus_url" style="display:none">' + url + '</span>' +
-												                 '<a style="cursor:pointer" class="go_individual_gridftp_short">' + 'Globus Online' + '</a> </span>';
-												                 //'<a style="cursor:pointer" class="go_individual_gridftp_short">' + service + '</a> </span>';
-												
-											}
-										} else {
-											if(openid != 'anonymousUser') {
-												appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '?openid=' + openid +  '" ' + 'target="_blank">' + service + '</a> </span>';
-											} else {
-												appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '" ' + 'target="_blank">' + service + '</a> </span>';
-											}
-										}
-										
-									}
-									
-									if(data.doc.files.file[i].technote != 'NA') {
-										
-										
-										var technoteStr = data.doc.files.file[i].technote;
-										//alert('i: ' + i + ' ' + technoteStr);
-										//var technoteArr = technoteStr.split("\\|");
-										//alert('len: ' + technoteArr.length);
-										appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a style="cursor:pointer" href="' + technoteStr + '" target="_blank" >' + 'TECHNOTE' + '</a> </span>';
-									}
-									
-									appendedFiles += '</td>';
-									
-									appendedFiles += '</tr>';
-									
-								}
-
-								appendedFiles += '<tr class="remove_' + tagid + '">';
-								appendedFiles += '<td></td>';
-								appendedFiles += '</tr>';
-								
+								var view_more_tag = '<tr class="' + self.view_files_tag + ESGF.datacart.replaceChars(idStr) + '">';
 								
 								if(fileLength >= ESGF.setting.fileCounter) {
-									appendedFiles += '<tr class="view_files_' + '' + ' remove_' + tagid + '" style="">';
+									appendedFiles += view_more_tag;
 									appendedFiles += '<td></td>';
 									appendedFiles += '<td style="display:none"><span class="datasetId">' + data.doc.datasetId + '</td>';
 									appendedFiles += '<td><a class="view_more_files_short" style="cursor:pointer;font-size:11px">' + 'View more files' + '</a></td>';
 									appendedFiles += '</tr>';
 									
-									
-									appendedFiles += '<tr class="file_append_' + replaceChars(data.doc.datasetId) + ' remove_' + tagid + '">';
-									//appendedFiles += '<tr class="file_append_' + replaceChars(data.doc.datasetId) + ' remove_' + tagid + '">';
-									appendedFiles += '<td></td>';
-									appendedFiles += '</tr>';
 								}
-								
-								
-								
+
 								$('.'+tagid).after(appendedFiles);
-
-								parentElement.find('a.showAllFiles_short').show();
-								parentElement.find('span.showAllFiles_short').hide();
-
-
 								
-								
-								
-
 								self.innerHTML="Collapse";
+								
+								
 							}
-							
 						},
 						error: function() {
-							alert('error in getting new rows');
+							alert('Error in expanding files for dataset ' + data.doc.datasetId);
 						}
 					});
 					
 					
 					
-					
-					
-					
-					
-					
-					
 						
 				}
-				
-				
-				
-		    	
+
 				
 			});
 			
@@ -375,172 +378,100 @@
 			
 			$('a.view_more_files_short').live('click',function() {
 
-				var openid = $('span#principal_username').html();
-				
-				
-				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html());
-				
-				
-				var self=this;
 				
 				if(this.innerHTML == "View more files") {
-					
+				
+
+					var openid = $('span#principal_username').html();
+
+					//extract the dataset Id from the span tag
+					var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
 					
 					var idStr = selectedDocId;
+					var peerStr = ESGF.datacart.getIndividualPeer(idStr);
+					var technoteStr = ESGF.datacart.getTechnoteStr();
+			    	var fqParamStr = ESGF.datacart.getFqParamStr();
 					
-					var peerStr = getIndividualPeer(idStr);//getPeerStr();
-					
-					//alert('peerStr: ' + peerStr);
-					
-					var technoteStr = getTechnoteStr();
-					
-			    	var fqParamStr = getFqParamStr();
-			    	
-			    	
 			    	var queryStr = {"idStr" : idStr, 
 							"peerStr" : peerStr, 
 							"technotesStr" : technoteStr, 
-							"showAll" : ESGF.setting.showAllContents, 
+							"showAllStr" : ESGF.setting.showAllContents, 
 							"fqStr" : fqParamStr, 
 							"initialQuery" : "false",
-        					"fileCounter" : ESGF.setting.fileCounter};
+	    					"fileCounter" : ESGF.setting.fileCounter};
 					
-			    	var appendedRows = $(this).parent().parent().parent().find('tr.file_append_' + replaceChars(selectedDocId));
+			    	//NEED TO FIX THIS!!!!
+			    	selectedDocId = 'aa.gov';
+			    	selectedDocId = Url.encode(selectedDocId);
+			    	var url = '/esgf-web-fe/solrfileproxy2/datacart/'+selectedDocId;
 
+			    	//CHANGE ME!
+			    	//queryStr['peerStr'] = 'localhost';
+					
+			    	var tagid = 'file_rows_' + ESGF.datacart.replaceChars(idStr);
+					
+			    	//alert('after queryStr: ' + queryStr['peerStr']);
 			    	
-			    	appendedRows.after('<tr id="spinner"><td></td><td><img src="images/ajax-loader.gif" /></td></tr>');
-			    	
+			    	//initial ajax call for first x number of files in dataset
 					$.ajax({
-						url: '/esgf-web-fe/solrfileproxy2/datacart',
+						url: url,
 						global: false,
-						type: "GET",
+						type: "POST",
 						data: queryStr,
 						dataType: 'json',
 						success: function(data) {
-				
-							$('tr#spinner').remove();
 							
-							var newRows = '';
+							//var fileLength = data.doc.files.file.length;
 							
-							data.docs = rewriteDocsObject(data.docs);
+							var tagid = self.view_files_tag + ESGF.datacart.replaceChars(idStr);//'view_more_files_' + replaceChars(idStr);
 							
-							for(var key in data.docs) {
-								var value = data.docs[key];
-								
-								for(var key2 in value) {
-
-									var value2 = value[key2]; 
-									for(var key3 in value2) {
-										//alert('key3: ' + key3);
-									}
-									//alert('key: ' + key + ' key2: ' + key2 + ' value2: ' + value2);
-								}
-							}
-							
-							var tagid = 'file_rows_' + replaceChars(idStr);
-							
-							for(var i=0;i<data.docs.doc[0].files.file.length;i++){
-								var file = data.docs.doc[0].files.file[i];
-								var newRow = '<tr class="file_rows_' + replaceChars(selectedDocId) + ' addedrow_' + replaceChars(selectedDocId) + ' remove_' + tagid + '">';
-								
-								//add the checkbox here
-								newRow += '<td style="width: 40px;">';
-								newRow += '<input style="margin-left: 10px;display:none" '
-								newRow += 'class="fileLevel fileId" ';
-								newRow += 'type="checkbox" ';
-								newRow += 'checked="true" ';
-								newRow += 'value="' + file.fileId + '" />';
-								
-								
-								//add the fileId, checksum, tracking id here
-								newRow += '<td style="width: 325px;padding-left:10px;font-size:11px;">';
-								newRow += '<div style="word-wrap: break-word;">';
-								newRow += '<span style="font-weight:bold"> ' + file.fileId + ' (' + sizeConversion(file.size)  + ') </span> <br />';
-								newRow += '<span style="font-weight:italic"> Tracking Id: ' + file.tracking_id + '</span> <br />';
-								newRow += '<span style="font-weight:italic"> Checksum: ' + file.checksum + ' (' + file.checksum_type + ') </span>';
-								newRow += '</div>';
-								newRow += '</td>';
-								
-
-								//services
-								
-								newRow += '<td style="float:right;font-size:11px;">';
-								
-								for(var j=0;j<file.services.service.length;j++) {
-									//var file = data.docs.doc[0].files.file[i];
-									
-									var service = file.services.service[j];
-									var url = file.urls.url[j];
-									var file_id = file.fileId;
-									
-									if(file.services.service[j] == 'HTTPServer') {
-										
-										newRow += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">';
-										newRow += '<a href="' + file.urls.url[j];
-										if(openid != 'anonymousUser') {
-											newRow += '?openid=' + openid;
-										}
-										newRow += '">HTTP</a> ';
-										newRow += '</span>';
-												  
-										
-									} else if(file.services.service[j] == 'GridFTP') {
-										
-										if(ESGF.setting.globusonline) {
-											newRow += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
-													  '<span class="file_id" style="display:none">' + file_id + '</span>' + 
-							                          '<span class="globus_url" style="display:none">' + url + '</span>' +
-							                          '<a style="cursor:pointer" class="go_individual_gridftp_short">' + service + '</a> </span>';
-										}
-									}
-									
-								}
-								
-								newRow += '</td>';
-								
-								if(file.technote != 'NA') {
-									newRow += '<td style="float:right;font-size:11px;">';
-									newRow += '<div style="word-wrap: break-word;vertical-align:middle">';
-									newRow += '<a href="${technote}" target="_blank">TECHNOTE </a>';
-									newRow += '</div>';
-									newRow += '</td>';
-								}
-								
-								
-								newRow += '</tr>';
-								
-								
-								newRows += newRow;
-							
-							}
-
-							appendedRows.after(newRows);
-							
-							
-							self.innerHTML = 'Collapse files';
+							var initial = false;
+							var appendedFiles = self.appendFileData(data, openid,initial);
+							$('.'+tagid).after(appendedFiles);
 							
 						},
 						error: function() {
-							alert('error');
+							alert('Error in expanding files for dataset ' + data.doc.datasetId);
 						}
 					});
 					
 					
+					//set collapsing files
+					this.innerHTML = 'Collapse files';
+					
+				
 				} else {
-
-					$('tr.addedrow_'+replaceChars(selectedDocId)).remove();
+					
+					//extract the dataset Id from the span tag
+					var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
+					
+					var idStr = selectedDocId;
+					
+					var initialStr = 'initial_' + 'false';
+					
+					//var tagid = 'remove_' + initialStr + '_' + replaceChars(idStr);
+					//remove all the files from the additional list
+					var view_first_files_tag = self.view_first_files_tag + 'initial_false' + '_' + ESGF.datacart.replaceChars(idStr);
+					$('.' + view_first_files_tag).remove();
+					
+					//set collapsing files
 					this.innerHTML = 'View more files';
 				}
 				
-				
-				
 			});
-			
-			
-			
+
 		}
 		
 		
 		
 	});	
 })(jQuery);
+
+
+
+
+
+
+
+
+

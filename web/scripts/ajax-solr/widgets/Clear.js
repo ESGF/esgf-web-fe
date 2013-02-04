@@ -15,7 +15,6 @@
 			$("a#clearcache").live('click', function() {
 				
 			
-			  alert('in clear cache');
 				
           	  //remove the existing parameter store
           	  //Manager.store.remove('fq');

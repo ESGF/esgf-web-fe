@@ -79,6 +79,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.jdom.JDOMException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -89,6 +90,8 @@ import org.esgf.commonui.UserOperationsESGFDBImpl;
 import org.esgf.commonui.UserOperationsInterface;
 import org.esgf.commonui.UserOperationsXMLImpl;
 import org.esgf.commonui.Utils;
+
+import esg.security.attr.service.api.FederatedAttributeService;
 
 @Controller
 @RequestMapping(value="/accountsview")
@@ -104,6 +107,7 @@ public class AccountsController {
 
     private final static Logger LOG = Logger.getLogger(AccountsController.class);
     private UserOperationsInterface uoi;
+    private FederatedAttributeService fas;
     private String openId;
 
     //private final static String USERS_FILE = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\users.file";
@@ -115,8 +119,11 @@ public class AccountsController {
     // */
     //private static Pattern pattern =
     //    Pattern.compile(".*[^a-zA-Z0-9_\\-\\.\\@\\'\\:\\;\\,\\s/()].*");
+    @Autowired
+    public AccountsController(FederatedAttributeService fas) throws FileNotFoundException, IOException {
+        //Thanks Spring for doing basic programming for me ...
+        this.fas = fas;
 
-    public AccountsController() throws FileNotFoundException, IOException {
         //System.out.println("In accounts controller");
         LOG.debug("IN AccountsController Constructor");
         if(Utils.environmentSwitch) {
@@ -201,7 +208,20 @@ public class AccountsController {
             model = (Map<String,Object>)request.getSession().getAttribute(ACCOUNTS_MODEL);
 
         } else {
-            
+            /* * */
+            try {
+              openId = Utils.getIdFromHeaderCookie(request);
+              Map<String,Set<String>> userGroupsAndRoles = fas.getAttributes(openId);
+                
+              for (Object key : userGroupsAndRoles.keySet()) {
+		            System.out.println("Key : " + key.toString() + " Value : " + userGroupsAndRoles.get(key));
+	            }
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
+             /* * */
+
+
             // get user info from DAO
             User userInfo = uoi.getUserObjectFromUserOpenID(openId);
             

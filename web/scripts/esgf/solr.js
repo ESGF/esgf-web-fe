@@ -119,6 +119,10 @@
             	 
            }));
          
+         Manager.addWidget(new AjaxSolr.DataCartSRMWidget({
+        	id: 'srmfeature' 
+         }));
+         
          Manager.addWidget(new AjaxSolr.ResultWidget({
               id: 'result',
               target: '#search-results'

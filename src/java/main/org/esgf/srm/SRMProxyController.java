@@ -31,8 +31,10 @@ public class SRMProxyController {
     //public ModelAndView addEmployee(@RequestBody String body) {
     public void doPost(HttpServletRequest request,final HttpServletResponse response) {
         
-        System.out.println("In srm proxy post");
+        System.out.println("In ESGF-WEB-FE SRMProxyController. HTTP POST: doPost");
      
+        
+        
         //grab the urls from the query string
         String [] urls = request.getParameterValues("file_ids[]");//null;
         if(urls == null) {
@@ -47,7 +49,11 @@ public class SRMProxyController {
                     "srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?" +
                         "SFN=mss://esg2-sdnl1.ccs.ornl.gov/proj/cli049/UHRGCS/ORNL" +
                         "/CESM1/t341f02.FAMIPr/atm/hist/t341f02.FAMIPr.cam2.h0.1978-12.nc";
-        } 
+        } else {
+            for(int i=0;i<urls.length;i++) {
+                System.out.println("url: " + i + " " + urls[i]);
+            }
+        }
         
         //compress urls into one string
         String url = "";
@@ -58,6 +64,9 @@ public class SRMProxyController {
                 url += urls[i];
             }
         }
+        
+        
+        //String url = "http://google.com";
         
         //attach url=<compressed urls> to queryString to esg-srm service
         String responseStr = querySRMService(url);

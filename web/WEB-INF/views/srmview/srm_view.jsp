@@ -37,37 +37,42 @@
 	</div>
 	<div class="span-12 prepend-1">
 		
-		<div>Dataset: ${datasetId}</div>
-		<div id="datasetId" style="display:none">${datasetId}</div>
-		<div>
-		Type: ${type}
-		</div>
-		<div id="type" style="display:none">${type}</div>
-		<div>
-		peerStr: ${peerStr}
-		</div>
-		<div id="peerStr" style="display:none">${peerStr}</div>
-		<div>
-		technoteStr: ${technoteStr}
-		</div>
-		<div id="technoteStr" style="display:none">${technoteStr}</div>
-		<div>
-		fqParamStr: ${fqParamStr}
-		</div>
-		<div id="fqParamStr" style="display:none">${fqParamStr}</div>
+		<div style="display:none">
+			<div>Dataset: ${datasetId}</div>
+			<div id="datasetId" style="display:none">${datasetId}</div>
+			<div>
+			Type: ${type}
+			</div>
+			<div id="type" style="display:none">${type}</div>
+			<div>
+			peerStr: ${peerStr}
+			</div>
+			<div id="peerStr" style="display:none">${peerStr}</div>
+			<div>
+			technoteStr: ${technoteStr}
+			</div>
+			<div id="technoteStr" style="display:none">${technoteStr}</div>
+			<div>
+			fqParamStr: ${fqParamStr}
+			</div>
+			<div id="fqParamStr" style="display:none">${fqParamStr}</div>
+			
 		
-	
-		<div>
-		Note: Blah blah blah
+			<div>
+			Note: Blah blah blah
+			</div>
+		
+		
 		</div>
 		
 		<input id="srm_workflow" type="submit" value="Submit SRM Request">
 		<input id="show_files" type="submit" value="View Files with Dataset(s)">
 	</div>
 	<div class="span-10 last">
-		<div id="file_contents" style="display:none">
-			File Content here
-		</div>
+		<div id="file_contents" style="display:none">Empty</div>
+	</div>
+	<div class="span-24 last">
+		<div id="srm_response"></div>
 	</div>
 </div>
 
@@ -80,12 +85,42 @@ $(document).ready(function(){
 	$('input#show_files').click(function() {
 		if($('input#show_files').val() == 'View Files with Dataset(s)') {
 			$('input#show_files').val('Hide Files with Dataset(s)');
+			
+			
+			var datasetId = $('#datasetId').html();
+			var type = $('#type').html();
+			var peerStr = $('#peerStr').html();
+			var technoteStr = $('#technoteStr').html();
+			var fqParamStr = $('#fqParamStr').html();
+			
+			
+			
+			
+			if(($('#file_contents').html() == 'Empty')) {
+				
+				$('#file_contents').empty();
+				
+				var file_ids = getFileIds(datasetId,type,peerStr,technoteStr,fqParamStr);
+				
+			}
+			
+			
 			$('div#file_contents').show();
+			
+			
+			
+			
+			
 		} else {
 			$('input#show_files').val('View Files with Dataset(s)');
 			$('div#file_contents').hide();
 		}
 	});
+	
+	
+	
+	
+	
 	
 	$('input#srm_workflow').click(function() {
 		
@@ -96,11 +131,50 @@ $(document).ready(function(){
 		var technoteStr = $('#technoteStr').html();
 		var fqParamStr = $('#fqParamStr').html();
 		
+		alert('trigger srm workflow');
 		
+		var srm_url = '/esgf-web-fe/srmproxy';
+		
+		//var queryStr = {"file_ids" : file_ids};
+		
+		//type: File
+		if(type == 'File') {
+			
+		} 
+		//type: Dataset
+		else {
+			
+			
+			var file_ids = getFileIds(datasetId,type,peerStr,technoteStr,fqParamStr);
+			
+			queryStr = {"file_ids" : file_ids};
+			
+			$.ajax({
+				url: srm_url,
+				global: false,
+				type: "POST",
+				data: queryStr,
+				//dataType: 'xml',
+				success: function(data) {
+					$('#srm_response').append("Staging successfully launched");
+				},
+				error: function() {
+					alert('srm error');
+				}
+				
+	    	});
+		}
+		
+		
+		
+		
+		/*
 		if(type == 'File') {
 			
 			var srm_url = '/esgf-web-fe/srmproxy';
 			
+			
+			//get the file_ids here
 			var file_ids = new Array();
 			file_ids.push(datasetId);
 			
@@ -123,7 +197,7 @@ $(document).ready(function(){
 			
 		} else {
 			
-			
+
 			//need to query solr for the files and then send to esg-srm
 			var queryStr = {"idStr" : datasetId, 
 					"peerStr" : peerStr, 
@@ -133,86 +207,37 @@ $(document).ready(function(){
 					"initialQuery" : "true",
 					"fileCounter" : 10};
 			
-			alert('queryStr: ' + queryStr);
+			var file_ids = getFileIds(datasetId,type,peerStr,technoteStr,fqParamStr);
+			
+			
+			var srm_url = '/esgf-web-fe/srmproxy';
+			
+			queryStr = {"file_ids" : file_ids};
+			
 			
 			$.ajax({
-				url: '/esgf-web-fe/solrfileproxy2/datacart',
+				url: srm_url,
 				global: false,
-				type: "GET",
+				type: "POST",
 				data: queryStr,
-				dataType: 'json',
+				//dataType: 'xml',
 				success: function(data) {
-					
-					var file_ids = new Array();
-					
-					//grab the file ids and send to the esg-srm service
-					for(var i=0;i<data.docs.doc.files.file.length;i++){
-						var file = data.docs.doc.files.file[i];
-						file_ids.push(file.fileId);
-						//alert((file));
-					}
-					
-					alert('file_ids: ' + file_ids);
-
-
-					var srm_url = '/esgf-web-fe/srmproxy';
-					
-					queryStr = {"file_ids" : file_ids};
-					
-					
-					$.ajax({
-						url: srm_url,
-						global: false,
-						type: "POST",
-						data: queryStr,
-						//dataType: 'xml',
-						success: function(data) {
-							alert('success');
-						},
-						error: function() {
-							alert('srm error');
-						}
-						
-						
-			    	});
-					
-					
-					
-					
+					alert('Your SRM request has been submitted successfully.');
 					
 				},
-				error: function () {
-					alert('error');
+				error: function() {
+					alert('Your SRM request has not been submitted successfully.  Please contact your administrator and try again.');
 				}
-			});
+				
+				
+	    	});
 			
 		
 		}
-		
-		
-		
-		/*
-		//extract the dataset Id from the span tag
-		var selectedDocId = $(this).parent().html();//($(this).parent().parent().find('span.datasetId').html()).trim();
-		
-		alert('selectedDocId: ' + selectedDocId);
-
-    	
-		//var openid = $('span.footer_openid').html();
-
-        var input = '';
-		
-        //begin assembling queryString
-        
-        alert('launch workflow here ' + srm_url);
 		*/
 		
-        /*
-        //send request
-        jQuery('<form action="'+ srm_url +'" method="post">'+input+'</form>')
-        .appendTo('body').submit().remove();
-		//alert($(this).parent().find('span').html());
-		*/
+		
+		
 		
 
     	//query solr for the files
@@ -220,6 +245,77 @@ $(document).ready(function(){
 	});
     
 });
+
+
+function getFileIds(datasetId,type,peerStr,technoteStr,fqParamStr) {
+	
+	var file_ids = new Array();
+	
+	
+	//need to query solr for the files and then send to esg-srm
+	var queryStr = {"idStr" : datasetId, 
+			"peerStr" : peerStr, 
+			"technotesStr" : technoteStr, 
+			"showAllStr" : "true", 
+			"fqStr" : fqParamStr, 
+			"initialQuery" : "true",
+			"fileCounter" : 10};
+	
+	
+	$.ajax({
+		url: '/esgf-web-fe/solrfileproxy2/datacart',
+		global: false,
+		async: false,
+		type: "GET",
+		data: queryStr,
+		dataType: 'json',
+		success: function(data) {
+			
+			
+			//grab the file ids and send to the esg-srm service
+			for(var i=0;i<data.docs.doc.files.file.length;i++){
+				var file = data.docs.doc.files.file[i];
+				file_ids.push(file.fileId);
+
+				$('#file_contents').append('<div>' + file.fileId + '</div>');
+			}
+			
+			
+			queryStr['initialQuery'] = false;
+			
+			$.ajax({
+				url: '/esgf-web-fe/solrfileproxy2/datacart',
+				global: false,
+				async: false,
+				type: "GET",
+				data: queryStr,
+				dataType: 'json',
+				success: function(data) {
+					//grab the file ids and send to the esg-srm service
+					for(var i=0;i<data.docs.doc.files.file.length;i++){
+						var file = data.docs.doc.files.file[i];
+						file_ids.push(file.fileId);
+
+						$('#file_contents').append('<div>' + file.fileId + '</div>');
+					}	
+				
+				},
+				error: function() {
+					alert('errr');
+				}
+			});
+			
+		},
+		error: function() {
+			alert('error');
+		}
+	});
+	
+	return file_ids;
+	
+}
+
+
 
 function getIndividualPeer(id) {
 	var peerStr = '';

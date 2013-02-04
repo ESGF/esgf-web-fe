@@ -103,8 +103,7 @@
 			//kill the view more files link
 			$('a.view_more_files_short').die('click');
 			
-			$('a.srm_event').die('click');
-			$('a.srm_dataset_event').die('click');
+			
 			
 		},
 		
@@ -248,8 +247,7 @@
 		    	
 		    	//extract the dataset Id from the span tag
 				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
-
-				alert('show all files');
+				
 				
 				//change verbage of the expand link
 				if(this.innerHTML === "Collapse") {
@@ -316,8 +314,7 @@
 						dataType: 'json',
 						success: function(data) {
 							
-							
-							alert('data: ' + data);
+							//alert('data: ' + data);
 							
 							
 							
@@ -342,113 +339,10 @@
 								//add the initial flag
 								var initial = true;
 								
-								
-
 								var appendedFiles = self.appendFileData(data, openid, initial);
 								
-								
-								/*
-								
 
-<<<<<<< HEAD
-								//alert('technote: ' + data.doc.files.file[3].technote);
-								
-								var appendedFiles = '';
-								
-								for(var i=0;i<fileLength;i++) {
-									
-									
-									appendedFiles += '<tr class="remove_' + tagid + '">';
-										
-									//appendedFiles += '<td>a</td>';
-									appendedFiles += '<td style="width: 40px">' +
-													 '<input style="margin-left: 10px;display:none"' + 
-										   					'class="fileLevel"' + 
-										   					'type="checkbox"' + 
-										   					'class="fileId"' + 
-										   					'id="${fileId}"' + 
-										   					'checked="true"' + 
-										   					'/>' +
-										   					'</td>';
-									
-									
-									appendedFiles += '<td style="width: 425px;padding-left:10px;font-size:11px;">' +
-													 '<div style="word-wrap: break-word;">' + 
-													 '<span style="font-weight:bold">' + data.doc.files.file[i].fileId + '</span>' +
-													 '	<br />' + 
-													 '<span style="font-style:italic">' + 'tracking_id: ' + data.doc.files.file[i].tracking_id + '</span>' +
-													 '  <br />' +
-													 '<span style="font-style:italic">checksum: ' + data.doc.files.file[i].checksum + ' (' + data.doc.files.file[i].checksum_type + ')' + '</span>' +
-													 '</div>' +
-													 '</td>';
-									
-									
-									appendedFiles += '<td style="float-right;font-size:11px;text-align:right">';
-									
-									for(var j=0;j<data.doc.files.file[i].services.service.length;j++) {
-										var service = data.doc.files.file[i].services.service[j];
-										var url = data.doc.files.file[i].urls.url[j];
-										var file_id = data.doc.files.file[i].fileId;
-										if(service == 'HTTPServer') {
-											service = 'HTTP';
-										}
-										
-										
-										
-										if(service == 'GridFTP') {
-											if(ESGF.setting.globusonline) {
-												//appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a style="cursor:pointer" class="go_individual_gridftp_short">' + service + '</a> </span>';
-												appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
-												                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
-												                 '<span class="globus_url" style="display:none">' + url + '</span>' +
-												                 '<a style="cursor:pointer" class="go_individual_gridftp_short">' + 'Globus Online' + '</a> </span>';
-												                 //'<a style="cursor:pointer" class="go_individual_gridftp_short">' + service + '</a> </span>';
-												
-											}
-										} else {
-											
-											if(service == 'SRM') {
-												if(openid != 'anonymousUser') {
-													appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a class="srm_event"><span style="display:none">' + url + '</span>' + 'srm service: ' + service + '</a> </span>';
-												} else {
-													appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a class="srm_event"><span style="display:none">' + url + '</span>' + 'srm service: ' + service + '</a> </span>';
-												}
-											}
-											else {
-												if(openid != 'anonymousUser') {
-													appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '?openid=' + openid +  '" ' + 'target="_blank">' + service + '</a> </span>';
-												} else {
-													appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '" ' + 'target="_blank">' + service + '</a> </span>';
-												}
-											}
-											
-										}
-										
-									}
-									
-									if(data.doc.files.file[i].technote != 'NA') {
-										
-										
-										var technoteStr = data.doc.files.file[i].technote;
-										//alert('i: ' + i + ' ' + technoteStr);
-										//var technoteArr = technoteStr.split("\\|");
-										//alert('len: ' + technoteArr.length);
-										appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a style="cursor:pointer" href="' + technoteStr + '" target="_blank" >' + 'TECHNOTE' + '</a> </span>';
-									}
-									
-									appendedFiles += '</td>';
-									
-									appendedFiles += '</tr>';
-									
-								}
-
-								appendedFiles += '<tr class="remove_' + tagid + '">';
-								appendedFiles += '<td></td>';
-								appendedFiles += '</tr>';
-								
-=======
 								var view_more_tag = '<tr class="' + self.view_files_tag + ESGF.datacart.replaceChars(idStr) + '">';
->>>>>>> devel
 								
 								if(fileLength >= ESGF.setting.fileCounter) {
 									appendedFiles += view_more_tag;
@@ -460,12 +354,11 @@
 								}
 
 								$('.'+tagid).after(appendedFiles);
-								*/
+								
 								self.innerHTML="Collapse";
 								
 								
 							}
-							
 						},
 						error: function() {
 							alert('Error in expanding files for dataset ' + data.doc.datasetId);
@@ -566,94 +459,7 @@
 				}
 				
 			});
-			
-			$('a.srm_event').live('click',function() {
-				//alert('launch srm workflow here');
-				
-				//alert($(this).parent().find('span').html());
-				var selectedDocId = ($(this).parent().find('span').html());
-				
-				var srm_url = '/esgf-web-fe/srmview?datasetId=' + selectedDocId + '&type=File';
-		    	
-				var input = '';
-				
-				//send request
-		        jQuery('<form action="'+ srm_url +'" method="post">'+input+'</form>')
-		        .appendTo('body').submit().remove();
-				//alert($(this).parent().find('span').html());
-				
-			});
-			
-			$('a.srm_dataset_event').live('click',function() {
-				//alert('launch srm dataset workflow here');
-				
-				//extract the dataset Id from the span tag
-				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
-				
-				//alert('selectedDocId: ' + selectedDocId);
 
-				var peerStr = getIndividualPeer(selectedDocId);
-				var technoteStr = getTechnoteStr();
-				var fqParamStr = getFqParamStr();
-				
-/*
-				var idStr = selectedDocId;
-				
-				var peerStr = getIndividualPeer(idStr);//getPeerStr();
-				
-				
-				var technoteStr = getTechnoteStr();
-								
-		    	var fqParamStr = getFqParamStr();
-		    	
-		    	
-		    	
-		    	var queryStr = {"idStr" : idStr, 
-						"peerStr" : peerStr, 
-						"technotesStr" : technoteStr, 
-						"showAllStr" : ESGF.setting.showAllContents, 
-						"fqStr" : fqParamStr, 
-						"initialQuery" : "true",
-    					"fileCounter" : ESGF.setting.fileCounter};
-*/				
-				
-		    	var srm_url = '/esgf-web-fe/srmview?';
-		    	srm_url += 'datasetId=' + selectedDocId;
-		    	srm_url += '&type=Dataset';
-		    	srm_url += '&peerStr=' + peerStr;
-		    	srm_url += '&technoteStr=' + technoteStr;
-		    	srm_url += '&fqParamStr=' + fqParamStr;
-		    	
-		    	
-		    	
-		    	
-		    	
-				//var openid = $('span.footer_openid').html();
-
-		        var input = '';
-				
-		        //begin assembling queryString
-	            //var queryString = 'type=create&id=' + datasetId + '&credential=' + go_credential;
-		        
-	            /*
-		        //assemble the input fields with the query string
-		        for(var i=0;i<self.file_ids_arr.length;i++) {
-		        	queryString += '&child_url=' + self.grid_urls_arr[i] + '&child_id=' + self.file_ids_arr[i];
-		        }
-		        jQuery.each(queryString.split('&'), function(){
-		          var pair = this.split('=');
-		          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-		        });
-		        */
-		        
-		        
-		        //send request
-		        jQuery('<form action="'+ srm_url +'" method="post">'+input+'</form>')
-		        .appendTo('body').submit().remove();
-				//alert($(this).parent().find('span').html());
-				
-			});
-			
 		}
 		
 		

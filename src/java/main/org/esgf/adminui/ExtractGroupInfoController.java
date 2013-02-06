@@ -46,7 +46,7 @@ public class ExtractGroupInfoController {
         LOG.debug("IN CreateGroupsController Constructor");
         //System.out.println("\n\n\n\n\nGroup info " + Utils.environmentSwitch + "\n\n\n");
         
-        /*
+        
         if(Utils.environmentSwitch) {
             
             goi = new GroupOperationsESGFDBImpl();
@@ -57,7 +57,7 @@ public class ExtractGroupInfoController {
             goi = new GroupOperationsXMLImpl();
             uoi = new UserOperationsXMLImpl();
         }
-        */
+        
     }
     
     /**

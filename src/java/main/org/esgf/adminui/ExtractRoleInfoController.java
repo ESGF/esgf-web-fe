@@ -46,7 +46,7 @@ public class ExtractRoleInfoController {
     public ExtractRoleInfoController() throws FileNotFoundException, IOException {
         LOG.debug("IN ExtractRoleInfoController Constructor");
         //System.out.println("\n\n\n\n\n\n\n" + Utils.environmentSwitch + "\n\n\n\n\n\n\n");
-        /*
+        
         if(Utils.environmentSwitch) {
             
             goi = new GroupOperationsESGFDBImpl();
@@ -58,7 +58,7 @@ public class ExtractRoleInfoController {
             goi = new GroupOperationsXMLImpl();
             uoi = new UserOperationsXMLImpl();
         }
-        */
+        
     }
     
     

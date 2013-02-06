@@ -67,6 +67,8 @@ ESGF.datacart.replaceChars = function (word) {
     var newWord = word.replace(/\./g,"_");
     newWord = newWord.replace(":","_");
     newWord = newWord.replace("|","_");
+    
+    //in case of two slashes...needs to be replaced
     newWord = newWord.replace("/","_");
     newWord = newWord.replace("/","_");
     

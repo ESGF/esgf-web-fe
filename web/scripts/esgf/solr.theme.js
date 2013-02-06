@@ -124,12 +124,13 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     
     selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
 
+    selectID = ESGF.datacart.replaceChars(selectID);
     
-    selectID = selectID.replace("|","_");
+    //selectID = selectID.replace("|","_");
 
     //for ARMBE
-    selectID = selectID.replace("/","_");
-    selectID = selectID.replace("/","_");
+    //selectID = selectID.replace("/","_");
+    //selectID = selectID.replace("/","_");
     //alert('selectID: ' + selectID);
     
     selectMetID = 'meta_select_'+ doc.id.replace(/\./g, "_");

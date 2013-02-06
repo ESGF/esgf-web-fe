@@ -67,6 +67,8 @@ ESGF.datacart.replaceChars = function (word) {
     var newWord = word.replace(/\./g,"_");
     newWord = newWord.replace(":","_");
     newWord = newWord.replace("|","_");
+    newWord = newWord.replace("/","_");
+    newWord = newWord.replace("/","_");
     
     return newWord;
 };

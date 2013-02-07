@@ -75,7 +75,8 @@
 	    
 	    	//grab all the keys from the datacart map and place in an array
 	    	self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
-	    	
+
+			$('a.single_srm').die('click');
 			$('a.srm_event').die('click');
 			$('a.srm_dataset_event').die('click');
 			
@@ -86,32 +87,75 @@
 		 */
 		afterRequest: function() {
 		
-			
-			
-			$('a.srm_event').live('click',function() {
-				alert('launch srm workflow here');
+			//event for sending the file id through
+			$('a.single_srm').live('click',function() {
+
+				var file_id = $(this).parent().find('.file_id').html().trim();
 				
-				/*
-				//alert($(this).parent().find('span').html());
-				var selectedDocId = ($(this).parent().find('span').html());
+				var srm_urll = $(this).parent().find('.srm_urll').html().trim();
 				
-				var srm_url = '/esgf-web-fe/srmview?datasetId=' + selectedDocId + '&type=File';
-		    	
-				var input = '';
-				
-				//send request
-		        jQuery('<form action="'+ srm_url +'" method="post">'+input+'</form>')
-		        .appendTo('body').submit().remove();
-				//alert($(this).parent().find('span').html());
-				*/
-			});
-			
-			
-			$('a.srm_dataset_event').live('click',function() {
-				//alert('launch srm dataset workflow here');
+				alert('launch srm dataset workflow here - just send the file ' + 
+						file_id + ' url: ' + srm_urll);
 				
 
+				/*
+				var peerStr = ESGF.datacart.getIndividualPeer(idStr);//getPeerStr();
+				
+				var technoteStr = ESGF.datacart.getTechnoteStr();
+								
+		    	var fqParamStr = ESGF.datacart.getFqParamStr();
+		    	*/
+				
+				/*
+				var srm_url = '/esgf-web-fe/srmview?datasetId=' + file_id + 
+								'&peerStr=' + peerStr + 
+								'&technoteStr=' + technoteStr + 
+								'&fqParamStr=' + fqParamStr + 
+								'&type=File';
+		    	
+				*/
+				
+				var srm_url = '/esgf-web-fe/srmview?datasetId=' + file_id +
+					'&s_url=' + srm_urll + 
+					'&type=File';
+				
+				//send request
+		        jQuery('<form action="'+ srm_url +'" method="post">'+''+'</form>')
+		        .appendTo('body').submit().remove();
+	    	});
+	    	
+	    	
+			
+			
+			
+			//for sending the dataset level srm request
+			$('a.srm_dataset_event').live('click',function() {
+				
 				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html());
+				
+				alert('launch srm dataset workflow here - just send the dataset id ' + selectedDocId);
+				
+				
+
+				/*
+				var srm_url = '/esgf-web-fe/srmview?datasetId=' + file_id + 
+								'&peerStr=' + peerStr + 
+								'&technoteStr=' + technoteStr + 
+								'&fqParamStr=' + fqParamStr + 
+								'&type=File';
+		    	
+				*/
+				
+				var srm_url = '/esgf-web-fe/srmview?datasetId=' + selectedDocId + '&type=Dataset';
+		    	
+				
+				//send request
+		        jQuery('<form action="'+ srm_url +'" method="post">'+''+'</form>')
+		        .appendTo('body').submit().remove();
+		        
+				//alert($(this).parent().find('span').html());
+				/*
+				
 				
 	        	//gather the ids and the urls for download
 	        	var file_ids   = new Array();
@@ -191,12 +235,7 @@
 							            //var queryString = 'type=create&id=' + datasetId + '&credential=' + go_credential;
 								        var queryString = 'type=create&id=' + selectedDocId;
 							            
-								        //assemble the input fields with the query string
-								        /*
-								        for(var i=0;i<file_ids.length;i++) {
-								        	queryString += '&child_url=' + self.grid_urls_arr[i] + '&child_id=' + self.file_ids_arr[i];
-								        }
-								        */
+								        
 								        
 								        jQuery.each(queryString.split('&'), function(){
 								          var pair = this.split('=');
@@ -235,80 +274,29 @@
 		    	
 		    	
 		    	
+		    	*/
 		    	
-		    	
-		    	
-		    	
-		    	
-		    	
-				/*
-				//extract the dataset Id from the span tag
-				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
-				
-				//alert('selectedDocId: ' + selectedDocId);
+			});
 
-				var peerStr = getIndividualPeer(selectedDocId);
-				var technoteStr = getTechnoteStr();
-				var fqParamStr = getFqParamStr();
-				
-//
-//				var idStr = selectedDocId;
-//				
-//				var peerStr = getIndividualPeer(idStr);//getPeerStr();
-//				
-//				
-//				var technoteStr = getTechnoteStr();
-//								
-//		    	var fqParamStr = getFqParamStr();
-//		    	
-//		    	
-//		    	
-//		    	var queryStr = {"idStr" : idStr, 
-//						"peerStr" : peerStr, 
-//						"technotesStr" : technoteStr, 
-//						"showAllStr" : ESGF.setting.showAllContents, 
-//						"fqStr" : fqParamStr, 
-//						"initialQuery" : "true",
- //   					"fileCounter" : ESGF.setting.fileCounter};
 			
+			
+			$('a.srm_event').live('click',function() {
+				alert('launch srm workflow here');
 				
-		    	var srm_url = '/esgf-web-fe/srmview?';
-		    	srm_url += 'datasetId=' + selectedDocId;
-		    	srm_url += '&type=Dataset';
-		    	srm_url += '&peerStr=' + peerStr;
-		    	srm_url += '&technoteStr=' + technoteStr;
-		    	srm_url += '&fqParamStr=' + fqParamStr;
-		    	
-		    	
-		    	
-		    	
-		    	
-				//var openid = $('span.footer_openid').html();
-
-		        var input = '';
+				/*
+				//alert($(this).parent().find('span').html());
+				var selectedDocId = ($(this).parent().find('span').html());
 				
-		        //begin assembling queryString
-	            //var queryString = 'type=create&id=' + datasetId + '&credential=' + go_credential;
-		        
-	            
-		        //assemble the input fields with the query string
-		        for(var i=0;i<self.file_ids_arr.length;i++) {
-		        	queryString += '&child_url=' + self.grid_urls_arr[i] + '&child_id=' + self.file_ids_arr[i];
-		        }
-		        jQuery.each(queryString.split('&'), function(){
-		          var pair = this.split('=');
-		          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-		        });
-		        
-		        
-		        
-		        //send request
+				var srm_url = '/esgf-web-fe/srmview?datasetId=' + selectedDocId + '&type=File';
+		    	
+				var input = '';
+				
+				//send request
 		        jQuery('<form action="'+ srm_url +'" method="post">'+input+'</form>')
 		        .appendTo('body').submit().remove();
 				//alert($(this).parent().find('span').html());
 				*/
 			});
-
 			
 		}
 	
@@ -320,3 +308,73 @@
 	
 	
 })(jQuery);
+
+
+
+
+/*
+//extract the dataset Id from the span tag
+var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
+
+//alert('selectedDocId: ' + selectedDocId);
+
+var peerStr = getIndividualPeer(selectedDocId);
+var technoteStr = getTechnoteStr();
+var fqParamStr = getFqParamStr();
+
+//
+//var idStr = selectedDocId;
+//
+//var peerStr = getIndividualPeer(idStr);//getPeerStr();
+//
+//
+//var technoteStr = getTechnoteStr();
+//				
+//var fqParamStr = getFqParamStr();
+//
+//
+//
+//var queryStr = {"idStr" : idStr, 
+//		"peerStr" : peerStr, 
+//		"technotesStr" : technoteStr, 
+//		"showAllStr" : ESGF.setting.showAllContents, 
+//		"fqStr" : fqParamStr, 
+//		"initialQuery" : "true",
+//   					"fileCounter" : ESGF.setting.fileCounter};
+
+
+var srm_url = '/esgf-web-fe/srmview?';
+srm_url += 'datasetId=' + selectedDocId;
+srm_url += '&type=Dataset';
+srm_url += '&peerStr=' + peerStr;
+srm_url += '&technoteStr=' + technoteStr;
+srm_url += '&fqParamStr=' + fqParamStr;
+
+
+
+
+
+//var openid = $('span.footer_openid').html();
+
+var input = '';
+
+//begin assembling queryString
+//var queryString = 'type=create&id=' + datasetId + '&credential=' + go_credential;
+
+
+//assemble the input fields with the query string
+for(var i=0;i<self.file_ids_arr.length;i++) {
+	queryString += '&child_url=' + self.grid_urls_arr[i] + '&child_id=' + self.file_ids_arr[i];
+}
+jQuery.each(queryString.split('&'), function(){
+  var pair = this.split('=');
+  input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
+});
+
+
+
+//send request
+jQuery('<form action="'+ srm_url +'" method="post">'+input+'</form>')
+.appendTo('body').submit().remove();
+//alert($(this).parent().find('span').html());
+*/

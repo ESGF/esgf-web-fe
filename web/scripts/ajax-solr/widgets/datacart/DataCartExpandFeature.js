@@ -210,6 +210,7 @@
 					if(service == 'HTTPServer') {
 						service = 'HTTP';
 					}
+					
 					if(service == 'GridFTP') {
 						if(ESGF.setting.globusonline) {
 							appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
@@ -218,7 +219,14 @@
 							                 '<a style="cursor:pointer" class="go_individual_gridftp_short">' + 'Globus Online' + '</a> </span>';
 							
 						}
-					} else {
+					} else if(service == 'SRM') {
+						appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
+		                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
+		                 '<span class="srm_urll" style="display:none">' + url + '</span>' +
+		                 '<a style="cursor:pointer" class="single_srm">' + 'SRM' + '</a> </span>';
+		
+					} 
+						else {
 						if(openid != 'anonymousUser') {
 							appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '?openid=' + openid +  '" ' + 'target="_blank">' + service + '</a> </span>';
 						} else {

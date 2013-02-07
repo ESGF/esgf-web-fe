@@ -55,6 +55,7 @@ public class SRMProxyController {
             }
         }
         
+        
         //compress urls into one string
         String url = "";
         for(int i=0;i<urls.length;i++) {
@@ -78,6 +79,8 @@ public class SRMProxyController {
         
         String response = null;
         
+        
+        
         String responseBody = null;
         
         // create an http client
@@ -87,7 +90,7 @@ public class SRMProxyController {
         //attact the dataset id to the query string
         PostMethod method = new PostMethod(srmAPIURL);
         
-        //System.out.println("UrLSSSS: " + url);
+        System.out.println("In querySRMService for : " + compressedUrl);
         
         try {
             compressedUrl = URLEncoder.encode(compressedUrl,"UTF-8").toString();

@@ -23,11 +23,21 @@ public class SRMController {
     public ModelAndView doPost(final HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         
+        System.out.println("In SRM Controller");
+        
         String datasetId = request.getParameter("datasetId");
         String type = request.getParameter("type");
-        String peerStr = request.getParameter("peerStr");
-        String technoteStr = request.getParameter("technoteStr");
-        String fqParamStr = request.getParameter("fqParamStr");
+        String s_url = request.getParameter("s_url");
+        
+        Map<String,Object> model = new HashMap<String,Object>();
+
+        model.put("datasetId", datasetId);
+        model.put("type", type);
+        model.put("s_url", s_url);
+        
+        /*
+        String datasetId = request.getParameter("datasetId");
+        String type = request.getParameter("type");
         
         
         Map<String,Object> model = new HashMap<String,Object>();
@@ -37,7 +47,7 @@ public class SRMController {
         model.put("peerStr", peerStr);
         model.put("technoteStr", technoteStr);
         model.put("fqParamStr", fqParamStr);
-        
+        */
         return new ModelAndView("srmview", model);
         
     }

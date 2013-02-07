@@ -37,13 +37,19 @@
 	</div>
 	<div class="span-12 prepend-1">
 		
-		<div style="display:none">
+		<div id="show_params" style="display:none">
 			<div>Dataset: ${datasetId}</div>
 			<div id="datasetId" style="display:none">${datasetId}</div>
 			<div>
 			Type: ${type}
 			</div>
 			<div id="type" style="display:none">${type}</div>
+			<div>
+			Type: ${s_url}
+			</div>
+			<div id="s_url" style="display:none">${s_url}</div>
+			
+			<!--  
 			<div>
 			peerStr: ${peerStr}
 			</div>
@@ -61,12 +67,13 @@
 			<div>
 			Note: Blah blah blah
 			</div>
-		
+			-->
 		
 		</div>
 		
 		<input id="srm_workflow" type="submit" value="Submit SRM Request">
 		<input id="show_files" type="submit" value="View Files with Dataset(s)">
+		<input id="show_params_sent" type="submit" value="Show Param(s)">
 	</div>
 	<div class="span-10 last">
 		<div id="file_contents" style="display:none">Empty</div>
@@ -82,6 +89,11 @@
 
 $(document).ready(function(){
 	
+	$('input#show_params_sent').click(function() {
+		$('#show_params').toggle();
+	
+	});
+	
 	$('input#show_files').click(function() {
 		if($('input#show_files').val() == 'View Files with Dataset(s)') {
 			$('input#show_files').val('Hide Files with Dataset(s)');
@@ -89,10 +101,13 @@ $(document).ready(function(){
 			
 			var datasetId = $('#datasetId').html();
 			var type = $('#type').html();
+			var s_url = $('#s_url').html();
+			
+			/*
 			var peerStr = $('#peerStr').html();
 			var technoteStr = $('#technoteStr').html();
 			var fqParamStr = $('#fqParamStr').html();
-			
+			*/
 			
 			
 			
@@ -100,7 +115,9 @@ $(document).ready(function(){
 				
 				$('#file_contents').empty();
 				
-				var file_ids = getFileIds(datasetId,type,peerStr,technoteStr,fqParamStr);
+				var file_ids = getFileIds(datasetId,type,s_url,null,null,null);
+				
+				var s_urls = getS_URLs(datasetId,type,s_url,null,null,null);
 				
 			}
 			
@@ -131,7 +148,6 @@ $(document).ready(function(){
 		var technoteStr = $('#technoteStr').html();
 		var fqParamStr = $('#fqParamStr').html();
 		
-		alert('trigger srm workflow');
 		
 		var srm_url = '/esgf-web-fe/srmproxy';
 		
@@ -139,6 +155,32 @@ $(document).ready(function(){
 		
 		//type: File
 		if(type == 'File') {
+			
+			alert('follow file workflow');
+			
+			//direct call to esg-srm
+			
+			//get the file_ids here
+			var file_ids = new Array();
+			file_ids.push(datasetId);
+			
+			queryStr = {"file_ids" : file_ids};
+			
+			$.ajax({
+				url: srm_url,
+				global: false,
+				type: "POST",
+				data: queryStr,
+				//dataType: 'xml',
+				success: function(data) {
+					$('#srm_response').append("Staging successfully launched");
+				},
+				error: function() {
+					alert('srm error');
+				}
+				
+	    	});
+			
 			
 		} 
 		//type: Dataset
@@ -247,6 +289,27 @@ $(document).ready(function(){
 });
 
 
+function getS_URLs(datasetId,type,s_url,peerStr,technoteStr,fqParamStr) {
+	var s_urls = new Array();
+	
+	if(type == 'File') {
+		s_urls.push(s_url);
+	}
+	
+	return s_urls;
+}
+
+function getFileIds(datasetId,type,surl,peerStr,technoteStr,fqParamStr) {
+	var file_ids = new Array();
+	
+	if(type == 'File') {
+		file_ids.push(datasetId);
+	}
+	
+	return file_ids;
+}
+
+/*
 function getFileIds(datasetId,type,peerStr,technoteStr,fqParamStr) {
 	
 	var file_ids = new Array();
@@ -314,7 +377,7 @@ function getFileIds(datasetId,type,peerStr,technoteStr,fqParamStr) {
 	return file_ids;
 	
 }
-
+*/
 
 
 function getIndividualPeer(id) {

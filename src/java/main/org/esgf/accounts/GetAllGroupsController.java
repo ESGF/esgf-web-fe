@@ -78,6 +78,7 @@ public class GetAllGroupsController {
     private GroupRoleDAO myGroupRoleDAO;
         
     public GetAllGroupsController() throws FileNotFoundException, IOException {
+        /*
         if(Utils.environmentSwitch) {
             // try to set up myUserInfoDAO here.
             ESGFProperties myESGFProperties = new ESGFProperties();
@@ -85,7 +86,7 @@ public class GetAllGroupsController {
             this.myUserInfoDAO = new UserInfoCredentialedDAO(root,passwd,myESGFProperties);
             this.myGroupRoleDAO = new GroupRoleDAO(myESGFProperties);
         }
-        
+        */
         LOG.debug("IN GetAllGroupsController Constructor");
     }
     

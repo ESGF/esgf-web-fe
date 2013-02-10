@@ -158,7 +158,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     				 	 '</td>' +
     				 	 '<td style="width:150px;font-size:12px;padding:0px; ">' +
     				 	 '<input type="radio" id="datacart_filtered" name="datacart_filter" value="filtered" /> ' +
-    				 	 'Filter over search constraints ' +
+    				 	 'Filter over variable ' +
     				 	 '</td>';
     	
     	optionsStr += '<td style="font-size:12px;width:20px;">' +
@@ -314,7 +314,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		
 		datasetList += '<div style="word-wrap: break-word;font-weight:bold"  ><span class="datasetId">' + self.selected_arr[i] + '</span></div>';
 		
-		datasetList += '<span>' + ' (Total Number of Files: ' +  ESGF.localStorage.get('dataCart',self.selected_arr[i])['numFiles'] + ')</span>';
+		datasetList += '<span>' + ' (Total Number of Files for All Variables: ' +  ESGF.localStorage.get('dataCart',self.selected_arr[i])['numFiles'] + ')</span>';
 		
 		
 		datasetList += '</td>';
@@ -322,7 +322,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		datasetList += '<td style="font-size:11px;float:right" >';
 		
 		datasetList += '<span class="showAllFiles_short" style="display:none;font-weight:bold;"> Expanding... </span>';
-		datasetList += '<a class="showAllFiles_short" style="cursor:pointer">Expand</a> | ';
+		datasetList += '<a class="showAllFiles_short" style="cursor:pointer">Show Files</a> | ';
 		
 		var datasetId = self.selected_arr[i];
 		var accessType = 'HTTPServer';

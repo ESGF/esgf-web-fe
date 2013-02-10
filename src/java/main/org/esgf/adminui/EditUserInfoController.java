@@ -49,6 +49,7 @@ public class EditUserInfoController {
     
         
     public EditUserInfoController() throws FileNotFoundException, IOException {
+        /*
         if(Utils.environmentSwitch) {
             
             // try to set up myUserInfoDAO here.
@@ -57,7 +58,7 @@ public class EditUserInfoController {
             this.myUserInfoDAO = new UserInfoCredentialedDAO(root,passwd,myESGFProperties);
             
         }
-        
+        */
         LOG.debug("IN EditUserInfoController Constructor");
     }
     

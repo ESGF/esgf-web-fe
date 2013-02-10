@@ -24,7 +24,7 @@ import org.esgf.metadata.JSONObject;
 @SuppressWarnings("unused")
 public class DataCartSolrHandler {
 
-    private static String searchAPIURL = "http://localhost/esg-search/search?";//
+    private static String searchAPIURL = "http://localhost:8080/esg-search/search?";//
     private static String queryPrefix = "format=application%2Fsolr%2Bjson&type=File";
     private final static Logger LOG = Logger.getLogger(DataCartSolrHandler.class);
     
@@ -127,7 +127,7 @@ public class DataCartSolrHandler {
         
         if(this.fq != null && this.showAllStr != null) {
             
-            //System.out.println("Show all string: " + this.showAllStr);
+            System.out.println("Show all string: " + this.showAllStr);
             
           //put any search criteria if the user selected "filter"
             if(this.showAllStr.equals("false")) {
@@ -146,6 +146,7 @@ public class DataCartSolrHandler {
                         }
                         */
                         String fqParam = this.fq[i];
+                        System.out.println("\tfqParam: " + fqParam);
                         /*
                          * Should ignore the following:
                          * - blanks - ""
@@ -161,7 +162,10 @@ public class DataCartSolrHandler {
                         
                         
                         //otherwise add to the query
-                        if(!ignore) {
+                        //should be adding only variables to the query
+                        if(fqParam.contains("variable=")) {
+                            System.out.println("Found variable match");
+                        //if(!ignore) {
                         
                             String valueTerm = fqParam.split("=")[1];
                             String valueTermEnc = null;
@@ -365,8 +369,8 @@ public class DataCartSolrHandler {
         //add the dataset to the query string
         try {
             this.solrQueryString += "&dataset_id=" + URLEncoder.encode(dataset_id,"UTF-8").toString();
-            //System.out.println("\nthis.solrQueryString->\t" + URLEncoder.encode(dataset_id,"UTF-8").toString());
-            //System.out.println("\n\n\n\tthis.solrQueryString->\t" + this.solrQueryString + "\n\n\n");
+            //System.out.println("\nQueryString->\t" + URLEncoder.encode(dataset_id,"UTF-8").toString());
+            System.out.println("\n\n\n\tthis.solrQueryString->\t" + this.solrQueryString + "\n\n\n");
             
         } catch (UnsupportedEncodingException e1) {
             // TODO Auto-generated catch block

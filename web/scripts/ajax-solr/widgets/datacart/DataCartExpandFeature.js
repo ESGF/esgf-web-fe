@@ -73,6 +73,9 @@
 		td_file_middle: '',
 		td_right_middle: '',
 		
+		show_files: 'Show Files',
+		hide_files: 'Hide Files',
+		
 		/**
 		 * 
 		 */
@@ -252,7 +255,7 @@
 				
 				
 				//change verbage of the expand link
-				if(this.innerHTML === "Collapse") {
+				if(this.innerHTML === self.hide_files) {
 					
 					
 					var idStr = selectedDocId;
@@ -274,12 +277,12 @@
 					$('.' + view_more_files_tag).remove();
 					
 					//alert('view_next: ' + view_next_files_tag + ' view_first: ' + view_first_files_tag + ' view_more: ' + view_more_files_tag);
-	                this.innerHTML="Expand";
+	                this.innerHTML=self.show_files;
 
 					
 				} else {
 
-	                this.innerHTML="Collapse";
+	                this.innerHTML=self.hide_files;
 
 	                var idStr = selectedDocId;
 	                
@@ -333,7 +336,7 @@
 
 								$('.'+tagid).after(appendedFiles);
 								
-								self.innerHTML="Collapse";
+								self.innerHTML=self.hide_files;
 								
 								
 							} else {
@@ -364,7 +367,7 @@
 
 								$('.'+tagid).after(appendedFiles);
 								
-								self.innerHTML="Collapse";
+								self.innerHTML=self.hide_files;
 								
 								
 							}

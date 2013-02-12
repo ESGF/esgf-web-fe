@@ -70,8 +70,14 @@ AjaxSolr.theme.prototype.result = function (doc, snippetReplica, snippetVersion,
     }
 
 
-    var idStr = 'id="' + doc.id + '" ';
+    var replId = (doc.id).replace('/','_');
+    
+    replId = replId.replace('/','_');
+    
+    var idStr = 'id="' + replId + '" ';
     var titleStr = 'title="' + doc.title + '" ';
+    //if(idStr.search("ARM") > -1) 
+    //	alert('idStr: ' + idStr);
     var urlStr = 'url="' + doc.url + '" ';
     var formatStr = 'format="' + doc.metadata_format + '" ';
     var metadataURLStr = 'metadata_url="' + doc.metadata_url + '" ';
@@ -118,9 +124,14 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     
     selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
 
-    selectID = selectID.replace("|","_");
+    selectID = ESGF.datacart.replaceChars(selectID);
     
-    
+    //selectID = selectID.replace("|","_");
+
+    //for ARMBE
+    //selectID = selectID.replace("/","_");
+    //selectID = selectID.replace("/","_");
+    //alert('selectID: ' + selectID);
     
     selectMetID = 'meta_select_'+ doc.id.replace(/\./g, "_");
     
@@ -202,7 +213,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     
     $("a#" + selectID).live('click', {doc:doc}, function (evt) {
 
-    	
+    	//alert('clickiung');
         var metadataFormat = doc.metadata_format;
         
         //right now, we only support downloads through TDS

@@ -243,6 +243,8 @@
 			
 		    $('a.showAllFiles_short').live('click',function() {
 
+		    	//alert('expand or collapse');
+		    	
 				var openid = $('span#principal_username').html();
 		    	
 		    	//extract the dataset Id from the span tag
@@ -303,7 +305,11 @@
 			    	//CHANGE ME!
 			    	//queryStr['peerStr'] = 'localhost';
 					
-			    	//alert('initial queryStr: ' + queryStr['peerStr']);
+			    	
+			    	queryStr['peerStr'] = 'localhost';
+			 
+			    	//('initial queryStr: ' + queryStr['peerStr']);
+			    	
 			    	
 			    	//initial ajax call for first x number of files in dataset
 					$.ajax({
@@ -314,7 +320,7 @@
 						dataType: 'json',
 						success: function(data) {
 							
-							//alert('data: ' + data);
+							//alert('data: ' + data );
 							
 							
 							
@@ -333,6 +339,9 @@
 							} else {
 
 								var fileLength = data.doc.files.file.length;
+								
+								//alert('fileLenght: ' + fileLength );
+								
 								
 								var tagid = 'file_rows_' + ESGF.datacart.replaceChars(data.doc.datasetId);
 								

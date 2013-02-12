@@ -1,6 +1,5 @@
 <%@ include file="/WEB-INF/views/common/include.jsp" %>
-
-
+<%@ include file="/WEB-INF/views/common/logInJavaScript.jsp" %>
 
 <ti:insertDefinition name="main-layout" >
 
@@ -30,39 +29,6 @@
 				    <!-- the value of the action attribute must be the same as the URL intercepted by the spring security filter  -->
 	                <form name="loginForm" action='<c:url value="/j_spring_openid_security_check"/>' > 
 <%-- 					<form name="loginForm"> --%>
-						<script language="javascript">
-							function sanitize() {
-								openidElement = document.getElementById("openid_identifier");
-								openid = openidElement.value;
-								openid = openid.replace("http:","https:")
-								               .replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-								openidElement.value = openid;								
-								var credential_controller_url = '/esgf-web-fe/credential_proxy';
-								
-								var queryStr = {'openid' : openid};
-								
-						        jQuery.ajax({
-						        	  url: credential_controller_url,
-						        	  query: queryStr,
-						        	  async: false,
-						        	  type: 'GET',
-						        	  success: function(data) {   
-
-						        		  ESGF.localStorage.remove('GO_Credential',data.credential['openid_str']);
-						        		  
-						        		  
-						        		  ESGF.localStorage.put('GO_Credential',data.credential['openid_str'],data.credential['credential_str']);
-						        		  
-						        		  ESGF.localStorage.printMap('GO_Credential');
-
-										// alert('openid: ' + data.credential['openid_str'] + ' credential: ' + data.credential['credential_str']);
-						        	  },
-						          	  error: function() {
-						          		  // alert('error in getting globus online credential');
-						          	  }
-						        });
-							}
-            </script>															    				
 	                    <div class="panel">  	                         	
 	                    	<c:if test="${param['failed']==true}">
 	                    		<span class="myerror">Error: unable to resolve OpenID identifier.</span>
@@ -118,128 +84,6 @@
                   <div class="error" align="center" style="display: none"></div>
 		              <div class="success" align="center" style="display: none"></div>
 
-                  <script language="javascript"> 
-                    // MBH: start of retrieve username or password
-                    function toggle() {
-	                    var usr = document.getElementById("username");
-	                    if(usr.style.display == "block") {
-    		                usr.style.display = "none";
-                        $("div .success").hide();
-		    			          $("div .error").hide();
-  	                  }
-	                    else {
-		                    usr.style.display = "block";
-	                      $("div .success").hide();
-  		    			        $("div .error").hide();
-                      }
-                    } 
-
-                    function roggle() {
-	                    var pwd = document.getElementById("password");
-	                    if(pwd.style.display == "block") {
-    		                pwd.style.display = "none";
-                        $("div .success").hide();
-		    			          $("div .error").hide();    
-  	                  }
-	                    else {
-		                    pwd.style.display = "block";
-	                      $("div .success").hide();
-		    			          $("div .error").hide();
-                      }
-                    }
-
-                    function findusername() {
-                      $("div .success").hide();
-		    			        $("div .error").hide();
-                      var email = document.getElementById("usnemail").value;
-                      var jsonObj = new Object;
-			                jsonObj.email = email;			
-			                var jsonStr = JSON.stringify(jsonObj);
-                      var userinfo_url = '/esgf-web-fe/getopenidsproxy';
-                      $.ajax({
-	    		              type: "POST",
-	    		              url: userinfo_url,
-				                async: true,
-				                cache: false,
-	    		              data: {query:jsonStr},
-	    	  	            dataType: 'json',
-                        statusCode: {
-                          404: function(){
-                            alert("page note found");
-                          }},
-	    		              success: function(data) {
-	    			              if (data.EditOutput.status == "success") {
-                            var split = data.EditOutput.comment.split('][');
-                            var size = split.length;
-                            if(size > 2){
-                              var print = "<u>These are all the Openids you have on this node:</u> <br/>";
-                              for(i = 1; i < (size - 1); i++){
-                                print = print + split[i] + "<br/>";
-                              }
-                            }
-                            else{
-                              var print = "<font color='red'>This email: " + email + " is not registered on this node</font>"; 
-                            }
-                            document.getElementById("usnemail").value="";
-		    			              $("div .success").html(print);
-		    			              $("div .success").show();
-		    			              $("div .error").hide();
-	    			              } else {
-	    				              $("div .error").html("Error");
-	    				              $("div .error").show();
-	    				              $("div .success").hide();
-	    			              }
-	    		              },
-				                error: function(request, status, error) {
-					                alert('request: ' + request + ' status: ' + status + ' error: ' + error);
-                          $("div .error").html("Error Three");
-					                $("div .error").show();
-					                $("div .success").hide();
-				                }
-			                });
-                    }
-
-                    function findpassword() {
-                      $("div .success").hide();
-		    			        $("div .error").hide();
-                      var openid = document.getElementById("pwdopenid").value;
-                      var jsonObj = new Object;
-                      jsonObj.openid = openid;      
-			                var jsonStr = JSON.stringify(jsonObj);
-                      var userinfo_url = '/esgf-web-fe/forgotpasswordproxy';
-                      $.ajax({
-	    		              type: "POST",
-	    		              url: userinfo_url,
-				                async: true,
-				                cache: false,
-	    		              data: {query:jsonStr},
-	    	  	            dataType: 'json',
-                        statusCode: {
-                          404: function(){
-                            alert("page note found");
-                          }},
-	    		              success: function(data) {
-	    			              if (data.EditOutput.status == "success") {
-                            document.getElementById("pwdopenid").value="";
-		    			              $("div .success").html(data.EditOutput.comment);
-		    			              $("div .success").show();
-		    			              $("div .error").hide();
-	    			              } else {
-	    				              $("div .error").html("Error");
-	    				              $("div .error").show();
-	    				              $("div .success").hide();
-	    			              }
-	    		              },
-				                error: function(request, status, error) {
-					                alert('request: ' + request + ' status: ' + status + ' error: ' + error);
-                          $("div .error").html("Error Three");
-					                $("div .error").show();
-					                $("div .success").hide();
-				                }
-			                });
-
-                    }
-                  </script>
             <p/>
                 </c:when>
 

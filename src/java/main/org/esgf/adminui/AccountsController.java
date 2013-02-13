@@ -68,6 +68,10 @@ package org.esgf.adminui;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.DataInputStream;
+
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -197,7 +201,7 @@ public class AccountsController {
     }
     
     /* Helper function for extracting the model */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "deprecation" })
     private Map<String,Object> getModel(final HttpServletRequest request,
                                        final @ModelAttribute(ACCOUNTS_INPUT)  String accountsInput) throws IOException {
         LOG.debug("------AccountsController getModel------");
@@ -207,19 +211,122 @@ public class AccountsController {
             // retrieve model from session
             model = (Map<String,Object>)request.getSession().getAttribute(ACCOUNTS_MODEL);
 
-        } else {
-            /* * */
+        } 
+        else {
+            /* * Getting List of all group names to extract group desc * */
+              String fileNameStatic = System.getenv().get("ESGF_HOME")+"/config/esgf_ats_static.xml"; //File is messy, created by humans.
+              String fileNameDynamic = System.getenv().get("ESGF_HOME")+"/config/esgf_ats.xml";       //File is clean, created by machine.
+              ArrayList<String> fileStatic = new ArrayList<String>();
+              ArrayList<String> fileDynamic = new ArrayList<String>();
+              String strLine = "";
+              String tmp = "";
+              List<Group> mygroups = new ArrayList<Group>();
+              List<String> myroles = new ArrayList<String>();
+              
+              try{
+                /* * get all groups and info out of dynamic file * */
+                FileInputStream dstream = new FileInputStream(fileNameDynamic);
+                DataInputStream get = new DataInputStream(dstream);
+                while ((strLine = get.readLine()) != null)   {
+                  strLine = strLine.trim();
+                  String finder[] = strLine.split(" ");
+                  if(finder[0].toString().equals("<attribute")){  
+                    fileDynamic.add(strLine);
+                  }
+                }
+                get.close();
+                /* * get all grops and info out of static file * */
+
+                FileInputStream fstream = new FileInputStream(fileNameStatic);
+                DataInputStream in = new DataInputStream(fstream);
+                while ((strLine = in.readLine()) != null ){
+                  strLine = strLine.trim();
+                  if(strLine.length() == 0){
+                    continue;
+                  }
+                  else if(strLine.charAt(0) == '<' && strLine.charAt(strLine.length() - 1) == '>'){
+                    String finder[] = strLine.split(" ");
+                    if(finder[0].toString().equals("<attribute")){
+                      fileStatic.add(strLine);  
+                    }
+                  }
+                  else if(strLine.charAt(0) == '<'){
+                    tmp = strLine;
+                  }
+                  else if(strLine.charAt(strLine.length() - 1) == '>'){
+                    tmp = tmp + strLine;
+                    tmp = tmp.replace("\n", " ");
+                    String finder[] = tmp.split(" ");
+                    if(finder[0].toString().equals("<attribute")){
+                      fileStatic.add(tmp);
+                    }
+                    tmp = "";
+                  }
+                  else{
+                    tmp = tmp + strLine;
+                  }
+                }
+                in.close();
+                /* * merge both sets of groups and info * */
+                for(int e = 0; e < fileDynamic.size(); e++){
+                  String dynamicLength[] = fileDynamic.get(e).split("\"");
+                  if(dynamicLength.length != 9){
+                    fileDynamic.remove(e);
+                  }
+                  else{
+                    for(int r = 0; r < fileStatic.size(); r++){
+                      String staticLength[] = fileStatic.get(r).split("\"");
+                      if(fileDynamic.get(e) == fileStatic.get(r)){
+                        fileStatic.remove(r);
+                      }
+                      else if(staticLength.length != 9){
+                        fileStatic.remove(r);
+                      }
+                    }
+                  }
+                }
+                fileDynamic.addAll(fileStatic);
+              }
+              catch (Exception e){
+                System.err.println("Error: " + e.getMessage());
+              }
+
+            /* * get map of all groups and info this.user is in * */
             try {
               openId = Utils.getIdFromHeaderCookie(request);
               Map<String,Set<String>> userGroupsAndRoles = fas.getAttributes(openId);
                 
               for (Object key : userGroupsAndRoles.keySet()) {
+                String gn = key.toString();
+
 		            System.out.println("Key : " + key.toString() + " Value : " + userGroupsAndRoles.get(key));
 	            }
+              /* * Putting the two together for delivery to the view * */
+              for (Object key : userGroupsAndRoles.keySet()) {
+                String name = key.toString();
+                for(int count = 0; count < fileDynamic.size(); count++){
+                  String spliter[] = fileDynamic.get(count).split("\"");
+                  if(spliter[1].equals(name)){ //yes user is in this group
+                    Group temp = new Group(key.toString(), spliter[1], spliter[5]);
+                    mygroups.add(temp);
+                    
+                    for(int parts = 0; parts < userGroupsAndRoles.get(key).size(); parts++){
+                        String tmproles = "";
+                        Iterator<String> myit = userGroupsAndRoles.get(key).iterator();
+                        while(myit.hasNext()){
+                            tmproles += myit.next();
+                        }
+                        myroles.add(tmproles);
+                    }
+                  }
+                }
+              } 
             } catch (Exception e) {
               e.printStackTrace();
             }
-             /* * */
+            
+            
+            /* * * */
 
 
             // get user info from DAO
@@ -231,7 +338,7 @@ public class AccountsController {
               model.put(ACCOUNTS_ERROR, error);
             }
             else {
-
+              /*
               // get group info from DAO
               List<Group> groups = uoi.getGroupsFromUser(userInfo.getUserName());
             
@@ -255,13 +362,13 @@ public class AccountsController {
                 }
                 roles.add(roleNames);
               }
-            
+                */
               // populate model
               model.put(ACCOUNTS_INPUT, accountsInput);
               model.put(ACCOUNTS_USERINFO, userInfo);
-              Group [] groupArray = groups.toArray(new Group[groups.size()]);
+              Group [] groupArray = mygroups.toArray(new Group[mygroups.size()]);
               model.put(ACCOUNTS_GROUPINFO, groupArray);
-              String [] roleArray = roles.toArray(new String[roles.size()]);
+              String [] roleArray = myroles.toArray(new String[myroles.size()]);
               model.put(ACCOUNTS_ROLEINFO, roleArray);
               request.getSession().setAttribute(ACCOUNTS_MODEL, model);
               model.put(ACCOUNTS_ERROR, "false");

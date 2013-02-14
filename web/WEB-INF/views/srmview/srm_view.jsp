@@ -45,7 +45,7 @@
 			</div>
 			<div id="type" style="display:none">${type}</div>
 			<div>
-			Type: ${s_url}
+			S_URL: ${s_url}
 			</div>
 			<div id="s_url" style="display:none">${s_url}</div>
 			
@@ -165,6 +165,8 @@ $(document).ready(function(){
 			file_ids.push(datasetId);
 			
 			queryStr = {"file_ids" : file_ids};
+			
+			alert('sending file_ids: ' + file_ids);
 			
 			$.ajax({
 				url: srm_url,

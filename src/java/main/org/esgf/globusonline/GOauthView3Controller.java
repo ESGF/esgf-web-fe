@@ -333,13 +333,14 @@ public class GOauthView3Controller {
             // FIXME: Cache from previous time we called this?
             // or reconstruct from the other format of them that we have?
             Vector<EndpointInfo> goEndpointInfos = transfer.listEndpoints();
+	    LOG.debug("Got endpointinfo again");
 
             // first pass, find all sources
             // we create a mapping of GO endpoints to Filelists
            
             for(String curURL : file_urls)
             {
-	//System.out.println("curURL is:" +curURL);
+	LOG.debug("curURL is:" +curURL);
                 pieces = curURL.split("//");
                 if ((pieces != null) && (pieces.length > 1))
                 {
@@ -375,13 +376,14 @@ public class GOauthView3Controller {
             // can only handle a single source endpoint (per transfer)
             // ... break up into multiple transfers later when we
             // support transfers of multiple data sets at once
+            LOG.debug("Finished Endpoint URL manipulation");
             Map.Entry<String, Vector<String>> entry = sourceMap.entrySet().iterator().next();
             String goSourceEndpoint = entry.getKey();
             Map.Entry<String, String> gftpEntry = sourceEpToGFTPMap.entrySet().iterator().next();
             String gftpServer = gftpEntry.getValue();
 
-            //System.out.println("Got GO Source EP: " + goSourceEndpoint);
-            //System.out.println("Got GFTP Server: " + gftpServer);
+            LOG.debug("Got GO Source EP: " + goSourceEndpoint);
+            LOG.debug("Got GFTP Server: " + gftpServer);
             if (goSourceEndpoint != null)
             {
                 fileList = entry.getValue();

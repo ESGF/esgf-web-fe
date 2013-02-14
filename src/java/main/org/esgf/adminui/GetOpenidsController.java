@@ -41,22 +41,27 @@ public class GetOpenidsController {
     
     private final static Logger LOG = Logger.getLogger(GetOpenidsController.class);
     
-    private final static boolean debugFlag = true;
+    private final static boolean debugFlag = false;
 
     private String passwd;
     private String root = "rootAdmin";     
     private UserInfoCredentialedDAO myUserInfoDAO;
     
         
-    public GetOpenidsController() throws FileNotFoundException, IOException {
-        /*
-        if(Utils.environmentSwitch) {
-            // try to set up myUserInfoDAO here.
-            ESGFProperties myESGFProperties = new ESGFProperties();
-            this.passwd = myESGFProperties.getAdminPassword();        
-            this.myUserInfoDAO = new UserInfoCredentialedDAO(root,passwd,myESGFProperties);
+    public GetOpenidsController() {
+        
+        try {
+            if(Utils.environmentSwitch) {
+                // try to set up myUserInfoDAO here.
+                ESGFProperties myESGFProperties = new ESGFProperties();
+                this.passwd = myESGFProperties.getAdminPassword();        
+                this.myUserInfoDAO = new UserInfoCredentialedDAO(root,passwd,myESGFProperties);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
         }
-        */
+        
+        
         LOG.debug("IN GetOpenidsController Constructor");
     }
     

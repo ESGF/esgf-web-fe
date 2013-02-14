@@ -124,7 +124,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     
     selectID = 'ai_select_'+ doc.id.replace(/\./g, "_");
 
-    selectID = ESGF.datacart.replaceChars(selectID);
+    //selectID = ESGF.datacart.replaceChars(selectID);
     
     //selectID = selectID.replace("|","_");
 

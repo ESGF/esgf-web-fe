@@ -42,22 +42,27 @@ public class ExtractGroupInfoController {
     private GroupOperationsInterface goi;
     private UserOperationsInterface uoi;
     
-    public ExtractGroupInfoController() throws FileNotFoundException, IOException {
+    public ExtractGroupInfoController() {
         LOG.debug("IN CreateGroupsController Constructor");
         //System.out.println("\n\n\n\n\nGroup info " + Utils.environmentSwitch + "\n\n\n");
         
-        /*
-        if(Utils.environmentSwitch) {
-            
-            goi = new GroupOperationsESGFDBImpl();
-            uoi = new UserOperationsESGFDBImpl();
-            
+        try {
+            if(Utils.environmentSwitch) {
+                
+                goi = new GroupOperationsESGFDBImpl();
+                uoi = new UserOperationsESGFDBImpl();
+                
+            }
+            else {
+                goi = new GroupOperationsXMLImpl();
+                uoi = new UserOperationsXMLImpl();
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
         }
-        else {
-            goi = new GroupOperationsXMLImpl();
-            uoi = new UserOperationsXMLImpl();
-        }
-        */
+        
+        
+        
     }
     
     /**

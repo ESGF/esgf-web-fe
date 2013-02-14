@@ -24,7 +24,7 @@ import org.esgf.metadata.JSONObject;
 @SuppressWarnings("unused")
 public class DataCartSolrHandler {
 
-    private static String searchAPIURL = "http://localhost:8080/esg-search/search?";//
+    private static String searchAPIURL = "http://localhost/esg-search/search?";//
     private static String queryPrefix = "format=application%2Fsolr%2Bjson&type=File";
     private final static Logger LOG = Logger.getLogger(DataCartSolrHandler.class);
     
@@ -146,7 +146,7 @@ public class DataCartSolrHandler {
                         }
                         */
                         String fqParam = this.fq[i];
-                        System.out.println("\tfqParam: " + fqParam);
+                        //System.out.println("\tfqParam: " + fqParam);
                         /*
                          * Should ignore the following:
                          * - blanks - ""
@@ -164,6 +164,7 @@ public class DataCartSolrHandler {
                         //otherwise add to the query
                         //should be adding only variables to the query
                         if(fqParam.contains("variable=")) {
+                            /*
                             System.out.println("Found variable match");
                         //if(!ignore) {
                         
@@ -186,12 +187,22 @@ public class DataCartSolrHandler {
                                 String [] clause = fqParam.split("=");
                                 fullText += clause[1] + "%20";
                             }
+                            */
                         }
-
+                        if(fqParam.contains("query=")) {
+                        
+                            //System.out.println("Found query match");
+                            String [] clause = fqParam.split("=");
+                            fullText += clause[1] + "%20";
+                            //System.out.println("\tadding fulltext: " + fullText + "\n");
+                        }
+                        
                     }//end for
                     if(!fullText.equals("") && !fullText.equals(" ")) {
                         this.solrQueryString += "&query=" + fullText;
                     }
+                    
+                    //System.out.println("Revised solr query string\n\t" + this.solrQueryString + "\n");
 
                 }
                 

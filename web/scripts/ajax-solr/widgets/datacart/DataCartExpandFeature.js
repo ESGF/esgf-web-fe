@@ -304,12 +304,9 @@
 			    	selectedDocId = Url.encode(selectedDocId);
 			    	var url = '/esgf-web-fe/solrfileproxy2/datacart/'+selectedDocId;
 
-			    	
+					
 			    	//CHANGE ME!
 			    	//queryStr['peerStr'] = 'localhost';
-					
-			    	
-			    	queryStr['peerStr'] = 'localhost';
 			 
 			    	//('initial queryStr: ' + queryStr['peerStr']);
 			    	
@@ -322,9 +319,6 @@
 						data: queryStr,
 						dataType: 'json',
 						success: function(data) {
-							
-							//alert('data: ' + data );
-							
 							
 							
 							//no files

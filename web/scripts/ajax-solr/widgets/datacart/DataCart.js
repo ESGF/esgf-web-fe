@@ -158,7 +158,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     				 	 '</td>' +
     				 	 '<td style="width:150px;font-size:12px;padding:0px; ">' +
     				 	 '<input type="radio" id="datacart_filtered" name="datacart_filter" value="filtered" /> ' +
-    				 	 'Filter over variable ' +
+    				 	 'Filter over text ' +
     				 	 '</td>';
     	
     	optionsStr += '<td style="font-size:12px;width:20px;">' +

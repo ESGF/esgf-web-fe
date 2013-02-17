@@ -170,8 +170,8 @@ public class GetAllGroupsController {
           */
         
           /* Matthews Code */
-          String fileNameStatic = System.getenv().get("ESGF_HOME")+"/config/esgf_ats_static.xml";
-          String fileNameDynamic = System.getenv().get("ESGF_HOME")+"/config/esgf_ats.xml";
+          String fileNameStatic = System.getenv().get("ESGF_HOME")+"/config/esgf_ats_static.xml"; //File is messy, created by humans.
+          String fileNameDynamic = System.getenv().get("ESGF_HOME")+"/config/esgf_ats.xml";       //File is clean, created by machine.
           ArrayList<String> fileStatic = new ArrayList<String>();
           ArrayList<String> fileDynamic = new ArrayList<String>();
           String strFile = "";

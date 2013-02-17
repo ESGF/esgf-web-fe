@@ -41,4 +41,10 @@
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 		<nature>org.apache.ivyde.eclipse.ivynature</nature>
 	</natures>
+	<variableList>
+		<variable>
+			<name>esgf_security</name>
+			<value>file:/Users/harris112/Projects/esgf-security/lib</value>
+		</variable>
+	</variableList>
 </projectDescription>

@@ -413,9 +413,11 @@ public class Utils {
         String gftpURL, Vector<EndpointInfo> endpointInfos, boolean forceESG)
     {
         String goEP = null, hosts = null;
+	LOG.debug("Starting lookupGOEPBasedOnGridFTPURL");
         for(EndpointInfo curInfo : endpointInfos)
         {
             hosts = curInfo.getHosts();
+	    if (hosts != null) {
             if (hosts.contains(gftpURL))
             {
                 if ((forceESG == true) && (!curInfo.getEPName().startsWith("esg")))
@@ -425,7 +427,9 @@ public class Utils {
                 goEP = curInfo.getEPName();
                 break;
             }
+	    }
         }
+	LOG.debug("Ending lookupGOEPBasedOnGridFTPURL");
         return goEP;
     }
 

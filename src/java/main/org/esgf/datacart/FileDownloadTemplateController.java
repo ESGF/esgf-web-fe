@@ -181,7 +181,7 @@ public class FileDownloadTemplateController {
     }
     
     
-    private DocElement getDocElement(String id,String peer,String initialQuery,String [] fq,String showAllStr,String fileCounter) {
+    public static DocElement getDocElement(String id,String peer,String initialQuery,String [] fq,String showAllStr,String fileCounter) {
         
         DocElement doc = null;
         

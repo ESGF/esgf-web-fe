@@ -92,36 +92,43 @@
 
 				var file_id = $(this).parent().find('.file_id').html().trim();
 				
-				var srm_urll = $(this).parent().find('.srm_urll').html().trim();
+				var file_url = $(this).parent().find('.srm_urll').html().trim();
 				
-				alert('launch srm dataset workflow here - just send the file ' + 
-						file_id + ' url: ' + srm_urll);
+				var dataset_id = $(this).parent().parent().parent().parent().find('span.datasetId').html();
 				
-
-				/*
-				var peerStr = ESGF.datacart.getIndividualPeer(idStr);//getPeerStr();
 				
-				var technoteStr = ESGF.datacart.getTechnoteStr();
-								
-		    	var fqParamStr = ESGF.datacart.getFqParamStr();
-		    	*/
+				//type
+				//dataset
+				//filtered
+				//file
+				//file_url
 				
-				/*
-				var srm_url = '/esgf-web-fe/srmview?datasetId=' + file_id + 
-								'&peerStr=' + peerStr + 
-								'&technoteStr=' + technoteStr + 
-								'&fqParamStr=' + fqParamStr + 
-								'&type=File';
+				var filtered = '';
+				if($("input[id='datacart_filtered']").attr("checked") == undefined) {
+					filtered = 'false';
+				} else {
+					filtered = 'true';
+				}
+				
+				alert('filtered: ' + filtered);
+				
+				//var datasetArg = 'datasetId=' + selectedDocId;
+				var typeArg = "type=File";
+				var filteredArg = 'filtered=' + filtered;
+				var fileArg = 'file_id=' + file_id;
+				var fileUrlArg = 'file_url=' + file_url;
+				var selectedDocIdArg = "dataset_id=" + dataset_id;
+				
+				
+				//var srm_url = '/esgf-web-fe/srmview?datasetId=' + selectedDocId + '&type=Dataset';
 		    	
-				*/
+				var srm_service_url = '/esgf-web-fe/srmview?' + typeArg + '&' + filteredArg + '&' + fileArg + '&' + fileUrlArg + '&' + selectedDocIdArg;
 				
-				var srm_url = '/esgf-web-fe/srmview?datasetId=' + file_id +
-					'&s_url=' + srm_urll + 
-					'&type=File';
-				
+				alert('srm_service_url: ' + srm_service_url);
 				//send request
-		        jQuery('<form action="'+ srm_url +'" method="post">'+''+'</form>')
+		        jQuery('<form action="'+ srm_service_url +'" method="post">'+''+'</form>')
 		        .appendTo('body').submit().remove();
+		        
 	    	});
 	    	
 	    	
@@ -133,11 +140,67 @@
 				
 				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html());
 				
-				alert('launch srm dataset workflow here - just send the dataset id ' + selectedDocId);
 				
 				
-
-				/*
+				//srm params
+				//type
+				//dataset
+				//filtered
+				//file
+				//file_url
+				var filtered = '';
+				if($("input[id='datacart_filtered']").attr("checked") == undefined) {
+					filtered = 'false';
+				} else {
+					filtered = 'true';
+				}
+				var datasetArg = 'dataset_id=' + selectedDocId;
+				var typeArg = "type=Dataset";
+				var filteredArg = 'filtered=' + filtered;
+				
+				
+				//filtered params
+		    	//idStr (taken)
+				//peerStr
+				//technoteStr
+				//fqParamStr
+				var peerStr = ESGF.datacart.getIndividualPeer(selectedDocId);//getPeerStr();
+				var technoteStr = ESGF.datacart.getTechnoteStr();
+		    	var fqParamStr = ESGF.datacart.getFqParamStr();
+				
+		    	var peerStrArg = 'peerStr=' + peerStr;
+		    	var technoteStrArg = 'technoteStr=' + technoteStr;
+		    	var fqParamStrArg = 'fqParamStr=' + fqParamStr;
+		    	var initialQueryArg = 'initialQuery=' + "true";
+		    	var fileCounterArg = 'fileCounter=' + ESGF.setting.fileCounter;
+		    	
+		    
+				
+				
+				
+				//var srm_url = '/esgf-web-fe/srmview?datasetId=' + selectedDocId + '&type=Dataset';
+		    	
+				var srm_service_url = '/esgf-web-fe/srmview?' + 
+										datasetArg + '&' + 
+										typeArg + '&' + 
+										filteredArg + '&' +
+										peerStrArg + '&' +
+										technoteStrArg + '&' +
+										fqParamStrArg + '&' + 
+										initialQueryArg + '&' +
+										fileCounterArg;
+				
+				
+				//send request
+		        jQuery('<form action="'+ srm_service_url +'" method="post">'+''+'</form>')
+		        .appendTo('body').submit().remove();
+		        
+		        
+		        
+		        
+		        
+		        
+		        /*
 				var srm_url = '/esgf-web-fe/srmview?datasetId=' + file_id + 
 								'&peerStr=' + peerStr + 
 								'&technoteStr=' + technoteStr + 
@@ -145,13 +208,6 @@
 								'&type=File';
 		    	
 				*/
-				
-				var srm_url = '/esgf-web-fe/srmview?datasetId=' + selectedDocId + '&type=Dataset';
-		    	
-				
-				//send request
-		        jQuery('<form action="'+ srm_url +'" method="post">'+''+'</form>')
-		        .appendTo('body').submit().remove();
 		        
 				//alert($(this).parent().find('span').html());
 				/*

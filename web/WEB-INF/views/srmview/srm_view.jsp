@@ -36,44 +36,36 @@
 		</h2>
 	</div>
 	<div class="span-12 prepend-1">
-		
+	
 		<div id="show_params" style="display:none">
-			<div>Dataset: ${datasetId}</div>
-			<div id="datasetId" style="display:none">${datasetId}</div>
-			<div>
-			Type: ${type}
-			</div>
+			<div>Type: ${type}</div>
 			<div id="type" style="display:none">${type}</div>
-			<div>
-			S_URL: ${s_url}
-			</div>
-			<div id="s_url" style="display:none">${s_url}</div>
-			
-			<!--  
-			<div>
-			peerStr: ${peerStr}
-			</div>
+			<div>Dataset: ${dataset_id}</div>
+			<div id="dataset_id" style="display:none">${dataset_id}</div>
+			<div>filtered: ${filtered}</div>
+			<div id="filtered" style="display:none">${filtered}</div>
+			<div>file_id: ${file_id}</div>
+			<div id="file_id" style="display:none">${file_id}</div>
+			<div>file_url: ${file_url}</div>
+			<div id="file_url" style="display:none">${file_url}</div>
+			<div>peerStr: ${peerStr}</div>
 			<div id="peerStr" style="display:none">${peerStr}</div>
-			<div>
-			technoteStr: ${technoteStr}
-			</div>
+			<div>technoteStr: ${technoteStr}</div>
 			<div id="technoteStr" style="display:none">${technoteStr}</div>
-			<div>
-			fqParamStr: ${fqParamStr}
-			</div>
+			<div>fqParamStr: ${fqParamStr}</div>
 			<div id="fqParamStr" style="display:none">${fqParamStr}</div>
+			<div>initialQuery: ${initialQuery}</div>
+			<div id="initialQuery" style="display:none">${initialQuery}</div>
+			<div>fileCounter: ${fileCounter}</div>
+			<div id="fileCounter" style="display:none">${fileCounter}</div>
 			
-		
-			<div>
-			Note: Blah blah blah
-			</div>
-			-->
 		
 		</div>
 		
 		<input id="srm_workflow" type="submit" value="Submit SRM Request">
 		<input id="show_files" type="submit" value="View Files with Dataset(s)">
 		<input id="show_params_sent" type="submit" value="Show Param(s)">
+		<input id="back" type="submit" value="Back to Search Page">
 	</div>
 	<div class="span-10 last">
 		<div id="file_contents" style="display:none">Empty</div>
@@ -89,9 +81,11 @@
 
 $(document).ready(function(){
 	
+	
+	
+	
 	$('input#show_params_sent').click(function() {
 		$('#show_params').toggle();
-	
 	});
 	
 	$('input#show_files').click(function() {
@@ -99,27 +93,10 @@ $(document).ready(function(){
 			$('input#show_files').val('Hide Files with Dataset(s)');
 			
 			
-			var datasetId = $('#datasetId').html();
-			var type = $('#type').html();
-			var s_url = $('#s_url').html();
-			
-			/*
-			var peerStr = $('#peerStr').html();
-			var technoteStr = $('#technoteStr').html();
-			var fqParamStr = $('#fqParamStr').html();
-			*/
 			
 			
 			
-			if(($('#file_contents').html() == 'Empty')) {
-				
-				$('#file_contents').empty();
-				
-				var file_ids = getFileIds(datasetId,type,s_url,null,null,null);
-				
-				var s_urls = getS_URLs(datasetId,type,s_url,null,null,null);
-				
-			}
+			
 			
 			
 			$('div#file_contents').show();
@@ -141,16 +118,106 @@ $(document).ready(function(){
 	
 	$('input#srm_workflow').click(function() {
 		
-
-		var datasetId = $('#datasetId').html();
+		
 		var type = $('#type').html();
-		var peerStr = $('#peerStr').html();
-		var technoteStr = $('#technoteStr').html();
-		var fqParamStr = $('#fqParamStr').html();
+		var dataset_id = $('#dataset_id').html();
+		var filtered = $('#filtered').html();
+		var file_id = $('#file_id').html();
+		var file_url = $('#file_url').html();
 		
 		
+
 		var srm_url = '/esgf-web-fe/srmproxy';
 		
+		
+		if(type == 'File') {
+			
+			/*
+			var file_idArr = new Array();
+			var file_urlArr = new Array();
+			
+			file_idArr.push(file_id);
+			file_urlArr.push(file_url);
+			
+			var file_idArg = 'file_id=' + file_id;
+			var file_urlArg = 'file_url=' + file_url;
+			
+			var queryStr = {'file_idArr' : file_idArr, 'file_urlArr' : file_urlArr};
+			//srm_url += file_idArg + '&' + file_urlArg;
+			*/
+			
+			var queryStr = { 'file_id':file_id,
+							 'file_url':file_url,
+							 'dataset_id':dataset_id,
+							 'filtered':filtered,
+							 'type':type}
+			
+			
+			$.ajax({
+				url: srm_url,
+				global: false,
+				type: "POST",
+				data: queryStr,
+				//dataType: 'xml',
+				success: function(data) {
+					alert('data: ' + data);
+					/* $('#srm_response').append("Staging successfully launched"); */
+				},
+				error: function() {
+					alert('srm error');
+				}
+				
+	    	});
+			
+		} else {
+			alert('dataset workflow');
+
+			//query solr for file ids and urls before sending request
+			var peerStr = $('#peerStr').html();
+			var technoteStr = $('#technoteStr').html();
+			var fqParamStr = $('#fqParamStr').html();
+			var initialQuery = $('#initialQuery').html();
+			var fileCounter = $('#fileCounter').html();
+		
+			var queryStr = { 'file_id':file_id,
+					 'file_url':file_url,
+					 'dataset_id':dataset_id,
+					 'filtered':filtered,
+					 'type':type,
+					 'peerStr':peerStr,
+					 'technoteStr':technoteStr,
+					 'fqParamStr':fqParamStr,
+					 'initialQuery':initialQuery,
+					 'fileCounter':fileCounter}
+	
+	
+			$.ajax({
+				url: srm_url,
+				global: false,
+				type: "POST",
+				data: queryStr,
+				//dataType: 'xml',
+				success: function(data) {
+					alert('data: ' + data);
+					
+				},
+				error: function() {
+					alert('srm error');
+				}
+				
+			});
+			
+			$('#srm_response').append("Staging launched");
+			
+			
+		}
+		
+		
+		
+		
+		
+		
+		/*
 		//var queryStr = {"file_ids" : file_ids};
 		
 		//type: File
@@ -208,83 +275,13 @@ $(document).ready(function(){
 				
 	    	});
 		}
-		
-		
-		
-		
-		/*
-		if(type == 'File') {
-			
-			var srm_url = '/esgf-web-fe/srmproxy';
-			
-			
-			//get the file_ids here
-			var file_ids = new Array();
-			file_ids.push(datasetId);
-			
-			var queryStr = {"file_ids" : file_ids};
-			
-			$.ajax({
-				url: srm_url,
-				global: false,
-				type: "POST",
-				data: queryStr,
-				//dataType: 'xml',
-				success: function(data) {
-					alert('success');
-				},
-				error: function() {
-					alert('srm error');
-				}
-				
-	    	});
-			
-		} else {
-			
-
-			//need to query solr for the files and then send to esg-srm
-			var queryStr = {"idStr" : datasetId, 
-					"peerStr" : peerStr, 
-					"technotesStr" : technoteStr, 
-					"showAllStr" : "true", 
-					"fqStr" : fqParamStr, 
-					"initialQuery" : "true",
-					"fileCounter" : 10};
-			
-			var file_ids = getFileIds(datasetId,type,peerStr,technoteStr,fqParamStr);
-			
-			
-			var srm_url = '/esgf-web-fe/srmproxy';
-			
-			queryStr = {"file_ids" : file_ids};
-			
-			
-			$.ajax({
-				url: srm_url,
-				global: false,
-				type: "POST",
-				data: queryStr,
-				//dataType: 'xml',
-				success: function(data) {
-					alert('Your SRM request has been submitted successfully.');
-					
-				},
-				error: function() {
-					alert('Your SRM request has not been submitted successfully.  Please contact your administrator and try again.');
-				}
-				
-				
-	    	});
-			
-		
-		}
 		*/
 		
 		
 		
 		
-
-    	//query solr for the files
+		
+		
     	
 	});
     
@@ -309,6 +306,26 @@ function getFileIds(datasetId,type,surl,peerStr,technoteStr,fqParamStr) {
 	}
 	
 	return file_ids;
+}
+
+
+
+
+function getIndividualPeer(id) {
+	var peerStr = '';
+	
+	var datasetInfo = ESGF.localStorage.get('dataCart',id);
+	
+	
+	if(datasetInfo['peer'] == null || datasetInfo['peer'] == undefined) {
+		peerStr = '';
+	} else {
+		peerStr = datasetInfo['peer'];
+	}
+	
+	
+	return peerStr.toString();
+	
 }
 
 /*
@@ -381,21 +398,21 @@ function getFileIds(datasetId,type,peerStr,technoteStr,fqParamStr) {
 }
 */
 
+/* show files script
+var datasetId = $('#datasetId').html();
+var type = $('#type').html();
+var s_url = $('#s_url').html();
 
-function getIndividualPeer(id) {
-	var peerStr = '';
+
+if(($('#file_contents').html() == 'Empty')) {
 	
-	var datasetInfo = ESGF.localStorage.get('dataCart',id);
+	$('#file_contents').empty();
 	
+	var file_ids = getFileIds(datasetId,type,s_url,null,null,null);
 	
-	if(datasetInfo['peer'] == null || datasetInfo['peer'] == undefined) {
-		peerStr = '';
-	} else {
-		peerStr = datasetInfo['peer'];
-	}
-	
-	
-	return peerStr.toString();
+	var s_urls = getS_URLs(datasetId,type,s_url,null,null,null);
 	
 }
+
+*/
 </script>

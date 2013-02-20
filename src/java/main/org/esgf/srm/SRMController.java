@@ -24,30 +24,66 @@ public class SRMController {
 
         
         System.out.println("In SRM Controller");
-        
-        String datasetId = request.getParameter("datasetId");
-        String type = request.getParameter("type");
-        String s_url = request.getParameter("s_url");
-        
+
         Map<String,Object> model = new HashMap<String,Object>();
 
-        model.put("datasetId", datasetId);
-        model.put("type", type);
-        model.put("s_url", s_url);
-        
-        /*
-        String datasetId = request.getParameter("datasetId");
         String type = request.getParameter("type");
-        
-        
-        Map<String,Object> model = new HashMap<String,Object>();
-
-        model.put("datasetId", datasetId);
         model.put("type", type);
-        model.put("peerStr", peerStr);
-        model.put("technoteStr", technoteStr);
-        model.put("fqParamStr", fqParamStr);
-        */
+        if(type.equals("Dataset")) {
+
+            String file_url = "N/A";
+            model.put("file_url", file_url);
+            
+            String file_id = "N/A";
+            model.put("file_id", file_id);
+            
+            String dataset_id = request.getParameter("dataset_id");
+            model.put("dataset_id", dataset_id);
+            
+            String filtered = request.getParameter("filtered");
+            model.put("filtered", filtered);
+            
+            
+            String peerStr = request.getParameter("peerStr");
+            model.put("peerStr", peerStr);
+            
+            String technoteStr = request.getParameter("technoteStr");
+            model.put("technoteStr", technoteStr);
+            
+            String fqParamStr = request.getParameter("fqParamStr");
+            model.put("fqParamStr", fqParamStr);
+            
+            String initialQuery = request.getParameter("initialQuery");
+            model.put("initialQuery", initialQuery);
+            
+            String fileCounter = request.getParameter("fileCounter");
+            model.put("fileCounter", fileCounter);        
+            
+            
+            
+        } else {
+            
+
+            String file_url = request.getParameter("file_url");
+            model.put("file_url", file_url);
+            
+            String file_id = request.getParameter("file_id");
+            model.put("file_id", file_id);
+
+            String dataset_id = request.getParameter("dataset_id");
+            model.put("dataset_id", dataset_id);
+            
+            String filtered = request.getParameter("filtered");
+            model.put("filtered", filtered);
+            
+            model.put("peerStr", "N/A");
+            model.put("technoteStr", "N/A");
+            model.put("fqParamStr", "N/A");
+            model.put("initialQuery", "N/A");
+            model.put("fileCounter", "N/A");        
+            
+        }
+        
         return new ModelAndView("srmview", model);
         
     }

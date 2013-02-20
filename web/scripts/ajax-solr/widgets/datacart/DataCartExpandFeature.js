@@ -73,6 +73,9 @@
 		td_file_middle: '',
 		td_right_middle: '',
 		
+		show_files: 'Show Files',
+		hide_files: 'Hide Files',
+		
 		/**
 		 * 
 		 */
@@ -251,6 +254,8 @@
 			
 		    $('a.showAllFiles_short').live('click',function() {
 
+		    	//alert('expand or collapse');
+		    	
 				var openid = $('span#principal_username').html();
 		    	
 		    	//extract the dataset Id from the span tag
@@ -258,7 +263,7 @@
 				
 				
 				//change verbage of the expand link
-				if(this.innerHTML === "Collapse") {
+				if(this.innerHTML === self.hide_files) {
 					
 					
 					var idStr = selectedDocId;
@@ -280,12 +285,12 @@
 					$('.' + view_more_files_tag).remove();
 					
 					//alert('view_next: ' + view_next_files_tag + ' view_first: ' + view_first_files_tag + ' view_more: ' + view_more_files_tag);
-	                this.innerHTML="Expand";
+	                this.innerHTML=self.show_files;
 
 					
 				} else {
 
-	                this.innerHTML="Collapse";
+	                this.innerHTML=self.hide_files;
 
 	                var idStr = selectedDocId;
 	                
@@ -307,11 +312,12 @@
 			    	selectedDocId = Url.encode(selectedDocId);
 			    	var url = '/esgf-web-fe/solrfileproxy2/datacart/'+selectedDocId;
 
-			    	
+					
 			    	//CHANGE ME!
 			    	//queryStr['peerStr'] = 'localhost';
-					
-			    	//alert('initial queryStr: ' + queryStr['peerStr']);
+			 
+			    	//('initial queryStr: ' + queryStr['peerStr']);
+			    	
 			    	
 			    	//initial ajax call for first x number of files in dataset
 					$.ajax({
@@ -321,9 +327,6 @@
 						data: queryStr,
 						dataType: 'json',
 						success: function(data) {
-							
-							//alert('data: ' + data);
-							
 							
 							
 							//no files
@@ -335,12 +338,15 @@
 
 								$('.'+tagid).after(appendedFiles);
 								
-								self.innerHTML="Collapse";
+								self.innerHTML=self.hide_files;
 								
 								
 							} else {
 
 								var fileLength = data.doc.files.file.length;
+								
+								//alert('fileLenght: ' + fileLength );
+								
 								
 								var tagid = 'file_rows_' + ESGF.datacart.replaceChars(data.doc.datasetId);
 								
@@ -363,13 +369,14 @@
 
 								$('.'+tagid).after(appendedFiles);
 								
-								self.innerHTML="Collapse";
+								self.innerHTML=self.hide_files;
 								
 								
 							}
 						},
 						error: function() {
 							alert('Error in expanding files for dataset ' + data.doc.datasetId);
+							//alert('Error in expanding files for dataset ');
 						}
 					});
 					

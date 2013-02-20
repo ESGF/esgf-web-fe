@@ -159,14 +159,12 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		 */
 		$("input[name='datacart_filter']").change(	function() { 
 			
-        	
-				if($("input[id='datacart_filtered']").attr("checked")) { 
-					ESGF.setting.showAllContents = 'false';
-				} else {
-					ESGF.setting.showAllContents = 'true';
-				}
-
-				Manager.doRequest(0);
+			if($("input[id='datacart_filtered']").attr("checked")) { 
+				ESGF.setting.showAllContents = 'false';
+			} else {
+				ESGF.setting.showAllContents = 'true';
+			}
+			Manager.doRequest(0);
 				
 		}); 
 		

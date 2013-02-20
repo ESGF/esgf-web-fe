@@ -61,13 +61,14 @@ public class UpdateUserInfoController {
     private UserInfoCredentialedDAO myUserInfoDAO;
         
     public UpdateUserInfoController() throws FileNotFoundException, IOException {
+        /*
         if(Utils.environmentSwitch) {
             // try to set up myUserInfoDAO here.
             ESGFProperties myESGFProperties = new ESGFProperties();
             this.passwd = myESGFProperties.getAdminPassword();        
             this.myUserInfoDAO = new UserInfoCredentialedDAO(root,passwd,myESGFProperties);
         }
-        
+        */
         LOG.debug("IN UpdateUserInfoController Constructor");
     }
     

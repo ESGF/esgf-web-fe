@@ -68,13 +68,19 @@ public class ForgotPasswordController {
     private UserInfoCredentialedDAO myUserInfoDAO;
     
         
-    public ForgotPasswordController() throws FileNotFoundException, IOException {
-        if(Utils.environmentSwitch) {
-            // try to set up myUserInfoDAO here.
-            ESGFProperties myESGFProperties = new ESGFProperties();
-            this.passwd = myESGFProperties.getAdminPassword();        
-            this.myUserInfoDAO = new UserInfoCredentialedDAO(root,passwd,myESGFProperties);
+    public ForgotPasswordController()  {
+        
+        try {
+            if(Utils.environmentSwitch) {
+                // try to set up myUserInfoDAO here.
+                ESGFProperties myESGFProperties = new ESGFProperties();
+                this.passwd = myESGFProperties.getAdminPassword();        
+                this.myUserInfoDAO = new UserInfoCredentialedDAO(root,passwd,myESGFProperties);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
         }
+        
         
         LOG.debug("IN ForgotPasswordController Constructor");
     }

@@ -88,5 +88,15 @@
     	<security:authentication-provider user-service-ref='userDetailsService'/>
   	</security:authentication-manager>
   	  	
+  <!-- Federation-wide Attribute Service -->
+  <bean id="registryService" class="esg.security.registry.service.impl.RegistryServiceLocalXmlImpl">
+    <constructor-arg index="0"><value>/esg/config/esgf_ats.xml, /esg/config/esgf_ats_static.xml</value></constructor-arg>
+  </bean> 
+  
+  <bean id="federatedAttributeService" class="esg.security.attr.service.impl.FederatedAttributeServiceImpl">
+    <constructor-arg index="0"><value>ESGF Attribute Service</value></constructor-arg>
+    <constructor-arg index="1" ref="registryService"/>
+  </bean>
+
 </beans>
      

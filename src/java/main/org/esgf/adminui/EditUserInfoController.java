@@ -48,7 +48,22 @@ public class EditUserInfoController {
     private UserInfoCredentialedDAO myUserInfoDAO;
     
         
-    public EditUserInfoController() throws FileNotFoundException, IOException {
+    public EditUserInfoController() {
+        System.out.println("enviSwitch: " + Utils.environmentSwitch);
+        
+        if(Utils.environmentSwitch) {
+            try {
+             // try to set up myUserInfoDAO here.
+                ESGFProperties myESGFProperties = new ESGFProperties();
+                this.passwd = myESGFProperties.getAdminPassword();        
+                this.myUserInfoDAO = new UserInfoCredentialedDAO(root,passwd,myESGFProperties);
+                
+            } catch(Exception e) {
+                e.printStackTrace();
+                
+            }
+        }
+        /*
         if(Utils.environmentSwitch) {
             
             // try to set up myUserInfoDAO here.
@@ -57,6 +72,7 @@ public class EditUserInfoController {
             this.myUserInfoDAO = new UserInfoCredentialedDAO(root,passwd,myESGFProperties);
             
         }
+        */
         
         LOG.debug("IN EditUserInfoController Constructor");
     }

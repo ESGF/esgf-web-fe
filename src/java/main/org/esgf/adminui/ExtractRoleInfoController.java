@@ -43,20 +43,27 @@ public class ExtractRoleInfoController {
     private UserOperationsInterface uoi;
     private RoleOperationsInterface roi;
     
-    public ExtractRoleInfoController() throws FileNotFoundException, IOException {
+    public ExtractRoleInfoController()  {
         LOG.debug("IN ExtractRoleInfoController Constructor");
-        //System.out.println("\n\n\n\n\n\n\n" + Utils.environmentSwitch + "\n\n\n\n\n\n\n");
-        if(Utils.environmentSwitch) {
-            
-            goi = new GroupOperationsESGFDBImpl();
-            uoi = new UserOperationsESGFDBImpl();
-            roi = new RoleOperationsESGFDBImpl();
-            
+        System.out.println("\n\n\n\n\n\n\n" + Utils.environmentSwitch + "\n\n\n\n\n\n\n");
+        
+        try {
+            if(Utils.environmentSwitch) {
+                
+                goi = new GroupOperationsESGFDBImpl();
+                uoi = new UserOperationsESGFDBImpl();
+                roi = new RoleOperationsESGFDBImpl();
+                
+            }
+            else {
+                goi = new GroupOperationsXMLImpl();
+                uoi = new UserOperationsXMLImpl();
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
         }
-        else {
-            goi = new GroupOperationsXMLImpl();
-            uoi = new UserOperationsXMLImpl();
-        }
+        
+        
     }
     
     

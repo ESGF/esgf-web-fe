@@ -99,7 +99,6 @@ public class UpdateUserInfoController {
     @RequestMapping(method=RequestMethod.POST)
     public @ResponseBody String doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException, JDOMException {
         
-        /*
         LOG.debug("ExtractUserInfoController doPost");
         String query = (String)request.getParameter("query");
         String userName = "";
@@ -180,9 +179,7 @@ public class UpdateUserInfoController {
         JSONObject jo = XML.toJSONObject(xmlOutput);
         String jsonContent = jo.toString();        
         return jsonContent;
-        */
-        return null;
-    }
+     }
 }
 
 

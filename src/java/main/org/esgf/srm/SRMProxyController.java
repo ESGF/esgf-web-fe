@@ -43,13 +43,25 @@ public class SRMProxyController {
         //ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-09.nc|esg2-sdnl1.ccs.ornl.gov
         //srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?SFN=mss://esg2-sdnl1.ccs.ornl.gov//proj/cli049/UHRGCS/ORNL/CESM1/t341f02.FAMIPr/atm/hist/t341f02.FAMIPr.cam2.h0.1978-09.nc
         
+        /*
         String [] file_ids = {"ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-09.nc|esg2-sdnl1.ccs.ornl.gov"};
         
         String [] file_urls = {"srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?SFN=mss://esg2-sdnl1.ccs.ornl.gov//proj/cli049/UHRGCS/ORNL/CESM1/t341f02.FAMIPr/atm/hist/t341f02.FAMIPr.cam2.h0.1978-09.nc"};
         
         mockRequest.addParameter("file_ids[]", file_ids);
         mockRequest.addParameter("file_urls[]", file_urls);
+        */
         
+        mockRequest.addParameter("file_id", "N/A");
+        mockRequest.addParameter("file_url", "N/A");
+        mockRequest.addParameter("dataset_id", "ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1|esg2-sdnl1.ccs.ornl.gov");
+        mockRequest.addParameter("filtered", "false");
+        mockRequest.addParameter("type", "Dataset");
+        mockRequest.addParameter("peerStr", "localhost");
+        mockRequest.addParameter("technoteStr", "undefined;undefined");
+        mockRequest.addParameter("fqParamStr", ";offset=0;query=*;latest=true;replica=false;");
+        mockRequest.addParameter("initialQuery", "true");
+        mockRequest.addParameter("fileCounter", "10");
         
         SRMProxyController fc = new SRMProxyController();
         
@@ -76,7 +88,7 @@ public class SRMProxyController {
             
             DocElement doc = querySolr(request);
             
-            //System.out.println("Count: " + doc.getCount());
+            System.out.println("\n\n\n\n\nCount: " + doc.getCount() + "\n\n\n\n");
 
             file_ids = getFileIds(doc,"ids");
             file_urls = getFileIds(doc,"urls");
@@ -96,36 +108,94 @@ public class SRMProxyController {
             
         }
         
+        String responseStr = queryESGSRM(file_urls);
         
+    }
+    
+    
+    
+    private static String queryESGSRM(String [] file_urls) {
         
-        /*
-        if(urls == null) {
-            
-            System.out.println("NULL URLS");
-            
-            urls = new String[2];
-            urls[0] = "srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?" +
-                        "SFN=mss://esg2-sdnl1.ccs.ornl.gov/proj/cli049/UHRGCS/ORNL/CESM1" +
-                        "/t341f02.FAMIPr/atm/hist/t341f02.FAMIPr.cam2.h0.1979-01.nc";
-            urls[1] = 
-                    "srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?" +
-                        "SFN=mss://esg2-sdnl1.ccs.ornl.gov/proj/cli049/UHRGCS/ORNL" +
-                        "/CESM1/t341f02.FAMIPr/atm/hist/t341f02.FAMIPr.cam2.h0.1978-12.nc";
-        } 
+        System.out.println("\nIn queryESGSRM\n");
         
-        if(debugFlag) {
-            for(int i=0;i<urls.length;i++) {
-                System.out.println("url: " + i + " " + urls[i]);
+        String response = null;
+        String responseBody = null;
+        
+        // create an http client
+        HttpClient client = new HttpClient();
+
+        //attact the dataset id to the query string
+        PostMethod method = new PostMethod(SRMUtils.srmAPIURL);
+        
+        String queryString = "";
+        String unencodedQueryString = "";
+        //add the urls
+        for(int i=0;i<file_urls.length;i++) {
+            System.out.println("\t adding id: " + i);
+            if(i == 0 && file_urls.length == 1) {
+                queryString += "url=";
+                unencodedQueryString += "url=";
+                queryString += encode(file_urls[i]);
+                
+            } 
+            else if(i == 0 && file_urls.length != 1) {
+                queryString += "url=";
+                unencodedQueryString += "url=" + (file_urls[i]) + "&";
+                queryString += encode(file_urls[i]) + "&";
+            }
+            else if(i == file_urls.length - 1) {
+                queryString += "url=";
+                unencodedQueryString += "url=" + (file_urls[i]);
+                queryString += encode(file_urls[i]);
+            } 
+            else {
+                queryString += "url=";
+                unencodedQueryString += "url=" + (file_urls[i]) + "&";
+                queryString += encode(file_urls[i]) + "&";
             }
         }
         
-        */
         
-        String responseStr = queryESGSRM(file_urls);
+        queryString += "&length=" + file_urls.length;
+        unencodedQueryString += "&length=" + file_urls.length;
+
+        queryString += "&file_request_type=" + "http";
+        
+        if(debugFlag) {
+            System.out.println("\tQuerystring-> " + queryString);
+            System.out.println("\n\n\n");
+            System.out.println("\tUnencodedQuerystring-> " + unencodedQueryString);
+            System.out.println("\n\n\n");
+        }
+        
+        method.setQueryString(queryString);
+        
+        method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
+                new DefaultHttpMethodRetryHandler(3, false));
+        
+        try {
+            // execute the method
+            int statusCode = client.executeMethod(method);
+
+            if (statusCode != HttpStatus.SC_OK) {
+            }
+
+            // read the response
+            responseBody = method.getResponseBodyAsString();
+        } catch (HTTPException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            method.releaseConnection();
+        }
+    
         
         
-        
+        return null;
     }
+    
+    
     
     public static String [] getFileIds(DocElement doc, String which) {
         String [] file_ids = new String[doc.getFileElements().size()];
@@ -215,85 +285,6 @@ public class SRMProxyController {
         DocElement doc = FileDownloadTemplateController.getDocElement(idStr,peerStr,initialQuery,fq,showAllStr,fileCounter);
         
         return doc;
-    }
-    
-    private static String queryESGSRM(String [] file_urls) {
-        
-        System.out.println("\nIn queryESGSRM\n");
-        
-        String response = null;
-        String responseBody = null;
-        
-        // create an http client
-        HttpClient client = new HttpClient();
-
-        //attact the dataset id to the query string
-        PostMethod method = new PostMethod(SRMUtils.srmAPIURL);
-        
-        String queryString = "";
-        String unencodedQueryString = "";
-        //add the urls
-        for(int i=0;i<file_urls.length;i++) {
-            System.out.println("\t adding id: " + i);
-            if(i == 0 && file_urls.length == 1) {
-                queryString += "url=";
-                unencodedQueryString += "url=";
-                queryString += encode(file_urls[i]);
-                
-            } 
-            else if(i == 0 && file_urls.length != 1) {
-                queryString += "url=";
-                unencodedQueryString += "url=" + (file_urls[i]) + "&";
-                queryString += encode(file_urls[i]) + "&";
-            }
-            else if(i == file_urls.length - 1) {
-                queryString += "url=";
-                unencodedQueryString += "url=" + (file_urls[i]);
-                queryString += encode(file_urls[i]);
-            } 
-            else {
-                queryString += "url=";
-                unencodedQueryString += "url=" + (file_urls[i]) + "&";
-                queryString += encode(file_urls[i]) + "&";
-            }
-        }
-        
-        
-        queryString += "&length=" + file_urls.length;
-        unencodedQueryString += "&length=" + file_urls.length;
-
-        System.out.println("\tQuerystring-> " + queryString);
-        System.out.println("\n\n\n");
-        System.out.println("\tUnencodedQuerystring-> " + unencodedQueryString);
-        System.out.println("\n\n\n");
-        
-        
-        /*
-        method.setQueryString(queryString);
-        
-        method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
-                new DefaultHttpMethodRetryHandler(3, false));
-        
-        try {
-            // execute the method
-            int statusCode = client.executeMethod(method);
-
-            if (statusCode != HttpStatus.SC_OK) {
-            }
-
-            // read the response
-            responseBody = method.getResponseBodyAsString();
-        } catch (HTTPException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            method.releaseConnection();
-        }
-    */
-        
-        
-        return null;
     }
     
     

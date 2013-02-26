@@ -170,7 +170,6 @@ $(document).ready(function(){
 	    	});
 			
 		} else {
-			alert('dataset workflow');
 
 			//query solr for file ids and urls before sending request
 			var peerStr = $('#peerStr').html();
@@ -190,7 +189,18 @@ $(document).ready(function(){
 					 'initialQuery':initialQuery,
 					 'fileCounter':fileCounter}
 	
-	
+
+			LOG.debug('file_id: ' + queryStr['file_id']);
+			LOG.debug('file_url: ' + queryStr['file_url']);
+			LOG.debug('dataset_id: ' + queryStr['dataset_id']);
+			LOG.debug('filtered: ' + queryStr['filtered']);
+			LOG.debug('type: ' + queryStr['type']);
+			LOG.debug('peerStr: ' + queryStr['peerStr']);
+			LOG.debug('technoteStr: ' + queryStr['technoteStr']);
+			LOG.debug('fqParamStr: ' + queryStr['fqParamStr']);
+			LOG.debug('initialQuery: ' + queryStr['fqParamStr']);
+			LOG.debug('fileCounter: ' + queryStr['fileCounter']);
+			
 			$.ajax({
 				url: srm_url,
 				global: false,

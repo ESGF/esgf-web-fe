@@ -45,7 +45,7 @@ public class ExtractRoleInfoController {
     
     public ExtractRoleInfoController()  {
         LOG.debug("IN ExtractRoleInfoController Constructor");
-        System.out.println("\n\n\n\n\n\n\n" + Utils.environmentSwitch + "\n\n\n\n\n\n\n");
+        //System.out.println("\n\n\n\n\n\n\n" + Utils.environmentSwitch + "\n\n\n\n\n\n\n");
         
         try {
             if(Utils.environmentSwitch) {

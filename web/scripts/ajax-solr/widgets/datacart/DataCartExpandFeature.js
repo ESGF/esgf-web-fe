@@ -117,7 +117,6 @@
 			
 			var view_first_files_tag = self.view_first_files_tag + 'initial_true_' + ESGF.datacart.replaceChars(data.doc.datasetId);
 			
-			//alert('view_first_files_tag: ' + view_first_files_tag);
 	    	
 			var appendedFiles = '';
 			
@@ -254,7 +253,6 @@
 			
 		    $('a.showAllFiles_short').live('click',function() {
 
-		    	//alert('expand or collapse');
 		    	
 				var openid = $('span#principal_username').html();
 		    	
@@ -425,7 +423,6 @@
 					
 			    	var tagid = 'file_rows_' + ESGF.datacart.replaceChars(idStr);
 					
-			    	//alert('after queryStr: ' + queryStr['peerStr']);
 			    	
 			    	//initial ajax call for first x number of files in dataset
 					$.ajax({

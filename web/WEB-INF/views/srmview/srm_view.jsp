@@ -30,10 +30,22 @@
 
 <div class="span-24 last" style="margin-top:20px;min-height:500px;">
 
-	<div class="span-23">
+	<div class="span-23 last">
 		<h2 style="text-align:center">
 		SRM Data Transfer Page
 		</h2>
+	</div>
+	<div class="span-22 prepend-1 last" style="margin-top:20px;margin-bottom:20px">
+	
+	Welcome to the Storage Resource Management request page.  
+	The data that you have selected is currently located in a tertiary storage device and will require some time to retrieve.  
+	Please select from the options below.  
+	
+	
+	Note that if you select one of the "Submit request" options, you will be receive two emails from ESGF.  The first will
+	confirm that the request has been submitted.  The second will notify you that the data is available on disk with further 
+	access instructions.   
+	
 	</div>
 	<div class="span-12 prepend-1">
 	
@@ -62,7 +74,8 @@
 		
 		</div>
 		
-		<input id="srm_workflow" type="submit" value="Submit SRM Request">
+		<input id="srm_workflow" type="submit" value="Submit SRM Request (WGET)">
+		<input id="srm_workflow_go" type="submit" value="Submit SRM Request (Globus Online)">
 		<input id="show_files" type="submit" value="View Files with Dataset(s)">
 		<input id="show_params_sent" type="submit" value="Show Param(s)">
 		<input id="back" type="submit" value="Back to Search Page">
@@ -70,7 +83,7 @@
 	<div class="span-10 last">
 		<div id="file_contents" style="display:none">Empty</div>
 	</div>
-	<div class="span-24 last">
+	<div class="span-24 prepend-1 last" style="margin-top:40px;">
 		<div id="srm_response"></div>
 	</div>
 </div>
@@ -92,17 +105,7 @@ $(document).ready(function(){
 		if($('input#show_files').val() == 'View Files with Dataset(s)') {
 			$('input#show_files').val('Hide Files with Dataset(s)');
 			
-			
-			
-			
-			
-			
-			
-			
 			$('div#file_contents').show();
-			
-			
-			
 			
 			
 		} else {
@@ -131,7 +134,6 @@ $(document).ready(function(){
 		
 		
 		if(type == 'File') {
-			
 			/*
 			var file_idArr = new Array();
 			var file_urlArr = new Array();
@@ -208,11 +210,11 @@ $(document).ready(function(){
 				data: queryStr,
 				//dataType: 'xml',
 				success: function(data) {
-					alert('data: ' + data);
+					//alert('data: ' + data);
 					
 				},
 				error: function() {
-					alert('srm error');
+					alert('error retrieving data from srm');
 				}
 				
 			});

@@ -44,7 +44,7 @@ public class ExtractGroupInfoController {
     
     public ExtractGroupInfoController() {
         LOG.debug("IN CreateGroupsController Constructor");
-        System.out.println("\n\n\n\n\nGroup info " + Utils.environmentSwitch + "\n\n\n");
+        //System.out.println("\n\n\n\n\nGroup info " + Utils.environmentSwitch + "\n\n\n");
         
         try {
             if(Utils.environmentSwitch) {

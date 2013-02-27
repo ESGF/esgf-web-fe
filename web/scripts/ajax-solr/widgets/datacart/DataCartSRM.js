@@ -110,7 +110,6 @@
 					filtered = 'true';
 				}
 				
-				alert('filtered: ' + filtered);
 				
 				//var datasetArg = 'datasetId=' + selectedDocId;
 				var typeArg = "type=File";
@@ -124,7 +123,6 @@
 		    	
 				var srm_service_url = '/esgf-web-fe/srmview?' + typeArg + '&' + filteredArg + '&' + fileArg + '&' + fileUrlArg + '&' + selectedDocIdArg;
 				
-				alert('srm_service_url: ' + srm_service_url);
 				//send request
 		        jQuery('<form action="'+ srm_service_url +'" method="post">'+''+'</form>')
 		        .appendTo('body').submit().remove();
@@ -209,7 +207,6 @@
 		    	
 				*/
 		        
-				//alert($(this).parent().find('span').html());
 				/*
 				
 				
@@ -334,25 +331,6 @@
 		    	
 			});
 
-			
-			
-			$('a.srm_event').live('click',function() {
-				alert('launch srm workflow here');
-				
-				/*
-				//alert($(this).parent().find('span').html());
-				var selectedDocId = ($(this).parent().find('span').html());
-				
-				var srm_url = '/esgf-web-fe/srmview?datasetId=' + selectedDocId + '&type=File';
-		    	
-				var input = '';
-				
-				//send request
-		        jQuery('<form action="'+ srm_url +'" method="post">'+input+'</form>')
-		        .appendTo('body').submit().remove();
-				//alert($(this).parent().find('span').html());
-				*/
-			});
 			
 		}
 	

@@ -384,7 +384,7 @@ public class DataCartSolrHandler {
 
             if(queryStringPrintFlag) {
               //System.out.println("\nQueryString->\t" + URLEncoder.encode(dataset_id,"UTF-8").toString());
-                System.out.println("\n\n\n\tthis.solrQueryString->\t" + this.solrQueryString + "\n\n\n");
+                System.out.println("\n\tthis.solrQueryString->\t" + this.solrQueryString + "\n\n");
 
             }
             //System.out.println("\nthis.solrQueryString->\t" + URLEncoder.encode(dataset_id,"UTF-8").toString());

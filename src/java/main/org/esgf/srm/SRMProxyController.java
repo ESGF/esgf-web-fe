@@ -39,29 +39,17 @@ public class SRMProxyController {
         
         final MockHttpServletRequest mockRequest = new MockHttpServletRequest();
         
-        //String [] id = {"anl.cssef.homme.v1|esg.anl.gov","obs4MIPs.CNES.AVISO.mon.v1|esg-datanode.jpl.nasa.gov"};
-        //ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-09.nc|esg2-sdnl1.ccs.ornl.gov
-        //srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?SFN=mss://esg2-sdnl1.ccs.ornl.gov//proj/cli049/UHRGCS/ORNL/CESM1/t341f02.FAMIPr/atm/hist/t341f02.FAMIPr.cam2.h0.1978-09.nc
         
-        /*
-        String [] file_ids = {"ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-09.nc|esg2-sdnl1.ccs.ornl.gov"};
-        
-        String [] file_urls = {"srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?SFN=mss://esg2-sdnl1.ccs.ornl.gov//proj/cli049/UHRGCS/ORNL/CESM1/t341f02.FAMIPr/atm/hist/t341f02.FAMIPr.cam2.h0.1978-09.nc"};
-        
-        mockRequest.addParameter("file_ids[]", file_ids);
-        mockRequest.addParameter("file_urls[]", file_urls);
-        */
-        
-        mockRequest.addParameter("file_id", "N/A");
-        mockRequest.addParameter("file_url", "N/A");
-        mockRequest.addParameter("dataset_id", "ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1|esg2-sdnl1.ccs.ornl.gov");
-        mockRequest.addParameter("filtered", "false");
-        mockRequest.addParameter("type", "Dataset");
-        mockRequest.addParameter("peerStr", "localhost");
-        mockRequest.addParameter("technoteStr", "undefined;undefined");
-        mockRequest.addParameter("fqParamStr", ";offset=0;query=*;latest=true;replica=false;");
-        mockRequest.addParameter("initialQuery", "true");
-        mockRequest.addParameter("fileCounter", "10");
+        mockRequest.addParameter("file_id", SRMProxyControllerConstants.INPUT_FILE_ID);
+        mockRequest.addParameter("file_url", SRMProxyControllerConstants.INPUT_FILE_URL);
+        mockRequest.addParameter("dataset_id", SRMProxyControllerConstants.INPUT_DATASET_ID);
+        mockRequest.addParameter("filtered", SRMProxyControllerConstants.INPUT_FILTERED);
+        mockRequest.addParameter("type", SRMProxyControllerConstants.INPUT_TYPE);
+        mockRequest.addParameter("peerStr", SRMProxyControllerConstants.INPUT_PEERSTR);
+        mockRequest.addParameter("technoteStr", SRMProxyControllerConstants.INPUT_TECHNOTESTR);
+        mockRequest.addParameter("fqParamStr", SRMProxyControllerConstants.INPUT_FQPARAMSTR);
+        mockRequest.addParameter("initialQuery", SRMProxyControllerConstants.INPUT_INITIALQUERY);
+        mockRequest.addParameter("fileCounter", SRMProxyControllerConstants.INPUT_FILE_COUNTER);
         
         SRMProxyController fc = new SRMProxyController();
         
@@ -87,14 +75,10 @@ public class SRMProxyController {
         if(type.equals("Dataset")) {
             
             DocElement doc = querySolr(request);
-            
-            System.out.println("\n\n\n\n\nCount: " + doc.getCount() + "\n\n\n\n");
 
             file_ids = getFileIds(doc,"ids");
             file_urls = getFileIds(doc,"urls");
             
-            
-        
         } else {
         
             String file_id = request.getParameter("file_id");
@@ -107,6 +91,8 @@ public class SRMProxyController {
             file_urls[0] = file_url;
             
         }
+        
+        
         
         String responseStr = queryESGSRM(file_urls);
         
@@ -131,7 +117,6 @@ public class SRMProxyController {
         String unencodedQueryString = "";
         //add the urls
         for(int i=0;i<file_urls.length;i++) {
-            System.out.println("\t adding id: " + i);
             if(i == 0 && file_urls.length == 1) {
                 queryString += "url=";
                 unencodedQueryString += "url=";
@@ -163,9 +148,9 @@ public class SRMProxyController {
         
         if(debugFlag) {
             System.out.println("\tQuerystring-> " + queryString);
-            System.out.println("\n\n\n");
+            System.out.println("\n");
             System.out.println("\tUnencodedQuerystring-> " + unencodedQueryString);
-            System.out.println("\n\n\n");
+            System.out.println("\n");
         }
         
         method.setQueryString(queryString);

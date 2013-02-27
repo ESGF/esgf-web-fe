@@ -18,7 +18,7 @@ function deleteUserInfo(username){
         if (data.EditOutput.status == "success") {
    		    $("div .success").html(data.EditOutput.comment);
           $("div .success").show();
-          $("div .user_info").hide();
+          $("div .edit_field").hide();
           user();
         }
         else{
@@ -37,7 +37,7 @@ function deleteUserInfo(username){
     $("div .doubleCheck").show();
   }
 
-  function cancelUserDelete(){
+  function cancelDelete(){
     $("div .doubleCheck").hide();
     $("div .submit").show();
   }

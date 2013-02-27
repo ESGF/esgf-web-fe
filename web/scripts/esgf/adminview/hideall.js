@@ -4,5 +4,5 @@ function hideAll(){
     $("div .pending").hide();
     $("div .error").hide();
     $("div .success").hide();
-    $("div .user_info").hide();
+    $("div .edit_field").hide();
   }

@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import esg.common.util.ESGFProperties;
 import esg.node.security.UserInfo;
 import esg.node.security.UserInfoCredentialedDAO;
+import esg.node.security.GroupRoleDAO;
 /**
  * Implementation of edit userinfo controller responsible for edit user info, like password, city, state, country information
  * The controller searches user record, and call DAO object to persist the changes into database

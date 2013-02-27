@@ -37,7 +37,7 @@ function submitUserInfo(username){
    		    if (data.EditOutput.status == "success") {
    		      $("div .success").html("Successful updated " + user + "'s information" );
             $("div .success").show();
-            $("div .user_info").hide();
+            $("div .edit_field").hide();
           } 
           else {
    			    $("div .error").html("Updating this account has failed! " + data.EditOutput.comment);
@@ -53,5 +53,5 @@ function submitUserInfo(username){
   }
 
   function cancelUserInfo(){
-    $("div .user_info").hide();
+    $("div .edit_field").hide();
   }

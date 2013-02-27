@@ -121,22 +121,23 @@ public class GetAllPendingController {
             error = true;
         }
 
-        //is user the root admin and not a group admin
+        //* is user the root admin and not a group admin
         isRoot = Utils.getIdFromHeaderCookie(request);
         UserInfo u = myUserInfoDAO.getUserByOpenid(isRoot);
         
         if(u.getUserName().equals("rootAdmin")){
-          //groupsWithPendingMembership = myGroupRoleDAO.allNonApprovedQuery();
+          groupsWithPendingMembership = myGroupRoleDAO.allNonApprovedQuery();
           if(groupsWithPendingMembership != null){
             for(String[] a : groupsWithPendingMembership){
-              System.out.println(a);
+              System.out.println(a.toString());
+              ids = ids + Arrays.toString(a);
             }
           }
         }
         else {
           //return subset
         }
-
+        
         String xmlOutput = "<EditOutput>";
         if(error){
           xmlOutput += "<status>fail</status>";

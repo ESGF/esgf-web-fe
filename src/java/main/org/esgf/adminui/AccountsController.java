@@ -314,7 +314,7 @@ public class AccountsController {
                         String tmproles = "";
                         Iterator<String> myit = userGroupsAndRoles.get(key).iterator();
                         while(myit.hasNext()){
-                            tmproles += myit.next();
+                            tmproles += myit.next() + " ";
                         }
                         myroles.add(tmproles);
                     }

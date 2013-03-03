@@ -134,19 +134,7 @@ $(document).ready(function(){
 		
 		
 		if(type == 'File') {
-			/*
-			var file_idArr = new Array();
-			var file_urlArr = new Array();
 			
-			file_idArr.push(file_id);
-			file_urlArr.push(file_url);
-			
-			var file_idArg = 'file_id=' + file_id;
-			var file_urlArg = 'file_url=' + file_url;
-			
-			var queryStr = {'file_idArr' : file_idArr, 'file_urlArr' : file_urlArr};
-			//srm_url += file_idArg + '&' + file_urlArg;
-			*/
 			
 			var queryStr = { 'file_id':file_id,
 							 'file_url':file_url,
@@ -203,6 +191,8 @@ $(document).ready(function(){
 			LOG.debug('initialQuery: ' + queryStr['fqParamStr']);
 			LOG.debug('fileCounter: ' + queryStr['fileCounter']);
 			
+			//alert('srm_url: ' + srm_url);
+			
 			$.ajax({
 				url: srm_url,
 				global: false,
@@ -210,11 +200,16 @@ $(document).ready(function(){
 				data: queryStr,
 				//dataType: 'xml',
 				success: function(data) {
-					//alert('data: ' + data);
+					alert('data: ' + data);
 					
 				},
-				error: function() {
-					alert('error retrieving data from srm');
+				error: function(jqXHR, textStatus,errorThrown) {
+					//alert('error retrieving data from srm');
+					alert('textStatus: ' + textStatus);
+					alert('errorThrown: ' + errorThrown);
+					for(var key in jqXHR) {
+						//alert('key: ' + key + ' value: ' + jqXHR[key]);
+					}
 				}
 				
 			});

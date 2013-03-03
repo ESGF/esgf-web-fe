@@ -24,7 +24,7 @@ import org.esgf.metadata.JSONObject;
 @SuppressWarnings("unused")
 public class DataCartSolrHandler {
 
-    private static String searchAPIURL = "http://localhost:8080/esg-search/search?";//
+    private static String searchAPIURL = "http://localhost/esg-search/search?";//
     private static String queryPrefix = "format=application%2Fsolr%2Bjson&type=File";
     private final static Logger LOG = Logger.getLogger(DataCartSolrHandler.class);
     private static final boolean queryStringPrintFlag = true;
@@ -452,6 +452,8 @@ public class DataCartSolrHandler {
         //convert extracted string into json array
         JSONObject jsonResponse = null;
         JSONArray jsonArray = null;
+        
+        
         try {
             jsonResponse = new JSONObject(rawString);
             jsonArray = jsonResponse.getJSONArray("docs");

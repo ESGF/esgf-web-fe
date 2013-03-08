@@ -12,6 +12,8 @@ public class SRMUtils {
     
     public static String SRM_CACHE_REPLACE = "/SRMTemp/";
 
+    public static String SRM_CACHE_FILE_LIST_FILE_LOC = "/esg/config/srm_entry_list_File.xml";
+    public static String SRM_CACHE_DATASET_LIST_FILE_LOC = "/esg/config/srm_entry_list_Dataset.xml";
     
     public static String [] gridftp2httpArr(String [] grid_ftp_arr) {
         String [] http_arr = new String[grid_ftp_arr.length];
@@ -141,6 +143,26 @@ public class SRMUtils {
         return srm_response;
     }
     
+    
+    //input
+    //srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?SFN=mss://esg2-sdnl1.ccs.ornl.gov//proj/cli049/UHRGCS/ORNL/CESM1/t341f02.FAMIPr/atm/hist/t341f02.FAMIPr.cam2.h0.1978-09.nc
+    //output
+    //gsiftp://esg2-sdnl1.ccs.ornl.gov//lustre/esgfs/SRM/shared/V.0.0-505553807/t341f02.FAMIPr.cam2.h0.1978-09.nc
+    
+    public static String stripSRMServer(String srm_url) {
+        String sourceUrl = srm_url;
+        
+        String tempFile = srm_url.replace("srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?SFN=mss://", "file:///");
+        
+        File f = new File(tempFile);
+        String fileName = f.getName();
+        
+        sourceUrl = "gsiftp://esg.ccs.ornl.gov:2811//lustre/esgfs/SRM/" + fileName;
+        
+        
+        return sourceUrl;
+    }
+    
     public static void main(String [] args) {
         //String url = "srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?" +
         //        "SFN=mss://esg2-sdnl1.ccs.ornl.gov/proj/cli049/UHRGCS/ORNL/CESM1" +
@@ -153,6 +175,14 @@ public class SRMUtils {
         
         String [] srm_urls = new String [1];
         
+        String str = stripSRMServer(url);
+        System.out.println(str);
+        
+        str = gridftp2http(str);
+        System.out.println(str);
+        
+        
+        /*
         srm_urls[0] = url;
         
         SRMResponse srm_response = new SRMResponse();
@@ -164,7 +194,7 @@ public class SRMUtils {
         for(int i=0;i<response_urls.length;i++) {
             System.out.println("resp: " + i + " " + response_urls[i]) ;
         }
-        
+        */
         
     }
     

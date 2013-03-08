@@ -171,11 +171,11 @@
 					var urlsArray = new Array();
 					urlsArray.push(data.doc.files.file[j].urls.url);
 					data.doc.files.file[j].urls['url'] = urlsArray;
-					
+					/*
 					var mimesArray = new Array();
 					mimesArray.push(data.doc.files.file[j].mimes.mime);
 					data.doc.files.file[j].mimes['mime'] = mimesArray;
-					
+					*/
 				}
 			}
 			//loop over the number of files
@@ -293,10 +293,24 @@
 	                var idStr = selectedDocId;
 	                
 	                
-					var peerStr = ESGF.datacart.getIndividualPeer(idStr);//getPeerStr();
+					var peerStr = ESGF.datacart.getIndividualPeer(idStr);
 					var technoteStr = ESGF.datacart.getTechnoteStr();
 			    	var fqParamStr = ESGF.datacart.getFqParamStr();
 			    	
+			    	var constraints = fqParamStr;
+			    	
+			    	alert('technoteStr: ' + technoteStr);
+			    	var queryStr = 
+			    	{
+			    			"dataset_id" : idStr, 
+			    			"isInitialQuery" : "true",
+			    			"limit" : ESGF.setting.fileCounter,
+			    			"isShowAll" : ESGF.setting.showAllContents,
+							"constraints" : constraints, 
+							"peerStr" : peerStr, 
+							"technotesStr" : technoteStr, 
+					};
+			    	/*
 			    	var queryStr = {"idStr" : idStr, 
 							"peerStr" : peerStr, 
 							"technotesStr" : technoteStr, 
@@ -304,12 +318,9 @@
 							"fqStr" : fqParamStr, 
 							"initialQuery" : "true",
         					"fileCounter" : ESGF.setting.fileCounter};
-			    	
+			    	*/
 			    	//NEED TO FIX THIS!!!!
-			    	selectedDocId = 'aa.gov';
-			    	selectedDocId = Url.encode(selectedDocId);
-			    	var url = '/esgf-web-fe/solrfileproxy2/datacart/'+selectedDocId;
-
+			    	var url = '/esgf-web-fe/solrfileproxy3/datacart/';
 					
 			    	//CHANGE ME!
 			    	//queryStr['peerStr'] = 'localhost';
@@ -325,12 +336,6 @@
 						data: queryStr,
 						dataType: 'json',
 						success: function(data) {
-							
-							
-							
-							
-							
-							/* OLD WORKING IMPLEMENTATION */
 							
 							//no files
 							if(data.doc.files.file == undefined) {
@@ -348,8 +353,6 @@
 
 								var fileLength = data.doc.files.file.length;
 								
-								//alert('fileLenght: ' + fileLength );
-								
 								
 								var tagid = 'file_rows_' + ESGF.datacart.replaceChars(data.doc.datasetId);
 								
@@ -357,7 +360,7 @@
 								var initial = true;
 								
 								var appendedFiles = self.appendFileData(data, openid, initial);
-								
+
 
 								var view_more_tag = '<tr class="' + self.view_files_tag + ESGF.datacart.replaceChars(idStr) + '">';
 								
@@ -370,12 +373,14 @@
 									
 								}
 
+								
 								$('.'+tagid).after(appendedFiles);
 								
 								self.innerHTML=self.hide_files;
 								
 								
 							}
+							
 						},
 						error: function() {
 							alert('Error in expanding files for dataset ' + data.doc.datasetId);
@@ -410,6 +415,8 @@
 					var technoteStr = ESGF.datacart.getTechnoteStr();
 			    	var fqParamStr = ESGF.datacart.getFqParamStr();
 					
+			    	
+			    	/* OLD
 			    	var queryStr = {"idStr" : idStr, 
 							"peerStr" : peerStr, 
 							"technotesStr" : technoteStr, 
@@ -425,10 +432,25 @@
 
 			    	//CHANGE ME!
 			    	//queryStr['peerStr'] = 'localhost';
-					
+					*/
+			    	
+			    	
+			    	var queryStr = 
+			    	{
+			    			"dataset_id" : idStr, 
+			    			"isInitialQuery" : "false",
+			    			"limit" : ESGF.setting.fileCounter,
+			    			"isShowAll" : ESGF.setting.showAllContents,
+							"constraints" : constraints, 
+							"peerStr" : peerStr, 
+							"technotesStr" : technoteStr, 
+					};
+			    	
+			    	
 			    	var tagid = 'file_rows_' + ESGF.datacart.replaceChars(idStr);
 					
-			    	
+			    	var url = '/esgf-web-fe/solrfileproxy3/datacart/';
+					
 			    	//initial ajax call for first x number of files in dataset
 					$.ajax({
 						url: url,
@@ -437,8 +459,6 @@
 						data: queryStr,
 						dataType: 'json',
 						success: function(data) {
-							
-							//var fileLength = data.doc.files.file.length;
 							
 							var tagid = self.view_files_tag + ESGF.datacart.replaceChars(idStr);//'view_more_files_' + replaceChars(idStr);
 							

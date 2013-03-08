@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/solrfileproxy3")
 public class DatacartController {
 
+    private static String MAXIMUM_LIMIT = "9999";
     
     public static void main(String [] args) {
         
@@ -42,16 +43,72 @@ public class DatacartController {
         //grab the input parameters (in lieu of idStr)
         String dataset_id = request.getParameter("dataset_id");
         
+        String initialLimit = request.getParameter("initialLimit");
+        if(initialLimit == null) {
+            initialLimit = "10";
+        }
         
+        String isInitialQuery = request.getParameter("isInitialQuery");
+        if(isInitialQuery == null) {
+            isInitialQuery = "false";
+        }
+        
+        String limit = "";
+        String offset = "0";
+        if(isInitialQuery.equals("false")) {
+            limit = MAXIMUM_LIMIT;
+            offset = initialLimit;
+        } else {
+            limit = initialLimit;
+        }
+        
+        
+        String isShowAll = request.getParameter("isShowAll");
+        if(isShowAll == null) {
+            isShowAll = "true";
+        }
+        
+        
+        
+       
+        
+        
+        
+        String query = "*";
+        if(!isShowAll.equals("true")) {
+            
+            String constraints = request.getParameter("constraints");
+            System.out.println("constraints: " + constraints);
+          
+            String [] constraint = constraints.split(";");
+            for(int i=0;i<constraint.length;i++) {
+                String constraintStr = constraint[i];
+                if(constraintStr.contains("query=")) {
+                    String [] parts = constraintStr.split("=");//
+                    query = parts[parts.length-1];
+                }
+            }
+            //add the text query here
+            
+        }
+        
+        System.out.println("isInitialQuery: " + isInitialQuery);
+        System.out.println("offset: " + offset);
+        System.out.println("limit: " + limit);
+        System.out.println("query: " + query);
         
         //query solr for the files
         Solr solr = new Solr();
         
-        solr.addConstraint("query", "*");
+        solr.addConstraint("query", query);
         solr.addConstraint("distrib", "false");
-        solr.addConstraint("limit", "8");
+        solr.addConstraint("limit", limit);
+        solr.addConstraint("offset", offset);
         solr.addConstraint("type", "File");
         solr.addConstraint("dataset_id",dataset_id);
+        
+        System.out.println("\nsolr query->" + solr.getQueryString() + "\n\n");
+        
         
         solr.executeQuery();
         
@@ -59,13 +116,13 @@ public class DatacartController {
         
         DatacartDoc datacartDoc = new DatacartDoc(solrResponse);
 
-        System.out.println( new XmlFormatter().format(datacartDoc.toXML()));
-        System.out.println( datacartDoc.toJSON());
+        datacartDoc.setDatasetId(dataset_id);
+        //System.out.println( new XmlFormatter().format(datacartDoc.toXML()));
+        //System.out.println( datacartDoc.toJSON());
         //get response and send it back in json form
         
-        
+        response = datacartDoc.toJSON();
 /*
-        String idStr = request.getParameter("idStr");
         
         String peerStr = request.getParameter("peerStr");
         //String [] peers = peerStr.split(";");
@@ -88,12 +145,6 @@ public class DatacartController {
         String initialQuery = request.getParameter("initialQuery");
         
 
-        //get the fileCounter
-        String fileCounter = request.getParameter("fileCounter");
-        
-        
-        
-        datasetId = idStr;
 */       
         return response;
         //return null;

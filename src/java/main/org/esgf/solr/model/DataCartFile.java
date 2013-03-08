@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.esgf.datacart.XmlFormatter;
 import org.esgf.srm.SRMEntryList;
+import org.esgf.srm.SRMUtils;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 
@@ -41,9 +42,10 @@ public class DataCartFile {
         this.tracking_id = solrRecord.getStrField("tracking_id");
         this.checksum = solrRecord.getStrField("checksum");
         this.checksum_type = solrRecord.getStrField("checksum_type");
+
+        this.getCacheInfo(solrRecord);
         
         this.parseUrl(solrRecord);
-        this.getCacheInfo(solrRecord);
     }
     
     
@@ -196,6 +198,9 @@ public class DataCartFile {
         DataCartFile datacartFile = new DataCartFile(solrRecords.get(0));
         
         System.out.println( new XmlFormatter().format(datacartFile.toXML()));
+        
+        
+        
     }
     
     
@@ -205,7 +210,7 @@ public class DataCartFile {
     public void getCacheInfo(SolrRecord solrRecord) {
         SRMEntryList srm_entry_list = new SRMEntryList();
         
-        srm_entry_list.fromFile("srm_entry_list_" + "File" + ".xml");
+        srm_entry_list.fromFile(SRMUtils.SRM_CACHE_FILE_LIST_FILE_LOC);
         
         this.isCached = srm_entry_list.isCached(solrRecord.getStrField("id"));
         
@@ -218,16 +223,45 @@ public class DataCartFile {
         this.services = new ArrayList<String>();
         this.urls = new ArrayList<String>();
         this.mimes = new ArrayList<String>();
-        for(int i=0;i<values.size();i++) {
-            String value = values.get(i);
-            String [] components = value.split("\\|");
+        
+        
+        if(this.isCached.equals("true")) {
             
-            String url = components[0];
-            this.urls.add(url);
+            for(int i=0;i<values.size();i++) {
+                String value = values.get(i);
+                String [] components = value.split("\\|");
+                
+                String srm_url = components[0];
+                
+                //add http and gridftp urls if cached
+                System.out.println(srm_url);
+                String gsiftp = SRMUtils.stripSRMServer(srm_url);
+                String http = SRMUtils.gridftp2http(gsiftp);
+
+                this.urls.add(http);
+                this.services.add("HTTPServer");
+                
+                this.urls.add(gsiftp);
+                this.services.add("GridFTP");
+                
+                
+            }
             
-            String service = components[components.length-1];
-            this.services.add(service);
+        } else {
+            
+            for(int i=0;i<values.size();i++) {
+                String value = values.get(i);
+                String [] components = value.split("\\|");
+                
+                String srm_url = components[0];
+                this.urls.add(srm_url);
+                
+                String service = components[components.length-1];
+                this.services.add(service);
+            }
+            
         }
+        
         
         
     }

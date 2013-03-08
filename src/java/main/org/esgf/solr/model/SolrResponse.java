@@ -38,38 +38,35 @@ public class SolrResponse {
         solr.addConstraint("query", "*");
         solr.addConstraint("distrib", "false");
         solr.addConstraint("limit", "8");
-        solr.addConstraint("type", "Dataset");
+        solr.addConstraint("type", "File");
+        solr.addConstraint("dataset_id","ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1|esg2-sdnl1.ccs.ornl.gov");
         //solr.addConstraint("project", "CMIP5");
         
         solr.executeQuery();
         
         SolrResponse solrResponse = solr.getSolrResponse();
         
-        //System.out.println("Count: " + solrResponse.getCount());
-        
         List<SolrRecord> solrRecords = solrResponse.getSolrRecords();
         
-        
-        //System.out.println(solrRecords.size());
-        
-        List<String> srms = solrResponse.needsSRM("Dataset");
+        System.out.println("Count: " + solrResponse.getCount() + " " + solrRecords.size());
         
         
-        //System.out.println(srms.size());
-        
-        solr.removeConstraint("type");
-        solr.addConstraint("type", "File");
-        
-        solr.executeQuery();
-        
-        solrResponse = solr.getSolrResponse();
-        
-        srms = solrResponse.needsSRM("File");
-        
-        //System.out.println(srms.size());
+        DataCartFile datacartFile = new DataCartFile(solrRecords.get(0));
         
         
+        /*
+        SolrRecord firstRecord = solrRecords.get(2);
+
+        System.out.println(firstRecord.getStrFieldNames());
+        System.out.println(firstRecord.getMiscFieldNames());
+        System.out.println(firstRecord.getArrFieldNames());
+        
+        System.out.println(firstRecord.getStrField("id"));
+        */
     }
+
+    
+   
     
     
     public List<String> getDatasetIds(String core) {

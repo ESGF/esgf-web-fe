@@ -327,6 +327,11 @@
 						success: function(data) {
 							
 							
+							
+							
+							
+							/* OLD WORKING IMPLEMENTATION */
+							
 							//no files
 							if(data.doc.files.file == undefined) {
 								

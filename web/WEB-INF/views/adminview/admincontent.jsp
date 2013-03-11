@@ -127,6 +127,7 @@
 </div>
 
 <script language="javascript">
+
 function group(){
   hideAll();
   //empty table first then fill
@@ -153,7 +154,7 @@ function group(){
         var groups = data.EditOutput.comment;
         var rows = groups.split("][");
         for(var i = 1; i < rows.length - 1; i++){
-          var userInfo = rows[i].split(",");
+          var userInfo = rows[i].split(", ");
           $('.groupTable').append('<tr><td><a href="javascript:editGroup(\'' + userInfo[0] + '\',\'' + userInfo[1] + '\',\'' + userInfo[2] + '\',\'' + userInfo[3] + '\',\'' + userInfo[4] +  '\')">' + userInfo[1] + '</a></td><td>' + userInfo[2] + '</td><td>' + userInfo[3] + '</td><td>' + userInfo[4] + '</td></tr>');
         }
         $("div .group").show();
@@ -203,7 +204,7 @@ function groupInfo(id){
     $("div .error").html("\"Group Name\" and \"Groupo Description\" can not be empty.");
     $("div .error").show();
   }
-  else if (!groupVis == "t" || !groupVis == "True" || groupVis != "true" || groupVis != "f" || groupVis != "False" || groupVis != "false"){
+  /*else if (groupVis != "t"){ // || groupVis != True || groupVis != true || groupVis != f || groupVis != "False" || groupVis != "false"){
     alert(groupVis);
     $("div .error").html("Invalid input for \"Visable\". Please enter one of the following: t, true, f, false");
     $("div .error").show();
@@ -211,19 +212,19 @@ function groupInfo(id){
   else if (groupAuto != "t" || groupAuto != "True" || groupAuto != "true" || groupAuto != "f" || groupAuto != "False" || groupAuto != "false"){
     $("div .error").html("Invalid input for \"Auto Approval\". Please enter one of the following: t, true, f, false");
     $("div .error").show();
-  }
+  }*/
   else{
     if(groupVis != "t" || groupVis != "True" || groupVis != "true"){
-      groupVis = "t";
-    }
-    else {
       groupVis = "f";
     }
+    else {
+      groupVis = "t";
+    }
     if(groupAuto != "t" || groupAuto != "True" || groupAuto != "true"){
-      groupAuto = "t";
+      groupAuto = "f";
     }
     else {
-      groupAuto = "f";
+      groupAuto = "t";
     }
 
     var jsonObj = new Object;
@@ -290,6 +291,7 @@ function pending(){
     success: function(data) {
       if (data.EditOutput.status == "success") { 
         var users = data.EditOutput.comment;
+        alert(users);
         var rows = users.split("][");
         for(var i = 0; i < rows.length - 1; i++){
           var userInfo = rows[i].split(",");

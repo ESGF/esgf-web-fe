@@ -129,7 +129,7 @@ public class GetAllPendingController {
           groupsWithPendingMembership = myGroupRoleDAO.allNonApprovedQuery();
           if(groupsWithPendingMembership != null){
             for(String[] a : groupsWithPendingMembership){
-              System.out.println(a.toString());
+              System.out.println(a);
               ids = ids + Arrays.toString(a);
             }
           }

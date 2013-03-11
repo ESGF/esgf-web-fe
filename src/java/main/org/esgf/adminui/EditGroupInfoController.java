@@ -127,7 +127,7 @@ public class EditGroupInfoController {
           }
           id = Integer.parseInt(groupId);
 
-          //error = myGroupRoleDAO.updateWholeGroup(id, name, description, vis, auto);
+          error = myGroupRoleDAO.updateWholeGroup(id, name, description, vis, auto);
           System.out.println(error);
         }
         catch(Exception e){

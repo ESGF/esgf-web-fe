@@ -46,11 +46,13 @@ function editUser(openId){
                                      '</td></tr>');
       }
       else{
-        alert("ERROR");
+   		  $("div .error").html("Deleting this account has failed! " + data.EditOutput.comment);
+   		  $("div .error").show();
       }
     },
     error: function(request, status, error) { 
-      alert("Error " + request + " " + status + " " + error);
+   		$("div .error").html("internal Error: " + request + " " + status + " " + error);
+   	  $("div .error").show();
     }
   });
 }

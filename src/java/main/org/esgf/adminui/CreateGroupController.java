@@ -2,8 +2,11 @@ package org.esgf.adminui;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,37 +31,36 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import esg.common.util.ESGFProperties;
 import esg.node.security.UserInfo;
-import esg.node.security.GroupRoleDAO;
 import esg.node.security.UserInfoCredentialedDAO;
+import esg.node.security.GroupRoleCredentialedDAO;
 /**
 /**
- * This controller returns all users for the admin page
+ * This controller create a group for the admin page
  * @author Matthew Harris 
  */
 @Controller
-@RequestMapping("/getallgroupsproxy")
-public class GetAllAdminGroupsController {
+@RequestMapping("/newgroupinfoproxy")
+public class CreateGroupController {
     
-    private final static Logger LOG = Logger.getLogger(GetAllAdminGroupsController.class);
+    private final static Logger LOG = Logger.getLogger(CreateGroupController.class);
     
     private final static boolean debugFlag = false;
 
     private String passwd;
     private String root = "rootAdmin";     
     private UserInfoCredentialedDAO myUserInfoDAO;
+    private GroupRoleCredentialedDAO myGroupRoleDAO;
     private UserOperationsInterface uoi;
-    private GroupRoleDAO myGroupRoleDAO; 
+    private ESGFProperties myESGFProperties;
     
-        
-    public GetAllAdminGroupsController() {
+    public CreateGroupController() {
         
         try {
             if(Utils.environmentSwitch) {
                 // try to set up myUserInfoDAO here.
-                ESGFProperties myESGFProperties = new ESGFProperties();
+                this.myESGFProperties = new ESGFProperties();
                 this.passwd = myESGFProperties.getAdminPassword();        
                 this.myUserInfoDAO = new UserInfoCredentialedDAO(root,passwd,myESGFProperties);
-                this.myGroupRoleDAO = new GroupRoleDAO(myESGFProperties);
                 //declare a UserOperations "Object"
                 if(Utils.environmentSwitch) {
                   uoi = new UserOperationsESGFDBImpl();
@@ -73,7 +75,7 @@ public class GetAllAdminGroupsController {
         }
         
         
-        LOG.debug("IN GetAllAdminGroupsController Constructor");
+        LOG.debug("IN CreateGroupController Constructor");
     }
     
     
@@ -87,7 +89,7 @@ public class GetAllAdminGroupsController {
      */
     @RequestMapping(method=RequestMethod.GET)
     public @ResponseBody String doGet(HttpServletRequest request, HttpServletResponse response) {
-        LOG.debug("GetAllAdminGroupsController doGet");
+        LOG.debug("CreateGroupController doGet");
 
         return "";        
     }
@@ -103,58 +105,78 @@ public class GetAllAdminGroupsController {
     @RequestMapping(method=RequestMethod.POST)
     public @ResponseBody String doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ParserConfigurationException, JDOMException {
         LOG.debug("ExtractUserInfoController doPost");
-        String query = (String)request.getParameter("query");
-        String username =  "";
-        String isRoot = "";
-        String errormessage = "";
-        String ids = "";        
-        List<String[]> groupsAll = null;
-        boolean error = false;
         JSONObject jsonObj = null;
+        UserInfo userInfo; 
+        UserInfo adminInfo;
+        
+        String query = (String)request.getParameter("query");
+        String groupName =  "";
+        String groupDesc = "";
+        String groupVis = "";
+        String groupAuto = "";
+        String errormessage = "";        
+        String info = "";
+        String openId = "";
+        
+        boolean error = true;
+        boolean pass = true;
+        boolean check = true;
+        boolean vis = false;
+        boolean auto = false;
         
         try {
             jsonObj = new JSONObject(query);
-            username = jsonObj.getString("userName");
+            groupName= jsonObj.getString("groupName");
+            groupDesc = jsonObj.getString("groupDesc");
+            groupVis = jsonObj.getString("groupVis");
+            groupAuto = jsonObj.getString("groupAuto");
         } catch (JSONException e) {
             LOG.debug("error in parsing the json text string :" + query);
             errormessage = "error in parsing the json text string :" + query;
-            error = true;
+            error = false;
         }
 
-        //is user the root admin and not a group admin
-        isRoot = Utils.getIdFromHeaderCookie(request);
-        UserInfo u = myUserInfoDAO.getUserByOpenid(isRoot);
-        
-        if(u.getUserName().equals("rootAdmin")){
-          groupsAll = myGroupRoleDAO.getGroupEntries();
-          for(String[] temp : groupsAll){
-            ids = ids + Arrays.toString(temp);
+        try{
+          openId = Utils.getIdFromHeaderCookie(request);
+          adminInfo = myUserInfoDAO.getUserById(openId);
+          this.myGroupRoleDAO = new GroupRoleCredentialedDAO(adminInfo,myESGFProperties);
+          
+          if(groupVis.equals("t")){
+            vis = true;
+          }
+          if(groupAuto.equals("t")){
+            auto = true;
+          }
+          error = myGroupRoleDAO.addGroup(groupName, groupDesc, vis, auto);
+          System.out.println(error);
+          if(!error){
+            errormessage = "Could not create this group at this time.";
+          }
+          else{
+            //TODO:update file or federation of new group?
           }
         }
-        else {
-          //return subset
+        catch(Exception e){
+          error = false;
+          errormessage = " : " + e;
         }
-        //System.out.println("\n" + ids);
 
         String xmlOutput = "<EditOutput>";
         if(error){
+          xmlOutput += "<status>success</status>";
+          xmlOutput += "<comment>" + info + "</comment>";
+        }
+        else{
           xmlOutput += "<status>fail</status>";
           xmlOutput += "<comment>" + errormessage + "</comment>";
         }
-        else{
-          xmlOutput += "<status>success</status>";
-          xmlOutput += "<comment>" + ids + "</comment>";
-        
-        }
-          xmlOutput += "</EditOutput>";
-        
+        xmlOutput += "</EditOutput>";
         JSONObject jo = XML.toJSONObject(xmlOutput);
 
         String jsonContent = jo.toString();        
         return jsonContent;
 
     }
-        
 }
 
 

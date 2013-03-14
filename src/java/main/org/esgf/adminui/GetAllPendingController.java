@@ -126,7 +126,7 @@ public class GetAllPendingController {
         UserInfo u = myUserInfoDAO.getUserByOpenid(isRoot);
         
         if(u.getUserName().equals("rootAdmin")){
-          groupsWithPendingMembership = myGroupRoleDAO.allNonApprovedQuery();
+          groupsWithPendingMembership = myGroupRoleDAO.allNonApproved();
           if(groupsWithPendingMembership != null){
             for(String[] a : groupsWithPendingMembership){
               System.out.println(a);

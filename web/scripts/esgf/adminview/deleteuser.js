@@ -1,5 +1,5 @@
 function deleteUserInfo(username){
-    cancelUserDelete();
+    cancelDelete();
 
     var userName = username;
     var jsonObj = new Object;
@@ -16,18 +16,19 @@ function deleteUserInfo(username){
 	    dataType: 'json',
       success: function(data) {
         if (data.EditOutput.status == "success") {
-   		    $("div .success").html(data.EditOutput.comment);
-          $("div .success").show();
           $("div .edit_field").hide();
           user();
+   		    $("div .success").html(data.EditOutput.comment);
+          $("div .success").show();
         }
         else{
-   			  $("div .error").html("Deleting this account has failed! " + data.EditOutput.comment);
+   			  $("div .error").html("Deleting this group has failed! " + data.EditOutput.comment);
    			  $("div .error").show();
         }
       },
       error: function(request, status, error) { 
-        alert("Error " + request + " " + status + " " + error);
+   			  $("div .error").html("internal Error: " + request + " " + status + " " + error);
+   			  $("div .error").show();
       }
     });
   }

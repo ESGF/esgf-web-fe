@@ -35,9 +35,9 @@ function submitUserInfo(username){
   	    dataType: 'json',
   	    success: function(data) {
    		    if (data.EditOutput.status == "success") {
+            hideAll();
    		      $("div .success").html("Successful updated " + user + "'s information" );
             $("div .success").show();
-            $("div .edit_field").hide();
           } 
           else {
    			    $("div .error").html("Updating this account has failed! " + data.EditOutput.comment);

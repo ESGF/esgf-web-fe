@@ -299,7 +299,6 @@
 			    	
 			    	var constraints = fqParamStr;
 			    	
-			    	alert('technoteStr: ' + technoteStr);
 			    	var queryStr = 
 			    	{
 			    			"dataset_id" : idStr, 

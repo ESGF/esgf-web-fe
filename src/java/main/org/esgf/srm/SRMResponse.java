@@ -158,6 +158,7 @@ public class SRMResponse {
     public void fromXML(String xml) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = null;
+        //System.out.println(new XmlFormatter().format(xml));
         try {
             dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(new ByteArrayInputStream(xml.getBytes("UTF-8")));

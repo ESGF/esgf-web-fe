@@ -132,16 +132,24 @@ $(document).ready(function(){
 
 		var srm_url = '/esgf-web-fe/srmproxy';
 		
+		//alert('type: ' + type + ' dataset_id: ' + dataset_id);
 		
 		if(type == 'File') {
 			
 			
-			var queryStr = { 'file_id':file_id,
-							 'file_url':file_url,
-							 'dataset_id':dataset_id,
-							 'filtered':filtered,
-							 'type':type}
+			var queryStr = { 
+								'file_id':file_id,
+							 	'file_url':file_url,
+							 	'dataset_id':dataset_id,
+							 	'filtered':filtered,
+							 	'type':type
+							}
 			
+			LOG.debug('dataset_id: ' + queryStr['dataset_id']);
+			LOG.debug('constraints: ' + queryStr['constraints']);
+			LOG.debug('file_id: ' + queryStr['file_id']);
+			LOG.debug('file_url: ' + queryStr['file_url']);
+			LOG.debug('type: ' + queryStr['type']);
 			
 			$.ajax({
 				url: srm_url,
@@ -150,7 +158,7 @@ $(document).ready(function(){
 				data: queryStr,
 				//dataType: 'xml',
 				success: function(data) {
-					alert('data: ' + data);
+					alert('An email has been sent to your account.  Please follow the instructions included.');
 					/* $('#srm_response').append("Staging successfully launched"); */
 				},
 				error: function() {
@@ -162,36 +170,23 @@ $(document).ready(function(){
 		} else {
 
 			//query solr for file ids and urls before sending request
-			var peerStr = $('#peerStr').html();
-			var technoteStr = $('#technoteStr').html();
 			var fqParamStr = $('#fqParamStr').html();
-			var initialQuery = $('#initialQuery').html();
-			var fileCounter = $('#fileCounter').html();
 		
-			var queryStr = { 'file_id':file_id,
-					 'file_url':file_url,
-					 'dataset_id':dataset_id,
-					 'filtered':filtered,
-					 'type':type,
-					 'peerStr':peerStr,
-					 'technoteStr':technoteStr,
-					 'fqParamStr':fqParamStr,
-					 'initialQuery':initialQuery,
-					 'fileCounter':fileCounter}
-	
+			var queryStr = { 
+								'dataset_id': dataset_id,
+								'constraints': fqParamStr,
+								'type': type,
+								'file_id':file_id,
+					 			'file_url':file_url,
+					 	   }
 
+			LOG.debug('dataset_id: ' + queryStr['dataset_id']);
+			LOG.debug('constraints: ' + queryStr['constraints']);
 			LOG.debug('file_id: ' + queryStr['file_id']);
 			LOG.debug('file_url: ' + queryStr['file_url']);
-			LOG.debug('dataset_id: ' + queryStr['dataset_id']);
-			LOG.debug('filtered: ' + queryStr['filtered']);
 			LOG.debug('type: ' + queryStr['type']);
-			LOG.debug('peerStr: ' + queryStr['peerStr']);
-			LOG.debug('technoteStr: ' + queryStr['technoteStr']);
-			LOG.debug('fqParamStr: ' + queryStr['fqParamStr']);
-			LOG.debug('initialQuery: ' + queryStr['fqParamStr']);
-			LOG.debug('fileCounter: ' + queryStr['fileCounter']);
 			
-			//alert('srm_url: ' + srm_url);
+			
 			
 			$.ajax({
 				url: srm_url,
@@ -200,7 +195,7 @@ $(document).ready(function(){
 				data: queryStr,
 				//dataType: 'xml',
 				success: function(data) {
-					alert('data: ' + data);
+					alert('An email has been sent to your account.  Please follow the instructions included.');
 					
 				},
 				error: function(jqXHR, textStatus,errorThrown) {
@@ -214,7 +209,7 @@ $(document).ready(function(){
 				
 			});
 			
-			$('#srm_response').append("Staging launched");
+			//$('#srm_response').append("Staging launched");
 			
 			
 		}

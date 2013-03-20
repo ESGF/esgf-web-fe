@@ -90,6 +90,8 @@
 			//event for sending the file id through
 			$('a.single_srm').live('click',function() {
 
+				alert('HPSS access not supported at this time');
+				/*
 				var file_id = $(this).parent().find('.file_id').html().trim();
 				
 				var file_url = $(this).parent().find('.srm_urll').html().trim();
@@ -126,7 +128,7 @@
 				//send request
 		        jQuery('<form action="'+ srm_service_url +'" method="post">'+''+'</form>')
 		        .appendTo('body').submit().remove();
-		        
+		        */
 	    	});
 	    	
 	    	
@@ -136,9 +138,11 @@
 			//for sending the dataset level srm request
 			$('a.srm_dataset_event').live('click',function() {
 				
+
+				alert('HPSS access not supported at this time');
+				
+				/*
 				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html());
-				
-				
 				
 				//srm params
 				//type
@@ -192,142 +196,7 @@
 				//send request
 		        jQuery('<form action="'+ srm_service_url +'" method="post">'+''+'</form>')
 		        .appendTo('body').submit().remove();
-		        
-		        
-		        
-		        
-		        
-		        
-		        /*
-				var srm_url = '/esgf-web-fe/srmview?datasetId=' + file_id + 
-								'&peerStr=' + peerStr + 
-								'&technoteStr=' + technoteStr + 
-								'&fqParamStr=' + fqParamStr + 
-								'&type=File';
-		    	
-				*/
-		        
-				/*
-				
-				
-	        	//gather the ids and the urls for download
-	        	var file_ids   = new Array();
-	        	
-	        	//gather the dataset_ids
-	        	var dataset_ids = new Array();
-	        	dataset_ids.push(selectedDocId);
-	        	
-	        	
-	        	//just make the two ajax calls for now
-	        	//1 - for the first ten
-	        	//2 - for >10
-
-				var idStr = selectedDocId;
-				
-				//alert('idStr ' + idStr);
-				
-				var peerStr = ESGF.datacart.getIndividualPeer(idStr);//getPeerStr();
-				
-				var technoteStr = ESGF.datacart.getTechnoteStr();
-								
-		    	var fqParamStr = ESGF.datacart.getFqParamStr();
-		    	
-		    	
-		    	
-		    	var queryStr = {"idStr" : idStr, 
-						"peerStr" : peerStr, 
-						"technotesStr" : technoteStr, 
-						"showAllStr" : ESGF.setting.showAllContents, 
-						"fqStr" : fqParamStr, 
-						"initialQuery" : "true",
-    					"fileCounter" : ESGF.setting.fileCounter};
-		    	
-		    	$.ajax({
-					url: '/esgf-web-fe/solrfileproxy2/datacart',
-					global: false,
-					type: "GET",
-					data: queryStr,
-					dataType: 'json',
-					success: function(data) {
-						
-						//alert('data: ' + data);
-						if(data.docs.doc.files.file != undefined) {
-							for(var i=0;i<data.docs.doc.files.file.length;i++){
-								var file = data.docs.doc.files.file[i];
-								file_ids.push(file.fileId);
-							}
-							
-							
-							if(data.docs.doc.files.file.length >= 10) {
-								queryStr = {"idStr" : idStr, 
-										"peerStr" : peerStr, 
-										"technotesStr" : technoteStr, 
-										"showAllStr" : ESGF.setting.showAllContents, 
-										"fqStr" : fqParamStr, 
-										"initialQuery" : "false",
-			        					"fileCounter" : ESGF.setting.fileCounter};
-								
-								$.ajax({
-									url: '/esgf-web-fe/solrfileproxy2/datacart',
-									global: false,
-									type: "GET",
-									data: queryStr,
-									dataType: 'json',
-									success: function(data) {
-										for(var i=0;i<data.docs.doc.files.file.length;i++){
-											var file = data.docs.doc.files.file[i];
-											file_ids.push(file.fileId);
-										}
-										
-
-										peerStr += ':8983/solr';
-										
-										var input = '';
-										
-								        //begin assembling queryString
-							            //var queryString = 'type=create&id=' + datasetId + '&credential=' + go_credential;
-								        var queryString = 'type=create&id=' + selectedDocId;
-							            
-								        
-								        
-								        jQuery.each(queryString.split('&'), function(){
-								          var pair = this.split('=');
-								          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-								        });
-								        
-								        
-								        
-								        var srm_url = '/esgf-web-fe/srmview?';
-								    	srm_url += 'datasetId=' + selectedDocId;
-								    	srm_url += '&type=Dataset';
-								    	srm_url += '&peerStr=' + peerStr;
-								    	srm_url += '&technoteStr=' + technoteStr;
-								    	srm_url += '&fqParamStr=' + fqParamStr;
-								    	
-								    	
-								        
-								        //send request
-								        jQuery('<form action="'+ srm_url +'" method="post">'+input+'</form>')
-								        .appendTo('body').submit().remove();
-										//alert($(this).parent().find('span').html());
-										
-						            	
-
-									}
-								});
-							}
-						}
-					}
-		    	
-		    	
-		    	});
-		    	
-		    	
-		    	
-		    	
-		    	
-		    	
-		    	*/
+		        */
 		    	
 			});
 

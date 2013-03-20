@@ -31,6 +31,10 @@ public class SRMEntryList {
     public static void main(String [] args) {
         
         SRMEntryList srm_entry_list = new SRMEntryList();
+        
+        srm_entry_list.fromFile("srm_entry_list_File.xml");
+        
+        System.out.println(srm_entry_list.getSrm_entry_list().size());
         srm_entry_list.fromSolr("File");
         
         //srm_entry_list.fromSolr("Dataset");
@@ -102,8 +106,8 @@ public class SRMEntryList {
         //System.out.println(dataset_ids);
         
         
-        System.out.println("srm_entry_list_" + core + ".xml");
-        srm_entry_list.toFile("srm_entry_list_" + core + ".xml");
+        System.out.println("/esg/config/srm_entry_list_" + core + ".xml");
+        srm_entry_list.toFile("/esg/config/srm_entry_list_" + core + ".xml");
         
         this.setSrm_entry_list(srm_entry_list.getSrm_entry_list());
         
@@ -113,6 +117,8 @@ public class SRMEntryList {
         
         
         File fXmlFile = new File(file);
+        
+        
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = null;
         
@@ -215,16 +221,40 @@ public class SRMEntryList {
     
     public void changeCached(String id,String cacheValue) {
         
+        System.out.println("\n\nCHANGE CACHED\n\n");
         for(int i=0;i<this.srm_entry_list.size();i++) {
+            
+            //System.out.println("\tid: " + this.srm_entry_list.get(i).getFile_id() + "\n\tid: " + id + "\n");
             if(this.srm_entry_list.get(i).getFile_id().equals(id)) {
+                //System.out.println("Match\n");
+                this.srm_entry_list.get(i).setIsCached(cacheValue);
                 
             }
+            
         }
+        /*
+        List<SRMEntry> srm_entries = new ArrayList<SRMEntry>();
+        for(int i=0;i<this.srm_entry_list.size();i++) {
+            
+            
+            
+            if(this.srm_entry_list.get(i).getFile_id().equals(id)) {
+                System.out.println("DO I ever get here?");
+                this.srm_entry_list.get(i).setIsCached(cacheValue);
+                srm_entries.add(this.srm_entry_list.get(i));
+                
+                System.out.println(this.srm_entry_list.get(i));
+            }
+        }
+        this.setSrm_entry_list(srm_entries);
+        */
     }
     
     public String isCached(String file_id) {
         String isCached = "false";
         for(int i=0;i<this.srm_entry_list.size();i++) {
+            //if(file_id.equals("ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-09.nc|esg2-sdnl1.ccs.ornl.gov"))
+            //    System.out.println("list: " + this.srm_entry_list.get(i).getFile_id() + " " + file_id);
             if(file_id.equals(this.srm_entry_list.get(i).getFile_id())) {
                 isCached = this.srm_entry_list.get(i).getIsCached();
             }

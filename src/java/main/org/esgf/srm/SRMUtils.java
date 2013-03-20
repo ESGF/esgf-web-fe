@@ -8,7 +8,7 @@ public class SRMUtils {
 
     private static String searchAPIURL = "http://localhost:8080/esg-search/search?";
 
-    public static String THREDDS_DATAROOT = "/thredds/fileServer/esg_dataroot/";
+    public static String THREDDS_DATAROOT = "/thredds/fileServer/esg_srm_dataroot";
     
     public static String SRM_CACHE_REPLACE = "/SRMTemp/";
 
@@ -34,7 +34,7 @@ public class SRMUtils {
         
         http = http.replace("gsiftp", "http");
         
-        http = http.replace("//lustre/esgfs/", THREDDS_DATAROOT);
+        http = http.replace("//lustre/esgfs/SRMTemp", THREDDS_DATAROOT);
         
         
         return http;
@@ -132,8 +132,9 @@ public class SRMUtils {
             File f = new File(tempFile);
             String fileName = f.getName();
             
-            String outputFile = "gsiftp://esg.ccs.ornl.gov:2811//lustre/esgfs/SRM/" + fileName;
-            
+            //String outputFile = "gsiftp://esg.ccs.ornl.gov:2811//lustre/esgfs/SRM/" + fileName;
+
+            String outputFile = "gsiftp://esg.ccs.ornl.gov:2811//lustre/esgfs/" + fileName;
             outputFiles[i] = outputFile;
         }
         
@@ -159,6 +160,7 @@ public class SRMUtils {
         
         sourceUrl = "gsiftp://esg.ccs.ornl.gov:2811//lustre/esgfs/SRM/" + fileName;
         
+        sourceUrl = replaceCacheName(sourceUrl);
         
         return sourceUrl;
     }

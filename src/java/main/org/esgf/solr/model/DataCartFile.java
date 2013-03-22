@@ -25,7 +25,8 @@ public class DataCartFile {
     private List<String> mimes;
     
     private String isCached;
-    
+
+    private List<String> technotes;
     
     
     public DataCartFile() {
@@ -35,6 +36,9 @@ public class DataCartFile {
     }
     
     public DataCartFile(SolrRecord solrRecord) {
+        
+        System.out.println("\n\n\nIn datacart File\n");
+        
         this.fileId = solrRecord.getStrField("id");
         this.title = solrRecord.getStrField("title");
         this.size = solrRecord.getMiscField("size");
@@ -46,9 +50,42 @@ public class DataCartFile {
         this.getCacheInfo(solrRecord);
         
         this.parseUrl(solrRecord);
+        
+        this.getTechnotesFromRecord(solrRecord);
     }
     
-    
+    public void getTechnotesFromRecord(SolrRecord solrRecord) {
+        
+        System.out.println("getting technote");
+        
+        List<String> technotes = solrRecord.getArrField("xlink");
+        
+        List<String> technoteStrs = new ArrayList<String>();
+        
+        for(int i=0;i<technotes.size();i++) {
+            
+            String technoteStrElement = technotes.get(i);
+            //System.out.println(technoteStrElement);
+            String [] technoteStr = technoteStrElement.split("\\|");
+            technoteStrs.add(technoteStr[0]);
+            //System.out.println(technoteStr.length);
+            /*
+            for(int j=0;j<technoteStr.length;j++) {
+                //System.out.println(j);
+                
+                technoteStrs.add(technoteStr[j]);
+            }
+            */
+            //System.out.println(i);
+        }
+        
+        
+        this.technotes = technoteStrs;
+        //System.out.println(technotes);
+        
+        //System.exit(0);
+        
+    }
     
     public String toXML() {
         String xml = "";
@@ -169,6 +206,23 @@ public class DataCartFile {
             Element urlsEl = new Element("urls");
 
             fileEl.addContent(urlsEl);
+        }
+        
+        if(this.technotes != null) {
+            Element technotesEl = new Element("technotes");
+            
+            if(this.technotes != null) {
+                for(int i=0;i<technotes.size();i++) {
+                    Element technoteEl = new Element("technote");
+                    technoteEl.addContent(technotes.get(i));
+                    technotesEl.addContent(technoteEl);
+                }
+            }
+            fileEl.addContent(technotesEl);
+        } else {
+            Element technotesEl = new Element("technotes");
+
+            fileEl.addContent(technotesEl);
         }
         
         return fileEl;
@@ -420,6 +474,20 @@ public class DataCartFile {
      */
     public void setIsCached(String isCached) {
         this.isCached = isCached;
+    }
+
+    /**
+     * @return the technotes
+     */
+    public List<String> getTechnotes() {
+        return technotes;
+    }
+
+    /**
+     * @param technotes the technotes to set
+     */
+    public void setTechnotes(List<String> technotes) {
+        this.technotes = technotes;
     }
     
     

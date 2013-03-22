@@ -25,6 +25,8 @@ public class DatacartDoc {
     
     private String isCached;
     
+    private List<String> technotes;
+    
     /** Description */
     private List<DataCartFile> datacartFiles;
     
@@ -83,6 +85,12 @@ public class DatacartDoc {
                 filesEl.addContent(datacartFileEl);
             }
             docEl.addContent(filesEl);
+        }
+        
+        if(this.technotes != null) {
+            Element technotesEl = new Element("technotes");
+            
+            docEl.addContent(technotesEl);
         }
         
         return docEl;
@@ -182,6 +190,20 @@ public class DatacartDoc {
      */
     public void setIsCached(String isCached) {
         this.isCached = isCached;
+    }
+
+    /**
+     * @return the technotes
+     */
+    public List<String> getTechnotes() {
+        return technotes;
+    }
+
+    /**
+     * @param technotes the technotes to set
+     */
+    public void setTechnotes(List<String> technotes) {
+        this.technotes = technotes;
     }
     
 }

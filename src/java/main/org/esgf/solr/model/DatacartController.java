@@ -22,7 +22,7 @@ public class DatacartController {
         
         final MockHttpServletRequest mockRequest = new MockHttpServletRequest();
         
-        mockRequest.addParameter("dataset_id", "ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1|esg2-sdnl1.ccs.ornl.gov");
+        mockRequest.addParameter("dataset_id", "ana4MIPs.NASA-GMAO.MERRA.atmos.mon.v20121221|esgdata1.nccs.nasa.gov");
         
         DatacartController dc = new DatacartController();
         
@@ -36,7 +36,7 @@ public class DatacartController {
     @RequestMapping(method=RequestMethod.POST, value="/datacart")
     public @ResponseBody String getDoc(HttpServletRequest request) {
         
-        System.out.println("In get doc");
+        System.out.println("\n\n\nIn new datacart controller\n\n\n");
         
         String response = "";
         
@@ -122,7 +122,9 @@ public class DatacartController {
         //get response and send it back in json form
         
         response = datacartDoc.toJSON();
-/*
+
+        System.out.println(response);
+        /*
         
         String peerStr = request.getParameter("peerStr");
         //String [] peers = peerStr.split(";");

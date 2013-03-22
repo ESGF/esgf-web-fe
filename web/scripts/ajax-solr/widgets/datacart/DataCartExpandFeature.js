@@ -200,11 +200,13 @@
 				 '<span style="font-style:italic">' + 'tracking_id: ' + data.doc.files.file[i].tracking_id + '</span>' +
 				 '  <br />' +
 				 '<span style="font-style:italic">checksum: ' + data.doc.files.file[i].checksum + ' (' + data.doc.files.file[i].checksum_type + ')' + '</span>' +
+				 '  <br />' +
+				 '<span style="font-style:bold"><a href="' + data.doc.files.file[i].technotes.technote + '" target="_blank">TECHNOTE</a>' + '</span>' +
 				 '</div>' +
 				 '</td>';
 							
 				appendedFiles += '<td style="float-right;font-size:11px;text-align:right">';
-			
+				alert('technote: ' + data.doc.files.file[i].technotes.technote);
 				for(var j=0;j<data.doc.files.file[i].services.service.length;j++) {
 					var service = data.doc.files.file[i].services.service[j];
 					var url = data.doc.files.file[i].urls.url[j];
@@ -382,7 +384,7 @@
 							
 						},
 						error: function() {
-							alert('Error in expanding files for dataset ' + data.doc.datasetId);
+							alert('Error in expanding files for dataset ');
 							//alert('Error in expanding files for dataset ');
 						}
 					});
@@ -400,7 +402,6 @@
 			
 			$('a.view_more_files_short').live('click',function() {
 
-				
 				if(this.innerHTML == "View more files") {
 				
 
@@ -413,7 +414,8 @@
 					var peerStr = ESGF.datacart.getIndividualPeer(idStr);
 					var technoteStr = ESGF.datacart.getTechnoteStr();
 			    	var fqParamStr = ESGF.datacart.getFqParamStr();
-					
+
+			    	var constraints = fqParamStr;
 			    	
 			    	/* OLD
 			    	var queryStr = {"idStr" : idStr, 

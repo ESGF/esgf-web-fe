@@ -124,6 +124,7 @@ public class GOauthView2Controller {
         String auth_code = request.getParameter("code");
 	String [] file_urls;
 	String [] file_names;
+	String dataset_id="";
 	String	BaseURL="";
 //Get the session, so we can retrieve state.
   	HttpSession session = request.getSession(false);
@@ -134,7 +135,7 @@ public class GOauthView2Controller {
         file_names = (String []) session.getAttribute("fileNames");
                 //LOG.info("filenames are:" + file_names.length);
         file_urls = (String []) session.getAttribute("fileUrls");
-        String dataset_id = (String ) session.getAttribute("datasetName");
+        dataset_id = (String ) session.getAttribute("datasetName");
 	//System.out.println("Auth2, session id is:" + session.getId());
 	//System.out.println("Your dataset name is: " + dataset_id);
 	BaseURL = (String) session.getAttribute("baseurl");
@@ -179,7 +180,7 @@ public class GOauthView2Controller {
 
 		}
 
-        return new ModelAndView("redirect:https://globusonline.org/xfer/SelectDestination" + "?method=post&ep=GC&title=Select Destination&message=Your Globus Connect endpoint has been selected by default. If you would prefer to transfer to a different endpoint, you can select it below.&button=Start Transfer&transferoptions=LBECG&action=" +URLEncoder.encode(response.encodeRedirectURL(BaseURL + "/esgf-web-fe/goauthview3"),"UTF-8"), model);
+        return new ModelAndView("redirect:https://globusonline.org/xfer/SelectDestination" + "?method=post&ep=GC&title=Select Destination&message=Choose your destination for dataset " + dataset_id + "     Your Globus Connect endpoint has been selected by default. If you would prefer to transfer to a different endpoint, you can select it below.&button=Start Transfer&transferoptions=BECG&action=" +URLEncoder.encode(response.encodeRedirectURL(BaseURL + "/esgf-web-fe/goauthview3"),"UTF-8"), model);
     }
 
   private Properties getGOProperties()

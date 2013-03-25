@@ -68,6 +68,7 @@
 package org.esgf.globusonline;
 
 import java.util.Vector;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -126,6 +127,7 @@ public class GOauthView3Controller {
         String userCertificate = null;
 	String goUserName = null;
         String target = request.getParameter("path");
+        String label = request.getParameter("label");
         String folder = request.getParameter("folder[0]");
 	
 	//System.out.println("path from Parameters is: " + target);
@@ -139,7 +141,6 @@ public class GOauthView3Controller {
         String srcMyproxyUserName = request.getParameter("srcmyproxyuser");
         String srcMyproxyUserPass = request.getParameter("myProxyUserPass");
         String myProxyServerStr = request.getParameter("srcmyproxyserver");
-
 
         StringBuffer errorStatus = new StringBuffer("Steps leading up to the error are shown below:<br><br>");
 
@@ -439,6 +440,8 @@ public class GOauthView3Controller {
 	    //System.out.println("goSourceEndpoint is" + goSourceEndpoint);
 	    //System.out.println("destEPName is" + destEPName);
 	    //System.out.println("fileList is" + fileList);
+
+	    //Need to modify JGOClient to pass label along
             String taskID = transfer.transfer(goSourceEndpoint, destEPName, fileList, destpath);
             if (taskID != null)
             {

@@ -143,6 +143,35 @@ public class GOauthView1Controller {
 		String BaseURL = currentURL.substring(0, currentURL.lastIndexOf(currentURI));
 		//System.out.println("BaseURL string is: " + BaseURL );
 
+		//Instantiate model object:
+        	Map<String,Object> model = new HashMap<String,Object>();
+
+//Bail out if no gsiftp URLs are in file_names
+	     if (file_names != null)
+	     {
+		for (int i = 0; i < file_names.length; i++) 
+		{
+		    if (!(file_urls[i] == null) && (file_urls[i].contains("gsiftp"))) 
+		    {
+			break;
+        	    }
+		    else 
+		    {
+		    model.put(GOFORMVIEW_ERROR, "error");
+		    String error_msg = "Selected dataset " + dataset_name + " contains no GridFTP URLS, and cannot be transferred with this transfer method.";
+                    model.put(GOFORMVIEW_ERROR_MSG, error_msg);
+                    return new ModelAndView("goauthview3", model);
+		    }
+		}
+	     }
+	    else 
+	    {
+	    System.out.println("file_urls itself was null\n");
+	    model.put(GOFORMVIEW_ERROR, "error");
+	    String error_msg = "Selected dataset(s) " + dataset_name + " contain no GridFTP URLS, and cannot be transferred with this transfer method.";
+                   model.put(GOFORMVIEW_ERROR_MSG, error_msg);
+                   return new ModelAndView("goauthview3", model);
+	    }
 //Create a session if it doesn't already exist, so we can save state.
   	HttpSession session = request.getSession(true);
 	if (session.isNew() == false) {
@@ -172,7 +201,6 @@ public class GOauthView1Controller {
             }
 
             LOG.debug("Got User OpenID: " + openId); 
-        	Map<String,Object> model = new HashMap<String,Object>();
 		// Create the client
 		Properties GOProperties = getGOProperties();
 		String PortalID = (String) GOProperties.getProperty("GOesgfPortalID", "bogususer");

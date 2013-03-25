@@ -44,6 +44,7 @@ public class DatacartDoc {
     
     public DatacartDoc(SolrResponse solrResponse) {
         
+        
         //get the count
         this.setCount(solrResponse.getCount());
         this.datacartFiles = new ArrayList<DataCartFile>();
@@ -57,7 +58,7 @@ public class DatacartDoc {
                 this.setIsCached("false");
             }
         }
-        
+
         
     }
     

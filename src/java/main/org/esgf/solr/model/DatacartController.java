@@ -36,7 +36,8 @@ public class DatacartController {
     @RequestMapping(method=RequestMethod.POST, value="/datacart")
     public @ResponseBody String getDoc(HttpServletRequest request) {
         
-        System.out.println("\n\n\nIn new datacart controller\n\n\n");
+        if(Utils.debugMode)
+            System.out.println("\n\n\nIn new datacart controller\n\n\n");
         
         String response = "";
         
@@ -70,15 +71,10 @@ public class DatacartController {
         
         
         
-       
-        
-        
-        
         String query = "*";
         if(!isShowAll.equals("true")) {
             
             String constraints = request.getParameter("constraints");
-            System.out.println("constraints: " + constraints);
           
             String [] constraint = constraints.split(";");
             for(int i=0;i<constraint.length;i++) {
@@ -92,10 +88,13 @@ public class DatacartController {
             
         }
         
-        System.out.println("isInitialQuery: " + isInitialQuery);
-        System.out.println("offset: " + offset);
-        System.out.println("limit: " + limit);
-        System.out.println("query: " + query);
+        if(Utils.debugMode) {
+            System.out.println("isInitialQuery: " + isInitialQuery);
+            System.out.println("offset: " + offset);
+            System.out.println("limit: " + limit);
+            System.out.println("query: " + query);
+        }
+        
         
         //query solr for the files
         Solr solr = new Solr();
@@ -107,15 +106,18 @@ public class DatacartController {
         solr.addConstraint("type", "File");
         solr.addConstraint("dataset_id",dataset_id);
         
-        System.out.println("\nsolr query->" + solr.getQueryString() + "\n\n");
+        if(Utils.debugMode)
+            System.out.println("\nsolr query->" + solr.getQueryString() + "\n\n");
         
         
         solr.executeQuery();
+        
         
         SolrResponse solrResponse = solr.getSolrResponse();
         
         DatacartDoc datacartDoc = new DatacartDoc(solrResponse);
 
+        System.out.println("am i here???");
         datacartDoc.setDatasetId(dataset_id);
         //System.out.println( new XmlFormatter().format(datacartDoc.toXML()));
         //System.out.println( datacartDoc.toJSON());
@@ -123,7 +125,8 @@ public class DatacartController {
         
         response = datacartDoc.toJSON();
 
-        System.out.println(response);
+        if(Utils.debugMode)
+            System.out.println(response);
         /*
         
         String peerStr = request.getParameter("peerStr");

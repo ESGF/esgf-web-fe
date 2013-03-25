@@ -37,16 +37,55 @@ public class DataCartFile {
     
     public DataCartFile(SolrRecord solrRecord) {
         
-        System.out.println("\n\n\nIn datacart File\n");
+        if(Utils.debugMode)
+            System.out.println("\n\n\nIn datacart File\n");
         
-        this.fileId = solrRecord.getStrField("id");
-        this.title = solrRecord.getStrField("title");
-        this.size = solrRecord.getMiscField("size");
+        String fileId = null;
+        if(solrRecord.getStrField("id") == null) {
+            fileId = "N/A";
+        } else {
+            fileId = solrRecord.getStrField("id");
+        }
+        String title = null;
+        if(solrRecord.getStrField("title") == null) {
+            title = "N/A";
+        } else {
+            title = solrRecord.getStrField("title");
+        }
+        String size = null;
+        if(solrRecord.getStrField("size") == null) {
+            size = "N/A";
+        } else {
+            size = solrRecord.getStrField("size");
+        }
+        String tracking_id = null;
+        if(solrRecord.getStrField("tracking_id") == null) {
+            tracking_id = "N/A";
+        } else {
+            tracking_id = solrRecord.getStrField("tracking_id");
+        }
+        String checksum = null;
+        if(solrRecord.getStrField("checksum") == null) {
+            checksum = "N/A";
+        } else {
+            checksum = solrRecord.getStrField("checksum");
+        }
+        String checksum_type = null;
+        if(solrRecord.getStrField("checksum_type") == null) {
+            checksum_type = "N/A";
+        } else {
+            checksum_type = solrRecord.getStrField("checksum_type");
+        }
         
-        this.tracking_id = solrRecord.getStrField("tracking_id");
-        this.checksum = solrRecord.getStrField("checksum");
-        this.checksum_type = solrRecord.getStrField("checksum_type");
-
+        this.fileId = fileId;
+        this.title = title;
+        this.size = size;
+        
+        this.tracking_id = tracking_id;
+        this.checksum = checksum;
+        this.checksum_type = checksum_type;
+        
+        
         this.getCacheInfo(solrRecord);
         
         this.parseUrl(solrRecord);
@@ -56,34 +95,23 @@ public class DataCartFile {
     
     public void getTechnotesFromRecord(SolrRecord solrRecord) {
         
-        System.out.println("getting technote");
         
         List<String> technotes = solrRecord.getArrField("xlink");
-        
         List<String> technoteStrs = new ArrayList<String>();
         
-        for(int i=0;i<technotes.size();i++) {
+        
+        if(technotes != null) {
+            System.out.println(technotes.size());
             
-            String technoteStrElement = technotes.get(i);
-            //System.out.println(technoteStrElement);
-            String [] technoteStr = technoteStrElement.split("\\|");
-            technoteStrs.add(technoteStr[0]);
-            //System.out.println(technoteStr.length);
-            /*
-            for(int j=0;j<technoteStr.length;j++) {
-                //System.out.println(j);
-                
-                technoteStrs.add(technoteStr[j]);
+            for(int i=0;i<technotes.size();i++) {
+                String technoteStrElement = technotes.get(i);
+                String [] technoteStr = technoteStrElement.split("\\|");
+                technoteStrs.add(technoteStr[0]);
             }
-            */
-            //System.out.println(i);
+            
+            this.technotes = technoteStrs;
         }
         
-        
-        this.technotes = technoteStrs;
-        //System.out.println(technotes);
-        
-        //System.exit(0);
         
     }
     

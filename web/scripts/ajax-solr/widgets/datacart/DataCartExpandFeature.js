@@ -206,7 +206,7 @@
 				 '</td>';
 							
 				appendedFiles += '<td style="float-right;font-size:11px;text-align:right">';
-				alert('technote: ' + data.doc.files.file[i].technotes.technote);
+				
 				for(var j=0;j<data.doc.files.file[i].services.service.length;j++) {
 					var service = data.doc.files.file[i].services.service[j];
 					var url = data.doc.files.file[i].urls.url[j];
@@ -311,24 +311,16 @@
 							"peerStr" : peerStr, 
 							"technotesStr" : technoteStr, 
 					};
-			    	/*
-			    	var queryStr = {"idStr" : idStr, 
-							"peerStr" : peerStr, 
-							"technotesStr" : technoteStr, 
-							"showAllStr" : ESGF.setting.showAllContents, 
-							"fqStr" : fqParamStr, 
-							"initialQuery" : "true",
-        					"fileCounter" : ESGF.setting.fileCounter};
-			    	*/
+			    	
 			    	//NEED TO FIX THIS!!!!
 			    	var url = '/esgf-web-fe/solrfileproxy3/datacart/';
+					
 					
 			    	//CHANGE ME!
 			    	//queryStr['peerStr'] = 'localhost';
 			 
-			    	//('initial queryStr: ' + queryStr['peerStr']);
-			    	
-			    	
+					
+					
 			    	//initial ajax call for first x number of files in dataset
 					$.ajax({
 						url: url,

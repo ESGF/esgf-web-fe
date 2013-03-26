@@ -61,12 +61,14 @@ ESGF.datacart.addConstraintsToWGETQueryString = function(queryString,constraints
     return queryString;
 };
 
-ESGF.datacart.addConstraintsToWGETQueryString = function(queryString) {
+ESGF.datacart.addConstraintsToWGETQueryString = function(queryString,fqParamStr) {
 	//if filtering over search constraints...then add the search constraints to the wget
 	
-	var fqParamStr = ESGF.datacart.getFqParamStr();
+	//var fqParamStr = ESGF.datacart.getFqParamStr();
 	
-	//alert('fqParamStr: ' + fqParamStr);
+	alert('fqParamStr: ' + fqParamStr);
+	
+	/*
     if(ESGF.setting.showAllContents == 'false') {
     	
     	// traverse through the constraints and add to the querystring
@@ -87,7 +89,7 @@ ESGF.datacart.addConstraintsToWGETQueryString = function(queryString) {
 			}
 		}
     }
-    
+    */
 	
     return queryString;
 };

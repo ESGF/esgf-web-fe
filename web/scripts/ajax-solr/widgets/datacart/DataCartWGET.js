@@ -138,9 +138,11 @@
 	        	
 		    	//alert('queryStringUber: ' + queryString);
                 
-
-		    	queryString = ESGF.datacart.addConstraintsToWGETQueryString(queryString);
+		    	var fqParamStr = ESGF.datacart.getFqParamStr();
+		    	
+		    	queryString = ESGF.datacart.addConstraintsToWGETQueryString(queryString,fqParamStr);
 	        	
+		    	
 	            //queryString += '&shards=' + peerAppend;
 	            
 	           // alert('queryStringUber: ' + queryString);

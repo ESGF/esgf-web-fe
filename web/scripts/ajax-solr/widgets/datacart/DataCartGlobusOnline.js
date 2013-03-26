@@ -346,6 +346,9 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 		
 		$('a#uber_GO_script_short').click(function() {
 
+			alert('accessing globus online');
+			
+			/*
 	    	self.file_ids_arr = new Array();
 	    	self.grid_urls_arr = new Array();
 			
@@ -425,7 +428,7 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 	        
 	        
 	        
-	        
+	        */
 	        
 	        
 	    	

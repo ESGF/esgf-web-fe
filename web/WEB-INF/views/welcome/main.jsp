@@ -28,11 +28,12 @@
         <br/>If you have trouble running wget scripts to download data,
         please consult the <a href="http://www.esgf.org/wiki/ESGF_wget_FAQ">TABLE OF WORKING DATA NODES</a>.  		
   		-->
+  		<!--  
   		Welcome to the new CMIP5 distributed archive. Our new ESGF peer-to-peer
 (P2P) enterprise system is now the official site for CMIP5 model output.
 The old <a href="http://pcmdi3.llnl.gov/esgcet/home.htm" target="_blank">gateways</a> will remain active and output from all models will continue to be available until the end of July 2012.  
 Please send e-mail to <a href="mailto:esgf-user@lists.llnl.gov?subject=ESGF Portal Feedback">esgf-user@lists.llnl.gov</a> to report bugs and provide feedback.
-  		
+  		-->
   		</div> 
   	</div>
   

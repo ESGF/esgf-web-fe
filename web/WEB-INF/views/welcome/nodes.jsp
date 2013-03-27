@@ -15,7 +15,7 @@
        	</div>
 	</div>
 	<div class="span-7 last infocontent">
-			<ul>
+			<ul style="margin-top:10px">
 		        <li>
 		        	<a href='http://dev.esg.anl.gov/'><img src="images/flags/USA.png" class="icon" alt="USA flag" />ANL Node</a>
 		        	<a href='http://dev.esg.anl.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon"  class="icon"></a>

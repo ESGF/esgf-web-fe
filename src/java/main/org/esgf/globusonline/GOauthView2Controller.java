@@ -4,7 +4,7 @@
  * OPEN SOURCE LICENSE
  *
  * Subject to the conditions of this License, UT-Battelle, LLC (the
- * “Licensor”) hereby grants to any person (the “Licensee”) obtaining a copy
+ * "Licensor") hereby grants to any person (the "Licensee") obtaining a copy
  * of this software and associated documentation files (the "Software"), a
  * perpetual, worldwide, non-exclusive, irrevocable copyright license to use,
  * copy, modify, merge, publish, distribute, and/or sublicense copies of the
@@ -14,7 +14,7 @@
  * grant, copyright and license notices, this list of conditions, and the
  * disclaimer listed below.  Changes or modifications to, or derivative works
  * of the Software must be noted with comments and the contributor and
- * organization’s name.  If the Software is protected by a proprietary
+ * organization's name.  If the Software is protected by a proprietary
  * trademark owned by Licensor or the Department of Energy, then derivative
  * works of the Software may not be distributed using the trademark without
  * the prior written approval of the trademark owner.
@@ -27,7 +27,7 @@
  * acknowledgment:
  *
  *    "This product includes software produced by UT-Battelle, LLC under
- *    Contract No. DE-AC05-00OR22725 with the Department of Energy.”
+ *    Contract No. DE-AC05-00OR22725 with the Department of Energy."
  *
  * 4. Licensee is authorized to commercialize its derivative works of the
  * Software.  All derivative works of the Software must include paragraphs 1,
@@ -124,6 +124,7 @@ public class GOauthView2Controller {
         String auth_code = request.getParameter("code");
 	String [] file_urls;
 	String [] file_names;
+	String dataset_id="";
 	String	BaseURL="";
 //Get the session, so we can retrieve state.
   	HttpSession session = request.getSession(false);
@@ -134,7 +135,7 @@ public class GOauthView2Controller {
         file_names = (String []) session.getAttribute("fileNames");
                 //LOG.info("filenames are:" + file_names.length);
         file_urls = (String []) session.getAttribute("fileUrls");
-        String dataset_id = (String ) session.getAttribute("datasetName");
+        dataset_id = (String ) session.getAttribute("datasetName");
 	//System.out.println("Auth2, session id is:" + session.getId());
 	//System.out.println("Your dataset name is: " + dataset_id);
 	BaseURL = (String) session.getAttribute("baseurl");
@@ -179,7 +180,7 @@ public class GOauthView2Controller {
 
 		}
 
-        return new ModelAndView("redirect:https://globusonline.org/xfer/SelectDestination" + "?method=post&ep=GC&title=Select Destination&message=Your Globus Connect endpoint has been selected by default. If you would prefer to transfer to a different endpoint, you can select it below.&button=Start Transfer&transferoptions=LBECG&action=" +URLEncoder.encode(response.encodeRedirectURL(BaseURL + "/esgf-web-fe/goauthview3"),"UTF-8"), model);
+        return new ModelAndView("redirect:https://globusonline.org/xfer/SelectDestination" + "?method=post&ep=GC&title=Select Destination&message=Choose your destination for dataset " + dataset_id + "     Your Globus Connect endpoint has been selected by default. If you would prefer to transfer to a different endpoint, you can select it below.&button=Start Transfer&transferoptions=BECG&action=" +URLEncoder.encode(response.encodeRedirectURL(BaseURL + "/esgf-web-fe/goauthview3"),"UTF-8"), model);
     }
 
   private Properties getGOProperties()

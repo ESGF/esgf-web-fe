@@ -1,10 +1,10 @@
 /*****************************************************************************
- * Copyright © 2011 , UT-Battelle, LLC All rights reserved
+ * Copyright 2011 , UT-Battelle, LLC All rights reserved
  *
  * OPEN SOURCE LICENSE
  *
  * Subject to the conditions of this License, UT-Battelle, LLC (the
- * ÒLicensorÓ) hereby grants to any person (the ÒLicenseeÓ) obtaining a copy
+ * "Licensor") hereby grants to any person (the "Licensee") obtaining a copy
  * of this software and associated documentation files (the "Software"), a
  * perpetual, worldwide, non-exclusive, irrevocable copyright license to use,
  * copy, modify, merge, publish, distribute, and/or sublicense copies of the
@@ -14,7 +14,7 @@
  * grant, copyright and license notices, this list of conditions, and the
  * disclaimer listed below.  Changes or modifications to, or derivative works
  * of the Software must be noted with comments and the contributor and
- * organizationÕs name.  If the Software is protected by a proprietary
+ * organization's name.  If the Software is protected by a proprietary
  * trademark owned by Licensor or the Department of Energy, then derivative
  * works of the Software may not be distributed using the trademark without
  * the prior written approval of the trademark owner.
@@ -27,7 +27,7 @@
  * acknowledgment:
  *
  *    "This product includes software produced by UT-Battelle, LLC under
- *    Contract No. DE-AC05-00OR22725 with the Department of Energy.Ó
+ *    Contract No. DE-AC05-00OR22725 with the Department of Energy."
  *
  * 4. Licensee is authorized to commercialize its derivative works of the
  * Software.  All derivative works of the Software must include paragraphs 1,
@@ -68,6 +68,7 @@
 package org.esgf.globusonline;
 
 import java.util.Vector;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -126,6 +127,7 @@ public class GOauthView3Controller {
         String userCertificate = null;
 	String goUserName = null;
         String target = request.getParameter("path");
+        String label = request.getParameter("label");
         String folder = request.getParameter("folder[0]");
 	
 	//System.out.println("path from Parameters is: " + target);
@@ -139,7 +141,6 @@ public class GOauthView3Controller {
         String srcMyproxyUserName = request.getParameter("srcmyproxyuser");
         String srcMyproxyUserPass = request.getParameter("myProxyUserPass");
         String myProxyServerStr = request.getParameter("srcmyproxyserver");
-
 
         StringBuffer errorStatus = new StringBuffer("Steps leading up to the error are shown below:<br><br>");
 
@@ -439,6 +440,8 @@ public class GOauthView3Controller {
 	    //System.out.println("goSourceEndpoint is" + goSourceEndpoint);
 	    //System.out.println("destEPName is" + destEPName);
 	    //System.out.println("fileList is" + fileList);
+
+	    //Need to modify JGOClient to pass label along
             String taskID = transfer.transfer(goSourceEndpoint, destEPName, fileList, destpath);
             if (taskID != null)
             {

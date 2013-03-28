@@ -115,134 +115,35 @@
 			 */
 			$("a#uber_script_short").live('click', function() {
 
-				
-				//alert('uber');
-				
-				var self = this;
-				
-				
 				//gather the file_ids
 	        	var file_ids   = new Array();
 	            
-	        	//gather the dataset_ids
+				//gather the dataset_ids
 	        	var dataset_ids = new Array();
 	        	
 	        	//iterate over the selected array of datasets in the data cart
 	        	//grab all the keys from the datacart map and place in an array
 		    	self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
 
-            	//get the peers
-            	var peerStr = ESGF.datacart.getPeerStr();
-	        	
-	            for(var i=0;i<self.selected_arr.length;i++) {
-	            
+		    	for(var i=0;i<self.selected_arr.length;i++) {
+		            
 	            	var selectedDocId = self.selected_arr[i];//self.selected_arr[i];
-	            	
-	            	
-	            	var selectedDocCount = $('span.datasetCount_'+ESGF.datacart.replaceChars(selectedDocId)).html();
-	            	
-	            	//if the count is greater than 10, check to see if the additional rows have been not been expanded for this dataset
-	            	//if not (null) then need an extra ajax call to get the rest of the file ids
-	            	var isAdded = $('tr.addedrow_' + ESGF.datacart.replaceChars(selectedDocId)).html();//$(this).parent().parent().parent().find('tr.addedrow_' + replaceChars(selectedDocId)).html();
-	            	
 	            	dataset_ids.push(selectedDocId);
 	            	
-	            	if(isAdded == null && selectedDocCount > ESGF.setting.fileCounter) {
-	            	
-	            		
-	            		$('tr.file_rows_'+ ESGF.datacart.replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
-	            			var file_id = $(this).parent().find('input').attr('value');
-	            			file_ids.push(file_id);
-	            		});
-	            		
-	            		
-	            		
-	            		//get all of the search constraints (fq params)
-	                	var fqParamStr = ESGF.datacart.getFqParamStr();
-	                	
-	                	
-	                	//get the technotes
-	                	var technoteStr = ESGF.datacart.getTechnoteStr();
-	            		
-	                	//the id str is only one file
-	                	var idStr = selectedDocId;
-	                	
-	                	
-	                	
-	            		//assemble the query string
-	                	var queryStr = {"idStr" : idStr, 
-	        					"peerStr" : peerStr, 
-	        					"technotesStr" : technoteStr, 
-	        					"showAllStr" : ESGF.setting.showAllContents, 
-	        					"fqStr" : fqParamStr, 
-	        					"initialQuery" : "true",
-	        					"fileCounter" : ESGF.setting.fileCounter};
-
-	                	
-	                	$.ajax({
-	    					url: '/esgf-web-fe/solrfileproxy2/datacart',
-	    					global: false,
-	    					type: "GET",
-	    					data: queryStr,
-	    				    async: false,
-	    					dataType: 'json',
-	    					success: function(data) {
-	    						for(var i=0;i<data.docs.doc.files.file.length;i++){
-	    							var file = data.docs.doc.files.file[i];
-	    							file_ids.push(file.fileId);
-	    						}
-	    						
-	    					},
-	    					error: function() {
-	    						alert('error in uber script');
-	    					}
-	                	});
-	            		
-	            	
-	            	} else {
-	            		$('tr.file_rows_'+ ESGF.datacart.replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
-	            			var file_id = $(this).parent().find('input').attr('value');
-	            			file_ids.push(file_id);
-	            		});
-	            		
-	            		
-	            	}
-	            	
-	            }
-	            
-	            var queryString = '/esg-search/wget/?';
+		    	}
+		    	
+		    	var queryString = '/esg-search/wget/?';
 	        	
-	            var constraintCount = 0;
-	            
-	            var peers = peerStr.split(";");
-	            var peerAppend = '';
-	            for(var i=0;i<peers.length;i++) {
-	            	/*
-	            	if(peers[i] == 'esg-datanode.jpl.nasa.gov') {
-	            		peerAppend += 'localhost:18983/solr';
-	            	} else if (peers[i] == 'pcmdi9.llnl.gov') {
-	            		peerAppend += 'localhost:28983/solr';
-	            	} else*/ {
-		            	peerAppend += peers[i] + ':8983/solr';
-	            	}
-	            	if(i != (peers.length-1)) {
-	            		peerAppend += ',';
-	            	}
-	            }
-	            
-	            //alert('peerAppend: ' + peerAppend);
-	            
-	            queryString = ESGF.datacart.addConstraintsToWGETQueryString(queryString);
-	        	
-	            //alert('peerStr: ' + peerStr + ' queryString: ' + queryString);
-	            
-	            queryString += '&shards=' + peerAppend;
-	            
-	            //alert('queryStringUber: ' + queryString);
                 
+		    	var fqParamStr = ESGF.datacart.getFqParamStr();
+		    	
+		    	queryString = ESGF.datacart.addConstraintsToWGETQueryString(queryString,fqParamStr);
+	        	
+		    	
 	            
 	            ESGF.datacart.submitWGETScriptForm(queryString,file_ids,dataset_ids);
 				
+
 				
 			});
 			
@@ -254,9 +155,12 @@
 			
 			$('a.wgetAllFiles_short').live('click',function() {
 				
+				
+				
+				
 				//extract the dataset Id from the span tag
 				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
-				
+
 				
 				//var self = this;
 				//self.innerHTML = "Downloading...";
@@ -268,7 +172,6 @@
 				parentElement.find('a.wgetAllFiles_short').hide();
 				parentElement.find('span.wgetAllFiles_short').show();
 				
-				//alert('sele: ' + selectedDocId + ' ' + replaceChars(selectedDocId));
 				
 				//$('.wgetAllFiles_short_'+replaceChars(selectedDocId)).remove();
 				
@@ -292,14 +195,23 @@
 				
 				//alert('idStr ' + idStr);
 				
-				var peerStr = ESGF.datacart.getIndividualPeer(idStr);//getPeerStr();
+				//var peerStr = ESGF.datacart.getIndividualPeer(idStr);//getPeerStr();
 				
-				var technoteStr = ESGF.datacart.getTechnoteStr();
+				//var technoteStr = ESGF.datacart.getTechnoteStr();
 								
+				var queryString = '/esg-search/wget/?';
+
 		    	var fqParamStr = ESGF.datacart.getFqParamStr();
 		    	
+                queryString = ESGF.datacart.addConstraintsToWGETQueryString(queryString,fqParamStr);
+                
+            	ESGF.datacart.submitWGETScriptForm(queryString,file_ids,dataset_ids);
+    			
+
+				parentElement.find('a.wgetAllFiles_short').show();
+				parentElement.find('span.wgetAllFiles_short').hide();
 		    	
-		    	
+		    	/*
 		    	var queryStr = {"idStr" : idStr, 
 						"peerStr" : peerStr, 
 						"technotesStr" : technoteStr, 
@@ -307,7 +219,57 @@
 						"fqStr" : fqParamStr, 
 						"initialQuery" : "true",
     					"fileCounter" : ESGF.setting.fileCounter};
+		    	*/
 		    	
+		    	
+				/*
+		    	var dataset_id = selectedDocId;
+		    	var fqParamStr = ESGF.datacart.getFqParamStr();
+		    	var type = 'Dataset';
+		    	var file_id = 'N/A';
+		    	var file_url = 'N/A';
+		    	
+		    	var queryStr = { 
+						'dataset_id': dataset_id,
+						'constraints': fqParamStr,
+						'type': type,
+						'file_id':file_id,
+			 			'file_url':file_url,
+			 	   };
+		    	
+		    	
+		    	$.ajax({
+		    		url: '/esgf-web-fe/solrfileproxy3/datacart',
+					global: false,
+					type: "POST",
+					data: queryStr,
+					//dataType: 'xml',
+					success: function(data) {
+						
+						
+						//var queryString = '/esg-search/wget/?' + 'shards=' + peerStr + '&';
+						var queryString = '/esg-search/wget/?';
+						
+		                queryString = ESGF.datacart.addConstraintsToWGETQueryString(queryString);
+		                
+		            	ESGF.datacart.submitWGETScriptForm(queryString,file_ids,dataset_ids);
+		    			
+						
+					},
+					error: function(jqXHR, textStatus,errorThrown) {
+						alert('Error generating wget script.  Please contact your administrator.');
+					}
+					
+				});
+		    	*/
+		    	
+		    	
+		    	
+		    	
+		    	
+		    	
+		    	
+		    	/*
 		    	$.ajax({
 					url: '/esgf-web-fe/solrfileproxy2/datacart',
 					global: false,
@@ -315,6 +277,8 @@
 					data: queryStr,
 					dataType: 'json',
 					success: function(data) {
+						
+						
 						
 						if(data.docs.doc.files.file != undefined) {
 							for(var i=0;i<data.docs.doc.files.file.length;i++){
@@ -344,12 +308,12 @@
 											file_ids.push(file.fileId);
 										}
 
-										/*
-										if(peerStr == 'esg-datanode.jpl.nasa.gov') {
-											peerStr = 'localhost:18983/solr';
-										} else if (peerStr == 'pcmdi9.llnl.gov') {
-											peerStr = 'localhost:28983/solr';
-										}*/
+										//
+										//if(peerStr == 'esg-datanode.jpl.nasa.gov') {
+										//	peerStr = 'localhost:18983/solr';
+										//} else if (peerStr == 'pcmdi9.llnl.gov') {
+										//	peerStr = 'localhost:28983/solr';
+										//}
 										peerStr += ':8983/solr';
 										
 										var queryString = '/esg-search/wget/?' + 'shards=' + peerStr + '&';
@@ -383,13 +347,13 @@
 								
 
 								//alert('peerStr: ' + peerStr);
-								/*
-								if(peerStr == 'esg-datanode.jpl.nasa.gov') {
-									peerStr = 'localhost:18983/solr';
-								} else if (peerStr == 'pcmdi9.llnl.gov') {
-									peerStr = 'localhost:28983/solr';
-								}
-								*/
+								//
+								//if(peerStr == 'esg-datanode.jpl.nasa.gov') {
+								//	peerStr = 'localhost:18983/solr';
+								//} else if (peerStr == 'pcmdi9.llnl.gov') {
+								//	peerStr = 'localhost:28983/solr';
+								//}
+								
 								peerStr += ':8983/solr';
 								var queryString = '/esg-search/wget/?' + 'shards=' + peerStr + '&';
 				            	
@@ -421,8 +385,10 @@
 						parentElement.find('span.wgetAllFiles_short').hide();
 				
 					}
+					
 		    	});
 	        	
+		    	*/
 	        	
 			});
 			
@@ -433,3 +399,196 @@
 	});
 })(jQuery);
 		
+
+
+
+
+/*
+ * 
+    public static String INPUT_DATASET_ID = "ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1|esg2-sdnl1.ccs.ornl.gov";
+    public static String INPUT_CONSTRAINTS = ";offset=0;query=snow;latest=true;replica=false;";
+    public static String INPUT_DATASET_TYPE = "Dataset";
+    public static String INPUT_DATASET_FILE_ID = "ornl.ultrahighres.CESM1.t85f09.F1850p.v1.Ém2.h1.0002-06-20-00000.nc|esg2-sdnl1.ccs.ornl.gov";
+    public static String INPUT_DATASET_FILE_URL = "srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?SFN=mss://esg2-sdnl1.ccs.ornl.gov//proj/cli049/UHRGCS/ORNL/CESM1/t85f09.F1850p/atm/hist/t85f09.F1850p.cam2.h1.0002-06-20-00000.nc";
+    public static final String INPUT_OPEN_ID = "https://esg.ccs.ornl.gov/esgf-idp/openid/jfharney";
+    public static String INPUT_TYPE_DATASET = "Dataset";
+    public static String INPUT_TYPE_FILE = "File";
+    public static String INPUT_FILE_FILE_ID = "N/A";
+    public static String INPUT_FILE_FILE_URL = "N/A";
+		        mockRequest.addParameter("dataset_id", SRMProxyControllerConstants.INPUT_DATASET_ID);
+		        mockRequest.addParameter("constraints", SRMProxyControllerConstants.INPUT_CONSTRAINTS);
+		        mockRequest.addParameter("file_id", SRMProxyControllerConstants.INPUT_DATASET_FILE_ID);
+		        mockRequest.addParameter("file_url", SRMProxyControllerConstants.INPUT_DATASET_FILE_URL);
+		        mockRequest.addParameter("open_id", SRMProxyControllerConstants.INPUT_OPEN_ID);
+		        mockRequest.addParameter("type", "File");
+		        
+		    
+		    
+		    var queryStr = { 
+								'dataset_id': dataset_id,
+								'constraints': fqParamStr,
+								'type': type,
+								'file_id':file_id,
+					 			'file_url':file_url,
+					 	   }
+
+			LOG.debug('dataset_id: ' + queryStr['dataset_id']);
+			LOG.debug('constraints: ' + queryStr['constraints']);
+			LOG.debug('file_id: ' + queryStr['file_id']);
+			LOG.debug('file_url: ' + queryStr['file_url']);
+			LOG.debug('type: ' + queryStr['type']);
+			
+			
+			
+			$.ajax({
+				url: srm_url,
+				global: false,
+				type: "POST",
+				data: queryStr,
+				//dataType: 'xml',
+				success: function(data) {
+					alert('An email has been sent to your account.  Please follow the instructions included.');
+					
+				},
+				error: function(jqXHR, textStatus,errorThrown) {
+					//alert('error retrieving data from srm');
+					alert('textStatus: ' + textStatus);
+					alert('errorThrown: ' + errorThrown);
+					for(var key in jqXHR) {
+						//alert('key: ' + key + ' value: ' + jqXHR[key]);
+					}
+				}
+				
+			});
+*/		    
+
+
+/* OLD UBER
+var self = this;
+
+
+//gather the file_ids
+var file_ids   = new Array();
+
+//gather the dataset_ids
+var dataset_ids = new Array();
+
+//iterate over the selected array of datasets in the data cart
+//grab all the keys from the datacart map and place in an array
+self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
+
+//get the peers
+var peerStr = ESGF.datacart.getPeerStr();
+
+for(var i=0;i<self.selected_arr.length;i++) {
+
+	var selectedDocId = self.selected_arr[i];//self.selected_arr[i];
+	
+	
+	var selectedDocCount = $('span.datasetCount_'+ESGF.datacart.replaceChars(selectedDocId)).html();
+	
+	//if the count is greater than 10, check to see if the additional rows have been not been expanded for this dataset
+	//if not (null) then need an extra ajax call to get the rest of the file ids
+	var isAdded = $('tr.addedrow_' + ESGF.datacart.replaceChars(selectedDocId)).html();//$(this).parent().parent().parent().find('tr.addedrow_' + replaceChars(selectedDocId)).html();
+	
+	dataset_ids.push(selectedDocId);
+	
+	if(isAdded == null && selectedDocCount > ESGF.setting.fileCounter) {
+	
+		
+		$('tr.file_rows_'+ ESGF.datacart.replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
+			var file_id = $(this).parent().find('input').attr('value');
+			file_ids.push(file_id);
+		});
+		
+		
+		
+		//get all of the search constraints (fq params)
+    	var fqParamStr = ESGF.datacart.getFqParamStr();
+    	
+    	
+    	//get the technotes
+    	var technoteStr = ESGF.datacart.getTechnoteStr();
+		
+    	//the id str is only one file
+    	var idStr = selectedDocId;
+    	
+    	
+    	
+		//assemble the query string
+    	var queryStr = {"idStr" : idStr, 
+				"peerStr" : peerStr, 
+				"technotesStr" : technoteStr, 
+				"showAllStr" : ESGF.setting.showAllContents, 
+				"fqStr" : fqParamStr, 
+				"initialQuery" : "true",
+				"fileCounter" : ESGF.setting.fileCounter};
+
+    	
+    	$.ajax({
+			url: '/esgf-web-fe/solrfileproxy2/datacart',
+			global: false,
+			type: "GET",
+			data: queryStr,
+		    async: false,
+			dataType: 'json',
+			success: function(data) {
+				for(var i=0;i<data.docs.doc.files.file.length;i++){
+					var file = data.docs.doc.files.file[i];
+					file_ids.push(file.fileId);
+				}
+				
+			},
+			error: function() {
+				alert('error in uber script');
+			}
+    	});
+		
+	
+	} else {
+		$('tr.file_rows_'+ ESGF.datacart.replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
+			var file_id = $(this).parent().find('input').attr('value');
+			file_ids.push(file_id);
+		});
+		
+		
+	}
+	
+}
+
+var queryString = '/esg-search/wget/?';
+
+var constraintCount = 0;
+
+var peers = peerStr.split(";");
+var peerAppend = '';
+for(var i=0;i<peers.length;i++) {
+//	
+//	if(peers[i] == 'esg-datanode.jpl.nasa.gov') {
+//		peerAppend += 'localhost:18983/solr';
+//	} else if (peers[i] == 'pcmdi9.llnl.gov') {
+//		peerAppend += 'localhost:28983/solr';
+//	} else
+	{
+    	peerAppend += peers[i] + ':8983/solr';
+	}
+	if(i != (peers.length-1)) {
+		peerAppend += ',';
+	}
+}
+
+//alert('peerAppend: ' + peerAppend);
+
+queryString = ESGF.datacart.addConstraintsToWGETQueryString(queryString);
+
+//alert('peerStr: ' + peerStr + ' queryString: ' + queryString);
+
+queryString += '&shards=' + peerAppend;
+
+//alert('queryStringUber: ' + queryString);
+
+
+ESGF.datacart.submitWGETScriptForm(queryString,file_ids,dataset_ids);
+
+*/
+	

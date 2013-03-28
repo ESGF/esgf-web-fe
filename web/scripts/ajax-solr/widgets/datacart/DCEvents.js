@@ -128,10 +128,6 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 		});
 		
 		$("select[name='fileC']").live(	'change', function() { 
-			//alert('fileCounter'+ESGF.setting.fileCounter);
-	    	
-			//var sel = document.fileC.selectedIndex;
-			//alert($("select[id='fileCounter50']").attr("selectedIndex"));
 			
 			var selectedIndex = $("select[name='fileC']").attr("selectedIndex");
 			
@@ -148,8 +144,6 @@ AjaxSolr.DCEventsWidget = AjaxSolr.AbstractWidget.extend({
 
 			Manager.doRequest(0);
 			
-			//alert($('.fileCounter'+ESGF.setting.fileCounter).attr("selected"));
-	    	//$('.fileCounter').change();
 		});
 		
 		

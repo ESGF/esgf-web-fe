@@ -170,6 +170,40 @@
     
 <!--  end admin pages -->
 
+<!-- srm pages -->
+<!-- go page layout  -->
+    <definition name="srm-layout" extends="base-layout">
+<!--
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+-->
+       <put-attribute name="layoutType" type="string" value="srmview"/>
+    </definition>
+    
+    <!-- go template -->
+    <definition name="srmview" extends="srm-layout">
+<!--
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+-->
+       <put-attribute name="main" value="/WEB-INF/views/srmview/srm_view.jsp" />
+    </definition>
+
+<!-- go page layout  -->
+    <definition name="go-srm-layout" extends="base-layout">
+<!--
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+-->
+       <put-attribute name="layoutType" type="string" value="srmview"/>
+    </definition>
+    
+    <!-- go template -->
+    <definition name="gosrmview" extends="go-srm-layout">
+<!--
+        <put-attribute name="extrascript"  value="/WEB-INF/views/search/script_search.jsp" />
+-->
+       <put-attribute name="main" value="/WEB-INF/views/srmview/go_srm_view.jsp" />
+    </definition>
+
+
 <!-- go pages -->
 
 <!-- go page layout  -->

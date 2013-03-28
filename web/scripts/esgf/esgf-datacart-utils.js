@@ -32,8 +32,7 @@ ESGF.datacart.submitWGETScriptForm = function (queryString,file_ids,dataset_ids)
     jQuery(form).appendTo('body').submit().remove();
 };
 
-
-ESGF.datacart.addConstraintsToWGETQueryString = function(queryString) {
+ESGF.datacart.addConstraintsToWGETQueryString = function(queryString,constraints) {
 	//if filtering over search constraints...then add the search constraints to the wget
 	
 	
@@ -58,6 +57,32 @@ ESGF.datacart.addConstraintsToWGETQueryString = function(queryString) {
 		}
     }
     
+	
+    return queryString;
+};
+
+ESGF.datacart.addConstraintsToWGETQueryString = function(queryString,fqParamStr) {
+	//if filtering over search constraints...then add the search constraints to the wget
+	
+	//var fqParamStr = ESGF.datacart.getFqParamStr();
+	
+	//alert('fqParamStr: ' + fqParamStr);
+	
+	if(ESGF.setting.showAllContents == 'false') {
+		var searchConstraintArr = fqParamStr.split(";");
+		for(var i=0;i<searchConstraintArr.length;i++) {
+			//alert('sea: ' + searchConstraintArr[i]);
+			if(searchConstraintArr[i].search('query') > -1) {
+				queryString += searchConstraintArr[i];
+			}
+		
+		}
+	}
+	
+	
+	var searchConstraints = ESGF.localStorage.toKeyArr('esgf_fq');
+	
+	
 	
     return queryString;
 };
@@ -298,3 +323,26 @@ ESGF.datacart.rewriteDocsObject = function (docs) {
 	
 };
 
+
+/*
+if(ESGF.setting.showAllContents == 'false') {
+	
+	// traverse through the constraints and add to the querystring
+	//for(var i in self.searchConstraints) {
+	var searchConstraints = ESGF.localStorage.toKeyArr('esgf_fq');
+	for(var i=0;i<searchConstraints.length;i++) {
+		if(searchConstraints[i].search('replica') == -1 && 
+		   searchConstraints[i].search('type') == -1) {
+		   //constraintCount = constraintCount + 1;
+		   
+		   //replace the : with =
+		   var constraint = searchConstraints[i].replace(':','=');
+		   
+		   //replace 'text' with 'query' for free text searches
+		   constraint = constraint.replace('text','query');
+		   queryString += constraint + '&';
+		   
+		}
+	}
+}
+*/

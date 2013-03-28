@@ -117,7 +117,6 @@
 			
 			var view_first_files_tag = self.view_first_files_tag + 'initial_true_' + ESGF.datacart.replaceChars(data.doc.datasetId);
 			
-			//alert('view_first_files_tag: ' + view_first_files_tag);
 	    	
 			var appendedFiles = '';
 			
@@ -172,11 +171,11 @@
 					var urlsArray = new Array();
 					urlsArray.push(data.doc.files.file[j].urls.url);
 					data.doc.files.file[j].urls['url'] = urlsArray;
-					
+					/*
 					var mimesArray = new Array();
 					mimesArray.push(data.doc.files.file[j].mimes.mime);
 					data.doc.files.file[j].mimes['mime'] = mimesArray;
-					
+					*/
 				}
 			}
 			//loop over the number of files
@@ -201,11 +200,13 @@
 				 '<span style="font-style:italic">' + 'tracking_id: ' + data.doc.files.file[i].tracking_id + '</span>' +
 				 '  <br />' +
 				 '<span style="font-style:italic">checksum: ' + data.doc.files.file[i].checksum + ' (' + data.doc.files.file[i].checksum_type + ')' + '</span>' +
+				 '  <br />' +
+				 '<span style="font-style:bold"><a href="' + data.doc.files.file[i].technotes.technote + '" target="_blank">TECHNOTE</a>' + '</span>' +
 				 '</div>' +
 				 '</td>';
 							
 				appendedFiles += '<td style="float-right;font-size:11px;text-align:right">';
-			
+				
 				for(var j=0;j<data.doc.files.file[i].services.service.length;j++) {
 					var service = data.doc.files.file[i].services.service[j];
 					var url = data.doc.files.file[i].urls.url[j];
@@ -213,6 +214,7 @@
 					if(service == 'HTTPServer') {
 						service = 'HTTP';
 					}
+					
 					if(service == 'GridFTP') {
 						if(ESGF.setting.globusonline) {
 							appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
@@ -221,7 +223,14 @@
 							                 '<a style="cursor:pointer" class="go_individual_gridftp_short">' + 'Globus Online' + '</a> </span>';
 							
 						}
-					} else {
+					} else if(service == 'SRM') {
+						appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
+		                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
+		                 '<span class="srm_urll" style="display:none">' + url + '</span>' +
+		                 '<a style="cursor:pointer" class="single_srm">' + 'SRM' + '</a> </span>';
+		
+					} 
+						else {
 						if(openid != 'anonymousUser') {
 							appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '?openid=' + openid +  '" ' + 'target="_blank">' + service + '</a> </span>';
 						} else {
@@ -246,7 +255,6 @@
 			
 		    $('a.showAllFiles_short').live('click',function() {
 
-		    	//alert('expand or collapse');
 		    	
 				var openid = $('span#principal_username').html();
 		    	
@@ -287,30 +295,32 @@
 	                var idStr = selectedDocId;
 	                
 	                
-					var peerStr = ESGF.datacart.getIndividualPeer(idStr);//getPeerStr();
+					var peerStr = ESGF.datacart.getIndividualPeer(idStr);
 					var technoteStr = ESGF.datacart.getTechnoteStr();
 			    	var fqParamStr = ESGF.datacart.getFqParamStr();
 			    	
-			    	var queryStr = {"idStr" : idStr, 
+			    	var constraints = fqParamStr;
+			    	
+			    	var queryStr = 
+			    	{
+			    			"dataset_id" : idStr, 
+			    			"isInitialQuery" : "true",
+			    			"limit" : ESGF.setting.fileCounter,
+			    			"isShowAll" : ESGF.setting.showAllContents,
+							"constraints" : constraints, 
 							"peerStr" : peerStr, 
 							"technotesStr" : technoteStr, 
-							"showAllStr" : ESGF.setting.showAllContents, 
-							"fqStr" : fqParamStr, 
-							"initialQuery" : "true",
-        					"fileCounter" : ESGF.setting.fileCounter};
+					};
 			    	
 			    	//NEED TO FIX THIS!!!!
-			    	selectedDocId = 'aa.gov';
-			    	selectedDocId = Url.encode(selectedDocId);
-			    	var url = '/esgf-web-fe/solrfileproxy2/datacart/'+selectedDocId;
-
+			    	var url = '/esgf-web-fe/solrfileproxy3/datacart/';
+					
 					
 			    	//CHANGE ME!
 			    	//queryStr['peerStr'] = 'localhost';
 			 
-			    	//('initial queryStr: ' + queryStr['peerStr']);
-			    	
-			    	
+					
+					
 			    	//initial ajax call for first x number of files in dataset
 					$.ajax({
 						url: url,
@@ -319,7 +329,6 @@
 						data: queryStr,
 						dataType: 'json',
 						success: function(data) {
-							
 							
 							//no files
 							if(data.doc.files.file == undefined) {
@@ -337,8 +346,6 @@
 
 								var fileLength = data.doc.files.file.length;
 								
-								//alert('fileLenght: ' + fileLength );
-								
 								
 								var tagid = 'file_rows_' + ESGF.datacart.replaceChars(data.doc.datasetId);
 								
@@ -346,7 +353,7 @@
 								var initial = true;
 								
 								var appendedFiles = self.appendFileData(data, openid, initial);
-								
+
 
 								var view_more_tag = '<tr class="' + self.view_files_tag + ESGF.datacart.replaceChars(idStr) + '">';
 								
@@ -359,15 +366,17 @@
 									
 								}
 
+								
 								$('.'+tagid).after(appendedFiles);
 								
 								self.innerHTML=self.hide_files;
 								
 								
 							}
+							
 						},
 						error: function() {
-							alert('Error in expanding files for dataset ' + data.doc.datasetId);
+							alert('Error in expanding files for dataset ');
 							//alert('Error in expanding files for dataset ');
 						}
 					});
@@ -385,7 +394,6 @@
 			
 			$('a.view_more_files_short').live('click',function() {
 
-				
 				if(this.innerHTML == "View more files") {
 				
 
@@ -398,7 +406,10 @@
 					var peerStr = ESGF.datacart.getIndividualPeer(idStr);
 					var technoteStr = ESGF.datacart.getTechnoteStr();
 			    	var fqParamStr = ESGF.datacart.getFqParamStr();
-					
+
+			    	var constraints = fqParamStr;
+			    	
+			    	/* OLD
 			    	var queryStr = {"idStr" : idStr, 
 							"peerStr" : peerStr, 
 							"technotesStr" : technoteStr, 
@@ -414,11 +425,25 @@
 
 			    	//CHANGE ME!
 			    	//queryStr['peerStr'] = 'localhost';
-					
+					*/
+			    	
+			    	
+			    	var queryStr = 
+			    	{
+			    			"dataset_id" : idStr, 
+			    			"isInitialQuery" : "false",
+			    			"limit" : ESGF.setting.fileCounter,
+			    			"isShowAll" : ESGF.setting.showAllContents,
+							"constraints" : constraints, 
+							"peerStr" : peerStr, 
+							"technotesStr" : technoteStr, 
+					};
+			    	
+			    	
 			    	var tagid = 'file_rows_' + ESGF.datacart.replaceChars(idStr);
 					
-			    	//alert('after queryStr: ' + queryStr['peerStr']);
-			    	
+			    	var url = '/esgf-web-fe/solrfileproxy3/datacart/';
+					
 			    	//initial ajax call for first x number of files in dataset
 					$.ajax({
 						url: url,
@@ -427,8 +452,6 @@
 						data: queryStr,
 						dataType: 'json',
 						success: function(data) {
-							
-							//var fileLength = data.doc.files.file.length;
 							
 							var tagid = self.view_files_tag + ESGF.datacart.replaceChars(idStr);//'view_more_files_' + replaceChars(idStr);
 							

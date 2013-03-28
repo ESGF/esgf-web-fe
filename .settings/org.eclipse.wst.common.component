@@ -4,8 +4,8 @@
         <wb-resource deploy-path="/" source-path="/web"/>
         <wb-resource deploy-path="/WEB-INF/lib" source-path="/lib/fetched/runtime"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/dbscripts"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/java/test"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/java/main"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/java/test"/>
 		<property name="java-output-path" value="target/classes"/>
         <property name="context-root" value="esgf-web-fe"/>
 	</wb-module>

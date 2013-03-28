@@ -145,6 +145,8 @@ ESGF.setting.ajaxTimeout = 20000;
 
 ESGF.setting.globusonline = false;
 
+ESGF.setting.srm_url_root = '/esg-srm/';
+
 
 ESGF.setting.lasRestrictions = new Array();
 /**

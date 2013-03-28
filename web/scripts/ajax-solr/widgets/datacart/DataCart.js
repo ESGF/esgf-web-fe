@@ -340,6 +340,15 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			}
 		}
 		
+		
+		accessType = 'SRM';
+		var hasSRM = self.checkDatasetAccess(accessType, datasetId);
+		if(hasSRM) {
+			datasetList += '<span class="srm_dataset_event" style="display:none;font-weight:bold;"> Transferring to SRM page... </span>';
+			datasetList += '<a class="srm_dataset_event" style="cursor:pointer"> SRM </a> |';
+		}
+		
+		
 		datasetList += ' <a class="remove_dataset_short" style="cursor:pointer">Remove</a>'; 
 		datasetList += '</td>';	
 		datasetList += '</tr>';
@@ -488,7 +497,26 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 
 
 // old version of the data cart template
-
+/*
+<<<<<<< HEAD
+function getIndividualPeer(id) {
+	var peerStr = '';
+	
+	var datasetInfo = ESGF.localStorage.get('dataCart',id);
+	
+	
+	if(datasetInfo['peer'] == null || datasetInfo['peer'] == undefined) {
+		peerStr = '';
+	} else {
+		peerStr = datasetInfo['peer'];
+	}
+	
+	
+	return peerStr.toString();
+	
+}
+*/
+//=======
 /**
  * Create the template for the datacart
  * 
@@ -499,6 +527,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
  */
 /*
 createTemplate: function() {
+>>>>>>> devel
 
 	var self = this;
 	

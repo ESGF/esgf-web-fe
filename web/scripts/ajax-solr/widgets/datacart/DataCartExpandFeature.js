@@ -185,7 +185,6 @@
 					
 				appendedFiles += '<tr class="' + displayed_files_tag + '">';
 				
-				//appendedFiles += '<td style="width: 40px">' +
 				appendedFiles += '<td style="' + self.td_file_left + '">' +
 				 '<input style="margin-left: 10px;display:none"' + 
 	  					'type="checkbox"' + 

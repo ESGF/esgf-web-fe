@@ -115,8 +115,6 @@
 			 */
 			$("a#uber_script_short").live('click', function() {
 
-				
-				//alert('uber');
 				//gather the file_ids
 	        	var file_ids   = new Array();
 	            
@@ -136,149 +134,17 @@
 		    	
 		    	var queryString = '/esg-search/wget/?';
 	        	
-		    	//alert('queryStringUber: ' + queryString);
                 
 		    	var fqParamStr = ESGF.datacart.getFqParamStr();
 		    	
 		    	queryString = ESGF.datacart.addConstraintsToWGETQueryString(queryString,fqParamStr);
 	        	
 		    	
-	            //queryString += '&shards=' + peerAppend;
-	            
-	           // alert('queryStringUber: ' + queryString);
-                
 	            
 	            ESGF.datacart.submitWGETScriptForm(queryString,file_ids,dataset_ids);
 				
-	            
-				/*
-				var self = this;
-				
-				
-				//gather the file_ids
-	        	var file_ids   = new Array();
-	            
-	        	//gather the dataset_ids
-	        	var dataset_ids = new Array();
-	        	
-	        	//iterate over the selected array of datasets in the data cart
-	        	//grab all the keys from the datacart map and place in an array
-		    	self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
 
-            	//get the peers
-            	var peerStr = ESGF.datacart.getPeerStr();
-	        	
-	            for(var i=0;i<self.selected_arr.length;i++) {
-	            
-	            	var selectedDocId = self.selected_arr[i];//self.selected_arr[i];
-	            	
-	            	
-	            	var selectedDocCount = $('span.datasetCount_'+ESGF.datacart.replaceChars(selectedDocId)).html();
-	            	
-	            	//if the count is greater than 10, check to see if the additional rows have been not been expanded for this dataset
-	            	//if not (null) then need an extra ajax call to get the rest of the file ids
-	            	var isAdded = $('tr.addedrow_' + ESGF.datacart.replaceChars(selectedDocId)).html();//$(this).parent().parent().parent().find('tr.addedrow_' + replaceChars(selectedDocId)).html();
-	            	
-	            	dataset_ids.push(selectedDocId);
-	            	
-	            	if(isAdded == null && selectedDocCount > ESGF.setting.fileCounter) {
-	            	
-	            		
-	            		$('tr.file_rows_'+ ESGF.datacart.replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
-	            			var file_id = $(this).parent().find('input').attr('value');
-	            			file_ids.push(file_id);
-	            		});
-	            		
-	            		
-	            		
-	            		//get all of the search constraints (fq params)
-	                	var fqParamStr = ESGF.datacart.getFqParamStr();
-	                	
-	                	
-	                	//get the technotes
-	                	var technoteStr = ESGF.datacart.getTechnoteStr();
-	            		
-	                	//the id str is only one file
-	                	var idStr = selectedDocId;
-	                	
-	                	
-	                	
-	            		//assemble the query string
-	                	var queryStr = {"idStr" : idStr, 
-	        					"peerStr" : peerStr, 
-	        					"technotesStr" : technoteStr, 
-	        					"showAllStr" : ESGF.setting.showAllContents, 
-	        					"fqStr" : fqParamStr, 
-	        					"initialQuery" : "true",
-	        					"fileCounter" : ESGF.setting.fileCounter};
-
-	                	
-	                	$.ajax({
-	    					url: '/esgf-web-fe/solrfileproxy2/datacart',
-	    					global: false,
-	    					type: "GET",
-	    					data: queryStr,
-	    				    async: false,
-	    					dataType: 'json',
-	    					success: function(data) {
-	    						for(var i=0;i<data.docs.doc.files.file.length;i++){
-	    							var file = data.docs.doc.files.file[i];
-	    							file_ids.push(file.fileId);
-	    						}
-	    						
-	    					},
-	    					error: function() {
-	    						alert('error in uber script');
-	    					}
-	                	});
-	            		
-	            	
-	            	} else {
-	            		$('tr.file_rows_'+ ESGF.datacart.replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
-	            			var file_id = $(this).parent().find('input').attr('value');
-	            			file_ids.push(file_id);
-	            		});
-	            		
-	            		
-	            	}
-	            	
-	            }
-	            
-	            var queryString = '/esg-search/wget/?';
-	        	
-	            var constraintCount = 0;
-	            
-	            var peers = peerStr.split(";");
-	            var peerAppend = '';
-	            for(var i=0;i<peers.length;i++) {
-	            //	
-	            //	if(peers[i] == 'esg-datanode.jpl.nasa.gov') {
-	            //		peerAppend += 'localhost:18983/solr';
-	            //	} else if (peers[i] == 'pcmdi9.llnl.gov') {
-	            //		peerAppend += 'localhost:28983/solr';
-	            //	} else
-	            	{
-		            	peerAppend += peers[i] + ':8983/solr';
-	            	}
-	            	if(i != (peers.length-1)) {
-	            		peerAppend += ',';
-	            	}
-	            }
-	            
-	            //alert('peerAppend: ' + peerAppend);
-	            
-	            queryString = ESGF.datacart.addConstraintsToWGETQueryString(queryString);
-	        	
-	            //alert('peerStr: ' + peerStr + ' queryString: ' + queryString);
-	            
-	            queryString += '&shards=' + peerAppend;
-	            
-	            //alert('queryStringUber: ' + queryString);
-                
-	            
-	            ESGF.datacart.submitWGETScriptForm(queryString,file_ids,dataset_ids);
 				
-				*/
 			});
 			
 			
@@ -294,10 +160,7 @@
 				
 				//extract the dataset Id from the span tag
 				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
-				
-				alert('selectedDocId: ' + selectedDocId);
-				
-				
+
 				
 				//var self = this;
 				//self.innerHTML = "Downloading...";
@@ -309,7 +172,6 @@
 				parentElement.find('a.wgetAllFiles_short').hide();
 				parentElement.find('span.wgetAllFiles_short').show();
 				
-				//alert('sele: ' + selectedDocId + ' ' + replaceChars(selectedDocId));
 				
 				//$('.wgetAllFiles_short_'+replaceChars(selectedDocId)).remove();
 				
@@ -338,11 +200,16 @@
 				//var technoteStr = ESGF.datacart.getTechnoteStr();
 								
 				var queryString = '/esg-search/wget/?';
-				
-                queryString = ESGF.datacart.addConstraintsToWGETQueryString(queryString);
+
+		    	var fqParamStr = ESGF.datacart.getFqParamStr();
+		    	
+                queryString = ESGF.datacart.addConstraintsToWGETQueryString(queryString,fqParamStr);
                 
             	ESGF.datacart.submitWGETScriptForm(queryString,file_ids,dataset_ids);
     			
+
+				parentElement.find('a.wgetAllFiles_short').show();
+				parentElement.find('span.wgetAllFiles_short').hide();
 		    	
 		    	/*
 		    	var queryStr = {"idStr" : idStr, 
@@ -593,5 +460,135 @@
 				}
 				
 			});
-*/		        
+*/		    
+
+
+/* OLD UBER
+var self = this;
+
+
+//gather the file_ids
+var file_ids   = new Array();
+
+//gather the dataset_ids
+var dataset_ids = new Array();
+
+//iterate over the selected array of datasets in the data cart
+//grab all the keys from the datacart map and place in an array
+self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
+
+//get the peers
+var peerStr = ESGF.datacart.getPeerStr();
+
+for(var i=0;i<self.selected_arr.length;i++) {
+
+	var selectedDocId = self.selected_arr[i];//self.selected_arr[i];
+	
+	
+	var selectedDocCount = $('span.datasetCount_'+ESGF.datacart.replaceChars(selectedDocId)).html();
+	
+	//if the count is greater than 10, check to see if the additional rows have been not been expanded for this dataset
+	//if not (null) then need an extra ajax call to get the rest of the file ids
+	var isAdded = $('tr.addedrow_' + ESGF.datacart.replaceChars(selectedDocId)).html();//$(this).parent().parent().parent().find('tr.addedrow_' + replaceChars(selectedDocId)).html();
+	
+	dataset_ids.push(selectedDocId);
+	
+	if(isAdded == null && selectedDocCount > ESGF.setting.fileCounter) {
+	
+		
+		$('tr.file_rows_'+ ESGF.datacart.replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
+			var file_id = $(this).parent().find('input').attr('value');
+			file_ids.push(file_id);
+		});
+		
+		
+		
+		//get all of the search constraints (fq params)
+    	var fqParamStr = ESGF.datacart.getFqParamStr();
+    	
+    	
+    	//get the technotes
+    	var technoteStr = ESGF.datacart.getTechnoteStr();
+		
+    	//the id str is only one file
+    	var idStr = selectedDocId;
+    	
+    	
+    	
+		//assemble the query string
+    	var queryStr = {"idStr" : idStr, 
+				"peerStr" : peerStr, 
+				"technotesStr" : technoteStr, 
+				"showAllStr" : ESGF.setting.showAllContents, 
+				"fqStr" : fqParamStr, 
+				"initialQuery" : "true",
+				"fileCounter" : ESGF.setting.fileCounter};
+
+    	
+    	$.ajax({
+			url: '/esgf-web-fe/solrfileproxy2/datacart',
+			global: false,
+			type: "GET",
+			data: queryStr,
+		    async: false,
+			dataType: 'json',
+			success: function(data) {
+				for(var i=0;i<data.docs.doc.files.file.length;i++){
+					var file = data.docs.doc.files.file[i];
+					file_ids.push(file.fileId);
+				}
+				
+			},
+			error: function() {
+				alert('error in uber script');
+			}
+    	});
+		
+	
+	} else {
+		$('tr.file_rows_'+ ESGF.datacart.replaceChars(selectedDocId)).find(':checkbox:checked').each( function(index) {
+			var file_id = $(this).parent().find('input').attr('value');
+			file_ids.push(file_id);
+		});
+		
+		
+	}
+	
+}
+
+var queryString = '/esg-search/wget/?';
+
+var constraintCount = 0;
+
+var peers = peerStr.split(";");
+var peerAppend = '';
+for(var i=0;i<peers.length;i++) {
+//	
+//	if(peers[i] == 'esg-datanode.jpl.nasa.gov') {
+//		peerAppend += 'localhost:18983/solr';
+//	} else if (peers[i] == 'pcmdi9.llnl.gov') {
+//		peerAppend += 'localhost:28983/solr';
+//	} else
+	{
+    	peerAppend += peers[i] + ':8983/solr';
+	}
+	if(i != (peers.length-1)) {
+		peerAppend += ',';
+	}
+}
+
+//alert('peerAppend: ' + peerAppend);
+
+queryString = ESGF.datacart.addConstraintsToWGETQueryString(queryString);
+
+//alert('peerStr: ' + peerStr + ' queryString: ' + queryString);
+
+queryString += '&shards=' + peerAppend;
+
+//alert('queryStringUber: ' + queryString);
+
+
+ESGF.datacart.submitWGETScriptForm(queryString,file_ids,dataset_ids);
+
+*/
 	

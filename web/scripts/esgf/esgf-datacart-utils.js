@@ -66,30 +66,23 @@ ESGF.datacart.addConstraintsToWGETQueryString = function(queryString,fqParamStr)
 	
 	//var fqParamStr = ESGF.datacart.getFqParamStr();
 	
-	alert('fqParamStr: ' + fqParamStr);
+	//alert('fqParamStr: ' + fqParamStr);
 	
-	/*
-    if(ESGF.setting.showAllContents == 'false') {
-    	
-    	// traverse through the constraints and add to the querystring
-		//for(var i in self.searchConstraints) {
-    	var searchConstraints = ESGF.localStorage.toKeyArr('esgf_fq');
-		for(var i=0;i<searchConstraints.length;i++) {
-			if(searchConstraints[i].search('replica') == -1 && 
-			   searchConstraints[i].search('type') == -1) {
-			   //constraintCount = constraintCount + 1;
-			   
-			   //replace the : with =
-			   var constraint = searchConstraints[i].replace(':','=');
-			   
-			   //replace 'text' with 'query' for free text searches
-			   constraint = constraint.replace('text','query');
-			   queryString += constraint + '&';
-			   
+	if(ESGF.setting.showAllContents == 'false') {
+		var searchConstraintArr = fqParamStr.split(";");
+		for(var i=0;i<searchConstraintArr.length;i++) {
+			//alert('sea: ' + searchConstraintArr[i]);
+			if(searchConstraintArr[i].search('query') > -1) {
+				queryString += searchConstraintArr[i];
 			}
+		
 		}
-    }
-    */
+	}
+	
+	
+	var searchConstraints = ESGF.localStorage.toKeyArr('esgf_fq');
+	
+	
 	
     return queryString;
 };
@@ -330,3 +323,26 @@ ESGF.datacart.rewriteDocsObject = function (docs) {
 	
 };
 
+
+/*
+if(ESGF.setting.showAllContents == 'false') {
+	
+	// traverse through the constraints and add to the querystring
+	//for(var i in self.searchConstraints) {
+	var searchConstraints = ESGF.localStorage.toKeyArr('esgf_fq');
+	for(var i=0;i<searchConstraints.length;i++) {
+		if(searchConstraints[i].search('replica') == -1 && 
+		   searchConstraints[i].search('type') == -1) {
+		   //constraintCount = constraintCount + 1;
+		   
+		   //replace the : with =
+		   var constraint = searchConstraints[i].replace(':','=');
+		   
+		   //replace 'text' with 'query' for free text searches
+		   constraint = constraint.replace('text','query');
+		   queryString += constraint + '&';
+		   
+		}
+	}
+}
+*/

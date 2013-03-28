@@ -185,7 +185,6 @@
 					
 				appendedFiles += '<tr class="' + displayed_files_tag + '">';
 				
-				//appendedFiles += '<td style="width: 40px">' +
 				appendedFiles += '<td style="' + self.td_file_left + '">' +
 				 '<input style="margin-left: 10px;display:none"' + 
 	  					'type="checkbox"' + 
@@ -200,9 +199,12 @@
 				 '<span style="font-style:italic">' + 'tracking_id: ' + data.doc.files.file[i].tracking_id + '</span>' +
 				 '  <br />' +
 				 '<span style="font-style:italic">checksum: ' + data.doc.files.file[i].checksum + ' (' + data.doc.files.file[i].checksum_type + ')' + '</span>' +
-				 '  <br />' +
-				 '<span style="font-style:bold"><a href="' + data.doc.files.file[i].technotes.technote + '" target="_blank">TECHNOTE</a>' + '</span>' +
-				 '</div>' +
+				 '  <br />';
+				 if(data.doc.files.file[i].technotes.technote != undefined) {
+					 appendedFiles += '<span style="font-style:bold"><a href="' + data.doc.files.file[i].technotes.technote + '" target="_blank">TECHNOTE</a>' + '</span>' +
+					 ' <br />';
+				 }
+				 appendedFiles += '</div>' +
 				 '</td>';
 							
 				appendedFiles += '<td style="float-right;font-size:11px;text-align:right">';

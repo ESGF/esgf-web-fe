@@ -320,7 +320,15 @@
 					
 			    	//CHANGE ME!
 			    	//queryStr['peerStr'] = 'localhost';
-			 
+			    	LOG.debug('---before expansion---')
+			    	LOG.debug('dataset_id :' + idStr);
+			    	LOG.debug("isInitialQuery: " + "true");
+			    	LOG.debug("limit: " + ESGF.setting.fileCounter);
+			    	LOG.debug("isShowAll: " + ESGF.setting.showAllContents);
+			    	LOG.debug("constraints: " + constraints);
+			    	LOG.debug("peerStr: " + peerStr) 
+			    	LOG.debug("technotesStr: " + technoteStr); 
+			    	LOG.debug('----------------------')
 					
 					
 			    	//initial ajax call for first x number of files in dataset

@@ -90,8 +90,8 @@
 			//event for sending the file id through
 			$('a.single_srm').live('click',function() {
 
-				alert('HPSS access not supported at this time');
-				/*
+				//alert('HPSS access not supported at this time');
+				
 				var file_id = $(this).parent().find('.file_id').html().trim();
 				
 				var file_url = $(this).parent().find('.srm_urll').html().trim();
@@ -128,7 +128,7 @@
 				//send request
 		        jQuery('<form action="'+ srm_service_url +'" method="post">'+''+'</form>')
 		        .appendTo('body').submit().remove();
-		        */
+		        
 	    	});
 	    	
 	    	
@@ -139,9 +139,9 @@
 			$('a.srm_dataset_event').live('click',function() {
 				
 
-				alert('HPSS access not supported at this time');
+				//alert('HPSS access not supported at this time');
 				
-				/*
+				
 				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html());
 				
 				//srm params
@@ -196,7 +196,7 @@
 				//send request
 		        jQuery('<form action="'+ srm_service_url +'" method="post">'+''+'</form>')
 		        .appendTo('body').submit().remove();
-		        */
+		        
 		    	
 			});
 

@@ -34,5 +34,7 @@ public class SRMProxyControllerConstants {
     public static String INPUT_FILE_FILE_ID = "N/A";
     public static String INPUT_FILE_FILE_URL = "N/A";
     
+    public static String INPUT_SCRIPT_TYPE = "WGET";
+    
     public static final String DEFAULT_EMAIL_ADDR = "jfharney@gmail.com";
 }

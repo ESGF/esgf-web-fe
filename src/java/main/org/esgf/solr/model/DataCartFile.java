@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.esgf.datacart.XmlFormatter;
-import org.esgf.srm.SRMEntryList;
 import org.esgf.srm.SRMUtils;
+import org.esgf.srm.cache.SRMEntryList;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 
@@ -38,7 +38,7 @@ public class DataCartFile {
     public DataCartFile(SolrRecord solrRecord) {
         
         if(Utils.debugMode)
-            System.out.println("\n\n\nIn datacart File\n");
+            System.out.println("In datacart File\n");
         
         String fileId = null;
         if(solrRecord.getStrField("id") == null) {
@@ -274,12 +274,10 @@ public class DataCartFile {
         
         List<SolrRecord> solrRecords = solrResponse.getSolrRecords();
         
-        System.out.println("Count: " + solrResponse.getCount() + " " + solrRecords.size());
-        
         
         DataCartFile datacartFile = new DataCartFile(solrRecords.get(0));
         
-        System.out.println( new XmlFormatter().format(datacartFile.toXML()));
+        //System.out.println( new XmlFormatter().format(datacartFile.toXML()));
         
         
         

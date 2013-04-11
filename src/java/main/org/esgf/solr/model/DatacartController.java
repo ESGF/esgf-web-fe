@@ -117,7 +117,6 @@ public class DatacartController {
         
         DatacartDoc datacartDoc = new DatacartDoc(solrResponse);
 
-        System.out.println("am i here???");
         datacartDoc.setDatasetId(dataset_id);
         //System.out.println( new XmlFormatter().format(datacartDoc.toXML()));
         //System.out.println( datacartDoc.toJSON());
@@ -127,32 +126,8 @@ public class DatacartController {
 
         if(Utils.debugMode)
             System.out.println(response);
-        /*
         
-        String peerStr = request.getParameter("peerStr");
-        //String [] peers = peerStr.split(";");
-
-        //NOTE: ID and PEERS SHOULD BE THE SAME LENGTH!!!!
-        
-        //get the fq string and convert to an array of peers
-        String fqStr = request.getParameter("fqStr");
-        String [] fq = fqStr.split(";");
-        
-        
-        String technotes = request.getParameter("technotesStr");
-        //System.out.println("Technotes: " + technotes);
-        
-        
-        //get the search constraints togggle parameter
-        String showAllStr = request.getParameter("showAllStr");
-        
-        //get the flag denoting whether or not this is an initial Query
-        String initialQuery = request.getParameter("initialQuery");
-        
-
-*/       
         return response;
-        //return null;
     }
     
     
@@ -160,13 +135,3 @@ public class DatacartController {
 
 
 
-
-/*
-System.out.println("--------");
-System.out.println("\tpeerStr\t" + peerStr);
-System.out.println("\tfqStr\t" + fqStr);
-System.out.println("\ttechnotesStr\t" + technotes);
-System.out.println("\tshowAllStr\t" + showAllStr);
-System.out.println("\tinitialQuery\t" + initialQuery);
-System.out.println("\tfileCount\t " + fileCounter + "\n");
-*/

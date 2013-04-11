@@ -1,10 +1,15 @@
-package org.esgf.srm;
+package org.esgf.srm.cache;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +17,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.esgf.datacart.XmlFormatter;
+import org.esgf.metadata.JSONException;
+import org.esgf.metadata.JSONObject;
+import org.esgf.metadata.XML;
+import org.esgf.srm.SRMControls;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 import org.w3c.dom.Document;
@@ -31,6 +40,21 @@ public class SRMEntry {
 
     public void setDataset_id(String dataset_id) {
         this.dataset_id = dataset_id;
+    }
+    
+    public static void main(String [] args) {
+        
+        SRMEntry entry = new SRMEntry();
+        
+        SRMEntry srmentry = new SRMEntry("file_id121","isCached1","timeStamp22221","dataset_id1");
+
+        srmentry.toDB();
+        
+        entry.fromDB("file_id21", "dataset_id331");
+        
+        System.out.println(entry.toXML());
+        
+        
     }
 
     public SRMEntry() {
@@ -53,6 +77,33 @@ public class SRMEntry {
         this.setTimeStamp(timeStamp);
         this.dataset_id = dataset_id;
     }
+    
+    public JSONObject toJSONObject() {
+        JSONObject json = null;
+        
+        try {
+            json = XML.toJSONObject(this.toXML());
+        } catch (JSONException e) {
+            System.out.println("Problem in toJSONObject");
+            e.printStackTrace();
+        }
+        
+        return json;
+    }
+    
+    public String toJSON() {
+        String json = null;
+        
+        try {
+            json = this.toJSONObject().toString(3);
+        } catch (JSONException e) {
+            System.out.println("Problem in toJSON");
+            e.printStackTrace();
+        }
+        
+        return json;
+    }
+    
     
     public Element toElement() {
 
@@ -88,6 +139,99 @@ public class SRMEntry {
         
         return srm_entryEl;
     }
+    
+    //commit to DB
+    public void toDB() {
+
+        Connection con = null;
+        try {
+            con = DriverManager.getConnection(
+                    "jdbc:postgresql://127.0.0.1:5432/" + SRMControls.db_name, SRMControls.valid_user,
+                    SRMControls.valid_password);
+            
+            Statement st = null;
+            ResultSet rs = null;
+            
+            String updateCommand = "update " + SRMControls.table_name + 
+                                   " set " + 
+                                   "timeStamp='" + this.getTimeStamp() + "' " +
+                                   " where " + 
+                                   "file_id='" + this.getFile_id() + "' and " +
+                                   "dataset_id='" + this.getDataset_id() + "';";
+            
+            String insertCommand = "insert into " + SRMControls.table_name + " (file_id,dataset_id,timeStamp) values (" +
+                    "'" + this.file_id + "'," +
+                    "'" + this.dataset_id + "'," +
+                    "'" + this.timeStamp + "');";
+
+            
+            try {
+
+
+                st = con.createStatement();
+                int update = st.executeUpdate(updateCommand);
+                System.out.println("Update: " + update);
+                //if the update is not successful (0) then the tuple didn't exist - add it here
+                if(update == 0) {
+                    System.out.println("Executing: " + insertCommand);
+                    st.executeUpdate(insertCommand);
+                    
+                } 
+                
+                st.close();
+            } catch(SQLException e) {
+                e.printStackTrace();
+                
+            }
+
+            con.close();
+            
+        } catch (SQLException e) {
+            
+            System.out.println(e.getMessage());
+            System.out.println("Connection Failed! Check output console");
+            
+        }
+    }
+    
+    //get from DB
+    public void fromDB(String file_id,String dataset_id) {
+        
+        Connection con = null;
+        try {
+            con = DriverManager.getConnection(
+                    "jdbc:postgresql://127.0.0.1:5432/" + SRMControls.db_name, SRMControls.valid_user,
+                    SRMControls.valid_password);
+            
+            Statement st = con.createStatement();
+            
+            String selectCommand = "select * from " + SRMControls.table_name + " " +
+                                   "where file_id='" + file_id + "' and " +
+                                         "dataset_id='" + dataset_id + "';";
+            
+            
+            ResultSet rs = st.executeQuery(selectCommand);
+            
+            if(rs != null) {
+                while(rs.next()) {
+                    SRMEntry srm_entry = new SRMEntry();
+                    String file_idVal = (String)rs.getObject("file_id");
+                    String dataset_idVal = (String)rs.getObject("dataset_id");
+                    String timeStampVal = (String)rs.getObject("timeStamp");
+                    
+                    this.dataset_id = dataset_idVal;
+                    this.file_id = file_idVal;
+                    this.timeStamp = timeStampVal;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Connection Failed! Check output console");
+        }
+        
+    }
+    
+    
     
     public String toXML() {
         String xml = "";
@@ -244,21 +388,6 @@ public class SRMEntry {
         this.timeStamp = timeStamp;
     }
     
-    public static void main(String [] args) {
-        String fileName = "srmentry.xml";
-        
-        SRMEntry srmentry = new SRMEntry("file_id1","isCached1","timeStamp1");
-
-        srmentry.setFile_id("file_id2");
-        
-        srmentry.toFile(fileName);
-        
-        SRMEntry srmentry2 = new SRMEntry();
-        
-        srmentry2.fromFile(fileName);
-        
-        System.out.println(srmentry2.toXML());
-        
-    }
+    
     
 }

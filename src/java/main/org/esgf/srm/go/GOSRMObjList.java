@@ -1,4 +1,4 @@
-package org.esgf.srm;
+package org.esgf.srm.go;
 
 import java.io.BufferedWriter;
 import java.io.File;

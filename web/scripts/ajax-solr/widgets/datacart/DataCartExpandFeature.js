@@ -226,11 +226,90 @@
 							
 						}
 					} else if(service == 'SRM') {
+						/*
+						if(j==0) {
+							
+							var queryString = 
+					    	{
+					    			"file_id" : file_id
+							};
+							var srmcache_url = '/esgf-web-fe/getCache';
+							$.ajax({
+								url: srmcache_url,
+								global: false,
+								type: "GET",
+								data: queryString,
+								dataType: 'json',
+								success: function(data) {
+									for(var key in data) {
+										alert('key: ' + data['key']);
+									}
+								},
+								error: function() {
+									alert('error');
+								}
+							});
+						}
+						*/
+						if(ESGF.setting.srmCacheOn) {
+							var queryString = 
+					    	{
+					    			"file_id" : file_id
+							};
+							
+							var srmcache_url = '/esgf-web-fe/srmcache/getCache';
+							
+							$.ajax({
+								url: srmcache_url,
+								global: false,
+								type: "GET",
+								data: queryString,
+								async: false,
+								//dataType: 'json',
+								success: function(data) {
+									//alert('data: ' + data);
+									if(data=='current') {
+										appendedFiles += '<span>current</span>';
+										alert('current');
+										appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
+						                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
+						                 '<span class="srm_urll" style="display:none">' + url + '</span>' +
+						                 '<a style="cursor:pointer" class="single_srm">' + 'HTTP' + '</a> </span>';
+										
+										
+									} else {
+										appendedFiles += '<span>expired</span>';
+										appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
+						                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
+						                 '<span class="srm_urll" style="display:none">' + url + '</span>' +
+						                 '<a style="cursor:pointer" class="single_srm">' + 'SRM' + '</a> </span>';
+									}
+									
+									/*
+									if(data == 'current') {
+										appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
+						                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
+						                 '<span class="srm_urll" style="display:none">' + url + '</span>' +
+						                 '<a style="cursor:pointer" class="single_srm">' + 'HTTP' + '</a> </span>';
+									} else {
+										
+									}
+									*/
+									
+								},
+								error: function(jqXHR, textStatus,errorThrown) {
+									//alert('error retrieving data from srm');
+									alert('textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
+								}
+							});
+							
+						}
+						/*
 						appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
 		                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
 		                 '<span class="srm_urll" style="display:none">' + url + '</span>' +
 		                 '<a style="cursor:pointer" class="single_srm">' + 'SRM' + '</a> </span>';
-		
+						*/
 					} 
 						else {
 						if(openid != 'anonymousUser') {

@@ -147,6 +147,7 @@ ESGF.setting.globusonline = false;
 
 ESGF.setting.srm_url_root = '/esg-srm/';
 
+ESGF.setting.srmCacheOn = true;
 
 ESGF.setting.lasRestrictions = new Array();
 /**

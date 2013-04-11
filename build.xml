@@ -278,6 +278,9 @@ Builds the project via ant (obviously).
   <target name="make" depends="deps" 
 	  description="(Java compiles all the main source code)">
     <echo message="Java compiling ${module}..."/> 
+
+    
+    	<echo message="ant.java.version: ${ant.java.version}" />
     
     <mkdir dir="${build_dir}" />
     <mkdir dir="${depcache_dir}" />

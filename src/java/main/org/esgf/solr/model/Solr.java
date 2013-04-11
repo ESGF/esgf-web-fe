@@ -14,11 +14,12 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.esgf.srm.SRMControls;
 import org.esgf.srm.SRMUtils;
 
 public class Solr {
     
-    public static String searchAPI = "http://localhost/esg-search/search?";
+    public static String searchAPI = SRMControls.searchAPI;
     private static String queryPrefix = "format=application%2Fsolr%2Bjson&type=File";
     
     
@@ -127,6 +128,7 @@ public class Solr {
             method.releaseConnection();
         }
         
+        //System.out.println("responseBody: \n" + responseBody);
         
         this.solrResponse = new SolrResponse(responseBody);
     }

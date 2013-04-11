@@ -7,7 +7,7 @@ import org.esgf.datacart.FileElement;
 import org.esgf.metadata.JSONException;
 import org.esgf.metadata.JSONObject;
 import org.esgf.metadata.XML;
-import org.esgf.srm.SRMEntryList;
+import org.esgf.srm.cache.SRMEntryList;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 

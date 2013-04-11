@@ -4,7 +4,6 @@ import java.io.File;
 
 public class SRMUtils {
 
-    public static String srmAPIURL = "http://localhost:8080/esg-srm/service/srmrequest?";
 
     private static String searchAPIURL = "http://localhost:8080/esg-search/search?";
 
@@ -84,13 +83,12 @@ public class SRMUtils {
     public static String extractFileName(String fileName) {
         String newFileName = "";
         String tempStr = "";
-        
         int counter = fileName.length()-1;
         char ch = fileName.charAt(counter);
         while(ch != '/') {
+            counter--;
             tempStr += ch;
             ch = fileName.charAt(counter);
-            counter--;
         }   
         
         for(int i=tempStr.length()-1;i>=0;i--) {

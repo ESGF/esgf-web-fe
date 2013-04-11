@@ -1,10 +1,15 @@
-package org.esgf.srm;
+package org.esgf.srm.cache;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,8 +19,12 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.esgf.datacart.XmlFormatter;
+import org.esgf.metadata.JSONException;
+import org.esgf.metadata.JSONObject;
+import org.esgf.metadata.XML;
 import org.esgf.solr.model.Solr;
 import org.esgf.solr.model.SolrResponse;
+import org.esgf.srm.SRMControls;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 import org.w3c.dom.Document;
@@ -30,14 +39,105 @@ public class SRMEntryList {
     
     public static void main(String [] args) {
         
+        /*
+        SRMEntry srm_entry = new SRMEntry();
+        srm_entry.setFile_id("file_id21");
+        srm_entry.setDataset_id("dataset_id1");
+        srm_entry.setTimeStamp("timeStamp1");
+        srm_entryDB.addEntry(srm_entry);
+        */
+         
         SRMEntryList srm_entry_list = new SRMEntryList();
         
-        srm_entry_list.fromFile("srm_entry_list_File.xml");
+        srm_entry_list.fromDB();
         
-        System.out.println(srm_entry_list.getSrm_entry_list().size());
-        srm_entry_list.fromSolr("File");
+        System.out.println(new XmlFormatter().format(srm_entry_list.toXML()));
+       
+    }
+    
+    public SRMEntry getSRMEntryForFileId(String file_id,String dataset_id) {
         
-        //srm_entry_list.fromSolr("Dataset");
+        SRMEntry srm_entry = new SRMEntry();
+        
+        for(int i=0;i<srm_entry_list.size();i++) {
+            if(srm_entry_list.get(i).getFile_id().equals(file_id)) {
+                if(srm_entry_list.get(i).getDataset_id().equals(dataset_id)) {
+                    srm_entry = srm_entry_list.get(i);
+                    
+                }
+            }
+        }
+        
+        return srm_entry;
+        
+    }
+    
+    public SRMEntry getSRMEntryForFileId(String file_id) {
+        
+        SRMEntry srm_entry = new SRMEntry();
+        
+        for(int i=0;i<srm_entry_list.size();i++) {
+            if(srm_entry_list.get(i).getFile_id().equals(file_id)) {
+                srm_entry = srm_entry_list.get(i);
+            }
+        }
+        
+        return srm_entry;
+        
+    }
+    
+    public List<SRMEntry> getSRMEntriesForDatasetId(String dataset_id) {
+        
+        List<SRMEntry> srm_entries = new ArrayList<SRMEntry>();
+        
+        for(int i=0;i<srm_entry_list.size();i++) {
+            if(srm_entry_list.get(i).getDataset_id().equals(dataset_id)) {
+                srm_entries.add(srm_entry_list.get(i));
+            }
+        }
+        
+        return srm_entries;
+        
+    }
+    
+    public void fromDB() {
+        
+        Connection con = null;
+        try {
+            System.out.println("connection");
+            con = DriverManager.getConnection(
+                    "jdbc:postgresql://127.0.0.1:5432/" + SRMControls.db_name, SRMControls.valid_user,
+                    SRMControls.valid_password);
+            
+            Statement st = con.createStatement();
+            
+            String selectCommand = "select * from " + SRMControls.table_name + ";";
+            
+            ResultSet rs = st.executeQuery(selectCommand);
+            
+            if(rs != null) {
+                while(rs.next()) {
+                    SRMEntry srm_entry = new SRMEntry();
+                    String file_idVal = (String)rs.getObject("file_id");
+                    String dataset_idVal = (String)rs.getObject("dataset_id");
+                    String timeStampVal = (String)rs.getObject("timeStamp");
+                    
+                   
+                    srm_entry.setFile_id(file_idVal);
+                    srm_entry.setDataset_id(dataset_idVal);
+                    srm_entry.setTimeStamp(timeStampVal);
+                    this.srm_entry_list.add(srm_entry);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Connection Failed! Check output console");
+        }
+        
+    }
+    
+    public void toDB() {
+        
     }
     
     
@@ -49,6 +149,7 @@ public class SRMEntryList {
         this.setSrm_entry_list(srm_entry_list);
     }
     
+    /*
     //note that this is a complete initialization!
     //it will wipe out the contents of any persistent srm entry list
     public void fromSolr(String core) {
@@ -112,6 +213,34 @@ public class SRMEntryList {
         this.setSrm_entry_list(srm_entry_list.getSrm_entry_list());
         
     }
+    */
+    
+    public JSONObject toJSONObject() {
+        JSONObject json = null;
+        
+        try {
+            json = XML.toJSONObject(this.toXML());
+        } catch (JSONException e) {
+            System.out.println("Problem in toJSONObject");
+            e.printStackTrace();
+        }
+        
+        return json;
+    }
+    
+    public String toJSON() {
+        String json = null;
+        
+        try {
+            json = this.toJSONObject().toString(3);
+        } catch (JSONException e) {
+            System.out.println("Problem in toJSON");
+            e.printStackTrace();
+        }
+        
+        return json;
+    }
+    
     
     public void fromFile(String file) {
         

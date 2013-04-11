@@ -1,4 +1,4 @@
-package org.esgf.srm;
+package org.esgf.srm.cache;
 
 import java.util.List;
 

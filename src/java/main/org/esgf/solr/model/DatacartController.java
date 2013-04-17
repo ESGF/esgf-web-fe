@@ -100,7 +100,7 @@ public class DatacartController {
         Solr solr = new Solr();
         
         solr.addConstraint("query", query);
-        solr.addConstraint("distrib", "false");
+        //solr.addConstraint("distrib", "false");
         solr.addConstraint("limit", limit);
         solr.addConstraint("offset", offset);
         solr.addConstraint("type", "File");
@@ -117,7 +117,6 @@ public class DatacartController {
         
         DatacartDoc datacartDoc = new DatacartDoc(solrResponse);
 
-        System.out.println("am i here???");
         datacartDoc.setDatasetId(dataset_id);
         //System.out.println( new XmlFormatter().format(datacartDoc.toXML()));
         //System.out.println( datacartDoc.toJSON());
@@ -159,14 +158,3 @@ public class DatacartController {
 }
 
 
-
-
-/*
-System.out.println("--------");
-System.out.println("\tpeerStr\t" + peerStr);
-System.out.println("\tfqStr\t" + fqStr);
-System.out.println("\ttechnotesStr\t" + technotes);
-System.out.println("\tshowAllStr\t" + showAllStr);
-System.out.println("\tinitialQuery\t" + initialQuery);
-System.out.println("\tfileCount\t " + fileCounter + "\n");
-*/

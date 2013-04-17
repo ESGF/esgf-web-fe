@@ -4,9 +4,9 @@ import java.io.File;
 
 public class SRMUtils {
 
-    public static String srmAPIURL = "http://localhost:8080/esg-srm/service/srmrequest?";
+    public static String srmAPIURL = "http://localhost/esg-srm/service/srmrequest?";
 
-    private static String searchAPIURL = "http://localhost:8080/esg-search/search?";
+    private static String searchAPIURL = "http://localhost/esg-search/search?";
 
     public static String THREDDS_DATAROOT = "/thredds/fileServer/esg_srm_dataroot";
     

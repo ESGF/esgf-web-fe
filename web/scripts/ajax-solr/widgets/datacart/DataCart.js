@@ -134,6 +134,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		
 		}
 		
+		LOG.debug('access: ' + datacart[datasetId]['access'] + ' hasAccess: ' + hasAccess);
 		
 		return hasAccess;
 		

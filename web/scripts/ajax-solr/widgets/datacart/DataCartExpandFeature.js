@@ -193,17 +193,20 @@
 	  					'</td>';
 
 				appendedFiles += '<td style="width: 425px;padding-left:10px;font-size:11px;">' +
-				 '<div style="word-wrap: break-word;">' + 
-				 '<span style="font-weight:bold">' + data.doc.files.file[i].fileId + '</span>' +
-				 '	<br />' + 
-				 '<span style="font-style:italic">' + 'tracking_id: ' + data.doc.files.file[i].tracking_id + '</span>' +
+				 '<div style="word-wrap: break-word;">';
+			 	 
+				appendedFiles += '<span style="font-weight:bold">' + data.doc.files.file[i].fileId + '</span>' +
+				 '	<br />';
+				if(data.doc.files.file[i].technotes.technote != undefined) {
+					 appendedFiles += '<span style="font-style:italic">Technote: <a href="' + data.doc.files.file[i].technotes.technote + '" target="_blank">TECHNOTE</a>' + '</span>' +
+					 ' <br />';
+				 } 
+				appendedFiles += '<span style="font-style:italic">' + 'tracking_id: ' + data.doc.files.file[i].tracking_id + '</span>' +
 				 '  <br />' +
 				 '<span style="font-style:italic">checksum: ' + data.doc.files.file[i].checksum + ' (' + data.doc.files.file[i].checksum_type + ')' + '</span>' +
 				 '  <br />';
-				 if(data.doc.files.file[i].technotes.technote != undefined) {
-					 appendedFiles += '<span style="font-style:bold"><a href="' + data.doc.files.file[i].technotes.technote + '" target="_blank">TECHNOTE</a>' + '</span>' +
-					 ' <br />';
-				 }
+				 //alert('technote: ' + data.doc.files.file[i].technotes.technote);
+				 
 				 appendedFiles += '</div>' +
 				 '</td>';
 							

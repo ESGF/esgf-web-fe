@@ -38,7 +38,7 @@ public class DataCartFile {
     public DataCartFile(SolrRecord solrRecord) {
         
         if(Utils.debugMode)
-            System.out.println("\n\n\nIn datacart File\n");
+            System.out.println("\nIn datacart File\n");
         
         String fileId = null;
         if(solrRecord.getStrField("id") == null) {
@@ -95,13 +95,11 @@ public class DataCartFile {
     
     public void getTechnotesFromRecord(SolrRecord solrRecord) {
         
-        
         List<String> technotes = solrRecord.getArrField("xlink");
         List<String> technoteStrs = new ArrayList<String>();
         
         
         if(technotes != null) {
-            System.out.println(technotes.size());
             
             for(int i=0;i<technotes.size();i++) {
                 String technoteStrElement = technotes.get(i);
@@ -316,7 +314,6 @@ public class DataCartFile {
                 String srm_url = components[0];
                 
                 //add http and gridftp urls if cached
-                System.out.println(srm_url);
                 String gsiftp = SRMUtils.stripSRMServer(srm_url);
                 String http = SRMUtils.gridftp2http(gsiftp);
 

@@ -24,6 +24,8 @@ $.ajax({
 });
 
 //LAS restriction
+ESGF.setting.lasRestrictions = new Array();
+/*
 $.ajax({
     url: "lasconfigurationproxy",
     dataType: 'json',
@@ -61,4 +63,5 @@ $.ajax({
 	}
 
 });
+*/
 //alert('restriction: ' + ESGF.setting.lasRestrictions);

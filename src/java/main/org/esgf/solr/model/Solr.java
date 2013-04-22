@@ -18,7 +18,7 @@ import org.esgf.srm.SRMUtils;
 
 public class Solr {
     
-    public static String searchAPI = "http://localhost/esg-search/search?";
+    public static String searchAPI = "http://localhost:8080/esg-search/search?";
     private static String queryPrefix = "format=application%2Fsolr%2Bjson&type=File";
     
     
@@ -99,6 +99,7 @@ public class Solr {
         
         
         method.setQueryString(this.queryString);
+        
         
         method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
                 new DefaultHttpMethodRetryHandler(3, false));

@@ -123,7 +123,9 @@ public class SolrRecord {
                         values = new ArrayList<String>();
                         for(int k=0;k<nodeList.getLength();k++) {
                             Node node = nodeList.item(k);
-                            values.add(node.getTextContent());
+                            if(node.getNodeType() == (javax.xml.soap.Node.ELEMENT_NODE)) {
+                                values.add(node.getTextContent());
+                            }
                         }
                     }
                 }

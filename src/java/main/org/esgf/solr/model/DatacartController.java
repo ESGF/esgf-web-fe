@@ -100,7 +100,7 @@ public class DatacartController {
         Solr solr = new Solr();
         
         solr.addConstraint("query", query);
-        solr.addConstraint("distrib", "false");
+        //solr.addConstraint("distrib", "false");
         solr.addConstraint("limit", limit);
         solr.addConstraint("offset", offset);
         solr.addConstraint("type", "File");
@@ -132,6 +132,4 @@ public class DatacartController {
     
     
 }
-
-
 

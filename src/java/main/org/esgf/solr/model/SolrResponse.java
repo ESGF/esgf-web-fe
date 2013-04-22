@@ -133,7 +133,28 @@ public class SolrResponse {
     }
     
     
+ 
+    //gets dataset ids from solr that have srm access
+    public List<String> needsSRM() {
+        List<String> needsSRM = new ArrayList<String>();
+        
+        for(int i=0;i<this.solrRecords.size();i++) {
+            boolean isSRM = false;
+            List<String> access = this.solrRecords.get(i).getArrField("access");
+            for(int j=0;j<access.size();j++) {
+                if(access.get(j).equals("SRM")) {
+                    isSRM = true;
+                }
+            }
+            if(isSRM) {
+                needsSRM.add(this.solrRecords.get(i).getStrField("id"));
+            }
+        }
+        
+        return needsSRM;
+    }
     
+    //gets file ids
     public List<String> needsSRM(String core) {
         List<String> needsSRM = new ArrayList<String>();
         
@@ -150,6 +171,9 @@ public class SolrResponse {
                         id = facetNode.getTextContent(); 
                     }
                 }
+                
+                System.out.println("id: " + id);
+                System.exit(0);
                 
                 for(int j=0;j<solrRecord.getArrNodes().size();j++) {
                     Node facetNode = solrRecord.getArrNodes().get(j);

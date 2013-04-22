@@ -231,7 +231,9 @@ AjaxSolr.theme.prototype.actions = function (doc) {
         	//alert('datasetId: ' + evt.data.doc.id);
         	//alert('number of files: ' + evt.data.doc['number_of_files']);
         	//var docInfo = 
-        	
+        	//alert('access: ' + evt.data.doc['access']);
+        	//evt.data.doc['access'] = undefined;
+        	//alert('access: ' + evt.data.doc['access']);
         	
             selected[evt.data.doc.id] = doc;
             if ( jQuery.trim(this.innerHTML) == "Add To Cart") {
@@ -257,8 +259,9 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                     		//var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : undefined};//evt.data.doc['access']};
                     		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : evt.data.doc['access']};
 
-                    		//alert(datasetInfo['peer']);
                     		
+                    		//alert(datasetInfo['peer']);
+                    		//alert(datasetInfo['access']);
                         	ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
                     	
                     	
@@ -273,7 +276,8 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                     		
 
                     		//alert(datasetInfo['peer']);
-                    		
+                    		//alert(datasetInfo['access']);
+                        	
                     		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
                     	
                     	
@@ -292,7 +296,8 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                     		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : evt.data.doc['access']};
 
                     		//alert(datasetInfo['peer']);
-                    		
+                    		//alert(datasetInfo['access']);
+                        	
                     		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
                     	
                     	
@@ -302,7 +307,8 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                     		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : evt.data.doc['access']};
 
                     		//alert(datasetInfo['peer']);
-                    		
+                    		//alert(datasetInfo['access']);
+                        	
                     		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
                     	
                     	

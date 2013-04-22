@@ -6,9 +6,16 @@
   <property name="ivy.esgf.devel.root.url" value="http://esgf.org/artifactory/esgf-repo-devel" override="false"/>
   <property name="ivy.esgf.shared.root.url" value="http://esgf.org/artifactory/esgf-repo-share" override="false"/>
   <property name="jboss.repo.url" value="https://repository.jboss.org/nexus/content/groups/public" override="false"/>
-   
+  <property name="ivy.esgf-repo-local.default.root.dir" value="${user.home}/.ivy2/local" override="false"/>   
+
   	<resolvers>
           
+          <filesystem name="esgf_repo_local">
+            <artifact pattern="${ivy.esgf-repo-local.default.root.dir}/[organisation]/[module]/[revision]/[artifact].[ext]" />
+            <artifact pattern="${ivy.esgf-repo-local.default.root.dir}/[organisation]/[module]/[revision]/[artifact].[revision].[ext]" />
+            <artifact pattern="${ivy.esgf-repo-local.default.root.dir}/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
+          </filesystem>
+
           <url name="esgf_repo_devel" checksums="md5">
             <ivy pattern="${ivy.esgf.devel.root.url}/[organisation]/[module]/[revision]/ivy-[revision].xml" />
             <artifact pattern="${ivy.esgf.devel.root.url}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
@@ -33,6 +40,7 @@
         
         <resolvers>
           <chain name="default" returnFirst="true">
+            <resolver ref="esgf_repo_local" />
             <resolver ref="esgf_repo_devel" />
             <resolver ref="esgf_repo_share" />
             <resolver ref="public" />

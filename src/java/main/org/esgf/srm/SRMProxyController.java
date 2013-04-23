@@ -27,6 +27,7 @@ import org.esgf.datacart.URLSElement;
 import org.esgf.datacart.XmlFormatter;
 import org.esgf.email.Email;
 import org.esgf.email.Attachment;
+import org.esgf.email.EmailUtils;
 import org.esgf.filetransformer.SRMFileTransformation;
 import org.esgf.solr.model.Solr;
 import org.esgf.solr.model.SolrRecord;
@@ -54,7 +55,7 @@ public class SRMProxyController {
     
 
     private static String SCRIPT_NAME = "wget";
-    private static String SCRIPT_TYPE = "complex";
+    private static String SCRIPT_TYPE = "basic";
     
     
     //anything over 25 doesn't work ... must fix
@@ -149,12 +150,10 @@ public class SRMProxyController {
         
         String type = input.getType();
         String scriptType = input.getScriptType();
-        System.out.println("TYPE: " + type);
-        System.out.println("SCRIPTTYPE: " + scriptType) ;
         
         //get email address here (either from default or the oepnid)
-        String emailAddr = SRMProxyControllerConstants.DEFAULT_EMAIL_ADDR;
-      
+        String openId = "jfharney";
+        String emailAddr = EmailUtils.getEmailAddrFromOpenId(openId);
         
         String [] file_urls = null;
         String [] file_ids = null;
@@ -252,20 +251,10 @@ public class SRMProxyController {
             checksums[0] = "null";
             checksumTypes[0] = "null";
             
-            
-            
-            
-           
-            
-            
-            
-            
-            
         }
         
-        
-
         //send initial email here
+        writeInitialEmail(file_urls,emailAddr);
         
         
         //execute bestman here
@@ -289,11 +278,12 @@ public class SRMProxyController {
         
         ScriptGeneratorFactory scriptGeneratorFactory = new ScriptGeneratorFactory();
         
-        scriptGenerator = scriptGeneratorFactory.makeScriptGenerator(SCRIPT_NAME,SCRIPT_TYPE);
+        //fix -> scriptType = WGET/GUC, SCRIPTTYPE=basic,complex
+        scriptGenerator = scriptGeneratorFactory.makeScriptGenerator(scriptType,SCRIPT_TYPE);
 
         String script = null;
         
-        if(SCRIPT_NAME.equals("wget")) {
+        if(scriptType.equalsIgnoreCase("wget")) {
             if(SCRIPT_TYPE.equals("basic")) {
                 ((BasicWgetScriptGenerator) scriptGenerator).setFileStr(outputFiles);
                 script = scriptGenerator.generateScript();
@@ -376,28 +366,11 @@ public class SRMProxyController {
         return "";
     }
     
-    /*
-    //constraints/query
-    String constraints = input.getConstraints();
-    String query = "*";
-    if(constraints != null) {
-        System.out.println("Constraints: " + constraints);
-        if(constraints.contains("query=")) {
-            String [] facets = constraints.split(";");
-            for(int i=0;i<facets.length;i++) {
-                if(facets[i].contains("query=")) {
-                    String queryValue = facets[i].split("=")[1];
-                    query = queryValue;
-                }
-            }
-            
-        }
-    }
-    */
     
     
     
-private SRMControllerInputObj request2InputObj(HttpServletRequest request) {
+    
+    private SRMControllerInputObj request2InputObj(HttpServletRequest request) {
         
         SRMControllerInputObj inputObj = new SRMControllerInputObj();
         
@@ -544,29 +517,7 @@ private SRMControllerInputObj request2InputObj(HttpServletRequest request) {
         
     }
     
-    private static String getEmailAddrFromOpenId(String openid) {
-        String emailAddr = null;
-        
-        
-        UserInfoCredentialedDAO myUserInfoDAO;
-
-        try{
-            ESGFProperties myESGFProperties = new ESGFProperties();
-            String passwd = myESGFProperties.getAdminPassword();   
-            
-            myUserInfoDAO = new UserInfoCredentialedDAO("rootAdmin",passwd,myESGFProperties);
-            UserInfo userInfo = myUserInfoDAO.getUserById(openid);
-            emailAddr = userInfo.getEmail();
-
-            
-        } catch(Exception e) {
-            //e.printStackTrace();
-            emailAddr = "jfharney@gmail.com";
-        }
-        
-        
-        return emailAddr;
-    }
+    
     
     private static String queryESGSRM(String [] file_urls) {
         
@@ -616,13 +567,6 @@ private SRMControllerInputObj request2InputObj(HttpServletRequest request) {
 
         queryString += "&file_request_type=" + "http";
         
-
-        //if(debugFlag) {
-            //System.out.println("\tQuerystring-> " + queryString);
-            //System.out.println("\n");
-            //System.out.println("\tUnencodedQuerystring-> " + unencodedQueryString);
-            //System.out.println("\n");
-        //}
         
 
         method.setQueryString(queryString);
@@ -690,9 +634,6 @@ private SRMControllerInputObj request2InputObj(HttpServletRequest request) {
         
     }
     
-    
-    
-    
     public static String encode(String queryString) {
         
         try {
@@ -704,8 +645,6 @@ private SRMControllerInputObj request2InputObj(HttpServletRequest request) {
         
         return queryString;
     }
-    
-    
     
     public void writeInitialEmail(String [] file_urls,String emailAddr) {
         this.initialEmail = new Email();
@@ -725,83 +664,77 @@ private SRMControllerInputObj request2InputObj(HttpServletRequest request) {
         this.initialEmail.setBodyText(bodyStr);
     }
     
-    
-    
-    
-    
-    
-    
-    /*
-    public void writeConfirmationEmail(String returnType,
-                                       String openid,
-                                       String [] file_urls,
-                                       String [] checksums,
-                                       String [] checksum,
-                                       String emailAddr) {
-        
-        //writeConfirmationEmail("http",null,file_urls,null,null,emailAddr);
-        //System.out.println("returnType: " + returnType);
-        
-        this.confirmationEmail = new Email();
-        this.confirmationEmail.setTo(emailAddr);
-        
-        //assemble the header text here
-        this.confirmationEmail.setHeaderText("Your request for data has been successfully staged!");
-        
-        //assemble the body text here
-        String bodyStr = "";
-        bodyStr += "Your request for data has been successfully staged!\n";
-        bodyStr += "The data you requested was the following:\n";
-        for(int i=0;i<file_urls.length;i++) {
-            bodyStr += "\t" + file_urls[i] + "\n";
-        }
-        
-        //assemble the attached script
-        Attachment attachment = new Attachment();
-        
-        returnType = "http";
-        
-        if(returnType.equals("http")) {
-            bodyStr += "\nAttached is a wget get script that may be run on any shell.\n";
-
-            file_urls = SRMUtils.gridftp2httpArr(file_urls);
-            
-            for(int i=0;i<file_urls.length;i++) {
-                System.out.println("file_url: " + i + " " + file_urls[i]);
-            }
-            
-            attachment.setAttachmentName("wgetscript.sh");
-            
-
-            //run the script generator
-            ScriptGenerator scriptGenerator = new ScriptGenerator();
-           
-            
-        } else if(returnType.equals("gridftp")) {
-            bodyStr += "\nAttached is a globus url copy script that may be run on any shell.\n";
-
-            attachment.setAttachmentName("globusurlcopyscript.sh");
-            
-            for(int i=0;i<srm_response.getResponse_urls().length;i++) {
-                System.out.println("srm_response.getResponse_urls(): " + srm_response.getResponse_urls()[i]);
-            }
-            
-            //run the script generator
-            ScriptGenerator scriptGenerator = new ScriptGenerator();
-            
-            
-            
-            
-        }
-        
-        
-        
-       
-    }
-    */
-    
 }
 
+
+/*
+public void writeConfirmationEmail(String returnType,
+                                   String openid,
+                                   String [] file_urls,
+                                   String [] checksums,
+                                   String [] checksum,
+                                   String emailAddr) {
+    
+    //writeConfirmationEmail("http",null,file_urls,null,null,emailAddr);
+    //System.out.println("returnType: " + returnType);
+    
+    this.confirmationEmail = new Email();
+    this.confirmationEmail.setTo(emailAddr);
+    
+    //assemble the header text here
+    this.confirmationEmail.setHeaderText("Your request for data has been successfully staged!");
+    
+    //assemble the body text here
+    String bodyStr = "";
+    bodyStr += "Your request for data has been successfully staged!\n";
+    bodyStr += "The data you requested was the following:\n";
+    for(int i=0;i<file_urls.length;i++) {
+        bodyStr += "\t" + file_urls[i] + "\n";
+    }
+    
+    //assemble the attached script
+    Attachment attachment = new Attachment();
+    
+    returnType = "http";
+    
+    if(returnType.equals("http")) {
+        bodyStr += "\nAttached is a wget get script that may be run on any shell.\n";
+
+        file_urls = SRMUtils.gridftp2httpArr(file_urls);
+        
+        for(int i=0;i<file_urls.length;i++) {
+            System.out.println("file_url: " + i + " " + file_urls[i]);
+        }
+        
+        attachment.setAttachmentName("wgetscript.sh");
+        
+
+        //run the script generator
+        ScriptGenerator scriptGenerator = new ScriptGenerator();
+       
+        
+    } else if(returnType.equals("gridftp")) {
+        bodyStr += "\nAttached is a globus url copy script that may be run on any shell.\n";
+
+        attachment.setAttachmentName("globusurlcopyscript.sh");
+        
+        for(int i=0;i<srm_response.getResponse_urls().length;i++) {
+            System.out.println("srm_response.getResponse_urls(): " + srm_response.getResponse_urls()[i]);
+        }
+        
+        //run the script generator
+        ScriptGenerator scriptGenerator = new ScriptGenerator();
+        
+        
+        
+        
+    }
+    
+    
+    
+   
+}
+*/
 
 
 /*
@@ -1194,5 +1127,24 @@ if(type.equals("Dataset")) {
 } //end if/else dataset or file
 
 
+*/
+
+/*
+//constraints/query
+String constraints = input.getConstraints();
+String query = "*";
+if(constraints != null) {
+    System.out.println("Constraints: " + constraints);
+    if(constraints.contains("query=")) {
+        String [] facets = constraints.split(";");
+        for(int i=0;i<facets.length;i++) {
+            if(facets[i].contains("query=")) {
+                String queryValue = facets[i].split("=")[1];
+                query = queryValue;
+            }
+        }
+        
+    }
+}
 */
 

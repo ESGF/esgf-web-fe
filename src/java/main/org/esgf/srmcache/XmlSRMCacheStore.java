@@ -46,4 +46,10 @@ public class XmlSRMCacheStore extends SRMCacheStore {
         
     }
 
+    @Override
+    public void createCacheStore() {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

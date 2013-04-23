@@ -398,4 +398,10 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
         return exists;
     }
 
+    @Override
+    public void createCacheStore() {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

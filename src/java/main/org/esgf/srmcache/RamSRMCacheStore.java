@@ -173,16 +173,18 @@ public class RamSRMCacheStore extends SRMCacheStore {
         
     }
 
-    @Override
     public void removeCacheStore() {
-        // TODO Auto-generated method stub
+        // No action needed
         
     }
 
-    @Override
     public void disconnect() {
-        // TODO Auto-generated method stub
+        // No action needed
         
+    }
+
+    public void createCacheStore() {
+        this.srm_entries = new ArrayList<SRMEntry>();
     }
 
 }

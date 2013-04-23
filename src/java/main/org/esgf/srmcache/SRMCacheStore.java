@@ -19,6 +19,8 @@ public abstract class SRMCacheStore {
     //delete
     public abstract int deleteSRMEntry(SRMEntry srm_entry);
     
+    public abstract void createCacheStore();
+    
     public abstract void initializeCacheStore();
     
     public abstract void removeCacheStore();

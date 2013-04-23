@@ -8,7 +8,7 @@ public class Driver {
         
         SRMCacheStoreFactory srmCacheStore = new SRMCacheStoreFactory();
         
-        String type = "ram";
+        String type = "postgres";
         
         SRMCacheStore srm_cache = srmCacheStore.makeSRMCacheStore(type); 
         
@@ -18,9 +18,9 @@ public class Driver {
         
         srm_cache.initializeCacheStore();
         
-        List<SRMEntry> entries = srm_cache.getSRMEntriesForDataset_id("ornl.ultrahighres.CESM1.t85f09.B1850_50yrs.seaIce.v1%7Cesg2-sdnl1.ccs.ornl.gov");
-        
-        System.out.println("size: " + entries.size());
+        //List<SRMEntry> entries = srm_cache.getSRMEntriesForDataset_id("ornl.ultrahighres.CESM1.t85f09.B1850_50yrs.seaIce.v1%7Cesg2-sdnl1.ccs.ornl.gov");
+        List<SRMEntry> entries = srm_cache.getSRMEntriesForDataset_id("ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1|esg2-sdnl1.ccs.ornl.gov");
+        //System.out.println("size: " + entries.size());
         
     }
 }

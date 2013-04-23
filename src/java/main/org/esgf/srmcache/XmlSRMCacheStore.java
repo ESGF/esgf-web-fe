@@ -29,7 +29,19 @@ public class XmlSRMCacheStore extends SRMCacheStore {
     }
 
     @Override
-    protected void initializeCacheStore() {
+    public void initializeCacheStore() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void removeCacheStore() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void disconnect() {
         // TODO Auto-generated method stub
         
     }

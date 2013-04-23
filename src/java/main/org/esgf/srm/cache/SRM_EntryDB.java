@@ -226,7 +226,7 @@ public class SRM_EntryDB {
         
             try {
                 st = con.createStatement();
-                update = st.executeUpdate(SRMControls.create_table_SQL);
+                //update = st.executeUpdate(SRMControls.create_table_SQL);
                
                 //adds tuples if needed
                 if(command != null) {

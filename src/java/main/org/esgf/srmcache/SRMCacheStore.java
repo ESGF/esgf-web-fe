@@ -23,6 +23,7 @@ public abstract class SRMCacheStore {
     
     public abstract void removeCacheStore();
     
+    public abstract void disconnect();
     /**
      * @return the name
      */

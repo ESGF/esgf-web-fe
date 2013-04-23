@@ -1,5 +1,7 @@
 package org.esgf.srm;
 
+import org.esgf.srm.scriptgen.*;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -25,10 +27,11 @@ import org.esgf.datacart.URLSElement;
 import org.esgf.datacart.XmlFormatter;
 import org.esgf.email.Email;
 import org.esgf.email.Attachment;
-import org.esgf.scriptgenerator.ScriptGenerator;
+import org.esgf.filetransformer.SRMFileTransformation;
 import org.esgf.solr.model.Solr;
 import org.esgf.solr.model.SolrRecord;
 import org.esgf.solr.model.SolrResponse;
+import org.esgf.srm.scriptgen.ScriptGeneratorFactory;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,6 +51,11 @@ public class SRMProxyController {
     private static String MAX_LIMIT = "9999";
 
     private static final String DEFAULT_TYPE = "Dataset";
+    
+
+    private static String SCRIPT_NAME = "wget";
+    private static String SCRIPT_TYPE = "complex";
+    
     
     //anything over 25 doesn't work ... must fix
     private static int NUM_FILES_LIMIT = 25;
@@ -144,49 +152,42 @@ public class SRMProxyController {
         System.out.println("TYPE: " + type);
         System.out.println("SCRIPTTYPE: " + scriptType) ;
         
+        //get email address here (either from default or the oepnid)
+        String emailAddr = SRMProxyControllerConstants.DEFAULT_EMAIL_ADDR;
+      
+        
+        String [] file_urls = null;
+        String [] file_ids = null;
+        String [] checksums = null;
+        String [] checksumTypes = null;
         
         if(type.equals("Dataset")) {
-            
-            /*
-            //constraints/query
-            String constraints = input.getConstraints();
-            String query = "*";
-            if(constraints != null) {
-                System.out.println("Constraints: " + constraints);
-                if(constraints.contains("query=")) {
-                    String [] facets = constraints.split(";");
-                    for(int i=0;i<facets.length;i++) {
-                        if(facets[i].contains("query=")) {
-                            String queryValue = facets[i].split("=")[1];
-                            query = queryValue;
-                        }
-                    }
-                    
-                }
-            }
-            */
+
+            System.out.println("In type dataset");
             
             String query = "*";
-            
             String dataset_id = input.getDataset_id();
-            
             
             //query solr and get the responses
             SolrResponse solrResponse = querySolr(query,dataset_id);
-            
             
             int numFiles = NUM_FILES_LIMIT;
             
             if(numFiles > solrResponse.getSolrRecords().size()) {
                 numFiles = solrResponse.getSolrRecords().size();
             }
-            System.out.println("numFiles: " + numFiles);
+            
+            System.out.println("NumFiles: " + numFiles);
+            
             if(numFiles != 0) {
+
+                file_ids = new String[numFiles];
+                file_urls = new String[numFiles];
+                checksums = new String[numFiles];
+                checksumTypes = new String[numFiles];
+            
                 
-                String [] file_urls = new String[numFiles];
-                
-                String [] file_ids = new String[numFiles];
-             
+                //grab the file_id, file_url, checksum, checksumType
                 for(int i=0;i<numFiles;i++) {
                     SolrRecord solrRecord = solrResponse.getSolrRecords().get(i);
                     String solr_record_url = solrRecord.getArrField("url").get(0);
@@ -195,162 +196,40 @@ public class SRMProxyController {
                     
                     String url = solr_record_url.split("\\|")[0];
                     file_urls[i] = url;
-                 
+                
                     String file_id = solrRecord.getStrField("id");
                     file_ids[i] = file_id;
+
+                    String solr_record_checksum = null;
+                    String solr_record_checksum_type = null;
+                    if(solrRecord.getArrField("checksum") == null) {
+                        solr_record_checksum = "null";
+                        solr_record_checksum_type = "null";
+                    } else {
+                        solr_record_checksum = solrRecord.getArrField("checksum").get(0);
+                        solr_record_checksum_type = solrRecord.getArrField("checksum_type").get(0);
+                    }
+                    
+                    checksums[i] = solr_record_checksum;
+                    checksumTypes[i] = solr_record_checksum_type;
                     
                 }
-
-                
-                System.out.println("\nSending initial email...\n");
-                
-              //get email address here
-                String emailAddr = SRMProxyControllerConstants.DEFAULT_EMAIL_ADDR;
-                
-                
-                //write initial email here
-                writeInitialEmail(file_urls,emailAddr);
-
-                this.initialEmail.sendEmail();
-                
-
-                System.out.println("Submitting request...\n");
-                //submit request here
-                //issue the request to the srm and get response
-                this.srm_response = new SRMResponse();
-                if(file_urls != null) {
-                    responseStr = queryESGSRM(file_urls);
-                    System.out.println("response\n"+responseStr);
-                }
-                this.srm_response.fromXML(responseStr);
-
-
-                System.out.println("response url: " + this.srm_response.getResponse_urls()[0]);
-                
-                
-                //send confirmation email here
-                
-                System.out.println("\nSending confirmation email...\n");
-                //writeConfirmationEmail("http",null,file_urls,null,null,emailAddr);
-                
-                //Inputs
-                //scriptType -> type of script (wget/http or globus/gridftp)
-                //scriptType = "gridftp";
-                //basic -> simple command line or complex credential fetcher
-                boolean basic = isBasicScript;
-                //hostName -> the host that houses the data (assumed to be localhost for now)
-                String hostName = "localhost";
-                //message -> descriptive message about script
-                String message = "message";
-                //date -> timestamped date of script generation
-                String date = "date";
-                //searchUrl -> additional search constraints included
-                String searchUrl = "searchUrl";
-                String userOpenId = "userOpenId";
-                        
-                
-                //basic template here
-                //ScriptGenerator script = new ScriptGenerator(this.srm_response.getResponse_urls(),scriptType);
-                ScriptGenerator script = new ScriptGenerator(this.srm_response.getResponse_urls(),
-                        this.srm_response.getResponse_urls(),
-                        this.srm_response.getResponse_urls(),
-                        scriptType,
-                        basic,
-                        hostName,
-                        message,
-                        date,
-                        searchUrl,
-                        userOpenId);
-
-
-                
-                script.populateTagMap();
-                script.getRevisedTemplate();
-                script.makeTemplate();
-                
-                
-                this.confirmationEmail = new Email();
-                this.confirmationEmail.setTo(emailAddr);
-                Attachment attachment1 = new Attachment();
-                
-                if(scriptType.equals("gridftp")) {
-                    attachment1.setAttachmentName("globus-url-copy.sh");
-                } else {
-                    attachment1.setAttachmentName("wget.sh");
-                }
-                //attachment1.setAttachmentContent("New wget content");
-                
-                attachment1.setAttachmentContent(script.getFinalTemplate());
-                
-                this.confirmationEmail.setAttachment(attachment1);
-                this.confirmationEmail.setHeaderText("Your request for data has been successfully staged!");
-                /*
-                String bodyStr = "";
-                bodyStr += "Your data request for the following files:\n";
-                for(int i=0;i<file_urls.length;i++) {
-                    bodyStr += "\t" + file_urls[i] + "\n";
-                }
-                bodyStr += "\nHas been submitted.  Please note that it may take some time to extract the data off tertiary storage and onto the local filesystem.  A confirmation email will be sent to this address soon with instructions on how to access this data.";
-                */
-              //assemble the body text here
-                String bodyStr = "";
-                bodyStr += "Your request for data has been successfully staged!\n";
-                bodyStr += "The data you requested was the following:\n";
-                for(int i=0;i<file_urls.length;i++) {
-                    bodyStr += "\t" + file_urls[i] + "\n";
-                }
-                
-                this.confirmationEmail.setBodyText(bodyStr);
-
-                System.out.println(this.confirmationEmail.toString());
-
-                //this.confirmationEmail.sendEmail();
-                //System.exit(0);
-                
-                //---
-                
-              
+                //should end the if else here
                 
                 
                 
-                
-                
-                
-                /*
-                //insert initial email code here
-                
-                
-                
-                
-              //issue the request to the srm and get response
-                this.srm_response = new SRMResponse();
-                if(file_urls != null) {
-                    responseStr = queryESGSRM(file_urls);
-                    System.out.println(responseStr);
-                }
-                this.srm_response.fromXML(responseStr);
-
-                if(debugFlag)
-                    System.out.println("\n\nsrm responses:\n\n" + new XmlFormatter().format(this.srm_response.toXML()));
-                
-                */
-                
-                
-            } else {
-                System.out.println("No files found");
+            
             }
-            /**/
             
             
         } else {
             
             System.out.println("In type file");
-            
             //files workflow
             
-            String [] file_urls = new String[1];
+            file_urls = new String[1];
             
-            String [] file_ids = new String[1];
+            file_ids = new String[1];
             
             String file_url = input.getFile_url();
             if(file_url == null) {
@@ -366,111 +245,17 @@ public class SRMProxyController {
             
             file_ids[0] = file_id;
             
-            
-            System.out.println("file id: " + file_ids[0] + " file url: " + file_urls[0]);
-
-            System.out.println("\nSending initial email...\n");
-            
-            //get email address here
-            String emailAddr = SRMProxyControllerConstants.DEFAULT_EMAIL_ADDR;
-            
-            
-            
-            writeInitialEmail(file_urls,emailAddr);
-            //System.out.println(this.initialEmail.toString());
-            
-            //prepare the entry list/caching system
-
-
-            System.out.println("Submitting request...\n");
-            //submit request here
-            //issue the request to the srm and get response
-            this.srm_response = new SRMResponse();
-            if(file_urls != null) {
-                responseStr = queryESGSRM(file_urls);
-                //System.out.println("response\n"+responseStr);
-            }
-            this.srm_response.fromXML(responseStr);
-
-
-            System.out.println("response url: " + this.srm_response.getResponse_urls()[0]);
-            
-            
-            System.out.println("\nSending confirmation email...\n");
-            //writeConfirmationEmail("http",null,file_urls,null,null,emailAddr);
-            
-            //Inputs
-            //scriptType -> type of script (wget/http or globus/gridftp)
-            //scriptType = "gridftp";
-            //basic -> simple command line or complex credential fetcher
-            boolean basic = isBasicScript;
-            //hostName -> the host that houses the data (assumed to be localhost for now)
-            String hostName = "localhost";
-            //message -> descriptive message about script
-            String message = "message";
-            //date -> timestamped date of script generation
-            String date = "date";
-            //searchUrl -> additional search constraints included
-            String searchUrl = "searchUrl";
-            String userOpenId = "userOpenId";
-                    
-            
-            //basic template here
-            //ScriptGenerator script = new ScriptGenerator(this.srm_response.getResponse_urls(),scriptType);
-            ScriptGenerator script = new ScriptGenerator(this.srm_response.getResponse_urls(),
-                    this.srm_response.getResponse_urls(),
-                    this.srm_response.getResponse_urls(),
-                    scriptType,
-                    basic,
-                    hostName,
-                    message,
-                    date,
-                    searchUrl,
-                    userOpenId);
-
-
-            
-            script.populateTagMap();
-            script.getRevisedTemplate();
-            script.makeTemplate();
-            
-            //System.out.println("Final Template\n" + script.getFinalTemplate());
-            
-            
-            this.confirmationEmail = new Email();
-            this.confirmationEmail.setTo(emailAddr);
-            Attachment attachment1 = new Attachment();
-            
-            if(scriptType.equals("gridftp")) {
-                attachment1.setAttachmentName("globus-url-copy.sh");
-            } else {
-                attachment1.setAttachmentName("wget.sh");
-            }
-            //attachment1.setAttachmentContent("New wget content");
-            
-            attachment1.setAttachmentContent(script.getFinalTemplate());
-            
-            this.confirmationEmail.setAttachment(attachment1);
-            this.confirmationEmail.setHeaderText("Your request for data has been successfully staged!");
-            
-          //assemble the body text here
-            String bodyStr = "";
-            bodyStr += "Your request for data has been successfully staged!\n";
-            bodyStr += "The data you requested was the following:\n";
-            for(int i=0;i<file_urls.length;i++) {
-                bodyStr += "\t" + file_urls[i] + "\n";
-            }
-            
-            
-            this.confirmationEmail.setBodyText(bodyStr);
-
-            //this.confirmationEmail.sendEmail();
-            System.out.println(this.confirmationEmail.toString());
+            checksums = new String[1];
+            checksumTypes = new String[1];
+        
+            //revisit (obviously)
+            checksums[0] = "null";
+            checksumTypes[0] = "null";
             
             
             
             
-            
+           
             
             
             
@@ -478,257 +263,138 @@ public class SRMProxyController {
             
         }
         
+        
+
+        //send initial email here
+        
+        
+        //execute bestman here
+        System.out.println("Submitting request...\n");
+        
+        String [] outputFiles = SRMFileTransformation.simulateSRM(file_urls);
         /*
-        //type
-        String type = request.getParameter("type");
-        if(type == null) {
-            type = SRMProxyControllerConstants.INPUT_TYPE_FILE;
+        //submit request here
+        //issue the request to the srm and get response
+        this.srm_response = new SRMResponse();
+        if(file_urls != null) {
+            responseStr = queryESGSRM(file_urls);
+            System.out.println("response\n"+responseStr);
         }
-                
-        System.out.println("TYPE: " + type + "\n\n\n") ;
-        if(type.equals("Dataset")) {
-            
-            
-            String dataset_id = request.getParameter("dataset_id");
-            if(dataset_id == null) {
-                dataset_id = "ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1|esg2-sdnl1.ccs.ornl.gov";
-            }
-            
-            
-            
-            //constraints/query
-            String constraints = request.getParameter("constraints");
-            String query = "*";
-            if(constraints != null) {
-                System.out.println("Constraints: " + constraints);
-                if(constraints.contains("query=")) {
-                    String [] facets = constraints.split(";");
-                    for(int i=0;i<facets.length;i++) {
-                        if(facets[i].contains("query=")) {
-                            String queryValue = facets[i].split("=")[1];
-                            query = queryValue;
-                        }
-                    }
-                    
-                }
-            }
-            
-            
-            
-            
-            
-            
-            //query solr and get the responses
-            SolrResponse solrResponse = querySolr(query,dataset_id);
-            
-            
-            int numFiles = NUM_FILES_LIMIT;
-            
-            if(numFiles > solrResponse.getSolrRecords().size()) {
-                numFiles = solrResponse.getSolrRecords().size();
-            }
-            
-            if(numFiles != 0) {
-                
-                String [] file_urls = new String[numFiles];
-                
-                String [] file_ids = new String[numFiles];
-                
-                
-                
-                //for(int i=0;i<solrResponse.getSolrRecords().size();i++) {
-                for(int i=0;i<numFiles;i++) {
-                    SolrRecord solrRecord = solrResponse.getSolrRecords().get(i);
-                    String solr_record_url = solrRecord.getArrField("url").get(0);
-                    
-                    //System.out.println("srm_url: " + solr_record_url);
-                    
-                    String url = solr_record_url.split("\\|")[0];
-                    file_urls[i] = url;
-                 
-                    String file_id = solrRecord.getStrField("id");
-                    file_ids[i] = file_id;
-                }
-                
-                
-                System.out.println("\nSending initial email...\n");
-                String emailAddr = SRMProxyControllerConstants.DEFAULT_EMAIL_ADDR;
-                writeInitialEmail(file_urls,emailAddr);
-                
-                if(isProduction) {
-                    this.initialEmail.sendEmail();
-                } else {
-                    System.out.println(this.initialEmail.toString());
-                }
-                
-                
-                SRMEntryList srm_list = new SRMEntryList();
-                
-                if(cacheOn) {
-                    System.out.println("Reading in entry list");
-                    srm_list.fromFile("/esg/config/srm_entry_list_File.xml");
-                    System.out.println("Current cache state for ids");
-                    for(int i=0;i<file_ids.length;i++) {
-                        System.out.println("file id: " + file_ids[i] + " " + srm_list.isCached(file_ids[i]));
-                    }
-                }
-                
-                
-                
-                //issue the request to the srm and get response
-                this.srm_response = new SRMResponse();
-                if(file_urls != null) {
-                    responseStr = queryESGSRM(file_urls);
-                }
-                this.srm_response.fromXML(responseStr);
-
-                
-                
-                
-                
-                //cache these file entries
-                if(cacheOn) {
-                    for(int i=0;i<file_ids.length;i++) {
-                        srm_list.changeCached(file_ids[i], "true");
-                    }
-                    //System.out.println(new XmlFormatter().format(srm_list.toXML()));
-                    srm_list.toFile("/esg/config/srm_entry_list_File.xml");
-                }
-
-                System.out.println(new XmlFormatter().format(srm_response.toXML()) + "\n");
-                
-                writeConfirmationEmail("http",null,file_urls,null,null,emailAddr);
-                        
-                System.out.println("\nSending confirmation email...\n");
-                
-                if(isProduction) {
-                    this.confirmationEmail.sendEmail();
-                } else {
-                    System.out.println(this.confirmationEmail.toString());
-                }
-            } else {
-                //there are no files
-                
-                
-            }
-            
-            
-            
-            
-        } else {
-            
-            System.out.println("In type file");
-            
-            //files workflow
-            
-            String [] file_urls = new String[1];
-            
-            String [] file_ids = new String[1];
-            
-            String file_url = request.getParameter("file_url");
-            if(file_url == null) {
-                file_url = SRMProxyControllerConstants.INPUT_FILE_FILE_URL;
-            }
-            
-            file_urls[0] = file_url;
-            
-            String file_id = request.getParameter("file_id");
-            if(file_id == null) {
-                file_id = SRMProxyControllerConstants.INPUT_FILE_FILE_ID;
-            }
-            
-            file_ids[0] = file_id;
-            
-            
-            System.out.println("\nSending initial email...\n");
-            
-            SRMEntryList srm_list = new SRMEntryList();
-            
-            if(cacheOn) {
-                System.out.println("Reading in entry list");
-                srm_list.fromFile("/esg/config/srm_entry_list_File.xml");
-                System.out.println("Current cache state for ids");
-                for(int i=0;i<file_ids.length;i++) {
-                    System.out.println("file id: " + file_ids[i] + " " + srm_list.isCached(file_ids[i]));
-                }
-            }
-            
-            //issue the request to the srm and get response
-            this.srm_response = new SRMResponse();
-            if(file_urls != null) {
-                responseStr = queryESGSRM(file_urls);
-            }
-            this.srm_response.fromXML(responseStr);
-
-            System.out.println(new XmlFormatter().format(srm_response.toXML()) + "\n");
-            
-            
-            
-            //String emailAddr = SRMProxyControllerConstants.DEFAULT_EMAIL_ADDR;
-            //writeInitialEmail(file_urls,emailAddr);
-            
-            //if(isProduction) {
-            //    this.initialEmail.sendEma0il();
-            //} else {
-            //    System.out.println(this.initialEmail.toString());
-            //}
-            
-            
-            //SRMEntryList srm_list = new SRMEntryList();
-            
-            //if(cacheOn) {
-            //    System.out.println("Reading in entry list");
-            //    srm_list.fromFile("/esg/config/srm_entry_list_File.xml");
-            //    System.out.println("Current cache state for ids");
-            //    for(int i=0;i<file_ids.length;i++) {
-            //        System.out.println("file id: " + file_ids[i] + " " + srm_list.isCached(file_ids[i]));
-            //    }
-            //}
-            
-            
-            
-            //issue the request to the srm and get response
-            //this.srm_response = new SRMResponse();
-            //if(file_urls != null) {
-            //    responseStr = queryESGSRM(file_urls);
-            //}
-            //this.srm_response.fromXML(responseStr);
-
-            
-            
-            
-            
-            //cache these file entries
-            //if(cacheOn) {
-            //    for(int i=0;i<file_ids.length;i++) {
-            //        srm_list.changeCached(file_ids[i], "true");
-            //    }
-            //    //System.out.println(new XmlFormatter().format(srm_list.toXML()));
-            //    srm_list.toFile("/esg/config/srm_entry_list_File.xml");
-            //}
-
-            //System.out.println(new XmlFormatter().format(srm_response.toXML()) + "\n");
-            
-            //writeConfirmationEmail("http",null,file_urls,null,null,emailAddr);
-                    
-            //System.out.println("\nSending confirmation email...\n");
-            
-            //if(isProduction) {
-            //    this.confirmationEmail.sendEmail();
-            //} else {
-            //    System.out.println(this.confirmationEmail.toString());
-            //}
-            
-        } //end if/else dataset or file
-        
-        
+        this.srm_response.fromXML(responseStr);
         */
+        
+        
+        //execute script generator here
+        org.esgf.srm.scriptgen.ScriptGenerator scriptGenerator = null;
+        
+        ScriptGeneratorFactory scriptGeneratorFactory = new ScriptGeneratorFactory();
+        
+        scriptGenerator = scriptGeneratorFactory.makeScriptGenerator(SCRIPT_NAME,SCRIPT_TYPE);
+
+        String script = null;
+        
+        if(SCRIPT_NAME.equals("wget")) {
+            if(SCRIPT_TYPE.equals("basic")) {
+                ((BasicWgetScriptGenerator) scriptGenerator).setFileStr(outputFiles);
+                script = scriptGenerator.generateScript();
+                
+            } else {
+                String message = "message";
+                String userOpenId = "userOpenId";
+                String hostName = "hostName";
+                String searchUrl = "searchUrl";
+                String date = "date";
+                ((ComplexWgetScriptGenerator) scriptGenerator).setFileStr(outputFiles,checksums,checksumTypes);
+                ((ComplexWgetScriptGenerator) scriptGenerator).setMessage(message);
+                ((ComplexWgetScriptGenerator) scriptGenerator).setUserOpenId(userOpenId);
+                ((ComplexWgetScriptGenerator) scriptGenerator).setHostName(hostName);
+                ((ComplexWgetScriptGenerator) scriptGenerator).setSearchUrl(searchUrl);
+                ((ComplexWgetScriptGenerator) scriptGenerator).setDate(date);
+                script = scriptGenerator.generateScript();
+
+            }
+        } else {
+            if(SCRIPT_TYPE.equals("basic")) {
+                
+                ((BasicGlobusUrlCopyScriptGenerator) scriptGenerator).setFileStr(outputFiles);
+                script = scriptGenerator.generateScript();
+                
+            } else {
+                
+                String message = "message";
+                String userOpenId = "userOpenId";
+                String hostName = "hostName";
+                String searchUrl = "searchUrl";
+                String date = "date";
+                ((ComplexGlobusUrlCopyScriptGenerator) scriptGenerator).setFileStr(outputFiles,checksums,checksumTypes);
+                ((ComplexGlobusUrlCopyScriptGenerator) scriptGenerator).setMessage(message);
+                ((ComplexGlobusUrlCopyScriptGenerator) scriptGenerator).setUserOpenId(userOpenId);
+                ((ComplexGlobusUrlCopyScriptGenerator) scriptGenerator).setHostName(hostName);
+                ((ComplexGlobusUrlCopyScriptGenerator) scriptGenerator).setSearchUrl(searchUrl);
+                ((ComplexGlobusUrlCopyScriptGenerator) scriptGenerator).setDate(date);
+                script = scriptGenerator.generateScript();
+                
+            }
+        }
+        
+        
+        
+        
+        //send resulting email here
+        this.confirmationEmail = new Email();
+        this.confirmationEmail.setTo(emailAddr);
+        Attachment attachment = new Attachment();
+        
+        if(!SCRIPT_NAME.equals("wget")) {
+            attachment.setAttachmentName("globus-url-copy.sh");
+        } else {
+            attachment.setAttachmentName("wget.sh");
+        }
+        
+        attachment.setAttachmentContent(script);
+        
+        this.confirmationEmail.setAttachment(attachment);
+        this.confirmationEmail.setHeaderText("Your request for data has been successfully staged!");
+        
+        //assemble the body text here
+        String bodyStr = "";
+        bodyStr += "Your request for data has been successfully staged!\n";
+        bodyStr += "The data you requested was the following:\n";
+        for(int i=0;i<file_urls.length;i++) {
+            bodyStr += "\t" + file_urls[i] + "\n";
+        }
+        this.confirmationEmail.setBodyText(bodyStr);
+
+        System.out.println(this.confirmationEmail.toString());
+        //this.confirmationEmail.sendEmail();
+        
+        
         
         
        
         //responseStr = "<a>a</a>";
         return "";
     }
+    
+    /*
+    //constraints/query
+    String constraints = input.getConstraints();
+    String query = "*";
+    if(constraints != null) {
+        System.out.println("Constraints: " + constraints);
+        if(constraints.contains("query=")) {
+            String [] facets = constraints.split(";");
+            for(int i=0;i<facets.length;i++) {
+                if(facets[i].contains("query=")) {
+                    String queryValue = facets[i].split("=")[1];
+                    query = queryValue;
+                }
+            }
+            
+        }
+    }
+    */
+    
     
     
 private SRMControllerInputObj request2InputObj(HttpServletRequest request) {
@@ -840,6 +506,7 @@ private SRMControllerInputObj request2InputObj(HttpServletRequest request) {
         return files;
     }
     
+    /*
     private ScriptGenerator ScriptGenerator(String[] response_urls,
             String[] response_urls2, String[] response_urls3,
             String scriptType, boolean basic, String hostName, String message,
@@ -847,7 +514,8 @@ private SRMControllerInputObj request2InputObj(HttpServletRequest request) {
         // TODO Auto-generated method stub
         return null;
     }
-
+    */
+    
     //requires 2 calls to solr
     //1 - Dataset core for the total count (optional)
     //2 - File core for the files
@@ -1279,5 +947,252 @@ if(isProduction) {
 }
 System.out.println("End Sending email...\n");
 responseStr = this.srm_response.toXML();
+*/
+
+
+/* OLD
+//type
+String type = request.getParameter("type");
+if(type == null) {
+    type = SRMProxyControllerConstants.INPUT_TYPE_FILE;
+}
+        
+System.out.println("TYPE: " + type + "\n\n\n") ;
+if(type.equals("Dataset")) {
+    
+    
+    String dataset_id = request.getParameter("dataset_id");
+    if(dataset_id == null) {
+        dataset_id = "ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1|esg2-sdnl1.ccs.ornl.gov";
+    }
+    
+    
+    
+    //constraints/query
+    String constraints = request.getParameter("constraints");
+    String query = "*";
+    if(constraints != null) {
+        System.out.println("Constraints: " + constraints);
+        if(constraints.contains("query=")) {
+            String [] facets = constraints.split(";");
+            for(int i=0;i<facets.length;i++) {
+                if(facets[i].contains("query=")) {
+                    String queryValue = facets[i].split("=")[1];
+                    query = queryValue;
+                }
+            }
+            
+        }
+    }
+    
+    
+    
+    
+    
+    
+    //query solr and get the responses
+    SolrResponse solrResponse = querySolr(query,dataset_id);
+    
+    
+    int numFiles = NUM_FILES_LIMIT;
+    
+    if(numFiles > solrResponse.getSolrRecords().size()) {
+        numFiles = solrResponse.getSolrRecords().size();
+    }
+    
+    if(numFiles != 0) {
+        
+        String [] file_urls = new String[numFiles];
+        
+        String [] file_ids = new String[numFiles];
+        
+        
+        
+        //for(int i=0;i<solrResponse.getSolrRecords().size();i++) {
+        for(int i=0;i<numFiles;i++) {
+            SolrRecord solrRecord = solrResponse.getSolrRecords().get(i);
+            String solr_record_url = solrRecord.getArrField("url").get(0);
+            
+            //System.out.println("srm_url: " + solr_record_url);
+            
+            String url = solr_record_url.split("\\|")[0];
+            file_urls[i] = url;
+         
+            String file_id = solrRecord.getStrField("id");
+            file_ids[i] = file_id;
+        }
+        
+        
+        System.out.println("\nSending initial email...\n");
+        String emailAddr = SRMProxyControllerConstants.DEFAULT_EMAIL_ADDR;
+        writeInitialEmail(file_urls,emailAddr);
+        
+        if(isProduction) {
+            this.initialEmail.sendEmail();
+        } else {
+            System.out.println(this.initialEmail.toString());
+        }
+        
+        
+        SRMEntryList srm_list = new SRMEntryList();
+        
+        if(cacheOn) {
+            System.out.println("Reading in entry list");
+            srm_list.fromFile("/esg/config/srm_entry_list_File.xml");
+            System.out.println("Current cache state for ids");
+            for(int i=0;i<file_ids.length;i++) {
+                System.out.println("file id: " + file_ids[i] + " " + srm_list.isCached(file_ids[i]));
+            }
+        }
+        
+        
+        
+        //issue the request to the srm and get response
+        this.srm_response = new SRMResponse();
+        if(file_urls != null) {
+            responseStr = queryESGSRM(file_urls);
+        }
+        this.srm_response.fromXML(responseStr);
+
+        
+        
+        
+        
+        //cache these file entries
+        if(cacheOn) {
+            for(int i=0;i<file_ids.length;i++) {
+                srm_list.changeCached(file_ids[i], "true");
+            }
+            //System.out.println(new XmlFormatter().format(srm_list.toXML()));
+            srm_list.toFile("/esg/config/srm_entry_list_File.xml");
+        }
+
+        System.out.println(new XmlFormatter().format(srm_response.toXML()) + "\n");
+        
+        writeConfirmationEmail("http",null,file_urls,null,null,emailAddr);
+                
+        System.out.println("\nSending confirmation email...\n");
+        
+        if(isProduction) {
+            this.confirmationEmail.sendEmail();
+        } else {
+            System.out.println(this.confirmationEmail.toString());
+        }
+    } else {
+        //there are no files
+        
+        
+    }
+    
+    
+    
+    
+} else {
+    
+    System.out.println("In type file");
+    
+    //files workflow
+    
+    String [] file_urls = new String[1];
+    
+    String [] file_ids = new String[1];
+    
+    String file_url = request.getParameter("file_url");
+    if(file_url == null) {
+        file_url = SRMProxyControllerConstants.INPUT_FILE_FILE_URL;
+    }
+    
+    file_urls[0] = file_url;
+    
+    String file_id = request.getParameter("file_id");
+    if(file_id == null) {
+        file_id = SRMProxyControllerConstants.INPUT_FILE_FILE_ID;
+    }
+    
+    file_ids[0] = file_id;
+    
+    
+    System.out.println("\nSending initial email...\n");
+    
+    SRMEntryList srm_list = new SRMEntryList();
+    
+    if(cacheOn) {
+        System.out.println("Reading in entry list");
+        srm_list.fromFile("/esg/config/srm_entry_list_File.xml");
+        System.out.println("Current cache state for ids");
+        for(int i=0;i<file_ids.length;i++) {
+            System.out.println("file id: " + file_ids[i] + " " + srm_list.isCached(file_ids[i]));
+        }
+    }
+    
+    //issue the request to the srm and get response
+    this.srm_response = new SRMResponse();
+    if(file_urls != null) {
+        responseStr = queryESGSRM(file_urls);
+    }
+    this.srm_response.fromXML(responseStr);
+
+    System.out.println(new XmlFormatter().format(srm_response.toXML()) + "\n");
+    
+    
+    
+    //String emailAddr = SRMProxyControllerConstants.DEFAULT_EMAIL_ADDR;
+    //writeInitialEmail(file_urls,emailAddr);
+    
+    //if(isProduction) {
+    //    this.initialEmail.sendEma0il();
+    //} else {
+    //    System.out.println(this.initialEmail.toString());
+    //}
+    
+    
+    //SRMEntryList srm_list = new SRMEntryList();
+    
+    //if(cacheOn) {
+    //    System.out.println("Reading in entry list");
+    //    srm_list.fromFile("/esg/config/srm_entry_list_File.xml");
+    //    System.out.println("Current cache state for ids");
+    //    for(int i=0;i<file_ids.length;i++) {
+    //        System.out.println("file id: " + file_ids[i] + " " + srm_list.isCached(file_ids[i]));
+    //    }
+    //}
+    
+    
+    
+    //issue the request to the srm and get response
+    //this.srm_response = new SRMResponse();
+    //if(file_urls != null) {
+    //    responseStr = queryESGSRM(file_urls);
+    //}
+    //this.srm_response.fromXML(responseStr);
+
+    
+    
+    
+    
+    //cache these file entries
+    //if(cacheOn) {
+    //    for(int i=0;i<file_ids.length;i++) {
+    //        srm_list.changeCached(file_ids[i], "true");
+    //    }
+    //    //System.out.println(new XmlFormatter().format(srm_list.toXML()));
+    //    srm_list.toFile("/esg/config/srm_entry_list_File.xml");
+    //}
+
+    //System.out.println(new XmlFormatter().format(srm_response.toXML()) + "\n");
+    
+    //writeConfirmationEmail("http",null,file_urls,null,null,emailAddr);
+            
+    //System.out.println("\nSending confirmation email...\n");
+    
+    //if(isProduction) {
+    //    this.confirmationEmail.sendEmail();
+    //} else {
+    //    System.out.println(this.confirmationEmail.toString());
+    //}
+    
+} //end if/else dataset or file
+
+
 */
 

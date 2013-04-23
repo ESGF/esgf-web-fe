@@ -7,7 +7,6 @@ public class SRMControls {
     public static boolean environmentSwitch = false;
     
     
-    public static String create_table_SQL = "create table srm_entries(file_id varchar(128),dataset_id varchar(128),timeStamp varchar(128), primary key (file_id,dataset_id));";
     
 
     //public static String db_name = "esgcet";

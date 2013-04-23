@@ -179,4 +179,10 @@ public class RamSRMCacheStore extends SRMCacheStore {
         
     }
 
+    @Override
+    public void disconnect() {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

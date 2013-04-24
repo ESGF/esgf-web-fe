@@ -26,7 +26,7 @@ public class Utils {
     
     //switch used for development purposes 
     //a "false" represents a disconnect from postgres
-    public final static boolean environmentSwitch = true;
+    public final static boolean environmentSwitch = false;
     
     public static String getPassword(File file) {
         String passwd = null;

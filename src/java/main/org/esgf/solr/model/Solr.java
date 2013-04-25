@@ -100,6 +100,7 @@ public class Solr {
         
         method.setQueryString(this.queryString);
         
+        
         method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
                 new DefaultHttpMethodRetryHandler(3, false));
         

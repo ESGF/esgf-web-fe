@@ -68,10 +68,6 @@ package org.esgf.adminui;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.FileInputStream;
-import java.io.DataInputStream;
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -83,7 +79,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.jdom.JDOMException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,8 +89,6 @@ import org.esgf.commonui.UserOperationsESGFDBImpl;
 import org.esgf.commonui.UserOperationsInterface;
 import org.esgf.commonui.UserOperationsXMLImpl;
 import org.esgf.commonui.Utils;
-
-import esg.security.attr.service.api.FederatedAttributeService;
 
 @Controller
 @RequestMapping(value="/accountsview")
@@ -111,34 +104,18 @@ public class AccountsController {
 
     private final static Logger LOG = Logger.getLogger(AccountsController.class);
     private UserOperationsInterface uoi;
-    private FederatedAttributeService fas;
     private String openId;
 
-    //private final static String USERS_FILE = "C:\\Users\\8xo\\esgProjects\\esgf-6-29\\esgf-web-fe\\esgf-web-fe\\src\\java\\main\\users.file";
-
     private final static boolean debugFlag = true;
-    ///**
-    // * List of invalid text characters -
-    // * anything that is not within square brackets.
-    // */
-    //private static Pattern pattern =
-    //    Pattern.compile(".*[^a-zA-Z0-9_\\-\\.\\@\\'\\:\\;\\,\\s/()].*");
-    @Autowired
-    public AccountsController(FederatedAttributeService fas) throws FileNotFoundException, IOException {
-        //Thanks Spring for doing basic programming for me ...
-        this.fas = fas;
 
-        //System.out.println("In accounts controller");
+    public AccountsController() throws FileNotFoundException, IOException {
         LOG.debug("IN AccountsController Constructor");
         if(Utils.environmentSwitch) {
-            //System.out.println("In accounts controller db");
             uoi = new UserOperationsESGFDBImpl();
         }
         else {
-            //System.out.println("In accounts controller xml");
             uoi = new UserOperationsXMLImpl();
         }
-        //System.out.println("End accounts controller");
     }
 
     /**
@@ -160,48 +137,18 @@ public class AccountsController {
 
         LOG.debug("In do get");
 
-        //get the userId from the cookie
         openId = Utils.getIdFromHeaderCookie(request);
         if(debugFlag) {
             LOG.debug("UserId Retrieved: " + openId);
         }
         
-        //debug
-        //if(userId.equals("https://pcmdi3.llnl.gov/esgcet/myopenid/jfharney")) {
-        //    userId = "user1_userName";
-        //}
-        
-        //initialize the model sent to the view
         Map<String,Object> model = getModel(request,accountsInput);
-
-//        //make sure this is a "fresh" model
-//        if (request.getParameter(ACCOUNTS_INPUT)!=null) {
-//            LOG.debug("model not null");
-//            // retrieve model from session
-//            model = (Map<String,Object>)request.getSession().getAttribute(ACCOUNTS_MODEL);
-//
-//        } 
-//        else {
-//            LOG.debug("model is null");
-//            
-//            //User user = Utils.populateUserObjectFromIdXML(userId,new File(USERS_FILE));
-//            
-//            // populate model with the UserInfo
-//            //model.put( ACCOUNTS_USERINFO, user);
-//            LOG.debug("AccountsView Input: " + accountsInput);
-//            model.put(ACCOUNTS_INPUT, accountsInput);
-//            
-//            //put the model in the session
-//            request.getSession().setAttribute(ACCOUNTS_INPUT, model);
-//            LOG.debug("GotHere2");
-//            
-//        }
 
         return new ModelAndView("accountsview", model);
     }
     
     /* Helper function for extracting the model */
-    @SuppressWarnings({ "unchecked", "deprecation" })
+    @SuppressWarnings("unchecked")
     private Map<String,Object> getModel(final HttpServletRequest request,
                                        final @ModelAttribute(ACCOUNTS_INPUT)  String accountsInput) throws IOException {
         LOG.debug("------AccountsController getModel------");
@@ -211,124 +158,8 @@ public class AccountsController {
             // retrieve model from session
             model = (Map<String,Object>)request.getSession().getAttribute(ACCOUNTS_MODEL);
 
-        } 
-        else {
-            /* * Getting List of all group names to extract group desc * */
-              String fileNameStatic = System.getenv().get("ESGF_HOME")+"/config/esgf_ats_static.xml"; //File is messy, created by humans.
-              String fileNameDynamic = System.getenv().get("ESGF_HOME")+"/config/esgf_ats.xml";       //File is clean, created by machine.
-              ArrayList<String> fileStatic = new ArrayList<String>();
-              ArrayList<String> fileDynamic = new ArrayList<String>();
-              String strLine = "";
-              String tmp = "";
-              List<Group> mygroups = new ArrayList<Group>();
-              List<String> myroles = new ArrayList<String>();
-              
-              try{
-                /* * get all groups and info out of dynamic file * */
-                FileInputStream dstream = new FileInputStream(fileNameDynamic);
-                DataInputStream get = new DataInputStream(dstream);
-                while ((strLine = get.readLine()) != null)   {
-                  strLine = strLine.trim();
-                  String finder[] = strLine.split(" ");
-                  if(finder[0].toString().equals("<attribute")){  
-                    fileDynamic.add(strLine);
-                  }
-                }
-                get.close();
-                /* * get all grops and info out of static file * */
-
-                FileInputStream fstream = new FileInputStream(fileNameStatic);
-                DataInputStream in = new DataInputStream(fstream);
-                while ((strLine = in.readLine()) != null ){
-                  strLine = strLine.trim();
-                  if(strLine.length() == 0){
-                    continue;
-                  }
-                  else if(strLine.charAt(0) == '<' && strLine.charAt(strLine.length() - 1) == '>'){
-                    String finder[] = strLine.split(" ");
-                    if(finder[0].toString().equals("<attribute")){
-                      fileStatic.add(strLine);  
-                    }
-                  }
-                  else if(strLine.charAt(0) == '<'){
-                    tmp = strLine;
-                  }
-                  else if(strLine.charAt(strLine.length() - 1) == '>'){
-                    tmp = tmp + strLine;
-                    tmp = tmp.replace("\n", " ");
-                    String finder[] = tmp.split(" ");
-                    if(finder[0].toString().equals("<attribute")){
-                      fileStatic.add(tmp);
-                    }
-                    tmp = "";
-                  }
-                  else{
-                    tmp = tmp + strLine;
-                  }
-                }
-                in.close();
-                /* * merge both sets of groups and info * */
-                for(int e = 0; e < fileDynamic.size(); e++){
-                  String dynamicLength[] = fileDynamic.get(e).split("\"");
-                  if(dynamicLength.length != 9){
-                    fileDynamic.remove(e);
-                  }
-                  else{
-                    for(int r = 0; r < fileStatic.size(); r++){
-                      String staticLength[] = fileStatic.get(r).split("\"");
-                      if(fileDynamic.get(e) == fileStatic.get(r)){
-                        fileStatic.remove(r);
-                      }
-                      else if(staticLength.length != 9){
-                        fileStatic.remove(r);
-                      }
-                    }
-                  }
-                }
-                fileDynamic.addAll(fileStatic);
-              }
-              catch (Exception e){
-                System.err.println("Error: " + e.getMessage());
-              }
-
-            /* * get map of all groups and info this.user is in * */
-            try {
-              openId = Utils.getIdFromHeaderCookie(request);
-              Map<String,Set<String>> userGroupsAndRoles = fas.getAttributes(openId);
-                
-              for (Object key : userGroupsAndRoles.keySet()) {
-                String gn = key.toString();
-
-		            //System.out.println("Key : " + key.toString() + " Value : " + userGroupsAndRoles.get(key));
-	            }
-              /* * Putting the two together for delivery to the view * */
-              for (Object key : userGroupsAndRoles.keySet()) {
-                String name = key.toString();
-                for(int count = 0; count < fileDynamic.size(); count++){
-                  String spliter[] = fileDynamic.get(count).split("\"");
-                  if(spliter[1].equals(name)){ //yes user is in this group
-                    Group temp = new Group(key.toString(), spliter[1], spliter[5]);
-                    mygroups.add(temp);
-                    
-                    for(int parts = 0; parts < userGroupsAndRoles.get(key).size(); parts++){
-                        String tmproles = "";
-                        Iterator<String> myit = userGroupsAndRoles.get(key).iterator();
-                        while(myit.hasNext()){
-                            tmproles += myit.next() + " ";
-                        }
-                        myroles.add(tmproles);
-                    }
-                  }
-                }
-              } 
-            } catch (Exception e) {
-              e.printStackTrace();
-            }
+        } else {
             
-            
-            /* * * */
-
-
             // get user info from DAO
             User userInfo = uoi.getUserObjectFromUserOpenID(openId);
             
@@ -338,7 +169,7 @@ public class AccountsController {
               model.put(ACCOUNTS_ERROR, error);
             }
             else {
-              /*
+
               // get group info from DAO
               List<Group> groups = uoi.getGroupsFromUser(userInfo.getUserName());
             
@@ -347,9 +178,7 @@ public class AccountsController {
               Map<String,Set<String>> userperms = uoi.getUserPermissionsFromOpenID(openId);
               LOG.debug("userperms = " + userperms);
             
-              // TODO: this should be added to GroupOperationsESGFDBImpl or better yet, create a combined GroupRole (or Permissions) OperationsESGFDBImpl
               for (Group g : groups) {
-                // iterate through role set
                 String roleNames = "";
                 Set<String> roleSet = userperms.get(g.getname());
                 
@@ -362,13 +191,13 @@ public class AccountsController {
                 }
                 roles.add(roleNames);
               }
-                */
+            
               // populate model
               model.put(ACCOUNTS_INPUT, accountsInput);
               model.put(ACCOUNTS_USERINFO, userInfo);
-              Group [] groupArray = mygroups.toArray(new Group[mygroups.size()]);
+              Group [] groupArray = groups.toArray(new Group[groups.size()]);
               model.put(ACCOUNTS_GROUPINFO, groupArray);
-              String [] roleArray = myroles.toArray(new String[myroles.size()]);
+              String [] roleArray = roles.toArray(new String[roles.size()]);
               model.put(ACCOUNTS_ROLEINFO, roleArray);
               request.getSession().setAttribute(ACCOUNTS_MODEL, model);
               model.put(ACCOUNTS_ERROR, "false");
@@ -416,38 +245,11 @@ public class AccountsController {
 
         } 
         else {
-            
-            //User user = Utils.populateUserObjectFromIdXML(userId,new File(USERS_FILE));
-            
-            // populate model with the UserInfo
-            //model.put( ACCOUNTS_USERINFO, user);
             model.put(ACCOUNTS_INPUT, accountsInput);
-            
-            //put the model in the session
             request.getSession().setAttribute(ACCOUNTS_MODEL, model);
-            
         }
         return new ModelAndView("accountsview", model);
     }
-    
-    
-    
-    /**
-     *
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    /*
-    @ModelAttribute(ACCOUNTS_MISC)
-    public String formAccountsMiscObject(final HttpServletRequest request) throws Exception {
-        LOG.debug("formAccountsMiscObject");
-        
-        
-        
-        return "ACCOUNTS_MISC here";
-    }
-    */
     
     /**
      *
@@ -457,14 +259,8 @@ public class AccountsController {
      */
     @ModelAttribute(ACCOUNTS_INPUT)
     public String formAccountsInputObject(final HttpServletRequest request) throws Exception {
-
         LOG.debug("formAccountsInputObject called");
-
         return "ACCOUNTS_INPUT here";
-
     }
-    
-    
 
 }
-

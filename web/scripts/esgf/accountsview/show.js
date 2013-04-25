@@ -89,7 +89,8 @@ function showmore(user){
 }
 
 function showAllGroups(openId){
-  $('SAR').hide();
+  $("div .SAR").hide();
+  document.getElementById('groupsRegistered').innerHTML = 'Federation Groups Registered';
   
   var Parent = document.getElementById('groups_admin_table_id');
   for(var i = Parent.rows.length - 1; i > 0; i--){

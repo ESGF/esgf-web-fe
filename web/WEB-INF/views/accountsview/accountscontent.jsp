@@ -73,7 +73,7 @@
     <div class="top" id="top"> </div>  
 
 		<fieldset style="background: #F5F5E0">
-			<legend>Local Groups Registered</legend>
+			<legend id="groupsRegistered">Local Groups Registered</legend>
 				<table id="groups_admin_table_id">
 					<thead>
 						<tr>
@@ -102,9 +102,9 @@
 
 				          <c:set var="j" value="${j+1}"/>
 						</c:forEach>
-            <input id="SAR" alt="" type="button" value="Show All Registered" onclick="javascript:showAllGroups('${accounts_userinfo.openId}')" style="float: left"/>
-      <div class="loading"> <input alt="" id='showMore' type="submit" value="Show All Available" class="button" onclick="javascript:showmore('${accounts_userinfo.openId}')"/> </div>
-      <div class="loaded" style="display: none"> <input alt="" id='showMore' type="submit" value="Show All" class="button" onclick="javascript:showmoregroups()"/> </div>
+      <div class="SAR" style="float: left">       <input id="SAR" alt="" type="button" value="Show All Registered" onclick="javascript:showAllGroups('${accounts_userinfo.openId}')" style="float: left"/>  </div>
+      <div class="loading">                       <input alt="" id='showMore' type="submit" value="Show All Available" class="button" onclick="javascript:showmore('${accounts_userinfo.openId}')"/>        </div>
+      <div class="loaded" style="display: none">  <input alt="" id='showMore' type="submit" value="Show All Available" class="button" onclick="javascript:showmoregroups()"/>                                         </div>
 		</fieldset>
 
     <div class="middle" id="middle"></div>

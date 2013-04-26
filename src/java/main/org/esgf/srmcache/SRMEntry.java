@@ -12,18 +12,21 @@ public class SRMEntry {
     private String dataset_id;
     private String isCached;
     private String timeStamp;
+    private String openid;
     
-    public SRMEntry(String file_id,String dataset_id,String isCached,String timeStamp) {
+    public SRMEntry(String file_id,String dataset_id,String isCached,String timeStamp,String openid) {
         this.file_id = file_id;
         this.dataset_id = dataset_id;
         this.isCached = isCached;
         this.timeStamp = timeStamp;
+        this.openid = openid;
     }
     
-    public SRMEntry(String file_id,String dataset_id,String isCached) {
+    public SRMEntry(String file_id,String dataset_id,String isCached,String openid) {
         this.file_id = file_id;
         this.dataset_id = dataset_id;
         this.isCached = isCached;
+        this.openid = openid;
         
         Long timeStampLong = System.currentTimeMillis();
         this.timeStamp = timeStampLong.toString();
@@ -67,7 +70,17 @@ public class SRMEntry {
             file_idEl.addContent(this.file_id);
             srm_entryEl.addContent(file_idEl);
         }
-
+        
+        if(this.dataset_id != null) {
+            Element dataset_idEl = new Element("dataset_id");
+            dataset_idEl.addContent(this.dataset_id);
+            srm_entryEl.addContent(dataset_idEl);
+        } else {
+            Element dataset_idEl = new Element("dataset_id");
+            dataset_idEl.addContent("N/A");
+            srm_entryEl.addContent(dataset_idEl);
+        }
+        
         if(this.isCached != null) {
             Element isCachedEl = new Element("isCached");
             isCachedEl.addContent(this.isCached);
@@ -80,14 +93,10 @@ public class SRMEntry {
             srm_entryEl.addContent(timeStampEl);
         }
         
-        if(this.dataset_id != null) {
-            Element dataset_idEl = new Element("dataset_id");
-            dataset_idEl.addContent(this.dataset_id);
-            srm_entryEl.addContent(dataset_idEl);
-        } else {
-            Element dataset_idEl = new Element("dataset_id");
-            dataset_idEl.addContent("N/A");
-            srm_entryEl.addContent(dataset_idEl);
+        if(this.openid != null) {
+            Element openidEl = new Element("openid");
+            openidEl.addContent(this.openid);
+            srm_entryEl.addContent(openidEl);
         }
         
         return srm_entryEl;
@@ -153,6 +162,20 @@ public class SRMEntry {
      */
     public void setDataset_id(String dataset_id) {
         this.dataset_id = dataset_id;
+    }
+
+    /**
+     * @return the openid
+     */
+    public String getOpenid() {
+        return openid;
+    }
+
+    /**
+     * @param openid the openid to set
+     */
+    public void setOpenid(String openid) {
+        this.openid = openid;
     }
     
 }

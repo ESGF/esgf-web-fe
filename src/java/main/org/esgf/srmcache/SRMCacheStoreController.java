@@ -12,13 +12,15 @@ public class SRMCacheStoreController {
 
     private long BESTMAN_EXPIRATION = (24*60*60*1000);
     
-    private static String DB_TYPE = "ram";
+    private static String DB_TYPE = "postgres";
     
     private SRMCacheStore srm_cache;
     
     public static void main(String [] args) {
         
         SRMCacheStoreController srm_cache_controller = new SRMCacheStoreController();
+        
+        /*
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
         
         String dataset_id = "a";
@@ -27,12 +29,21 @@ public class SRMCacheStoreController {
         String file_id = "b";
         mockRequest.addParameter("file_id", file_id);
         
+        String openid = "openid1";
+        mockRequest.addParameter("openid", openid);
+
+        srm_cache_controller.addSRMEntry(mockRequest);
+        
+        mockRequest.setParameter("file_id", "c");
+        
         srm_cache_controller.addSRMEntry(mockRequest);
         
         //mockRequest.setParameter("file_id", "c");
         
-        String srm_entry = srm_cache_controller.getSRMEntry(mockRequest);
-        System.out.println(srm_entry);
+        //String srm_entry = srm_cache_controller.getSRMEntry(mockRequest);
+        //System.out.println(srm_entry);
+         
+         */
     }
     
     public SRMCacheStoreController() {
@@ -40,6 +51,11 @@ public class SRMCacheStoreController {
         SRMCacheStoreFactory srmCacheStore = new SRMCacheStoreFactory();
         
         srm_cache = srmCacheStore.makeSRMCacheStore(DB_TYPE); 
+        
+        
+        /*
+        srm_cache.createCacheStore();
+        */
     }
     
     
@@ -56,13 +72,20 @@ public class SRMCacheStoreController {
             file_id = "file_id";
         }
         
-        srm_cache.createCacheStore();
+        String openid = request.getParameter("openid");
+        if(openid == null) {
+            openid = "openid";
+        }
+        
+        //srm_cache.createCacheStore();
+        
+        
         
         String isCached = "N/A";
         String timeStamp = Long.toString(System.currentTimeMillis());
         
-        SRMEntry srm_entry = new SRMEntry(file_id,dataset_id,isCached,timeStamp);
-        
+        SRMEntry srm_entry = new SRMEntry(file_id,dataset_id,isCached,timeStamp,openid);
+
         if(srm_cache.addSRMEntry(srm_entry) == 0) {
             return "success";
         } else {

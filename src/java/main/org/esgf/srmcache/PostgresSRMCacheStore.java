@@ -1,6 +1,7 @@
 package org.esgf.srmcache;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +16,7 @@ import org.esgf.srm.SRMControls;
 
 public class PostgresSRMCacheStore extends SRMCacheStore {
 
-    public static String create_table_SQL = "create table srm_entries(file_id varchar(128),dataset_id varchar(128),isCached varchar(32),timeStamp varchar(128), primary key (file_id,dataset_id));";
+    public static String create_table_SQL = "create table srm_entries(file_id varchar(128),dataset_id varchar(128),isCached varchar(32),timeStamp varchar(128), openid varchar(256), primary key (file_id,dataset_id));";
     
     public static String drop_table_SQL = "drop table srm_entries;";
     
@@ -27,13 +28,28 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
     public PostgresSRMCacheStore() {
         setName("Postgres");
         
-        //establish connection
+        //establish connection to the database
         this.connection = null;
         try {
-            //System.out.println("connection");
             this.connection = DriverManager.getConnection(
                     "jdbc:postgresql://127.0.0.1:5432/" + SRMControls.db_name, SRMControls.valid_user,
                     SRMControls.valid_password);
+            
+            //check to see if the table exists
+            boolean tableExists = false;
+            
+            //if the table doesn't exist - create it
+            if(!SQLTableExists(connection, table_name)) {
+                Statement st = connection.createStatement();
+
+                if(!SQLTableExists(connection, table_name)) {
+                    int update = st.executeUpdate(create_table_SQL);
+                }
+                System.out.println("Table not there"); 
+                
+            } else {
+               System.out.println("Table already there"); 
+            }
             
         } catch (SQLException e) {
             
@@ -62,7 +78,8 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                 String dataset_idVal = (String)rs.getObject("dataset_id");
                 String timeStampVal = (String)rs.getObject("timeStamp");
                 String isCachedVal = (String)rs.getObject("isCached");
-                srm_entry = new SRMEntry(file_idVal,dataset_idVal,isCachedVal,timeStampVal);
+                String openidVal = (String)rs.getObject("openid");
+                srm_entry = new SRMEntry(file_idVal,dataset_idVal,isCachedVal,timeStampVal,openidVal);
             }
             
         } catch (SQLException e) {
@@ -93,7 +110,8 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                 String dataset_idVal = (String)rs.getObject("dataset_id");
                 String timeStampVal = (String)rs.getObject("timeStamp");
                 String isCachedVal = (String)rs.getObject("isCached");
-                srm_entry = new SRMEntry(file_idVal,dataset_idVal,isCachedVal,timeStampVal);
+                String openidVal = (String)rs.getObject("openid");
+                srm_entry = new SRMEntry(file_idVal,dataset_idVal,isCachedVal,timeStampVal,openidVal);
                 srm_entries.add(srm_entry);
             }
             
@@ -109,19 +127,24 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
         Statement st = null;
         ResultSet rs = null;
         
-        String updateCommand = "insert into " + SRMControls.table_name + " (file_id,dataset_id,isCached,timeStamp) values (" +
+        String updateCommand = "insert into " + SRMControls.table_name + " (file_id,dataset_id,isCached,timeStamp,openid) values (" +
                                 "'" + srm_entry.getFile_id() + "'," +
                                 "'" + srm_entry.getDataset_id() + "'," +
                                 "'" + srm_entry.getIsCached() + "'," +
-                                "'" + srm_entry.getTimeStamp() + "');";
+                                "'" + srm_entry.getTimeStamp() + "'," +
+                                "'" + srm_entry.getOpenid() +
+                                "');";
                 
-        //System.out.println("Update Command: " + updateCommand);
+        System.out.println("Update Command: " + updateCommand);
+        
+        //System.exit(0);
         if (this.connection != null) {
             try {
                 st = connection.createStatement();
                 int update = st.executeUpdate(updateCommand);
                 st.close();
             } catch(SQLException e) {
+                //e.printStackTrace();
                 return -1;
             }
             
@@ -129,6 +152,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
             return -1;
         }
         
+        System.out.println("Update complete!");
         
         return 0;
     }
@@ -143,7 +167,9 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                                "file_id='" + srm_entry.getFile_id() + "'," +
                                "dataset_id='" + srm_entry.getDataset_id() + "'," +
                                "isCached='" + srm_entry.getIsCached() + "'," +
-                               "timeStamp='" + srm_entry.getTimeStamp() + ";";
+                               "timeStamp='" + srm_entry.getTimeStamp() + "'," +
+                               "openid='" + srm_entry.getOpenid() + "'," +
+                               ";";
               
 
         //System.out.println("Update Command: " + updateCommand);
@@ -290,38 +316,6 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                     }
                 }
                 
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
                 st.close();
                 
             } catch(SQLException e) {
@@ -398,10 +392,24 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
         return exists;
     }
 
-    @Override
     public void createCacheStore() {
-        // TODO Auto-generated method stub
-        
+        if (this.connection != null) {
+            Statement st = null;
+            int update = 0;
+            
+            try {
+                
+                st = connection.createStatement();
+
+                if(SQLTableExists(connection, table_name)) {
+                    update = st.executeUpdate(drop_table_SQL);
+                }
+                update = st.executeUpdate(create_table_SQL);
+               
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

@@ -30,13 +30,14 @@ public class SRMEntryList {
     
     public static void main(String [] args) {
         
+        /*
         SRMEntryList srm_entry_list = new SRMEntryList();
         
         srm_entry_list.fromFile("srm_entry_list_File.xml");
         
         System.out.println(srm_entry_list.getSrm_entry_list().size());
         srm_entry_list.fromSolr("File");
-        
+        */
         //srm_entry_list.fromSolr("Dataset");
     }
     
@@ -53,6 +54,7 @@ public class SRMEntryList {
     //it will wipe out the contents of any persistent srm entry list
     public void fromSolr(String core) {
         
+        /*
         SRMEntryList srm_entry_list = new SRMEntryList();
         
         Solr solr = new Solr();
@@ -110,12 +112,12 @@ public class SRMEntryList {
         srm_entry_list.toFile("/esg/config/srm_entry_list_" + core + ".xml");
         
         this.setSrm_entry_list(srm_entry_list.getSrm_entry_list());
-        
+        */
     }
     
     public void fromFile(String file) {
         
-        
+        /*
         File fXmlFile = new File(file);
         
         
@@ -134,9 +136,11 @@ public class SRMEntryList {
         } catch(Exception e) {
             e.printStackTrace();
         }
+        */
     }
     
     public void fromXML(String xml) {
+        /*
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = null;
         try {
@@ -152,12 +156,12 @@ public class SRMEntryList {
         }catch(Exception e) {
             e.printStackTrace();
         }
-        
+        */
     }
     
     
     public void readHelper(org.w3c.dom.Element docElement) {
-        
+        /*
         List<SRMEntry> srm_entry_list = new ArrayList<SRMEntry>();
         if(docElement.getNodeName().equals("srm_entry_list")) {
             NodeList fileNodeList = docElement.getChildNodes();
@@ -175,6 +179,7 @@ public class SRMEntryList {
         }
      
         this.setSrm_entry_list(srm_entry_list);
+        */
     }
 
     
@@ -205,7 +210,7 @@ public class SRMEntryList {
     }
     
     public void toFile(String file) {
-        
+        /*
         try {
             BufferedWriter out = new BufferedWriter(new FileWriter(file));
             out.write(new XmlFormatter().format(this.toXML()));
@@ -216,11 +221,11 @@ public class SRMEntryList {
             System.out.println("Exception ");
 
         }
-        
+        */
     }
     
     public void changeCached(String id,String cacheValue) {
-        
+        /*
         System.out.println("\n\nCHANGE CACHED\n\n");
         for(int i=0;i<this.srm_entry_list.size();i++) {
             
@@ -232,21 +237,6 @@ public class SRMEntryList {
             }
             
         }
-        /*
-        List<SRMEntry> srm_entries = new ArrayList<SRMEntry>();
-        for(int i=0;i<this.srm_entry_list.size();i++) {
-            
-            
-            
-            if(this.srm_entry_list.get(i).getFile_id().equals(id)) {
-                System.out.println("DO I ever get here?");
-                this.srm_entry_list.get(i).setIsCached(cacheValue);
-                srm_entries.add(this.srm_entry_list.get(i));
-                
-                System.out.println(this.srm_entry_list.get(i));
-            }
-        }
-        this.setSrm_entry_list(srm_entries);
         */
     }
     

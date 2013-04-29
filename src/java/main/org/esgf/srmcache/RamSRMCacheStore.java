@@ -187,4 +187,10 @@ public class RamSRMCacheStore extends SRMCacheStore {
         this.srm_entries = new ArrayList<SRMEntry>();
     }
 
+    @Override
+    public List<SRMEntry> getSRMEntriesForOpenid(String openid) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

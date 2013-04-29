@@ -9,6 +9,7 @@ public abstract class SRMCacheStore {
     //get
     public abstract SRMEntry getSRMEntryForFile_id(String dataset_id,String file_id);
     public abstract List<SRMEntry> getSRMEntriesForDataset_id(String dataset_id);
+    public abstract List<SRMEntry> getSRMEntriesForOpenid(String openid);
     
     //post
     public abstract int addSRMEntry(SRMEntry srm_entry);

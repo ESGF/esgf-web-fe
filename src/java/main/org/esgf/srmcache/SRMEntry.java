@@ -1,8 +1,11 @@
 package org.esgf.srmcache;
 
+import java.util.List;
+
 import org.esgf.metadata.JSONException;
 import org.esgf.metadata.JSONObject;
 import org.esgf.metadata.XML;
+import org.esgf.srm.SRMControls;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 
@@ -13,12 +16,15 @@ public class SRMEntry {
     private String isCached;
     private String timeStamp;
     private String openid;
-    
-    public SRMEntry(String file_id,String dataset_id,String isCached,String timeStamp,String openid) {
+    private String expiration;
+  
+
+    public SRMEntry(String file_id,String dataset_id,String isCached,String timeStamp,String expiration,String openid) {
         this.file_id = file_id;
         this.dataset_id = dataset_id;
         this.isCached = isCached;
         this.timeStamp = timeStamp;
+        this.expiration = expiration;
         this.openid = openid;
     }
     
@@ -31,6 +37,8 @@ public class SRMEntry {
         Long timeStampLong = System.currentTimeMillis();
         this.timeStamp = timeStampLong.toString();
         
+        this.expiration = this.timeStamp + SRMControls.expiration;
+                
     }
     
     public JSONObject toJSONObject() {
@@ -91,6 +99,12 @@ public class SRMEntry {
             Element timeStampEl = new Element("timeStamp");
             timeStampEl.addContent(this.timeStamp);
             srm_entryEl.addContent(timeStampEl);
+        }
+        
+        if(this.expiration != null) {
+            Element expirationEl = new Element("expiration");
+            expirationEl.addContent(this.expiration);
+            srm_entryEl.addContent(expirationEl);
         }
         
         if(this.openid != null) {
@@ -177,5 +191,17 @@ public class SRMEntry {
     public void setOpenid(String openid) {
         this.openid = openid;
     }
+    
+    
+    public String getExpiration() {
+        return expiration;
+    }
+
+    public void setExpiration(String expiration) {
+        this.expiration = expiration;
+    }
+    
+    
+    
     
 }

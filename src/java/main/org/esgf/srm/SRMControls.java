@@ -18,4 +18,6 @@ public class SRMControls {
     public static String valid_password = "mattryan12";
     //public static String valid_password = "esg4ever";
     
+    public static long expiration = 50000;
+    
 }

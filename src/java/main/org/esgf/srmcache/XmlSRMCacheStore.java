@@ -52,4 +52,10 @@ public class XmlSRMCacheStore extends SRMCacheStore {
         
     }
 
+    @Override
+    public List<SRMEntry> getSRMEntriesForOpenid(String openid) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

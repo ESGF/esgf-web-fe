@@ -13,20 +13,13 @@
             <tr>
               <td><a href="javascript:user()" id="users">Manage Users</a></td>
               <td><a href="javascript:group()" id="groups">Manage Groups</a></td>
+            </tr><tr>
               <td><a href="javascript:pending()" id="pendings">Pending Request</a></td>
+              <td><a href="javascript:manipulation()" id="manipulation">User Role Group Manipulation</a></td>
             </tr>
           </table>
         </p>
         
-<!--    
-        <p>
-          <ul style="list-style-type: none;">                    
-	          <li><a href="<c:url value='/usermanagement'/> ">Manage Users</a></li>  
-	          <li><a href="<c:url value='/creategroups'/> ">Manage Groups</a></li>
-          </ul>
-        </p>
--->
-
   </fieldset>
     </div>
 
@@ -121,10 +114,60 @@
       </fieldset>
     </div>
     <!-- ********** *********** *********** -->
+    
+    <!-- ********** Edit User X To Group Y with Role Z********** -->
+    <div id="XYZ" class="XYZ" style="display: none">
+      <fieldset style="background: #F5F5E0">
+        <legend>Manipulation</legend>
+        <a style="float: right" href="javascript:help()" id="manipulationHelp">Help</a>
+        <p>
+        <table>
+          <thead>
+          <tr>
+            <th>Action</th>
+            <th>User</th>
+            <th>Group</th>
+            <th>Roles</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <select id="action">
+                <option value="ADD">Add</option>
+                <option value="EDIT">Edit</option>
+                <option value="REMOVE">Remove</option>
+              </select>
+            </td>
+            <td>
+              <select id="manipulationUsers">
+              </select>
+            </td>
+            <td>
+              <select id="manipulationGroups">
+              </select>
+            </td>
+            <td id="doublecheck" class="doublecheckend">
+              <select id="manipulationRoles" name="Roles" multiple="multiple">
+                <option>user</option>
+                <option>default</option>
+                <option>none</option>
+                <option>publisher</option>
+                <option>admin</option>
+                <option>super</option>
+              </select>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <input type="button" id="manipulationSubmit" value="Submit" alt="" onclick="javascript:manipulationSubmit()" style="float: left"/>
+        <form action"adminview">
+          <input type="submit" value="Cancel" alt="" style="float: left"/>
+        </form>  
+        <p>
+      </fieldset>
+    </div>
+    <!-- ********** *********** *********** -->
   
   </div>
 </div>
-
-<script language="javascript">
-
-</script>

@@ -87,3 +87,65 @@ function showmore(user){
 	  }
   });	
 }
+
+function showAllGroups(openId){
+  $("div .SAR").hide();
+  document.getElementById('groupsRegistered').innerHTML = 'Federation Groups Registered';
+  
+  var Parent = document.getElementById('groups_admin_table_id');
+  for(var i = Parent.rows.length - 1; i > 0; i--){
+    Parent.deleteRow(i);
+  }
+
+  var oid = openId;
+  var jsonObj = new Object;
+	jsonObj.openId = oid;
+	var jsonStr = JSON.stringify(jsonObj);
+	var userinfo_url = '/esgf-web-fe/showallusersgroupsproxy';
+	$.ajax({
+	  type: "POST",
+	  url: userinfo_url,
+		async: true,
+		cache: false,
+	  data: {query:jsonStr},
+	  dataType: 'json',
+	  success: function(data) {
+	    if (data.EditOutput.status == "success") {
+        var output = data.EditOutput.comment;
+        output = output.substring(1);
+        output = output.substring(0, output.length -2);
+        var rows = output.split(" ][");
+        if(rows.length > 1){
+          for(var i = 0; i < rows.length; i++){
+            var groupInfo = rows[i].split(",");
+            if(groupInfo[0] == "wheel" || groupInfo[0] == ""){
+              //logic?
+            }
+            else{
+                roles = groupInfo[2].split(";");
+               $('.updatable').append('<tr><td>' + groupInfo[0] + '</td><td>' + groupInfo[1] + '</td><td>' + groupInfo[2] + '</td></tr>');
+            }
+          }
+        }
+        else{
+          $("div .error").html("You are not a member of any groups.");
+          $("div .bottom").append($("div .error"));
+	    		$("div .error").show();
+          $("div .loading").hide();
+          $("div .loaded").hide();
+        }
+      } 
+      else {
+	   	  $("div .error").html(data.EditOutput.comment);
+        $("div .middle").append($("div .error"));
+	   		$("div .error").show();
+	   	}
+	  },
+		error: function(request, status, error) {
+			$("div .error").html(request + " | " + status + " | " + error);
+			$("div .middle").append($("div .error"));
+      $("div .error").show();
+	  }
+  });	
+}
+

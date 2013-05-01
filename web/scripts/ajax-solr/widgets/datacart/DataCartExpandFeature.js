@@ -75,6 +75,7 @@
 		
 		show_files: 'Show Files',
 		hide_files: 'Hide Files',
+		expanding_files: 'Expanding...',
 		
 		/**
 		 * 
@@ -102,6 +103,9 @@
 
 			//kill the show all files link
 			$('a.showAllFiles_short').die('click');
+			
+			//kill the span of show files
+			$('span.show_files').die('click');
 			
 			//kill the view more files link
 			$('a.view_more_files_short').die('click');
@@ -380,18 +384,38 @@
 
 			var self = this;
 			
-		    $('a.showAllFiles_short').live('click',function() {
-
+		    //$('a.showAllFiles_short').live('click',function() {
+			$('span.show_files').live('click',function() {
 		    	
 				var openid = $('span#principal_username').html();
 		    	
 		    	//extract the dataset Id from the span tag
 				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
 				
+				//alert($(this).parent().find('a.hideAllFiles_short').html());//.find('span.hideAllFiles_short').attr('style'));
 				
-				//change verbage of the expand link
-				if(this.innerHTML === self.hide_files) {
-					
+				var hideFilesStyle = $(this).parent().find('a.hideAllFiles_short').attr('style');//html();
+				
+				var showFilesDisplay = false;
+				// display none is found, then the page is displaying "show files"
+				if(hideFilesStyle.search('display:none') > -1) {
+					showFilesDisplay = true;
+				}
+				
+				//alert('hideFilesStyle: ' + hideFilesStyle + ' displayName: ' + showFilesDisplay);
+				//alert(this.innerHTML + ' ' + self.hide_files);
+				
+				var parentElement = $(this).parent();
+				
+				var showFilesElement = parentElement.find('a.showAllFiles_short');
+				//alert('display: ' + parentElement.find('a.showAllFiles_short').attr('style'));
+				
+				
+				//detects if there is a 'none' in the style attr.
+				//if this is true, then showing the files is hidden and enters the first code block,
+				//meaning the event is the removal of the file content
+				//
+				if(parentElement.find('a.showAllFiles_short').attr('style').search('none') > -1) {	
 					
 					var idStr = selectedDocId;
 					
@@ -411,14 +435,15 @@
 					var view_more_files_tag = self.view_files_tag + ESGF.datacart.replaceChars(idStr);//'view_more_files_' + replaceChars(idStr);
 					$('.' + view_more_files_tag).remove();
 					
-					//alert('view_next: ' + view_next_files_tag + ' view_first: ' + view_first_files_tag + ' view_more: ' + view_more_files_tag);
-	                this.innerHTML=self.show_files;
-
+					parentElement.find('a.hideAllFiles_short').hide();
+					parentElement.find('a.showAllFiles_short').show();
 					
 				} else {
 
-	                this.innerHTML=self.hide_files;
-
+	                var parentElement = $(this).parent();
+					parentElement.find('a.showAllFiles_short').hide();
+					parentElement.find('span.showAllFiles_short').show();
+					
 	                var idStr = selectedDocId;
 	                
 	                
@@ -444,8 +469,7 @@
 					
 					
 			    	//CHANGE ME!
-			    	//queryStr['peerStr'] = 'localhost';
-			    	LOG.debug('---before expansion---')
+			    	LOG.debug('---before expansion---');
 			    	LOG.debug('dataset_id :' + idStr);
 			    	LOG.debug("isInitialQuery: " + "true");
 			    	LOG.debug("limit: " + ESGF.setting.fileCounter);
@@ -453,7 +477,7 @@
 			    	LOG.debug("constraints: " + constraints);
 			    	LOG.debug("peerStr: " + peerStr) 
 			    	LOG.debug("technotesStr: " + technoteStr); 
-			    	LOG.debug('----------------------')
+			    	LOG.debug('----------------------');
 					
 					
 			    	//initial ajax call for first x number of files in dataset
@@ -474,8 +498,11 @@
 
 								$('.'+tagid).after(appendedFiles);
 								
-								self.innerHTML=self.hide_files;
+								//self.innerHTML=self.hide_files;
 								
+
+								parentElement.find('span.showAllFiles_short').hide();
+								parentElement.find('a.hideAllFiles_short').show();
 								
 							} else {
 
@@ -504,8 +531,8 @@
 								
 								$('.'+tagid).after(appendedFiles);
 								
-								self.innerHTML=self.hide_files;
-								
+								parentElement.find('span.showAllFiles_short').hide();
+								parentElement.find('a.hideAllFiles_short').show();
 								
 							}
 							

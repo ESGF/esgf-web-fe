@@ -320,8 +320,11 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		
 		datasetList += '<td style="font-size:11px;float:right" >';
 		
+		datasetList += '<span class="show_files">';
 		datasetList += '<span class="showAllFiles_short" style="display:none;font-weight:bold;"> Expanding... </span>';
-		datasetList += '<a class="showAllFiles_short" style="cursor:pointer">Show Files</a> | ';
+		datasetList += '<a class="hideAllFiles_short" style="display:none;cursor:pointer">Hide Files</a>' + 
+					   '<a class="showAllFiles_short" style="cursor:pointer">Show Files</a> | ';
+		datasetList += '</span>';
 		
 		var datasetId = self.selected_arr[i];
 		var accessType = 'HTTPServer';

@@ -5,7 +5,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.esgf.srm.SRMControls;
-import org.esgf.srm.cache.SRMCache;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 import org.springframework.mock.web.MockHttpServletRequest;

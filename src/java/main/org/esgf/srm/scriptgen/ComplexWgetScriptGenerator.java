@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.esgf.filetransformer.SRMFileTransformation;
+import org.esgf.filetransformer.SRMFileTransformationUtils;
 import org.esgf.srm.SRMUtils;
 
 public class ComplexWgetScriptGenerator extends WgetScriptGenerator {
@@ -100,7 +100,7 @@ public class ComplexWgetScriptGenerator extends WgetScriptGenerator {
         
         String fileStr = "";
         for(int i=0;i<files.length;i++) {
-            String fileRow = "'" + SRMFileTransformation.gridftp2http(files[i]) + "' " +  
+            String fileRow = "'" + SRMFileTransformationUtils.gridftp2http(files[i]) + "' " +  
                              "'" + fileNames[i] + "' " +
                              "'" + checksums[i] + "' " +
                              "'" + checksumTypes[i] + "'" + "\n";

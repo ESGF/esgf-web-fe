@@ -3,7 +3,7 @@ package org.esgf.srm.scriptgen;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.esgf.filetransformer.SRMFileTransformation;
+import org.esgf.filetransformer.SRMFileTransformationUtils;
 
 public class BasicGlobusUrlCopyScriptGenerator extends GlobusUrlCopyScriptGenerator{
 
@@ -44,7 +44,7 @@ public class BasicGlobusUrlCopyScriptGenerator extends GlobusUrlCopyScriptGenera
         
         for(int i=0;i<files.length;i++) {
             String fileRow = "globus-url-copy " +  
-                            files[i] + " file:///tmp/" + SRMFileTransformation.extractFileNameFromUrl(files[i]) + "\n";
+                            files[i] + " file:///tmp/" + SRMFileTransformationUtils.extractFileNameFromUrl(files[i]) + "\n";
             this.fileStr += fileRow;
         }
         

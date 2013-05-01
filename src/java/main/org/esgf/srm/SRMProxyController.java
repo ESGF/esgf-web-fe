@@ -28,11 +28,13 @@ import org.esgf.datacart.XmlFormatter;
 import org.esgf.email.Email;
 import org.esgf.email.Attachment;
 import org.esgf.email.EmailUtils;
-import org.esgf.filetransformer.SRMFileTransformation;
+import org.esgf.filetransformer.SRMFileTransformationUtils;
 import org.esgf.solr.model.Solr;
 import org.esgf.solr.model.SolrRecord;
 import org.esgf.solr.model.SolrResponse;
 import org.esgf.srm.scriptgen.ScriptGeneratorFactory;
+import org.esgf.srmworkflow.SRMWorkflow;
+import org.esgf.srmworkflow.SRMWorkflowFactory;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,7 +57,7 @@ public class SRMProxyController {
     
 
     private static String SCRIPT_NAME = "wget";
-    private static String SCRIPT_TYPE = "basic";
+    private static String SCRIPT_COMPLEXITY = "basic";
     
     
     //anything over 25 doesn't work ... must fix
@@ -129,18 +131,11 @@ public class SRMProxyController {
     
     
     @RequestMapping(method=RequestMethod.POST, value="/srmproxy")
-    //public ModelAndView addEmployee(@RequestBody String body) {
     public @ResponseBody String doPost(HttpServletRequest request,final HttpServletResponse response) {
         
         Enumeration<String> paramEnum = request.getParameterNames();
         
-        /*
-        while(paramEnum.hasMoreElements()) { 
-            String postContent = (String) paramEnum.nextElement();
-            System.out.println(postContent+"-->"); 
-            System.out.println(request.getParameter(postContent));
-        }   
-        */
+        
         
         System.out.println("In ESGF-WEB-FE SRMProxyController. HTTP POST: doPost");
         
@@ -253,6 +248,9 @@ public class SRMProxyController {
             
         }
         
+        
+        
+        
         //send initial email here
         writeInitialEmail(file_urls,emailAddr);
         
@@ -260,17 +258,13 @@ public class SRMProxyController {
         //execute bestman here
         System.out.println("Submitting request...\n");
         
-        String [] outputFiles = SRMFileTransformation.simulateSRM(file_urls);
-        /*
-        //submit request here
-        //issue the request to the srm and get response
-        this.srm_response = new SRMResponse();
-        if(file_urls != null) {
-            responseStr = queryESGSRM(file_urls);
-            System.out.println("response\n"+responseStr);
-        }
-        this.srm_response.fromXML(responseStr);
-        */
+        SRMWorkflowFactory srm_workflow_factory = new SRMWorkflowFactory();
+        SRMWorkflow srm_workflow_engine = srm_workflow_factory.makeSRMWorkflow("simulation");
+        
+        SRMResponse srm_response = srm_workflow_engine.runWorkFlow(file_urls);
+        String [] outputFiles = srm_response.getResponse_urls();
+        
+        
         
         
         //execute script generator here
@@ -279,12 +273,12 @@ public class SRMProxyController {
         ScriptGeneratorFactory scriptGeneratorFactory = new ScriptGeneratorFactory();
         
         //fix -> scriptType = WGET/GUC, SCRIPTTYPE=basic,complex
-        scriptGenerator = scriptGeneratorFactory.makeScriptGenerator(scriptType,SCRIPT_TYPE);
+        scriptGenerator = scriptGeneratorFactory.makeScriptGenerator(scriptType,SCRIPT_COMPLEXITY);
 
         String script = null;
         
         if(scriptType.equalsIgnoreCase("wget")) {
-            if(SCRIPT_TYPE.equals("basic")) {
+            if(SCRIPT_COMPLEXITY.equals("basic")) {
                 ((BasicWgetScriptGenerator) scriptGenerator).setFileStr(outputFiles);
                 script = scriptGenerator.generateScript();
                 
@@ -304,7 +298,7 @@ public class SRMProxyController {
 
             }
         } else {
-            if(SCRIPT_TYPE.equals("basic")) {
+            if(SCRIPT_COMPLEXITY.equals("basic")) {
                 
                 ((BasicGlobusUrlCopyScriptGenerator) scriptGenerator).setFileStr(outputFiles);
                 script = scriptGenerator.generateScript();
@@ -361,8 +355,6 @@ public class SRMProxyController {
         
         
         
-       
-        //responseStr = "<a>a</a>";
         return "";
     }
     
@@ -519,84 +511,7 @@ public class SRMProxyController {
     
     
     
-    private static String queryESGSRM(String [] file_urls) {
-        
-        if(debugFlag)
-            System.out.println("\nIn queryESGSRM for size: " + file_urls.length + "\n");
-        
-        String response = null;
-        String responseBody = null;
-        
-        // create an http client
-        HttpClient client = new HttpClient();
-
-        //attact the dataset id to the query string
-        PostMethod method = new PostMethod(SRMControls.srmAPIURL);
-        String queryString = "";
-        String unencodedQueryString = "";
-
-        //add the urls
-        for(int i=0;i<file_urls.length;i++) {
-
-            if(i == 0 && file_urls.length == 1) {
-                queryString += "url=";
-                unencodedQueryString += "url=";
-                queryString += encode(file_urls[i]);
-                
-            } 
-            else if(i == 0 && file_urls.length != 1) {
-                queryString += "url=";
-                unencodedQueryString += "url=" + (file_urls[i]) + "&";
-                queryString += encode(file_urls[i]) + "&";
-            }
-            else if(i == file_urls.length - 1) {
-                queryString += "url=";
-                unencodedQueryString += "url=" + (file_urls[i]);
-                queryString += encode(file_urls[i]);
-            } 
-            else {
-                queryString += "url=";
-                unencodedQueryString += "url=" + (file_urls[i]) + "&";
-                queryString += encode(file_urls[i]) + "&";
-            }
-        }
-
-
-        queryString += "&length=" + file_urls.length;
-        unencodedQueryString += "&length=" + file_urls.length;
-
-        queryString += "&file_request_type=" + "http";
-        
-        
-
-        method.setQueryString(queryString);
-        System.out.println("\tQuerystring-> " + method.getQueryString());
-        
-        method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
-                new DefaultHttpMethodRetryHandler(3, false));
-        
-        try {
-            // execute the method
-            int statusCode = client.executeMethod(method);
-
-            if (statusCode != HttpStatus.SC_OK) {
-                System.out.println("statusCode: " + statusCode);
-            }
-
-            // read the response
-            responseBody = method.getResponseBodyAsString();
-        } catch (HTTPException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            method.releaseConnection();
-        }
     
-        
-        
-        return responseBody;
-    }
     
     
     public static String [] getSolrParams(DocElement doc, String which) {
@@ -634,17 +549,7 @@ public class SRMProxyController {
         
     }
     
-    public static String encode(String queryString) {
-        
-        try {
-            queryString = URLEncoder.encode(queryString,"UTF-8").toString();
-        } catch (UnsupportedEncodingException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        
-        return queryString;
-    }
+    
     
     public void writeInitialEmail(String [] file_urls,String emailAddr) {
         this.initialEmail = new Email();

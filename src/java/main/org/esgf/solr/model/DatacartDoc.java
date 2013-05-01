@@ -7,7 +7,6 @@ import org.esgf.datacart.FileElement;
 import org.esgf.metadata.JSONException;
 import org.esgf.metadata.JSONObject;
 import org.esgf.metadata.XML;
-import org.esgf.srm.cache.SRMEntryList;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 
@@ -23,7 +22,7 @@ public class DatacartDoc {
     /** Description */
     private String hasSRM;
     
-    private String isCached;
+    //private String isCached;
     
     private List<String> technotes;
     
@@ -48,15 +47,21 @@ public class DatacartDoc {
         //get the count
         this.setCount(solrResponse.getCount());
         this.datacartFiles = new ArrayList<DataCartFile>();
-        this.setIsCached("true");
+        //this.setIsCached("true");
         for(int i=0;i<solrResponse.getSolrRecords().size();i++) {
+            System.out.println("\nAM I HERE?" + i + "\n\n\n\n\n");
             SolrRecord solrRecord = solrResponse.getSolrRecords().get(i);
+            System.out.println("\nAM I HERE?" + i + "\n\n\n\n\n");
             
             DataCartFile datacartFile = new DataCartFile(solrRecord);
+            System.out.println("\nAM I HERE?" + i + "\n\n\n\n\n");
             this.datacartFiles.add(datacartFile);
+            System.out.println("\nAM I HERE?" + i + "\n\n\n\n\n");
+            /*
             if(datacartFile.getIsCached().equals("false")) {
                 this.setIsCached("false");
             }
+            */
         }
 
         
@@ -71,13 +76,13 @@ public class DatacartDoc {
             datasetIdEl.addContent(this.datasetId);
             docEl.addContent(datasetIdEl);
         }
-        
+        /*
         if(this.isCached != null) {
             Element isCachedEl = new Element("isCached");
             isCachedEl.addContent(this.isCached);
             docEl.addContent(isCachedEl);
         }
-        
+        */
 
         if(this.datacartFiles != null) {
             Element filesEl = new Element("files");
@@ -182,17 +187,21 @@ public class DatacartDoc {
     /**
      * @return the isCached
      */
+    /*
     public String getIsCached() {
         return isCached;
     }
-
+    */
+    
     /**
      * @param isCached the isCached to set
      */
+    /*
     public void setIsCached(String isCached) {
         this.isCached = isCached;
     }
-
+    */
+    
     /**
      * @return the technotes
      */

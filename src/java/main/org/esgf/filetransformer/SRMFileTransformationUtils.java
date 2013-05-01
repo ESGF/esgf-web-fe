@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.List;
 
 
-public class SRMFileTransformation {
+public class SRMFileTransformationUtils {
 
     public static String THREDDS_DATAROOT = "/thredds/fileServer/esg_dataroot/";
     

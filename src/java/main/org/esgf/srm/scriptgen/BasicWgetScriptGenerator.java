@@ -3,7 +3,7 @@ package org.esgf.srm.scriptgen;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.esgf.filetransformer.SRMFileTransformation;
+import org.esgf.filetransformer.SRMFileTransformationUtils;
 
 public class BasicWgetScriptGenerator extends WgetScriptGenerator {
 	
@@ -43,7 +43,7 @@ public class BasicWgetScriptGenerator extends WgetScriptGenerator {
     
     public void setFileStr(String [] files) {
         for(int i=0;i<files.length;i++) {
-           this.fileStr += "wget " + SRMFileTransformation.gridftp2http(files[i]) + "\n";
+           this.fileStr += "wget " + SRMFileTransformationUtils.gridftp2http(files[i]) + "\n";
            
         }
     }

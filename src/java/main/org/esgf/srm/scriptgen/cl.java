@@ -2,7 +2,7 @@ package org.esgf.srm.scriptgen;
 
 import java.util.Scanner;
 
-import org.esgf.filetransformer.SRMFileTransformation;
+import org.esgf.filetransformer.SRMFileTransformationUtils;
 
 public class cl {
 
@@ -22,7 +22,7 @@ public class cl {
 	    String [] urls = new String [2];
         urls[0] = url1;
         urls[1] = url2;
-        String [] outputFiles = SRMFileTransformation.simulateSRM(urls);
+        String [] outputFiles = SRMFileTransformationUtils.simulateSRM(urls);
         
         String checksum = "dsgasg";
         String checksumType = "MD5";

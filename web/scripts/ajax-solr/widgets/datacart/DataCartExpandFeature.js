@@ -235,12 +235,35 @@
 						var queryString = 
 				    	{
 				    			"file_id" : file_id,
+				    			"file_url" : url,
 				    			"dataset_id" : data.doc.datasetId,
 				    			"openid" : 'openid'
 						};
 						var srmcache_url = '/esgf-web-fe/getSRMEntry';
 						
+						var filetransformer_url = '/esgf-web-fe/httpfile';
 						
+						$.ajax({
+							url: filetransformer_url,
+							global: false,
+							type: "GET",
+							async: false,
+							data: queryString,
+							success: function(data) {
+								//alert('data: ' + data);
+								
+								appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
+				                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
+				                 '<span class="srm_urll" style="display:none">' + url + '</span>' +
+				                 '<a style="cursor:pointer" href="' + data + '">' + 'HTTP' + '</a> </span>';
+								
+							}, 
+							error: function() {
+								alert('error');
+							}
+							
+						});
+						/*
 						$.ajax({
 							url: srmcache_url,
 							global: false,
@@ -268,24 +291,24 @@
 					                 '<a style="cursor:pointer" class="single_srm">' + ' exp' + 
 					                 'HTTP' + '</a> </span>';
 								}
-								/*
-								if(data=='failure') {
-									appendedFiles += '<span>expired</span>';
-									appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
-					                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
-					                 '<span class="srm_urll" style="display:none">' + url + '</span>' +
-					                 '<a style="cursor:pointer" class="single_srm">' + 'SRM' + '</a> </span>';
+								//
+								//if(data=='failure') {
+								//	appendedFiles += '<span>expired</span>';
+								//	appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
+					            //     '<span class="file_id" style="display:none">' + file_id + '</span>' + 
+					            //     '<span class="srm_urll" style="display:none">' + url + '</span>' +
+					            //     '<a style="cursor:pointer" class="single_srm">' + 'SRM' + '</a> </span>';
 								
-								} else {
+								//} else {
 									//alert('shouldnt b here');
-								}
-								*/
+								//}
+								//
 							},
 							error: function() {
 								alert('error');
 							}
 						});
-						
+						*/
 						
 						if(ESGF.setting.srmCacheOn) {
 							

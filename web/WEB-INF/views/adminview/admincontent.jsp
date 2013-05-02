@@ -128,6 +128,7 @@
             <th>User</th>
             <th>Group</th>
             <th>Roles</th>
+            <th>Approved</th>
           </tr>
         </thead>
         <tbody>
@@ -155,6 +156,12 @@
                 <option>publisher</option>
                 <option>admin</option>
                 <option>super</option>
+              </select>
+            </td>
+            <td>
+              <select id="manipulationApproved">
+                <option>true</option>
+                <option>false</option>
               </select>
             </td>
           </tr>

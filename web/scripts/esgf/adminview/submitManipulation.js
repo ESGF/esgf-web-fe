@@ -5,6 +5,7 @@ function manipulationSubmit(){
   var userName = user.options[user.selectedIndex].value;
   var group = document.getElementById("manipulationGroups");
   var groupName = group.options[group.selectedIndex].value;
+  var approved = document.getElementById("manipulationApproved");
 
   var roles = [];
   $('#manipulationRoles :selected').each(function(i, selected){ roles[i] = $(selected).text(); });
@@ -30,6 +31,7 @@ function manipulationSubmit(){
     jsonObj.user = userName;
     jsonObj.group = groupName;
     jsonObj.roles = roles.join();
+    jsonObj.approved = approved;
 	  
     var jsonStr = JSON.stringify(jsonObj);
 	  var userinfo_url = '/esgf-web-fe/manipulationproxy';

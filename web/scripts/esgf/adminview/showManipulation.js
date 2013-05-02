@@ -1,5 +1,9 @@
 function manipulation(){
+    
     hideAll();
+    document.getElementById(manipulationUsers).options.length = 0;
+    document.getElementById(manipulationGroups).options.length = 0;
+    
     /******************************** get all users ************************************/
     var userName = "admin";
     var jsonObj = new Object;

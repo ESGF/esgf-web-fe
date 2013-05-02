@@ -107,7 +107,10 @@ public class ManipulationController {
         String userName = "";
         String groupName = "";
         String roles = "";
+        String approved = "";
         String returnmessage = "";
+        int userId = -1;
+        boolean approvedAction = true;
         boolean error = true;
         boolean queryError = false;
         JSONObject jsonObj = null;
@@ -118,8 +121,11 @@ public class ManipulationController {
           userName = jsonObj.getString("user");
           groupName = jsonObj.getString("group");
           roles = jsonObj.getString("roles");
+          approved = jsonObj.getString("approved");
+          if (approved.equals("false")) approvedAction = false; 
             
           UserInfo userInfo = myUserInfoDAO.getUserById(userName);
+          //userId = userInfo.getUserId();
           String[] role = roles.split(",");
           
           //add and edit are the same thing on the back end...
@@ -128,6 +134,7 @@ public class ManipulationController {
               queryError = myUserInfoDAO.addPermission(userInfo, groupName, role[i]);
               if(queryError){ 
                 returnmessage += userName + " has been added to " + groupName + " with the role " + role[i] + "][";
+                queryError = myUserInfoDAO.setPermission(userId, groupName, role[i], approvedAction);
               }
               else {
                 returnmessage += userName + " already has the role " + role[i] +  " in the group " +  groupName + "][";
@@ -141,6 +148,8 @@ public class ManipulationController {
             }
              for(int i = 0; i < role.length; i++){
               queryError = myUserInfoDAO.addPermission(userInfo, groupName, role[i]);
+              queryError = myUserInfoDAO.setPermission(userId, groupName, role[i], approvedAction);
+              returnmessage += userName + " has been added to " + groupName + " with the role " + role[i] + "][";
              }
              roles = roles.replaceAll(",", ", ");
              returnmessage = userName + " now only has the roles " + roles + " in the group " + groupName;
@@ -148,6 +157,7 @@ public class ManipulationController {
           else if(action.equals("REMOVE")){
             for(int i = 0; i < role.length; i++){
               queryError = myUserInfoDAO.deletePermission(userInfo, groupName, role[i]);
+              queryError = myUserInfoDAO.setPermission(userId, groupName, role[i], approvedAction);
               if(queryError){ 
                 returnmessage += userName + " has been removed from " + groupName + " with the role " + role[i] + "][";
               }

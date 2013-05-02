@@ -123,7 +123,7 @@ public class ManipulationController {
           String[] role = roles.split(",");
           
           //add and edit are the same thing on the back end...
-          if(action.equals("ADD") || action.equals("EDIT")){
+          if(action.equals("ADD")){
             for(int i = 0; i < role.length; i++){
               queryError = myUserInfoDAO.addPermission(userInfo, groupName, role[i]);
               if(queryError){ 
@@ -133,6 +133,17 @@ public class ManipulationController {
                 returnmessage += userName + " already has the role " + role[i] +  " in the group " +  groupName + "][";
               }
             } 
+          }
+          else if(action.equals("EDIT")){
+            String[] allRoles = {"user", "default", "none", "publisher", "admin", "super"};
+            for(int i = 0; i < allRoles.length; i++){
+              queryError = myUserInfoDAO.deletePermission(userInfo, groupName, allRoles[i]);
+            }
+             for(int i = 0; i < role.length; i++){
+              queryError = myUserInfoDAO.addPermission(userInfo, groupName, role[i]);
+             }
+             roles = roles.replaceAll(",", ", ");
+             returnmessage = userName + " now only has the roles " + roles + " in the group " + groupName;
           }
           else if(action.equals("REMOVE")){
             for(int i = 0; i < role.length; i++){

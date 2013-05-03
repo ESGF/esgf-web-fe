@@ -150,8 +150,8 @@ public class SRMCacheStoreController {
         
         String expiration = srm_entry.getExpiration();
         
-        if(file_id.equals("ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-10.nc|esg2-sdnl1.ccs.ornl.gov"))
-            System.out.println("\n\nFILEID: " + file_id + "\n\n" + currentTimeStamp + " " + expiration + "\n\n\n\n");
+        //if(file_id.equals("ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-10.nc|esg2-sdnl1.ccs.ornl.gov"))
+            //.out.println("\n\nFILEID: " + file_id + "\n\n" + currentTimeStamp + " " + expiration + "\n\n\n\n");
         
         
         if(Long.parseLong(expiration) > currentTimeStamp) {
@@ -177,10 +177,10 @@ public class SRMCacheStoreController {
         long currentTimeStamp = System.currentTimeMillis();
         
         List<SRMEntry> srm_entries = this.srm_cache.getSRMEntriesForDataset_id(dataset_id);
-        System.out.println("\n\n\nENTRIES FOR: " + dataset_id);
+        //System.out.println("\n\n\nENTRIES FOR: " + dataset_id);
         for(int i=0;i<srm_entries.size();i++) {
             String timestamp = srm_entries.get(i).getExpiration();
-            System.out.println(srm_entries.get(i).getFile_id() + " " + currentTimeStamp + " " + timestamp);
+            //System.out.println(srm_entries.get(i).getFile_id() + " " + currentTimeStamp + " " + timestamp);
             long expirationTimeStamp = Long.parseLong(timestamp);
             if(expirationTimeStamp < currentTimeStamp) {
                 return failure_message;

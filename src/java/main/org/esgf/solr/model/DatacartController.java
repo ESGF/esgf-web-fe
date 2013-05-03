@@ -107,7 +107,7 @@ public class DatacartController {
         solr.addConstraint("dataset_id",dataset_id);
         
         //if(Utils.debugMode)
-            System.out.println("\nsolr query->" + solr.getQueryString() + "\n\n");
+        //    System.out.println("\nsolr query->" + solr.getQueryString() + "\n\n");
         
         
         solr.executeQuery();
@@ -116,23 +116,13 @@ public class DatacartController {
         SolrResponse solrResponse = solr.getSolrResponse();
         
         
-        System.out.println("\nAM I HERE?" + "\n\n\n\n\n");
-        
         DatacartDoc datacartDoc = new DatacartDoc(solrResponse);
 
-        System.out.println("\nAM I HERE?2" + "\n\n\n\n\n");
         datacartDoc.setDatasetId(dataset_id);
 
-        System.out.println("\nAM I HERE?3" + "\n\n\n\n\n");
-        //System.out.println( new XmlFormatter().format(datacartDoc.toXML()));
-        //System.out.println( datacartDoc.toJSON());
         //get response and send it back in json form
-        
         response = datacartDoc.toJSON();
 
-        //if(Utils.debugMode)
-            System.out.println("\n\nRESPONSE:\n" + response + "\n");
-        
         return response;
     }
     

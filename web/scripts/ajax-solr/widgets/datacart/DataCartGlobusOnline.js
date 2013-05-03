@@ -447,8 +447,6 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 			
 			var self = this;
 			
-			alert('go convert from srm');
-			
 			self.file_ids_arr = new Array();
 	    	self.grid_urls_arr = new Array();
 

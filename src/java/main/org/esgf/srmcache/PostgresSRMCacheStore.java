@@ -56,7 +56,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
         
         //establish connection to the database
         this.connection = null;
-        System.out.println("Trying connection");
+        //System.out.println("Trying connection");
         try {
             
             this.connection = DriverManager.getConnection(
@@ -79,7 +79,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                 if(!SQLTableExists(connection, table_name)) {
                     int update = st.executeUpdate(create_table_SQL);
                 }
-                System.out.println("Table not there"); 
+                //System.out.println("Table not there"); 
                 
             } else {
                System.out.println("Table already there"); 
@@ -180,7 +180,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                 //"'" + srm_entry.getOpenid() +
                 ");";
 
-        System.out.println("\t" + updateCommand);
+        //System.out.println("\t" + updateCommand);
         /*
         String updateCommand = "insert into " + SRMControls.table_name + 
                                 " (file_id,dataset_id,isCached,timeStamp,expiration,openid) values (" +
@@ -247,7 +247,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
             System.out.println("Not connected to the database");
         }
         
-        System.out.println("Update command: " + updateCommand + " " + update);
+        //System.out.println("Update command: " + updateCommand + " " + update);
         
         return update;
     }
@@ -270,7 +270,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                                "';";
               
 
-        System.out.println("Update command: " + updateCommand);
+        //System.out.println("Update command: " + updateCommand);
         
         if (this.connection != null) {
             try {
@@ -366,7 +366,6 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                 
                 for(int i=0;i<dataset_ids.size();i++) {
                     
-                    //System.out.println("Querying-> " + dataset_ids.get(i));
                     core = "File";
                     solr = new Solr();
                     limit = 80;
@@ -394,7 +393,6 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                             SolrRecord record = solrResponse.getSolrRecords().get(j);
                             String file_id = record.getStrField("id");
                             String dataset_id = dataset_ids.get(i);
-                            //System.out.println("Dataset: " + dataset_ids.get(i) + " " + file_id);
                             String isCached = "N/A";
                             
                             long expirationLong = Long.parseLong(timeStamp) + SRMControls.expiration;
@@ -407,7 +405,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                             
                             int add = this.addSRMEntry(srm_entry);
                             
-                            System.out.println("adding " + srm_entry.getFile_id() + " " + add);
+                            //System.out.println("adding " + srm_entry.getFile_id() + " " + add);
                             
                         }
                         
@@ -424,8 +422,6 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                 
                 st.close();
                 
-                System.out.println("Closing...");
-                System.exit(0);
                 
             } catch(SQLException e) {
                 //e.printStackTrace();
@@ -483,10 +479,10 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
             if (rs != null) {
                 while (rs.next()) {
                     if (rs.getString(1).equalsIgnoreCase(tableName)) {
-                        System.out.println("Table: " + tableName + " already exists!");
+                        //System.out.println("Table: " + tableName + " already exists!");
                         exists = true;
                     } else { 
-                        System.out.println("Table: " + tableName + " does not appear to exist.");
+                        //System.out.println("Table: " + tableName + " does not appear to exist.");
                         exists = false;
                     }
 

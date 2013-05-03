@@ -163,7 +163,7 @@ public class SRMProxyController {
         
         if(type.equals("Dataset")) {
 
-            System.out.println("In type dataset");
+            //System.out.println("In type dataset");
             
             String query = "*";
             dataset_id = input.getDataset_id();
@@ -177,7 +177,7 @@ public class SRMProxyController {
                 numFiles = solrResponse.getSolrRecords().size();
             }
             
-            System.out.println("\n\nNumFiles: " + numFiles + "\n\n");
+            //System.out.println("\n\nNumFiles: " + numFiles + "\n\n");
             
             if(numFiles != 0) {
 
@@ -224,7 +224,7 @@ public class SRMProxyController {
             
         } else {
             
-            System.out.println("In type file");
+            //System.out.println("In type file");
             //files workflow
             
             file_urls = new String[1];
@@ -255,8 +255,8 @@ public class SRMProxyController {
         }
         
         
-        System.out.println("\n\nDATASET ID: " + dataset_id);
-        System.out.println("FILE ID: " + file_ids[0] + "\n\n");
+        //System.out.println("\n\nDATASET ID: " + dataset_id);
+        //System.out.println("FILE ID: " + file_ids[0] + "\n\n");
         
         
         //send initial email here
@@ -264,7 +264,7 @@ public class SRMProxyController {
         
         
         //execute bestman here
-        System.out.println("Submitting request...\n");
+        //System.out.println("Submitting request...\n");
         
         SRMWorkflowFactory srm_workflow_factory = new SRMWorkflowFactory();
         SRMWorkflow srm_workflow_engine = srm_workflow_factory.makeSRMWorkflow("simulation");
@@ -680,151 +680,6 @@ public void writeConfirmationEmail(String returnType,
 */
 
 
-/*
-public static DocElement querySolr(HttpServletRequest request) {
-  //query solr first
-    String filtered = request.getParameter("filtered");
-    filtered = "false";
-
-    
-    String idStr = request.getParameter("dataset_id");
-    if(idStr == null) {
-        idStr = "null";
-    }
-    
-   
-    String peerStr = request.getParameter("peerStr");
-
-    if(peerStr == null) {
-        peerStr = "null";
-    }
-    
-    //get the fq string and convert to an array of peers
-    String fqStr = request.getParameter("fqParamStr");
-    
-    if(fqStr == null) {
-        fqStr = "null";
-    }
-    String [] fq = fqStr.split(";");
-    
-
-    //get the search constraints togggle parameter
-    String showAllStr = "true";
-    if(showAllStr == null) {
-        showAllStr = "null";
-    }
-    
-    
-    //get the flag denoting whether or not this is an initial Query
-    String initialQuery = request.getParameter("initialQuery");
-    if(initialQuery == null) {
-        initialQuery = "null";
-    }
-
-    //get the fileCounter
-    String fileCounter = request.getParameter("fileCounter");
-    if(fileCounter == null) {
-        fileCounter = "null";
-    }
-    
-    System.out.println("--------");
-    System.out.println("\tidStr\t" + idStr);
-    System.out.println("\tfiltered\t" + filtered);
-    System.out.println("\tpeerStr\t" + peerStr);
-    System.out.println("\tfqStr\t" + fqStr);
-    //System.out.println("\ttechnotesStr\t" + technotes);
-    System.out.println("\tshowAllStr\t" + showAllStr);
-    System.out.println("\tinitialQuery\t" + initialQuery);
-    System.out.println("\tfileCount\t " + fileCounter + "\n");
-    
-    
-    DocElement doc = FileDownloadTemplateController.getDocElement(idStr,peerStr,initialQuery,fq,showAllStr,fileCounter);
-    
-    return doc;
-}
-*/
-
-
-/*
-String [] file_ids = null;
-String [] file_urls = null;
-String [] checksums = null;
-String [] checksumTypes = null;
-
-String type = request.getParameter("type");
-if(type == null) {
-    type = "Dataset";
-}
-
-String openid = request.getParameter("openid");
-if(openid == null) {
-    openid = "https://esg.ccs.ornl.gov/esgf-idp/openid/jfharney";
-}
-
-String returnType = request.getParameter("returnType");
-if(returnType == null) {
-    returnType = "http";
-} 
-
-
-//get the file ids and file urls (either from solr or individual file)
-if(type.equals("Dataset")) {
-    
-    DocElement doc = querySolr(request);
-    file_ids = getSolrParams(doc,"ids");
-    file_urls = getSolrParams(doc,"urls");
-    checksums = getSolrParams(doc,"checksums");
-    checksumTypes = getSolrParams(doc,"checksumTypes");
-    
-} else {
-
-    String file_id = request.getParameter("file_id");
-    String file_url = request.getParameter("file_url");
-    
-    file_ids = new String [1];
-    file_urls = new String [1];
-    
-    file_ids[0] = file_id;
-    file_urls[0] = file_url;
-    
-}
-
-
-String toEmailAddr = getEmailAddrFromOpenId(openid);
-
-
-//write initial email
-
-//this.writeInitialEmail(file_urls,toEmailAddr);
-//if(isProduction) {
-//    this.initialEmail.sendEmail();
-//} else {
-//    //System.out.println(this.initialEmail);
-//}
-
-
-
-this.srm_response = new SRMResponse();
-
-responseStr = queryESGSRM(file_urls);
-
-this.srm_response.fromXML(responseStr);
-
-String [] response_urls = this.srm_response.getResponse_urls();
-
-//write confirmation email
-this.writeConfirmationEmail(returnType, openid, response_urls, checksums, checksumTypes, toEmailAddr);
-
-if(isProduction) {
-    System.out.println(this.confirmationEmail);
-    this.confirmationEmail.sendEmail();
-} else {
-    System.out.println(this.confirmationEmail);
-}
-System.out.println("End Sending email...\n");
-responseStr = this.srm_response.toXML();
-*/
-
 
 /* OLD
 //type
@@ -1072,22 +927,4 @@ if(type.equals("Dataset")) {
 
 */
 
-/*
-//constraints/query
-String constraints = input.getConstraints();
-String query = "*";
-if(constraints != null) {
-    System.out.println("Constraints: " + constraints);
-    if(constraints.contains("query=")) {
-        String [] facets = constraints.split(";");
-        for(int i=0;i<facets.length;i++) {
-            if(facets[i].contains("query=")) {
-                String queryValue = facets[i].split("=")[1];
-                query = queryValue;
-            }
-        }
-        
-    }
-}
-*/
 

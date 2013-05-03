@@ -49,19 +49,10 @@ public class DatacartDoc {
         this.datacartFiles = new ArrayList<DataCartFile>();
         //this.setIsCached("true");
         for(int i=0;i<solrResponse.getSolrRecords().size();i++) {
-            System.out.println("\nAM I HERE?" + i + "\n\n\n\n\n");
             SolrRecord solrRecord = solrResponse.getSolrRecords().get(i);
-            System.out.println("\nAM I HERE?" + i + "\n\n\n\n\n");
             
             DataCartFile datacartFile = new DataCartFile(solrRecord);
-            System.out.println("\nAM I HERE?" + i + "\n\n\n\n\n");
             this.datacartFiles.add(datacartFile);
-            System.out.println("\nAM I HERE?" + i + "\n\n\n\n\n");
-            /*
-            if(datacartFile.getIsCached().equals("false")) {
-                this.setIsCached("false");
-            }
-            */
         }
 
         

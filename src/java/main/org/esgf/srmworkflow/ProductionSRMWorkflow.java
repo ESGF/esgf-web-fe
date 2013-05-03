@@ -11,6 +11,8 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.esgf.propertiesreader.PropertiesReader;
+import org.esgf.propertiesreader.PropertiesReaderFactory;
 import org.esgf.srm.SRMControls;
 import org.esgf.srm.SRMResponse;
 
@@ -49,7 +51,11 @@ public class ProductionSRMWorkflow extends SRMWorkflow {
         HttpClient client = new HttpClient();
 
         //attact the dataset id to the query string
-        PostMethod method = new PostMethod(SRMControls.srmAPIURL);
+        //PostMethod method = new PostMethod(SRMControls.srmAPIURL);
+        PropertiesReaderFactory factory = new PropertiesReaderFactory();
+        PropertiesReader srm_props = factory.makePropertiesReader("SRM");
+
+        PostMethod method = new PostMethod(srm_props.getValue("srm_api_uyrl"));
         String queryString = "";
         String unencodedQueryString = "";
 

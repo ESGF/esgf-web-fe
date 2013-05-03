@@ -33,6 +33,9 @@ import org.esgf.solr.model.Solr;
 import org.esgf.solr.model.SolrRecord;
 import org.esgf.solr.model.SolrResponse;
 import org.esgf.srm.scriptgen.ScriptGeneratorFactory;
+import org.esgf.srmcache.SRMCacheStore;
+import org.esgf.srmcache.SRMCacheStoreFactory;
+import org.esgf.srmcache.SRMEntry;
 import org.esgf.srmworkflow.SRMWorkflow;
 import org.esgf.srmworkflow.SRMWorkflowFactory;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -54,14 +57,15 @@ public class SRMProxyController {
     private static String MAX_LIMIT = "9999";
 
     private static final String DEFAULT_TYPE = "Dataset";
-    
+
+    private static String DB_TYPE = "postgres";
 
     private static String SCRIPT_NAME = "wget";
     private static String SCRIPT_COMPLEXITY = "basic";
     
     
     //anything over 25 doesn't work ... must fix
-    private static int NUM_FILES_LIMIT = 25;
+    private static int NUM_FILES_LIMIT = 11125;
 
     private static boolean debugFlag = false;
     
@@ -146,6 +150,8 @@ public class SRMProxyController {
         String type = input.getType();
         String scriptType = input.getScriptType();
         
+        String dataset_id = input.getDataset_id();
+        
         //get email address here (either from default or the oepnid)
         String openId = "jfharney";
         String emailAddr = EmailUtils.getEmailAddrFromOpenId(openId);
@@ -160,7 +166,7 @@ public class SRMProxyController {
             System.out.println("In type dataset");
             
             String query = "*";
-            String dataset_id = input.getDataset_id();
+            dataset_id = input.getDataset_id();
             
             //query solr and get the responses
             SolrResponse solrResponse = querySolr(query,dataset_id);
@@ -171,7 +177,7 @@ public class SRMProxyController {
                 numFiles = solrResponse.getSolrRecords().size();
             }
             
-            System.out.println("NumFiles: " + numFiles);
+            System.out.println("\n\nNumFiles: " + numFiles + "\n\n");
             
             if(numFiles != 0) {
 
@@ -249,6 +255,8 @@ public class SRMProxyController {
         }
         
         
+        System.out.println("\n\nDATASET ID: " + dataset_id);
+        System.out.println("FILE ID: " + file_ids[0] + "\n\n");
         
         
         //send initial email here
@@ -263,6 +271,34 @@ public class SRMProxyController {
         
         SRMResponse srm_response = srm_workflow_engine.runWorkFlow(file_urls);
         String [] outputFiles = srm_response.getResponse_urls();
+        
+        
+        String timeStamp = Long.toString(System.currentTimeMillis());
+        long expirationLong = Long.parseLong(timeStamp) + SRMControls.expiration;
+        String expiration = Long.toString(expirationLong);
+        
+        
+        //update the expiration times of the files in the srm_cache
+        if(type.equals("Dataset")) {
+            SRMCacheStoreFactory srmCacheStoreFactory = new SRMCacheStoreFactory();
+            
+            SRMCacheStore srm_cache = srmCacheStoreFactory.makeSRMCacheStore(DB_TYPE); 
+
+            srm_cache.updateAllSRMEntriesForDatasetId(dataset_id);
+            
+        } else {
+            for(int i=0;i<file_ids.length;i++) {
+                SRMCacheStoreFactory srmCacheStoreFactory = new SRMCacheStoreFactory();
+                
+                SRMCacheStore srm_cache = srmCacheStoreFactory.makeSRMCacheStore(DB_TYPE); 
+                
+                
+                //SRMEntry srm_entry = new SRMEntry(file_ids[i],dataset_id,"N/A",timeStamp,expiration,"openid");
+                SRMEntry srm_entry = new SRMEntry(file_ids[i],dataset_id,timeStamp,expiration);
+                
+                srm_cache.updateSRMEntry(srm_entry);
+            }
+        }
         
         
         
@@ -322,6 +358,8 @@ public class SRMProxyController {
         }
         
         
+       
+        
         
         
         //send resulting email here
@@ -349,7 +387,7 @@ public class SRMProxyController {
         }
         this.confirmationEmail.setBodyText(bodyStr);
 
-        System.out.println(this.confirmationEmail.toString());
+        //System.out.println(this.confirmationEmail.toString());
         //this.confirmationEmail.sendEmail();
         
         

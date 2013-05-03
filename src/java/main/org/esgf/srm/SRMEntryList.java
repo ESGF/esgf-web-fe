@@ -247,7 +247,7 @@ public class SRMEntryList {
             //if(file_id.equals("ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-09.nc|esg2-sdnl1.ccs.ornl.gov"))
             //    System.out.println("list: " + this.srm_entry_list.get(i).getFile_id() + " " + file_id);
             if(file_id.equals(this.srm_entry_list.get(i).getFile_id())) {
-                isCached = this.srm_entry_list.get(i).getIsCached();
+                //isCached = this.srm_entry_list.get(i).getIsCached();
             }
         }
         return isCached;

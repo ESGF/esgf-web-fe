@@ -59,7 +59,7 @@ public class FileTransformerController {
             filetrans = factory.makeFileTransformer("SRM",file_url);
         }
         
-        System.out.println(filetrans.getHttp());
+        //System.out.println(filetrans.getHttp());
             
         return filetrans.getSRM();
     }
@@ -96,7 +96,7 @@ public class FileTransformerController {
             filetrans = factory.makeFileTransformer("SRM",file_url);
         }
         
-        System.out.println(filetrans.getHttp());
+        //System.out.println(filetrans.getHttp());
             
         return filetrans.getGridFTP();
     }
@@ -132,7 +132,7 @@ public class FileTransformerController {
             
             filetrans = factory.makeFileTransformer("SRM",file_url);
         }
-        System.out.println(filetrans.getHttp());
+        //System.out.println(filetrans.getHttp());
             
         return filetrans.getHttp();
     }

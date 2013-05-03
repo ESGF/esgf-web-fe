@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.esgf.propertiesreader.PropertiesReader;
+import org.esgf.propertiesreader.PropertiesReaderFactory;
 import org.esgf.srm.SRMControls;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
@@ -20,10 +22,12 @@ public class SRMCacheStoreController {
     
     private static String DB_TYPE = "postgres";
 
-    private static String FAILURE_MESSAGE = "failure";
-    private static String SUCCESS_MESSAGE = "success";
+    //private static String failure_message = "failure";
+    //private static String success_message = "success";
     
     private SRMCacheStore srm_cache;
+    private String failure_message;
+    private String success_message;
     
     public static void main(String [] args) {
         
@@ -32,7 +36,7 @@ public class SRMCacheStoreController {
         
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
         
-        String dataset_id = "a";
+        String dataset_id = "ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1|esg2-sdnl1.ccs.ornl.gov";
         mockRequest.addParameter("dataset_id", dataset_id);
         
         String file_id = "b";
@@ -42,50 +46,7 @@ public class SRMCacheStoreController {
         mockRequest.addParameter("openid", openid);
 
         
-        System.out.println(srm_cache_controller.getSRMEntry(mockRequest));
-        /*
         
-        mockRequest.setParameter("dataset_id", "a");
-        mockRequest.setParameter("file_id", "o");
-        mockRequest.setParameter("openid", "openid2");
-        
-        System.out.println("adding...");
-        srm_cache_controller.addSRMEntry(mockRequest);
-
-        try {
-            Thread.sleep(1000);
-            System.out.println("adding...");
-            srm_cache_controller.updateSRMEntry(mockRequest);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
-
-        mockRequest.setParameter("openid", "openid1");
-        
-        String result_xml = srm_cache_controller.getSRMEntryOpenId(mockRequest);
-        
-        System.out.println(result_xml);
-        
-        
-        
-        result_xml = srm_cache_controller.getSRMEntryDatasetId(mockRequest);
-        
-        System.out.println(result_xml);
-        */
-        
-        /*
-        mockRequest.setParameter("file_id", "c");
-        
-        srm_cache_controller.addSRMEntry(mockRequest);
-        
-        //mockRequest.setParameter("file_id", "c");
-        
-        //String srm_entry = srm_cache_controller.getSRMEntry(mockRequest);
-        //System.out.println(srm_entry);
-         
-         */
     }
     
     public SRMCacheStoreController() {
@@ -94,7 +55,19 @@ public class SRMCacheStoreController {
         
         srm_cache = srmCacheStore.makeSRMCacheStore(DB_TYPE); 
         
+        PropertiesReaderFactory factory = new PropertiesReaderFactory();
+        PropertiesReader srm_props = factory.makePropertiesReader("SRM");
+
+        this.success_message = srm_props.getValue("success_message");
+        this.failure_message = srm_props.getValue("failure_message");
+        
+        //srm_cache.initializeCacheStore();
+        
+        //System.exit(0);
+        
     }
+    
+    
     
     
     //input srmentry stuff (dataset_id and file_id)
@@ -103,15 +76,15 @@ public class SRMCacheStoreController {
     
         String dataset_id = request.getParameter("dataset_id");
         if(dataset_id == null) {
-            return FAILURE_MESSAGE;
+            return failure_message;
         }
         String file_id = request.getParameter("file_id");
         if(file_id == null) {
-            return FAILURE_MESSAGE;
+            return failure_message;
         }
         String openid = request.getParameter("openid");
         if(openid == null) {
-            return FAILURE_MESSAGE;
+            return failure_message;
         }
         
         
@@ -122,12 +95,13 @@ public class SRMCacheStoreController {
         long expirationLong = Long.parseLong(timeStamp) + SRMControls.expiration;
         String expiration = Long.toString(expirationLong);
         
-        SRMEntry srm_entry = new SRMEntry(file_id,dataset_id,isCached,timeStamp,expiration,openid);
+        //SRMEntry srm_entry = new SRMEntry(file_id,dataset_id,isCached,timeStamp,expiration,openid);
+        SRMEntry srm_entry = new SRMEntry(file_id,dataset_id,timeStamp,expiration);
 
         if(srm_cache.addSRMEntry(srm_entry) == 0) {
-            return SUCCESS_MESSAGE;
+            return success_message;
         } else {
-            return FAILURE_MESSAGE;
+            return failure_message;
         }
         
     }
@@ -138,16 +112,84 @@ public class SRMCacheStoreController {
     
         String openid = request.getParameter("openid");
         if(openid == null) {
-            return FAILURE_MESSAGE;
+            return failure_message;
         }
         
         
         this.srm_cache.initializeCacheStore();
         
         
-        return SUCCESS_MESSAGE;
+        return success_message;
         
         
+    }
+    
+    @RequestMapping(method=RequestMethod.GET, value="/isCachedFile")
+    public @ResponseBody String isCachedFile(HttpServletRequest request) {
+        
+        //System.out.println("In iscached");
+        
+        String dataset_id = request.getParameter("dataset_id");
+        if(dataset_id == null) {
+            return failure_message;
+        }
+        
+        String file_id = request.getParameter("file_id");
+        if(file_id == null) {
+            return failure_message;
+        }
+
+        //System.out.println("In iscached2 " + dataset_id + " file: " + file_id);
+        SRMEntry srm_entry = this.srm_cache.getSRMEntryForFile_id(dataset_id, file_id);
+
+        if(srm_entry == null) {
+            return failure_message;
+        }
+        
+        long currentTimeStamp = System.currentTimeMillis();
+        
+        String expiration = srm_entry.getExpiration();
+        
+        if(file_id.equals("ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-10.nc|esg2-sdnl1.ccs.ornl.gov"))
+            System.out.println("\n\nFILEID: " + file_id + "\n\n" + currentTimeStamp + " " + expiration + "\n\n\n\n");
+        
+        
+        if(Long.parseLong(expiration) > currentTimeStamp) {
+            return success_message;
+        } else {
+            return failure_message;
+        }
+        
+        
+    }
+    
+    
+    //input dataset_id
+    @RequestMapping(method=RequestMethod.GET, value="/isCachedDataset")
+    public @ResponseBody String isCachedDataset(HttpServletRequest request) {
+        
+        
+        String dataset_id = request.getParameter("dataset_id");
+        if(dataset_id == null) {
+            return failure_message;
+        }
+        
+        long currentTimeStamp = System.currentTimeMillis();
+        
+        List<SRMEntry> srm_entries = this.srm_cache.getSRMEntriesForDataset_id(dataset_id);
+        System.out.println("\n\n\nENTRIES FOR: " + dataset_id);
+        for(int i=0;i<srm_entries.size();i++) {
+            String timestamp = srm_entries.get(i).getExpiration();
+            System.out.println(srm_entries.get(i).getFile_id() + " " + currentTimeStamp + " " + timestamp);
+            long expirationTimeStamp = Long.parseLong(timestamp);
+            if(expirationTimeStamp < currentTimeStamp) {
+                return failure_message;
+            }
+        }
+        
+        
+        return success_message;
+    
     }
     
     //input dataset_id and file_id
@@ -156,20 +198,20 @@ public class SRMCacheStoreController {
 
         String dataset_id = request.getParameter("dataset_id");
         if(dataset_id == null) {
-            return FAILURE_MESSAGE;
+            return failure_message;
         }
         String file_id = request.getParameter("file_id");
         if(file_id == null) {
-            return FAILURE_MESSAGE;
+            return failure_message;
         }
         String openid = request.getParameter("openid");
         if(openid == null) {
-            return FAILURE_MESSAGE;
+            return failure_message;
         }
         
         SRMEntry srm_entry = srm_cache.getSRMEntryForFile_id(dataset_id, file_id);
         if(srm_entry == null) {
-            return FAILURE_MESSAGE;
+            return failure_message;
         } else {
             return srm_entry.toXML();
         }
@@ -183,13 +225,13 @@ public class SRMCacheStoreController {
         
         String dataset_id = request.getParameter("dataset_id");
         if(dataset_id == null) {
-            return FAILURE_MESSAGE;
+            return failure_message;
         }
         
         
         List<SRMEntry> srm_entries = srm_cache.getSRMEntriesForDataset_id(dataset_id);
         if(srm_entries == null) {
-            return FAILURE_MESSAGE;
+            return failure_message;
         } else {
             return srmEntryListXML(srm_entries);
         }
@@ -202,12 +244,12 @@ public class SRMCacheStoreController {
         
         String openid = request.getParameter("openid");
         if(openid == null) {
-            return FAILURE_MESSAGE;
+            return failure_message;
         }
         
         List<SRMEntry> srm_entries = srm_cache.getSRMEntriesForOpenid(openid);
         if(srm_entries == null) {
-            return FAILURE_MESSAGE;
+            return failure_message;
         } else {
             return srmEntryListXML(srm_entries);
         }
@@ -220,15 +262,15 @@ public class SRMCacheStoreController {
 
         String dataset_id = request.getParameter("dataset_id");
         if(dataset_id == null) {
-            return FAILURE_MESSAGE;
+            return failure_message;
         }
         String file_id = request.getParameter("file_id");
         if(file_id == null) {
-            return FAILURE_MESSAGE;
+            return failure_message;
         }
         String openid = request.getParameter("openid");
         if(openid == null) {
-            return FAILURE_MESSAGE;
+            return failure_message;
         }
         
         
@@ -243,9 +285,9 @@ public class SRMCacheStoreController {
         
         
         if(this.srm_cache.updateSRMEntry(srm_entry) == 1) {
-            return SUCCESS_MESSAGE;
+            return success_message;
         } else {
-            return FAILURE_MESSAGE;
+            return failure_message;
         }
         
         
@@ -258,23 +300,23 @@ public class SRMCacheStoreController {
 
         String dataset_id = request.getParameter("dataset_id");
         if(dataset_id == null) {
-            return FAILURE_MESSAGE;
+            return failure_message;
         }
         String file_id = request.getParameter("file_id");
         if(file_id == null) {
-            return FAILURE_MESSAGE;
+            return failure_message;
         }
         String openid = request.getParameter("openid");
         if(openid == null) {
-            return FAILURE_MESSAGE;
+            return failure_message;
         }
         
         SRMEntry srm_entry = srm_cache.getSRMEntryForFile_id(dataset_id, file_id);
         
         if(this.srm_cache.deleteSRMEntry(srm_entry) == 1) {
-            return SUCCESS_MESSAGE;
+            return success_message;
         } else {
-            return FAILURE_MESSAGE;
+            return failure_message;
         }
         
     

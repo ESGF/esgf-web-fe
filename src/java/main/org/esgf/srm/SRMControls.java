@@ -3,10 +3,11 @@ package org.esgf.srm;
 public class SRMControls {
 
     public static String searchAPI = "http://localhost:8080/esg-search/search?";
-    public static String srmAPIURL = "http://localhost:8080/esgf-srm/service/srmrequest?";
     public static boolean environmentSwitch = false;
     
     
+    
+    public static String srmAPIURL = "http://localhost:8080/esgf-srm/service/srmrequest?";
     
 
     //public static String db_name = "esgcet";
@@ -18,6 +19,7 @@ public class SRMControls {
     public static String valid_password = "mattryan12";
     //public static String valid_password = "esg4ever";
     
-    public static long expiration = 50000;
+    
+    public static long expiration = 5000000;
     
 }

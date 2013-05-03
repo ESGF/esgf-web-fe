@@ -346,10 +346,48 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		accessType = 'SRM';
 		var hasSRM = self.checkDatasetAccess(accessType, datasetId);
 		if(hasSRM) {
-			datasetList += '<span class="srm_dataset_event" style="display:none;font-weight:bold;"> Transferring to SRM page... </span>';
-			datasetList += '<a class="srm_dataset_event" style="cursor:pointer"> SRM </a> |';
+			//first check to see if it is cached
+			var isCached_url = '/esgf-web-fe/isCachedDataset';
+			
+			var isCached = false;
+			
+			var dataset_id = self.selected_arr[i];
+			
+			var queryString = 
+	    	{
+	    			"dataset_id" : dataset_id,
+	    			"openid" : 'openid'
+			};
+			
+			$.ajax({
+				url: isCached_url,
+				global: false,
+				type: 'GET',
+				async: false,
+				data: queryString,
+				success: function(data) {
+					if(data == 'success') {
+						isCached = true;
+					}
+				},
+				error: function() {
+					alert('error in isCached');
+				}
+			});
+			
+			//isCached = true;
+			
+			if(isCached) {
+				datasetList += '<span class="wgetAllFiles_short_SRMConvert" style="display:none;font-weight:bold;"> Downloading... </span>';
+				datasetList += '<a class="wgetAllFiles_short_SRMConvert" style="cursor:pointer"> WGET </a> |';
+				datasetList += '<span class="globusOnlineAllFiles_short_SRMConvert" style="display:none;font-weight:bold;"> Transferring to GO page...</span>';	
+				datasetList += ' <a class="globusOnlineAllFiles_short_SRMConvert" style="cursor:pointer">Globus Online</a> |';
+				
+			} else {
+				datasetList += '<span class="srm_dataset_event" style="display:none;font-weight:bold;"> Transferring to SRM page... </span>';
+				datasetList += '<a class="srm_dataset_event" style="cursor:pointer"> SRM </a> |';
+			}
 		}
-		
 		
 		datasetList += ' <a class="remove_dataset_short" style="cursor:pointer">Remove</a>'; 
 		datasetList += '</td>';	

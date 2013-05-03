@@ -93,6 +93,8 @@
 				
 			//kill the all files wget	
 			$('a.wgetAllFiles_short').die('click');
+			$('a.wgetAllFiles_short_SRMConvert').die('click');
+			
 			
 		},
 		
@@ -161,9 +163,66 @@
 			
 			
 			
+			$('a.wgetAllFiles_short_SRMConvert').live('click',function() {
 			
-			
-			
+				//extract the dataset Id from the span tag
+				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
+
+				var parentElement = $(this).parent();
+				
+				
+
+				parentElement.find('a.wgetAllFiles_short_SRMConvert').hide();
+				parentElement.find('span.wgetAllFiles_short_SRMConvert').show();
+				
+				
+				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html());
+				
+
+	        	//gather the ids and the urls for download
+	        	var file_ids   = new Array();
+	        	
+
+	        	//gather the dataset_ids
+	        	var dataset_ids = new Array();
+	        	dataset_ids.push(selectedDocId);
+	        	
+	        	
+	        	//just make the two ajax calls for now
+	        	//1 - for the first ten
+	        	//2 - for >10
+
+				var idStr = selectedDocId;
+				
+								
+				var queryString = '/esg-search/wget/?';
+
+				filtered = ($('#datacart_filtered').attr('checked') == 'checked');
+				
+				
+		    	if(filtered) {
+		    		var textQueryParam = '';
+					var fqParams = ESGF.localStorage.getAll('esgf_queryString');
+					for(var key in fqParams) {
+						if(key.search('query:') > -1) {
+							textQueryParam = fqParams[key];
+						}
+						
+					}
+					queryString += textQueryParam;
+		    	} else {
+		    		queryString += 'query=*';
+		    	}
+
+				parentElement.find('a.wgetAllFiles_short_SRMConvert').show();
+				parentElement.find('span.wgetAllFiles_short_SRMConvert').hide();
+		    	
+				ESGF.datacart.submitWGETScriptForm(queryString,file_ids,dataset_ids);
+				
+				
+				
+				
+			});
 			
 			$('a.wgetAllFiles_short').live('click',function() {
 				
@@ -175,7 +234,6 @@
 				
 				var parentElement = $(this).parent();
 				
-
 				parentElement.find('a.wgetAllFiles_short').hide();
 				parentElement.find('span.wgetAllFiles_short').show();
 				

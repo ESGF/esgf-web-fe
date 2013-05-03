@@ -79,10 +79,8 @@ public class SolrResponse {
                 
                 for(int j=0;j<solrRecord.getArrNodes().size();j++) {
                     Node facetNode = solrRecord.getArrNodes().get(j);
-                    //System.out.println(facetNode.getAttributes().item(0).getNodeValue());
                     if(facetNode.getAttributes().item(0).getNodeValue().equals("url")) {
                         String content = facetNode.getTextContent(); 
-                        //System.out.println(content);
                         if(content.contains("SRM")){
                             datasetIds.add(dataset_id);
                         }
@@ -92,9 +90,9 @@ public class SolrResponse {
             }
         } else {
             for(int i=0;i<this.solrRecords.size();i++) {
-                System.out.println(this.solrRecords.get(i).getStrField("id"));
+                //System.out.println(this.solrRecords.get(i).getStrField("id"));
             }
-            System.out.println("here");
+            //System.out.println("here");
         }
         /*
         else {
@@ -172,15 +170,11 @@ public class SolrResponse {
                     }
                 }
                 
-                System.out.println("id: " + id);
-                System.exit(0);
                 
                 for(int j=0;j<solrRecord.getArrNodes().size();j++) {
                     Node facetNode = solrRecord.getArrNodes().get(j);
-                    //System.out.println(facetNode.getAttributes().item(0).getNodeValue());
                     if(facetNode.getAttributes().item(0).getNodeValue().equals("url")) {
                         String content = facetNode.getTextContent(); 
-                        //System.out.println(content);
                         if(content.contains("SRM")){
                             needsSRM.add(id);
                         }

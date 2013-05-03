@@ -13,12 +13,13 @@ public class SRMEntry {
 
     private String file_id;
     private String dataset_id;
-    private String isCached;
+    //private String isCached;
     private String timeStamp;
-    private String openid;
+    //private String openid;
     private String expiration;
   
 
+    /*
     public SRMEntry(String file_id,String dataset_id,String isCached,String timeStamp,String expiration,String openid) {
         this.file_id = file_id;
         this.dataset_id = dataset_id;
@@ -27,7 +28,27 @@ public class SRMEntry {
         this.expiration = expiration;
         this.openid = openid;
     }
+    */
     
+    public SRMEntry(String file_id,String dataset_id,String timeStamp,String expiration) {
+        this.file_id = file_id;
+        this.dataset_id = dataset_id;
+        this.timeStamp = timeStamp;
+        this.expiration = expiration;
+    }
+    
+    public SRMEntry(String file_id,String dataset_id) {
+        this.file_id = file_id;
+        this.dataset_id = dataset_id;
+        
+        Long timeStampLong = System.currentTimeMillis();
+        this.timeStamp = timeStampLong.toString();
+        
+        this.expiration = this.timeStamp + SRMControls.expiration;
+    }
+    
+    
+    /*
     public SRMEntry(String file_id,String dataset_id,String isCached,String openid) {
         this.file_id = file_id;
         this.dataset_id = dataset_id;
@@ -40,6 +61,7 @@ public class SRMEntry {
         this.expiration = this.timeStamp + SRMControls.expiration;
                 
     }
+    */
     
     public JSONObject toJSONObject() {
         JSONObject json = null;
@@ -88,13 +110,13 @@ public class SRMEntry {
             dataset_idEl.addContent("N/A");
             srm_entryEl.addContent(dataset_idEl);
         }
-        
+        /*
         if(this.isCached != null) {
             Element isCachedEl = new Element("isCached");
             isCachedEl.addContent(this.isCached);
             srm_entryEl.addContent(isCachedEl);
         }
-
+        */
         if(this.timeStamp != null) {
             Element timeStampEl = new Element("timeStamp");
             timeStampEl.addContent(this.timeStamp);
@@ -106,13 +128,13 @@ public class SRMEntry {
             expirationEl.addContent(this.expiration);
             srm_entryEl.addContent(expirationEl);
         }
-        
+        /*
         if(this.openid != null) {
             Element openidEl = new Element("openid");
             openidEl.addContent(this.openid);
             srm_entryEl.addContent(openidEl);
         }
-        
+        */
         return srm_entryEl;
     }
     
@@ -144,15 +166,19 @@ public class SRMEntry {
     /**
      * @return the isCached
      */
+    /*
     public String getIsCached() {
         return isCached;
     }
+    */
     /**
      * @param isCached the isCached to set
      */
+    /*
     public void setIsCached(String isCached) {
         this.isCached = isCached;
     }
+    */
     /**
      * @return the timeStamp
      */
@@ -181,17 +207,19 @@ public class SRMEntry {
     /**
      * @return the openid
      */
+    /*
     public String getOpenid() {
         return openid;
     }
-
+    */
     /**
      * @param openid the openid to set
      */
+    /*
     public void setOpenid(String openid) {
         this.openid = openid;
     }
-    
+    */
     
     public String getExpiration() {
         return expiration;

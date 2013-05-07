@@ -114,27 +114,38 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		return hasAccess;
 	},
 	
-	checkDatasetAccess: function (accessType,datasetId) {
-		
-		
-		var datacart = ESGF.localStorage.getAll('dataCart');
-	
+	checkDatasetAccess: function (accessType,datasetId,access) {
 		
 		var hasAccess = false;
 		
-		if(datacart[datasetId] != undefined) {
-			if(datacart[datasetId]['access'] != undefined) {
-				var access = new String(datacart[datasetId]['access']);
-				if(access.search(accessType) > -1) {
+		var accessStr = new String(access);
+		
+		
+		if(accessStr.search(accessType) > -1) {
+			hasAccess = true;
+		}
+		/*
+		
+			var datacart = ESGF.localStorage.getAll('dataCart');
+			
+			if(datacart[datasetId] != undefined) {
+				if(datacart[datasetId]['access'] != undefined) {
+					var access = new String(datacart[datasetId]['access']);
+					if(access.search(accessType) > -1) {
+						hasAccess = true;
+					}
+				} else {
 					hasAccess = true;
 				}
-			} else {
-				hasAccess = true;
+			
 			}
-		
 		}
 		
-		LOG.debug('access: ' + datacart[datasetId]['access'] + ' hasAccess: ' + hasAccess);
+		//alert('hasAccess: ' + hasAccess + " for " + accessType);
+		
+		//LOG.debug('access: ' + datacart[datasetId]['access'] + ' hasAccess: ' + hasAccess);
+		*/
+		
 		
 		return hasAccess;
 		
@@ -216,10 +227,12 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 
     	var optionsStr = self.writeTopMenuMarkup();
 
-
+    	
+    	/*
     	if($('span#datacartOpen').html() == 'true') {
     		$( "#myTabs" ).tabs({ selected: 1 });
     	}
+    	*/
     	
     	//add the options to the page
     	$('#carts').append(optionsStr);
@@ -249,6 +262,18 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     		$("input[id='datacart_filtered']").attr("checked","true");
     	}
     	
+    	
+    	var urlParams = ESGF.datacart.getURLParams();
+		
+    	if(urlParams['tab'] == 'datacart') {
+    		//override check
+    		if(urlParams['override'] == 'true') {
+    			ESGF.setting.datacartOverride = true;
+    		} else {
+    			ESGF.setting.datacartOverride = false;
+    		}
+    	}
+		
 
     	if(self.selected_arr != null) {
     		
@@ -270,7 +295,49 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     		//create the data cart template
             //only create if the data cart tab is selected
     		if(selected == 1) {
-    	        self.createTemplateShort(self.selected_arr);
+    			
+    			var dataset_arr = '';//self.selected_arr;
+    			
+    			//override with url params
+    			if(ESGF.setting.datacartOverride) {
+    				var datasetParams = ESGF.datacart.getDatasetIdsFromURL();
+    				//alert('datasetParams ' + datasetParams);
+    	        	
+    				//at this point, need to convert the datasetParams array to the 
+    				//alert('convert');
+    				
+    				dataset_arr = datasetParams;
+    				
+    			} else {
+    				
+    				dataset_arr = self.selected_arr;
+    			
+    			}
+    			
+    			
+    	        self.createTemplateShort(dataset_arr);
+    	        
+    	        /*
+    	        if(ESGF.setting.datacartOverride) {
+    	        	
+    	        	//apply the new settings to the datacart cookie
+    	        	var datasetParams = ESGF.datacart.getDatasetIdsFromURL();
+    	        	
+    	        	
+    	        	
+    	        	
+    	        	var dataset_id = datasetParams[0];
+    	        	
+    	        	alert('dataset_id: ' + dataset_id);
+    	        	
+    	        	self.updateDatacartLocalStorage(dataset_id);
+    	        	
+           	
+    	        	
+    	        	ESGF.setting.datacartOverride = false;
+    	        	
+    	        }
+    	        */
     		}
     		
     		
@@ -278,27 +345,514 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     	
 		
 	},
-
 	
-	
-	
-	createTemplateShort: function() {
+	updateDatacartLocalStorage: function(dataset_id) {
 		
 		var self = this;
 		
+		var datacart_entry = self.getDataCartEntryFromURLParams(dataset_id);
+    	
+		// at this point defined the changing variables
+		var datasetId = datacart_entry['datasetId'];
+		var numFiles = datacart_entry['numFiles'];
+		var peer = datacart_entry['numFiles'];
+		var access = datacart_entry['access'];
+		var xlink = datacart_entry['xlink'];
 		
-		for(var i=0;i<self.selected_arr.length;i++) {
-			var datasetList = self.writeDatasetMarkup(i);
-			$( "#datasetList").append(datasetList);
-		}
+		var datasetInfo = {
+				
+				'numFiles' : numFiles, 
+				'peer' : peer, 
+				'xlink' : xlink, 
+				'access' : access,
+				
+		};
+
+		ESGF.localStorage.remove('dataCart',dataset_id);
+		ESGF.localStorage.put('dataCart',dataset_id,datasetInfo);
+		
+		ESGF.localStorage.printMap('dataCart');
+		
+		var a = ESGF.localStorage.get('dataCart',dataset_id);
 		
 		
 	},
 	
-    
 	
-	writeDatasetMarkup: function (i) {
+	
+	getDataCartEntryFromURLParams: function(dataset_id) {
 		
+		var srmdatasetdatacarturl = '/esgf-web-fe/srmdatacartproxy/datacart';
+		
+		var queryString = 
+    	{
+    			"dataset_id" : dataset_id
+		};
+		
+		var datacart_entry = undefined;
+		
+		$.ajax({
+			url: srmdatasetdatacarturl,
+			global: false,
+			type: 'POST',
+			async: false,
+			dataType: 'json',
+			data: queryString,
+			success: function(data) {
+				datacart_entry = data['datacartdataset'];
+			},
+			error: function() {
+				alert('error in srm dataset datacart');
+			}
+		});
+		
+		
+		//slight glitch in access -> needs fixing
+		var access = datacart_entry['access'];
+		
+		var access_arr = new Array();
+		for(var i=0;i<access.split(';').length;i++) {
+			//alert('access i: ' + i + ' ' + access[i]);
+			access_arr.push(access.split(';')[i]);
+		}
+		datacart_entry['access'] = access_arr;
+		
+		return datacart_entry;
+		
+	},
+
+	
+	
+	
+	createTemplateShort: function(dataset_arr) {
+		
+		var self = this;
+		
+		//alert('dataset_arr: ' + dataset_arr + ' len: ' + dataset_arr.length);
+		
+		for(var i=0;i<dataset_arr.length;i++) {
+			
+			//write dataset list here
+			var datasetList = self.writeDatacartOverrideDatasetMarkup(dataset_arr, i);
+			$( "#datasetList").append(datasetList);
+			
+		}
+		
+		
+		/*
+		for(var i=0;i<dataset_arr.length;i++) {
+			var datasetList = self.writeDatasetMarkup(dataset_arr,i);
+			$( "#datasetList").append(datasetList);
+		}
+		*/
+		
+		
+		
+		/*
+		for(var i=0;i<self.selected_arr.length;i++) {
+			var datasetList = self.writeDatasetMarkup(i);
+			$( "#datasetList").append(datasetList);
+		}
+		*/
+		
+	},
+	
+	writeDatacartOverrideDatasetMarkup: function (dataset_arr,i) {
+		
+		var self = this;
+		
+		var dataset_id = dataset_arr[i];
+		
+		var datasetList = '';
+		
+		var datacart_entry = '';
+		
+		
+		if(ESGF.setting.datacartOverride) {
+			
+			datacart_entry = self.getDataCartEntryFromURLParams(dataset_id);
+			
+		} else {
+			
+			datacart_entry = ESGF.localStorage.get('dataCart',self.selected_arr[i]);
+			
+		}
+		
+		
+		//evaluate the datacart_entry map
+		/*
+		for(var key in datacart_entry) {
+			alert('key: ' + key + ' value: ' + datacart_entry[key]);
+		}
+		*/
+		
+
+		//need to define 
+		//datasetId
+		var datasetId = dataset_id;//datacart_entry['datasetId'];
+		
+		//numFiles
+		var numFiles = datacart_entry['numFiles'];
+		
+		//access
+		var access = datacart_entry['access'];
+		
+		datasetList += '<tr style="margin-top:50px;" class="top_level_data_item"  >';
+		
+		datasetList += '<td style="width: 40px;"><input class="topLevel" type="checkbox" checked="true" /> </td>';	
+		
+		datasetList += '<td style="width: 325px;font-size:13px">';
+		
+		datasetList += '<div style="word-wrap: break-word;font-weight:bold"  ><span class="datasetId">' + dataset_id + '</span></div>';
+		
+		datasetList += '<span>' + ' (Total Number of Files for All Variables: ' +  numFiles + ')</span>';
+		
+		datasetList += '</td>';
+		
+		datasetList += '<td style="font-size:11px;float:right" >';
+		
+		datasetList += '<span class="show_files">';
+		datasetList += '<span class="showAllFiles_short" style="display:none;font-weight:bold;"> Expanding... </span>';
+		datasetList += '<a class="hideAllFiles_short" style="display:none;cursor:pointer">Hide Files</a>' + 
+					   '<a class="showAllFiles_short" style="cursor:pointer">Show Files</a> | ';
+		datasetList += '</span>';
+		
+		
+		
+		var accessType = 'HTTPServer';
+		var hasHTTP = self.checkDatasetAccess(accessType,datasetId,access);
+		if(hasHTTP) {
+			datasetList += '<span class="wgetAllFiles_short" style="display:none;font-weight:bold;"> Downloading... </span>';
+			datasetList += '<a class="wgetAllFiles_short" style="cursor:pointer"> WGET </a> |';
+		}
+		accessType = 'GridFTP';
+		var hasGridFTP = self.checkDatasetAccess(accessType, datasetId, access);
+		if(hasGridFTP) {
+			if(ESGF.setting.globusonline) {
+				datasetList += '<span class="globusOnlineAllFiles_short" style="display:none;font-weight:bold;"> Transferring to GO page...</span>';	
+				datasetList += ' <a class="globusOnlineAllFiles_short" style="cursor:pointer">Globus Online</a> |';
+			}
+		}
+		
+		accessType = 'SRM';
+		var hasSRM = self.checkDatasetAccess(accessType, datasetId, access);
+		if(hasSRM) {
+			//first check to see if it is cached
+			var isCached_url = '/esgf-web-fe/isCachedDataset';
+			
+			var isCached = false;
+			
+			var dataset_id = datasetId;//self.selected_arr[i];
+			
+			var queryString = 
+	    	{
+	    			"dataset_id" : dataset_id,
+	    			"openid" : 'openid'
+			};
+			
+			$.ajax({
+				url: isCached_url,
+				global: false,
+				type: 'GET',
+				async: false,
+				data: queryString,
+				success: function(data) {
+					if(data == 'success') {
+						isCached = true;
+					}
+				},
+				error: function() {
+					alert('error in isCached');
+				}
+			});
+			
+			//isCached = true;
+			
+			if(isCached) {
+				datasetList += '<span class="wgetAllFiles_short_SRMConvert" style="display:none;font-weight:bold;"> Downloading... </span>';
+				datasetList += '<a class="wgetAllFiles_short_SRMConvert" style="cursor:pointer"> WGET </a> |';
+				datasetList += '<span class="globusOnlineAllFiles_short_SRMConvert" style="display:none;font-weight:bold;"> Transferring to GO page...</span>';	
+				datasetList += ' <a class="globusOnlineAllFiles_short_SRMConvert" style="cursor:pointer">Globus Online</a> |';
+				
+			} else {
+				datasetList += '<span class="srm_dataset_event" style="display:none;font-weight:bold;"> Transferring to SRM page... </span>';
+				datasetList += '<a class="srm_dataset_event" style="cursor:pointer"> SRM </a> |';
+			}
+		}
+		
+		
+		
+		
+		
+		
+		datasetList += ' <a class="remove_dataset_short" style="cursor:pointer">Remove</a>'; 
+		datasetList += '</td>';	
+		datasetList += '</tr>';
+		
+		
+
+		//datasetList += '<tr class="file_rows_' + ESGF.datacart.replaceChars(self.selected_arr[i]) + '" style="">';
+		datasetList += '<tr class="file_rows_' + ESGF.datacart.replaceChars(dataset_id) + '" style="">';
+		datasetList += '</tr>';
+		
+		
+		
+		/*
+		datasetList += '<tr style="margin-top:50px;" class="top_level_data_item"  >';
+		
+		datasetList += '<td style="width: 40px;"><input class="topLevel" type="checkbox" checked="true" /> </td>';	
+		
+		datasetList += '<td style="width: 325px;font-size:13px">';
+		
+		datasetList += '<div style="word-wrap: break-word;font-weight:bold"  ><span class="datasetId">' + datasetId + '</span></div>';
+		
+		datasetList += '<span>' + ' (Total Number of Files for All Variables: ' +  numFiles + ')</span>';
+		
+
+		datasetList += '</td>';
+		
+		
+		datasetList += '<td style="font-size:11px;float:right" >';
+		
+		datasetList += '<span class="show_files">';
+		datasetList += '<span class="showAllFiles_short" style="display:none;font-weight:bold;"> Expanding... </span>';
+		datasetList += '<a class="hideAllFiles_short" style="display:none;cursor:pointer">Hide Files</a>' + 
+					   '<a class="showAllFiles_short" style="cursor:pointer">Show Files</a> | ';
+		datasetList += '</span>';
+		
+		
+		var accessType = 'HTTPServer';
+		var hasHTTP = self.checkDatasetAccess(accessType,datasetId);
+		if(hasHTTP) {
+			datasetList += '<span class="wgetAllFiles_short" style="display:none;font-weight:bold;"> Downloading... </span>';
+			datasetList += '<a class="wgetAllFiles_short" style="cursor:pointer"> WGET </a> |';
+		}
+		accessType = 'GridFTP';
+		var hasGridFTP = self.checkDatasetAccess(accessType, datasetId);
+		if(hasGridFTP) {
+			if(ESGF.setting.globusonline) {
+				datasetList += '<span class="globusOnlineAllFiles_short" style="display:none;font-weight:bold;"> Transferring to GO page...</span>';	
+				datasetList += ' <a class="globusOnlineAllFiles_short" style="cursor:pointer">Globus Online</a> |';
+			}
+		}
+		
+		accessType = 'SRM';
+		var hasSRM = self.checkDatasetAccess(accessType, datasetId);
+		if(hasSRM) {
+			//first check to see if it is cached
+			var isCached_url = '/esgf-web-fe/isCachedDataset';
+			
+			var isCached = false;
+			
+			var dataset_id = datasetId;//self.selected_arr[i];
+			
+			var queryString = 
+	    	{
+	    			"dataset_id" : dataset_id,
+	    			"openid" : 'openid'
+			};
+			
+			$.ajax({
+				url: isCached_url,
+				global: false,
+				type: 'GET',
+				async: false,
+				data: queryString,
+				success: function(data) {
+					if(data == 'success') {
+						isCached = true;
+					}
+				},
+				error: function() {
+					alert('error in isCached');
+				}
+			});
+			
+			//isCached = true;
+			
+			if(isCached) {
+				datasetList += '<span class="wgetAllFiles_short_SRMConvert" style="display:none;font-weight:bold;"> Downloading... </span>';
+				datasetList += '<a class="wgetAllFiles_short_SRMConvert" style="cursor:pointer"> WGET </a> |';
+				datasetList += '<span class="globusOnlineAllFiles_short_SRMConvert" style="display:none;font-weight:bold;"> Transferring to GO page...</span>';	
+				datasetList += ' <a class="globusOnlineAllFiles_short_SRMConvert" style="cursor:pointer">Globus Online</a> |';
+				
+			} else {
+				datasetList += '<span class="srm_dataset_event" style="display:none;font-weight:bold;"> Transferring to SRM page... </span>';
+				datasetList += '<a class="srm_dataset_event" style="cursor:pointer"> SRM </a> |';
+			}
+		}
+		
+		
+		
+		datasetList += ' <a class="remove_dataset_short" style="cursor:pointer">Remove</a>'; 
+		datasetList += '</td>';	
+		datasetList += '</tr>';
+		
+		
+
+		//datasetList += '<tr class="file_rows_' + ESGF.datacart.replaceChars(self.selected_arr[i]) + '" style="">';
+		datasetList += '<tr class="file_rows_' + ESGF.datacart.replaceChars(datasetId) + '" style="">';
+		datasetList += '</tr>';
+		*/
+		
+		return datasetList;
+		
+		
+	},
+	
+	
+	writeDatasetMarkup: function (dataset_arr,i) {
+		
+		var self = this;
+		
+		
+		
+		
+		/*
+		var datasetId = dataset_arr[i];
+		
+		var dataset_id = datasetId;
+		
+		//alert('start here');
+		
+		var srmdatasetdatacarturl = '/esgf-web-fe/srmdatacartproxy/datacart';
+		
+		var queryString = 
+    	{
+    			"dataset_id" : dataset_id
+		};
+		
+		var datacart_entry = '';
+		
+		$.ajax({
+			url: srmdatasetdatacarturl,
+			global: false,
+			type: 'POST',
+			async: false,
+			dataType: 'json',
+			data: queryString,
+			success: function(data) {
+				datacart_entry = data['datacartdataset'];
+			},
+			error: function() {
+				alert('error in srm dataset datacart');
+			}
+		});
+		
+		
+		//alert('stop here');
+		
+		var datasetList = '';
+		
+		datasetList += '<tr style="margin-top:50px;" class="top_level_data_item"  >';
+		
+		datasetList += '<td style="width: 40px;"><input class="topLevel" type="checkbox" checked="true" /> </td>';	
+		
+		datasetList += '<td style="width: 325px;font-size:13px">';
+		
+		datasetList += '<div style="word-wrap: break-word;font-weight:bold"  ><span class="datasetId">' + datacart_entry['datasetId'] + '</span></div>';
+		
+		//datasetList += '<div style="word-wrap: break-word;font-weight:bold"  ><span class="datasetId">' + self.selected_arr[i] + '</span></div>';
+		
+		datasetList += '<span>' + ' (Total Number of Files for All Variables: ' +  datacart_entry['numFiles'] + ')</span>';
+		
+		
+		//datasetList += '<span>' + ' (Total Number of Files for All Variables: ' +  ESGF.localStorage.get('dataCart',self.selected_arr[i])['numFiles'] + ')</span>';
+		//var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : evt.data.doc['access']};
+
+		//datasetList += '<span>' + ' (Total Number of Files for All Variables: ' +  ESGF.localStorage.get('dataCart',self.selected_arr[i])['numFiles'] + ')</span>';
+		
+		
+		datasetList += '</td>';
+		
+		datasetList += '<td style="font-size:11px;float:right" >';
+		
+		datasetList += '<span class="show_files">';
+		datasetList += '<span class="showAllFiles_short" style="display:none;font-weight:bold;"> Expanding... </span>';
+		datasetList += '<a class="hideAllFiles_short" style="display:none;cursor:pointer">Hide Files</a>' + 
+					   '<a class="showAllFiles_short" style="cursor:pointer">Show Files</a> | ';
+		datasetList += '</span>';
+		
+		
+		
+		
+		var accessType = 'HTTPServer';
+		var hasHTTP = self.checkDatasetAccess(accessType,datasetId);
+		if(hasHTTP) {
+			datasetList += '<span class="wgetAllFiles_short" style="display:none;font-weight:bold;"> Downloading... </span>';
+			datasetList += '<a class="wgetAllFiles_short" style="cursor:pointer"> WGET </a> |';
+		}
+		accessType = 'GridFTP';
+		var hasGridFTP = self.checkDatasetAccess(accessType, datasetId);
+		if(hasGridFTP) {
+			if(ESGF.setting.globusonline) {
+				datasetList += '<span class="globusOnlineAllFiles_short" style="display:none;font-weight:bold;"> Transferring to GO page...</span>';	
+				datasetList += ' <a class="globusOnlineAllFiles_short" style="cursor:pointer">Globus Online</a> |';
+			}
+		}
+		
+		
+		accessType = 'SRM';
+		var hasSRM = self.checkDatasetAccess(accessType, datasetId);
+		if(hasSRM) {
+			//first check to see if it is cached
+			var isCached_url = '/esgf-web-fe/isCachedDataset';
+			
+			var isCached = false;
+			
+			var dataset_id = self.selected_arr[i];
+			
+			var queryString = 
+	    	{
+	    			"dataset_id" : dataset_id,
+	    			"openid" : 'openid'
+			};
+			
+			$.ajax({
+				url: isCached_url,
+				global: false,
+				type: 'GET',
+				async: false,
+				data: queryString,
+				success: function(data) {
+					if(data == 'success') {
+						isCached = true;
+					}
+				},
+				error: function() {
+					alert('error in isCached');
+				}
+			});
+			
+			//isCached = true;
+			
+			if(isCached) {
+				datasetList += '<span class="wgetAllFiles_short_SRMConvert" style="display:none;font-weight:bold;"> Downloading... </span>';
+				datasetList += '<a class="wgetAllFiles_short_SRMConvert" style="cursor:pointer"> WGET </a> |';
+				datasetList += '<span class="globusOnlineAllFiles_short_SRMConvert" style="display:none;font-weight:bold;"> Transferring to GO page...</span>';	
+				datasetList += ' <a class="globusOnlineAllFiles_short_SRMConvert" style="cursor:pointer">Globus Online</a> |';
+				
+			} else {
+				datasetList += '<span class="srm_dataset_event" style="display:none;font-weight:bold;"> Transferring to SRM page... </span>';
+				datasetList += '<a class="srm_dataset_event" style="cursor:pointer"> SRM </a> |';
+			}
+		}
+		
+		datasetList += ' <a class="remove_dataset_short" style="cursor:pointer">Remove</a>'; 
+		datasetList += '</td>';	
+		datasetList += '</tr>';
+		
+		datasetList += '<tr class="file_rows_' + ESGF.datacart.replaceChars(self.selected_arr[i]) + '" style="">';
+		datasetList += '</tr>';
+		*/
+		
+		return datasetList;
+	},
+	
+        
+	/*
+	writeDatasetMarkup: function (i) {
+		alert('???');
 		
 		var self = this;
 		
@@ -398,7 +952,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		
 		return datasetList;
 	},
-	
+	*/
     
 	
 	rewriteTextQuery: function(queryString) {

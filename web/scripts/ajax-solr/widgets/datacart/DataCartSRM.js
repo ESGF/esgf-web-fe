@@ -98,8 +98,6 @@
 				
 				var dataset_id = $(this).parent().parent().parent().parent().find('span.datasetId').html();
 				
-				alert('dataset_id: ' + dataset_id);
-				
 				//type
 				//dataset
 				//filtered

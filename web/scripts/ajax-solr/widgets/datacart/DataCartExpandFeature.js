@@ -143,7 +143,6 @@
 		
 		appendFileData: function (data,openid,initial) {
 
-			
 			var self = this;
 			
 			var initialStr = 'initial_' + new String(initial);
@@ -185,6 +184,7 @@
 			//loop over the number of files
 			for(var i=0;i<fileLength;i++) 
 			{
+				
 				var displayed_files_tag = self.view_first_files_tag + initialStr + '_' + ESGF.datacart.replaceChars(data.doc.datasetId);
 					
 				appendedFiles += '<tr class="' + displayed_files_tag + '">';
@@ -209,12 +209,12 @@
 				 '  <br />' +
 				 '<span style="font-style:italic">checksum: ' + data.doc.files.file[i].checksum + ' (' + data.doc.files.file[i].checksum_type + ')' + '</span>' +
 				 '  <br />';
-				 //alert('technote: ' + data.doc.files.file[i].technotes.technote);
 				 
 				 appendedFiles += '</div>' +
 				 '</td>';
 							
 				appendedFiles += '<td style="float-right;font-size:11px;text-align:right">';
+				
 				
 				for(var j=0;j<data.doc.files.file[i].services.service.length;j++) {
 					var service = data.doc.files.file[i].services.service[j];
@@ -329,6 +329,7 @@
 				                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
 				                 '<span class="srm_urll" style="display:none">' + url + '</span>' +
 				                 '<a style="cursor:pointer" class="single_srm">' + 'SRM' + '</a> </span>';
+							
 						}
 						
 						/*
@@ -469,8 +470,7 @@
 							*/
 						}
 						
-					} 
-						else {
+					} else {
 						if(openid != 'anonymousUser') {
 							appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right"> <a href="'  + url  + '?openid=' + openid +  '" ' + 'target="_blank">' + service + '</a> </span>';
 						} else {
@@ -497,12 +497,15 @@
 		    //$('a.showAllFiles_short').live('click',function() {
 			$('span.show_files').live('click',function() {
 		    	
+				
+				
 				var openid = $('span#principal_username').html();
 		    	
+				
+				
 		    	//extract the dataset Id from the span tag
 				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
 				
-				//alert($(this).parent().find('a.hideAllFiles_short').html());//.find('span.hideAllFiles_short').attr('style'));
 				
 				var hideFilesStyle = $(this).parent().find('a.hideAllFiles_short').attr('style');//html();
 				
@@ -512,8 +515,6 @@
 					showFilesDisplay = true;
 				}
 				
-				//alert('hideFilesStyle: ' + hideFilesStyle + ' displayName: ' + showFilesDisplay);
-				//alert(this.innerHTML + ' ' + self.hide_files);
 				
 				var parentElement = $(this).parent();
 				
@@ -589,7 +590,7 @@
 			    	LOG.debug("technotesStr: " + technoteStr); 
 			    	LOG.debug('----------------------');
 					
-					
+			    	
 			    	//initial ajax call for first x number of files in dataset
 					$.ajax({
 						url: url,
@@ -598,6 +599,8 @@
 						data: queryStr,
 						dataType: 'json',
 						success: function(data) {
+							
+				
 							
 							//no files
 							if(data.doc.files.file == undefined) {
@@ -638,7 +641,6 @@
 									
 								}
 
-								
 								$('.'+tagid).after(appendedFiles);
 								
 								parentElement.find('span.showAllFiles_short').hide();

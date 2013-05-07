@@ -140,6 +140,10 @@ ESGF.setting.datasetCounter = 10;
 ESGF.setting.datacartMax = 100;
 
 
+//switch for datacart override
+ESGF.setting.datacartOverride = false;
+
+
 //timeout in case of an ajax call not returning results
 ESGF.setting.ajaxTimeout = 20000;
 
@@ -150,6 +154,9 @@ ESGF.setting.srm_url_root = '/esg-srm/';
 ESGF.setting.srmCacheOn = true;
 
 ESGF.setting.lasRestrictions = new Array();
+
+
+
 /**
  * Proxy for creating the template for file downloads.
  *

@@ -55,7 +55,7 @@ public class ProductionSRMWorkflow extends SRMWorkflow {
         PropertiesReaderFactory factory = new PropertiesReaderFactory();
         PropertiesReader srm_props = factory.makePropertiesReader("SRM");
 
-        PostMethod method = new PostMethod(srm_props.getValue("srm_api_uyrl"));
+        PostMethod method = new PostMethod(srm_props.getValue("srm_api_url"));
         String queryString = "";
         String unencodedQueryString = "";
 

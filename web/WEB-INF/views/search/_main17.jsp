@@ -255,9 +255,23 @@
     		}
     		*/
 		});
-        $('#myTabs').tabs();
+    	
+    	
+    	$('#myTabs').tabs();
         
-        
+    	
+    	var urlParams = ESGF.datacart.getURLParams();
+		
+    	if(urlParams['tab'] == undefined) {
+    		$('#myTabs').tabs('select' , 0);
+    	} else if(urlParams['tab'] == 'datacart') {
+    		$('#myTabs').tabs('select' , 1);
+    	} else {
+    		$('#myTabs').tabs('select' , 0);
+    	}
+    	
+    	
+    	
         /*Facet overlay
         */
       //scroll wheel for facet overlay 

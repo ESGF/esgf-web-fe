@@ -1,8 +1,10 @@
 package org.esgf.email;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -20,6 +22,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.esgf.datacart.XmlFormatter;
 import org.esgf.srm.SRMUtils;
 
 import esg.common.util.ESGFProperties;
@@ -27,6 +30,8 @@ import esg.common.util.ESGFProperties;
 public class Email {
 
 	private static boolean atHome = false;
+	
+	private static String FILE_NAME = "EmailExampleGeneric.txt";
 	
 	private String to;
 	private String from;
@@ -386,7 +391,23 @@ public class Email {
     	
 	}
 
-	
+	public void toFile(String name) {
+	    
+	    if(name == null)
+	        name = FILE_NAME;
+	    
+	    try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(name));
+            out.write(this.toString());
+            //out.write(new XmlFormatter().format(this.toXML()));
+            out.close();
+        } 
+        catch (IOException e) { 
+            e.printStackTrace();
+            System.out.println("Exception ");
+
+        }
+	}
 	
 	public String toString() {
 		

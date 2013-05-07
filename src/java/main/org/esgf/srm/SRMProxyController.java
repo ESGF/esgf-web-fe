@@ -261,7 +261,7 @@ public class SRMProxyController {
         
         //send initial email here
         writeInitialEmail(file_urls,emailAddr);
-        
+       
         
         //execute bestman here
         //System.out.println("Submitting request...\n");
@@ -381,12 +381,25 @@ public class SRMProxyController {
         //assemble the body text here
         String bodyStr = "";
         bodyStr += "Your request for data has been successfully staged!\n";
+        
+
+        if(type.equals("Dataset")) {
+            bodyStr += "\nPlease navigate to the following URL:\n" + 
+                    "http://localhost:8080/esgf-web-fe/live?tab=datacart&override=true" +
+                    "&datasetid=" + dataset_id +
+                    "\n";
+        } 
+        
         bodyStr += "The data you requested was the following:\n";
         for(int i=0;i<file_urls.length;i++) {
             bodyStr += "\t" + file_urls[i] + "\n";
         }
+        
+        
         this.confirmationEmail.setBodyText(bodyStr);
 
+        String fileName = "/esg/config/Comfirmation_" + scriptType + ".txt";
+        this.confirmationEmail.toFile(fileName);
         //System.out.println(this.confirmationEmail.toString());
         //this.confirmationEmail.sendEmail();
         

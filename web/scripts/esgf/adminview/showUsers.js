@@ -1,6 +1,5 @@
 function user(){
     hideAll();
-    
     //empty table first then fill
     var Parent = document.getElementById('manage_users_table');
     for(var i = Parent.rows.length - 1; i > 0; i--){

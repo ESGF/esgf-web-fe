@@ -1,15 +1,8 @@
 package org.esgf.adminui;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -23,16 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
-import org.esgf.commonui.GroupOperationsESGFDBImpl;
-import org.esgf.commonui.GroupOperationsInterface;
-import org.esgf.commonui.GroupOperationsXMLImpl;
-import org.esgf.commonui.UserOperationsESGFDBImpl;
-import org.esgf.commonui.UserOperationsInterface;
-import org.esgf.commonui.UserOperationsXMLImpl;
 import org.esgf.commonui.Utils;
 import org.esgf.metadata.JSONException;
 import org.esgf.metadata.JSONObject;
@@ -60,13 +44,9 @@ import esg.node.security.UserInfoCredentialedDAO;
 public class ForgotPasswordController {
    
     private final static Logger LOG = Logger.getLogger(ForgotPasswordController.class);
-    
-    private final static boolean debugFlag = true;
-
     private String passwd;
     private String root = "rootAdmin";     
     private UserInfoCredentialedDAO myUserInfoDAO;
-    
         
     public ForgotPasswordController()  {
         
@@ -80,11 +60,8 @@ public class ForgotPasswordController {
         } catch(Exception e) {
             e.printStackTrace();
         }
-        
-        
         LOG.debug("IN ForgotPasswordController Constructor");
     }
-    
     
     /**
      * Note: GET and POST contain the same functionality.
@@ -147,16 +124,16 @@ public class ForgotPasswordController {
 
             // method call for setting a users password
             if (myUserInfoDAO.setPassword(userInfo, password)) {
-              error = false;
-              String to = email;
-              String from = "esgf-user@lists.llnl.gov";
-              ESGFProperties myESGFProperties = null;
-              myESGFProperties = new ESGFProperties();
-
-              Properties properties = myESGFProperties;
-              Session session = Session.getDefaultInstance(properties);
-
               try{
+                error = false;
+                ESGFProperties p = new ESGFProperties();
+                p.load();
+                String from = p.getProperty("mail.admin.address");
+                String to = email;
+                ESGFProperties myESGFProperties = null;
+                myESGFProperties = new ESGFProperties();
+                Properties properties = myESGFProperties;
+                Session session = Session.getDefaultInstance(properties);  
                 MimeMessage message = new MimeMessage(session);
                 message.setFrom(new InternetAddress(from));
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
@@ -184,7 +161,7 @@ public class ForgotPasswordController {
         if(error){
           //password did not set
           xmlOutput += "<status>fail</status>";
-          xmlOutput += "<comment>" + error + "</comment>";
+          xmlOutput += "<comment>" + errormessage + "</comment>";
           xmlOutput += "</EditOutput>";
 
         } else {
@@ -200,6 +177,3 @@ public class ForgotPasswordController {
         return jsonContent;
     }
 }
-
-
-

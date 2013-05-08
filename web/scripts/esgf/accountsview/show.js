@@ -90,6 +90,7 @@ function showmore(user){
 
 function showAllGroups(openId){
   $("div .SAR").hide();
+  $("div .clock").show();
   document.getElementById('groupsRegistered').innerHTML = 'Federation Groups Registered';
   
   var Parent = document.getElementById('groups_admin_table_id');
@@ -147,5 +148,6 @@ function showAllGroups(openId){
       $("div .error").show();
 	  }
   });	
+	$("div .clock").hide();
 }
 

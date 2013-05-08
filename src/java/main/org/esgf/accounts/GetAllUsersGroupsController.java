@@ -4,23 +4,11 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.File;
-import java.io.FileReader;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
 
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.Set;
-import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,16 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
-import org.esgf.commonui.GroupOperationsESGFDBImpl;
-import org.esgf.commonui.GroupOperationsInterface;
-import org.esgf.commonui.GroupOperationsXMLImpl;
-import org.esgf.commonui.UserOperationsESGFDBImpl;
-import org.esgf.commonui.UserOperationsInterface;
-import org.esgf.commonui.UserOperationsXMLImpl;
 import org.esgf.commonui.Utils;
 import org.esgf.metadata.JSONException;
 import org.esgf.metadata.JSONObject;
@@ -54,13 +33,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import esg.common.util.ESGFProperties;
 
 import esg.security.attr.service.api.FederatedAttributeService;
-import esg.security.attr.service.impl.FederatedAttributeServiceImpl;
-import esg.security.registry.service.api.RegistryService;
-import esg.security.registry.service.impl.RegistryServiceLocalXmlImpl;
 
-import esg.node.security.UserInfo;
 import esg.node.security.UserInfoCredentialedDAO;
-import esg.node.security.GroupRoleDAO;
 import esg.node.security.GroupRoleCredentialedDAO;
 
 /**

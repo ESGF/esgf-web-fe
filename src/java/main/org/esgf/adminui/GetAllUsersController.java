@@ -115,6 +115,9 @@ public class GetAllUsersController {
         String query = (String)request.getParameter("query");
         String username =  "";
         String isRoot = "";
+        String ids = "";
+        int start = 1;
+        int end = 0;
         boolean error = false;
         String errormessage = "";        
         JSONObject jsonObj = null;
@@ -122,25 +125,32 @@ public class GetAllUsersController {
         try {
             jsonObj = new JSONObject(query);
             username = jsonObj.getString("userName");
+            start = Integer.parseInt(jsonObj.getString("start"));
+            end = Integer.parseInt(jsonObj.getString("end"));
+            System.out.println(start + "   " + end); 
         } catch (JSONException e) {
-            LOG.debug("error in parsing the json text string :" + query);
+            System.out.println("error in parsing the json text string :" + query);
             errormessage = "error in parsing the json text string :" + query;
             error = true;
         }
-
-        // method call for openids tied to passed email
-        List<User> openidList = uoi.getAllUsers();
-        if(openidList == null) System.out.println("id is null");
-
-        String ids = "";
-
-        for(User u : openidList){
-          String userName = u.getUserName();
-          String lastName = u.getLastName();
-          String firstName = u.getFirstName();
-          String userEmail = u.getEmailAddress();
-          String openId = u.getOpenId();
-          ids += userName + "," + lastName + "," + firstName + "," + userEmail + "," + openId + "][";
+        
+        try{
+            // method call for openids tied to passed email
+            List<User> openidList = uoi.getSomeUsers(start, end);
+            System.out.println("openidList.size = " + openidList.size());
+    
+            for(User u : openidList){
+              String userName = u.getUserName();
+              String lastName = u.getLastName();
+              String firstName = u.getFirstName();
+              String userEmail = u.getEmailAddress();
+              String openId = u.getOpenId();
+              ids += userName + "," + lastName + "," + firstName + "," + userEmail + "," + openId + "][";
+            }
+        } catch(Exception e){
+            error = true;
+            errormessage = "exception = " + e;
+            System.out.println(e);
         }
 
         //System.out.println(ids);
@@ -153,7 +163,9 @@ public class GetAllUsersController {
           errormessage = "You are not root. Only the root admin may edit users information.";
           error = true;
         }
-
+System.out.println("error = " + error);
+System.out.println("errormessage = " + errormessage);
+System.out.println("ids = " + ids);
         String xmlOutput = "<EditOutput>";
         if(error){
           xmlOutput += "<status>fail</status>";

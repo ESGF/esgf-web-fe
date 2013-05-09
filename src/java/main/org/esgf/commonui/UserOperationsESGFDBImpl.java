@@ -383,6 +383,33 @@ public class UserOperationsESGFDBImpl implements UserOperationsInterface {
     }
     
     /*
+     * (non-Javadoc)
+     * @see org.esgf.commonui.UserOperationsInterface#getSomeUsers()
+     */
+    @Override
+    public List<User> getSomeUsers(int start, int end) {
+        List<User> users = new ArrayList<User>();
+        System.out.println(start + "  " + end);        
+        try {
+            ESGFProperties props = new ESGFProperties();
+            UserInfoDAO uid = new UserInfoDAO(props);
+            if(end > uid.getUserEntries().size()) end = uid.getUserEntries().size();
+            if(start > end) start = end - 25;
+            if(start < 1) start = 1;
+            System.out.println(start + "  " + end);
+            for(int i=start;i<end;i++) {
+                String [] str = uid.getUserEntries().get(i);
+                User user = this.getUserObjectFromUserName(str[0]);
+                users.add(user);                
+            }
+            
+        }catch(Exception e) {
+            System.out.println(e.getMessage());
+        }        
+        return users;        
+    }
+    
+    /*
      * Note the hardcoded roles
      */
     @Override

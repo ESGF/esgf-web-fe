@@ -11,7 +11,7 @@
 			  <p>
           <table>
             <tr>
-              <td><a href="javascript:user()" id="users">Manage Users</a></td>
+              <td><a href="javascript:user('start')" id="users">Manage Users</a></td>
               <td><a href="javascript:group()" id="groups">Manage Groups</a></td>
             </tr><tr>
               <td><a href="javascript:pending()" id="pendings">Pending Request</a></td>
@@ -22,7 +22,7 @@
         
   </fieldset>
     </div>
-
+    <div class="clock" style="display: none"><center><img id="spinner" src="images/ajax-loader.gif" /><br/>Loading</center></div>
     <!-- ********** Manage User fieldsets ********** -->
     <div id="user" class="user" style="display: none">
       <fieldset style="background: #F5F5E0">
@@ -40,7 +40,8 @@
 					</thead>
 					<tbody class="userTable">
           </tbody>
-        </table>  
+        </table>
+        <div class="showBack" style="display: none; float: left"><a href="javascript:user('back')">Back</a></div> &nbsp;  &nbsp; <div class="showNext" style="display: none"><a href="javascript:user('next')">Next</a><div>
         </p>
       </fieldset>
     </div>
@@ -125,7 +126,7 @@
           <thead>
           <tr>
             <th>Action</th>
-            <th>User</th>
+            <th>Username</th>
             <th>Group</th>
             <th>Roles</th>
             <th>Approved</th>
@@ -140,9 +141,8 @@
                 <option value="REMOVE">Remove</option>
               </select>
             </td>
-            <td>
-              <select id="manipulationUsers">
-              </select>
+            <td>             
+              <input alt="" type="text" class="text" id="manipulationUsers" value="" style="width: 175px"/>
             </td>
             <td>
               <select id="manipulationGroups">

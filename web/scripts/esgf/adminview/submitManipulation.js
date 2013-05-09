@@ -1,11 +1,13 @@
 function manipulationSubmit(){
+  $("div .error").hide()
+  $("div .success").hide();
+	
   var action = document.getElementById("action");
   var actionType = action.options[action.selectedIndex].value;
-  var user = document.getElementById("manipulationUsers");
-  var userName = user.options[user.selectedIndex].value;
+  var userName = document.getElementById("manipulationUsers").value;
   var group = document.getElementById("manipulationGroups");
   var groupName = group.options[group.selectedIndex].value;
-  var approved = document.getElementById("manipulationApproved");
+  var approved = document.getElementById("manipulationApproved").value;
 
   var roles = [];
   $('#manipulationRoles :selected').each(function(i, selected){ roles[i] = $(selected).text(); });

@@ -130,5 +130,7 @@
     <dependency org="org.opensaml" name="xmltooling" rev="1.2.2" transitive="false" conf="base->default"  />
     <dependency org="org.opensaml" name="XSGroupRole" rev="1.0.0" transitive="false" conf="base->default"  />
     
+    <dependency org="javax.servlet" name="javax.servlet-api" rev="3.0.1"/>
+
   </dependencies>
 </ivy-module>

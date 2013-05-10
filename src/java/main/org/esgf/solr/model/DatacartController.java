@@ -1,6 +1,9 @@
 package org.esgf.solr.model;
 
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.esgf.datacart.FileDownloadTemplateController;
 import org.esgf.datacart.XmlFormatter;
@@ -35,6 +38,18 @@ public class DatacartController {
     
     @RequestMapping(method=RequestMethod.POST, value="/datacart")
     public @ResponseBody String getDoc(HttpServletRequest request) {
+        
+        HttpSession session = request.getSession();
+        
+        System.out.println("\n\n\nIn original datacart controller\n\n");
+        
+        Enumeration e = session.getAttributeNames();
+        while( e.hasMoreElements() ) {
+            String key = (String) e.nextElement();
+            System.out.println("\n\n\n\nIn original datacart controller key..." + key);
+        }
+        
+        
         
         if(Utils.debugMode)
             System.out.println("\n\n\nIn new datacart controller\n\n\n");

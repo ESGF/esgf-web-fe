@@ -41,6 +41,16 @@ public class DatacartDataset {
         this.access = access;
     }
     
+    public DatacartDataset() {
+        this.datasetId = "undefined";
+        this.numFiles = "undefined";
+        this.peer = "undefined";
+        this.xlink = new String[1];
+        this.xlink[0] = "undefined";
+        this.access = new String[1];
+        this.access = new String[1];
+    }
+    
     public String getDatasetId() {
         return datasetId;
     }
@@ -74,9 +84,7 @@ public class DatacartDataset {
     
     public static DatacartDataset getDatacartDatasetFromSolr(String datasetId) {
 
-        System.out.println("IN getDatacartDatasetFromSolr");
-        
-        DatacartDataset dDataset = null;
+        DatacartDataset dDataset = new DatacartDataset();
         
         //query solr for the files
         Solr solr = new Solr();
@@ -88,90 +96,15 @@ public class DatacartDataset {
         solr.addConstraint("type", "Dataset");
       
         solr.addConstraint("id",datasetId);
-        System.out.println("query->" + solr.getQueryString());
+        System.out.println("\n\nquery->" + solr.getQueryString() + "\n\n");
         solr.executeQuery();
         
         SolrResponse solrResponse = solr.getSolrResponse();
         System.out.println(solrResponse.getSolrRecords().size());
         
-        SolrRecord record = solrResponse.getSolrRecords().get(0);
-        
-        //get the id
-        String id = record.getStrField("id");
-        
-        //get the numfiles
-        String numFiles = record.getMiscField("number_of_files");
-        if(numFiles == null) {
-            numFiles = "undefined";
-            
-        }
-        
-        //get the peer
-        String peer = record.getStrField("index_node");
-        if(peer == null) {
-            peer = "undefined";
-        }
-        
-        //get the xlink
-        String [] xlink = null;
-        if(record.getArrField("xlink") == null) {
-            xlink = new String [1];
-            xlink[0] = "undefined";
-        } else {
-            xlink = new String [record.getArrField("xlink").size()];
-            for(int j=0;j<xlink.length;j++) {
-                xlink[j] = record.getArrField("xlink").get(j);
-            }
-        }
-          
-        
-        //get the access
-        String [] access = null;
-        if(record.getArrField("access") == null) {
-            access = new String [1];
-            access[0] = "undefined";
-        } else {
-            access = new String [record.getArrField("access").size()];
-            for(int j=0;j<access.length;j++) {
-                access[j] = record.getArrField("access").get(j);
-            }
-        }
-        
-        //(String datasetId,String numFiles,String peer,String [] xlink,String [] access) {
-        dDataset = new DatacartDataset(id,numFiles,peer,xlink,access);
-          
-        
-        return dDataset;
-        
-    }
-    
-    public static DatacartDataset [] getDatacartDatasetFromSolr(String [] datasetIds) {
-        
-        DatacartDataset [] dDatasets = new DatacartDataset[datasetIds.length];
-        
-      //query solr for the files
-        Solr solr = new Solr();
-        
-        solr.addConstraint("query", "*");
-        //solr.addConstraint("distrib", "false");
-        solr.addConstraint("limit", "1");
-        solr.addConstraint("offset", "0");
-        solr.addConstraint("type", "Dataset");
-        
-        //call solr for each dataset id
-        for(int i=0;i<datasetIds.length;i++) {
-            String dataset_id = datasetIds[i];
+        if(solrResponse.getSolrRecords().size() > 0) {
 
-            solr.addConstraint("id",dataset_id);
-            System.out.println("query->" + solr.getQueryString());
-            solr.executeQuery();
-            
-            SolrResponse solrResponse = solr.getSolrResponse();
-            System.out.println(solrResponse.getSolrRecords().size());
-            
             SolrRecord record = solrResponse.getSolrRecords().get(0);
-            
-            System.out.println("Record: " + i + " id: " + record.getStrField("id"));
             
             //get the id
             String id = record.getStrField("id");
@@ -213,6 +146,87 @@ public class DatacartDataset {
                     access[j] = record.getArrField("access").get(j);
                 }
             }
+            
+            //(String datasetId,String numFiles,String peer,String [] xlink,String [] access) {
+            dDataset = new DatacartDataset(id,numFiles,peer,xlink,access);
+
+        }
+        
+
+        return dDataset;
+        
+    }
+    
+    public static DatacartDataset [] getDatacartDatasetFromSolr(String [] datasetIds) {
+        
+        DatacartDataset [] dDatasets = new DatacartDataset[datasetIds.length];
+        
+      //query solr for the files
+        Solr solr = new Solr();
+        
+        solr.addConstraint("query", "*");
+        //solr.addConstraint("distrib", "false");
+        solr.addConstraint("limit", "1");
+        solr.addConstraint("offset", "0");
+        solr.addConstraint("type", "Dataset");
+        
+        //call solr for each dataset id
+        for(int i=0;i<datasetIds.length;i++) {
+            String dataset_id = datasetIds[i];
+
+            solr.addConstraint("id",dataset_id);
+            //System.out.println("query->" + solr.getQueryString());
+            solr.executeQuery();
+            
+            SolrResponse solrResponse = solr.getSolrResponse();
+            //System.out.println(solrResponse.getSolrRecords().size());
+            
+            SolrRecord record = solrResponse.getSolrRecords().get(0);
+            
+            //System.out.println("Record: " + i + " id: " + record.getStrField("id"));
+            
+            //get the id
+            String id = record.getStrField("id");
+            
+            //get the numfiles
+            String numFiles = record.getMiscField("number_of_files");
+            if(numFiles == null) {
+                numFiles = "undefined";
+                
+            }
+            
+            //get the peer
+            String peer = record.getStrField("index_node");
+            if(peer == null) {
+                peer = "undefined";
+            }
+            
+            //get the xlink
+            String [] xlink = null;
+            if(record.getArrField("xlink") == null) {
+                xlink = new String [1];
+                xlink[0] = "undefined";
+            } else {
+                xlink = new String [record.getArrField("xlink").size()];
+                for(int j=0;j<xlink.length;j++) {
+                    xlink[j] = record.getArrField("xlink").get(j);
+                }
+            }
+              
+            
+            //get the access
+            String [] access = null;
+            if(record.getArrField("access") == null) {
+                access = new String [1];
+                access[0] = "undefined";
+            } else {
+                access = new String [record.getArrField("access").size()];
+                for(int j=0;j<access.length;j++) {
+                    access[j] = record.getArrField("access").get(j);
+                }
+            }
+
+            solr.removeConstraint("id");
             
             //(String datasetId,String numFiles,String peer,String [] xlink,String [] access) {
             DatacartDataset dDataset = new DatacartDataset(id,numFiles,peer,xlink,access);

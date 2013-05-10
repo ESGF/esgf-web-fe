@@ -215,7 +215,8 @@ ESGF.datacart.getIndividualPeer = function (id) {
 		};
 		
 		datasetInfo = undefined;
-		
+
+		alert('data: ' + data);
 		$.ajax({
 			url: srmdatasetdatacarturl,
 			global: false,

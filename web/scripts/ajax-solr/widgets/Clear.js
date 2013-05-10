@@ -15,6 +15,21 @@
 			$("a#clearcache").live('click', function() {
 				
 			
+				//put into datacart
+            	var datacartControllerUrl = '/esgf-web-fe/datacartcontroller2/datacart';
+            	$.ajax({
+					url: datacartControllerUrl,
+					global: false,
+					type: 'DELETE',
+					async: false,
+					//data: queryString,
+					success: function(data) {
+						alert('success');
+					},
+					error: function(jqXHR) {
+						alert('error status: ' + jqXHR.status);
+					}
+				});
 				
           	  //remove the existing parameter store
           	  //Manager.store.remove('fq');

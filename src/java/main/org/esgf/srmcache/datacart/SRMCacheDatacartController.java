@@ -17,6 +17,7 @@ public class SRMCacheDatacartController {
         final MockHttpServletRequest mockRequest = new MockHttpServletRequest();
         
         String dataset_id = "ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1|esg2-sdnl1.ccs.ornl.gov";
+        //String dataset_id = "a";
         
         mockRequest.addParameter("dataset_id", dataset_id );
         //mockRequest.addParameter("dataset_id", "ana4MIPs.NASA-GMAO.MERRA.atmos.mon.v20121221|esgdata1.nccs.nasa.gov");
@@ -25,7 +26,7 @@ public class SRMCacheDatacartController {
         
         String response = controller.getDoc(mockRequest);
         
-        System.out.println(response);
+        System.out.println("Response: " + response);
         
     }
     
@@ -38,22 +39,23 @@ public class SRMCacheDatacartController {
     
         String response = "";
         
-        System.out.println("\tIN POST");
         
         String datasetId = request.getParameter("dataset_id");
         if(datasetId == null) {
-            System.out.println("NULL");
             return "failure";
         }
         
         DatacartDataset dDataset = DatacartDataset.getDatacartDatasetFromSolr(datasetId);
         
+        if(dDataset == null) {
+            System.out.println("Returning failure");
+            return "<failure>failure</failure>";
+        } else {
+            response = dDataset.toJSON();
+            //System.out.println("\n\n\n\t->" + response);
+            return response;
+        }
         
-        response = dDataset.toJSON();
-        
-        System.out.println("\n\n\n\t->" + response);
-        
-        return response;
         
     }
     

@@ -318,6 +318,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                 			'dataset_id' : evt.data.doc.id
                 	};
                 	
+                	/*
                 	//put into datacart
                 	var datacartControllerUrl = '/esgf-web-fe/datacartcontroller2/datacart';
                 	$.ajax({
@@ -333,7 +334,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     						alert('error status: ' + jqXHR.status);
     					}
     				});
-                	
+                	*/
                 	
             		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
             	
@@ -354,6 +355,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             	//remove from super cookie
             	ESGF.localStorage.remove('dataCart',evt.data.doc.id);
 
+            	/*
             	alert('removing: ' + evt.data.doc.id);
             	
             	var queryString = {
@@ -374,7 +376,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
 						alert('error status: ' + jqXHR.status);
 					}
 				});
-				
+				*/
             	
             	//remove from stateful super cookie
                 var key = ESGF.localStorage.toString('esgf_fq');

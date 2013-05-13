@@ -152,6 +152,8 @@ public class SRMProxyController {
         
         String dataset_id = input.getDataset_id();
         
+        System.out.println("SRMController datasetid: " + dataset_id);
+        
         //get email address here (either from default or the oepnid)
         String openId = "jfharney";
         String emailAddr = EmailUtils.getEmailAddrFromOpenId(openId);

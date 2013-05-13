@@ -150,13 +150,19 @@ public class SRMCacheStoreController {
         
         String expiration = srm_entry.getExpiration();
         
-        //if(file_id.equals("ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-10.nc|esg2-sdnl1.ccs.ornl.gov"))
-            //.out.println("\n\nFILEID: " + file_id + "\n\n" + currentTimeStamp + " " + expiration + "\n\n\n\n");
-        
-        
+       
         if(Long.parseLong(expiration) > currentTimeStamp) {
+            if(file_id.equals("ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-09.nc|esg2-sdnl1.ccs.ornl.gov")){
+                System.out.println("\n\nFILEID: " + file_id + "\n\t" + currentTimeStamp + " " + expiration + "\n");
+                System.out.println("success");
+            }
             return success_message;
         } else {
+            if(file_id.equals("ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-09.nc|esg2-sdnl1.ccs.ornl.gov")){
+                System.out.println("\n\nFILEID: " + file_id + "\n\t" + currentTimeStamp + " " + expiration + "\n");
+            
+                System.out.println("failure");
+            }
             return failure_message;
         }
         
@@ -273,7 +279,7 @@ public class SRMCacheStoreController {
             return failure_message;
         }
         
-        
+        System.out.println("\nDatasetid to updated->" + dataset_id);
         
         SRMEntry srm_entry = srm_cache.getSRMEntryForFile_id(dataset_id, file_id);
         
@@ -285,6 +291,7 @@ public class SRMCacheStoreController {
         
         
         if(this.srm_cache.updateSRMEntry(srm_entry) == 1) {
+            System.out.println("UPDATE SUCCESSFUL");
             return success_message;
         } else {
             return failure_message;

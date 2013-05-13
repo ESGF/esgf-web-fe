@@ -270,7 +270,8 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                                "';";
               
 
-        //System.out.println("Update command: " + updateCommand);
+        
+        System.out.println("Update command: " + updateCommand);
         
         if (this.connection != null) {
             try {

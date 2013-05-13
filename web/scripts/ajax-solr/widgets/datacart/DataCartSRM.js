@@ -96,7 +96,9 @@
 				
 				var file_url = $(this).parent().find('.srm_urll').html().trim();
 				
-				var dataset_id = $(this).parent().parent().parent().parent().find('span.datasetId').html();
+				//var dataset_id = $(this).parent().parent().parent().parent().find('span.datasetId').html();
+				
+				var dataset_id =  $(this).parent().parent().find('span.srm_dataset_id').html();
 				
 				//type
 				//dataset
@@ -123,6 +125,8 @@
 				//var srm_url = '/esgf-web-fe/srmview?datasetId=' + selectedDocId + '&type=Dataset';
 		    	
 				var srm_service_url = '/esgf-web-fe/srmview?' + typeArg + '&' + filteredArg + '&' + fileArg + '&' + fileUrlArg + '&' + selectedDocIdArg;
+				
+				alert('srm_service_url: ' + srm_service_url);
 				
 				//send request
 		        jQuery('<form action="'+ srm_service_url +'" method="post">'+''+'</form>')

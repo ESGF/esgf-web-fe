@@ -174,11 +174,7 @@
 					var urlsArray = new Array();
 					urlsArray.push(data.doc.files.file[j].urls.url);
 					data.doc.files.file[j].urls['url'] = urlsArray;
-					/*
-					var mimesArray = new Array();
-					mimesArray.push(data.doc.files.file[j].mimes.mime);
-					data.doc.files.file[j].mimes['mime'] = mimesArray;
-					*/
+					
 				}
 			}
 			//loop over the number of files
@@ -196,6 +192,7 @@
 	  					'/>' +
 	  					'</td>';
 
+				appendedFiles += '<span style="display:none" class="datasetIdSend">' + data.doc.datasetId + '</span>';
 				appendedFiles += '<td style="width: 425px;padding-left:10px;font-size:11px;">' +
 				 '<div style="word-wrap: break-word;">';
 			 	 
@@ -212,7 +209,7 @@
 				 
 				 appendedFiles += '</div>' +
 				 '</td>';
-							
+				 						
 				appendedFiles += '<td style="float-right;font-size:11px;text-align:right">';
 				
 				
@@ -271,6 +268,7 @@
 						});
 						
 						
+						//isCached = false;
 						
 						//if it is cached, then expose http and gridftp links
 						if(isCached) {
@@ -317,158 +315,17 @@
 								}
 							});
 							
-							/*
-							appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
-			                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
-			                 '<span class="srm_urll" style="display:none">' + url + '</span>' +
-			                 '<a style="cursor:pointer" class="single_srm">' + 'http' + '</a> </span>';
-			                */
 						} else {
 
 							appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
 				                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
 				                 '<span class="srm_urll" style="display:none">' + url + '</span>' +
+				                 '<span class="srm_dataset_id" style="display:none">' + data.doc.datasetId + '</span>' +
 				                 '<a style="cursor:pointer" class="single_srm">' + 'SRM' + '</a> </span>';
 							
 						}
 						
-						/*
-						$.ajax({
-							url: filetransformer_url,
-							global: false,
-							type: "GET",
-							async: false,
-							data: queryString,
-							success: function(data) {
-								//alert('data: ' + data);
-								
-								appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
-				                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
-				                 '<span class="srm_urll" style="display:none">' + data + '</span>' +
-				                 '<a style="cursor:pointer" href="' + data + '">' + 'HTTP' + '</a> </span>';
-								
-								filetransformer_url = '/esgf-web-fe/gridftpfile';
-								$.ajax({
-									url: filetransformer_url,
-									global: false,
-									type: "GET",
-									async: false,
-									data: queryString,
-									success: function(data) {
-										if(ESGF.setting.globusonline) {
-											appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
-											                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
-											                 '<span class="globus_url" style="display:none">' + data + '</span>' +
-											                 '<a style="cursor:pointer" class="go_individual_gridftp_short">' + 'Globus Online' + '</a> </span>';
-											
-										}
-										
-									},
-									error: function() {
-										alert('go error');
-									}
-								});
-								
-								
-							}, 
-							error: function() {
-								alert('error');
-							}
-							
-						});
-						*/
-
-						/*
-						$.ajax({
-							url: srmcache_url,
-							global: false,
-							type: "GET",
-							async: false,
-							data: queryString,
-							//dataType: 'json',
-							success: function(data) {
-								//alert(data);
-								//really shouldn't be a failure but if it is...
-								if(data=='failure') {
-									appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
-					                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
-					                 '<span class="srm_urll" style="display:none">' + url + '</span>' +
-					                 '<a style="cursor:pointer" class="single_srm">' + '' + '</a> </span>';
-								} else {
-									//data.srm_entry.expiration))
-									for(var key in data) {
-										alert('kley : ' + file_id + ' ' + key + ' ' + data[key]);
-									}
-									
-									appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
-					                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
-					                 '<span class="srm_urll" style="display:none">' + url + '</span>' +
-					                 '<a style="cursor:pointer" class="single_srm">' + ' exp' + 
-					                 'HTTP' + '</a> </span>';
-								}
-								//
-								//if(data=='failure') {
-								//	appendedFiles += '<span>expired</span>';
-								//	appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
-					            //     '<span class="file_id" style="display:none">' + file_id + '</span>' + 
-					            //     '<span class="srm_urll" style="display:none">' + url + '</span>' +
-					            //     '<a style="cursor:pointer" class="single_srm">' + 'SRM' + '</a> </span>';
-								
-								//} else {
-									//alert('shouldnt b here');
-								//}
-								//
-							},
-							error: function() {
-								alert('error');
-							}
-						});
-						*/
 						
-						if(ESGF.setting.srmCacheOn) {
-							
-							/*
-							var queryString = 
-					    	{
-					    			"file_id" : file_id
-							};
-							
-							var srmcache_url = '/esgf-web-fe/srmcache/getCache';
-							
-							$.ajax({
-								url: srmcache_url,
-								global: false,
-								type: "GET",
-								data: queryString,
-								async: false,
-								//dataType: 'json',
-								success: function(data) {
-									//alert('data: ' + data);
-									if(data=='current') {
-										appendedFiles += '<span>current</span>';
-										appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
-						                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
-						                 '<span class="srm_urll" style="display:none">' + url + '</span>' +
-						                 '<a style="cursor:pointer" class="single_srm">' + 'HTTP' + '</a> </span>';
-										
-										
-									} else {
-										appendedFiles += '<span>expired</span>';
-										appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
-						                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
-						                 '<span class="srm_urll" style="display:none">' + url + '</span>' +
-						                 '<a style="cursor:pointer" class="single_srm">' + 'SRM' + '</a> </span>';
-									}
-									
-									
-								},
-								error: function(jqXHR, textStatus,errorThrown) {
-									//alert('error retrieving data from srm');
-									alert('textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
-								}
-							});
-							*/
-						}
 						
 					} else {
 						if(openid != 'anonymousUser') {
@@ -479,6 +336,7 @@
 					}
 					
 				}
+
 				appendedFiles += '</tr>';
 			
 			}
@@ -506,6 +364,7 @@
 		    	//extract the dataset Id from the span tag
 				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
 				
+				alert('expand datasetit: ' + selectedDocId);
 				
 				var hideFilesStyle = $(this).parent().find('a.hideAllFiles_short').attr('style');//html();
 				
@@ -774,6 +633,99 @@
 
 
 
+
+/*
+$.ajax({
+	url: filetransformer_url,
+	global: false,
+	type: "GET",
+	async: false,
+	data: queryString,
+	success: function(data) {
+		//alert('data: ' + data);
+		
+		appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
+         '<span class="file_id" style="display:none">' + file_id + '</span>' + 
+         '<span class="srm_urll" style="display:none">' + data + '</span>' +
+         '<a style="cursor:pointer" href="' + data + '">' + 'HTTP' + '</a> </span>';
+		
+		filetransformer_url = '/esgf-web-fe/gridftpfile';
+		$.ajax({
+			url: filetransformer_url,
+			global: false,
+			type: "GET",
+			async: false,
+			data: queryString,
+			success: function(data) {
+				if(ESGF.setting.globusonline) {
+					appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
+					                 '<span class="file_id" style="display:none">' + file_id + '</span>' + 
+					                 '<span class="globus_url" style="display:none">' + data + '</span>' +
+					                 '<a style="cursor:pointer" class="go_individual_gridftp_short">' + 'Globus Online' + '</a> </span>';
+					
+				}
+				
+			},
+			error: function() {
+				alert('go error');
+			}
+		});
+		
+		
+	}, 
+	error: function() {
+		alert('error');
+	}
+	
+});
+*/
+
+/*
+$.ajax({
+	url: srmcache_url,
+	global: false,
+	type: "GET",
+	async: false,
+	data: queryString,
+	//dataType: 'json',
+	success: function(data) {
+		//alert(data);
+		//really shouldn't be a failure but if it is...
+		if(data=='failure') {
+			appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
+             '<span class="file_id" style="display:none">' + file_id + '</span>' + 
+             '<span class="srm_urll" style="display:none">' + url + '</span>' +
+             '<a style="cursor:pointer" class="single_srm">' + '' + '</a> </span>';
+		} else {
+			//data.srm_entry.expiration))
+			for(var key in data) {
+				alert('kley : ' + file_id + ' ' + key + ' ' + data[key]);
+			}
+			
+			appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
+             '<span class="file_id" style="display:none">' + file_id + '</span>' + 
+             '<span class="srm_urll" style="display:none">' + url + '</span>' +
+             '<a style="cursor:pointer" class="single_srm">' + ' exp' + 
+             'HTTP' + '</a> </span>';
+		}
+		//
+		//if(data=='failure') {
+		//	appendedFiles += '<span>expired</span>';
+		//	appendedFiles += '<span syle="word-wrap: break-word;vertical-align:middle;text-align:right">' +
+        //     '<span class="file_id" style="display:none">' + file_id + '</span>' + 
+        //     '<span class="srm_urll" style="display:none">' + url + '</span>' +
+        //     '<a style="cursor:pointer" class="single_srm">' + 'SRM' + '</a> </span>';
+		
+		//} else {
+			//alert('shouldnt b here');
+		//}
+		//
+	},
+	error: function() {
+		alert('error');
+	}
+});
+*/
 
 
 

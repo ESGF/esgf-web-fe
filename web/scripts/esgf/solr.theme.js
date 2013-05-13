@@ -314,6 +314,10 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                 	
                 	}
                 	
+                	var queryString = {
+                			'dataset_id' : evt.data.doc.id
+                	};
+                	
                 	//put into datacart
                 	var datacartControllerUrl = '/esgf-web-fe/datacartcontroller2/datacart';
                 	$.ajax({
@@ -321,7 +325,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     					global: false,
     					type: 'POST',
     					async: false,
-    					//data: queryString,
+    					data: queryString,
     					success: function(data) {
     						alert('success');
     					},
@@ -350,6 +354,28 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             	//remove from super cookie
             	ESGF.localStorage.remove('dataCart',evt.data.doc.id);
 
+            	alert('removing: ' + evt.data.doc.id);
+            	
+            	var queryString = {
+            			'dataset_id' : evt.data.doc.id
+            	};
+            	//remove the datacart from the session
+            	var datacartControllerUrl = '/esgf-web-fe/datacartcontroller2/datacart';
+            	$.ajax({
+					url: datacartControllerUrl,
+					global: false,
+					type: 'DELETE',
+					async: false,
+					data: queryString,
+					success: function(data) {
+						alert('success');
+					},
+					error: function(jqXHR) {
+						alert('error status: ' + jqXHR.status);
+					}
+				});
+				
+            	
             	//remove from stateful super cookie
                 var key = ESGF.localStorage.toString('esgf_fq');
                 var value = evt.data.doc.id;

@@ -2,7 +2,10 @@ package org.esgf.datacart;
 
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Stack;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -61,15 +64,20 @@ public class DatacartController2 {
     
     @RequestMapping(method=RequestMethod.GET, value="/datacartAll")
     public @ResponseBody Map<String,String> getAllDatacart(HttpServletRequest request,HttpSession session) {
+        System.out.println("Getting the whole datacart");
+        
         Enumeration e = session.getAttributeNames();
         while( e.hasMoreElements() ) {
             String key = (String) e.nextElement();
+            System.out.println("Key: " + key);
             if(key.equals("datacart")) {
                 Map<String,String> datacartMap = (Map<String,String>)session.getAttribute(key);
                 return datacartMap;
                 
             } 
         }
+        
+        System.out.println("\n\nReturning empty hashmap?\n\n");
         return new HashMap<String,String>();
         
     }
@@ -109,34 +117,58 @@ public class DatacartController2 {
     }
     
     @RequestMapping(method=RequestMethod.DELETE, value="/datacart")
-    public @ResponseBody void deleteDatacart(HttpServletRequest request,HttpSession session) {
+    public @ResponseBody void deleteDatacartEntry(HttpServletRequest request,HttpSession session) {
+        
+        Enumeration n = request.getParameterNames();
+        while( n.hasMoreElements() ) {
+            String key = (String) n.nextElement();
+            System.out.println("Key: " + key);
+        }
         
         String dataset_id = request.getParameter("dataset_id");
         if(dataset_id != null) {
-            System.out.println("DELETING DATACART entry");
-            
+            System.out.println("DELETING DATACART entry " + dataset_id);
             Enumeration e = session.getAttributeNames();
             while( e.hasMoreElements() ) {
                 String key = (String) e.nextElement();
                 if(key.equals("datacart")) {
                     Map<String,String> datacartMap = (Map<String,String>)session.getAttribute(key);
-                    for(Object datacartKey : datacartMap.keySet()) {
-                        String datacartKeyStr = (String) datacartKey;
-                        System.out.println("\tkey: " + datacartKeyStr);
-                        if(datacartKeyStr.equals(dataset_id)) {
-                            String value = datacartMap.get(datacartKeyStr);
-                            datacartMap.remove(datacartKeyStr);
-                            session.setAttribute("datacart", datacartMap);
-                        }
-                    }
-                    //return "not found";
+                    session.removeAttribute(key);
+                    datacartMap.remove(dataset_id);
+                    session.setAttribute("datacart", datacartMap);
                 }
             }
-            
+        } else {
+            System.out.println("Dataset ID is null");
         }
         
-        //HttpSession session = request.getSession();
         
+        
+        
+    }
+    
+    @RequestMapping(method=RequestMethod.DELETE, value="/datacartAll")
+    public @ResponseBody void deleteDatacart(HttpServletRequest request,HttpSession session) {
+        
+        System.out.println("DELETING DATACART entries");
+        
+        Stack<String> stack = new Stack<String>();
+        
+        Enumeration e = session.getAttributeNames();
+        while( e.hasMoreElements() ) {
+            String key = (String) e.nextElement();
+            if(key.equals("datacart")) {
+                //Map<String,String> datacartMap = (Map<String,String>)session.getAttribute(key);
+                //session.removeAttribute(key);
+                stack.push(key);
+                
+            }
+        }
+        while(!stack.empty()) {
+            String key = stack.pop();
+            session.removeAttribute(key);
+        }
+            
         
         
         

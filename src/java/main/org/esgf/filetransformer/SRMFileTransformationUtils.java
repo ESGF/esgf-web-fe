@@ -6,7 +6,7 @@ import java.util.List;
 
 public class SRMFileTransformationUtils {
 
-    public static String THREDDS_DATAROOT = "/thredds/fileServer/esg_dataroot/";
+    public static String THREDDS_DATAROOT = "/thredds/fileServer/esg_srm_dataroot/";
     
     public static void main(String [] args) {
         String url = "srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?" +
@@ -39,7 +39,7 @@ public class SRMFileTransformationUtils {
         
         http = http.replace(":2811","");
         
-        http = http.replace("//lustre/esgfs/", THREDDS_DATAROOT);
+        http = http.replace("//lustre/esgfs/SRMTemp", THREDDS_DATAROOT);
         
         
         return http;

@@ -240,8 +240,8 @@ $(document).ready(function(){
 					alert('An email has been sent to your account.  Please follow the instructions included.');
 					// $('#srm_response').append("Staging successfully launched"); 
 				},
-				error: function() {
-					alert('srm error');
+				error: function (request, status, error) {
+			        alert("SRM Request error: " + request.responseText);
 				}
 				
 	    	});

@@ -14,6 +14,7 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.esgf.propertiesreader.PropertiesReader;
 import org.esgf.propertiesreader.PropertiesReaderFactory;
 import org.esgf.srm.SRMControls;
+import org.esgf.srm.SRMProxyController;
 import org.esgf.srm.SRMResponse;
 
 public class ProductionSRMWorkflow extends SRMWorkflow {
@@ -58,10 +59,15 @@ public class ProductionSRMWorkflow extends SRMWorkflow {
         PostMethod method = new PostMethod(srm_props.getValue("srm_api_url"));
         String queryString = "";
         String unencodedQueryString = "";
-
+        //int file_length = file_urls.length;
+        int file_length = SRMProxyController.TEST_NUMFILE_LIMIT;
+        
         //add the urls
-        for(int i=0;i<file_urls.length;i++) {
+        for(int i=0;i<file_length;i++) {
 
+            //System.out.println("fileurls: " + i + " " + file_urls[i]);
+            System.out.println("queryString: " + queryString);
+            //System.exit(0);
             if(i == 0 && file_urls.length == 1) {
                 queryString += "url=";
                 unencodedQueryString += "url=";
@@ -86,8 +92,8 @@ public class ProductionSRMWorkflow extends SRMWorkflow {
         }
 
 
-        queryString += "&length=" + file_urls.length;
-        unencodedQueryString += "&length=" + file_urls.length;
+        queryString += "&length=" + file_length;
+        unencodedQueryString += "&length=" + file_length;
 
         queryString += "&file_request_type=" + "http";
         

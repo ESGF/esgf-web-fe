@@ -60,8 +60,6 @@ public class SRMProxyController {
 
     private static String DB_TYPE = "postgres";
 
-    private static String SCRIPT_NAME = "wget";
-    private static String SCRIPT_COMPLEXITY = "basic";
     
     
     //anything over 25 doesn't work ... must fix
@@ -82,6 +80,16 @@ public class SRMProxyController {
     private Email initialEmail;
     private Email confirmationEmail;
     private SRMResponse srm_response;
+    
+    
+    
+    private boolean srmproxydebugflag = true;
+    private boolean emailTextflag = true;
+
+    private static String SCRIPT_NAME = "wget";
+    private static String SCRIPT_COMPLEXITY = "basic";
+    
+    public static int TEST_NUMFILE_LIMIT = 12;
     
     
     public static void main(String [] args) {
@@ -149,20 +157,40 @@ public class SRMProxyController {
         
         String type = input.getType();
         String scriptType = input.getScriptType();
-        
         String dataset_id = input.getDataset_id();
+        String file_id = input.getFile_id();
+        String srm_url = input.getFile_url();
+        String constraints = input.getConstraints();
+        String filtered = input.getFiltered();
+
+        if(srmproxydebugflag) {
+            System.out.println("---Input params to SRMProxy---");
+            System.out.println("\tSRMController ScriptType: " + scriptType);
+            System.out.println("\tSRMController Type: " + type);
+            System.out.println("\tSRMController datasetid: " + dataset_id);
+            System.out.println("\tSRMController fileid: " + file_id);
+            System.out.println("\tSRMController srmurl: " + srm_url);
+            System.out.println("\tSRMController constraints: " + constraints);
+            System.out.println("\tSRMController filtered: " + filtered);
+            System.out.println("---End Input params to SRMProxy---");
+        }
         
-        System.out.println("SRMController datasetid: " + dataset_id);
         
         //get email address here (either from default or the oepnid)
         String openId = "jfharney";
         String emailAddr = EmailUtils.getEmailAddrFromOpenId(openId);
+        
+
         
         String [] file_urls = null;
         String [] file_ids = null;
         String [] checksums = null;
         String [] checksumTypes = null;
         
+        //choose flow between the two types
+        // - if it is a dataset type, that means the user has selected srm requests for all files in a dataset
+                     
+        // - if it is a file type, that means the user has selected an individual file in a dataset
         if(type.equals("Dataset")) {
 
             //System.out.println("In type dataset");
@@ -180,6 +208,7 @@ public class SRMProxyController {
             }
             
             //System.out.println("\n\nNumFiles: " + numFiles + "\n\n");
+            //System.exit(0);
             
             if(numFiles != 0) {
 
@@ -188,6 +217,7 @@ public class SRMProxyController {
                 checksums = new String[numFiles];
                 checksumTypes = new String[numFiles];
             
+                numFiles = TEST_NUMFILE_LIMIT;
                 
                 //grab the file_id, file_url, checksum, checksumType
                 for(int i=0;i<numFiles;i++) {
@@ -199,7 +229,7 @@ public class SRMProxyController {
                     String url = solr_record_url.split("\\|")[0];
                     file_urls[i] = url;
                 
-                    String file_id = solrRecord.getStrField("id");
+                    file_id = solrRecord.getStrField("id");
                     file_ids[i] = file_id;
 
                     String solr_record_checksum = null;
@@ -226,9 +256,6 @@ public class SRMProxyController {
             
         } else {
             
-            //System.out.println("In type file");
-            //files workflow
-            
             file_urls = new String[1];
             
             file_ids = new String[1];
@@ -240,7 +267,7 @@ public class SRMProxyController {
             
             file_urls[0] = file_url;
             
-            String file_id = input.getFile_id();
+            file_id = input.getFile_id();
             if(file_id == null) {
                 file_id = SRMProxyControllerConstants.INPUT_FILE_FILE_ID;
             }
@@ -256,28 +283,39 @@ public class SRMProxyController {
             
         }
         
-        
-        //System.out.println("\n\nDATASET ID: " + dataset_id);
-        //System.out.println("FILE ID: " + file_ids[0] + "\n\n");
-        
+        if(srmproxydebugflag) {
+            System.out.println("DATASET ID: " + dataset_id);
+            System.out.println("FILE ID: " + file_ids[0] + "\n");
+            System.out.println("FILE URL: " + file_urls[0] + "\n");
+        }
+
         
         //send initial email here
         writeInitialEmail(file_urls,emailAddr);
        
+
         
         //execute bestman here
-        //System.out.println("Submitting request...\n");
-        
         SRMWorkflowFactory srm_workflow_factory = new SRMWorkflowFactory();
-        SRMWorkflow srm_workflow_engine = srm_workflow_factory.makeSRMWorkflow("simulation");
-        
+        SRMWorkflow srm_workflow_engine = srm_workflow_factory.makeSRMWorkflow("Production");
         SRMResponse srm_response = srm_workflow_engine.runWorkFlow(file_urls);
+        String respMessage = srm_response.getMessage();
         String [] outputFiles = srm_response.getResponse_urls();
+
+        System.out.println("Response Message: " + respMessage);
+        for(int i=0;i<outputFiles.length;i++) {
+            System.out.println("output file: " + i + " " + outputFiles[i]);
+        }
         
         
         String timeStamp = Long.toString(System.currentTimeMillis());
         long expirationLong = Long.parseLong(timeStamp) + SRMControls.expiration;
         String expiration = Long.toString(expirationLong);
+        
+        System.out.println("---SRM Cache Params---");
+        System.out.println("\ttimeStamp: " + timeStamp);
+        System.out.println("\texpiration: " + expiration);
+        System.out.println("---End SRM Cache Params---");
         
         
         //update the expiration times of the files in the srm_cache
@@ -303,19 +341,30 @@ public class SRMProxyController {
         }
         
         
-        
+
         
         //execute script generator here
         org.esgf.srm.scriptgen.ScriptGenerator scriptGenerator = null;
         
         ScriptGeneratorFactory scriptGeneratorFactory = new ScriptGeneratorFactory();
+
+        //scriptType = "wget";
+        System.out.println("---ScriptGen Params---");
+        System.out.println("\tScriptType: " + scriptType);
+        System.out.println("\tScriptComplexity: " + SCRIPT_COMPLEXITY);
+        System.out.println("---End ScriptGen Params---");
+        
         
         //fix -> scriptType = WGET/GUC, SCRIPTTYPE=basic,complex
         scriptGenerator = scriptGeneratorFactory.makeScriptGenerator(scriptType,SCRIPT_COMPLEXITY);
 
         String script = null;
         
+        
         if(scriptType.equalsIgnoreCase("wget")) {
+            
+            System.out.println("Generating wget ");
+            
             if(SCRIPT_COMPLEXITY.equals("basic")) {
                 ((BasicWgetScriptGenerator) scriptGenerator).setFileStr(outputFiles);
                 script = scriptGenerator.generateScript();
@@ -359,7 +408,10 @@ public class SRMProxyController {
             }
         }
         
-        
+        System.out.println("Script: " + script);
+
+
+
        
         
         
@@ -369,7 +421,9 @@ public class SRMProxyController {
         this.confirmationEmail.setTo(emailAddr);
         Attachment attachment = new Attachment();
         
-        if(!SCRIPT_NAME.equals("wget")) {
+        
+        
+        if(!scriptType.equals("wget")) {
             attachment.setAttachmentName("globus-url-copy.sh");
         } else {
             attachment.setAttachmentName("wget.sh");
@@ -402,7 +456,13 @@ public class SRMProxyController {
 
         String fileName = "/esg/config/Comfirmation_" + scriptType + ".txt";
         this.confirmationEmail.toFile(fileName);
-        //System.out.println(this.confirmationEmail.toString());
+        
+        if(emailTextflag) {
+            System.out.println(this.confirmationEmail.toString());
+        }
+
+        System.exit(0);
+        
         //this.confirmationEmail.sendEmail();
         
         

@@ -90,48 +90,62 @@
 			//event for sending the file id through
 			$('a.single_srm').live('click',function() {
 
-				//alert('HPSS access not supported at this time');
+				var openid = $('span#principal_username').html();
+
+				alert('openidd: ' + openid + ' len: ' + openid.length);
 				
-				var file_id = $(this).parent().find('.file_id').html().trim();
+				openid = 'jfharney';
 				
-				var file_url = $(this).parent().find('.srm_urll').html().trim();
-				
-				//var dataset_id = $(this).parent().parent().parent().parent().find('span.datasetId').html();
-				
-				var dataset_id =  $(this).parent().parent().find('span.srm_dataset_id').html();
-				
-				//type
-				//dataset
-				//filtered
-				//file
-				//file_url
-				
-				var filtered = '';
-				if($("input[id='datacart_filtered']").attr("checked") == undefined) {
-					filtered = 'false';
+				if(openid != 'anonymousUser') {
+					
+					//alert('HPSS access not supported at this time');
+					
+					var file_id = $(this).parent().find('.file_id').html().trim();
+					
+					var file_url = $(this).parent().find('.srm_urll').html().trim();
+					
+					//var dataset_id = $(this).parent().parent().parent().parent().find('span.datasetId').html();
+					
+					var dataset_id =  $(this).parent().parent().find('span.srm_dataset_id').html();
+					
+					//type
+					//dataset
+					//filtered
+					//file
+					//file_url
+					
+					var filtered = '';
+					if($("input[id='datacart_filtered']").attr("checked") == undefined) {
+						filtered = 'false';
+					} else {
+						filtered = 'true';
+					}
+					
+					
+					//var datasetArg = 'datasetId=' + selectedDocId;
+					var typeArg = "type=File";
+					var filteredArg = 'filtered=' + filtered;
+					var fileArg = 'file_id=' + file_id;
+					var fileUrlArg = 'file_url=' + file_url;
+					var selectedDocIdArg = "dataset_id=" + dataset_id;
+					
+					
+					//var srm_url = '/esgf-web-fe/srmview?datasetId=' + selectedDocId + '&type=Dataset';
+			    	
+					var srm_service_url = '/esgf-web-fe/srmview?' + typeArg + '&' + filteredArg + '&' + fileArg + '&' + fileUrlArg + '&' + selectedDocIdArg;
+					
+					alert('srm_service_url: ' + srm_service_url);
+					
+					//send request
+			        jQuery('<form action="'+ srm_service_url +'" method="post">'+''+'</form>')
+			        .appendTo('body').submit().remove();
+			        
+					
 				} else {
-					filtered = 'true';
+					alert('Cannot access SRM as anonymous user.  Please log in before proceeding.');
 				}
 				
 				
-				//var datasetArg = 'datasetId=' + selectedDocId;
-				var typeArg = "type=File";
-				var filteredArg = 'filtered=' + filtered;
-				var fileArg = 'file_id=' + file_id;
-				var fileUrlArg = 'file_url=' + file_url;
-				var selectedDocIdArg = "dataset_id=" + dataset_id;
-				
-				
-				//var srm_url = '/esgf-web-fe/srmview?datasetId=' + selectedDocId + '&type=Dataset';
-		    	
-				var srm_service_url = '/esgf-web-fe/srmview?' + typeArg + '&' + filteredArg + '&' + fileArg + '&' + fileUrlArg + '&' + selectedDocIdArg;
-				
-				alert('srm_service_url: ' + srm_service_url);
-				
-				//send request
-		        jQuery('<form action="'+ srm_service_url +'" method="post">'+''+'</form>')
-		        .appendTo('body').submit().remove();
-		        
 	    	});
 	    	
 	    	

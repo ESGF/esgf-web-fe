@@ -119,6 +119,8 @@
 			
 			var self = this;
 			
+			alert('in the empty file message');
+			
 			var view_first_files_tag = self.view_first_files_tag + 'initial_true_' + ESGF.datacart.replaceChars(data.doc.datasetId);
 			
 	    	
@@ -359,12 +361,11 @@
 				
 				var openid = $('span#principal_username').html();
 		    	
-				
+
 				
 		    	//extract the dataset Id from the span tag
 				var selectedDocId = ($(this).parent().parent().find('span.datasetId').html()).trim();
 				
-				alert('expand datasetit: ' + selectedDocId);
 				
 				var hideFilesStyle = $(this).parent().find('a.hideAllFiles_short').attr('style');//html();
 				
@@ -458,8 +459,6 @@
 						data: queryStr,
 						dataType: 'json',
 						success: function(data) {
-							
-				
 							
 							//no files
 							if(data.doc.files.file == undefined) {

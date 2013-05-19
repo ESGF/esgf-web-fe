@@ -127,9 +127,13 @@
               id: 'result',
               target: '#search-results'
             }));
-		
+
          Manager.addWidget(new AjaxSolr.CacheClearWidget({
              id: 'clearall'
+           }));
+
+         Manager.addWidget(new AjaxSolr.TooltipsWidget({
+             id: 'tooltips'
            }));
 		
          

@@ -910,3 +910,24 @@ legend#more_constraints{
     text-align: center;
     color: #FF0000;
 }
+
+
+
+
+/* tool tips */
+#hint {
+	cursor:pointer;
+}
+	
+.tooltip{
+	margin:8px;
+	padding:8px;
+	border:1px solid blue;
+	background-color:yellow;
+	position: absolute;
+	z-index: 2;
+}
+
+
+
+

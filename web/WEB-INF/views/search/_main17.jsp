@@ -34,6 +34,64 @@
     padding:10px 0 10px 45px;
     font-size:20px;
 }
+
+
+.tip{
+ display:none;
+ background-color:whitesmoke; 
+ width: 100px;
+ height: 50px; 
+}
+
+
+.tipsy { font-size: 10px; position: absolute; padding: 5px; z-index: 100000; }
+  .tipsy-inner { background-color: #000; color: #FFF; max-width: 200px; padding: 5px 8px 4px 8px; text-align: center; }
+
+  /* Rounded corners */
+  .tipsy-inner { border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; }
+  
+  /* Uncomment for shadow */
+  /*.tipsy-inner { box-shadow: 0 0 5px #000000; -webkit-box-shadow: 0 0 5px #000000; -moz-box-shadow: 0 0 5px #000000; }*/
+  
+  .tipsy-arrow { position: absolute; width: 0; height: 0; line-height: 0; border: 5px dashed #000; }
+  
+  /* Rules to colour arrows */
+  .tipsy-arrow-n { border-bottom-color: #000; }
+  .tipsy-arrow-s { border-top-color: #000; }
+  .tipsy-arrow-e { border-left-color: #000; }
+  .tipsy-arrow-w { border-right-color: #000; }
+  
+	.tipsy-n .tipsy-arrow { top: 0px; left: 50%; margin-left: -5px; border-bottom-style: solid; border-top: none; border-left-color: transparent; border-right-color: transparent; }
+    .tipsy-nw .tipsy-arrow { top: 0; left: 10px; border-bottom-style: solid; border-top: none; border-left-color: transparent; border-right-color: transparent;}
+    .tipsy-ne .tipsy-arrow { top: 0; right: 10px; border-bottom-style: solid; border-top: none;  border-left-color: transparent; border-right-color: transparent;}
+  .tipsy-s .tipsy-arrow { bottom: 0; left: 50%; margin-left: -5px; border-top-style: solid; border-bottom: none;  border-left-color: transparent; border-right-color: transparent; }
+    .tipsy-sw .tipsy-arrow { bottom: 0; left: 10px; border-top-style: solid; border-bottom: none;  border-left-color: transparent; border-right-color: transparent; }
+    .tipsy-se .tipsy-arrow { bottom: 0; right: 10px; border-top-style: solid; border-bottom: none; border-left-color: transparent; border-right-color: transparent; }
+  .tipsy-e .tipsy-arrow { right: 0; top: 50%; margin-top: -5px; border-left-style: solid; border-right: none; border-top-color: transparent; border-bottom-color: transparent; }
+  .tipsy-w .tipsy-arrow { left: 0; top: 50%; margin-top: -5px; border-right-style: solid; border-left: none; border-top-color: transparent; border-bottom-color: transparent; }
+
+
+
+
+/*
+.tooltip {
+    display:none;
+    background:transparent url(/esgf-web-fe/images/black_arrow.png); 
+    background: orange;
+    font-size:12px;
+    height:70px;
+    width:160px;
+    padding:25px;
+    color:#eee;
+  }
+    
+  #demo img {
+    border:0;
+    cursor:pointer;
+    margin:0 1px;
+  }
+*/
+
 </style>
 
 
@@ -59,32 +117,40 @@
 			<div id="search_help"><a href="http://www.esgf.org/wiki/ESGF_Web_Search_User_Guide" style="font-size:10px" >Search Help</a></div>
 	    	<div id="search_cv"><a href="http://www.esgf.org/wiki/ESGF_Search_CV" style="font-size:10px" >Search Controlled Vocabulary</a></div>
 	    </div>
-	   	
-	   	  
+	  
 		
 		
 		
 </div>
 
 <div class="span-18 last" style="margin-bottom:15px"> 
-		<!--  
-			<input class="distribbutton1" id="distribbutton" type="submit" style="margin-left:20px" alt="distrib submit" />
-		-->
 		<div class="span-12 last">
-		<!--  <input type="checkbox" alt="distrib checkbox" class="distribcheckbox1" id="distribcheckbox" style="margin-left:20px" checked="yes" /> <span style="font-weight:bold">Search All Sites</span> -->
-			<!--  
-		    <input type="checkbox" alt="distrib checkbox" class="distribcheckbox1" id="distribcheckbox" style="margin-left:20px"/> <span style="font-weight:bold">Search All Sites</span>
-			-->
+			
 			<!--   <label style="display: block;float: left;padding-right: 10px;white-space: nowrap;"> -->
 				<input type="checkbox" alt="distrib checkbox" class="distribcheckbox1" id="distribcheckbox" style="vertical-align: middle;margin-left:10px;padding-bottom:10px"/><span style="font-weight:bold;padding-top:10px;vertical-align: middle;">Search All Sites</span>
 				<input type="checkbox" alt="replica checkbox" class="replicacheckbox1" id="replicacheckbox" style="vertical-align: middle;margin-left:10px;padding-bottom:10px"/> <span style="font-weight:bold;padding-top:10px;vertical-align: middle;">Show All Replicas</span>
 				<input type="checkbox" alt="versions checkbox" class="versioncheckbox1" id="versioncheckbox" style="vertical-align: middle;margin-left:10px;padding-bottom:10px"/> <span style="font-weight:bold;padding-top:10px;vertical-align: middle;">Show All Versions</span>
 				<!--  </label> -->
-			<!--  
-			jQuery(list).append('<div><label style="display: block;float: left;padding-right: 10px;white-space: nowrap;"><input type="checkbox" alt="param checkbox" id="read_params" style="vertical-align: middle;padding-bottom:10px" name="checkBox"><span style="font-size:12px;padding-top:5px;vertical-align: middle;">Include URL Parameters</span></label></div>');
-			-->
+			
+			
 		
 		</div>
+		
+		
+		<table id='gravity' cellspacing='5'>
+  <tr>
+    <td>
+      <a id='north-west' href='#' title='This is an example of north-west gravity'>Northwest</a>
+    </td>
+    <td>
+      <a id='north' href='#' title='This is an example of north gravity'>North</a>
+    </td>
+    <td>
+      <a id='north-east' href='#' title='This is an example of north-east gravity'>Northeast</a>
+    </td>
+  </tr>
+</table>
+		
 		<!--  
 		<div class="span-12 last">
 		<input type="checkbox" alt="param checkbox" class="urlparamscheckbox1" id="urlparamscheckbox" style="vertical-align: middle;margin-left:10px;padding-bottom:10px"/> <span style="font-weight:bold;padding-top:10px;vertical-align: middle;">Include URL Parameters</span>		
@@ -302,7 +368,55 @@
                 Manager.doRequest(0);
             }
         });
+         
+        $('#somecontent a').mouseover(function(){
+            if(!$('#somecontent .tip').exists())
+            {
+                // add your tip to the dom
+                $('#somecontent').append('<div class="tip">Tool Tip Stuff Here</div>');
+                
+                // animate the display if you wish
+                $('#somecontent .tip').fadeIn('slow', function() {
+                });
+                
+                // remove element on mouse out
+                $('.tip').mouseout(function(){
+                   $(this).remove();
+                })
+            }
+        });
+
+         
         
+        $('#example-1').tipsy();
+        
+        $('#auto-gravity').tipsy({gravity: $.fn.tipsy.autoNS});
+        
+        $('#example-fade').tipsy({fade: true});
+        
+        $('#example-custom-attribute').tipsy({title: 'id'});
+        $('#example-callback').tipsy({title: function() { return this.getAttribute('original-title').toUpperCase(); } });
+        $('#example-fallback').tipsy({fallback: "Where's my tooltip yo'?" });
+        
+        $('#example-html').tipsy({html: true });
+        
+        //$('.tipsy').bind('mouseout',function() {alert('here')});
+            
+            $('#south').tipsy({gravity: 's'});
+            $('#east').tipsy({gravity: 'e'});
+            $('#west').tipsy({gravity: 'w'});
+            $('#north-west').tipsy({gravity: 'nw'});
+            $('#north-east').tipsy({gravity: 'ne'});
+            $('#south-west').tipsy({gravity: 'sw'});
+            $('#south-east').tipsy({gravity: 'se'});
+          
+            $('#north').hover(function() {
+            	var flag = true;
+            	if(flag) {
+                	$('#north').tipsy({delayOut: 10000,gravity: 'n'});
+            	}
+            	
+            });
         
     });
 

@@ -149,6 +149,19 @@ ESGF.setting.srm_url_root = '/esg-srm/';
 
 
 ESGF.setting.lasRestrictions = new Array();
+
+ESGF.setting.tooltipOn = {};
+ESGF.setting.tooltipContent = {};
+
+//for the 
+ESGF.setting.tooltipOn.nonfiltered = true;
+ESGF.setting.tooltipContent.nonfiltered = 'Get/Display all files associated with dataset';
+
+//for the tool tip in the datacart filter over text
+ESGF.setting.tooltipOn.filtered = true;
+ESGF.setting.tooltipContent.filtered = 'Get/Display all files associated with dataset that matches the text ';
+
+
 /**
  * Proxy for creating the template for file downloads.
  *

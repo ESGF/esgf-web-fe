@@ -156,7 +156,8 @@ public class RamSRMCacheStore extends SRMCacheStore {
                     //System.out.println("Dataset: " + dataset_ids.get(i) + " " + file_id);
                     String timeStamp = Long.toString(System.currentTimeMillis());
                     String isCached = "N/A";
-                    SRMEntry srm_entry = new SRMEntry(file_id,dataset_id,isCached,timeStamp);
+                    String bestmannumber = "V-0.0.0000";
+                    SRMEntry srm_entry = new SRMEntry(file_id,dataset_id,isCached,timeStamp,bestmannumber);
                     this.srm_entries.add(srm_entry);
                 }
                 
@@ -194,7 +195,7 @@ public class RamSRMCacheStore extends SRMCacheStore {
     }
 
     @Override
-    public int updateAllSRMEntriesForDatasetId(String dataset_id) {
+    public int updateAllSRMEntriesForDatasetId(String dataset_id,String [] file_ids,String [] response_urls) {
         // TODO Auto-generated method stub
         return 0;
     }

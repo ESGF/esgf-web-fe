@@ -20,7 +20,7 @@ public class SRMCacheStoreController {
 
     private long BESTMAN_EXPIRATION = (24*60*60*1000);
     
-    private static String DB_TYPE = "postgres";
+    public static String DB_TYPE = "postgres";
 
     //private static String failure_message = "failure";
     //private static String success_message = "success";
@@ -61,9 +61,9 @@ public class SRMCacheStoreController {
         this.success_message = srm_props.getValue("success_message");
         this.failure_message = srm_props.getValue("failure_message");
         
-        //srm_cache.initializeCacheStore();
+        srm_cache.initializeCacheStore();
         
-        //System.exit(0);
+        System.exit(0);
         
     }
     
@@ -95,8 +95,10 @@ public class SRMCacheStoreController {
         long expirationLong = Long.parseLong(timeStamp) + SRMControls.expiration;
         String expiration = Long.toString(expirationLong);
         
+        String bestmannumber = "V-0.0.0000";
+        
         //SRMEntry srm_entry = new SRMEntry(file_id,dataset_id,isCached,timeStamp,expiration,openid);
-        SRMEntry srm_entry = new SRMEntry(file_id,dataset_id,timeStamp,expiration);
+        SRMEntry srm_entry = new SRMEntry(file_id,dataset_id,timeStamp,expiration,bestmannumber);
 
         if(srm_cache.addSRMEntry(srm_entry) == 0) {
             return success_message;

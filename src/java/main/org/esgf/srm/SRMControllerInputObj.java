@@ -1,5 +1,7 @@
 package org.esgf.srm;
 
+import org.esgf.srm.utils.SRMUtils;
+
 public class SRMControllerInputObj {
 
     private String file_id;
@@ -12,13 +14,13 @@ public class SRMControllerInputObj {
     private String openid;
     
     public SRMControllerInputObj() {
-        this.setFile_id(SRMProxyControllerConstants.INPUT_FILE_FILE_ID);
-        this.setFile_url(SRMProxyControllerConstants.INPUT_FILE_FILE_URL);
-        this.setDataset_id(SRMProxyControllerConstants.INPUT_DATASET_ID);
-        this.setFiltered(SRMProxyControllerConstants.INPUT_FILTERED);
-        this.setType(SRMProxyControllerConstants.INPUT_TYPE_FILE);
-        this.constraints = SRMProxyControllerConstants.INPUT_CONSTRAINTS;
-        this.setScriptType(SRMProxyControllerConstants.INPUT_SCRIPT_TYPE);
+        this.setFile_id(SRMUtils.INPUT_FILE_FILE_ID);
+        this.setFile_url(SRMUtils.INPUT_FILE_FILE_URL);
+        this.setDataset_id(SRMUtils.INPUT_DATASET_ID);
+        this.setFiltered(SRMUtils.INPUT_FILTERED);
+        this.setType(SRMUtils.INPUT_TYPE_FILE);
+        this.constraints = SRMUtils.INPUT_CONSTRAINTS;
+        this.setScriptType(SRMUtils.INPUT_SCRIPT_TYPE);
         this.openid = "https://esg.ccs.ornl.gov/esgf-idp/openid/jfharney";
     }
     

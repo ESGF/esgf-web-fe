@@ -1,7 +1,7 @@
 package org.esgf.service.test;
 
 import org.esgf.srm.SRMProxyController;
-import org.esgf.srm.SRMProxyControllerConstants;
+import org.esgf.srm.utils.SRMUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 public class SRMProxyControllerTester {
@@ -12,7 +12,7 @@ public class SRMProxyControllerTester {
     public static void main(String [] args) {
         
         
-        test3();
+        test1();
         
         
         
@@ -24,13 +24,13 @@ public class SRMProxyControllerTester {
         final MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
         String dataset_id = "ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1" + DATASET_NODE;
-        String file_id = "ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1ÉFAMIPr.cam2.h0.1978-12.nc" + DATASET_NODE;
+        String file_id = "ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-12.nc" + DATASET_NODE;
         
         mockRequest.addParameter("dataset_id", dataset_id);
-        mockRequest.addParameter("constraints", SRMProxyControllerConstants.INPUT_CONSTRAINTS);
+        mockRequest.addParameter("constraints", SRMUtils.INPUT_CONSTRAINTS);
         mockRequest.addParameter("file_id", file_id);
         mockRequest.addParameter("file_url", "srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?SFN=mss://esg2-sdnl1.ccs.ornl.gov//proj/cli049/UHRGCS/ORNL/CESM1/t341f02.FAMIPr/atm/hist/t341f02.FAMIPr.cam2.h0.1978-10.nc");
-        mockRequest.addParameter("open_id", SRMProxyControllerConstants.INPUT_OPEN_ID);
+        mockRequest.addParameter("open_id", SRMUtils.INPUT_OPEN_ID);
         mockRequest.addParameter("type", "Dataset");
         mockRequest.addParameter("scriptType", "WGET");
         
@@ -45,13 +45,13 @@ public class SRMProxyControllerTester {
         final MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
         String dataset_id = "ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1" + DATASET_NODE;
-        String file_id = "ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1ÉFAMIPr.cam2.h0.1978-12.nc" + DATASET_NODE;
+        String file_id = "ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-12.nc" + DATASET_NODE;
         
         mockRequest.addParameter("dataset_id", dataset_id);
-        mockRequest.addParameter("constraints", SRMProxyControllerConstants.INPUT_CONSTRAINTS);
+        mockRequest.addParameter("constraints", SRMUtils.INPUT_CONSTRAINTS);
         mockRequest.addParameter("file_id", file_id);
         mockRequest.addParameter("file_url", "srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?SFN=mss://esg2-sdnl1.ccs.ornl.gov//proj/cli049/UHRGCS/ORNL/CESM1/t341f02.FAMIPr/atm/hist/t341f02.FAMIPr.cam2.h0.1978-10.nc");
-        mockRequest.addParameter("open_id", SRMProxyControllerConstants.INPUT_OPEN_ID);
+        mockRequest.addParameter("open_id", SRMUtils.INPUT_OPEN_ID);
         mockRequest.addParameter("type", "File");
         mockRequest.addParameter("scriptType", "GUC");
         
@@ -67,13 +67,13 @@ public class SRMProxyControllerTester {
         final MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
         String dataset_id = "ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1" + DATASET_NODE;
-        String file_id = "ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1ÉFAMIPr.cam2.h0.1978-12.nc" + DATASET_NODE;
+        String file_id = "ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-12.nc" + DATASET_NODE;
         
         mockRequest.addParameter("dataset_id", dataset_id);
-        mockRequest.addParameter("constraints", SRMProxyControllerConstants.INPUT_CONSTRAINTS);
+        mockRequest.addParameter("constraints", SRMUtils.INPUT_CONSTRAINTS);
         mockRequest.addParameter("file_id", file_id);
         mockRequest.addParameter("file_url", "srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?SFN=mss://esg2-sdnl1.ccs.ornl.gov//proj/cli049/UHRGCS/ORNL/CESM1/t341f02.FAMIPr/atm/hist/t341f02.FAMIPr.cam2.h0.1978-10.nc");
-        mockRequest.addParameter("open_id", SRMProxyControllerConstants.INPUT_OPEN_ID);
+        mockRequest.addParameter("open_id", SRMUtils.INPUT_OPEN_ID);
         mockRequest.addParameter("type", "File");
         mockRequest.addParameter("scriptType", "WGET");
         

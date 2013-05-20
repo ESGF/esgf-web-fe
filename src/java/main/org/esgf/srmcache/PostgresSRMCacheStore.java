@@ -9,12 +9,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.esgf.filetransformer.SRMFileTransformationUtils;
 import org.esgf.propertiesreader.PropertiesReader;
 import org.esgf.propertiesreader.PropertiesReaderFactory;
 import org.esgf.solr.model.Solr;
 import org.esgf.solr.model.SolrRecord;
 import org.esgf.solr.model.SolrResponse;
 import org.esgf.srm.SRMControls;
+import org.esgf.srm.utils.SRMUtils;
 
 public class PostgresSRMCacheStore extends SRMCacheStore {
 
@@ -45,8 +47,11 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                 "(file_id varchar(128),dataset_id varchar(128),isCached varchar(32),timeStamp varchar(128), expiration varchar(128),openid varchar(256), primary key (file_id,dataset_id,openid));";
         */
         
+      //create_table_SQL = "create table " + table_name + 
+        //        "(file_id varchar(128),dataset_id varchar(128),timeStamp varchar(128), expiration varchar(128),primary key (file_id,dataset_id));";
+      
         create_table_SQL = "create table " + table_name + 
-                "(file_id varchar(128),dataset_id varchar(128),timeStamp varchar(128), expiration varchar(128),primary key (file_id,dataset_id));";
+                "(file_id varchar(128),dataset_id varchar(128),timeStamp varchar(128), expiration varchar(128), bestmanNumber varchar(128), primary key (file_id,dataset_id));";
         
         
         drop_table_SQL = "drop table " + table_name + ";";
@@ -64,11 +69,6 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                     srm_props.getValue("srm_valid_user"),
                     srm_props.getValue("srm_valid_password"));
             
-            /*
-            this.connection = DriverManager.getConnection(
-                    "jdbc:postgresql://127.0.0.1:5432/" + SRMControls.db_name, SRMControls.valid_user,
-                    SRMControls.valid_password);
-            */
             //check to see if the table exists
             boolean tableExists = false;
             
@@ -113,10 +113,11 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                 String dataset_idVal = (String)rs.getObject("dataset_id");
                 String timeStampVal = (String)rs.getObject("timeStamp");
                 String expirationVal = (String)rs.getObject("expiration");
+                String bestmannumberVal = (String)rs.getObject("bestmannumber");
                 //String isCachedVal = (String)rs.getObject("isCached");
                 //String openidVal = (String)rs.getObject("openid");
                 //srm_entry = new SRMEntry(file_idVal,dataset_idVal,isCachedVal,timeStampVal,expirationVal,openidVal);
-                srm_entry = new SRMEntry(file_idVal,dataset_idVal,timeStampVal,expirationVal);
+                srm_entry = new SRMEntry(file_idVal,dataset_idVal,timeStampVal,expirationVal,bestmannumberVal);
             }
             
         } catch (SQLException e) {
@@ -149,8 +150,9 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                 //String isCachedVal = (String)rs.getObject("isCached");
                 //String openidVal = (String)rs.getObject("openid");
                 String expirationVal = (String)rs.getObject("expiration");
+                String bestmannumberVal = (String)rs.getObject("bestmannumber");
                 //srm_entry = new SRMEntry(file_idVal,dataset_idVal,isCachedVal,timeStampVal,expirationVal,openidVal);
-                srm_entry = new SRMEntry(file_idVal,dataset_idVal,timeStampVal,expirationVal);
+                srm_entry = new SRMEntry(file_idVal,dataset_idVal,timeStampVal,expirationVal,bestmannumberVal);
                 srm_entries.add(srm_entry);
             }
             
@@ -171,12 +173,13 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
 
         
         String updateCommand = "insert into " + table_name + 
-                " (file_id,dataset_id,timeStamp,expiration) values (" +
+                " (file_id,dataset_id,timeStamp,expiration,bestmannumber) values (" +
                 "'" + srm_entry.getFile_id() + "'," +
                 "'" + srm_entry.getDataset_id() + "'," +
                 //"'" + srm_entry.getIsCached() + "'," +
                 "'" + srm_entry.getTimeStamp() + "'," +
-                "'" + srm_entry.getExpiration() + "'" +
+                "'" + srm_entry.getExpiration() + "'," +
+                "'" + srm_entry.getBestmannumber() + "'" +
                 //"'" + srm_entry.getOpenid() +
                 ");";
 
@@ -210,7 +213,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
         return 0;
     }
     
-    public int updateAllSRMEntriesForDatasetId(String dataset_id) {
+    public int updateAllSRMEntriesForDatasetId(String dataset_id,String [] file_ids,String [] response_urls) {
         Statement st = null;
         ResultSet rs = null;
         
@@ -219,38 +222,48 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
         long expirationLong = Long.parseLong(timeStamp) + SRMControls.expiration;
         //String openid = "openid";
         
-        String updateCommand = "update " + table_name + 
-                               " set " + 
-                               //"file_id='" + srm_entry.getFile_id() + "'," +
-                               //"dataset_id='" + srm_entry.getDataset_id() + "'," +
-                               //"isCached='" + isCached + "'," +
-                               "timeStamp='" + timeStamp + "'," +
-                               "expiration='" + Long.toString(expirationLong) + "'" +
-                               //"openid='" + openid + "' 
-                               " where " +
-                               "dataset_id='" + dataset_id +
-                               "';";
-              
-
-        
         int update = -1;
-        if (this.connection != null) {
-            try {
-
-                st = connection.createStatement();
-                update = st.executeUpdate(updateCommand);
-                st.close();
-            } catch(SQLException e) {
-                
-            }
-        } else {
-            System.out.println("Not connected to the database");
-        }
         
-        //System.out.println("Update command: " + updateCommand + " " + update);
+        if(file_ids.length == response_urls.length) {
+            
+            for(int i=0;i<file_ids.length;i++) {
+                String file_id = file_ids[i];
+                
+                String bestmannum = SRMFileTransformationUtils.extractBestmanNumFromUrl(response_urls[i]);
+                
+                String updateCommand = "update " + table_name + 
+                                       " set " + 
+                                       "bestmannumber='" + bestmannum + "'," +
+                                       "timeStamp='" + timeStamp + "'," +
+                                       "expiration='" + Long.toString(expirationLong) + "'" +
+                                       " where " +
+                                       "dataset_id='" + dataset_id + "' AND " +
+                                       "file_id='" + file_id +
+                                       "';";
+                      
+                if(SRMUtils.updateAllSRMEntriesForDatasetIdFlag)
+                    System.out.println("Update: " + updateCommand);
+                
+                if (this.connection != null) {
+                    try {
+        
+                        st = connection.createStatement();
+                        update = st.executeUpdate(updateCommand);
+                        st.close();
+                    } catch(SQLException e) {
+                        
+                    }
+                } else {
+                    System.out.println("Not connected to the database");
+                }
+            }
+            
+        }
         
         return update;
     }
+    
+    
 
     public int updateSRMEntry(SRMEntry srm_entry) {
         
@@ -260,18 +273,16 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
         
         String updateCommand = "update " + table_name + 
                                " set " + 
-                               //"isCached='" + srm_entry.getIsCached() + "'," +
                                "timeStamp='" + srm_entry.getTimeStamp() + "'," +
+                               "bestmannumber='" + srm_entry.getBestmannumber() + "'," +
                                "expiration='" + srm_entry.getExpiration() + "'" +
-                               //"openid='" + srm_entry.getOpenid() + "'" +
                                	" where " +
                                "file_id='" + srm_entry.getFile_id() + "' and " +
                                "dataset_id='" + srm_entry.getDataset_id() +
                                "';";
               
 
-        
-        System.out.println("Update command: " + updateCommand);
+        System.out.println("Update: " + updateCommand);
         
         if (this.connection != null) {
             try {
@@ -398,8 +409,10 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                             
                             long expirationLong = Long.parseLong(timeStamp) + SRMControls.expiration;
 
+                            String bestmannumber = "V-0.0.000000";
+                            
                             //SRMEntry srm_entry = new SRMEntry(file_id,dataset_id,isCached,timeStamp,timeStamp,"openid");
-                            SRMEntry srm_entry = new SRMEntry(file_id,dataset_id,timeStamp,timeStamp);
+                            SRMEntry srm_entry = new SRMEntry(file_id,dataset_id,timeStamp,timeStamp,bestmannumber);
                             
                             //this.srm_entries.add(srm_entry);
                             
@@ -539,8 +552,9 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                 //String isCachedVal = (String)rs.getObject("isCached");
                 //String openidVal = (String)rs.getObject("openid");
                 String expirationVal = (String)rs.getObject("expiration");
+                String bestmannumberVal = (String)rs.getObject("bestmannumber");
                 //srm_entry = new SRMEntry(file_idVal,dataset_idVal,isCachedVal,timeStampVal,expirationVal,openidVal);
-                srm_entry = new SRMEntry(file_idVal,dataset_idVal,timeStampVal,expirationVal);
+                srm_entry = new SRMEntry(file_idVal,dataset_idVal,timeStampVal,expirationVal,bestmannumberVal);
                 srm_entries.add(srm_entry);
             }
             

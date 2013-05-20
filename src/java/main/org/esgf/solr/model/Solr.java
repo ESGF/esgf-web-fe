@@ -15,7 +15,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.esgf.srm.SRMControls;
-import org.esgf.srm.SRMUtils;
+import org.esgf.srm.utils.SRMUtils;
 
 public class Solr {
     

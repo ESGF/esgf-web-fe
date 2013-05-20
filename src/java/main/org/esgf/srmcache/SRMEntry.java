@@ -17,6 +17,7 @@ public class SRMEntry {
     private String timeStamp;
     //private String openid;
     private String expiration;
+    private String bestmannumber;
   
 
     /*
@@ -29,12 +30,22 @@ public class SRMEntry {
         this.openid = openid;
     }
     */
-    
+
+    /*
     public SRMEntry(String file_id,String dataset_id,String timeStamp,String expiration) {
         this.file_id = file_id;
         this.dataset_id = dataset_id;
         this.timeStamp = timeStamp;
         this.expiration = expiration;
+    }
+    */
+    
+    public SRMEntry(String file_id,String dataset_id,String timeStamp,String expiration,String bestmannumber) {
+        this.file_id = file_id;
+        this.dataset_id = dataset_id;
+        this.timeStamp = timeStamp;
+        this.expiration = expiration;
+        this.setBestmannumber(bestmannumber);
     }
     
     public SRMEntry(String file_id,String dataset_id) {
@@ -227,6 +238,20 @@ public class SRMEntry {
 
     public void setExpiration(String expiration) {
         this.expiration = expiration;
+    }
+
+    /**
+     * @return the bestmannumber
+     */
+    public String getBestmannumber() {
+        return bestmannumber;
+    }
+
+    /**
+     * @param bestmannumber the bestmannumber to set
+     */
+    public void setBestmannumber(String bestmannumber) {
+        this.bestmannumber = bestmannumber;
     }
     
     

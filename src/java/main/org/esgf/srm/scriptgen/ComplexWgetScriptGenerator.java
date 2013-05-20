@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.esgf.filetransformer.SRMFileTransformationUtils;
-import org.esgf.srm.SRMUtils;
+import org.esgf.srm.utils.SRMUtils;
 
 public class ComplexWgetScriptGenerator extends WgetScriptGenerator {
 

@@ -2,22 +2,41 @@ package org.esgf.filetransformer;
 
 import java.io.File;
 import java.util.List;
+import java.util.Random;
 
+import org.esgf.bestmanpath.BestmanPathGenerator;
+import org.esgf.bestmanpath.BestmanPathGeneratorFactory;
+
+/**
+ * 
+gsiftp://esg.ccs.ornl.gov//lustre/esgfs/SRMTemp/shared/V.0.0-1034476012/t341f02.FAMIPr.cam2.h0.1979-06.nc
+
+wget http://esg.ccs.ornl.gov/thredds/fileServer/esg_srm_dataroot/SRMTemp/shared/V.0.0-10999984/t341f02.FAMIPr.cam2.h0.1978-10.nc
+
+ * 
+ * @author 8xo
+ *
+ */
 
 public class SRMFileTransformationUtils {
 
-    public static String THREDDS_DATAROOT = "/thredds/fileServer/esg_srm_dataroot/";
+    public static String THREDDS_DATAROOT = "/thredds/fileServer/esg_srm_dataroot";
+    
+    public static String BESTMAN_PATH_GENERATOR_TYPE = "Random";
     
     public static void main(String [] args) {
         String url = "srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?" +
                 "SFN=mss://esg2-sdnl1.ccs.ornl.gov//proj/cli049/UHRGCS/ORNL/CESM1/" +
                 "t341f02.FAMIPr/atm/hist/t341f02.FAMIPr.cam2.h0.1978-09.nc";
    
+        
+        
+        /*
+        String path = extractFilePathNameFromUrl(url);
+        
         String file = extractFileNameFromUrl(url);
-        //System.out.println(file);
         
         String revisedUrl = replaceHostName(url);
-        System.out.println(revisedUrl);
         
         String [] urls = new String [1];
         urls[0] = url;
@@ -26,6 +45,19 @@ public class SRMFileTransformationUtils {
         for(int i=0;i<outputFiles.length;i++) {
             System.out.println("i: " + outputFiles[i] + " " + gridftp2http(outputFiles[i]));
         }
+        */
+        
+        FileTransformerFactory factory = new FileTransformerFactory();
+        
+        FileTransformer filetrans = null;
+        
+        filetrans = factory.makeFileTransformer("SRM",url);
+        
+        
+        System.out.println(filetrans.getGridFTP());
+        
+        System.out.println(filetrans.getHttp());
+        
     }
     
     
@@ -39,7 +71,7 @@ public class SRMFileTransformationUtils {
         
         http = http.replace(":2811","");
         
-        http = http.replace("//lustre/esgfs/SRMTemp", THREDDS_DATAROOT);
+        http = http.replace("//lustre/esgfs", THREDDS_DATAROOT);
         
         
         return http;
@@ -76,6 +108,27 @@ public class SRMFileTransformationUtils {
         return newFileName;
     }
     
+    public static String extractFilePathNameFromUrl(String url) {
+        String newFileName = "";
+        String tempStr = "";
+        
+        int counter = url.length()-1;
+        char ch = url.charAt(counter);
+        while(ch != '/') {
+            tempStr += ch;
+            ch = url.charAt(counter);
+            counter--;
+        }   
+        
+        newFileName = url.substring(0, (counter+1));
+        
+        return newFileName;
+    }
+    
+    public static String extractBestmanNumFromUrl(String url) {
+        return extractFileNameFromUrl(extractFilePathNameFromUrl(url));
+    }
+   
     
     //simulate
     //input
@@ -86,14 +139,29 @@ public class SRMFileTransformationUtils {
     
         String [] outputFiles = new String [inputFiles.length];
         
+        //System.out.println("file urls length: " + inputFiles.length);
+        
+        
+        
         for(int i=0;i<inputFiles.length;i++) {
+            //System.out.println("input file: " + i + " " + inputFiles[i]);
             String tempFile = inputFiles[i].replace("srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?SFN=mss://", "file:///");
             //tempFile = transformServerName(tempFile);
             
             File f = new File(tempFile);
             String fileName = f.getName();
             
-            String outputFile = "gsiftp://esg.ccs.ornl.gov:2811//lustre/esgfs/SRM/" + fileName;
+            String file_id = "";
+            String dataset_id = "";
+            
+            BestmanPathGeneratorFactory bestmanPathGeneratorFactory = new BestmanPathGeneratorFactory();
+            BestmanPathGenerator bestmanNumGenerator = 
+                    bestmanPathGeneratorFactory.makeBestmanPathGenerator(BESTMAN_PATH_GENERATOR_TYPE,dataset_id,file_id);
+            
+            String bestmannum = bestmanNumGenerator.getBestmanPath();
+            
+            
+            String outputFile = "gsiftp://esg.ccs.ornl.gov:2811//lustre/esgfs/shared/" + bestmannum + "/" + fileName;
             
             outputFiles[i] = outputFile;
         }

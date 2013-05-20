@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.esgf.datacart.XmlFormatter;
-import org.esgf.srm.SRMUtils;
+import org.esgf.srm.utils.SRMUtils;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 

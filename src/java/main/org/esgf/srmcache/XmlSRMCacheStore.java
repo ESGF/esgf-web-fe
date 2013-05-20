@@ -59,7 +59,7 @@ public class XmlSRMCacheStore extends SRMCacheStore {
     }
 
     @Override
-    public int updateAllSRMEntriesForDatasetId(String dataset_id) {
+    public int updateAllSRMEntriesForDatasetId(String dataset_id,String [] file_ids,String [] response_urls) {
         // TODO Auto-generated method stub
         return 0;
     }

@@ -16,6 +16,7 @@ import org.esgf.propertiesreader.PropertiesReaderFactory;
 import org.esgf.srm.SRMControls;
 import org.esgf.srm.SRMProxyController;
 import org.esgf.srm.SRMResponse;
+import org.esgf.srm.utils.SRMUtils;
 
 public class ProductionSRMWorkflow extends SRMWorkflow {
 
@@ -60,7 +61,7 @@ public class ProductionSRMWorkflow extends SRMWorkflow {
         String queryString = "";
         String unencodedQueryString = "";
         //int file_length = file_urls.length;
-        int file_length = SRMProxyController.TEST_NUMFILE_LIMIT;
+        int file_length = SRMUtils.TEST_NUMFILE_LIMIT;
         
         //add the urls
         for(int i=0;i<file_length;i++) {

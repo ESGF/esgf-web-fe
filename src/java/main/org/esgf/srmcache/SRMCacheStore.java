@@ -16,7 +16,7 @@ public abstract class SRMCacheStore {
     
     //put
     public abstract int updateSRMEntry(SRMEntry srm_entry);
-    public abstract int updateAllSRMEntriesForDatasetId(String dataset_id);
+    public abstract int updateAllSRMEntriesForDatasetId(String dataset_id,String [] file_ids,String [] response_urls);
     
     //delete
     public abstract int deleteSRMEntry(SRMEntry srm_entry);

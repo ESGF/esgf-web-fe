@@ -3,6 +3,8 @@ package org.esgf.accounts;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -174,11 +176,13 @@ public class CreateAccountController {
      * @param errors
      */
     private final void validate(final CreateAccountBean user, final BindingResult errors) {
-                
+        //added MBH 5/13/13 system can not handle special characters.
+        NoSpecialCharacters(user, errors);
+        
         // validate first name
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "error.required", "'First Name' is required");
         if (StringValidationUtils.hasInvalidCharacters(user.getFirstName())) errors.rejectValue("firstName", "error.invalid", new Object[] {}, getInvalidCharactersErrorMessage("First Name"));
-
+                
         // validate middle name
         if (StringValidationUtils.hasInvalidCharacters(user.getMiddleName())) errors.rejectValue("middleName", "error.invalid", new Object[] {}, getInvalidCharactersErrorMessage("Middle Name"));
 
@@ -219,6 +223,31 @@ public class CreateAccountController {
 
     }
     
+    private void NoSpecialCharacters(final CreateAccountBean user, final BindingResult errors) {
+        Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
+        System.out.println("in NoSpecialCharacters...");
+        Matcher firstName = p.matcher(user.getFirstName());
+        if (firstName.find()) errors.rejectValue("firstName", "error.invalid", new Object[] {}, getSpecialCharactersErrorMessage("First name"));
+        Matcher middleName = p.matcher(user.getMiddleName());
+        if (middleName.find()) errors.rejectValue("middleName", "error.invalid", new Object[] {}, getSpecialCharactersErrorMessage("Middle name"));
+        Matcher lastName = p.matcher(user.getLastName());
+        if (lastName.find()) errors.rejectValue("lastName", "error.invalid", new Object[] {}, getSpecialCharactersErrorMessage("Last name"));
+        Matcher userName = p.matcher(user.getUserName());
+        if (userName.find()) errors.rejectValue("userName", "error.invalid", new Object[] {}, getSpecialCharactersErrorMessage("User name"));
+        Matcher organization = p.matcher(user.getOrganization());
+        if (organization.find()) errors.rejectValue("organization", "error.invalid", new Object[] {}, getSpecialCharactersErrorMessage("Organization"));
+        Matcher city = p.matcher(user.getCity());
+        if (city.find()) errors.rejectValue("city", "error.invalid", new Object[] {}, getSpecialCharactersErrorMessage("City"));
+        Matcher state = p.matcher(user.getState());
+        if (state.find()) errors.rejectValue("state", "error.invalid", new Object[] {}, getSpecialCharactersErrorMessage("State"));
+        Matcher country = p.matcher(user.getCountry());
+        if (country.find()) errors.rejectValue("country", "error.invalid", new Object[] {}, getSpecialCharactersErrorMessage("Country"));
+    }
+
+    private String getSpecialCharactersErrorMessage(String word) {
+        return word + " cannot contain any special characters. only [^a-zA-Z0-9]*";
+    }
+
     private final String getInvalidCharactersErrorMessage(final String field) {
         return "'" + field + "' cannot contain any of the characters: > < # $ & ! / \\";
     }

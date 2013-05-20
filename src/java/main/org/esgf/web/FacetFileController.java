@@ -168,11 +168,14 @@ public class FacetFileController {
                 try {
                     int index = Integer.parseInt(valueTokens[0]);
                     
-                    if(index < properties.size()) {
+                    if(index > -1) {
+                        if(index < properties.size()) {
 
-                        String facetInfo = (String)key + ":" + valueTokens[1] + ":" + valueTokens[2];
-                        facetTokens[index] = facetInfo;
+                            String facetInfo = (String)key + ":" + valueTokens[1] + ":" + valueTokens[2];
+                            facetTokens[index] = facetInfo;
+                        }
                     }
+                    
                     
                 } 
                 //Note: need to fix this.  This will only work if ALL facet readings are wrong
@@ -248,6 +251,10 @@ public class FacetFileController {
         }
         System.out.println(facets.length);
         
+        
+        int neg = Integer.parseInt("-1");
+        
+        System.out.println(neg);
     }
     
     

@@ -245,7 +245,7 @@ public class CreateAccountController {
     }
 
     private String getSpecialCharactersErrorMessage(String word) {
-        return word + " cannot contain any special characters. only [^a-zA-Z0-9]*";
+        return word + " cannot contain any special characters. only ^[a-zA-Z0-9]*";
     }
 
     private final String getInvalidCharactersErrorMessage(final String field) {

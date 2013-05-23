@@ -155,11 +155,15 @@ ESGF.setting.tooltipContent = {};
 
 //for the 
 ESGF.setting.tooltipOn.nonfiltered = true;
-ESGF.setting.tooltipContent.nonfiltered = 'Get/Display all files associated with dataset';
+ESGF.setting.tooltipContent.nonfiltered = 'Displays all files associated with dataset';
 
 //for the tool tip in the datacart filter over text
 ESGF.setting.tooltipOn.filtered = true;
-ESGF.setting.tooltipContent.filtered = 'Get/Display all files associated with dataset that matches the text ';
+ESGF.setting.tooltipContent.filtered = 'Use the text box on top to sub-select the files of a dataset by a matching string.  ' +
+									   '(e.g enter "tas" for those files that contain "tas" or ' + 
+									   'restrict to a specific variable by entering ' +
+									   '"variable:tas")<br />Click the "Search" button for ' +
+									   'constraint to take effect. <br />';//'Filters files over the content in the textbar';
 
 
 /**

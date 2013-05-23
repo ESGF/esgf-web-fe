@@ -130,13 +130,11 @@
 				<input type="checkbox" alt="distrib checkbox" class="distribcheckbox1" id="distribcheckbox" style="vertical-align: middle;margin-left:10px;padding-bottom:10px"/><span style="font-weight:bold;padding-top:10px;vertical-align: middle;">Search All Sites</span>
 				<input type="checkbox" alt="replica checkbox" class="replicacheckbox1" id="replicacheckbox" style="vertical-align: middle;margin-left:10px;padding-bottom:10px"/> <span style="font-weight:bold;padding-top:10px;vertical-align: middle;">Show All Replicas</span>
 				<input type="checkbox" alt="versions checkbox" class="versioncheckbox1" id="versioncheckbox" style="vertical-align: middle;margin-left:10px;padding-bottom:10px"/> <span style="font-weight:bold;padding-top:10px;vertical-align: middle;">Show All Versions</span>
-				<!--  </label> -->
-			
-			
-		
+				
 		</div>
 		
 		
+<!--  	
 		<table id='gravity' cellspacing='5'>
   <tr>
     <td>
@@ -150,12 +148,8 @@
     </td>
   </tr>
 </table>
-		
-		<!--  
-		<div class="span-12 last">
-		<input type="checkbox" alt="param checkbox" class="urlparamscheckbox1" id="urlparamscheckbox" style="vertical-align: middle;margin-left:10px;padding-bottom:10px"/> <span style="font-weight:bold;padding-top:10px;vertical-align: middle;">Include URL Parameters</span>		
-		</div>
-		-->
+-->	
+
 </div>
 
 <div class="span-20 last" id="search-summary" style="margin-top:0px;">
@@ -369,6 +363,7 @@
             }
         });
          
+         /*
         $('#somecontent a').mouseover(function(){
             if(!$('#somecontent .tip').exists())
             {
@@ -385,9 +380,10 @@
                 })
             }
         });
-
+		*/
          
         
+		/*
         $('#example-1').tipsy();
         
         $('#auto-gravity').tipsy({gravity: $.fn.tipsy.autoNS});
@@ -417,7 +413,7 @@
             	}
             	
             });
-        
+        */
     });
 
 </script>

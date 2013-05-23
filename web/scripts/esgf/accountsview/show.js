@@ -90,6 +90,7 @@ function showmore(user){
 
 function showAllGroups(openId){
   $("div .SAR").hide();
+  $("div .clock").show();
   document.getElementById('groupsRegistered').innerHTML = 'Federation Groups Registered';
   
   var Parent = document.getElementById('groups_admin_table_id');
@@ -134,18 +135,22 @@ function showAllGroups(openId){
           $("div .loading").hide();
           $("div .loaded").hide();
         }
+        $("div .clock").hide();
       } 
       else {
 	   	  $("div .error").html(data.EditOutput.comment);
         $("div .middle").append($("div .error"));
 	   		$("div .error").show();
+	   		$("div .clock").hide();
 	   	}
 	  },
 		error: function(request, status, error) {
 			$("div .error").html(request + " | " + status + " | " + error);
 			$("div .middle").append($("div .error"));
-      $("div .error").show();
+			$("div .error").show();
+			$("div .clock").hide();
 	  }
   });	
+	
 }
 

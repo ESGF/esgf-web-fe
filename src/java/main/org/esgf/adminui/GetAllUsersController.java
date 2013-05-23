@@ -1,18 +1,12 @@
 package org.esgf.adminui;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.esgf.commonui.GroupOperationsESGFDBImpl;
-import org.esgf.commonui.GroupOperationsInterface;
-import org.esgf.commonui.GroupOperationsXMLImpl;
 import org.esgf.commonui.UserOperationsESGFDBImpl;
 import org.esgf.commonui.UserOperationsInterface;
 import org.esgf.commonui.UserOperationsXMLImpl;
@@ -21,6 +15,8 @@ import org.esgf.metadata.JSONException;
 import org.esgf.metadata.JSONObject;
 import org.esgf.metadata.XML;
 import org.jdom.JDOMException;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,9 +43,29 @@ public class GetAllUsersController {
     private UserInfoCredentialedDAO myUserInfoDAO;
     private UserOperationsInterface uoi; 
     
-        
+    public static void main(String [] args) {    
+        final MockHttpServletRequest mockRequest = new MockHttpServletRequest();
+        final MockHttpServletResponse mockResponse = new MockHttpServletResponse();
+        GetAllUsersController gauc = new GetAllUsersController();
+        mockRequest.addParameter("query", "rootAdmin");
+        try {
+            gauc.doPost(mockRequest, mockResponse);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (JDOMException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    } 
+    
     public GetAllUsersController() {
-        
         try {
             if(Utils.environmentSwitch) {
                 // try to set up myUserInfoDAO here.
@@ -68,11 +84,8 @@ public class GetAllUsersController {
         catch(Exception e) {
             e.printStackTrace();
         }
-        
-        
         LOG.debug("IN GetAllUsersController Constructor");
     }
-    
     
     /**
      * Note: GET and POST contain the same functionality.
@@ -85,7 +98,6 @@ public class GetAllUsersController {
     @RequestMapping(method=RequestMethod.GET)
     public @ResponseBody String doGet(HttpServletRequest request, HttpServletResponse response) {
         LOG.debug("GetAllUsersController doGet");
-
         return "";        
     }
     
@@ -103,6 +115,9 @@ public class GetAllUsersController {
         String query = (String)request.getParameter("query");
         String username =  "";
         String isRoot = "";
+        String ids = "";
+        int start = 1;
+        int end = 0;
         boolean error = false;
         String errormessage = "";        
         JSONObject jsonObj = null;
@@ -110,23 +125,32 @@ public class GetAllUsersController {
         try {
             jsonObj = new JSONObject(query);
             username = jsonObj.getString("userName");
+            start = Integer.parseInt(jsonObj.getString("start"));
+            end = Integer.parseInt(jsonObj.getString("end"));
+            System.out.println(start + "   " + end); 
         } catch (JSONException e) {
-            LOG.debug("error in parsing the json text string :" + query);
+            System.out.println("error in parsing the json text string :" + query);
             errormessage = "error in parsing the json text string :" + query;
             error = true;
         }
-
-        // method call for openids tied to passed email
-        List<User> openidList = uoi.getAllUsers();
-        String ids = "";
-
-        for(User u : openidList){
-          String userName = u.getUserName();
-          String lastName = u.getLastName();
-          String firstName = u.getFirstName();
-          String userEmail = u.getEmailAddress();
-          String openId = u.getOpenId();
-          ids += userName + "," + lastName + "," + firstName + "," + userEmail + "," + openId + "][";
+        
+        try{
+            // method call for openids tied to passed email
+            List<User> openidList = uoi.getSomeUsers(start, end);
+            System.out.println("openidList.size = " + openidList.size());
+    
+            for(User u : openidList){
+              String userName = u.getUserName();
+              String lastName = u.getLastName();
+              String firstName = u.getFirstName();
+              String userEmail = u.getEmailAddress();
+              String openId = u.getOpenId();
+              ids += userName + "," + lastName + "," + firstName + "," + userEmail + "," + openId + "][";
+            }
+        } catch(Exception e){
+            error = true;
+            errormessage = "exception = " + e;
+            System.out.println(e);
         }
 
         //System.out.println(ids);
@@ -139,7 +163,9 @@ public class GetAllUsersController {
           errormessage = "You are not root. Only the root admin may edit users information.";
           error = true;
         }
-
+System.out.println("error = " + error);
+System.out.println("errormessage = " + errormessage);
+System.out.println("ids = " + ids);
         String xmlOutput = "<EditOutput>";
         if(error){
           xmlOutput += "<status>fail</status>";
@@ -156,9 +182,5 @@ public class GetAllUsersController {
 
         String jsonContent = jo.toString();        
         return jsonContent;
-
     }
-        
 }
-
-

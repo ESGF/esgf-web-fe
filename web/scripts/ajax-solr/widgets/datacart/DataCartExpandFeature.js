@@ -147,6 +147,8 @@
 
 			var self = this;
 			
+			
+			
 			var initialStr = 'initial_' + new String(initial);
 			
 			var appendedFiles = '';
@@ -263,6 +265,7 @@
 								if(data == 'success') {
 									isCached = true;
 								}
+								
 							},
 							error: function() {
 								alert('error in isCached');

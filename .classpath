@@ -2,11 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src/java/main"/>
 	<classpathentry kind="src" path="src/java/test"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
-		<attributes>
-			<attribute name="owner.project.facets" value="java"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=esgf-web-fe&amp;ivyXmlPath=ivy.xml&amp;confs=*&amp;ivySettingsPath=%24%7Bworkspace_loc%3Aesgf-web-fe%2Fivysettings.xml%7D&amp;loadSettingsOnDemand=false&amp;propertyFiles="/>
 	<classpathentry kind="lib" path="/Users/8xo/esgProjects/esgf-web-fe3/esgf-web-fe/lib/fetched/compile/activation-1.1.jar"/>
 	<classpathentry kind="lib" path="/Users/8xo/esgProjects/esgf-web-fe3/esgf-web-fe/lib/fetched/compile/annotations-api-6.0.29.jar"/>
@@ -124,5 +119,6 @@
 	<classpathentry kind="lib" path="/Users/8xo/esgProjects/esgf-web-fe3/esgf-web-fe/lib/fetched/compile/xmlsec-1.4.2.jar"/>
 	<classpathentry kind="lib" path="/Users/8xo/esgProjects/esgf-web-fe3/esgf-web-fe/lib/fetched/compile/xmltooling-1.2.2.jar"/>
 	<classpathentry kind="lib" path="/Users/8xo/esgProjects/esgf-web-fe3/esgf-web-fe/lib/fetched/compile/XSGroupRole-1.0.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

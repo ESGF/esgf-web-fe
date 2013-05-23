@@ -166,7 +166,7 @@ public class SRMProxyController {
         // - if it is a file type, that means the user has selected an individual file in a dataset
         if(type.equals("Dataset")) {
 
-            //System.out.println("In type dataset");
+            System.out.println("In type dataset");
             
             String query = "*";
             dataset_id = input.getDataset_id();
@@ -195,23 +195,29 @@ public class SRMProxyController {
                     SolrRecord solrRecord = solrResponse.getSolrRecords().get(i);
                     String solr_record_url = solrRecord.getArrField("url").get(0);
                     
-                    //System.out.println("srm_url: " + solr_record_url);
+                    System.out.println("srm_url: " + solr_record_url);
                     
                     String url = solr_record_url.split("\\|")[0];
                     file_urls[i] = url;
                 
+                    System.out.println("Here?");
+                    
                     file_id = solrRecord.getStrField("id");
                     file_ids[i] = file_id;
 
+                    System.out.println("Here2?");
+                    
                     String solr_record_checksum = null;
                     String solr_record_checksum_type = null;
-                    if(solrRecord.getArrField("checksum") == null) {
+                    if(solrRecord.getArrField("checksum") == null || solrRecord.getArrField("checksum").size() == 0) {
                         solr_record_checksum = "null";
                         solr_record_checksum_type = "null";
                     } else {
                         solr_record_checksum = solrRecord.getArrField("checksum").get(0);
                         solr_record_checksum_type = solrRecord.getArrField("checksum_type").get(0);
                     }
+
+                    System.out.println("Here3?");
                     
                     checksums[i] = solr_record_checksum;
                     checksumTypes[i] = solr_record_checksum_type;
@@ -263,8 +269,9 @@ public class SRMProxyController {
         }
 
         //send initial email here
-        writeInitialEmail(file_urls,emailAddr);
+        //writeInitialEmail(file_urls,emailAddr);
        
+        System.out.println("\n\n\n\nBefore Bestman\n\n\n");
         
         //execute bestman here
         SRMWorkflowFactory srm_workflow_factory = new SRMWorkflowFactory();
@@ -274,7 +281,7 @@ public class SRMProxyController {
         String [] outputFiles = srm_response.getResponse_urls();
         String [] response_urls = srm_response.getResponse_urls();
         
-        
+        System.out.println("\n\n\n\nBestman executed\n\n\n");
         
         
         String timeStamp = Long.toString(System.currentTimeMillis());
@@ -308,7 +315,6 @@ public class SRMProxyController {
                 System.out.println("Updating with bestmannumber: " + bestmannumber);
                 
                 System.out.println("file_ids[i] " + file_ids[i]);
-                System.exit(0);
                 
                 SRMEntry srm_entry = new SRMEntry(file_ids[i],dataset_id,timeStamp,expiration,bestmannumber);
                 
@@ -320,7 +326,7 @@ public class SRMProxyController {
 
         
         //execute script generator here
-        
+        /*
         if(SRMUtils.srmproxydebugflag) {
             System.out.println("---ScriptGen Params---");
             System.out.println("\tScriptType: " + scriptType);
@@ -339,7 +345,7 @@ public class SRMProxyController {
         
         
         //this.confirmationEmail.sendEmail();
-        
+        */
         
         
         
@@ -411,7 +417,8 @@ public class SRMProxyController {
         
         SRMControllerInputObj input = this.request2InputObj(request);
         
-        
+        System.out.println("input file id: " + input.getFile_id());
+                
         
         if(input.getType().equals("Dataset")) {
             
@@ -445,12 +452,13 @@ public class SRMProxyController {
             
         } else {
 
-            System.out.println("File");
             
             String file_id = request.getParameter("file_id");
             if(file_id == null) {
+                System.out.println("file_id is null");
                 file_id = SRMUtils.INPUT_FILE_FILE_ID;
             }
+            System.out.println("File " + file_id);
 
             files.add(file_id);
             

@@ -60,13 +60,15 @@ public class ProductionSRMWorkflow extends SRMWorkflow {
         PostMethod method = new PostMethod(srm_props.getValue("srm_api_url"));
         String queryString = "";
         String unencodedQueryString = "";
-        //int file_length = file_urls.length;
-        int file_length = SRMUtils.TEST_NUMFILE_LIMIT;
+        int file_length = file_urls.length;
+        //int file_length = SRMUtils.TEST_NUMFILE_LIMIT;
+        
+        
         
         //add the urls
         for(int i=0;i<file_length;i++) {
 
-            //System.out.println("fileurls: " + i + " " + file_urls[i]);
+            System.out.println("fileurls: " + i + " " + file_urls[i]);
             System.out.println("queryString: " + queryString);
             //System.exit(0);
             if(i == 0 && file_urls.length == 1) {

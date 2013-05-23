@@ -144,7 +144,7 @@ public class SRMFileTransformationUtils {
         
         
         for(int i=0;i<inputFiles.length;i++) {
-            //System.out.println("input file: " + i + " " + inputFiles[i]);
+            System.out.println("\tinput file: " + i + " " + inputFiles[i]);
             String tempFile = inputFiles[i].replace("srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?SFN=mss://", "file:///");
             //tempFile = transformServerName(tempFile);
             
@@ -162,6 +162,7 @@ public class SRMFileTransformationUtils {
             
             
             String outputFile = "gsiftp://esg.ccs.ornl.gov:2811//lustre/esgfs/shared/" + bestmannum + "/" + fileName;
+            System.out.println("\toutput file: " + i + " " + outputFile);
             
             outputFiles[i] = outputFile;
         }

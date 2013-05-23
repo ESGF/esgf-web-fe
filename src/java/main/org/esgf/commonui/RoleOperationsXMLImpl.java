@@ -43,7 +43,6 @@ public class RoleOperationsXMLImpl implements RoleOperationsInterface {
     
     
     
-    @Override
     public Role getRoleForUserInGroup(String userId, String groupId) {
         Role role = null;
         

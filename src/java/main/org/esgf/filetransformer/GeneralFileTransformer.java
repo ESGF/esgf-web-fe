@@ -5,44 +5,29 @@ import java.io.File;
 import org.esgf.bestmanpath.BestmanPathGenerator;
 import org.esgf.bestmanpath.BestmanPathGeneratorFactory;
 
-public class SRMFileTransformer extends FileTransformer {
+public class GeneralFileTransformer extends FileTransformer  {
 
-    public static String THREDDS_DATAROOT = "/thredds/fileServer/esg_dataroot/";
-    
-
-    public SRMFileTransformer(String fileTransformerName) {
+    public GeneralFileTransformer(String fileTransformerName) {
         super(fileTransformerName);
     }
     
-    public SRMFileTransformer(String fileTransformerName,String file_url) {
-        super(fileTransformerName,file_url);
-        System.out.println("\nIn SRMFileTransformer Constructor: " + fileTransformerName + "\n\tfile url: " + file_url);
+    public GeneralFileTransformer(String fileTransformerName,String file_id) {
+        super(fileTransformerName,file_id);
     }
     
+    public GeneralFileTransformer(String fileTransformerName,String file_url,String dataset_id,String file_id) {
+        super(fileTransformerName,file_url,dataset_id,file_id);
+    }
     
+    @Override
     public String getHttp() {
-        
-        /*
-        String tempFile = this.getFileUrl().replace("srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?SFN=mss://", "file:///");
-        
-        File f = new File(tempFile);
-        String fileName = f.getName();
-        
-        String outputFile = "gsiftp://esg.ccs.ornl.gov:2811//lustre/esgfs/SRM/" + fileName;
-        
-        
-        String http = outputFile.replace("gsiftp", "http");
-        
-        http = http.replace(":2811","");
-        
-        http = http.replace("//lustre/esgfs/", THREDDS_DATAROOT);
-        */
-        
+
         String http = SRMFileTransformationUtils.gridftp2http(this.getGridFTP());
         
         return http;
     }
 
+    @Override
     public String getGridFTP() {
 
         String outputFile = "";
@@ -53,8 +38,10 @@ public class SRMFileTransformer extends FileTransformer {
         File f = new File(tempFile);
         String fileName = f.getName();
         
+        /*
         String file_id = "";
         String dataset_id = "";
+        */
         
         BestmanPathGeneratorFactory bestmanPathGeneratorFactory = new BestmanPathGeneratorFactory();
         BestmanPathGenerator bestmanNumGenerator = 
@@ -73,8 +60,10 @@ public class SRMFileTransformer extends FileTransformer {
         return outputFile;
     }
 
+    @Override
     public String getSRM() {
-        return this.getFileUrl();
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override

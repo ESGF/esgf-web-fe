@@ -3,6 +3,7 @@ package org.esgf.srmcache;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -36,6 +37,74 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
     
     private Connection connection;
     
+    public static void main(String [] args) {
+        String sql = "select * from srm_entries where dataset_id='ornl.ultrahighres.CESM1.t85f09.B1850_50yrs.seaIce.v1|esg2-sdnl1.ccs.ornl.gov' AND file_id='ornl.ultrahighres.CESM1.t85f09.B1850_50yrs.seaIce.v1.t85f09.B1850.cice.h.0005-02.nc|esg2-sdnl1.ccs.ornl.gov';";
+    
+        Statement st = null;
+
+        PreparedStatement pst = null;
+        
+        Connection connection = null;
+        
+        PropertiesReaderFactory factory = new PropertiesReaderFactory();
+        PropertiesReader srm_props = factory.makePropertiesReader("SRM");
+
+        System.out.println("IN main");
+        
+        ResultSet rs;
+        try {
+            
+            connection = DriverManager.getConnection(
+                    "jdbc:postgresql://127.0.0.1:5432/" + srm_props.getValue("srm_db_name"), 
+                    srm_props.getValue("srm_valid_user"),
+                    srm_props.getValue("srm_valid_password"));
+            
+            pst = connection.prepareStatement(sql);
+            rs = pst.executeQuery();
+            if(!rs.next()) {
+                System.out.println("RS is null?????");
+            }else {
+                System.out.println("not null");
+            }
+            /*
+             
+            st = connection.createStatement();
+            rs = st.executeQuery(sql);
+            System.out.println("first: " + rs.first());
+            if(!rs.next()) {
+                System.out.println("RS is null?????");
+            }
+            */
+            
+            System.out.println("Executing sql: " + sql);
+        
+            sql = "select * from esgf_security.srm_entries where dataset_id='ornl.ultrahighres.CESM1.t85f09.B1850_50yrs.seaIce.v1|esg2-sdnl1.ccs.ornl.gov' AND file_id='ornl.ultrahighres.CESM1.t85f09.B1850_50yrs.seaIce.v1.t85f09.B1850.cice.h.0005-02.nc|esg2-sdnl1.ccs.ornl.gov'";
+            
+            
+            pst = connection.prepareStatement(sql);
+            rs = pst.executeQuery();
+            if(!rs.next()) {
+                System.out.println("RS is null?????");
+            }else {
+                System.out.println("not null");
+            }
+            /*
+             
+            st = connection.createStatement();
+            rs = st.executeQuery(sql);
+            System.out.println("first: " + rs.first());
+            if(!rs.next()) {
+                System.out.println("RS is null?????");
+            }
+            */
+            System.out.println("Executing sql: " + sql);
+        
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    
+    }
+    
     public PostgresSRMCacheStore() {
         
         PropertiesReaderFactory factory = new PropertiesReaderFactory();
@@ -53,6 +122,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
         create_table_SQL = "create table " + table_name + 
                 "(file_id varchar(128),dataset_id varchar(128),timeStamp varchar(128), expiration varchar(128), bestmanNumber varchar(128), primary key (file_id,dataset_id));";
         
+        System.out.println("in constructor: " + create_table_SQL);
         
         drop_table_SQL = "drop table " + table_name + ";";
 
@@ -96,7 +166,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
     
     public SRMEntry getSRMEntryForFile_id(String dataset_id,String file_id) {
         
-        String sql = "select * from srm_entries where dataset_id='" + dataset_id + "' AND file_id='" + file_id + "';";
+        String sql = "select * from " + table_name +  " where dataset_id='" + dataset_id + "' AND file_id='" + file_id + "';";
         
         Statement st = null;
         int update = 0;
@@ -107,8 +177,22 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
         try {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
-            
+       
+            /*
+            if(!rs.next()) {
+                System.out.println("RS is null?????");
+            }
+            */
+            System.out.println("\tExecuting sql: " + sql);
+            /*
+            if (rs.last()) {
+                System.out.println("Last?");
+                //rowcount = rs.getRow();
+                //rs.beforeFirst(); // not rs.first() because the rs.next() below will move on, missing the first element
+            }
+            */
             while(rs.next()) {
+                System.out.println("\trecord");
                 String file_idVal = (String)rs.getObject("file_id");
                 String dataset_idVal = (String)rs.getObject("dataset_id");
                 String timeStampVal = (String)rs.getObject("timeStamp");
@@ -129,7 +213,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
 
     public List<SRMEntry> getSRMEntriesForDataset_id(String dataset_id) {
         
-        String sql = "select * from srm_entries where dataset_id='" + dataset_id + "';";
+        String sql = "select * from " + table_name + " where dataset_id='" + dataset_id + "';";
         
         Statement st = null;
         int update = 0;
@@ -168,8 +252,8 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
         Statement st = null;
         ResultSet rs = null;
         
-        PropertiesReaderFactory factory = new PropertiesReaderFactory();
-        PropertiesReader srm_props = factory.makePropertiesReader("SRM");
+        //PropertiesReaderFactory factory = new PropertiesReaderFactory();
+        //PropertiesReader srm_props = factory.makePropertiesReader("SRM");
 
         
         String updateCommand = "insert into " + table_name + 
@@ -323,9 +407,10 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                 
                 st = connection.createStatement();
 
-                if(SQLTableExists(connection, table_name)) {
+                //if(SQLTableExists(connection, table_name)) {
                     update = st.executeUpdate(drop_table_SQL);
-                }
+                //}
+                System.out.println(create_table_SQL);
                 update = st.executeUpdate(create_table_SQL);
                
                 
@@ -343,6 +428,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                 solr.addConstraint("limit", Integer.toString(limit));
                 solr.addConstraint("type", core);
 
+                
                 List<String> srms = new ArrayList<String>();
                 List<String> dataset_ids = new ArrayList<String>();
                 
@@ -352,8 +438,11 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                 
                 
                 while(iterate) {
+                    
                     String offset = Integer.toString(counter*limit);
                     solr.addConstraint("offset", Integer.toString(counter*limit));
+                    //System.out.println("\tExecuting solr query");
+                    //System.out.println("\tQueryString->" + solr.getQueryString());
                     solr.executeQuery();
                     
                     
@@ -438,7 +527,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                 
                 
             } catch(SQLException e) {
-                //e.printStackTrace();
+                e.printStackTrace();
             }
             
         }
@@ -488,6 +577,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
         try {
             Statement stmt = connection.createStatement();
             String sqlText = "SELECT tables.table_name FROM information_schema.tables WHERE table_name = '" + tableName + "'";    
+            
             ResultSet rs = stmt.executeQuery(sqlText);
 
             if (rs != null) {
@@ -531,7 +621,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
 
     @Override
     public List<SRMEntry> getSRMEntriesForOpenid(String openid) {
-        String sql = "select * from srm_entries where openid='" + openid + "';";
+        String sql = "select * from " + table_name + " where openid='" + openid + "';";
         
         Statement st = null;
         int update = 0;

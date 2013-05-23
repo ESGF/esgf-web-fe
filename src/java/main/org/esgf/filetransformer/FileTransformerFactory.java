@@ -17,4 +17,10 @@ public class FileTransformerFactory {
         
             
     }
+    
+    public FileTransformer makeFileTransformer(String fileTransformerName,String file_url,String dataset_id,String file_id) {
+        
+        return new GeneralFileTransformer(fileTransformerName,file_url,dataset_id,file_id);
+        
+    }
 }

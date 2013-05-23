@@ -379,7 +379,7 @@ Builds the project via ant (obviously).
     <mkdir dir="${dist_dir}/tmplib"/>
     
     <copy todir="${dist_dir}/tmplib" overwrite="true" flatten="yes">
-      <fileset dir="${lib_runtime_dir}" includes="**/*.jar" />
+      <fileset dir="${lib_runtime_dir}" includes="**/*.jar" excludes="**/*servlet-api*.jar,**/junit*.jar,**/*sources.jar,**/*javadoc.jar" />
     </copy>
     
   	<!-- views.properties bug resolved here

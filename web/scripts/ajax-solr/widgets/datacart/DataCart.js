@@ -388,7 +388,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		
 		var srmdatasetdatacarturl = '/esgf-web-fe/srmdatacartproxy/datacart';
 		
-		alert('dataset_id: ' + dataset_id);
 		
 		var queryString = 
     	{
@@ -397,7 +396,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		
 		var datacart_entry = undefined;
 
-		alert('get entry from url params');
 		
 		$.ajax({
 			url: srmdatasetdatacarturl,

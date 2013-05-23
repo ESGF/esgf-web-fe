@@ -136,6 +136,7 @@ public class SolrResponse {
     public List<String> needsSRM() {
         List<String> needsSRM = new ArrayList<String>();
         
+        System.out.println("Number of solr records: " + this.solrRecords.size());
         for(int i=0;i<this.solrRecords.size();i++) {
             boolean isSRM = false;
             List<String> access = this.solrRecords.get(i).getArrField("access");

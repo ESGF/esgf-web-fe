@@ -92,7 +92,7 @@
 
 				var openid = $('span#principal_username').html();
 
-				alert('openidd: ' + openid + ' len: ' + openid.length);
+				//alert('openidd: ' + openid + ' len: ' + openid.length);
 				
 				openid = 'jfharney';
 				
@@ -134,7 +134,7 @@
 			    	
 					var srm_service_url = '/esgf-web-fe/srmview?' + typeArg + '&' + filteredArg + '&' + fileArg + '&' + fileUrlArg + '&' + selectedDocIdArg;
 					
-					alert('srm_service_url: ' + srm_service_url);
+					//alert('srm_service_url: ' + srm_service_url);
 					
 					//send request
 			        jQuery('<form action="'+ srm_service_url +'" method="post">'+''+'</form>')

@@ -28,6 +28,9 @@ public class FileTransformerController {
      */
     @RequestMapping(method=RequestMethod.GET, value="/srmfile")
     public @ResponseBody String getSRMFile(HttpServletRequest request) {
+        System.out.println("---In srmfile---");
+        
+        
         
         String file_url = request.getParameter("file_url");
         if(file_url == null) {
@@ -59,7 +62,7 @@ public class FileTransformerController {
             filetrans = factory.makeFileTransformer("SRM",file_url);
         }
         
-        //System.out.println(filetrans.getHttp());
+        System.out.println("---End In srmfile---");
             
         return filetrans.getSRM();
     }
@@ -67,6 +70,10 @@ public class FileTransformerController {
     @RequestMapping(method=RequestMethod.GET, value="/gridftpfile")
     public @ResponseBody String getGridFTPFile(HttpServletRequest request) {
        
+        System.out.println("---In gridftpfile---");
+        
+        
+        /*
         String file_url = request.getParameter("file_url");
         if(file_url == null) {
             return FAILURE_MESSAGE;
@@ -96,23 +103,75 @@ public class FileTransformerController {
             filetrans = factory.makeFileTransformer("SRM",file_url);
         }
         
-        //System.out.println(filetrans.getHttp());
-            
+        System.out.println("gridftp: " + filetrans.getGridFTP());
+        System.out.println("---End In gridftpfile---");
+        */
+        
+        String dataset_id = request.getParameter("dataset_id");
+        if(dataset_id == null) {
+            return FAILURE_MESSAGE;
+        }
+        
+
+        String file_id = request.getParameter("file_id");
+        if(file_id == null) {
+            return FAILURE_MESSAGE;
+        }
+        
+        String file_url = request.getParameter("file_url");
+        if(file_url == null) {
+            return FAILURE_MESSAGE;
+        }
+
+        System.out.println("\tDatasetId: " + dataset_id);
+        System.out.println("\tFileId: " + file_id);
+        System.out.println("\tFileUrl: " + file_url);
+        
+        String inputType = request.getParameter("input_type");
+        
+        FileTransformer filetrans = null;
+              
+        FileTransformerFactory factory = new FileTransformerFactory();
+        
+        filetrans = factory.makeFileTransformer("General",file_url,dataset_id,file_id);
+        
         return filetrans.getGridFTP();
     }
     
     @RequestMapping(method=RequestMethod.GET, value="/httpfile")
     public @ResponseBody String getHTTPFile(HttpServletRequest request) {
         
+        System.out.println("---In httpfile---");
+        
+        String dataset_id = request.getParameter("dataset_id");
+        if(dataset_id == null) {
+            return FAILURE_MESSAGE;
+        }
+        
+
+        String file_id = request.getParameter("file_id");
+        if(file_id == null) {
+            return FAILURE_MESSAGE;
+        }
+        
         String file_url = request.getParameter("file_url");
         if(file_url == null) {
             return FAILURE_MESSAGE;
         }
+
+        System.out.println("\tDatasetId: " + dataset_id);
+        System.out.println("\tFileId: " + file_id);
+        System.out.println("\tFileUrl: " + file_url);
         
         String inputType = request.getParameter("input_type");
         
         FileTransformer filetrans = null;
-                
+              
+        FileTransformerFactory factory = new FileTransformerFactory();
+        
+        filetrans = factory.makeFileTransformer("General",file_url,dataset_id,file_id);
+        
+        /*
         if(inputType == null) {
             FileTransformerFactory factory = new FileTransformerFactory();
             
@@ -132,7 +191,10 @@ public class FileTransformerController {
             
             filetrans = factory.makeFileTransformer("SRM",file_url);
         }
-        //System.out.println(filetrans.getHttp());
+        */
+        
+        System.out.println("http: " + filetrans.getHttp());
+        System.out.println("---End In httpfile---");
             
         return filetrans.getHttp();
     }

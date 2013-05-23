@@ -6,10 +6,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.esgf.srm.utils.SRMUtils;
+
 public class SRMPropertiesReader extends PropertiesReader {
     
-    private String SRM_PROPERTIES_FILE_LOCATION = "/esg/config/srm.properties";
-
+    
     //private Properties prop = new Properties();
     
     public static void main(String [] args) {
@@ -26,9 +27,22 @@ public class SRMPropertiesReader extends PropertiesReader {
         this.name = name;
         this.prop = new Properties();
         
+        System.out.println("No properties file...use defaults and post to location");
+
+        /*
+        prop.setProperty("bestman_expiration", SRMPropertiesConstants.expiration);
+        prop.setProperty("failure_message", SRMPropertiesConstants.failure_message);
+        prop.setProperty("success_message", SRMPropertiesConstants.success_message);
+        prop.setProperty("srm_api_url", SRMPropertiesConstants.srmAPIURL);
+        prop.setProperty("srm_db_name", SRMPropertiesConstants.db_name);
+        prop.setProperty("srm_table_name", SRMPropertiesConstants.table_name);
+        prop.setProperty("srm_valid_user", SRMPropertiesConstants.valid_user);
+        prop.setProperty("srm_valid_password", SRMPropertiesConstants.valid_password);
+        */
+        
         try {
             //load a properties file
-            prop.load(new FileInputStream(SRM_PROPERTIES_FILE_LOCATION));
+            prop.load(new FileInputStream(SRMUtils.SRM_PROPERTIES_FILE_LOCATION));
             
         } catch(Exception e) {
             
@@ -45,7 +59,7 @@ public class SRMPropertiesReader extends PropertiesReader {
             
             
             try {
-                prop.store(new FileOutputStream(SRM_PROPERTIES_FILE_LOCATION), null);
+                prop.store(new FileOutputStream(SRMUtils.SRM_PROPERTIES_FILE_LOCATION), null);
             } catch (FileNotFoundException e1) {
                 e1.printStackTrace();
             } catch (IOException e1) {
@@ -53,6 +67,7 @@ public class SRMPropertiesReader extends PropertiesReader {
             }
             
         }
+        
     }
     
     

@@ -17,16 +17,13 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.esgf.datacart.DocElement;
-import org.esgf.datacart.FileDownloadTemplateController;
-import org.esgf.datacart.URLSElement;
-import org.esgf.datacart.XmlFormatter;
 import org.esgf.email.Email;
 import org.esgf.email.Attachment;
 import org.esgf.scriptgenerator.ScriptGenerator;
 import org.esgf.solr.model.Solr;
 import org.esgf.solr.model.SolrRecord;
 import org.esgf.solr.model.SolrResponse;
+import org.esgf.util.XmlFormatter;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -500,7 +497,7 @@ public class SRMProxyController {
         return responseBody;
     }
     
-    
+    /*
     public static String [] getSolrParams(DocElement doc, String which) {
         String [] file_ids = new String[doc.getFileElements().size()];
         String [] file_urls = new String[doc.getFileElements().size()];
@@ -535,7 +532,7 @@ public class SRMProxyController {
         }
         
     }
-    
+    */
     
     
     

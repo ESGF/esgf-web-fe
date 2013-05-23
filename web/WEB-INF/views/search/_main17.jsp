@@ -2,7 +2,9 @@
 <%@ include file="/WEB-INF/views/search/temporal_widget_dialog.jsp" %>
 <%@ include file="/WEB-INF/views/search/geospatial_widget_dialog.jsp" %>
 <%@ include file="/WEB-INF/views/search/facetsidebar_widget_dialog.jsp" %>
+<%-- 
 <%@ include file="/WEB-INF/views/search/_select_tbl.jsp" %>
+--%>
 
 <style>
 .distribbutton {
@@ -44,53 +46,7 @@
 }
 
 
-.tipsy { font-size: 10px; position: absolute; padding: 5px; z-index: 100000; }
-  .tipsy-inner { background-color: #000; color: #FFF; max-width: 200px; padding: 5px 8px 4px 8px; text-align: center; }
 
-  /* Rounded corners */
-  .tipsy-inner { border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; }
-  
-  /* Uncomment for shadow */
-  /*.tipsy-inner { box-shadow: 0 0 5px #000000; -webkit-box-shadow: 0 0 5px #000000; -moz-box-shadow: 0 0 5px #000000; }*/
-  
-  .tipsy-arrow { position: absolute; width: 0; height: 0; line-height: 0; border: 5px dashed #000; }
-  
-  /* Rules to colour arrows */
-  .tipsy-arrow-n { border-bottom-color: #000; }
-  .tipsy-arrow-s { border-top-color: #000; }
-  .tipsy-arrow-e { border-left-color: #000; }
-  .tipsy-arrow-w { border-right-color: #000; }
-  
-	.tipsy-n .tipsy-arrow { top: 0px; left: 50%; margin-left: -5px; border-bottom-style: solid; border-top: none; border-left-color: transparent; border-right-color: transparent; }
-    .tipsy-nw .tipsy-arrow { top: 0; left: 10px; border-bottom-style: solid; border-top: none; border-left-color: transparent; border-right-color: transparent;}
-    .tipsy-ne .tipsy-arrow { top: 0; right: 10px; border-bottom-style: solid; border-top: none;  border-left-color: transparent; border-right-color: transparent;}
-  .tipsy-s .tipsy-arrow { bottom: 0; left: 50%; margin-left: -5px; border-top-style: solid; border-bottom: none;  border-left-color: transparent; border-right-color: transparent; }
-    .tipsy-sw .tipsy-arrow { bottom: 0; left: 10px; border-top-style: solid; border-bottom: none;  border-left-color: transparent; border-right-color: transparent; }
-    .tipsy-se .tipsy-arrow { bottom: 0; right: 10px; border-top-style: solid; border-bottom: none; border-left-color: transparent; border-right-color: transparent; }
-  .tipsy-e .tipsy-arrow { right: 0; top: 50%; margin-top: -5px; border-left-style: solid; border-right: none; border-top-color: transparent; border-bottom-color: transparent; }
-  .tipsy-w .tipsy-arrow { left: 0; top: 50%; margin-top: -5px; border-right-style: solid; border-left: none; border-top-color: transparent; border-bottom-color: transparent; }
-
-
-
-
-/*
-.tooltip {
-    display:none;
-    background:transparent url(/esgf-web-fe/images/black_arrow.png); 
-    background: orange;
-    font-size:12px;
-    height:70px;
-    width:160px;
-    padding:25px;
-    color:#eee;
-  }
-    
-  #demo img {
-    border:0;
-    cursor:pointer;
-    margin:0 1px;
-  }
-*/
 
 </style>
 
@@ -108,11 +64,10 @@
 	       To download data: add datasets to your Data Cart, then click on <i>Expand</i> or <i>wget</i>.
         </div>
 	    <div class="span-3 last" style="margin-top:5px">
-<!--  
-	    	<div id="temporal"><a href="<c:url value="/scripts/esgf/overlays/temporal_overlay.html" />" id="temporal" rel="#temporal_overlay" style="font-size:10px">Temporal Search</a></div>
--->	    	
 			<div id="temporal"><a href="#" id="temporal" style="font-size:10px">Temporal Search</a></div>
+			<!--  
 			<div id="geo"><a href="#" id="geospatial" style="font-size:10px">Geospatial Search</a></div>
+			-->
 			<div id="clearc"><a href="#" id="clearcache" style="font-size:10px">Clear search constraints and datacart</a></div>
 			<div id="search_help"><a href="http://www.esgf.org/wiki/ESGF_Web_Search_User_Guide" style="font-size:10px" >Search Help</a></div>
 	    	<div id="search_cv"><a href="http://www.esgf.org/wiki/ESGF_Search_CV" style="font-size:10px" >Search Controlled Vocabulary</a></div>
@@ -164,16 +119,7 @@
 		    	<!--<div id="search-help" style="margin-left:15px;">(press ESC to close suggestions)</div>-->
 			<!-- </div> -->
 		    
-		<!--  
-		    <div id="page-navigation" class="span-8">
-		      <ul id="pager"></ul>
-		      <div id="pager-header"></div>
-		    </div>
-	
-			<div class="span-5 last">
-			<a id="add_all" style="margin-left:10px;cursor:pointer">Add All to Datacart</a>
-			</div>
-		-->
+		
 			
 </div>  
 

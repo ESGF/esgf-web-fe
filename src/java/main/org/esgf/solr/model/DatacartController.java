@@ -2,8 +2,8 @@ package org.esgf.solr.model;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.esgf.datacart.FileDownloadTemplateController;
-import org.esgf.datacart.XmlFormatter;
+//import org.esgf.legacy.datacart.FileDownloadTemplateController;
+//import org.esgf.legacy.datacart.XmlFormatter;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

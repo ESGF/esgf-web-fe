@@ -1,26 +1,10 @@
 package org.esgf.srm;
 
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.esgf.datacart.XmlFormatter;
-import org.esgf.solr.model.Solr;
-import org.esgf.solr.model.SolrResponse;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 public class SRMEntryList {
 

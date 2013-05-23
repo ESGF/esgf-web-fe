@@ -3,9 +3,10 @@ package org.esgf.solr.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.esgf.datacart.XmlFormatter;
+//import org.esgf.legacy.datacart.XmlFormatter;
 import org.esgf.srm.SRMEntryList;
 import org.esgf.srm.SRMUtils;
+import org.esgf.util.XmlFormatter;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 

@@ -76,7 +76,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
             }
             */
             
-            System.out.println("Executing sql: " + sql);
+            //System.out.println("Executing sql: " + sql);
         
             sql = "select * from esgf_security.srm_entries where dataset_id='ornl.ultrahighres.CESM1.t85f09.B1850_50yrs.seaIce.v1|esg2-sdnl1.ccs.ornl.gov' AND file_id='ornl.ultrahighres.CESM1.t85f09.B1850_50yrs.seaIce.v1.t85f09.B1850.cice.h.0005-02.nc|esg2-sdnl1.ccs.ornl.gov'";
             
@@ -97,7 +97,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                 System.out.println("RS is null?????");
             }
             */
-            System.out.println("Executing sql: " + sql);
+            //System.out.println("Executing sql: " + sql);
         
         } catch(Exception e) {
             e.printStackTrace();
@@ -155,6 +155,8 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                System.out.println("Table already there"); 
             }
             
+            //this.connection.close();
+            
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
@@ -178,34 +180,24 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
        
-            /*
-            if(!rs.next()) {
-                System.out.println("RS is null?????");
-            }
-            */
-            System.out.println("\tExecuting sql: " + sql);
-            /*
-            if (rs.last()) {
-                System.out.println("Last?");
-                //rowcount = rs.getRow();
-                //rs.beforeFirst(); // not rs.first() because the rs.next() below will move on, missing the first element
-            }
-            */
+            //System.out.println("\tExecuting sql: " + sql);
+            
             while(rs.next()) {
-                System.out.println("\trecord");
+                //System.out.println("\trecord");
                 String file_idVal = (String)rs.getObject("file_id");
                 String dataset_idVal = (String)rs.getObject("dataset_id");
                 String timeStampVal = (String)rs.getObject("timeStamp");
                 String expirationVal = (String)rs.getObject("expiration");
                 String bestmannumberVal = (String)rs.getObject("bestmannumber");
-                //String isCachedVal = (String)rs.getObject("isCached");
-                //String openidVal = (String)rs.getObject("openid");
-                //srm_entry = new SRMEntry(file_idVal,dataset_idVal,isCachedVal,timeStampVal,expirationVal,openidVal);
                 srm_entry = new SRMEntry(file_idVal,dataset_idVal,timeStampVal,expirationVal,bestmannumberVal);
             }
+
+            rs.close();
+            st.close();
             
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
         }
         
         return srm_entry;
@@ -239,6 +231,9 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                 srm_entry = new SRMEntry(file_idVal,dataset_idVal,timeStampVal,expirationVal,bestmannumberVal);
                 srm_entries.add(srm_entry);
             }
+
+            rs.close();
+            st.close();
             
         } catch (SQLException e) {
             e.printStackTrace();
@@ -366,7 +361,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                                "';";
               
 
-        System.out.println("Update: " + updateCommand);
+        //System.out.println("Update: " + updateCommand);
         
         if (this.connection != null) {
             try {
@@ -410,7 +405,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                 //if(SQLTableExists(connection, table_name)) {
                     update = st.executeUpdate(drop_table_SQL);
                 //}
-                System.out.println(create_table_SQL);
+                //System.out.println(create_table_SQL);
                 update = st.executeUpdate(create_table_SQL);
                
                 
@@ -592,6 +587,8 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
 
                 }
             }
+            
+            rs.close();
 
         } catch (SQLException sqlex) {
             sqlex.printStackTrace();
@@ -612,7 +609,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                     update = st.executeUpdate(drop_table_SQL);
                 }
                 update = st.executeUpdate(create_table_SQL);
-               
+                st.close();
             } catch(Exception e) {
                 e.printStackTrace();
             }
@@ -647,6 +644,8 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
                 srm_entry = new SRMEntry(file_idVal,dataset_idVal,timeStampVal,expirationVal,bestmannumberVal);
                 srm_entries.add(srm_entry);
             }
+            rs.close();
+            st.close();
             
         } catch (SQLException e) {
             e.printStackTrace();

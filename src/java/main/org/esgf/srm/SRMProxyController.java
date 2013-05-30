@@ -135,7 +135,11 @@ public class SRMProxyController {
         String constraints = input.getConstraints();
         String filtered = input.getFiltered();
 
-        if(SRMUtils.srmproxydebugflag) {
+        if(scriptType.equalsIgnoreCase("http")) {
+            scriptType = "wget";
+        }
+        
+        if(SRMUtils.inputParamsFlag) {
             System.out.println("---Input params to SRMProxy---");
             System.out.println("\tSRMController ScriptType: " + scriptType);
             System.out.println("\tSRMController Type: " + type);
@@ -176,10 +180,16 @@ public class SRMProxyController {
             
             int numFiles = solrResponse.getSolrRecords().size();//NUM_FILES_LIMIT;
             
+            if(SRMUtils.numFileTest) {
+                numFiles = SRMUtils.TEST_NUMFILE_LIMIT;
+            }
+            
+            System.out.println("numFiles limit: " + numFiles + " solr records size: " +  solrResponse.getSolrRecords().size());
+            
             if(numFiles > solrResponse.getSolrRecords().size()) {
                 numFiles = solrResponse.getSolrRecords().size();
             }
-            
+
             
             if(numFiles != 0) {
 
@@ -188,27 +198,22 @@ public class SRMProxyController {
                 checksums = new String[numFiles];
                 checksumTypes = new String[numFiles];
             
-                //numFiles = TEST_NUMFILE_LIMIT;
+                
                 
                 //grab the file_id, file_url, checksum, checksumType
                 for(int i=0;i<numFiles;i++) {
                     SolrRecord solrRecord = solrResponse.getSolrRecords().get(i);
                     String solr_record_url = solrRecord.getArrField("url").get(0);
                     
-                    System.out.println("srm_url: " + solr_record_url);
-                    
                     String url = solr_record_url.split("\\|")[0];
                     file_urls[i] = url;
                 
-                    System.out.println("Here?");
-                    
                     file_id = solrRecord.getStrField("id");
                     file_ids[i] = file_id;
 
-                    System.out.println("Here2?");
-                    
                     String solr_record_checksum = null;
                     String solr_record_checksum_type = null;
+                    
                     if(solrRecord.getArrField("checksum") == null || solrRecord.getArrField("checksum").size() == 0) {
                         solr_record_checksum = "null";
                         solr_record_checksum_type = "null";
@@ -216,9 +221,6 @@ public class SRMProxyController {
                         solr_record_checksum = solrRecord.getArrField("checksum").get(0);
                         solr_record_checksum_type = solrRecord.getArrField("checksum_type").get(0);
                     }
-
-                    System.out.println("Here3?");
-                    
                     checksums[i] = solr_record_checksum;
                     checksumTypes[i] = solr_record_checksum_type;
                     
@@ -262,16 +264,24 @@ public class SRMProxyController {
         
         
         
-        if(SRMUtils.srmproxydebugflag) {
+        if(SRMUtils.afterInitializationFlag) {
             System.out.println("DATASET ID: " + dataset_id);
             System.out.println("FILE ID: " + file_ids[0] + "\n");
             System.out.println("FILE URL: " + file_urls[0] + "\n");
         }
 
         //send initial email here
-        //writeInitialEmail(file_urls,emailAddr);
+        writeInitialEmail(file_urls,file_ids,emailAddr);
        
-        System.out.println("\n\n\n\nBefore Bestman\n\n\n");
+        if(SRMUtils.initialEmailTextflag) {
+            System.out.println(this.initialEmail.toString());
+        } 
+        
+        if(SRMUtils.initialEmailSendflag) {
+            this.initialEmail.sendEmail();
+        }
+        System.out.println("\n\n---Before Bestman---\n\n");
+        
         
         //execute bestman here
         SRMWorkflowFactory srm_workflow_factory = new SRMWorkflowFactory();
@@ -280,8 +290,8 @@ public class SRMProxyController {
         String respMessage = srm_response.getMessage();
         String [] outputFiles = srm_response.getResponse_urls();
         String [] response_urls = srm_response.getResponse_urls();
-        
-        System.out.println("\n\n\n\nBestman executed\n\n\n");
+
+        System.out.println("\n\n---After Bestman---\n\n");
         
         
         String timeStamp = Long.toString(System.currentTimeMillis());
@@ -296,6 +306,7 @@ public class SRMProxyController {
         }
         
         //update the expiration times AND bestman path strings of the files in the srm_cache
+        
         if(type.equals("Dataset")) {
             SRMCacheStoreFactory srmCacheStoreFactory = new SRMCacheStoreFactory();
             
@@ -303,6 +314,7 @@ public class SRMProxyController {
 
             srm_cache.updateAllSRMEntriesForDatasetId(dataset_id,file_ids,response_urls);
             
+            System.out.println("\n\n\n\nUpdated entries for dataset: " + dataset_id);
 
         } else {
             for(int i=0;i<file_ids.length;i++) {
@@ -326,26 +338,30 @@ public class SRMProxyController {
 
         
         //execute script generator here
-        /*
-        if(SRMUtils.srmproxydebugflag) {
+        
+        if(SRMUtils.scriptGenFlag) {
             System.out.println("---ScriptGen Params---");
             System.out.println("\tScriptType: " + scriptType);
             System.out.println("\tScriptComplexity: " + SRMUtils.SCRIPT_COMPLEXITY);
             System.out.println("---End ScriptGen Params---");
         }
         
+        
         String script = buildScript(scriptType,outputFiles,checksums,checksumTypes);
         
         
-        //System.exit(0);
+        //
         
         //confirmation email
         writeConfirmationEmail(dataset_id,file_urls,emailAddr,type,scriptType,script);
         
+        if(SRMUtils.confirmationEmailTextflag) {
+            System.out.println(this.confirmationEmail.toString());
+        } 
         
-        
-        //this.confirmationEmail.sendEmail();
-        */
+        if(SRMUtils.initialEmailSendflag) {
+            this.confirmationEmail.sendEmail();
+        }
         
         
         
@@ -392,9 +408,11 @@ public class SRMProxyController {
 
         String scriptType = request.getParameter("scriptType");
         if(scriptType == null) {
+            System.out.println("\n\n\nIn null?");
             scriptType = SRMUtils.INPUT_SCRIPT_TYPE;
         }
         
+        //System.out.println("\t\t\tscript type-? " + scriptType + " default: " + SRMUtils.INPUT_SCRIPT_TYPE);
         
         inputObj.setDataset_id(dataset_id);
         inputObj.setType(type);
@@ -417,7 +435,7 @@ public class SRMProxyController {
         
         SRMControllerInputObj input = this.request2InputObj(request);
         
-        System.out.println("input file id: " + input.getFile_id());
+        //System.out.println("input file id: " + input.getFile_id());
                 
         
         if(input.getType().equals("Dataset")) {
@@ -458,7 +476,7 @@ public class SRMProxyController {
                 System.out.println("file_id is null");
                 file_id = SRMUtils.INPUT_FILE_FILE_ID;
             }
-            System.out.println("File " + file_id);
+            //System.out.println("File " + file_id);
 
             files.add(file_id);
             
@@ -475,14 +493,6 @@ public class SRMProxyController {
         
         ScriptGeneratorFactory scriptGeneratorFactory = new ScriptGeneratorFactory();
 
-        //scriptType = "wget";
-        System.out.println("---ScriptGen Params---");
-        System.out.println("\tScriptType: " + scriptType);
-        System.out.println("\tScriptComplexity: " + SRMUtils.SCRIPT_COMPLEXITY);
-        System.out.println("---End ScriptGen Params---");
-        
-        
-        
         scriptGenerator = scriptGeneratorFactory.makeScriptGenerator(scriptType,SRMUtils.SCRIPT_COMPLEXITY);
 
         
@@ -607,19 +617,19 @@ public class SRMProxyController {
     
     
     
-    public void writeInitialEmail(String [] file_urls,String emailAddr) {
+    public void writeInitialEmail(String [] file_urls,String [] file_ids,String emailAddr) {
         this.initialEmail = new Email();
         this.initialEmail.setTo(emailAddr);
-        Attachment attachment1 = new Attachment();
+        //Attachment attachment1 = new Attachment();
         //attachment1.setAttachmentName("wget.sh");
         //attachment1.setAttachmentContent("New wget content");
-        this.initialEmail.setAttachment(attachment1);
+        //this.initialEmail.setAttachment(attachment1);
         this.initialEmail.setHeaderText("Your request for data has been submitted.");
         
         String bodyStr = "";
         bodyStr += "Your data request for the following files:\n";
-        for(int i=0;i<file_urls.length;i++) {
-            bodyStr += "\t" + file_urls[i] + "\n";
+        for(int i=0;i<file_ids.length;i++) {
+            bodyStr += "\t" + file_ids[i] + "\n";
         }
         bodyStr += "\nHas been submitted.  Please note that it may take some time to extract the data off tertiary storage and onto the local filesystem.  A confirmation email will be sent to this address soon with instructions on how to access this data.";
         this.initialEmail.setBodyText(bodyStr);
@@ -635,9 +645,9 @@ public class SRMProxyController {
         
         
         if(!scriptType.equals("wget")) {
-            attachment.setAttachmentName(SRMUtils.GUC_ATTACHMENT_NAME);
-        } else {
             attachment.setAttachmentName(SRMUtils.WGET_ATTACHMENT_NAME);
+        } else {
+            attachment.setAttachmentName(SRMUtils.GUC_ATTACHMENT_NAME);
         }
         
         attachment.setAttachmentContent(script);
@@ -650,27 +660,27 @@ public class SRMProxyController {
         bodyStr += "Your request for data has been successfully staged!\n";
         
 
-        if(type.equals("Dataset")) {
-            bodyStr += "\nPlease navigate to the following URL:\n" + 
+        //if(type.equals("Dataset")) {
+            bodyStr += "\nYou may either use the script attached or navigate to the following URL:\n" + 
                     "http://localhost:8080/esgf-web-fe/live?tab=datacart&override=true" +
                     "&datasetid=" + dataset_id +
                     "\n";
-        } 
+        //} 
         
+        /*
         bodyStr += "The data you requested was the following:\n";
         for(int i=0;i<file_urls.length;i++) {
             bodyStr += "\t" + file_urls[i] + "\n";
         }
-        
+        */
         
         this.confirmationEmail.setBodyText(bodyStr);
 
+        /*
         String fileName = "/esg/config/Comfirmation_" + scriptType + ".txt";
         this.confirmationEmail.toFile(fileName);
+        */
         
-        if(SRMUtils.emailTextflag) {
-            System.out.println(this.confirmationEmail.toString());
-        }
 
         
     }

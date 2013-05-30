@@ -29,7 +29,16 @@ public class SRMFileTransformationUtils {
                 "SFN=mss://esg2-sdnl1.ccs.ornl.gov//proj/cli049/UHRGCS/ORNL/CESM1/" +
                 "t341f02.FAMIPr/atm/hist/t341f02.FAMIPr.cam2.h0.1978-09.nc";
    
+/*
+        Given: gsiftp://esg.ccs.ornl.gov//lustre/esgfs/SRMTemp/shared/V.0.0-115256497/t85f09.B1850.cice.h.0022-01.nc
+    Double...V.0.0-1152564977
+  */
         
+        String givenUrl = "gsiftp://esg.ccs.ornl.gov//lustre/esgfs/SRMTemp/shared/V.0.0-115256497/t85f09.B1850.cice.h.0022-01.nc";
+        
+        String bestmanNum = extractBestmanNumFromUrl(givenUrl);
+        
+        System.out.println(bestmanNum);
         
         /*
         String path = extractFilePathNameFromUrl(url);
@@ -47,6 +56,10 @@ public class SRMFileTransformationUtils {
         }
         */
         
+        
+        
+        
+        /*
         FileTransformerFactory factory = new FileTransformerFactory();
         
         FileTransformer filetrans = null;
@@ -57,7 +70,7 @@ public class SRMFileTransformationUtils {
         System.out.println(filetrans.getGridFTP());
         
         System.out.println(filetrans.getHttp());
-        
+        */
     }
     
     
@@ -109,6 +122,30 @@ public class SRMFileTransformationUtils {
     }
     
     public static String extractFilePathNameFromUrl(String url) {
+        
+        System.out.println("Extract File Path Original URL: " + url);
+        
+        String newFileName = "";
+        String tempStr = "";
+        
+        int counter = url.length()-1;
+        char ch = url.charAt(counter);
+        while(ch != '/') {
+            tempStr += ch;
+            ch = url.charAt(counter);
+            counter--;
+        }   
+        
+        newFileName = url.substring(0, (counter+1));
+        //System.out.println("new File name: " + newFileName + "\n");
+        
+        return newFileName;
+    }
+    
+    
+    public static String extractBestmanNumFromUrl(String url) {
+        //System.out.println("Double..." + extractFileNameFromUrl(extractFilePathNameFromUrl(url)) + "\n");
+        
         String newFileName = "";
         String tempStr = "";
         
@@ -122,11 +159,27 @@ public class SRMFileTransformationUtils {
         
         newFileName = url.substring(0, (counter+1));
         
+        
+        
+        tempStr = "";
+        
+        counter = newFileName.length()-1;
+        while(url.charAt(counter) != '/') {
+            ch = url.charAt(counter);
+            tempStr += ch;
+            counter--;
+        }   
+        
+        newFileName = "";
+        
+        for(int i=tempStr.length()-1;i>=0;i--) {
+            newFileName += tempStr.charAt(i);
+        }
+        
+        
+        
         return newFileName;
-    }
-    
-    public static String extractBestmanNumFromUrl(String url) {
-        return extractFileNameFromUrl(extractFilePathNameFromUrl(url));
+        //return extractFileNameFromUrl(extractFilePathNameFromUrl(url));
     }
    
     
@@ -139,12 +192,13 @@ public class SRMFileTransformationUtils {
     
         String [] outputFiles = new String [inputFiles.length];
         
-        //System.out.println("file urls length: " + inputFiles.length);
+        System.out.println("file urls length: " + inputFiles.length);
+        
         
         
         
         for(int i=0;i<inputFiles.length;i++) {
-            System.out.println("\tinput file: " + i + " " + inputFiles[i]);
+            //System.out.println("\tinput file: " + i + " " + inputFiles[i]);
             String tempFile = inputFiles[i].replace("srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?SFN=mss://", "file:///");
             //tempFile = transformServerName(tempFile);
             
@@ -166,6 +220,7 @@ public class SRMFileTransformationUtils {
             
             outputFiles[i] = outputFile;
         }
+        
         
         
         return outputFiles;

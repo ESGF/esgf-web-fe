@@ -96,11 +96,11 @@ public class DatacartDataset {
         solr.addConstraint("type", "Dataset");
       
         solr.addConstraint("id",datasetId);
-        System.out.println("\n\nquery->" + solr.getQueryString() + "\n\n");
+        //System.out.println("\n\nquery->" + solr.getQueryString() + "\n\n");
         solr.executeQuery();
         
         SolrResponse solrResponse = solr.getSolrResponse();
-        System.out.println(solrResponse.getSolrRecords().size());
+        //System.out.println(solrResponse.getSolrRecords().size());
         
         if(solrResponse.getSolrRecords().size() > 0) {
 

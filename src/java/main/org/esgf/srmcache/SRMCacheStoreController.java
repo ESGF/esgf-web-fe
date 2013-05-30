@@ -152,7 +152,7 @@ public class SRMCacheStoreController {
         }
         //System.out.println("2Here");
 
-        System.out.println("In iscached2 " + dataset_id + " file: " + file_id);
+        //System.out.println("In iscached2 " + dataset_id + " file: " + file_id);
         SRMEntry srm_entry = this.srm_cache.getSRMEntryForFile_id(dataset_id, file_id);
 
         if(srm_entry == null) {
@@ -165,7 +165,7 @@ public class SRMCacheStoreController {
         
         String expiration = srm_entry.getExpiration();
         
-        System.out.println("File_id: " + file_id + " expiration: " + expiration + " currentTimeStamp: " + currentTimeStamp);
+        //System.out.println("File_id: " + file_id + " expiration: " + expiration + " currentTimeStamp: " + currentTimeStamp);
        
         if(Long.parseLong(expiration) > currentTimeStamp) {
             if(file_id.equals("ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-09.nc|esg2-sdnl1.ccs.ornl.gov")){

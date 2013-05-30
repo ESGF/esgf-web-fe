@@ -208,6 +208,8 @@ $(document).ready(function(){
 		
 		//alert('type: ' + type + ' dataset_id: ' + dataset_id);
 		
+		alert('An email has been sent to your account indicating that your request has been submitted.');
+					
 		if(type == 'File') {
 			
 			
@@ -237,7 +239,7 @@ $(document).ready(function(){
 				data: queryStr,
 				//dataType: 'xml',
 				success: function(data) {
-					alert('An email has been sent to your account.  Please follow the instructions included.');
+					alert('Your data has been staged and an email has been sent to your account.  Please follow the instructions included.');
 					// $('#srm_response').append("Staging successfully launched"); 
 				},
 				error: function (request, status, error) {
@@ -277,7 +279,7 @@ $(document).ready(function(){
 				data: queryStr,
 				//dataType: 'xml',
 				success: function(data) {
-					alert('An email has been sent to your account.  Please follow the instructions included.');
+					alert('Your data has been staged and an email has been sent to your account.  Please follow the instructions included.');
 					
 				},
 				error: function(jqXHR, textStatus,errorThrown) {
@@ -311,7 +313,7 @@ $(document).ready(function(){
 
 		var srm_url = '/esgf-web-fe/srmproxy';
 		
-		//alert('type: ' + type + ' dataset_id: ' + dataset_id);
+		alert('An email has been sent to your account indicating that your request has been submitted.');
 		
 		if(type == 'File') {
 			
@@ -342,7 +344,7 @@ $(document).ready(function(){
 				data: queryStr,
 				//dataType: 'xml',
 				success: function(data) {
-					alert('An email has been sent to your account.  Please follow the instructions included.');
+					alert('Your data has been staged and an email has been sent to your account.  Please follow the instructions included.');
 					// $('#srm_response').append("Staging successfully launched"); 
 				},
 				error: function() {

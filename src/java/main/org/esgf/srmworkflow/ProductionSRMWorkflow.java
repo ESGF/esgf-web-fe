@@ -44,7 +44,7 @@ public class ProductionSRMWorkflow extends SRMWorkflow {
     private static String queryESGSRM(String [] file_urls) {
         
         //if(debugFlag)
-            System.out.println("\nIn queryESGSRM for size: " + file_urls.length + "\n");
+            //System.out.println("\nIn queryESGSRM for size: " + file_urls.length + "\n");
         
         String response = null;
         String responseBody = null;
@@ -63,13 +63,13 @@ public class ProductionSRMWorkflow extends SRMWorkflow {
         int file_length = file_urls.length;
         //int file_length = SRMUtils.TEST_NUMFILE_LIMIT;
         
-        
+        //System.out.println("props: " + srm_props.getValue("srm_api_url"));
         
         //add the urls
         for(int i=0;i<file_length;i++) {
 
-            System.out.println("fileurls: " + i + " " + file_urls[i]);
-            System.out.println("queryString: " + queryString);
+            //System.out.println("fileurls: " + i + " " + file_urls[i]);
+            //System.out.println("queryString: " + queryString);
             //System.exit(0);
             if(i == 0 && file_urls.length == 1) {
                 queryString += "url=";
@@ -103,7 +103,9 @@ public class ProductionSRMWorkflow extends SRMWorkflow {
         
 
         method.setQueryString(queryString);
-        System.out.println("\tQuerystring-> " + method.getQueryString());
+        //System.out.println("\tQuerystring-> " + method.getQueryString());
+        
+
         
         method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
                 new DefaultHttpMethodRetryHandler(3, false));
@@ -126,7 +128,7 @@ public class ProductionSRMWorkflow extends SRMWorkflow {
             method.releaseConnection();
         }
     
-        
+
         
         return responseBody;
     }

@@ -210,6 +210,8 @@ public class Email {
 		          
 		          
 		          if((this.attachment != null)) {
+		              //System.out.println("not null");
+		              //System.exit(0);
 		        	  message.setSubject(this.headerText);
 		        	  message.setText(this.bodyText);
 		        	  Multipart mp = new MimeMultipart();
@@ -236,6 +238,8 @@ public class Email {
 			          
 		        	  this.deleteFileAttachment();
 		          } else {
+                      //System.out.println("null");
+                      //System.exit(0);
 		        	  message.setSubject(this.headerText);
 		        	  //message.setText(this.bodyText);
 		        	  Multipart mp = new MimeMultipart();
@@ -327,68 +331,67 @@ public class Email {
 	
 	public void deleteFileAttachment() {
 		
-		FileOutputStream fop = null;
-		File file;
- 
-		try {
-			 
-			file = new File(this.attachment.getAttachmentName());
-			fop = new FileOutputStream(file);
- 
-			
-			if(file.delete()){
-				System.out.println(file.getName() + " is deleted!");
-			}else{
-				System.out.println("Delete operation is failed.");
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+	    if(this.attachment != null) {
+	        FileOutputStream fop = null;
+	        File file;
+	 
+	        try {
+	             
+	            file = new File(this.attachment.getAttachmentName());
+	            fop = new FileOutputStream(file);
+	 
+	            
+	            if(file.delete()){
+	                System.out.println(file.getName() + " is deleted!");
+	            }else{
+	                System.out.println("Delete operation is failed.");
+	            }
+	        }catch(Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+		
 		
 	}
 	
 	public void writeFileAttachment() {
-		
-		
-		
-		
-		
-		FileOutputStream fop = null;
-		File file;
-		String content = this.attachment.getAttachmentContent();
- 
-		try {
- 
-			file = new File(this.attachment.getAttachmentName());
-			
-			fop = new FileOutputStream(file);
- 
-			// if file doesnt exists, then create it
-			if (!file.exists()) {
-				file.createNewFile();
-			}
- 
-			// get the content in bytes
-			byte[] contentInBytes = content.getBytes();
- 
-			fop.write(contentInBytes);
-			fop.flush();
-			fop.close();
- 
- 
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (fop != null) {
-					fop.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		if(this.attachment != null) {
+		    FileOutputStream fop = null;
+	        File file;
+	        String content = this.attachment.getAttachmentContent();
+	 
+	        try {
+	 
+	            file = new File(this.attachment.getAttachmentName());
+	            
+	            fop = new FileOutputStream(file);
+	 
+	            // if file doesnt exists, then create it
+	            if (!file.exists()) {
+	                file.createNewFile();
+	            }
+	 
+	            // get the content in bytes
+	            byte[] contentInBytes = content.getBytes();
+	 
+	            fop.write(contentInBytes);
+	            fop.flush();
+	            fop.close();
+	 
+	 
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        } finally {
+	            try {
+	                if (fop != null) {
+	                    fop.close();
+	                }
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+	        }
 		}
-    	
-    	
+		
 	}
 
 	public void toFile(String name) {
@@ -420,9 +423,10 @@ public class Email {
 		emailStr += "\n" + "HeaderText: \n" + this.headerText + "\n";
 		emailStr += "\n" + "BodyText: \n\n" + this.bodyText + "\n";
 		
-		emailStr += "\n" + "Attachment name: \n" + this.attachment.getAttachmentName() + "\n";
-		
-		emailStr += "\n" + "Attachment content: \n" + this.attachment.getAttachmentContent() + "\n";
+		if(this.attachment != null) {
+		    emailStr += "\n" + "Attachment name: \n" + this.attachment.getAttachmentName() + "\n";
+	        emailStr += "\n" + "Attachment content: \n" + this.attachment.getAttachmentContent() + "\n";
+		}
 		
 		emailStr += "\n----End Email----" + "\n";
 		

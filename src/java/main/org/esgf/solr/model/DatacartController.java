@@ -41,16 +41,15 @@ public class DatacartController {
         
         HttpSession session = request.getSession();
         
-        System.out.println("\n\n\nIn original datacart controller\n\n");
+        //System.out.println("\n\n\nIn original datacart controller\n\n");
         
         Enumeration e = session.getAttributeNames();
         while( e.hasMoreElements() ) {
             String key = (String) e.nextElement();
-            System.out.println("\n\n\n\nIn original datacart controller key..." + key);
+            //System.out.println("\n\n\n\nIn original datacart controller key..." + key);
         }
         
 
-        System.out.println("Here1");
         
         if(Utils.debugMode)
             System.out.println("\n\n\nIn new datacart controller\n\n\n");
@@ -85,8 +84,6 @@ public class DatacartController {
             isShowAll = "true";
         }
 
-        System.out.println("Here2");
-        
         
         String query = "*";
         if(!isShowAll.equals("true")) {
@@ -124,7 +121,7 @@ public class DatacartController {
         solr.addConstraint("dataset_id",dataset_id);
         
         //if(Utils.debugMode)
-            System.out.println("\nsolr query->" + solr.getQueryString() + "\n\n");
+            //System.out.println("\nsolr query->" + solr.getQueryString() + "\n\n");
         
         
         solr.executeQuery();
@@ -141,7 +138,7 @@ public class DatacartController {
         //get response and send it back in json form
         response = datacartDoc.toJSON();
 
-        System.out.println("Response:\n" + response);
+        //System.out.println("Response:\n" + response);
         
         return response;
     }

@@ -18,7 +18,8 @@ public class SRMUtils {
     public static String DB_TYPE = "postgres";
 
     //testing params
-    public static int TEST_NUMFILE_LIMIT = 12;
+    public static int TEST_NUMFILE_LIMIT = 5;
+    public static boolean numFileTest = true;
     
     //simulation or production
     public static String ENVIRONMENT = "Production";
@@ -27,10 +28,26 @@ public class SRMUtils {
 
     //printing flags for srmproxy controller
     public static boolean srmproxydebugflag = true;
-    public static boolean emailTextflag = false;
     
     //printing flags for srm cache store operations
-    public static boolean updateAllSRMEntriesForDatasetIdFlag = true;
+    public static boolean updateAllSRMEntriesForDatasetIdFlag = false;
+    
+    //printing flag for input params
+    public static boolean inputParamsFlag = false;
+
+    //parameters after initialization of dataset id, file ids, and file urls
+    public static boolean afterInitializationFlag = true;
+    
+    //email debug flags
+    public static boolean initialEmailTextflag = false;
+    public static boolean confirmationEmailTextflag = false;
+    
+    //email send flags
+    public static boolean initialEmailSendflag = true;
+    public static boolean confirmationEmailSendflag = true;
+    
+    //script generation flags
+    public static boolean scriptGenFlag = false;
     
     //attachment file names
     public static String GUC_ATTACHMENT_NAME = "globus-url-copy.sh";
@@ -40,7 +57,7 @@ public class SRMUtils {
     
     
     
-    public static String srmAPIURL = "http://localhost/esg-srm/service/srmrequest?";
+    public static String srmAPIURL = "http://esg.ccs.ornl.gov:8080/esg-srm/service/srmrequest?";
 
 
     private static String searchAPIURL = "http://localhost/esg-search/search?";

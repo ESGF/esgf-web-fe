@@ -36,7 +36,6 @@ public class EmailUtils {
 
 	public static String getEmailAddrFromOpenId(String openid) {
 	    
-	    System.out.println("Getting email address from openid: " + openid);
 	    
         String emailAddr = null;
         
@@ -45,21 +44,11 @@ public class EmailUtils {
 
         try{
             ESGFProperties myESGFProperties = new ESGFProperties();
-            /*
-            for(Object key : myESGFProperties.keySet()) {
-                String keyStr = (String)key;
-                System.out.println("Keystr: " + keyStr);
-            }
-            */
+            
             String passwd = myESGFProperties.getAdminPassword();   
             
-            /*
-            if(passwd == null) {
-                System.out.println("passwd null");
-            } else {
-                System.out.println("passwd: " + passwd);
-            }
-            */
+            System.out.println("Getting email address from openid: " + openid);
+            System.out.println("passwd: " + passwd);
             
             myUserInfoDAO = new UserInfoCredentialedDAO("rootAdmin",passwd,myESGFProperties);
             UserInfo userInfo = myUserInfoDAO.getUserById(openid);
@@ -67,7 +56,7 @@ public class EmailUtils {
 
             
         } catch(Exception e) {
-            System.out.println("\n\tNothing found... using default");
+            System.out.println("\n\tNo email found... using default");
             //e.printStackTrace();
             emailAddr = "jfharney@gmail.com";
         }

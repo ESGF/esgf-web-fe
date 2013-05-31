@@ -122,16 +122,14 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
         create_table_SQL = "create table " + table_name + 
                 "(file_id varchar(128),dataset_id varchar(128),timeStamp varchar(128), expiration varchar(128), bestmanNumber varchar(128), primary key (file_id,dataset_id));";
         
-        System.out.println("in constructor: " + create_table_SQL);
+        //System.out.println("in constructor: " + create_table_SQL);
         
         drop_table_SQL = "drop table " + table_name + ";";
 
-        
         setName("Postgres");
         
         //establish connection to the database
         this.connection = null;
-        //System.out.println("Trying connection");
         try {
             
             this.connection = DriverManager.getConnection(
@@ -567,25 +565,33 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
     
     
     public static boolean SQLTableExists(Connection connection, String tableName) {
+        
+        tableName = "srm_entries";
+        
         boolean exists = false;
 
         try {
             Statement stmt = connection.createStatement();
             String sqlText = "SELECT tables.table_name FROM information_schema.tables WHERE table_name = '" + tableName + "'";    
-            
+            System.out.println(sqlText);
             ResultSet rs = stmt.executeQuery(sqlText);
 
             if (rs != null) {
+                System.out.println("NOT NULL");
+                System.out.println("rs next: " + rs.next());
                 while (rs.next()) {
+                    System.out.println("record");
                     if (rs.getString(1).equalsIgnoreCase(tableName)) {
-                        //System.out.println("Table: " + tableName + " already exists!");
+                        System.out.println("Table: " + tableName + " already exists!");
                         exists = true;
                     } else { 
-                        //System.out.println("Table: " + tableName + " does not appear to exist.");
+                        System.out.println("Table: " + tableName + " does not appear to exist.");
                         exists = false;
                     }
 
                 }
+            } else {
+                System.out.println("NULL");
             }
             
             rs.close();
@@ -593,6 +599,9 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
         } catch (SQLException sqlex) {
             sqlex.printStackTrace();
         }
+        
+        System.out.println("In SQL exists?: " + exists);
+        
         return exists;
     }
 

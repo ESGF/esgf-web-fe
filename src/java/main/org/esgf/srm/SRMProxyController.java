@@ -154,7 +154,7 @@ public class SRMProxyController {
 
         
         //get email address here (either from default or the oepnid)
-        String openId = "jfharney";
+        String openId = "https://esg.ccs.ornl.gov/esgf-idp/openid/kjchrebet";//"jfharney";
         String emailAddr = EmailUtils.getEmailAddrFromOpenId(openId);
         
         

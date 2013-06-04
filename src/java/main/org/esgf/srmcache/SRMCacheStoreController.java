@@ -20,9 +20,6 @@ public class SRMCacheStoreController {
 
     
     public static String DB_TYPE = "postgres";
-
-    //private static String failure_message = "failure";
-    //private static String success_message = "success";
     
     private SRMCacheStore srm_cache;
     private String failure_message;
@@ -58,10 +55,12 @@ public class SRMCacheStoreController {
     
     public SRMCacheStoreController() {
 
-        
+
+        System.out.println("From SRMCacheStoreController->");
         SRMCacheStoreFactory srmCacheStore = new SRMCacheStoreFactory();
         
         srm_cache = srmCacheStore.makeSRMCacheStore(DB_TYPE); 
+
         
         PropertiesReaderFactory factory = new PropertiesReaderFactory();
         PropertiesReader srm_props = factory.makePropertiesReader("SRM");
@@ -97,7 +96,6 @@ public class SRMCacheStoreController {
         
         
         //add a dummy value for isCached until we find a better use for it
-        String isCached = "N/A";
         String timeStamp = Long.toString(System.currentTimeMillis());
         
         long expirationLong = Long.parseLong(timeStamp) + SRMControls.expiration;
@@ -121,64 +119,52 @@ public class SRMCacheStoreController {
     public @ResponseBody String initializeCacheDBFromSolr(HttpServletRequest request) {
     
         String openid = request.getParameter("openid");
+        openid = "rootAdmin";
         if(openid == null) {
             return failure_message;
         }
         
-        
         this.srm_cache.initializeCacheStore();
-        
-        
         return success_message;
-        
-        
     }
     
     @RequestMapping(method=RequestMethod.GET, value="/isCachedFile")
     public @ResponseBody String isCachedFile(HttpServletRequest request) {
         
-        //System.out.println("In iscached");
-        
         String dataset_id = request.getParameter("dataset_id");
         if(dataset_id == null) {
             return failure_message;
         }
-        
-        //System.out.println("1Here");
-        
         String file_id = request.getParameter("file_id");
         if(file_id == null) {
             return failure_message;
         }
-        //System.out.println("2Here");
-
-        //System.out.println("In iscached2 " + dataset_id + " file: " + file_id);
         SRMEntry srm_entry = this.srm_cache.getSRMEntryForFile_id(dataset_id, file_id);
 
         if(srm_entry == null) {
             return failure_message;
         }
 
-        //System.out.println("3Here");
-        
         long currentTimeStamp = System.currentTimeMillis();
         
         String expiration = srm_entry.getExpiration();
         
-        //System.out.println("File_id: " + file_id + " expiration: " + expiration + " currentTimeStamp: " + currentTimeStamp);
-       
         if(Long.parseLong(expiration) > currentTimeStamp) {
+            /*
             if(file_id.equals("ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-09.nc|esg2-sdnl1.ccs.ornl.gov")){
                 System.out.println("\n\nFILEID: " + file_id + "\n\t" + currentTimeStamp + " " + expiration + "\n");
                 System.out.println("success");
             }
+            */
             return success_message;
         } else {
+            /*
             if(file_id.equals("ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-09.nc|esg2-sdnl1.ccs.ornl.gov")){
                 System.out.println("\n\nFILEID: " + file_id + "\n\t" + currentTimeStamp + " " + expiration + "\n");
             
                 System.out.println("failure");
             }
+            */
             return failure_message;
         }
         
@@ -199,10 +185,8 @@ public class SRMCacheStoreController {
         long currentTimeStamp = System.currentTimeMillis();
         
         List<SRMEntry> srm_entries = this.srm_cache.getSRMEntriesForDataset_id(dataset_id);
-        System.out.println("\n\n\nENTRIES FOR: " + dataset_id);
         for(int i=0;i<srm_entries.size();i++) {
             String timestamp = srm_entries.get(i).getExpiration();
-            System.out.println(srm_entries.get(i).getFile_id() + " " + currentTimeStamp + " " + timestamp);
             long expirationTimeStamp = Long.parseLong(timestamp);
             if(expirationTimeStamp < currentTimeStamp) {
                 return failure_message;
@@ -295,7 +279,7 @@ public class SRMCacheStoreController {
             return failure_message;
         }
         
-        System.out.println("\nDatasetid to updated->" + dataset_id);
+        //System.out.println("\nDatasetid to updated->" + dataset_id);
         
         SRMEntry srm_entry = srm_cache.getSRMEntryForFile_id(dataset_id, file_id);
         
@@ -307,7 +291,7 @@ public class SRMCacheStoreController {
         
         
         if(this.srm_cache.updateSRMEntry(srm_entry) == 1) {
-            System.out.println("UPDATE SUCCESSFUL");
+            //System.out.println("UPDATE SUCCESSFUL");
             return success_message;
         } else {
             return failure_message;

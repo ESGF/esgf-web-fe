@@ -9,6 +9,9 @@ public class SRMUtils {
     //properties file for postgres
     public static String SRM_PROPERTIES_FILE_LOCATION = "/esg/config/srm.properties";
 
+    //default locations
+    public static String searchAPI = "http://esg.ccs.ornl.gov:8080/esg-search/search?";
+    public static String srmAPIURL = "http://esg.ccs.ornl.gov:8080/esgf-srm/service/srmrequest?";
     
     
     //the complexity of the returned script (attached in email)
@@ -18,11 +21,11 @@ public class SRMUtils {
     public static String DB_TYPE = "postgres";
 
     //testing params
-    public static int TEST_NUMFILE_LIMIT = 5;
+    public static int TEST_NUMFILE_LIMIT = 3000;
     public static boolean numFileTest = true;
     
     //simulation or production
-    public static String ENVIRONMENT = "Production";
+    public static String ENVIRONMENT = "Simulation";
     
     
 
@@ -35,41 +38,72 @@ public class SRMUtils {
     //printing flag for input params
     public static boolean inputParamsFlag = false;
 
+    //printing flag for simulation output
+    public static boolean simulationOutputParamsFlag = false;
+    
     //parameters after initialization of dataset id, file ids, and file urls
-    public static boolean afterInitializationFlag = true;
+    public static boolean afterInitializationFlag = false;
+    
+    //debug flag for the existance of whether or not a table exists
+    public static boolean tableExistsFlag = false;
     
     //email debug flags
     public static boolean initialEmailTextflag = false;
     public static boolean confirmationEmailTextflag = false;
     
+    //update of the bestman cache table
+    public static boolean updateStatusFlag = false;
+    
+    //print the IDS in getSolrParams helper function
+    public static boolean printIDsFlag = false; 
+    
     //email send flags
-    public static boolean initialEmailSendflag = true;
-    public static boolean confirmationEmailSendflag = true;
+    public static boolean initialEmailSendflag = false;
+    public static boolean confirmationEmailSendflag = false;
+    
+    public static boolean timeParamsFlag = false;
     
     //script generation flags
     public static boolean scriptGenFlag = false;
+    
+    //in filetransformercontroller for http translations
+    public static boolean httpFileFlag = false;
+    
+    //in postgres bestman path controller
+    public static boolean postgresBestmanPathFlag = false;
+
+    //debug flag to check when a properties file is being opened (in PostgresSRMCacheStore constructor)
+    public static boolean postgresCacheStoreFlag = true;
+
+    
+    public static boolean useDefaultEmail = true;
+    
     
     //attachment file names
     public static String GUC_ATTACHMENT_NAME = "globus-url-copy.sh";
     public static String WGET_ATTACHMENT_NAME = "wget.sh";
     
-    
-    
-    
-    
-    public static String srmAPIURL = "http://esg.ccs.ornl.gov:8080/esg-srm/service/srmrequest?";
-
-
-    private static String searchAPIURL = "http://localhost/esg-search/search?";
 
     public static String THREDDS_DATAROOT = "/thredds/fileServer/esg_srm_dataroot";
     
     public static String SRM_CACHE_REPLACE = "/SRMTemp/";
 
-    public static String SRM_CACHE_FILE_LIST_FILE_LOC = "/esg/config/srm_entry_list_File.xml";
-    public static String SRM_CACHE_DATASET_LIST_FILE_LOC = "/esg/config/srm_entry_list_Dataset.xml";
     
+    //from SRM Properties Reader
+    //public static String srmAPIURL = "http://localhost:8080/esgf-srm/service/srmrequest?";
     
+    public static String expiration = "86400000";
+    public static String success_message = "success";
+    public static String failure_message = "failure";
+    
+    public static String db_name = "esgcet";
+    //public static String db_name = "first_db";
+    public static String table_name = "esgf_security.srm_entries";
+    //public static String table_name = "srm_entries";
+    //public static String valid_user = "first_user";
+    public static String valid_user = "dbsuper";
+    //public static String valid_password = "mattryan12";
+    public static String valid_password = "esg4ever";
     
     
     
@@ -179,11 +213,6 @@ public class SRMUtils {
         
         String [] outputFiles = new String [inputFiles.length];
         
-        /*
-        for(int i=0;i<inputFiles.length;i++) {
-            System.out.println("input file: " + i + " " + inputFiles[i]);
-        }
-        */
         
         for(int i=0;i<inputFiles.length;i++) {
             String tempFile = inputFiles[i].replace("srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?SFN=mss://", "file:///");
@@ -300,6 +329,9 @@ public class SRMUtils {
     public static String INPUT_FILE_FILE_URL = "N/A";
     
     public static String INPUT_SCRIPT_TYPE = "WGET";
+
+    
+    
     
     public static final String DEFAULT_EMAIL_ADDR = "jfharney@gmail.com";
     

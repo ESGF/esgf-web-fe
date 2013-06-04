@@ -55,6 +55,7 @@
 -->	    	
 			<div id="temporal"><a href="#" id="temporal" style="font-size:10px">Temporal Search</a></div>
 			<div id="geo"><a href="#" id="geospatial" style="font-size:10px">Geospatial Search</a></div>
+			<div id="initializeSRM"><a href="#" id="initializeSRM" style="font-size:10px">Initialize SRM</a></div>
 			<div id="clearc"><a href="#" id="clearcache" style="font-size:10px">Clear search constraints and datacart</a></div>
 			<div id="search_help"><a href="http://www.esgf.org/wiki/ESGF_Web_Search_User_Guide" style="font-size:10px" >Search Help</a></div>
 	    	<div id="search_cv"><a href="http://www.esgf.org/wiki/ESGF_Search_CV" style="font-size:10px" >Search Controlled Vocabulary</a></div>
@@ -205,7 +206,30 @@
  	  	
   	  });
  	  
-    	
+  		$('a#initializeSRM').click(function() {
+  			
+  			
+  			var initialize_url = '/esgf-web-fe/initializeSRMEntryList';
+  			
+  			$.ajax({
+				url: initialize_url,
+				global: false,
+				type: "POST",
+				//data: queryStr,
+				//dataType: 'xml',
+				success: function(data) {
+					alert(data);
+					//alert('Your data has been staged and an email has been sent to your account.  Please follow the instructions included.');
+					// $('#srm_response').append("Staging successfully launched"); 
+				},
+				error: function (request, status, error) {
+			        //alert("SRM Request error: " + request.responseText);
+				}
+				
+	    	});
+  			
+  			
+  		});
     	
     	//event is trigger on both logout and login links (for now)
     	//there is a little disconnect with the header.jsp file so this can be seen as a temporary fix until a main page clean up is performed 

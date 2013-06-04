@@ -2,6 +2,7 @@ package org.esgf.propertiesreader;
 
 public class SRMPropertiesConstants {
 
+    /*
     public static String srmAPIURL = "http://localhost:8080/esgf-srm/service/srmrequest?";
     
     public static String expiration = "86400000";
@@ -16,5 +17,5 @@ public class SRMPropertiesConstants {
     public static String valid_user = "dbsuper";
     //public static String valid_password = "mattryan12";
     public static String valid_password = "esg4ever";
-    
+    */
 }

@@ -102,12 +102,12 @@ public class DatacartController {
             
         }
         
-        if(Utils.debugMode) {
+        //if(Utils.debugMode) {
             System.out.println("isInitialQuery: " + isInitialQuery);
             System.out.println("offset: " + offset);
             System.out.println("limit: " + limit);
             System.out.println("query: " + query);
-        }
+        //}
         
         
         //query solr for the files
@@ -121,7 +121,7 @@ public class DatacartController {
         solr.addConstraint("dataset_id",dataset_id);
         
         //if(Utils.debugMode)
-            //System.out.println("\nsolr query->" + solr.getQueryString() + "\n\n");
+            System.out.println("\nsolr query->" + solr.getQueryString() + "\n\n");
         
         
         solr.executeQuery();

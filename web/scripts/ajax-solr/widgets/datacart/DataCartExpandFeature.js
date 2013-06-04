@@ -119,8 +119,6 @@
 			
 			var self = this;
 			
-			alert('in the empty file message');
-			
 			var view_first_files_tag = self.view_first_files_tag + 'initial_true_' + ESGF.datacart.replaceChars(data.doc.datasetId);
 			
 	    	
@@ -462,6 +460,7 @@
 						data: queryStr,
 						dataType: 'json',
 						success: function(data) {
+							
 							
 							//no files
 							if(data.doc.files.file == undefined) {

@@ -1,26 +1,34 @@
 package org.esgf.filetransformer;
 
+import org.esgf.srmcache.SRMCacheStore;
+import org.esgf.srmcache.SRMCacheStoreController;
+import org.esgf.srmcache.SRMCacheStoreFactory;
+
 public abstract class FileTransformer {
 
     private String name;
     private String file_url;
     protected String dataset_id;
     protected String file_id;
+    protected SRMCacheStore srm_cache;
     
-    public FileTransformer(String name) {
+    public FileTransformer(String name,SRMCacheStore srm_cache) {
         this.name = name;
+        this.srm_cache = srm_cache;
     }
     
-    public FileTransformer(String name,String file_url) {
+    public FileTransformer(String name,SRMCacheStore srm_cache,String file_url) {
         this.name = name;
         this.file_url = file_url;
+        this.srm_cache = srm_cache;
     }
 
-    public FileTransformer(String name,String file_url,String dataset_id,String file_id) {
+    public FileTransformer(String name,SRMCacheStore srm_cache,String file_url,String dataset_id,String file_id) {
         this.name = name;
         this.file_url = file_url;
         this.dataset_id = dataset_id;
         this.file_id = file_id;
+        this.srm_cache = srm_cache;
     }
     
     public String getName() {
@@ -40,6 +48,7 @@ public abstract class FileTransformer {
     abstract public String getGridFTP();
     abstract public String getSRM();
     abstract public String getFileName();
+    abstract public SRMCacheStore getSRMCacheStore();
     
     
     public static void main(String [] args) {
@@ -47,7 +56,11 @@ public abstract class FileTransformer {
         
         String file_url = "srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?SFN=mss://esg2-sdnl1.ccs.ornl.gov//proj/cli049/UHRGCS/ORNL/CESM1/t341f02.FAMIPr/atm/hist/t341f02.FAMIPr.cam2.h0.1978-10.nc";
         
-        FileTransformer filetrans = factory.makeFileTransformer("SRM",file_url);
+        SRMCacheStoreFactory srmCacheStore = new SRMCacheStoreFactory();
+        System.out.println("From bestman path generator");
+        SRMCacheStore srm_cache = srmCacheStore.makeSRMCacheStore(SRMCacheStoreController.DB_TYPE); 
+        
+        FileTransformer filetrans = factory.makeFileTransformer("SRM",srm_cache,file_url);
         
         System.out.println(filetrans.getHttp());
         

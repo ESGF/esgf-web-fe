@@ -1,5 +1,7 @@
 package org.esgf.email;
 
+import org.esgf.srm.utils.SRMUtils;
+
 import esg.common.util.ESGFProperties;
 import esg.node.security.UserInfo;
 import esg.node.security.UserInfoCredentialedDAO;
@@ -39,27 +41,31 @@ public class EmailUtils {
 	    
         String emailAddr = null;
         
-        
-        UserInfoCredentialedDAO myUserInfoDAO;
-
-        try{
-            ESGFProperties myESGFProperties = new ESGFProperties();
-            
-            String passwd = myESGFProperties.getAdminPassword();   
-            
-            System.out.println("Getting email address from openid: " + openid);
-            System.out.println("passwd: " + passwd);
-            
-            myUserInfoDAO = new UserInfoCredentialedDAO("rootAdmin",passwd,myESGFProperties);
-            UserInfo userInfo = myUserInfoDAO.getUserById(openid);
-            emailAddr = userInfo.getEmail();
-
-            
-        } catch(Exception e) {
-            System.out.println("\n\tNo email found... using default");
-            //e.printStackTrace();
+        if(SRMUtils.useDefaultEmail) {
             emailAddr = "jfharney@gmail.com";
+        } else {
+            UserInfoCredentialedDAO myUserInfoDAO;
+
+            try{
+                ESGFProperties myESGFProperties = new ESGFProperties();
+                
+                String passwd = myESGFProperties.getAdminPassword();   
+                
+                System.out.println("Getting email address from openid: " + openid);
+                System.out.println("passwd: " + passwd);
+                
+                myUserInfoDAO = new UserInfoCredentialedDAO("rootAdmin",passwd,myESGFProperties);
+                UserInfo userInfo = myUserInfoDAO.getUserById(openid);
+                emailAddr = userInfo.getEmail();
+
+                
+            } catch(Exception e) {
+                System.out.println("\n\tNo email found... using default");
+                //e.printStackTrace();
+                emailAddr = "jfharney@gmail.com";
+            }
         }
+        
         
         
         return emailAddr;

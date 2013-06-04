@@ -70,6 +70,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.esgf.datacart.FileDownloadTemplateController;
 import org.esgf.propertiesfiles.Utils;
+import org.esgf.srm.utils.SRMUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -164,6 +165,8 @@ public class LiveSearchController {
                 modelFacetParamsValues.add(request.getParameter(facetParams.get(i)));
             }
         }
+        
+        
         
         //System.out.println("modelFacetParamsLen: " + modelFacetParams.size());
         String [] facetParamList = (String [])modelFacetParams.toArray(new String[0]);

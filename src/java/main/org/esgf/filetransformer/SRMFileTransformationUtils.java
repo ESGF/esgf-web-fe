@@ -6,6 +6,8 @@ import java.util.Random;
 
 import org.esgf.bestmanpath.BestmanPathGenerator;
 import org.esgf.bestmanpath.BestmanPathGeneratorFactory;
+import org.esgf.srm.utils.SRMUtils;
+import org.esgf.srmcache.SRMCacheStore;
 
 /**
  * 
@@ -123,7 +125,7 @@ public class SRMFileTransformationUtils {
     
     public static String extractFilePathNameFromUrl(String url) {
         
-        System.out.println("Extract File Path Original URL: " + url);
+        //System.out.println("Extract File Path Original URL: " + url);
         
         String newFileName = "";
         String tempStr = "";
@@ -188,17 +190,17 @@ public class SRMFileTransformationUtils {
     //srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?SFN=mss://esg2-sdnl1.ccs.ornl.gov//proj/cli049/UHRGCS/ORNL/CESM1/t341f02.FAMIPr/atm/hist/t341f02.FAMIPr.cam2.h0.1978-09.nc
     //output
     //gsiftp://esg2-sdnl1.ccs.ornl.gov//lustre/esgfs/SRM/shared/V.0.0-505553807/t341f02.FAMIPr.cam2.h0.1978-09.nc
-    public static String [] simulateSRM(String [] inputFiles) {
+    public static String [] simulateSRM(String [] inputFiles,SRMCacheStore srm_cache) {
     
         String [] outputFiles = new String [inputFiles.length];
         
-        System.out.println("file urls length: " + inputFiles.length);
-        
+        if(SRMUtils.simulationOutputParamsFlag) {   
+            System.out.println("output file urls length: " + inputFiles.length);
+        }
         
         
         
         for(int i=0;i<inputFiles.length;i++) {
-            //System.out.println("\tinput file: " + i + " " + inputFiles[i]);
             String tempFile = inputFiles[i].replace("srm://esg2-sdnl1.ccs.ornl.gov:46790/srm/v2/server?SFN=mss://", "file:///");
             //tempFile = transformServerName(tempFile);
             
@@ -208,15 +210,20 @@ public class SRMFileTransformationUtils {
             String file_id = "";
             String dataset_id = "";
             
+            
+            
             BestmanPathGeneratorFactory bestmanPathGeneratorFactory = new BestmanPathGeneratorFactory();
             BestmanPathGenerator bestmanNumGenerator = 
-                    bestmanPathGeneratorFactory.makeBestmanPathGenerator(BESTMAN_PATH_GENERATOR_TYPE,dataset_id,file_id);
+                    bestmanPathGeneratorFactory.makeBestmanPathGenerator(BESTMAN_PATH_GENERATOR_TYPE,srm_cache,dataset_id,file_id);
             
-            String bestmannum = bestmanNumGenerator.getBestmanPath();
+            String bestmannum = bestmanNumGenerator.getBestmanPath(srm_cache);
             
             
             String outputFile = "gsiftp://esg.ccs.ornl.gov:2811//lustre/esgfs/shared/" + bestmannum + "/" + fileName;
-            System.out.println("\toutput file: " + i + " " + outputFile);
+            
+            if(SRMUtils.simulationOutputParamsFlag) {
+                System.out.println("\toutput file: " + i + " " + outputFile);
+            }
             
             outputFiles[i] = outputFile;
         }

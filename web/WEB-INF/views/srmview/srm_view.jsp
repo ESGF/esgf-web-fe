@@ -143,7 +143,7 @@ $(document).ready(function(){
 				 	'dataset_id':dataset_id,
 				 	'filtered':filtered,
 				 	'type':type,
-				 	'scriptType':scriptType
+				 	//'scriptType':scriptType
 				 	
 				};
 
@@ -152,7 +152,7 @@ $(document).ready(function(){
 			LOG.debug('file_id: ' + queryStr['file_id']);
 			LOG.debug('file_url: ' + queryStr['file_url']);
 			LOG.debug('type: ' + queryStr['type']);
-			LOG.debug('scriptType: ' + queryStr['scriptType']);
+			//LOG.debug('scriptType: ' + queryStr['scriptType']);
 			
 			
 			var srm_url = '/esgf-web-fe/srmfilesrequest';

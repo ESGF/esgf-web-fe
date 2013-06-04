@@ -19,7 +19,7 @@ import org.esgf.srm.utils.SRMUtils;
 
 public class Solr {
     
-    public static String searchAPI = SRMControls.searchAPI;
+    public static String searchAPI = SRMUtils.searchAPI;
 
     private static String queryPrefix = "format=application%2Fsolr%2Bjson&type=File";
     

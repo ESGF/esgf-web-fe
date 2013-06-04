@@ -1,6 +1,7 @@
 package org.esgf.srmworkflow;
 
 import org.esgf.srm.SRMResponse;
+import org.esgf.srmcache.SRMCacheStore;
 
 public abstract class SRMWorkflow {
 
@@ -18,6 +19,6 @@ public abstract class SRMWorkflow {
         this.type = type;
     }
     
-    public abstract SRMResponse runWorkFlow(String [] srm_files);
+    public abstract SRMResponse runWorkFlow(String [] srm_files,SRMCacheStore srm_cache);
     
 }

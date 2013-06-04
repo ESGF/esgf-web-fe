@@ -27,7 +27,7 @@ public class SRMPropertiesReader extends PropertiesReader {
         this.name = name;
         this.prop = new Properties();
         
-        System.out.println("No properties file...use defaults and post to location");
+        //System.out.println("No properties file...use defaults and post to location");
 
         /*
         prop.setProperty("bestman_expiration", SRMPropertiesConstants.expiration);
@@ -48,14 +48,14 @@ public class SRMPropertiesReader extends PropertiesReader {
             
             System.out.println("No properties file...use defaults and post to location");
 
-            prop.setProperty("bestman_expiration", SRMPropertiesConstants.expiration);
-            prop.setProperty("failure_message", SRMPropertiesConstants.failure_message);
-            prop.setProperty("success_message", SRMPropertiesConstants.success_message);
-            prop.setProperty("srm_api_url", SRMPropertiesConstants.srmAPIURL);
-            prop.setProperty("srm_db_name", SRMPropertiesConstants.db_name);
-            prop.setProperty("srm_table_name", SRMPropertiesConstants.table_name);
-            prop.setProperty("srm_valid_user", SRMPropertiesConstants.valid_user);
-            prop.setProperty("srm_valid_password", SRMPropertiesConstants.valid_password);
+            prop.setProperty("bestman_expiration", SRMUtils.expiration);
+            prop.setProperty("failure_message", SRMUtils.failure_message);
+            prop.setProperty("success_message", SRMUtils.success_message);
+            prop.setProperty("srm_api_url", SRMUtils.srmAPIURL);
+            prop.setProperty("srm_db_name", SRMUtils.db_name);
+            prop.setProperty("srm_table_name", SRMUtils.table_name);
+            prop.setProperty("srm_valid_user", SRMUtils.valid_user);
+            prop.setProperty("srm_valid_password", SRMUtils.valid_password);
             
             
             try {

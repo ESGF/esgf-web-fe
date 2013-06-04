@@ -17,6 +17,7 @@ import org.esgf.srm.SRMControls;
 import org.esgf.srm.SRMProxyController;
 import org.esgf.srm.SRMResponse;
 import org.esgf.srm.utils.SRMUtils;
+import org.esgf.srmcache.SRMCacheStore;
 
 public class ProductionSRMWorkflow extends SRMWorkflow {
 
@@ -103,7 +104,7 @@ public class ProductionSRMWorkflow extends SRMWorkflow {
         
 
         method.setQueryString(queryString);
-        //System.out.println("\tQuerystring-> " + method.getQueryString());
+        System.out.println("\n\n\tQuerystring-> " + method.getQueryString() + "\n\n");
         
 
         
@@ -143,6 +144,22 @@ public class ProductionSRMWorkflow extends SRMWorkflow {
         }
         
         return queryString;
+    }
+
+    @Override
+    public SRMResponse runWorkFlow(String[] srm_files, SRMCacheStore srm_cache) {
+String [] resultingUrls = null;
+        
+        String responseStr = queryESGSRM(srm_files);
+        
+        SRMResponse srm_response = new SRMResponse();
+        
+        srm_response.fromXML(responseStr);
+        
+        //resultingUrls = srm_response.getResponse_urls();
+        
+        return srm_response;
+        
     }
 
 }

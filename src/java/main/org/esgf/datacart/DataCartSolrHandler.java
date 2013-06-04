@@ -20,12 +20,13 @@ import org.esgf.metadata.JSONArray;
 import org.esgf.metadata.JSONException;
 import org.esgf.metadata.JSONObject;
 import org.esgf.srm.SRMControls;
+import org.esgf.srm.utils.SRMUtils;
 
 
 @SuppressWarnings("unused")
 public class DataCartSolrHandler {
 
-    private static String searchAPIURL = SRMControls.searchAPI;//
+    private static String searchAPIURL = SRMUtils.searchAPI;//
     private static String queryPrefix = "format=application%2Fsolr%2Bjson&type=File";
     private final static Logger LOG = Logger.getLogger(DataCartSolrHandler.class);
     private static final boolean queryStringPrintFlag = true;

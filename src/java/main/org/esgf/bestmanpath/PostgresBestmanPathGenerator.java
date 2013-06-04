@@ -1,5 +1,6 @@
 package org.esgf.bestmanpath;
 
+import org.esgf.srm.utils.SRMUtils;
 import org.esgf.srmcache.SRMCacheStore;
 import org.esgf.srmcache.SRMCacheStoreController;
 import org.esgf.srmcache.SRMCacheStoreFactory;
@@ -7,7 +8,7 @@ import org.esgf.srmcache.SRMEntry;
 
 public class PostgresBestmanPathGenerator extends BestmanPathGenerator {
 
-    public PostgresBestmanPathGenerator(String dataset_id,String file_id) {
+    public PostgresBestmanPathGenerator(SRMCacheStore srm_cache,String dataset_id,String file_id) {
         super();
         this.name = "PostgresBestman";
         this.file_id = file_id;
@@ -15,13 +16,16 @@ public class PostgresBestmanPathGenerator extends BestmanPathGenerator {
     }
     
     @Override
-    public String getBestmanPath() {
+    public String getBestmanPath(SRMCacheStore srm_cache) {
         
+        /*
         SRMCacheStoreFactory srmCacheStore = new SRMCacheStoreFactory();
-        
+        System.out.println("From bestman path generator");
         SRMCacheStore srm_cache = srmCacheStore.makeSRMCacheStore(SRMCacheStoreController.DB_TYPE); 
-        
-        System.out.println("\t\tGETTING ENTRY FOR D: " + dataset_id + " AND F: " + file_id);
+        */
+        if(SRMUtils.postgresBestmanPathFlag) {
+            System.out.println("\t\tGETTING ENTRY FOR D: " + dataset_id + " AND F: " + file_id);
+        }
         SRMEntry srm_entry = srm_cache.getSRMEntryForFile_id(dataset_id, file_id);
         
         String bestmanNum = srm_entry.getBestmannumber();

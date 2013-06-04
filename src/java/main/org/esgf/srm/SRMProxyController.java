@@ -35,6 +35,7 @@ import org.esgf.solr.model.SolrResponse;
 import org.esgf.srm.scriptgen.ScriptGeneratorFactory;
 import org.esgf.srm.utils.SRMUtils;
 import org.esgf.srmcache.SRMCacheStore;
+import org.esgf.srmcache.SRMCacheStoreController;
 import org.esgf.srmcache.SRMCacheStoreFactory;
 import org.esgf.srmcache.SRMEntry;
 import org.esgf.srmworkflow.SRMWorkflow;
@@ -57,11 +58,13 @@ public class SRMProxyController {
     
     private static String MAX_LIMIT = "9999";
     
-    private static boolean printIDsFlag = false; 
     
     private Email initialEmail;
     private Email confirmationEmail;
     private SRMResponse srm_response;
+
+
+    private SRMCacheStore srm_cache;
     
     
     public static void main(String [] args) {
@@ -109,6 +112,16 @@ public class SRMProxyController {
         
         System.out.println("resp: " + srm_response.getMessage());
         */
+    }
+    
+    
+    public SRMProxyController() {
+        
+        
+        SRMCacheStoreFactory srmCacheStore = new SRMCacheStoreFactory();
+        System.out.println("From SRMProxyController->");
+        this.srm_cache = srmCacheStore.makeSRMCacheStore(SRMCacheStoreController.DB_TYPE); 
+        
     }
     
     
@@ -266,8 +279,8 @@ public class SRMProxyController {
         
         if(SRMUtils.afterInitializationFlag) {
             System.out.println("DATASET ID: " + dataset_id);
-            System.out.println("FILE ID: " + file_ids[0] + "\n");
-            System.out.println("FILE URL: " + file_urls[0] + "\n");
+            System.out.println("FILE ID [0]: " + file_ids[0] + "\n");
+            System.out.println("FILE URL [0]: " + file_urls[0] + "\n");
         }
 
         //send initial email here
@@ -280,25 +293,25 @@ public class SRMProxyController {
         if(SRMUtils.initialEmailSendflag) {
             this.initialEmail.sendEmail();
         }
-        System.out.println("\n\n---Before Bestman---\n\n");
         
+        System.out.println("\n---Before Bestman---\n");
         
         //execute bestman here
         SRMWorkflowFactory srm_workflow_factory = new SRMWorkflowFactory();
         SRMWorkflow srm_workflow_engine = srm_workflow_factory.makeSRMWorkflow(SRMUtils.ENVIRONMENT);
-        SRMResponse srm_response = srm_workflow_engine.runWorkFlow(file_urls);
+        SRMResponse srm_response = srm_workflow_engine.runWorkFlow(file_urls,srm_cache);
         String respMessage = srm_response.getMessage();
         String [] outputFiles = srm_response.getResponse_urls();
         String [] response_urls = srm_response.getResponse_urls();
 
-        System.out.println("\n\n---After Bestman---\n\n");
+        System.out.println("\n---After Bestman---\n");
         
         
         String timeStamp = Long.toString(System.currentTimeMillis());
         long expirationLong = Long.parseLong(timeStamp) + SRMControls.expiration;
         String expiration = Long.toString(expirationLong);
         
-        if(SRMUtils.srmproxydebugflag) {
+        if(SRMUtils.timeParamsFlag) {
             System.out.println("---SRM Cache Params---");
             System.out.println("\ttimeStamp: " + timeStamp);
             System.out.println("\texpiration: " + expiration);
@@ -308,26 +321,27 @@ public class SRMProxyController {
         //update the expiration times AND bestman path strings of the files in the srm_cache
         
         if(type.equals("Dataset")) {
-            SRMCacheStoreFactory srmCacheStoreFactory = new SRMCacheStoreFactory();
+            //SRMCacheStoreFactory srmCacheStoreFactory = new SRMCacheStoreFactory();
             
-            SRMCacheStore srm_cache = srmCacheStoreFactory.makeSRMCacheStore(SRMUtils.DB_TYPE); 
+            //SRMCacheStore srm_cache = srmCacheStoreFactory.makeSRMCacheStore(SRMUtils.DB_TYPE); 
 
             srm_cache.updateAllSRMEntriesForDatasetId(dataset_id,file_ids,response_urls);
+            if(SRMUtils.updateStatusFlag) {
+                System.out.println("\nUpdated entries for dataset: " + dataset_id);
+            }
             
-            System.out.println("\n\n\n\nUpdated entries for dataset: " + dataset_id);
-
         } else {
             for(int i=0;i<file_ids.length;i++) {
-                SRMCacheStoreFactory srmCacheStoreFactory = new SRMCacheStoreFactory();
+                //SRMCacheStoreFactory srmCacheStoreFactory = new SRMCacheStoreFactory();
                 
-                SRMCacheStore srm_cache = srmCacheStoreFactory.makeSRMCacheStore(SRMUtils.DB_TYPE); 
+                //SRMCacheStore srm_cache = srmCacheStoreFactory.makeSRMCacheStore(SRMUtils.DB_TYPE); 
                 
                 String bestmannumber = SRMFileTransformationUtils.extractBestmanNumFromUrl(response_urls[i]);
                 
-                System.out.println("Updating with bestmannumber: " + bestmannumber);
-                
-                System.out.println("file_ids[i] " + file_ids[i]);
-                
+                if(SRMUtils.updateStatusFlag) {
+                    System.out.println("Updating with bestmannumber: " + bestmannumber);
+                    System.out.println("file_ids[i] " + file_ids[i]);
+                }
                 SRMEntry srm_entry = new SRMEntry(file_ids[i],dataset_id,timeStamp,expiration,bestmannumber);
                 
                 srm_cache.updateSRMEntry(srm_entry);
@@ -412,7 +426,6 @@ public class SRMProxyController {
             scriptType = SRMUtils.INPUT_SCRIPT_TYPE;
         }
         
-        //System.out.println("\t\t\tscript type-? " + scriptType + " default: " + SRMUtils.INPUT_SCRIPT_TYPE);
         
         inputObj.setDataset_id(dataset_id);
         inputObj.setType(type);
@@ -473,7 +486,7 @@ public class SRMProxyController {
             
             String file_id = request.getParameter("file_id");
             if(file_id == null) {
-                System.out.println("file_id is null");
+                //System.out.println("file_id is null");
                 file_id = SRMUtils.INPUT_FILE_FILE_ID;
             }
             //System.out.println("File " + file_id);
@@ -498,7 +511,7 @@ public class SRMProxyController {
         
         if(scriptType.equalsIgnoreCase("wget")) {
             
-            System.out.println("Generating wget ");
+            //System.out.println("Generating wget ");
             
             if(SRMUtils.SCRIPT_COMPLEXITY.equals("basic")) {
                 ((BasicWgetScriptGenerator) scriptGenerator).setFileStr(outputFiles);
@@ -552,6 +565,7 @@ public class SRMProxyController {
     //2 - File core for the files
     private SolrResponse querySolr(String query,String dataset_id) {
     
+        
         System.out.println("Querying solr...");
         
         Solr solr = new Solr();
@@ -569,7 +583,7 @@ public class SRMProxyController {
         
         SolrResponse solrResponse = solr.getSolrResponse();
         
-        System.out.println("Done Querying solr...");
+        System.out.println("End Querying solr...");
         
         return solrResponse;
         
@@ -595,7 +609,7 @@ public class SRMProxyController {
             for(int j=0;j<urlsElement.getUrls().size();j++) {
                 if(urlsElement.getUrls().get(j).contains("srm://")) { 
                     file_urls[i] = urlsElement.getUrls().get(j);
-                    if(printIDsFlag) {
+                    if(SRMUtils.printIDsFlag) {
                        System.out.println("\t" + file_urls[i]);
                     } 
                     
@@ -644,7 +658,7 @@ public class SRMProxyController {
         
         
         
-        if(!scriptType.equals("wget")) {
+        if(scriptType.equals("wget")) {
             attachment.setAttachmentName(SRMUtils.WGET_ATTACHMENT_NAME);
         } else {
             attachment.setAttachmentName(SRMUtils.GUC_ATTACHMENT_NAME);
@@ -685,52 +699,6 @@ public class SRMProxyController {
         
     }
     
-    /*
-    //send resulting email here
-    this.confirmationEmail = new Email();
-    this.confirmationEmail.setTo(emailAddr);
-    Attachment attachment = new Attachment();
-    
-    
-    
-    if(!scriptType.equals("wget")) {
-        attachment.setAttachmentName(SRMUtils.GUC_ATTACHMENT_NAME);
-    } else {
-        attachment.setAttachmentName(SRMUtils.WGET_ATTACHMENT_NAME);
-    }
-    
-    attachment.setAttachmentContent(script);
-    
-    this.confirmationEmail.setAttachment(attachment);
-    this.confirmationEmail.setHeaderText("Your request for data has been successfully staged!");
-    
-    //assemble the body text here
-    String bodyStr = "";
-    bodyStr += "Your request for data has been successfully staged!\n";
-    
-
-    if(type.equals("Dataset")) {
-        bodyStr += "\nPlease navigate to the following URL:\n" + 
-                "http://localhost:8080/esgf-web-fe/live?tab=datacart&override=true" +
-                "&datasetid=" + dataset_id +
-                "\n";
-    } 
-    
-    bodyStr += "The data you requested was the following:\n";
-    for(int i=0;i<file_urls.length;i++) {
-        bodyStr += "\t" + file_urls[i] + "\n";
-    }
-    
-    
-    this.confirmationEmail.setBodyText(bodyStr);
-
-    String fileName = "/esg/config/Comfirmation_" + scriptType + ".txt";
-    this.confirmationEmail.toFile(fileName);
-    
-    if(SRMUtils.emailTextflag) {
-        System.out.println(this.confirmationEmail.toString());
-    }
-    */
     
     
     

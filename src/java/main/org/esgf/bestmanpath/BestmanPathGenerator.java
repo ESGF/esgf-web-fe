@@ -1,5 +1,7 @@
 package org.esgf.bestmanpath;
 
+import org.esgf.srmcache.SRMCacheStore;
+
 public abstract class BestmanPathGenerator {
 
     protected String name;
@@ -23,7 +25,7 @@ public abstract class BestmanPathGenerator {
         this.file_id = file_id;
     }
 
-    abstract public String getBestmanPath();
+    abstract public String getBestmanPath(SRMCacheStore srm_cache);
     
     public String getName() {
         return name;

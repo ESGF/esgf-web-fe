@@ -213,6 +213,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 	 */
 	afterRequest: function () {
 		
+		
+		
 
 		//empty the tab
         $(this.target).empty();

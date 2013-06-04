@@ -4,18 +4,19 @@ import java.io.File;
 
 import org.esgf.bestmanpath.BestmanPathGenerator;
 import org.esgf.bestmanpath.BestmanPathGeneratorFactory;
+import org.esgf.srmcache.SRMCacheStore;
 
 public class SRMFileTransformer extends FileTransformer {
 
     public static String THREDDS_DATAROOT = "/thredds/fileServer/esg_dataroot/";
     
 
-    public SRMFileTransformer(String fileTransformerName) {
-        super(fileTransformerName);
+    public SRMFileTransformer(String fileTransformerName,SRMCacheStore srm_cache) {
+        super(fileTransformerName,srm_cache);
     }
     
-    public SRMFileTransformer(String fileTransformerName,String file_url) {
-        super(fileTransformerName,file_url);
+    public SRMFileTransformer(String fileTransformerName,SRMCacheStore srm_cache,String file_url) {
+        super(fileTransformerName,srm_cache,file_url);
         System.out.println("\nIn SRMFileTransformer Constructor: " + fileTransformerName + "\n\tfile url: " + file_url);
     }
     
@@ -58,13 +59,13 @@ public class SRMFileTransformer extends FileTransformer {
         
         BestmanPathGeneratorFactory bestmanPathGeneratorFactory = new BestmanPathGeneratorFactory();
         BestmanPathGenerator bestmanNumGenerator = 
-                bestmanPathGeneratorFactory.makeBestmanPathGenerator("Postgres",dataset_id,file_id);
+                bestmanPathGeneratorFactory.makeBestmanPathGenerator("Postgres",srm_cache,dataset_id,file_id);
         
         /*
         BestmanPathGenerator bestmanNumGenerator = 
                 bestmanPathGeneratorFactory.makeBestmanPathGenerator(SRMFileTransformationUtils.BESTMAN_PATH_GENERATOR_TYPE,dataset_id,file_id);
         */
-        String bestmannum = bestmanNumGenerator.getBestmanPath();
+        String bestmannum = bestmanNumGenerator.getBestmanPath(srm_cache);
         
         
         
@@ -79,6 +80,12 @@ public class SRMFileTransformer extends FileTransformer {
 
     @Override
     public String getFileName() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public SRMCacheStore getSRMCacheStore() {
         // TODO Auto-generated method stub
         return null;
     }

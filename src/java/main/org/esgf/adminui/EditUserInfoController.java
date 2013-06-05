@@ -50,7 +50,6 @@ public class EditUserInfoController {
     
         
     public EditUserInfoController() {
-        System.out.println("enviSwitch: " + Utils.environmentSwitch);
         
         if(Utils.environmentSwitch) {
             try {

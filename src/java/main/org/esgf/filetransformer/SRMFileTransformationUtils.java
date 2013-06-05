@@ -80,14 +80,19 @@ public class SRMFileTransformationUtils {
     public static String gridftp2http(String gsiftp) {
         String http = "";
         
+        
         http = replaceHostName(gsiftp);
+        
+        System.out.println("1 http: " + http);
         
         http = http.replace("gsiftp", "http");
         
         http = http.replace(":2811","");
         
-        http = http.replace("//lustre/esgfs", THREDDS_DATAROOT);
-        
+        http = http.replace("//lustre/esgfs/SRMTemp", THREDDS_DATAROOT);
+        http = http.replace("//lustre/esgfs/SRM", THREDDS_DATAROOT);
+
+        System.out.println("1 http: " + http);
         
         return http;
     }

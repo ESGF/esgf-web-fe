@@ -53,7 +53,7 @@ public class GeneralFileTransformer extends FileTransformer  {
         
         
         
-        outputFile = "gsiftp://esg.ccs.ornl.gov:2811//lustre/esgfs/shared/" + bestmannum + "/" + fileName;
+        outputFile = "gsiftp://esg.ccs.ornl.gov:2811//lustre/esgfs/SRMTemp/shared/" + bestmannum + "/" + fileName;
         
         return outputFile;
     }

@@ -63,7 +63,7 @@
 	<div class="span-24 prepend-1 last" style="margin-top:40px;">
 		<div id="srm_response"></div>
 	</div>
-	<div class="span-18 prepend-1 last" style="margin-top:30px;margin-bottom:30px">
+	<div class="span-18 prepend-1 last" style="margin-top:30px;margin-bottom:10px">
 	
 		<div id="show_params" style="display:none">
 			<div>Type: ${type}</div>
@@ -94,7 +94,7 @@
 		
 	</div>
 	
-	<div class="span-18 prepend-1 last" style="margin-top:30px;margin-bottom:30px">
+	<div class="span-18 prepend-1 last" style="margin-top:10px;margin-bottom:10px">
 	
 		<div id="file_contents" style="display:none;font-weight:bold">
 			File(s) to be transferred from HPSS
@@ -129,6 +129,8 @@ $(document).ready(function(){
 			
 			$('div#file_contents').show();
 			
+			
+			
 			var type = $('#type').html();
 			var dataset_id = $('#dataset_id').html();
 			var filtered = $('#filtered').html();
@@ -142,7 +144,7 @@ $(document).ready(function(){
 					'constraints': fqParamStr,
 				 	'dataset_id':dataset_id,
 				 	'filtered':filtered,
-				 	'type':type,
+				 	'type':type
 				 	//'scriptType':scriptType
 				 	
 				};
@@ -154,30 +156,32 @@ $(document).ready(function(){
 			LOG.debug('type: ' + queryStr['type']);
 			//LOG.debug('scriptType: ' + queryStr['scriptType']);
 			
-			
-			var srm_url = '/esgf-web-fe/srmfilesrequest';
+			var srm_url = '/esgf-web-fe/srmfilesrequest?file_id='+file_id+
+					'&dataset_id='+dataset_id+
+					'&type='+type+
+					'&constraints='+fqParamStr;
 			
 			$.ajax({
 				url: srm_url,
-				global: false,
 				type: "POST",
-				data: queryStr,
-				//dataType: 'xml',
+				global: false,
+				//data: queryStr,
 				success: function(data) {
 					for(var i=0;i<data.length;i++) {
 						$('#files').append('<div>' + data[i] + '</div>')
 					}
 				},
 				error: function() {
-					alert('srm error');
+					alert('error');
 				}
-				
-	    	});
+			});
+			
 			
 			
 			
 		} else {
 			$('input#show_files').val('View Files with Dataset(s)');
+			$('#files').empty();
 			$('div#file_contents').hide();
 		}
 	});

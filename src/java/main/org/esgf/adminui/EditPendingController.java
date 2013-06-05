@@ -53,7 +53,6 @@ public class EditPendingController {
     private ESGFProperties myESGFProperties; 
     
     public EditPendingController() {
-        System.out.println("enviSwitch: " + Utils.environmentSwitch);
         
         if(Utils.environmentSwitch) {
             try {

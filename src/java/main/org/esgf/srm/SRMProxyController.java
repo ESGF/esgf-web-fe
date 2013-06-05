@@ -361,10 +361,12 @@ public class SRMProxyController {
         }
         
         
-        String script = buildScript(scriptType,outputFiles,checksums,checksumTypes);
+        
+        //String script = buildScript(scriptType,outputFiles,checksums,checksumTypes);
+        String script = buildScript(scriptType,response_urls,checksums,checksumTypes);
         
         
-        //
+        
         
         //confirmation email
         writeConfirmationEmail(dataset_id,file_urls,emailAddr,type,scriptType,script);
@@ -422,7 +424,7 @@ public class SRMProxyController {
 
         String scriptType = request.getParameter("scriptType");
         if(scriptType == null) {
-            System.out.println("\n\n\nIn null?");
+            //System.out.println("\n\n\nIn null?");
             scriptType = SRMUtils.INPUT_SCRIPT_TYPE;
         }
         
@@ -448,9 +450,9 @@ public class SRMProxyController {
         
         SRMControllerInputObj input = this.request2InputObj(request);
         
-        //System.out.println("input file id: " + input.getFile_id());
+        System.out.println("input file id: " + input.getFile_id());
                 
-        
+       
         if(input.getType().equals("Dataset")) {
             
             String dataset_id = input.getDataset_id();
@@ -489,12 +491,12 @@ public class SRMProxyController {
                 //System.out.println("file_id is null");
                 file_id = SRMUtils.INPUT_FILE_FILE_ID;
             }
-            //System.out.println("File " + file_id);
+            System.out.println("File " + file_id);
 
             files.add(file_id);
             
         }
-       
+           
         return files;
     }
     
@@ -676,7 +678,7 @@ public class SRMProxyController {
 
         //if(type.equals("Dataset")) {
             bodyStr += "\nYou may either use the script attached or navigate to the following URL:\n" + 
-                    "http://localhost:8080/esgf-web-fe/live?tab=datacart&override=true" +
+                    "http://esg.ccs.ornl.gov:8080/esgf-web-fe/live?tab=datacart&override=true" +
                     "&datasetid=" + dataset_id +
                     "\n";
         //} 

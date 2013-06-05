@@ -43,8 +43,12 @@ public class BasicWgetScriptGenerator extends WgetScriptGenerator {
     
     public void setFileStr(String [] files) {
         for(int i=0;i<files.length;i++) {
-           this.fileStr += "wget " + SRMFileTransformationUtils.gridftp2http(files[i]) + "\n";
-
+           //System.out.println("file: " + files[i]);
+           
+           this.fileStr += "wget " + SRMFileTransformationUtils.gridftp2http(files[i]);
+           if(i!=files.length-1) {
+               this.fileStr += "\n";
+           }
         }
     }
 

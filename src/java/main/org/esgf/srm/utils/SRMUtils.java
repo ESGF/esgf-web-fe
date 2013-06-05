@@ -21,11 +21,11 @@ public class SRMUtils {
     public static String DB_TYPE = "postgres";
 
     //testing params
-    public static int TEST_NUMFILE_LIMIT = 3000;
+    public static int TEST_NUMFILE_LIMIT = 3;
     public static boolean numFileTest = true;
     
     //simulation or production
-    public static String ENVIRONMENT = "Simulation";
+    public static String ENVIRONMENT = "Production";
     
     
 
@@ -52,14 +52,14 @@ public class SRMUtils {
     public static boolean confirmationEmailTextflag = false;
     
     //update of the bestman cache table
-    public static boolean updateStatusFlag = false;
+    public static boolean updateStatusFlag = true;
     
     //print the IDS in getSolrParams helper function
     public static boolean printIDsFlag = false; 
     
     //email send flags
-    public static boolean initialEmailSendflag = false;
-    public static boolean confirmationEmailSendflag = false;
+    public static boolean initialEmailSendflag = true;
+    public static boolean confirmationEmailSendflag = true;
     
     public static boolean timeParamsFlag = false;
     
@@ -129,8 +129,11 @@ public class SRMUtils {
         
         http = http.replace("gsiftp", "http");
         
+        System.out.println("\n\n\n\n\tPRe http: " + http);
+        
         http = http.replace("//lustre/esgfs/SRMTemp", THREDDS_DATAROOT);
         
+        System.out.println("\tPoST http: " + http);
         
         return http;
     }

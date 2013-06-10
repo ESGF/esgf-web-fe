@@ -2,8 +2,8 @@ package org.esgf.service.test;
 
 import java.util.Scanner;
 
-import org.esgf.srm.SRMProxyController;
 import org.esgf.srm.utils.SRMUtils;
+import org.esgf.web.SRMProxyController;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 public class SRMProxyControllerTester {

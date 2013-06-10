@@ -1,4 +1,4 @@
-package org.esgf.srm;
+package org.esgf.web;
 
 import java.io.IOException;
 import java.util.HashMap;

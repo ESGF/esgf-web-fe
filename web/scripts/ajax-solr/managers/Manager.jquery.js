@@ -129,7 +129,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   	      
   	      var facet_param_arr = new Array();
   	    
-  	      var dataObj = {'facet_param_list' : queryStr, 'search_constraint_list' : searchConstraints, 'useURLParams' : useURLParams};//queryObj};
+  	      var dataObj = {'facet_param_list' : queryStr, 'search_constraint_list' : searchConstraints, 'useURLParams' : useURLParams};
 
 			 //get only the facets that matter
   	      jQuery.ajax({

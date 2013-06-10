@@ -1,8 +1,8 @@
 package org.esgf.filetransformer;
 
 import org.esgf.srmcache.SRMCacheStore;
-import org.esgf.srmcache.SRMCacheStoreController;
 import org.esgf.srmcache.SRMCacheStoreFactory;
+import org.esgf.web.SRMCacheStoreController;
 
 public abstract class FileTransformer {
 

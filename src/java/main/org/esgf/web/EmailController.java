@@ -1,4 +1,4 @@
-package org.esgf.email;
+package org.esgf.web;
 
 public class EmailController {
 

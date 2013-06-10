@@ -1,4 +1,4 @@
-package org.esgf.srmcache;
+package org.esgf.web;
 
 import java.util.List;
 
@@ -7,6 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.esgf.propertiesreader.PropertiesReader;
 import org.esgf.propertiesreader.PropertiesReaderFactory;
 import org.esgf.srm.SRMControls;
+import org.esgf.srm.utils.SRMUtils;
+import org.esgf.srmcache.SRMCacheStore;
+import org.esgf.srmcache.SRMCacheStoreFactory;
+import org.esgf.srmcache.SRMEntry;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -56,18 +60,20 @@ public class SRMCacheStoreController {
     public SRMCacheStoreController() {
 
 
-        System.out.println("From SRMCacheStoreController->");
-        SRMCacheStoreFactory srmCacheStore = new SRMCacheStoreFactory();
-        
-        srm_cache = srmCacheStore.makeSRMCacheStore(DB_TYPE); 
 
-        
-        PropertiesReaderFactory factory = new PropertiesReaderFactory();
-        PropertiesReader srm_props = factory.makePropertiesReader("SRM");
-
-        this.success_message = srm_props.getValue("success_message");
-        this.failure_message = srm_props.getValue("failure_message");
-        
+        if(!SRMUtils.srm_disabled) {
+            System.out.println("From SRMCacheStoreController->");
+            SRMCacheStoreFactory srmCacheStore = new SRMCacheStoreFactory();
+            
+            srm_cache = srmCacheStore.makeSRMCacheStore(DB_TYPE); 
+    
+            
+            PropertiesReaderFactory factory = new PropertiesReaderFactory();
+            PropertiesReader srm_props = factory.makePropertiesReader("SRM");
+    
+            this.success_message = srm_props.getValue("success_message");
+            this.failure_message = srm_props.getValue("failure_message");
+        }
         //srm_cache.initializeCacheStore();
         
         //System.exit(0);

@@ -1,7 +1,8 @@
-package org.esgf.srmcache.datacart;
+package org.esgf.web;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.esgf.srmcache.datacart.DatacartDataset;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

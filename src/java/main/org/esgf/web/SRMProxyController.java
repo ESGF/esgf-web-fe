@@ -1,5 +1,8 @@
-package org.esgf.srm;
+package org.esgf.web;
 
+import org.esgf.srm.SRMControllerInputObj;
+import org.esgf.srm.SRMControls;
+import org.esgf.srm.SRMResponse;
 import org.esgf.srm.scriptgen.*;
 
 import java.io.IOException;
@@ -21,10 +24,6 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.esgf.datacart.DocElement;
-import org.esgf.datacart.FileDownloadTemplateController;
-import org.esgf.datacart.URLSElement;
-import org.esgf.datacart.XmlFormatter;
 import org.esgf.email.Email;
 import org.esgf.email.Attachment;
 import org.esgf.email.EmailUtils;
@@ -35,7 +34,6 @@ import org.esgf.solr.model.SolrResponse;
 import org.esgf.srm.scriptgen.ScriptGeneratorFactory;
 import org.esgf.srm.utils.SRMUtils;
 import org.esgf.srmcache.SRMCacheStore;
-import org.esgf.srmcache.SRMCacheStoreController;
 import org.esgf.srmcache.SRMCacheStoreFactory;
 import org.esgf.srmcache.SRMEntry;
 import org.esgf.srmworkflow.SRMWorkflow;
@@ -117,10 +115,11 @@ public class SRMProxyController {
     
     public SRMProxyController() {
         
-        
-        SRMCacheStoreFactory srmCacheStore = new SRMCacheStoreFactory();
-        System.out.println("From SRMProxyController->");
-        this.srm_cache = srmCacheStore.makeSRMCacheStore(SRMCacheStoreController.DB_TYPE); 
+        if(!SRMUtils.srm_disabled) {
+            SRMCacheStoreFactory srmCacheStore = new SRMCacheStoreFactory();
+            System.out.println("From SRMProxyController->");
+            this.srm_cache = srmCacheStore.makeSRMCacheStore(SRMCacheStoreController.DB_TYPE); 
+        }
         
     }
     
@@ -594,7 +593,7 @@ public class SRMProxyController {
     
     
     
-    
+    /*
     
     public static String [] getSolrParams(DocElement doc, String which) {
         String [] file_ids = new String[doc.getFileElements().size()];
@@ -630,7 +629,7 @@ public class SRMProxyController {
         }
         
     }
-    
+    */
     
     
     public void writeInitialEmail(String [] file_urls,String [] file_ids,String emailAddr) {

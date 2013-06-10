@@ -1,12 +1,15 @@
-package org.esgf.solr.model;
+package org.esgf.web;
 
 import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.esgf.datacart.FileDownloadTemplateController;
-import org.esgf.datacart.XmlFormatter;
+import org.esgf.srm.utils.XmlFormatter;
+import org.esgf.solr.model.DatacartDoc;
+import org.esgf.solr.model.Solr;
+import org.esgf.solr.model.SolrResponse;
+import org.esgf.solr.model.Utils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

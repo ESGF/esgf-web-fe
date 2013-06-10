@@ -1,6 +1,5 @@
 package org.esgf.searchConfig;
 
-import org.esgf.datacart.FileElement;
 import org.esgf.metadata.JSONException;
 import org.esgf.metadata.JSONObject;
 import org.esgf.metadata.XML;

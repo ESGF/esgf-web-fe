@@ -3,7 +3,6 @@ package org.esgf.solr.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.esgf.datacart.FileElement;
 import org.esgf.metadata.JSONException;
 import org.esgf.metadata.JSONObject;
 import org.esgf.metadata.XML;

@@ -2,9 +2,9 @@ package org.esgf.bestmanpath;
 
 import org.esgf.srm.utils.SRMUtils;
 import org.esgf.srmcache.SRMCacheStore;
-import org.esgf.srmcache.SRMCacheStoreController;
 import org.esgf.srmcache.SRMCacheStoreFactory;
 import org.esgf.srmcache.SRMEntry;
+import org.esgf.web.SRMCacheStoreController;
 
 public class PostgresBestmanPathGenerator extends BestmanPathGenerator {
 

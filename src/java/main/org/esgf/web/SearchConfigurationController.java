@@ -50,7 +50,7 @@
  *
  ******************************************************************************/
 
-package org.esgf.searchConfig;
+package org.esgf.web;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -69,6 +69,7 @@ import org.esgf.metadata.JSONArray;
 import org.esgf.metadata.JSONException;
 import org.esgf.metadata.JSONObject;
 import org.esgf.metadata.XML;
+import org.esgf.searchConfig.SearchConfiguration;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 import org.springframework.core.io.ClassPathResource;

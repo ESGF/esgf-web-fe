@@ -50,7 +50,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
         PropertiesReaderFactory factory = new PropertiesReaderFactory();
         PropertiesReader srm_props = factory.makePropertiesReader("SRM");
 
-        System.out.println("IN main");
+        //System.out.println("IN main");
         
         ResultSet rs;
         try {
@@ -99,7 +99,7 @@ public class PostgresSRMCacheStore extends SRMCacheStore {
     public PostgresSRMCacheStore() {
         
         
-        System.out.println("\nGETTING PSQL Object\n");
+        //System.out.println("\nGETTING PSQL Object\n");
         //System.out.println("\n\nGETTING SRM PROPERTIES HERE\n\n");
         //System.out.println("pass->" + SRMProperties.valid_password);
         

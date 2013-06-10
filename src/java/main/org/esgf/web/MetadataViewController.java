@@ -1,4 +1,4 @@
-package org.esgf.metadata;
+package org.esgf.web;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -17,9 +17,9 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.esgf.datacart.MIMESElement;
-import org.esgf.datacart.ServicesElement;
-import org.esgf.datacart.URLSElement;
+import org.esgf.metadata.JSONArray;
+import org.esgf.metadata.JSONException;
+import org.esgf.metadata.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

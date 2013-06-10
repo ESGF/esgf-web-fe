@@ -6,11 +6,13 @@ import org.esgf.srm.SRMResponse;
 
 public class SRMUtils {
 
+    public static boolean srm_disabled = true;
+    
     //properties file for postgres
     public static String SRM_PROPERTIES_FILE_LOCATION = "/esg/config/srm.properties";
 
     //default locations
-    public static String searchAPI = "http://esg.ccs.ornl.gov:8080/esg-search/search?";
+    public static String searchAPI = "http://localhost:8080/esg-search/search?";
     public static String srmAPIURL = "http://esg.ccs.ornl.gov:8080/esgf-srm/service/srmrequest?";
     
     
@@ -58,8 +60,8 @@ public class SRMUtils {
     public static boolean printIDsFlag = false; 
     
     //email send flags
-    public static boolean initialEmailSendflag = true;
-    public static boolean confirmationEmailSendflag = true;
+    public static boolean initialEmailSendflag = false;
+    public static boolean confirmationEmailSendflag = false;
     
     public static boolean timeParamsFlag = false;
     
@@ -73,7 +75,7 @@ public class SRMUtils {
     public static boolean postgresBestmanPathFlag = false;
 
     //debug flag to check when a properties file is being opened (in PostgresSRMCacheStore constructor)
-    public static boolean postgresCacheStoreFlag = true;
+    public static boolean postgresCacheStoreFlag = false;
 
     
     public static boolean useDefaultEmail = true;
@@ -87,10 +89,6 @@ public class SRMUtils {
     public static String THREDDS_DATAROOT = "/thredds/fileServer/esg_srm_dataroot";
     
     public static String SRM_CACHE_REPLACE = "/SRMTemp/";
-
-    
-    //from SRM Properties Reader
-    //public static String srmAPIURL = "http://localhost:8080/esgf-srm/service/srmrequest?";
     
     public static String expiration = "86400000";
     public static String success_message = "success";

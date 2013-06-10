@@ -14,10 +14,10 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.esgf.propertiesreader.PropertiesReader;
 import org.esgf.propertiesreader.PropertiesReaderFactory;
 import org.esgf.srm.SRMControls;
-import org.esgf.srm.SRMProxyController;
 import org.esgf.srm.SRMResponse;
 import org.esgf.srm.utils.SRMUtils;
 import org.esgf.srmcache.SRMCacheStore;
+import org.esgf.web.SRMProxyController;
 
 public class ProductionSRMWorkflow extends SRMWorkflow {
 

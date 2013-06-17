@@ -481,7 +481,6 @@
 						dataType: 'json',
 						success: function(data) {
 							
-							
 							//no files
 							if(data.doc.files.file == undefined) {
 								

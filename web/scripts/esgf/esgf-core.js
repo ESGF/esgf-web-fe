@@ -147,7 +147,7 @@ ESGF.setting.datacartOverride = false;
 //timeout in case of an ajax call not returning results
 ESGF.setting.ajaxTimeout = 20000;
 
-ESGF.setting.globusonline = false;
+ESGF.setting.globusonline = true;
 
 ESGF.setting.srm_url_root = '/esg-srm/';
 

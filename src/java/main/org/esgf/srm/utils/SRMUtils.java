@@ -12,7 +12,7 @@ public class SRMUtils {
     public static String SRM_PROPERTIES_FILE_LOCATION = "/esg/config/srm.properties";
 
     //default locations
-    public static String searchAPI = "http://localhost:8080/esg-search/search?";
+    public static String searchAPI = "http://localhost/esg-search/search?";
     public static String srmAPIURL = "http://esg.ccs.ornl.gov:8080/esgf-srm/service/srmrequest?";
     
     
@@ -100,7 +100,6 @@ public class SRMUtils {
     //public static String table_name = "srm_entries";
     //public static String valid_user = "first_user";
     public static String valid_user = "dbsuper";
-    //public static String valid_password = "mattryan12";
     public static String valid_password = "esg4ever";
     
     

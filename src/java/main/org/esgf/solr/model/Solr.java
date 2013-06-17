@@ -90,7 +90,8 @@ public class Solr {
     }
     
     public void executeQuery() {
-        //System.out.println("Executing query");
+        long startTime = System.currentTimeMillis();
+        System.out.println("\n\n\nExecuting query " + startTime);
         
         // create an http client
         HttpClient client = new HttpClient();
@@ -131,7 +132,9 @@ public class Solr {
         }
         
         //System.out.println("responseBody: \n" + responseBody);
-        
+
+        long stopTime = System.currentTimeMillis();
+        System.out.println("Done Executing query " + stopTime + " \ntotal time: " + (stopTime-startTime) + "\n\n\n\n");
         this.solrResponse = new SolrResponse(responseBody);
     }
     

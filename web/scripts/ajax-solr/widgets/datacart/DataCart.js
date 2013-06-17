@@ -120,6 +120,7 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		
 		var accessStr = new String(access);
 		
+		//alert('accessStr: ' + accessStr + ' ' + accessType + ' ' + accessStr.search(accessType));
 		
 		if(accessStr.search(accessType) > -1) {
 			hasAccess = true;
@@ -513,6 +514,11 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		//access
 		var access = datacart_entry['access'];
 		
+		//alert('access');
+		//for(var key in access) {
+		//	alert('key: ' + key + ' value: ' + access[key]);
+		//}
+		
 		datasetList += '<tr style="margin-top:50px;" class="top_level_data_item"  >';
 		
 		datasetList += '<td style="width: 40px;"><input class="topLevel" type="checkbox" checked="true" /> </td>';	
@@ -550,6 +556,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			}
 			accessType = 'GridFTP';
 			var hasGridFTP = self.checkDatasetAccess(accessType, datasetId, access);
+			
+			
 			if(hasGridFTP) {
 				if(ESGF.setting.globusonline) {
 					datasetList += '<span class="globusOnlineAllFiles_short" style="display:none;font-weight:bold;"> Transferring to GO page...</span>';	
@@ -561,6 +569,8 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			accessType = 'SRM';
 			var hasSRM = self.checkDatasetAccess(accessType, datasetId, access);
 			
+			
+			//alert('hasSRM: ' + hasSRM + ' disabled: ' + !ESGF.setting.srm_disabled);
 			
 			if(!ESGF.setting.srm_disabled) {
 				if(hasSRM) {

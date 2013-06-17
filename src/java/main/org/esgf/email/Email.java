@@ -22,9 +22,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.esgf.srm.utils.XmlFormatter;
-import org.esgf.srm.utils.SRMUtils;
-
 import esg.common.util.ESGFProperties;
 
 public class Email {

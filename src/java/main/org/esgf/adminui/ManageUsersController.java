@@ -96,15 +96,21 @@ public class ManageUsersController {
     
    
     
-    public ManageUsersController() throws FileNotFoundException, IOException {
+    public ManageUsersController()  {
         LOG.debug("IN ManageUsersController Constructor");
-        //declare a UserOperations "Object"
-        if(Utils.environmentSwitch) {
-            uoi = new UserOperationsESGFDBImpl();
+        
+        try {
+          //declare a UserOperations "Object"
+            if(Utils.environmentSwitch) {
+                uoi = new UserOperationsESGFDBImpl();
+            }
+            else {
+                uoi = new UserOperationsXMLImpl();
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
         }
-        else {
-            uoi = new UserOperationsXMLImpl();
-        }
+        
     }
 
     /**

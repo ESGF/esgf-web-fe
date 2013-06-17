@@ -74,6 +74,7 @@
 
 		<fieldset style="background: #F5F5E0">
 			<legend id="groupsRegistered">Local Groups Registered</legend>
+				<div class="clock" style="display: none"><center><img id="spinner" src="images/ajax-loader.gif" /><br/>Loading</center></div>
 				<table id="groups_admin_table_id">
 					<thead>
 						<tr>

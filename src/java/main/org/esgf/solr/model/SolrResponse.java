@@ -218,6 +218,7 @@ public class SolrResponse {
     
     public void fromXML(String xml) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+
         DocumentBuilder dBuilder = null;
         try {
             dBuilder = dbFactory.newDocumentBuilder();

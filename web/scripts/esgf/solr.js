@@ -127,9 +127,13 @@
               id: 'result',
               target: '#search-results'
             }));
-		
+
          Manager.addWidget(new AjaxSolr.CacheClearWidget({
              id: 'clearall'
+           }));
+
+         Manager.addWidget(new AjaxSolr.TooltipsWidget({
+             id: 'tooltips'
            }));
 		
          
@@ -230,11 +234,11 @@
 
         //Register the geospatial search widget.
         //This widget is responsible for the geospatial overlay
-        /*
+        
         Manager.addWidget(new AjaxSolr.GeospatialSearchWidget({
              id: 'geo_browse'
            }));
-    	*/
+    	
 
         //Register the temporal search widget.
         //This widget is responsible for the temporal overlay

@@ -71,11 +71,8 @@ public class GetAllAdminGroupsController {
         catch(Exception e) {
             e.printStackTrace();
         }
-        
-        
         LOG.debug("IN GetAllAdminGroupsController Constructor");
     }
-    
     
     /**
      * Note: GET and POST contain the same functionality.
@@ -117,7 +114,7 @@ public class GetAllAdminGroupsController {
             username = jsonObj.getString("userName");
         } catch (JSONException e) {
             LOG.debug("error in parsing the json text string :" + query);
-            errormessage = "error in parsing the json text string :" + query;
+            errormessage = "MBH... error in parsing the json text string :" + query + " : " + e;
             error = true;
         }
 

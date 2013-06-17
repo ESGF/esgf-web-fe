@@ -780,6 +780,12 @@ public class UserOperationsXMLImpl implements UserOperationsInterface {
         
         return user;
     }
+
+    @Override
+    public List<User> getSomeUsers(int start, int end) {
+        // TODO Auto-generated method stub
+        return null;
+    }
     
     /*
     public void deleteUser(String userId) {

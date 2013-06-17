@@ -44,6 +44,8 @@ public interface UserOperationsInterface {
     void deleteUserFromGroup(String userName, String groupName);
 
     List<Group> getGroupsFromUser(String userName);
+
+    List<User> getSomeUsers(final int start, final int end);
     
     
 }

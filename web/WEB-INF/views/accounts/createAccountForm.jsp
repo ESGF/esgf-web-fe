@@ -68,7 +68,7 @@
                             <th class="right_text" nowrap="nowrap">User Name</th>
                             <td class="left_text">
                                 <form:input path="userName" size="60" />
-                                <br/><i>Username can contain only digits and numbers.</i>
+                                <br/><i>Username can contain only letters and numbers.</i>
                                 <br/><form:errors path="userName" cssClass="myerror" />
                             </td>
                         </tr>

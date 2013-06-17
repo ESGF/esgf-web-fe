@@ -165,11 +165,11 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
     				 	 '<tr>' +
     				 	 '<td style="width:80px;font-size:12px;padding:0px; ">' +
     				 	 '<input type="radio" id="datacart_filter_all" name="datacart_filter" value="all" /> ' +
-    				 	 'Show all ' +
+    				 	 '<span id="filter_over_all">Show all </span>' +
     				 	 '</td>' +
     				 	 '<td style="width:150px;font-size:12px;padding:0px; ">' +
-    				 	 '<input type="radio" id="datacart_filtered" name="datacart_filter" value="filtered" /> ' +
-    				 	 'Filter over text ' +
+    				 	 '<input type="radio" class="north" id="datacart_filtered" name="datacart_filter" value="filtered" /> ' +
+    				 	 '<span id="filter_over_text">Filter over text </span>' +
     				 	 '</td>';
     	
     	optionsStr += '<td style="font-size:12px;width:20px;">' +

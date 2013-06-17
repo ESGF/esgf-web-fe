@@ -107,9 +107,13 @@ public class ManipulationController {
         String userName = "";
         String groupName = "";
         String roles = "";
+        String approved = "";
         String returnmessage = "";
+        int userId = -1;
+        boolean approvedAction = true;
         boolean error = true;
         boolean queryError = false;
+        boolean isValid = false;
         JSONObject jsonObj = null;
         
         try {
@@ -118,44 +122,70 @@ public class ManipulationController {
           userName = jsonObj.getString("user");
           groupName = jsonObj.getString("group");
           roles = jsonObj.getString("roles");
+          approved = jsonObj.getString("approved");
+          if (approved.equals("false")) approvedAction = false; 
             
-          UserInfo userInfo = myUserInfoDAO.getUserById(userName);
-          String[] role = roles.split(",");
+          UserInfo userInfo = myUserInfoDAO.getUserById(userName);          
+          isValid = userInfo.isValid();
           
-          //add and edit are the same thing on the back end...
-          if(action.equals("ADD") || action.equals("EDIT")){
-            for(int i = 0; i < role.length; i++){
-              queryError = myUserInfoDAO.addPermission(userInfo, groupName, role[i]);
-              if(queryError){ 
-                returnmessage += userName + " has been added to " + groupName + " with the role " + role[i] + "][";
-              }
-              else {
-                returnmessage += userName + " already has the role " + role[i] +  " in the group " +  groupName + "][";
-              }
-            } 
-          }
-          else if(action.equals("REMOVE")){
-            for(int i = 0; i < role.length; i++){
-              queryError = myUserInfoDAO.deletePermission(userInfo, groupName, role[i]);
-              if(queryError){ 
-                returnmessage += userName + " has been removed from " + groupName + " with the role " + role[i] + "][";
-              }
-              else {
-                returnmessage += userName + " was not in " + groupName + " with the role " + role[i] + "][";
-              }
-            }
+          if(!isValid){
+              error = false;
+              returnmessage = "There is no user with the username " + userName;
           }
           else{
+              //userId = userInfo.getUserId();
+              String[] role = roles.split(",");
+              
+              //add and edit are the same thing on the back end...
+              if(action.equals("ADD")){
+                for(int i = 0; i < role.length; i++){
+                  queryError = myUserInfoDAO.addPermission(userInfo, groupName, role[i]);
+                  if(queryError){ 
+                    returnmessage += userName + " has been added to " + groupName + " with the role " + role[i] + "][";
+                    queryError = myUserInfoDAO.setPermission(userId, groupName, role[i], approvedAction);
+                  }
+                  else {
+                    returnmessage += userName + " already has the role " + role[i] +  " in the group " +  groupName + "][";
+                  }
+                } 
+              }
+              else if(action.equals("EDIT")){
+                String[] allRoles = {"user", "default", "none", "publisher", "admin", "super"};
+                for(int i = 0; i < allRoles.length; i++){
+                  queryError = myUserInfoDAO.deletePermission(userInfo, groupName, allRoles[i]);
+                }
+                 for(int i = 0; i < role.length; i++){
+                  queryError = myUserInfoDAO.addPermission(userInfo, groupName, role[i]);
+                  queryError = myUserInfoDAO.setPermission(userId, groupName, role[i], approvedAction);
+                  returnmessage += userName + " has been added to " + groupName + " with the role " + role[i] + "][";
+                 }
+                 roles = roles.replaceAll(",", ", ");
+                 returnmessage = userName + " now only has the roles " + roles + " in the group " + groupName;
+              }
+              else if(action.equals("REMOVE")){
+                for(int i = 0; i < role.length; i++){
+                  queryError = myUserInfoDAO.deletePermission(userInfo, groupName, role[i]);
+                  queryError = myUserInfoDAO.setPermission(userId, groupName, role[i], approvedAction);
+                  if(queryError){ 
+                    returnmessage += userName + " has been removed from " + groupName + " with the role " + role[i] + "][";
+                  }
+                  else {
+                    returnmessage += userName + " was not in " + groupName + " with the role " + role[i] + "][";
+                  }
+                }
+              }
+              else{
+                error = false;
+                returnmessage = "unrecognized action code.";
+             }          
+          }
+        }
+        catch (JSONException e) {
+            LOG.debug("error in parsing the json text string :" + query);
+            returnmessage = "error in parsing the json text string :" + query + ".";
             error = false;
-            returnmessage = "unrecognized action code.";
-         }
-      } 
-      catch (JSONException e) {
-        LOG.debug("error in parsing the json text string :" + query);
-        returnmessage = "error in parsing the json text string :" + query + ".";
-        error = false;
-      }
-
+        }
+        
       System.out.println(returnmessage);
        
       String xmlOutput = "<EditOutput>";

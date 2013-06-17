@@ -39,11 +39,15 @@
 		        <li>
 		        	<a href='http://esgf-data.dkrz.de/'><img src="images/flags/Germany.png" class="icon" alt="Germany flag" />DKRZ CMIP5 Node</a>
 		        	<a href='http://esgf-data.dkrz.de/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>
-		        </li>      
+		        </li>  
+		        <li>
+                     <a href='http://hydra.fsl.noaa.gov/'><img src="images/flags/USA.png" class="icon" alt="USA flag" />NOAA-ESRL Node</a>
+                     <a href='http://hydra.fsl.noaa.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>
+                 </li>		                          	             
 		        <li>
                      <a href='http://esgdata.gfdl.noaa.gov/'><img src="images/flags/USA.png" class="icon" alt="USA flag" />NOAA-GFDL Node</a>
                      <a href='http://esgdata.gfdl.noaa.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>
-                 </li>		         
+                 </li>	
 		        <li>
 		        	<a href='http://esgf-node.ipsl.fr/'><img src="images/flags/France.png" class="icon" alt="France flag" />IPSL Node</a>
 		        	<a href='http://esgf-node.ipsl.fr/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>

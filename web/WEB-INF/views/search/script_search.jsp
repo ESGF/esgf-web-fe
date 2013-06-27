@@ -26,10 +26,6 @@
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.livequery.js" /> '></script>
     <script type="text/javascript" src='<c:url value="/scripts/jquery-1.4.2/jquery.autocomplete.js" /> '></script>
 
-<!--  
-    <script type="text/javascript" src='<c:url value="/scripts/jquery-1.7.2/jquery.tipsy.js" /> '></script>
--->
-
 	<script type="text/javascript" src='http://purl.org/org/es-doc/plugins/jscim-esgf-web-fe.js'> </script>
 
  

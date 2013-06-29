@@ -1,7 +1,8 @@
 <ivysettings>
   <settings defaultResolver="default"/>
   
-  <property name="spring.version" value="3.0.5.RELEASE" />
+  <property name="spring.version" value="3.2.2.RELEASE" />
+  <property name="spring.security.version" value="3.1.4.RELEASE" />
   <property name="hibernate.version" value="3.6.1.Final" />
   <property name="ivy.esgf.devel.root.url" value="http://esgf.org/artifactory/esgf-repo-devel" override="false"/>
   <property name="ivy.esgf.shared.root.url" value="http://esgf.org/artifactory/esgf-repo-share" override="false"/>

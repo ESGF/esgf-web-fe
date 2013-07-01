@@ -114,7 +114,7 @@
 		
 		<div class="span-18 last">
 			<ul id="pager"></ul>
-		    <div id="pager-header"></div>
+		    <div id="pager-header"> </div>
 		</div>
 		
 		<!-- old -->    	  

@@ -445,6 +445,8 @@
 			    	
 			    	var constraints = fqParamStr;
 			    	
+			    	//alert('getting peerStr ' + peerStr);
+			    	
 			    	var queryStr = 
 			    	{
 			    			"dataset_id" : idStr, 

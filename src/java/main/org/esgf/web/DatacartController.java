@@ -44,7 +44,8 @@ public class DatacartController {
         
         HttpSession session = request.getSession();
         
-        //System.out.println("\n\n\nIn original datacart controller\n\n");
+        
+        String peerStr = request.getParameter("peerStr");
         
         Enumeration e = session.getAttributeNames();
         while( e.hasMoreElements() ) {
@@ -122,6 +123,10 @@ public class DatacartController {
         solr.addConstraint("offset", offset);
         solr.addConstraint("type", "File");
         solr.addConstraint("dataset_id",dataset_id);
+        
+        if(peerStr != "undefined" && peerStr != null) {
+            solr.addConstraint("shards", peerStr + ":8983/solr");
+        }
         
         //if(Utils.debugMode)
             System.out.println("\nsolr query->" + solr.getQueryString() + "\n\n");

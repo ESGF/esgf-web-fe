@@ -496,7 +496,6 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 			
 		}
 		
-		
 		//evaluate the datacart_entry map
 		/*
 		for(var key in datacart_entry) {

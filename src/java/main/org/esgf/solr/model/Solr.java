@@ -90,6 +90,9 @@ public class Solr {
     }
     
     public void executeQuery() {
+        
+        System.out.println("\n\n\n\n\n\n---------------\n\n");
+        
         long startTime = System.currentTimeMillis();
         System.out.println("\n\n\nExecuting query " + startTime);
         
@@ -103,6 +106,8 @@ public class Solr {
         
         method.setQueryString(this.queryString);
         
+        System.out.println("searchAPI: " + searchAPI);
+        System.out.println("this.query->" + this.queryString);
         
         method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
                 new DefaultHttpMethodRetryHandler(3, false));

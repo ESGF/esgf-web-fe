@@ -313,6 +313,9 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                 	
                 	}
                 	
+
+            		//alert('peer: ' + datasetInfo['peer'] + ' access: ' + datasetInfo['access']);
+                	
                 	var queryString = {
                 			'dataset_id' : evt.data.doc.id
                 	};

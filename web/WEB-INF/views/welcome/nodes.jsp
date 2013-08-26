@@ -75,7 +75,11 @@
 		        <li>
 		        	<a href='http://pcmdi9.llnl.gov/'><img src="images/flags/USA.png" class="icon" alt="USA flag" />PCMDI Node</a>
 		        	<a href='http://pcmdi9.llnl.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>
-		        </li>                 		        
+		        </li>           
+		        <li>
+					<a href='http://esg-dn1.nsc.liu.se/'><img src="images/flags/se.png" class="icon" alt="Sweden flag" />SMHI-LIU-NSC Node</a>
+					<a href='http://esg-dn1.nsc.liu.se/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>
+				</li>      		        
                 <!-- <li>
 		        	<a href='http://esg1-gw.pnl.gov/'><img src="images/flags/USA.png" class="icon" alt="USA flag" />PNNL Node</a>
 		        	<a href='http://esg1-gw.pnl.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>

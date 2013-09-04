@@ -100,7 +100,7 @@ public class SRMUtils {
     //public static String table_name = "srm_entries";
     //public static String valid_user = "first_user";
     public static String valid_user = "dbsuper";
-    public static String valid_password = "esg4ever";
+    public static String valid_password = "xxxxx";
     
     
     

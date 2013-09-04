@@ -363,7 +363,9 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 			
 	    	self.file_ids_arr = new Array();
 	    	self.grid_urls_arr = new Array();
-			
+	    	
+	    	
+	    	
 
 			var datacart = ESGF.localStorage.getAll('dataCart');
 			
@@ -373,69 +375,91 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 
 	    	var non_grid_arr = new Array();
 	    	
-	    	for(var i=0;i<self.selected_arr.length;i++) {
-	    		
-	    		
-	    		var datasetId = self.selected_arr[i];
-				var accessType = 'GridFTP';
-				var hasGridFTP = self.checkDatasetAccess(accessType,datasetId);
 	    	
-				//if dataset has access to gridftp
-				if(hasGridFTP) {
+	    	//iterate over the selected array of datasets in the data cart
+        	//grab all the keys from the datacart map and place in an array
+        	var counter = 0;
+	    	$('input.selected_dataset').each(function () {
+	    		if($(this).attr("checked") == 'checked') {
+	    			
+	    			datasetId = $(this).parent().find('span.datasetId').html();
+	    			var accessType = 'GridFTP';
+					var hasGridFTP = self.checkDatasetAccess(accessType,datasetId);
+		    	
+					//if dataset has access to gridftp
+					if(hasGridFTP) {
+						
+						//if the dataset access is "undefined", we must do additional processing
+			    		if(datacart[datasetId]['access'] == undefined) {
+			    			
+			    			var hasAccess = self.checkPostQueryAccess(datasetId,accessType);
+			    			if(hasAccess) {
+			    				
+			    				self.getFileAndGridInfo(datasetId);
+			    				
+			    			} else {
+
+				    			non_grid_arr.push(datasetId);
+			    			}
+			    			
+			    		} 
+			    		//otherwise all is good, grab the file_ids and grid_urls
+			    		else {
+			    			self.getFileAndGridInfo(datasetId);
+			    			
+			    		}
+
+		    			counter++;
+					}
+					//otherwise add to the list of datasets in the alert message 
+					else {
+		    			non_grid_arr.push(datasetId);
+					}
 					
-					//if the dataset access is "undefined", we must do additional processing
-		    		if(datacart[datasetId]['access'] == undefined) {
-		    			
-		    			var hasAccess = self.checkPostQueryAccess(datasetId,accessType);
-		    			if(hasAccess) {
-		    				
-		    				self.getFileAndGridInfo(datasetId);
-		    				
-		    			} else {
-
-			    			non_grid_arr.push(datasetId);
-		    			}
-		    			
-		    		} 
-		    		//otherwise all is good, grab the file_ids and grid_urls
-		    		else {
-		    			self.getFileAndGridInfo(datasetId);
-		    			
-		    		}
-				}
-				//otherwise add to the list of datasets in the alert message 
-				else {
-	    			non_grid_arr.push(datasetId);
-				}
+	    		}
+	    		
+	    	});
 	    	
+	    	if(counter == 0) {
+	    		alert('No datasets have been selected.  Please select a dataset and try to run the Globus Online workflow again.');
+		    	
+	    	} else {
+	    		
+	    		//alert('datasetIds: ' + dataset)
+		    	
+		    	//write a message if there are are
+		    	if(non_grid_arr.length > 0) {
+			    	self.writeNonDatasetMessage(non_grid_arr); 
+		    	}
+		    	
+		    	var globus_url = '/esgf-web-fe/goauthview1';
+
+	            var openid = $('span.footer_openid').html();
+	            var go_credential = ESGF.localStorage.get('GO_Credential',openid);
+		        //begin assembling queryString
+	            var queryString = 'type=create&id=' + datasetId + '&credential=' + go_credential;
+		        
+		        //assemble the input fields with the query string
+		        for(var i=0;i<self.file_ids_arr.length;i++) {
+		        	queryString += '&child_url=' + self.grid_urls_arr[i] + '&child_id=' + self.file_ids_arr[i];
+		        }
+
+	            
+		        var input = '';
+		        jQuery.each(queryString.split('&'), function(){
+		          var pair = this.split('=');
+		          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
+		        });
+		        
+		        
+		        
+		        //send request
+		        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
+		        .appendTo('body').submit().remove();
+		    	
+	    		
 	    	}
 	    	
-	    	
-	    	//write a message if there are are
-	    	if(non_grid_arr.length > 0) {
-		    	self.writeNonDatasetMessage(non_grid_arr); 
-	    	}
-	    	
-	    	var globus_url = '/esgf-web-fe/goauthview1';
-
-            var openid = $('span.footer_openid').html();
-            var go_credential = ESGF.localStorage.get('GO_Credential',openid);
-	        //begin assembling queryString
-            var queryString = 'type=create&id=' + datasetId + '&credential=' + go_credential;
-	        
-	        //assemble the input fields with the query string
-	        for(var i=0;i<self.file_ids_arr.length;i++) {
-	        	queryString += '&child_url=' + self.grid_urls_arr[i] + '&child_id=' + self.file_ids_arr[i];
-	        }
-	        var input = '';
-	        jQuery.each(queryString.split('&'), function(){
-	          var pair = this.split('=');
-	          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
-	        });
-	        
-	        //send request
-	        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
-	        .appendTo('body').submit().remove();
 	    	
 	        
 	        
@@ -514,7 +538,6 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 
 						} 
 						
-						//alert('data.doc.files.file.length ' + data.doc.files.file.length);
 						
 						for(var i=0;i<data.doc.files.file.length;i++){
 							
@@ -629,9 +652,6 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 						
 					}
 					
-					//alert('file urls len: ' + self.grid_urls_arr.length);
-					
-					
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
 					alert('error: ' + errorThrown);
@@ -663,18 +683,6 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 	        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
 	        .appendTo('body').submit().remove();
 	    	
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
 			
 		});
 		
@@ -831,4 +839,43 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 })(jQuery);
 
 
+/*
+old implementation of traversing array
+for(var i=0;i<self.selected_arr.length;i++) {
+	
+	
+	var datasetId = self.selected_arr[i];
+	var accessType = 'GridFTP';
+	var hasGridFTP = self.checkDatasetAccess(accessType,datasetId);
+
+	//if dataset has access to gridftp
+	if(hasGridFTP) {
+		
+		//if the dataset access is "undefined", we must do additional processing
+		if(datacart[datasetId]['access'] == undefined) {
+			
+			var hasAccess = self.checkPostQueryAccess(datasetId,accessType);
+			if(hasAccess) {
+				
+				self.getFileAndGridInfo(datasetId);
+				
+			} else {
+
+    			non_grid_arr.push(datasetId);
+			}
+			
+		} 
+		//otherwise all is good, grab the file_ids and grid_urls
+		else {
+			self.getFileAndGridInfo(datasetId);
+			
+		}
+	}
+	//otherwise add to the list of datasets in the alert message 
+	else {
+		non_grid_arr.push(datasetId);
+	}
+
+}
+*/
 

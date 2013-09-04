@@ -5,7 +5,7 @@ public class SRMControls {
     
     
     
-    public static boolean environmentSwitch = false;
+    public static boolean environmentSwitch = true;
     
     //public static String db_name = "esgcet";
     public static String db_name = "first_db";

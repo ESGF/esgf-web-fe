@@ -125,39 +125,63 @@
 	        	
 	        	//iterate over the selected array of datasets in the data cart
 	        	//grab all the keys from the datacart map and place in an array
+	        	var counter = 0;
+		    	$('input.selected_dataset').each(function () {
+		    		if($(this).attr("checked") == 'checked') {
+		    			dataset_ids.push($(this).parent().find('span.datasetId').html());
+		    			//alert('counter[]: ' + self.selected_arr[counter] + ' length: ' + 
+		    			//		self.selected_arr[counter].length + ' datasetId: ' + $(this).parent().find('span.datasetId').html() + 
+		    			//		' length: ' + $(this).parent().find('span.datasetId').html().length + '   ' + (self.selected_arr[counter] == $(this).parent().find('span.datasetId').html()));
+			    		counter++;
+		    		}
+		    		
+		    	});
+		    	
+		    	
+		    	
+	        	/*
 		    	self.selected_arr = ESGF.localStorage.toKeyArr('dataCart');
-
+		    	
 		    	for(var i=0;i<self.selected_arr.length;i++) {
 		            
 	            	var selectedDocId = self.selected_arr[i];//self.selected_arr[i];
 	            	dataset_ids.push(selectedDocId);
 	            	
 		    	}
-		    	
-		    	var queryString = '/esg-search/wget/?';
+		    	*/
 	        	
-		    	var filtered = false;
-				filtered = ($('#datacart_filtered').attr('checked') == 'checked');
-				
-		    	if(filtered) {
-		    		var textQueryParam = '';
-					var fqParams = ESGF.localStorage.getAll('esgf_queryString');
-					for(var key in fqParams) {
-						if(key.search('query:') > -1) {
-							textQueryParam = fqParams[key];
-						}
-						
-					}
-					queryString += textQueryParam;
+		    	if(counter == 0) {
+		    		
+		    		alert('No datasets selected.  Please select a dataset and try to generate WGET scrpt again.');
+		    	
 		    	} else {
-		    		queryString += 'query=*';
+		    		
+		    		var queryString = '/esg-search/wget/?';
+		        	
+			    	var filtered = false;
+					filtered = ($('#datacart_filtered').attr('checked') == 'checked');
+					
+			    	if(filtered) {
+			    		var textQueryParam = '';
+						var fqParams = ESGF.localStorage.getAll('esgf_queryString');
+						for(var key in fqParams) {
+							if(key.search('query:') > -1) {
+								textQueryParam = fqParams[key];
+							}
+							
+						}
+						queryString += textQueryParam;
+			    	} else {
+			    		queryString += 'query=*';
+			    	}
+			    	
+					
+		            
+		            ESGF.datacart.submitWGETScriptForm(queryString,file_ids,dataset_ids);
+					
+
 		    	}
 		    	
-				
-	            
-	            ESGF.datacart.submitWGETScriptForm(queryString,file_ids,dataset_ids);
-				
-
 				
 			});
 			

@@ -520,7 +520,9 @@ AjaxSolr.DataCartWidget = AjaxSolr.AbstractWidget.extend({
 		
 		datasetList += '<tr style="margin-top:50px;" class="top_level_data_item"  >';
 		
-		datasetList += '<td style="width: 40px;"><input class="topLevel" type="checkbox" checked="true" /> </td>';	
+		datasetList += '<td style="width: 40px;"><input class="topLevel selected_dataset" type="checkbox" checked="true" />' + 
+						'<span class="datasetId" style="display:none">' + dataset_id + '</span>' + 
+						'</td>';	
 		
 		datasetList += '<td style="width: 325px;font-size:13px">';
 		

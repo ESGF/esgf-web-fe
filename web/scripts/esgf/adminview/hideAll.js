@@ -6,4 +6,6 @@ function hideAll(){
   $("div .success").hide();
   $("div .edit_field").hide();
   $("div .XYZ").hide();
+  $("div .showNext").hide();
+  $("div .showBack").hide();
 }

@@ -108,14 +108,20 @@ public class AccountsController {
 
     private final static boolean debugFlag = true;
 
-    public AccountsController() throws FileNotFoundException, IOException {
+    public AccountsController() {
         LOG.debug("IN AccountsController Constructor");
-        if(Utils.environmentSwitch) {
-            uoi = new UserOperationsESGFDBImpl();
+        
+        try {
+            if(Utils.environmentSwitch) {
+                uoi = new UserOperationsESGFDBImpl();
+            }
+            else {
+                uoi = new UserOperationsXMLImpl();
+            }
+        } catch(Exception e) {
+            
         }
-        else {
-            uoi = new UserOperationsXMLImpl();
-        }
+        
     }
 
     /**

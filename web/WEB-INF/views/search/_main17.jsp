@@ -2,7 +2,9 @@
 <%@ include file="/WEB-INF/views/search/temporal_widget_dialog.jsp" %>
 <%@ include file="/WEB-INF/views/search/geospatial_widget_dialog.jsp" %>
 <%@ include file="/WEB-INF/views/search/facetsidebar_widget_dialog.jsp" %>
+<%-- 
 <%@ include file="/WEB-INF/views/search/_select_tbl.jsp" %>
+--%>
 
 <style>
 .distribbutton {
@@ -34,6 +36,18 @@
     padding:10px 0 10px 45px;
     font-size:20px;
 }
+
+
+.tip{
+ display:none;
+ background-color:whitesmoke; 
+ width: 100px;
+ height: 50px; 
+}
+
+
+
+
 </style>
 
 
@@ -50,53 +64,57 @@
 	       To download data: add datasets to your Data Cart, then click on <i>Expand</i> or <i>wget</i>.
         </div>
 	    <div class="span-3 last" style="margin-top:5px">
-<!--  
-	    	<div id="temporal"><a href="<c:url value="/scripts/esgf/overlays/temporal_overlay.html" />" id="temporal" rel="#temporal_overlay" style="font-size:10px">Temporal Search</a></div>
--->	    	
 			<div id="temporal"><a href="#" id="temporal" style="font-size:10px">Temporal Search</a></div>
+			<!--  
 			<div id="geo"><a href="#" id="geospatial" style="font-size:10px">Geospatial Search</a></div>
+<<<<<<< HEAD
+			<div id="initializeSRM"><a href="#" id="initializeSRM" style="font-size:10px">Initialize SRM</a></div>
+=======
+			-->
 			<div id="clearc"><a href="#" id="clearcache" style="font-size:10px">Clear search constraints and datacart</a></div>
 			<div id="search_help"><a href="http://www.esgf.org/wiki/ESGF_Web_Search_User_Guide" style="font-size:10px" >Search Help</a></div>
 	    	<div id="search_cv"><a href="http://www.esgf.org/wiki/ESGF_Search_CV" style="font-size:10px" >Search Controlled Vocabulary</a></div>
 	    </div>
-	   	
-	   	  
+	  
 		
 		
 		
 </div>
 
 <div class="span-18 last" style="margin-bottom:15px"> 
-		<!--  
-			<input class="distribbutton1" id="distribbutton" type="submit" style="margin-left:20px" alt="distrib submit" />
-		-->
 		<div class="span-12 last">
-		<!--  <input type="checkbox" alt="distrib checkbox" class="distribcheckbox1" id="distribcheckbox" style="margin-left:20px" checked="yes" /> <span style="font-weight:bold">Search All Sites</span> -->
-			<!--  
-		    <input type="checkbox" alt="distrib checkbox" class="distribcheckbox1" id="distribcheckbox" style="margin-left:20px"/> <span style="font-weight:bold">Search All Sites</span>
-			-->
+			
 			<!--   <label style="display: block;float: left;padding-right: 10px;white-space: nowrap;"> -->
 				<input type="checkbox" alt="distrib checkbox" class="distribcheckbox1" id="distribcheckbox" style="vertical-align: middle;margin-left:10px;padding-bottom:10px"/><span style="font-weight:bold;padding-top:10px;vertical-align: middle;">Search All Sites</span>
 				<input type="checkbox" alt="replica checkbox" class="replicacheckbox1" id="replicacheckbox" style="vertical-align: middle;margin-left:10px;padding-bottom:10px"/> <span style="font-weight:bold;padding-top:10px;vertical-align: middle;">Show All Replicas</span>
 				<input type="checkbox" alt="versions checkbox" class="versioncheckbox1" id="versioncheckbox" style="vertical-align: middle;margin-left:10px;padding-bottom:10px"/> <span style="font-weight:bold;padding-top:10px;vertical-align: middle;">Show All Versions</span>
-				<!--  </label> -->
-			<!--  
-			jQuery(list).append('<div><label style="display: block;float: left;padding-right: 10px;white-space: nowrap;"><input type="checkbox" alt="param checkbox" id="read_params" style="vertical-align: middle;padding-bottom:10px" name="checkBox"><span style="font-size:12px;padding-top:5px;vertical-align: middle;">Include URL Parameters</span></label></div>');
-			-->
+				
+		</div>
 		
-		</div>
-		<!--  
-		<div class="span-12 last">
-		<input type="checkbox" alt="param checkbox" class="urlparamscheckbox1" id="urlparamscheckbox" style="vertical-align: middle;margin-left:10px;padding-bottom:10px"/> <span style="font-weight:bold;padding-top:10px;vertical-align: middle;">Include URL Parameters</span>		
-		</div>
-		-->
+		
+<!--  	
+		<table id='gravity' cellspacing='5'>
+  <tr>
+    <td>
+      <a id='north-west' href='#' title='This is an example of north-west gravity'>Northwest</a>
+    </td>
+    <td>
+      <a id='north' href='#' title='This is an example of north gravity'>North</a>
+    </td>
+    <td>
+      <a id='north-east' href='#' title='This is an example of north-east gravity'>Northeast</a>
+    </td>
+  </tr>
+</table>
+-->	
+
 </div>
 
 <div class="span-20 last" id="search-summary" style="margin-top:0px;">
 		
 		<div class="span-18 last">
 			<ul id="pager"></ul>
-		    <div id="pager-header"></div>
+		    <div id="pager-header"> </div>
 		</div>
 		
 		<!-- old -->    	  
@@ -104,16 +122,7 @@
 		    	<!--<div id="search-help" style="margin-left:15px;">(press ESC to close suggestions)</div>-->
 			<!-- </div> -->
 		    
-		<!--  
-		    <div id="page-navigation" class="span-8">
-		      <ul id="pager"></ul>
-		      <div id="pager-header"></div>
-		    </div>
-	
-			<div class="span-5 last">
-			<a id="add_all" style="margin-left:10px;cursor:pointer">Add All to Datacart</a>
-			</div>
-		-->
+		
 			
 </div>  
 
@@ -205,7 +214,30 @@
  	  	
   	  });
  	  
-    	
+  		$('a#initializeSRM').click(function() {
+  			
+  			
+  			var initialize_url = '/esgf-web-fe/initializeSRMEntryList';
+  			
+  			$.ajax({
+				url: initialize_url,
+				global: false,
+				type: "POST",
+				//data: queryStr,
+				//dataType: 'xml',
+				success: function(data) {
+					alert(data);
+					//alert('Your data has been staged and an email has been sent to your account.  Please follow the instructions included.');
+					// $('#srm_response').append("Staging successfully launched"); 
+				},
+				error: function (request, status, error) {
+			        //alert("SRM Request error: " + request.responseText);
+				}
+				
+	    	});
+  			
+  			
+  		});
     	
     	//event is trigger on both logout and login links (for now)
     	//there is a little disconnect with the header.jsp file so this can be seen as a temporary fix until a main page clean up is performed 
@@ -255,9 +287,23 @@
     		}
     		*/
 		});
-        $('#myTabs').tabs();
+    	
+    	
+    	$('#myTabs').tabs();
         
-        
+    	
+    	var urlParams = ESGF.datacart.getURLParams();
+		
+    	if(urlParams['tab'] == undefined) {
+    		$('#myTabs').tabs('select' , 0);
+    	} else if(urlParams['tab'] == 'datacart') {
+    		$('#myTabs').tabs('select' , 1);
+    	} else {
+    		$('#myTabs').tabs('select' , 0);
+    	}
+    	
+    	
+    	
         /*Facet overlay
         */
       //scroll wheel for facet overlay 
@@ -302,8 +348,58 @@
                 Manager.doRequest(0);
             }
         });
+         
+         /*
+        $('#somecontent a').mouseover(function(){
+            if(!$('#somecontent .tip').exists())
+            {
+                // add your tip to the dom
+                $('#somecontent').append('<div class="tip">Tool Tip Stuff Here</div>');
+                
+                // animate the display if you wish
+                $('#somecontent .tip').fadeIn('slow', function() {
+                });
+                
+                // remove element on mouse out
+                $('.tip').mouseout(function(){
+                   $(this).remove();
+                })
+            }
+        });
+		*/
+         
         
+		/*
+        $('#example-1').tipsy();
         
+        $('#auto-gravity').tipsy({gravity: $.fn.tipsy.autoNS});
+        
+        $('#example-fade').tipsy({fade: true});
+        
+        $('#example-custom-attribute').tipsy({title: 'id'});
+        $('#example-callback').tipsy({title: function() { return this.getAttribute('original-title').toUpperCase(); } });
+        $('#example-fallback').tipsy({fallback: "Where's my tooltip yo'?" });
+        
+        $('#example-html').tipsy({html: true });
+        
+        //$('.tipsy').bind('mouseout',function() {alert('here')});
+            
+            $('#south').tipsy({gravity: 's'});
+            $('#east').tipsy({gravity: 'e'});
+            $('#west').tipsy({gravity: 'w'});
+            $('#north-west').tipsy({gravity: 'nw'});
+            $('#north-east').tipsy({gravity: 'ne'});
+            $('#south-west').tipsy({gravity: 'sw'});
+            $('#south-east').tipsy({gravity: 'se'});
+          
+            $('#north').hover(function() {
+            	var flag = true;
+            	if(flag) {
+                	$('#north').tipsy({delayOut: 10000,gravity: 'n'});
+            	}
+            	
+            });
+        */
     });
 
 </script>

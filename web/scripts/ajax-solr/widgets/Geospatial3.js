@@ -83,7 +83,8 @@
          */
         beforeRequest: function () {
     		
-        	
+        	$( "#geodialog" ).die();
+        	$('button#submitGeo').die();
         },
         
         
@@ -97,6 +98,8 @@
             
             
     		$('a#geospatial').click(function() {
+    			
+    			alert('in geospatial');
                 
             	$( "#geodialog" ).dialog({
             		width: 700,

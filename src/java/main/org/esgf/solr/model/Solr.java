@@ -14,11 +14,13 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.esgf.srm.SRMUtils;
+import org.esgf.srm.SRMControls;
+import org.esgf.srm.utils.SRMUtils;
 
 public class Solr {
     
-    public static String searchAPI = "http://localhost/esg-search/search?";
+    public static String searchAPI = SRMUtils.searchAPI;
+
     private static String queryPrefix = "format=application%2Fsolr%2Bjson&type=File";
     
     
@@ -88,7 +90,11 @@ public class Solr {
     }
     
     public void executeQuery() {
-        //System.out.println("Executing query");
+        
+        System.out.println("\n\n\n\n\n\n---------------\n\n");
+        
+        long startTime = System.currentTimeMillis();
+        System.out.println("\n\n\nExecuting query " + startTime);
         
         // create an http client
         HttpClient client = new HttpClient();
@@ -100,6 +106,8 @@ public class Solr {
         
         method.setQueryString(this.queryString);
         
+        System.out.println("searchAPI: " + searchAPI);
+        System.out.println("this.query->" + this.queryString);
         
         method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
                 new DefaultHttpMethodRetryHandler(3, false));
@@ -128,7 +136,10 @@ public class Solr {
             method.releaseConnection();
         }
         
-        
+        //System.out.println("responseBody: \n" + responseBody);
+
+        long stopTime = System.currentTimeMillis();
+        System.out.println("Done Executing query " + stopTime + " \ntotal time: " + (stopTime-startTime) + "\n\n\n\n");
         this.solrResponse = new SolrResponse(responseBody);
     }
     

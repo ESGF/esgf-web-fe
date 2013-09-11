@@ -49,6 +49,22 @@
 	</div>
 	<div class="span-12 prepend-1">
 	
+		
+		
+		<input id="srm_workflow" type="submit" value="Submit SRM Request (WGET)">
+		<input id="srm_workflow_go" type="submit" value="Submit SRM Request (Globus Online)">
+		<input id="srm_workflow_guc" type="submit" value="Submit SRM Request (Globus URL Copy)">
+		<input id="show_files" type="submit" value="View Files with Dataset(s)">
+		<input id="show_params_sent" type="submit" value="Show Param(s)">
+		<input id="back" type="submit" value="Back to Search Page">
+		
+	</div>
+	
+	<div class="span-24 prepend-1 last" style="margin-top:40px;">
+		<div id="srm_response"></div>
+	</div>
+	<div class="span-18 prepend-1 last" style="margin-top:30px;margin-bottom:10px">
+	
 		<div id="show_params" style="display:none">
 			<div>Type: ${type}</div>
 			<div id="type" style="display:none">${type}</div>
@@ -74,17 +90,21 @@
 		
 		</div>
 		
-		<input id="srm_workflow" type="submit" value="Submit SRM Request (WGET)">
-		<input id="srm_workflow_go" type="submit" value="Submit SRM Request (Globus Online)">
-		<input id="show_files" type="submit" value="View Files with Dataset(s)">
-		<input id="show_params_sent" type="submit" value="Show Param(s)">
-		<input id="back" type="submit" value="Back to Search Page">
+		
+		
 	</div>
-	<div class="span-10 last">
-		<div id="file_contents" style="display:none">Empty</div>
-	</div>
-	<div class="span-24 prepend-1 last" style="margin-top:40px;">
-		<div id="srm_response"></div>
+	
+	<div class="span-18 prepend-1 last" style="margin-top:10px;margin-bottom:10px">
+	
+		<div id="file_contents" style="display:none;font-weight:bold">
+			File(s) to be transferred from HPSS
+			<div id="files" style="font-size:10px">
+			
+			</div>
+		</div>
+		
+		
+		
 	</div>
 </div>
 
@@ -94,7 +114,9 @@
 
 $(document).ready(function(){
 	
-	
+	$('input#back').click(function() {
+		location.href='/esgf-web-fe/live';
+	});
 	
 	
 	$('input#show_params_sent').click(function() {
@@ -108,19 +130,75 @@ $(document).ready(function(){
 			$('div#file_contents').show();
 			
 			
+			
+			var type = $('#type').html();
+			var dataset_id = $('#dataset_id').html();
+			var filtered = $('#filtered').html();
+			var file_id = $('#file_id').html();
+			var file_url = $('#file_url').html();
+			
+			
+			var queryStr = { 
+					'file_id':file_id,
+				 	'file_url':file_url,
+					'constraints': fqParamStr,
+				 	'dataset_id':dataset_id,
+				 	'filtered':filtered,
+				 	'type':type
+				 	//'scriptType':scriptType
+				 	
+				};
+
+			LOG.debug('dataset_id: ' + queryStr['dataset_id']);
+			LOG.debug('constraints: ' + queryStr['constraints']);
+			LOG.debug('file_id: ' + queryStr['file_id']);
+			LOG.debug('file_url: ' + queryStr['file_url']);
+			LOG.debug('type: ' + queryStr['type']);
+			//LOG.debug('scriptType: ' + queryStr['scriptType']);
+			
+			var srm_url = '/esgf-web-fe/srmfilesrequest?file_id='+file_id+
+					'&dataset_id='+dataset_id+
+					'&type='+type+
+					'&constraints='+fqParamStr;
+			
+			$.ajax({
+				url: srm_url,
+				type: "POST",
+				global: false,
+				//data: queryStr,
+				success: function(data) {
+					for(var i=0;i<data.length;i++) {
+						$('#files').append('<div>' + data[i] + '</div>')
+					}
+				},
+				error: function() {
+					alert('error');
+				}
+			});
+			
+			
+			
+			
 		} else {
 			$('input#show_files').val('View Files with Dataset(s)');
+			$('#files').empty();
 			$('div#file_contents').hide();
 		}
 	});
 	
 	
-	
-	
-	
-	
-	$('input#srm_workflow').click(function() {
+	$('input#srm_workflow_go').click(function() {
 		
+		var scriptType = 'GO';            
+	
+		alert('Globus online workflow is not supported at this time');
+		
+	});
+	
+	$('input#srm_workflow_guc').click(function() {
+	
+		
+		//alert('in globus url copy workflow');
 		
 		var type = $('#type').html();
 		var dataset_id = $('#dataset_id').html();
@@ -128,21 +206,26 @@ $(document).ready(function(){
 		var file_id = $('#file_id').html();
 		var file_url = $('#file_url').html();
 		
+		var scriptType = 'gridftp';            
 		
-
 		var srm_url = '/esgf-web-fe/srmproxy';
 		
 		//alert('type: ' + type + ' dataset_id: ' + dataset_id);
 		
+		alert('An email has been sent to your account indicating that your request has been submitted.');
+					
 		if(type == 'File') {
 			
 			
 			var queryStr = { 
 								'file_id':file_id,
 							 	'file_url':file_url,
+								'constraints': fqParamStr,
 							 	'dataset_id':dataset_id,
 							 	'filtered':filtered,
-							 	'type':type
+							 	'type':type,
+							 	'scriptType':scriptType
+							 	
 							}
 			
 			LOG.debug('dataset_id: ' + queryStr['dataset_id']);
@@ -150,6 +233,8 @@ $(document).ready(function(){
 			LOG.debug('file_id: ' + queryStr['file_id']);
 			LOG.debug('file_url: ' + queryStr['file_url']);
 			LOG.debug('type: ' + queryStr['type']);
+			LOG.debug('scriptType: ' + queryStr['scriptType']);
+			
 			
 			$.ajax({
 				url: srm_url,
@@ -158,8 +243,113 @@ $(document).ready(function(){
 				data: queryStr,
 				//dataType: 'xml',
 				success: function(data) {
-					alert('An email has been sent to your account.  Please follow the instructions included.');
-					/* $('#srm_response').append("Staging successfully launched"); */
+					alert('Your data has been staged and an email has been sent to your account.  Please follow the instructions included.');
+					// $('#srm_response').append("Staging successfully launched"); 
+				},
+				error: function (request, status, error) {
+			        alert("SRM Request error: " + request.responseText);
+				}
+				
+	    	});
+			
+		} else {
+
+			//query solr for file ids and urls before sending request
+			var fqParamStr = $('#fqParamStr').html();
+		
+			var queryStr = { 
+								'dataset_id': dataset_id,
+								'constraints': fqParamStr,
+								'type': type,
+							 	'filtered':filtered,
+								'file_id':file_id,
+					 			'file_url':file_url,
+							 	'scriptType':scriptType
+					 	   }
+
+			LOG.debug('dataset_id: ' + queryStr['dataset_id']);
+			LOG.debug('constraints: ' + queryStr['constraints']);
+			LOG.debug('file_id: ' + queryStr['file_id']);
+			LOG.debug('file_url: ' + queryStr['file_url']);
+			LOG.debug('type: ' + queryStr['type']);
+			LOG.debug('scriptType: ' + queryStr['scriptType']);
+			
+			
+			
+			$.ajax({
+				url: srm_url,
+				global: false,
+				type: "POST",
+				data: queryStr,
+				//dataType: 'xml',
+				success: function(data) {
+					alert('Your data has been staged and an email has been sent to your account.  Please follow the instructions included.');
+					
+				},
+				error: function(jqXHR, textStatus,errorThrown) {
+					//alert('error retrieving data from srm');
+					alert('textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
+				}
+				
+			});
+			
+			//$('#srm_response').append("Staging launched");
+			
+			
+		}
+		
+		
+	});
+	
+	
+	
+	$('input#srm_workflow').click(function() {
+
+		//alert('in wget workflow');
+		
+		var type = $('#type').html();
+		var dataset_id = $('#dataset_id').html();
+		var filtered = $('#filtered').html();
+		var file_id = $('#file_id').html();
+		var file_url = $('#file_url').html();
+		
+		var scriptType = 'http';
+
+		var srm_url = '/esgf-web-fe/srmproxy';
+		
+		alert('An email has been sent to your account indicating that your request has been submitted.');
+		
+		if(type == 'File') {
+			
+			
+			var queryStr = { 
+								'file_id':file_id,
+							 	'file_url':file_url,
+								'constraints': fqParamStr,
+							 	'dataset_id':dataset_id,
+							 	'filtered':filtered,
+							 	'type':type,
+							 	'scriptType':scriptType
+							 	
+							}
+			
+			LOG.debug('dataset_id: ' + queryStr['dataset_id']);
+			LOG.debug('constraints: ' + queryStr['constraints']);
+			LOG.debug('file_id: ' + queryStr['file_id']);
+			LOG.debug('file_url: ' + queryStr['file_url']);
+			LOG.debug('type: ' + queryStr['type']);
+			LOG.debug('scriptType: ' + queryStr['scriptType']);
+			
+			
+			$.ajax({
+				url: srm_url,
+				global: false,
+				type: "POST",
+				data: queryStr,
+				//dataType: 'xml',
+				success: function(data) {
+					alert('Your data has been staged and an email has been sent to your account.  Please follow the instructions included.');
+					// $('#srm_response').append("Staging successfully launched"); 
 				},
 				error: function() {
 					alert('srm error');
@@ -176,8 +366,10 @@ $(document).ready(function(){
 								'dataset_id': dataset_id,
 								'constraints': fqParamStr,
 								'type': type,
+							 	'filtered':filtered,
 								'file_id':file_id,
 					 			'file_url':file_url,
+							 	'scriptType':scriptType
 					 	   }
 
 			LOG.debug('dataset_id: ' + queryStr['dataset_id']);
@@ -185,6 +377,7 @@ $(document).ready(function(){
 			LOG.debug('file_id: ' + queryStr['file_id']);
 			LOG.debug('file_url: ' + queryStr['file_url']);
 			LOG.debug('type: ' + queryStr['type']);
+			LOG.debug('scriptType: ' + queryStr['scriptType']);
 			
 			
 			

@@ -177,28 +177,74 @@ ESGF.datacart.getFqParamStr = function () {
 };
 
 ESGF.datacart.getIdStr = function () {
+	
+
 	var idStr = '';
-	var selected_arr = ESGF.localStorage.toKeyArr('dataCart');;
-	for(var i=0;i<selected_arr.length;i++) {
-		if(i != (selected_arr.length - 1)) {
-    		idStr += selected_arr[i] + ';';
-		} else {
-			idStr += selected_arr[i];
+	
+	if(ESGF.setting.datacartOverride) {
+		var datasetParams = ESGF.datacart.getDatasetIdsFromURL();
+		
+		//alert('datasetIDStr ' + datasetParams);
+	} else {
+		var selected_arr = ESGF.localStorage.toKeyArr('dataCart');;
+		for(var i=0;i<selected_arr.length;i++) {
+			if(i != (selected_arr.length - 1)) {
+	    		idStr += selected_arr[i] + ';';
+			} else {
+				idStr += selected_arr[i];
+			}
 		}
 	}
+	
 	return idStr;
 };
 
 ESGF.datacart.getIndividualPeer = function (id) {
 	var peerStr = '';
 	
-	var datasetInfo = ESGF.localStorage.get('dataCart',id);
+	var datasetInfo = '';
+	if(ESGF.setting.datacartOverride) {
+		
+		var dataset_id = id;
+		
+		var srmdatasetdatacarturl = '/esgf-web-fe/srmdatacartproxy/datacart';
+		
+		var queryString = 
+    	{
+    			"dataset_id" : dataset_id
+		};
+		
+		datasetInfo = undefined;
+
+		alert('data: ' + data);
+		$.ajax({
+			url: srmdatasetdatacarturl,
+			global: false,
+			type: 'POST',
+			async: false,
+			dataType: 'json',
+			data: queryString,
+			success: function(data) {
+				datasetInfo = data['datacartdataset'];
+			},
+			error: function() {
+				alert('error in srm dataset datacart');
+			}
+		});
+		
+		
+		
+		
+	} else {
+		datasetInfo = ESGF.localStorage.get('dataCart',id);
+	}
 	
 	peerStr = datasetInfo['peer'];
 	
 	if(peerStr == undefined) {
 		peerStr = 'localhost';
 	}
+	
 	
 	return peerStr.toString();
 	
@@ -251,6 +297,46 @@ ESGF.datacart.getTechnoteStr = function () {
 };
 
 
+ESGF.datacart.getURLParams = function() {
+	var urlParams;
+	(window.onpopstate = function () {
+	    var match,
+	        pl     = /\+/g,  // Regex for replacing addition symbol with a space
+	        search = /([^&=]+)=?([^&]*)/g,
+	        decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+	        query  = window.location.search.substring(1);
+
+	    urlParams = {};
+	    while (match = search.exec(query))
+	       urlParams[decode(match[1])] = decode(match[2]);
+	})();
+	return urlParams;
+};
+
+/**
+ * Gets parameters in case there is an array (specifically for datasetid)
+ */
+ESGF.datacart.getDatasetIdsFromURL = function() {
+	URL = window.location.toString();
+	var query = URL.match(/\?(.+)$/);
+	var queryList = query[1].split("&");
+	
+	var queryParamArr = new Array();
+	
+	for(var i=0;i<queryList.length;i++) {
+		var queryKey = queryList[i].split('=')[0];
+		var queryValue = queryList[i].split('=')[1];
+		if(queryValue[queryValue.length-1] == '#') {
+			
+			queryValue = queryValue.substring(0,queryValue.length-1);
+			
+		}
+		if(queryKey == 'datasetid') {
+			queryParamArr.push(queryValue);
+		}
+	}
+	return queryParamArr;
+};
 
 
 ESGF.datacart.rewriteDocsObject = function (docs) {

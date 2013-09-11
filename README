@@ -1,6 +1,13 @@
 
+To build this project.... the easiest way is to run:
 
+%> ant make_dist
 
+To clean up:
+
+%> ant clean_all
+
+----------------------------------------------
 GeoSpatial Demo
 ----------------------------------------------
 

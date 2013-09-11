@@ -1,26 +1,17 @@
 package org.esgf.srm;
 
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.esgf.datacart.XmlFormatter;
+import org.esgf.srm.utils.XmlFormatter;
 import org.esgf.solr.model.Solr;
 import org.esgf.solr.model.SolrResponse;
+import org.esgf.srmcache.SRMEntry;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 public class SRMEntryList {
 
@@ -246,7 +237,7 @@ public class SRMEntryList {
             //if(file_id.equals("ornl.ultrahighres.CESM1.t341f02.FAMIPr.v1.t341f02.FAMIPr.cam2.h0.1978-09.nc|esg2-sdnl1.ccs.ornl.gov"))
             //    System.out.println("list: " + this.srm_entry_list.get(i).getFile_id() + " " + file_id);
             if(file_id.equals(this.srm_entry_list.get(i).getFile_id())) {
-                isCached = this.srm_entry_list.get(i).getIsCached();
+                //isCached = this.srm_entry_list.get(i).getIsCached();
             }
         }
         return isCached;

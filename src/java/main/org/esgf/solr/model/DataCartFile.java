@@ -3,9 +3,12 @@ package org.esgf.solr.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.esgf.datacart.XmlFormatter;
+//import org.esgf.legacy.datacart.XmlFormatter;
+import org.esgf.solr.model.Solr;
+import org.esgf.solr.model.SolrRecord;
+import org.esgf.solr.model.SolrResponse;
 import org.esgf.srm.SRMEntryList;
-import org.esgf.srm.SRMUtils;
+import org.esgf.util.XmlFormatter;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 
@@ -24,7 +27,7 @@ public class DataCartFile {
     private List<String> urls;
     private List<String> mimes;
     
-    private String isCached;
+    //private String isCached;
 
     private List<String> technotes;
     
@@ -38,7 +41,8 @@ public class DataCartFile {
     public DataCartFile(SolrRecord solrRecord) {
         
         if(Utils.debugMode)
-            System.out.println("\nIn datacart File\n");
+            System.out.println("In datacart File\n");
+
         
         String fileId = null;
         if(solrRecord.getStrField("id") == null) {
@@ -86,7 +90,7 @@ public class DataCartFile {
         this.checksum_type = checksum_type;
         
         
-        this.getCacheInfo(solrRecord);
+        //this.getCacheInfo(solrRecord);
         
         this.parseUrl(solrRecord);
         
@@ -190,6 +194,7 @@ public class DataCartFile {
             fileEl.addContent(checksum_typeEl);
         }
 
+        /*
         if(this.isCached != null) {
             Element isCachedEl = new Element("isCached");
             isCachedEl.addContent(this.isCached);
@@ -199,6 +204,7 @@ public class DataCartFile {
             isCachedEl.addContent("true");
             fileEl.addContent(isCachedEl);
         }
+        */
         
         if(this.services != null) {
             Element servicesEl = new Element("services");
@@ -272,12 +278,10 @@ public class DataCartFile {
         
         List<SolrRecord> solrRecords = solrResponse.getSolrRecords();
         
-        System.out.println("Count: " + solrResponse.getCount() + " " + solrRecords.size());
-        
         
         DataCartFile datacartFile = new DataCartFile(solrRecords.get(0));
         
-        System.out.println( new XmlFormatter().format(datacartFile.toXML()));
+        //System.out.println( new XmlFormatter().format(datacartFile.toXML()));
         
         
         
@@ -286,7 +290,7 @@ public class DataCartFile {
     
     
    
-    
+    /*
     public void getCacheInfo(SolrRecord solrRecord) {
         SRMEntryList srm_entry_list = new SRMEntryList();
         
@@ -296,6 +300,7 @@ public class DataCartFile {
         
         
     }
+    */
     
     public void parseUrl(SolrRecord solrRecord) {
         
@@ -305,8 +310,8 @@ public class DataCartFile {
         this.mimes = new ArrayList<String>();
         
         
-        if(this.isCached.equals("true")) {
-            
+        //if(this.isCached.equals("true")) {
+        /* 
             for(int i=0;i<values.size();i++) {
                 String value = values.get(i);
                 String [] components = value.split("\\|");
@@ -325,8 +330,8 @@ public class DataCartFile {
                 
                 
             }
-            
-        } else {
+          */  
+        //} else {
             
             for(int i=0;i<values.size();i++) {
                 String value = values.get(i);
@@ -339,7 +344,7 @@ public class DataCartFile {
                 this.services.add(service);
             }
             
-        }
+        //}
         
         
         
@@ -490,17 +495,20 @@ public class DataCartFile {
     /**
      * @return the isCached
      */
+    /*
     public String getIsCached() {
         return isCached;
     }
-
+    */
     /**
      * @param isCached the isCached to set
      */
+    /*
     public void setIsCached(String isCached) {
         this.isCached = isCached;
     }
-
+    */
+    
     /**
      * @return the technotes
      */

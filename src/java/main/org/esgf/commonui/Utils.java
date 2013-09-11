@@ -14,6 +14,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.esgf.srm.SRMControls;
 import org.jdom.Document;
 import org.jdom.Element;
 
@@ -26,7 +27,7 @@ public class Utils {
     
     //switch used for development purposes 
     //a "false" represents a disconnect from postgres
-    public final static boolean environmentSwitch = true;
+    public final static boolean environmentSwitch = SRMControls.environmentSwitch;
     
     public static String getPassword(File file) {
         String passwd = null;

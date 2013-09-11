@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import esg.node.security.ESGFDataAccessException;
 import esg.node.security.UserInfo;
 import esg.node.security.UserInfoCredentialedDAO;
-import esg.node.security.UserInfoDAO;
 
 /**
  * Controller to disable a user account.

@@ -110,7 +110,7 @@ public class SolrRecord {
     }
 
     public List<String> getArrField(String field) {
-        List<String> values = null;
+        List<String> values = new ArrayList<String>();
         
         for(int i=0;i<arrNodes.size();i++) {
             //System.out.println("i: " + i + " " + arr_nodes.get(i).getNodeName());
@@ -120,7 +120,7 @@ public class SolrRecord {
                     //System.out.println("\tj: " + j + " " + attrNode.getNodeValue());
                     if(attrNode.getNodeValue().equals(field)) {
                         NodeList nodeList = arrNodes.get(i).getChildNodes();
-                        values = new ArrayList<String>();
+                        //values = new ArrayList<String>();
                         for(int k=0;k<nodeList.getLength();k++) {
                             Node node = nodeList.item(k);
                             if(node.getNodeType() == (javax.xml.soap.Node.ELEMENT_NODE)) {

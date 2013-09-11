@@ -140,15 +140,40 @@ ESGF.setting.datasetCounter = 10;
 ESGF.setting.datacartMax = 100;
 
 
+//switch for datacart override
+ESGF.setting.datacartOverride = false;
+
+
 //timeout in case of an ajax call not returning results
 ESGF.setting.ajaxTimeout = 20000;
 
-ESGF.setting.globusonline = false;
+ESGF.setting.globusonline = true;
 
 ESGF.setting.srm_url_root = '/esg-srm/';
 
+ESGF.setting.srm_disabled = true;
+
+ESGF.setting.srmCacheOn = false;
 
 ESGF.setting.lasRestrictions = new Array();
+
+
+ESGF.setting.tooltipOn = {};
+ESGF.setting.tooltipContent = {};
+
+//for the 
+ESGF.setting.tooltipOn.nonfiltered = true;
+ESGF.setting.tooltipContent.nonfiltered = 'Displays all files associated with dataset';
+
+//for the tool tip in the datacart filter over text
+ESGF.setting.tooltipOn.filtered = true;
+ESGF.setting.tooltipContent.filtered = 'Use the text box on top to sub-select the files of a dataset by a matching string.  ' +
+									   '(e.g enter "tas" for those files that contain "tas" or ' + 
+									   'restrict to a specific variable by entering ' +
+									   '"variable:tas")<br />Click the "Search" button for ' +
+									   'constraint to take effect. <br />';//'Filters files over the content in the textbar';
+
+
 /**
  * Proxy for creating the template for file downloads.
  *

@@ -29,7 +29,7 @@
 
 
     <dependency org="com.sun.xml.bind" name="jaxb-xjc" rev="2.2" conf="base->default" />
-    <dependency org="log4j" name="log4j" rev="1.2.14" conf="base->default">
+    <dependency org="log4j" name="log4j" rev="1.2.17" conf="base->default">
       <exclude org="com.sun.jdmk"/>
       <exclude org="com.sun.jmx"/>
       <exclude org="javax.jms"/>
@@ -45,14 +45,14 @@
     <dependency org="org.springframework" name="spring-aspects" rev="${spring.version}" transitive="true" conf="base->default" />
 	<dependency org="org.springframework" name="spring-mock" rev="2.0-m5" />
 
-    <dependency org="org.springframework.security" name="spring-security-core" rev="${spring.version}" conf="base->default" />
-    <dependency org="org.springframework.security" name="spring-security-config" rev="${spring.version}" conf="base->default" />
-    <dependency org="org.springframework.security" name="spring-security-openid" rev="${spring.version}" conf="base->default" />
-    <dependency org="org.springframework.security" name="spring-security-taglibs" rev="${spring.version}" conf="base->default" />
+    <dependency org="org.springframework.security" name="spring-security-core" rev="${spring.security.version}" conf="base->default" />
+    <dependency org="org.springframework.security" name="spring-security-config" rev="${spring.security.version}" conf="base->default" />
+    <dependency org="org.springframework.security" name="spring-security-openid" rev="${spring.security.version}" conf="base->default" />
+    <dependency org="org.springframework.security" name="spring-security-taglibs" rev="${spring.security.version}" conf="base->default" />
 
     <dependency org="org.apache.tomcat" name="annotations-api" rev="6.0.29" conf="base->default" />
     <dependency org="hsqldb" name="hsqldb" rev="1.8.0.10" conf="base->default" />
-    <dependency org="javax.servlet" name="servlet-api" rev="2.5" transitive="false" conf="compile->default" />
+    <dependency org="javax.servlet" name="javax.servlet-api" rev="3.0.1" transitive="false" conf="compile->default" />
     <dependency org="javax.servlet" name="jstl" rev="1.2" conf="base->default" />
     <dependency org="org.apache.lucene" name="lucene-spatial" rev="3.0.2" transitive="false" conf="base->default" />
 
@@ -117,13 +117,13 @@
     <dependency org="net.sourceforge.cobertura" name="cobertura" rev="1.9.4" conf="base->default"/>
     <dependency org="antlr" name="antlr" rev="2.7.7" conf="base->default" />
     <dependency org="commons-fileupload" name="commons-fileupload" rev="1.2.1" conf="base->default"/>
-    <dependency org="commons-io" name="commons-io" rev="2.0.1" conf="base->default"/>
+    <dependency org="commons-io" name="commons-io" rev="2.4" conf="base->default"/>
     <dependency org="postgresql" name="postgresql" rev="9.0-801.jdbc4" conf="base->default" />
     <dependency org="xerces" name="xercesImpl" rev="2.9.1" conf="base->default"/>
     <dependency org="javax.mail" name="mail" rev="1.4.3" transitive="false" conf="base->default" />
     <dependency org="org.codehaus.jackson" name="jackson-mapper-asl" rev="1.8.5" conf="base->default"/>
 
-    <dependency org="joda-time" name="joda-time" rev="1.6" conf="base->default" />
+    <dependency org="joda-time" name="joda-time" rev="2.0" conf="base->default" />
     <dependency org="xml-security" name="xmlsec" rev="1.4.2" transitive="false" conf="base->default" />
     <dependency org="org.opensaml" name="opensaml" rev="2.3.2" transitive="false" conf="base->default"  /> 
     <dependency org="org.opensaml" name="openws" rev="1.3.1" transitive="false" conf="base->default"  />

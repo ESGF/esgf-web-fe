@@ -101,6 +101,9 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 		    
 		//kill the all files globus online
 		$('a.globusOnlineAllFiles_short').die('click');
+		
+		$('a.globusOnlineAllFiles_short_SRMConvert').die('click');
+			
 	},
 	
 	
@@ -273,7 +276,8 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 						var file = data.doc.files.file[i];
 						
 						self.file_ids_arr.push(file.fileId);
-				
+
+						//alert(file.services.service);
 						for(var j=0;j<file.services.service.length;j++) {
 							if(file.services.service[j] == 'GridFTP') {
 								self.grid_urls_arr.push(file.urls.url[j]);
@@ -359,7 +363,9 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 			
 	    	self.file_ids_arr = new Array();
 	    	self.grid_urls_arr = new Array();
-			
+	    	
+	    	
+	    	
 
 			var datacart = ESGF.localStorage.getAll('dataCart');
 			
@@ -369,50 +375,294 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 
 	    	var non_grid_arr = new Array();
 	    	
-	    	for(var i=0;i<self.selected_arr.length;i++) {
-	    		
-	    		
-	    		var datasetId = self.selected_arr[i];
-				var accessType = 'GridFTP';
-				var hasGridFTP = self.checkDatasetAccess(accessType,datasetId);
 	    	
-				//if dataset has access to gridftp
-				if(hasGridFTP) {
-					
-					//if the dataset access is "undefined", we must do additional processing
-		    		if(datacart[datasetId]['access'] == undefined) {
-		    			
-		    			var hasAccess = self.checkPostQueryAccess(datasetId,accessType);
-		    			if(hasAccess) {
-		    				
-		    				self.getFileAndGridInfo(datasetId);
-		    				
-		    			} else {
+	    	//iterate over the selected array of datasets in the data cart
+        	//grab all the keys from the datacart map and place in an array
+        	var counter = 0;
+	    	$('input.selected_dataset').each(function () {
+	    		if($(this).attr("checked") == 'checked') {
+	    			
+	    			datasetId = $(this).parent().find('span.datasetId').html();
+	    			var accessType = 'GridFTP';
+					var hasGridFTP = self.checkDatasetAccess(accessType,datasetId);
+		    	
+					//if dataset has access to gridftp
+					if(hasGridFTP) {
+						
+						//if the dataset access is "undefined", we must do additional processing
+			    		if(datacart[datasetId]['access'] == undefined) {
+			    			
+			    			var hasAccess = self.checkPostQueryAccess(datasetId,accessType);
+			    			if(hasAccess) {
+			    				
+			    				self.getFileAndGridInfo(datasetId);
+			    				
+			    			} else {
 
-			    			non_grid_arr.push(datasetId);
-		    			}
-		    			
-		    		} 
-		    		//otherwise all is good, grab the file_ids and grid_urls
-		    		else {
-		    			self.getFileAndGridInfo(datasetId);
-		    			
-		    		}
-				}
-				//otherwise add to the list of datasets in the alert message 
-				else {
-	    			non_grid_arr.push(datasetId);
-				}
+				    			non_grid_arr.push(datasetId);
+			    			}
+			    			
+			    		} 
+			    		//otherwise all is good, grab the file_ids and grid_urls
+			    		else {
+			    			self.getFileAndGridInfo(datasetId);
+			    			
+			    		}
+
+		    			counter++;
+					}
+					//otherwise add to the list of datasets in the alert message 
+					else {
+		    			non_grid_arr.push(datasetId);
+					}
+					
+	    		}
+	    		
+	    	});
 	    	
+	    	if(counter == 0) {
+	    		alert('No datasets have been selected.  Please select a dataset and try to run the Globus Online workflow again.');
+		    	
+	    	} else {
+	    		
+	    		//alert('datasetIds: ' + dataset)
+		    	
+		    	//write a message if there are are
+		    	if(non_grid_arr.length > 0) {
+			    	self.writeNonDatasetMessage(non_grid_arr); 
+		    	}
+		    	
+		    	var globus_url = '/esgf-web-fe/goauthview1';
+
+	            var openid = $('span.footer_openid').html();
+	            var go_credential = ESGF.localStorage.get('GO_Credential',openid);
+		        //begin assembling queryString
+	            var queryString = 'type=create&id=' + datasetId + '&credential=' + go_credential;
+		        
+		        //assemble the input fields with the query string
+		        for(var i=0;i<self.file_ids_arr.length;i++) {
+		        	queryString += '&child_url=' + self.grid_urls_arr[i] + '&child_id=' + self.file_ids_arr[i];
+		        }
+
+	            
+		        var input = '';
+		        jQuery.each(queryString.split('&'), function(){
+		          var pair = this.split('=');
+		          input+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
+		        });
+		        
+		        
+		        
+		        //send request
+		        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
+		        .appendTo('body').submit().remove();
+		    	
+	    		
 	    	}
 	    	
 	    	
-	    	//write a message if there are are
-	    	if(non_grid_arr.length > 0) {
-		    	self.writeNonDatasetMessage(non_grid_arr); 
-	    	}
+	        
+	        
 	    	
-	    	var globus_url = '/esgf-web-fe/goauthview1';
+		});
+	    	
+		
+		$('a.globusOnlineAllFiles_short_SRMConvert').live('click',function() {
+			
+			var self = this;
+			
+			self.file_ids_arr = new Array();
+	    	self.grid_urls_arr = new Array();
+
+	    	var non_grid_arr = new Array();
+
+			var datacart = ESGF.localStorage.getAll('dataCart');
+			
+			var parentElement = $(this).parent();
+			
+			parentElement.find('a.globusOnlineAllFiles_short_SRMConvert').hide();
+			parentElement.find('span.globusOnlineAllFiles_short_SRMConvert').show();
+
+			var datasetId = ($(this).parent().parent().find('span.datasetId').html());
+			
+			
+			var self = this;
+			
+			var idStr = datasetId;
+	    	var peerStr = ESGF.datacart.getPeerStr();
+			var technoteStr = ESGF.datacart.getTechnoteStr();
+							
+	    	var fqParamStr = ESGF.datacart.getFqParamStr();
+	    	
+
+	    	var constraints = fqParamStr;
+	    	
+	    	var queryStr = 
+	    	{
+	    			"dataset_id" : idStr, 
+	    			"isInitialQuery" : "true",
+	    			"limit" : ESGF.setting.fileCounter,
+	    			"isShowAll" : ESGF.setting.showAllContents,
+					"constraints" : constraints, 
+					"peerStr" : peerStr, 
+					"technotesStr" : technoteStr, 
+			};
+			
+			
+
+	    	var url = '/esgf-web-fe/solrfileproxy3/datacart/';
+			
+			$.ajax({
+				url: url,
+				global: false,
+				async: false,
+				type: "POST",
+				data: queryStr,
+				dataType: 'json',
+				success: function(data) {
+					
+					
+					var fileCount = ESGF.localStorage.get('dataCart',idStr)['numFiles'];
+					
+					if(data.doc.files.file != undefined) {
+						
+						//if there is only one file in the data set
+						if(data.doc.files.file.length == undefined) {
+				
+							
+							var file_arr = new Array();
+
+							file_arr.push(data.doc.files.file);
+
+							data.doc.files['file'] = file_arr;
+
+						} 
+						
+						
+						for(var i=0;i<data.doc.files.file.length;i++){
+							
+
+							
+							var file = data.doc.files.file[i];
+							
+							self.file_ids_arr.push(file.fileId);
+								
+							if(file.services.service == 'SRM') {
+								
+								//translate from srm url to grid ftp url
+								var filetransformer_url = '/esgf-web-fe/gridftpfile';
+								
+								var queryString = 
+						    	{
+						    			"file_url" : file.urls.url
+								};
+								
+								//need to get both http and gridftp urls
+								$.ajax({
+									url: filetransformer_url,
+									global: false,
+									type: "GET",
+									async: false,
+									data: queryString,
+									success: function(data) {
+										self.grid_urls_arr.push(data);
+									}, 
+									error: function() {
+										alert('error in getting gridftp');
+									}
+								});
+								
+								//alert('push url: ' + file.urls.url);
+							} 
+							
+					
+						}
+						
+						
+						if(fileCount > 10) {
+						
+							queryStr = 
+					    	{
+					    			"dataset_id" : idStr, 
+					    			"isInitialQuery" : "false",
+					    			"limit" : "9999",
+					    			"isShowAll" : ESGF.setting.showAllContents,
+									"constraints" : constraints, 
+									"peerStr" : peerStr, 
+									"technotesStr" : technoteStr, 
+							};
+							
+							$.ajax({
+								url: url,
+								global: false,
+								async: false,
+								type: "POST",
+								data: queryStr,
+								dataType: 'json',
+								success: function(data) {
+
+									//alert('data.doc.files.file.length ' + data.doc.files.file.length);
+									
+									for(var i=0;i<data.doc.files.file.length;i++){
+										var file = data.doc.files.file[i];
+										
+										self.file_ids_arr.push(file.fileId);
+											
+										if(file.services.service == 'SRM') {
+											
+											//translate from srm url to grid ftp url
+											var filetransformer_url = '/esgf-web-fe/gridftpfile';
+											
+											var queryString = 
+									    	{
+									    			"file_url" : file.urls.url
+											};
+											
+											//need to get both http and gridftp urls
+											$.ajax({
+												url: filetransformer_url,
+												global: false,
+												type: "GET",
+												async: false,
+												data: queryString,
+												success: function(data) {
+													self.grid_urls_arr.push(data);
+												}, 
+												error: function() {
+													alert('error in getting gridftp');
+												}
+											});
+											
+											//alert('push url: ' + file.urls.url);
+										}
+									}
+
+									
+								}, 
+								error: function(jqXHR, textStatus, errorThrown) {
+									alert('error: ' + errorThrown);
+								}
+							});
+						
+						}
+						
+						
+					} else {
+						
+						
+					}
+					
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					alert('error: ' + errorThrown);
+				}
+	    	});
+			
+
+			parentElement.find('a.globusOnlineAllFiles_short_SRMConvert').hide();
+			parentElement.find('span.globusOnlineAllFiles_short_SRMConvert').show();
+			
+			var globus_url = '/esgf-web-fe/goauthview1';
 
             var openid = $('span.footer_openid').html();
             var go_credential = ESGF.localStorage.get('GO_Credential',openid);
@@ -433,13 +683,8 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 	        jQuery('<form action="'+ globus_url +'" method="post">'+input+'</form>')
 	        .appendTo('body').submit().remove();
 	    	
-	        
-	        
-	    	
+			
 		});
-	    	
-		
-		
 		
 		$('a.globusOnlineAllFiles_short').live('click',function() {
 
@@ -594,4 +839,43 @@ AjaxSolr.DataCartGlobusOnlineWidget = AjaxSolr.AbstractWidget.extend({
 })(jQuery);
 
 
+/*
+old implementation of traversing array
+for(var i=0;i<self.selected_arr.length;i++) {
+	
+	
+	var datasetId = self.selected_arr[i];
+	var accessType = 'GridFTP';
+	var hasGridFTP = self.checkDatasetAccess(accessType,datasetId);
+
+	//if dataset has access to gridftp
+	if(hasGridFTP) {
+		
+		//if the dataset access is "undefined", we must do additional processing
+		if(datacart[datasetId]['access'] == undefined) {
+			
+			var hasAccess = self.checkPostQueryAccess(datasetId,accessType);
+			if(hasAccess) {
+				
+				self.getFileAndGridInfo(datasetId);
+				
+			} else {
+
+    			non_grid_arr.push(datasetId);
+			}
+			
+		} 
+		//otherwise all is good, grab the file_ids and grid_urls
+		else {
+			self.getFileAndGridInfo(datasetId);
+			
+		}
+	}
+	//otherwise add to the list of datasets in the alert message 
+	else {
+		non_grid_arr.push(datasetId);
+	}
+
+}
+*/
 

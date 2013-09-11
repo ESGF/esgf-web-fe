@@ -3,11 +3,9 @@ package org.esgf.solr.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.esgf.datacart.FileElement;
 import org.esgf.metadata.JSONException;
 import org.esgf.metadata.JSONObject;
 import org.esgf.metadata.XML;
-import org.esgf.srm.SRMEntryList;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 
@@ -23,7 +21,7 @@ public class DatacartDoc {
     /** Description */
     private String hasSRM;
     
-    private String isCached;
+    //private String isCached;
     
     private List<String> technotes;
     
@@ -48,15 +46,12 @@ public class DatacartDoc {
         //get the count
         this.setCount(solrResponse.getCount());
         this.datacartFiles = new ArrayList<DataCartFile>();
-        this.setIsCached("true");
+        //this.setIsCached("true");
         for(int i=0;i<solrResponse.getSolrRecords().size();i++) {
             SolrRecord solrRecord = solrResponse.getSolrRecords().get(i);
             
             DataCartFile datacartFile = new DataCartFile(solrRecord);
             this.datacartFiles.add(datacartFile);
-            if(datacartFile.getIsCached().equals("false")) {
-                this.setIsCached("false");
-            }
         }
 
         
@@ -71,13 +66,13 @@ public class DatacartDoc {
             datasetIdEl.addContent(this.datasetId);
             docEl.addContent(datasetIdEl);
         }
-        
+        /*
         if(this.isCached != null) {
             Element isCachedEl = new Element("isCached");
             isCachedEl.addContent(this.isCached);
             docEl.addContent(isCachedEl);
         }
-        
+        */
 
         if(this.datacartFiles != null) {
             Element filesEl = new Element("files");
@@ -182,17 +177,21 @@ public class DatacartDoc {
     /**
      * @return the isCached
      */
+    /*
     public String getIsCached() {
         return isCached;
     }
-
+    */
+    
     /**
      * @param isCached the isCached to set
      */
+    /*
     public void setIsCached(String isCached) {
         this.isCached = isCached;
     }
-
+    */
+    
     /**
      * @return the technotes
      */

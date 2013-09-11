@@ -22,10 +22,20 @@
 		</div>
 		
 		<div style='margin-bottom:15px'>
+		<a href='http://askbot.esgf.org/questions/' target="_blank" style='font-weight:bold'>Askbot</a>
+		<br/>Find, tag or submit a question to our "askbot" forum.  Askbot is an open source question and answer 
+		oriented Internet forum similar to Stack Overflow.  Questions are typically resolved much more quickly in this forum than through email.
+		</div>
+		
+		<!--  
+		
+		<div style='margin-bottom:15px'>
 		<a href='http://www.esgf.org/wiki/ESGF_User_FAQ' style='font-weight:bold'>ESGF User FAQ</a>
 		<br/>Commonly asked questions from the ESGF user community.
 		<br/><span id="userFAQ_question" style="cursor:pointer"><img src='<c:url value="/images/help/moin-email.png" />' style="margin-right: 5px;" alt="email icon" /><a>Have a question about the User FAQs?</a></span>
 		</div>
+		
+		-->
 		
 		<div style='margin-bottom:15px'>
 		<a href='http://www.esgf.org/wiki/ESGF_Data_Download'  style='font-weight:bold'>User registration at ESGF</a>

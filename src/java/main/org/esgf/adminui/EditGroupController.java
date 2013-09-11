@@ -51,7 +51,6 @@ public class EditGroupController {
     private ESGFProperties myESGFProperties; 
     
     public EditGroupController() {
-        System.out.println("enviSwitch: " + Utils.environmentSwitch);
         
         if(Utils.environmentSwitch) {
             try {

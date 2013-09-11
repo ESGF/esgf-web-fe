@@ -48,21 +48,12 @@ public class SolrResponse {
         
         List<SolrRecord> solrRecords = solrResponse.getSolrRecords();
         
-        System.out.println("Count: " + solrResponse.getCount() + " " + solrRecords.size());
         
         
         DataCartFile datacartFile = new DataCartFile(solrRecords.get(0));
         
         
-        /*
-        SolrRecord firstRecord = solrRecords.get(2);
-
-        System.out.println(firstRecord.getStrFieldNames());
-        System.out.println(firstRecord.getMiscFieldNames());
-        System.out.println(firstRecord.getArrFieldNames());
         
-        System.out.println(firstRecord.getStrField("id"));
-        */
     }
 
     
@@ -88,10 +79,8 @@ public class SolrResponse {
                 
                 for(int j=0;j<solrRecord.getArrNodes().size();j++) {
                     Node facetNode = solrRecord.getArrNodes().get(j);
-                    //System.out.println(facetNode.getAttributes().item(0).getNodeValue());
                     if(facetNode.getAttributes().item(0).getNodeValue().equals("url")) {
                         String content = facetNode.getTextContent(); 
-                        //System.out.println(content);
                         if(content.contains("SRM")){
                             datasetIds.add(dataset_id);
                         }
@@ -99,8 +88,12 @@ public class SolrResponse {
                     
                 }
             }
-        } 
-        
+        } else {
+            for(int i=0;i<this.solrRecords.size();i++) {
+                //System.out.println(this.solrRecords.get(i).getStrField("id"));
+            }
+            //System.out.println("here");
+        }
         /*
         else {
             
@@ -143,6 +136,7 @@ public class SolrResponse {
     public List<String> needsSRM() {
         List<String> needsSRM = new ArrayList<String>();
         
+        System.out.println("Number of solr records: " + this.solrRecords.size());
         for(int i=0;i<this.solrRecords.size();i++) {
             boolean isSRM = false;
             List<String> access = this.solrRecords.get(i).getArrField("access");
@@ -177,15 +171,11 @@ public class SolrResponse {
                     }
                 }
                 
-                System.out.println("id: " + id);
-                System.exit(0);
                 
                 for(int j=0;j<solrRecord.getArrNodes().size();j++) {
                     Node facetNode = solrRecord.getArrNodes().get(j);
-                    //System.out.println(facetNode.getAttributes().item(0).getNodeValue());
                     if(facetNode.getAttributes().item(0).getNodeValue().equals("url")) {
                         String content = facetNode.getTextContent(); 
-                        //System.out.println(content);
                         if(content.contains("SRM")){
                             needsSRM.add(id);
                         }
@@ -212,7 +202,6 @@ public class SolrResponse {
                     Node facetNode = solrRecord.getArrNodes().get(j);
                     if(facetNode.getAttributes().item(0).getNodeValue().equals("access")) {
                         String content = facetNode.getTextContent(); 
-                        //System.out.println(content);
                         if(content.contains("SRM")){
                             needsSRM.add(id);
                         }
@@ -229,6 +218,7 @@ public class SolrResponse {
     
     public void fromXML(String xml) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+
         DocumentBuilder dBuilder = null;
         try {
             dBuilder = dbFactory.newDocumentBuilder();

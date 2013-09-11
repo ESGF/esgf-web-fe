@@ -190,8 +190,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
     var cimStr = projectStr + modelStr + instituteStr + experimentStr + datasetIdStr;
     
     if(doc.project == 'CMIP5' || doc.project == 'cmip5') {
-    	//output += '<span class="__actionitem__"> <a class="cim-model" href="#" id="' + selectMetID + '">CIM Metadata</a></span>';
-        output += '<span class="__actionitem__"> <a class="cim-model" href="#" ' + cimStr + '">Model Metadata</a></span>';
+        output += '<span class="__actionitem__"> <a class="cim-model" href="#" ' + cimStr + '">Model Documentation</a></span>';
         
     }
     
@@ -243,7 +242,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             	} else {
 
             		//alert('dataset has index: ' + evt.data.doc['index_node']);
-            		
+            		var datasetInfo = '';
                 	//alert('adding to cart');
                 	if(evt.data.doc['xlink'] != undefined) {
                 		//alert('xlink defined');
@@ -257,12 +256,12 @@ AjaxSolr.theme.prototype.actions = function (doc) {
 
                     		
                     		//var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : undefined};//evt.data.doc['access']};
-                    		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : evt.data.doc['access']};
+                    		datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : evt.data.doc['access']};
 
                     		
                     		//alert(datasetInfo['peer']);
                     		//alert(datasetInfo['access']);
-                        	ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
+                        	//ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
                     	
                     	
                     	} else {
@@ -270,7 +269,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                     		//alert('peer should be undefined');
                     		
                     		//var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : 'undefined' , 'xlink' : evt.data.doc['xlink'], 'access' : undefined};//evt.data.doc['access']};
-                    		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : evt.data.doc['access']};
+                    		datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : evt.data.doc['access']};
 
                     		//alert('xlink: ' + datasetInfo['xlink']);
                     		
@@ -278,7 +277,7 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                     		//alert(datasetInfo['peer']);
                     		//alert(datasetInfo['access']);
                         	
-                    		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
+                    		//ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
                     	
                     	
                     	}
@@ -293,30 +292,54 @@ AjaxSolr.theme.prototype.actions = function (doc) {
                     		//alert('index defined');
                     		
                     		//var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : 'undefined',  'access' : undefined};//evt.data.doc['access'] };
-                    		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : evt.data.doc['access']};
+                    		datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : evt.data.doc['access']};
 
                     		//alert(datasetInfo['peer']);
                     		//alert(datasetInfo['access']);
                         	
-                    		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
+                    		//ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
                     	
                     	
                     	} else {
                     		//alert('peer should be undefined');
                     		//var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : 'undefined' , 'xlink' : 'undefined',  'access' : undefined };//evt.data.doc['access'] };
-                    		var datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : evt.data.doc['access']};
+                    		datasetInfo = {'numFiles' : evt.data.doc['number_of_files'], 'peer' : evt.data.doc['index_node'] , 'xlink' : evt.data.doc['xlink'], 'access' : evt.data.doc['access']};
 
                     		//alert(datasetInfo['peer']);
                     		//alert(datasetInfo['access']);
                         	
-                    		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
-                    	
                     	
                     	}
                 	
                 	}
                 	
+
+            		//alert('peer: ' + datasetInfo['peer'] + ' access: ' + datasetInfo['access']);
                 	
+                	var queryString = {
+                			'dataset_id' : evt.data.doc.id
+                	};
+                	
+                	/*
+                	//put into datacart
+                	var datacartControllerUrl = '/esgf-web-fe/datacartcontroller2/datacart';
+                	$.ajax({
+    					url: datacartControllerUrl,
+    					global: false,
+    					type: 'POST',
+    					async: false,
+    					data: queryString,
+    					success: function(data) {
+    						alert('success');
+    					},
+    					error: function(jqXHR) {
+    						alert('error status: ' + jqXHR.status);
+    					}
+    				});
+                	*/
+                	
+            		ESGF.localStorage.put('dataCart',evt.data.doc.id,datasetInfo);
+            	
                 	
                 	//add to the datacart searchstates localstorage
                 	
@@ -334,6 +357,29 @@ AjaxSolr.theme.prototype.actions = function (doc) {
             	//remove from super cookie
             	ESGF.localStorage.remove('dataCart',evt.data.doc.id);
 
+            	/*
+            	alert('removing: ' + evt.data.doc.id);
+            	
+            	var queryString = {
+            			'dataset_id' : evt.data.doc.id
+            	};
+            	//remove the datacart from the session
+            	var datacartControllerUrl = '/esgf-web-fe/datacartcontroller2/datacart';
+            	$.ajax({
+					url: datacartControllerUrl,
+					global: false,
+					type: 'DELETE',
+					async: false,
+					data: queryString,
+					success: function(data) {
+						alert('success');
+					},
+					error: function(jqXHR) {
+						alert('error status: ' + jqXHR.status);
+					}
+				});
+				*/
+            	
             	//remove from stateful super cookie
                 var key = ESGF.localStorage.toString('esgf_fq');
                 var value = evt.data.doc.id;

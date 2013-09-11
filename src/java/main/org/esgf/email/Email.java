@@ -1,8 +1,10 @@
 package org.esgf.email;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -20,13 +22,13 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.esgf.srm.SRMUtils;
-
 import esg.common.util.ESGFProperties;
 
 public class Email {
 
 	private static boolean atHome = false;
+	
+	private static String FILE_NAME = "EmailExampleGeneric.txt";
 	
 	private String to;
 	private String from;
@@ -205,6 +207,8 @@ public class Email {
 		          
 		          
 		          if((this.attachment != null)) {
+		              //System.out.println("not null");
+		              //System.exit(0);
 		        	  message.setSubject(this.headerText);
 		        	  message.setText(this.bodyText);
 		        	  Multipart mp = new MimeMultipart();
@@ -231,6 +235,8 @@ public class Email {
 			          
 		        	  this.deleteFileAttachment();
 		          } else {
+                      //System.out.println("null");
+                      //System.exit(0);
 		        	  message.setSubject(this.headerText);
 		        	  //message.setText(this.bodyText);
 		        	  Multipart mp = new MimeMultipart();
@@ -322,71 +328,86 @@ public class Email {
 	
 	public void deleteFileAttachment() {
 		
-		FileOutputStream fop = null;
-		File file;
- 
-		try {
-			 
-			file = new File(this.attachment.getAttachmentName());
-			fop = new FileOutputStream(file);
- 
-			
-			if(file.delete()){
-				System.out.println(file.getName() + " is deleted!");
-			}else{
-				System.out.println("Delete operation is failed.");
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+	    if(this.attachment != null) {
+	        FileOutputStream fop = null;
+	        File file;
+	 
+	        try {
+	             
+	            file = new File(this.attachment.getAttachmentName());
+	            fop = new FileOutputStream(file);
+	 
+	            
+	            if(file.delete()){
+	                System.out.println(file.getName() + " is deleted!");
+	            }else{
+	                System.out.println("Delete operation is failed.");
+	            }
+	        }catch(Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+		
 		
 	}
 	
 	public void writeFileAttachment() {
-		
-		
-		
-		
-		
-		FileOutputStream fop = null;
-		File file;
-		String content = this.attachment.getAttachmentContent();
- 
-		try {
- 
-			file = new File(this.attachment.getAttachmentName());
-			
-			fop = new FileOutputStream(file);
- 
-			// if file doesnt exists, then create it
-			if (!file.exists()) {
-				file.createNewFile();
-			}
- 
-			// get the content in bytes
-			byte[] contentInBytes = content.getBytes();
- 
-			fop.write(contentInBytes);
-			fop.flush();
-			fop.close();
- 
- 
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (fop != null) {
-					fop.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		if(this.attachment != null) {
+		    FileOutputStream fop = null;
+	        File file;
+	        String content = this.attachment.getAttachmentContent();
+	 
+	        try {
+	 
+	            file = new File(this.attachment.getAttachmentName());
+	            
+	            fop = new FileOutputStream(file);
+	 
+	            // if file doesnt exists, then create it
+	            if (!file.exists()) {
+	                file.createNewFile();
+	            }
+	 
+	            // get the content in bytes
+	            byte[] contentInBytes = content.getBytes();
+	 
+	            fop.write(contentInBytes);
+	            fop.flush();
+	            fop.close();
+	 
+	 
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        } finally {
+	            try {
+	                if (fop != null) {
+	                    fop.close();
+	                }
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+	        }
 		}
-    	
-    	
+		
 	}
 
-	
+	public void toFile(String name) {
+	    
+	    if(name == null)
+	        name = FILE_NAME;
+	    
+	    try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(name));
+            out.write(this.toString());
+            //out.write(new XmlFormatter().format(this.toXML()));
+            out.close();
+        } 
+        catch (IOException e) { 
+            e.printStackTrace();
+            System.out.println("Exception ");
+
+        }
+	}
 	
 	public String toString() {
 		
@@ -399,9 +420,10 @@ public class Email {
 		emailStr += "\n" + "HeaderText: \n" + this.headerText + "\n";
 		emailStr += "\n" + "BodyText: \n\n" + this.bodyText + "\n";
 		
-		emailStr += "\n" + "Attachment name: \n" + this.attachment.getAttachmentName() + "\n";
-		
-		emailStr += "\n" + "Attachment content: \n" + this.attachment.getAttachmentContent() + "\n";
+		if(this.attachment != null) {
+		    emailStr += "\n" + "Attachment name: \n" + this.attachment.getAttachmentName() + "\n";
+	        emailStr += "\n" + "Attachment content: \n" + this.attachment.getAttachmentContent() + "\n";
+		}
 		
 		emailStr += "\n----End Email----" + "\n";
 		

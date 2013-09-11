@@ -14,7 +14,47 @@
 			
 			$("a#clearcache").live('click', function() {
 				
+				
+
+				
+				//remove the datacart from the session
+            	var datacartControllerUrl = '/esgf-web-fe/datacartcontroller2/datacartAll';
+            	$.ajax({
+					url: datacartControllerUrl,
+					global: false,
+					type: 'GET',
+					async: false,
+					//data: queryString,
+					success: function(data) {
+						alert('printing datacart contents');
+						for(var key in data) {
+							alert('key: ' + key);
+						}
+					},
+					error: function(jqXHR) {
+						alert('error status in datacartAll: ' + jqXHR.status);
+					}
+				});
+            	
+            	
+				
 			
+            	
+				//remove the datacart from the session
+            	var datacartControllerUrl = '/esgf-web-fe/datacartcontroller2/datacartAll';
+            	$.ajax({
+					url: datacartControllerUrl,
+					global: false,
+					type: 'DELETE',
+					async: false,
+					success: function(data) {
+						alert('success');
+					},
+					error: function(jqXHR) {
+						alert('error status: ' + jqXHR.status);
+					}
+				});
+				
 				
           	  //remove the existing parameter store
           	  //Manager.store.remove('fq');

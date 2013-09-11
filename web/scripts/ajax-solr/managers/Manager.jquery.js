@@ -129,7 +129,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
   	      
   	      var facet_param_arr = new Array();
   	    
-  	      var dataObj = {'facet_param_list' : queryStr, 'search_constraint_list' : searchConstraints, 'useURLParams' : useURLParams};//queryObj};
+  	      var dataObj = {'facet_param_list' : queryStr, 'search_constraint_list' : searchConstraints, 'useURLParams' : useURLParams};
 
 			 //get only the facets that matter
   	      jQuery.ajax({
@@ -202,7 +202,7 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
           
           
           //add shards
-          //queryString += '&shards=esgf.nccs.nasa.gov:8983/solr';
+          //queryString += '&shards=pcmdi9.llnl.gov:8983/solr,esg-datanode.jpl.nasa.gov:8983/solr';
           
           
           
@@ -226,10 +226,11 @@ AjaxSolr.Manager = AjaxSolr.AbstractManager.extend(
         	  $("#prompt").overlay().load();
           }
           
+          //alert('revised querystring: ' + revisedQueryString);
+          
           /**
            * Ajax call to the search API
            */
-          
           
           jQuery.ajax({
         	  url: revisedQueryString,

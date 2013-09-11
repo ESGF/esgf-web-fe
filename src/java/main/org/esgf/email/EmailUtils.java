@@ -1,5 +1,11 @@
 package org.esgf.email;
 
+import org.esgf.srm.utils.SRMUtils;
+
+import esg.common.util.ESGFProperties;
+import esg.node.security.UserInfo;
+import esg.node.security.UserInfoCredentialedDAO;
+
 public class EmailUtils {
 
 	
@@ -30,43 +36,39 @@ public class EmailUtils {
 	public static String [] DEFAULT_FILE_URLS = {"file_url1","file_url2"};
 	
 
-	
-	/*
-	
-	
-	
-	
-	
-	//receiver
-	public static String RECEIVER_USERNAME = "jfharney@gmail.com";
-	
-	//header and body text
-	public static String DEFAULT_HEADER_TEXT = "Your data has been successfully staged!";
-	public static String DEFAULT_BODY_TEXT = "Dear ESGF User, " +
-			"\nThe data that you have ordered is now available on disk.  Please download the attached wget script to extract the files.";
-	
-	//default files names to be extracted
-	public static String [] DEFAULT_FILE_NAMES = {"http://google.com","http://yahoo.com"};
-	
-	//default wget script name
-	public static final String DEFAULT_SCRIPT_FILE_NAME = "wget.sh";
-	
-	
+	public static String getEmailAddrFromOpenId(String openid) {
+	    
+	    
+        String emailAddr = null;
+        
+        if(SRMUtils.useDefaultEmail) {
+            emailAddr = "jfharney@gmail.com";
+        } else {
+            UserInfoCredentialedDAO myUserInfoDAO;
 
-	public static final String DEFAULT_INITIAL_EMAIL_HEADER = 
-			"Your SRM request has been submitted";
+            try{
+                ESGFProperties myESGFProperties = new ESGFProperties();
+                
+                String passwd = myESGFProperties.getAdminPassword();   
+                
+                System.out.println("Getting email address from openid: " + openid);
+                System.out.println("passwd: " + passwd);
+                
+                myUserInfoDAO = new UserInfoCredentialedDAO("rootAdmin",passwd,myESGFProperties);
+                UserInfo userInfo = myUserInfoDAO.getUserById(openid);
+                emailAddr = userInfo.getEmail();
 
-	public static final String DEFAULT_INITIAL_EMAIL_BODY = 
-			"Your request for file(s) in link\n"+ "url" +"\n has been submitted to SRM. It may take some time to retreive the" +
-         		" data. You will receive another email when the data is ready for download along with the download link. " +
-         		"\nThe link will be active for about 4 days after which it will be deactivated and you will be asked to resubmit " +
-         		"your request. \n\n";
+                
+            } catch(Exception e) {
+                System.out.println("\n\tNo email found... using default");
+                //e.printStackTrace();
+                emailAddr = "jfharney@gmail.com";
+            }
+        }
+        
+        
+        
+        return emailAddr;
+    }
 	
-
-	public static final String DEFAULT_WGET_EMAIL_HEADER = 
-			"Your SRM request has been completed";
-	
-	public static final String DEFAULT_WGET_EMAIL_BODY = 
-			"";
-			*/
 }

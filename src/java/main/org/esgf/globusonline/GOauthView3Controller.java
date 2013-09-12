@@ -313,6 +313,11 @@ public class GOauthView3Controller {
         {
             String newURL = null, goEP = null;
             String[] pieces = null;
+            
+            String [] urlParts = null;
+            String urlHost = null;
+            int filePathIndex;
+            
             Vector<String> fileList = null;
             HashMap<String, String> sourceEpToGFTPMap = new HashMap<String, String>();
             HashMap<String, Vector<String>> sourceMap = new HashMap<String, Vector<String>>();
@@ -342,17 +347,26 @@ public class GOauthView3Controller {
             for(String curURL : file_urls)
             {
 	LOG.debug("curURL is:" +curURL);
-                pieces = curURL.split("//");
+                //pieces = curURL.split("//");
+	            pieces = curURL.split("://");
+	            //splite on :// instead, then the first / will separate host:port from path
                 if ((pieces != null) && (pieces.length > 1))
                 {
-                    goEP = Utils.lookupGOEPBasedOnGridFTPURL(pieces[1], goEndpointInfos, true);
+                    //goEP = Utils.lookupGOEPBasedOnGridFTPURL(pieces[1], goEndpointInfos, true);
+                    filePathIndex = pieces[1].indexOf("/");
+                    urlHost = pieces[1].substring(0,filePathIndex);
+                    LOG.debug("urlHost is " + urlHost + "\n");
+                    goEP = Utils.lookupGOEPBasedOnGridFTPURL(urlHost, goEndpointInfos, true);
+                    
                     if (goEP == null)
                     {
-                        goEP = Utils.lookupGOEPBasedOnGridFTPURL(pieces[1], goEndpointInfos, false);
+                        //goEP = Utils.lookupGOEPBasedOnGridFTPURL(pieces[1], goEndpointInfos, false);
+                        goEP = Utils.lookupGOEPBasedOnGridFTPURL(urlHost, goEndpointInfos, true);
                     }
 
                     if (!sourceMap.containsKey(goEP))
                     {
+                        //LOG.debug("Mapped GridFTP Server " + pieces[1] + " to GO EP " + goEP);
                         LOG.debug("Mapped GridFTP Server " + pieces[1] + " to GO EP " + goEP);
                         //System.out.println("Mapped GridFTP Server " + pieces[1] + " to GO EP " + goEP);
                         sourceEpToGFTPMap.put(goEP, pieces[1]);
@@ -360,8 +374,13 @@ public class GOauthView3Controller {
                     }
 
                     fileList = sourceMap.get(goEP);
-                    newURL = "//" + pieces[2];
-
+                    //newURL = "//" + pieces[2];
+                    //if(pieces.length = 2)
+                    //newUrl = "//" + pieces[2];
+                    //shouldn't need to add any leading slashes
+                    //newURL = "/" + pieces[1].substring(filePathIndex);
+                    newURL = pieces[1].substring(filePathIndex);
+                    
                     LOG.debug("Transformed " + curURL + " into " + newURL);
                     //System.out.println("Transformed " + curURL + " into " + newURL);
                     fileList.add(newURL);

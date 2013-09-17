@@ -63,23 +63,38 @@ public class DataCartFile {
             size = solrRecord.getStrField("size");
         }
         String tracking_id = null;
-        if(solrRecord.getStrField("tracking_id") == null) {
+        if(solrRecord.getArrField("tracking_id") != null) {
+            if(solrRecord.getArrField("tracking_id").get(0) == null) {
+                tracking_id = "N/A";
+            } else {
+                tracking_id = solrRecord.getArrField("tracking_id").get(0);
+            }
+        } else {
             tracking_id = "N/A";
-        } else {
-            tracking_id = solrRecord.getStrField("tracking_id");
         }
+        
         String checksum = null;
-        if(solrRecord.getStrField("checksum") == null) {
+        if(solrRecord.getArrField("checksum") != null) {
+            if(solrRecord.getArrField("checksum").get(0) == null) {
+                checksum = "N/A";
+            } else {
+                checksum = solrRecord.getArrField("checksum").get(0);
+            }
+        } else {
             checksum = "N/A";
-        } else {
-            checksum = solrRecord.getStrField("checksum");
         }
+        
         String checksum_type = null;
-        if(solrRecord.getStrField("checksum_type") == null) {
-            checksum_type = "N/A";
+        if(solrRecord.getArrField("checksum_type") != null) { 
+            if(solrRecord.getArrField("checksum_type").get(0) == null) {
+                checksum_type = "N/A";
+            } else {
+                checksum_type = solrRecord.getArrField("checksum_type").get(0);
+            }
         } else {
-            checksum_type = solrRecord.getStrField("checksum_type");
+            checksum_type = "N/A";
         }
+        
         
         this.fileId = fileId;
         this.title = title;

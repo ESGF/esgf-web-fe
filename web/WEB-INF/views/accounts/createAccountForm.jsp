@@ -33,97 +33,153 @@
             <h1>ESGF User Registration</h1>
 
             <div class="panel">
-                <form:form method="post" commandName="user">
+                <form method="post" commandName="user">
 
                     <table>
                         <tr>
                             <th class="right_text" nowrap="nowrap">First Name</th>
                             <td class="left_text">
-                                <form:input path="firstName" size="60" />
-                                <br/><form:errors path="firstName" cssClass="myerror" />
+                                <input type="text" name="firstName" size="60" value="${param.firstName}" />
+                                <br/>
+                                <c:forEach items="${errors}" var="error">
+								    <c:if test="${error.field == 'firstName'}">
+								    	<span class="myerror"><c:out value="${error.defaultMessage}" /></span><br/>
+								    </c:if>
+								</c:forEach>                               
                             </td>
                         </tr>
                         <tr>
                             <td class="right_text" nowrap="nowrap">Middle Name</td>
                             <td class="left_text">
-                                <form:input path="middleName" size="60" />
-                                <br/><form:errors path="middleName" cssClass="myerror" />
+                                <input type="text" name="middleName" size="60" value="${param.middleName}" />
+                                <br/>
+                                <c:forEach items="${errors}" var="error">
+								    <c:if test="${error.field == 'middleName'}">
+								    	<span class="myerror"><c:out value="${error.defaultMessage}" /></span><br/>
+								    </c:if>
+								</c:forEach>                               
                             </td>
                         </tr>
                         <tr>
                             <th class="right_text" nowrap="nowrap">Last Name</th>
                             <td class="left_text">
-                                <form:input path="lastName" size="60" />
-                                <br/><form:errors path="lastName" cssClass="myerror" />
+                                <input type="text" name="lastName" size="60" value="${param.lastName}" />
+                                <br/>
+                                <c:forEach items="${errors}" var="error">
+								    <c:if test="${error.field == 'lastName'}">
+								    	<span class="myerror"><c:out value="${error.defaultMessage}" /></span><br/>
+								    </c:if>
+								</c:forEach>                                                               
                             </td>
                         </tr>
                         <tr>
                             <th class="right_text">Email</th>
                             <td class="left_text">
-                                <form:input path="email" size="60" />
-                                <br/><form:errors path="email" cssClass="myerror" />
+                                <input type="text" name="email" size="60" value="${param.email}" />
+                                <br/>
+                                <c:forEach items="${errors}" var="error">
+								    <c:if test="${error.field == 'email'}">
+								    	<span class="myerror"><c:out value="${error.defaultMessage}" /></span><br/>
+								    </c:if>
+								</c:forEach>                                                               
                             </td>
                         </tr>
                         <tr>
                             <th class="right_text" nowrap="nowrap">User Name</th>
                             <td class="left_text">
-                                <form:input path="userName" size="60" />
+                                <input type="text" name="userName" size="60" value="${param.userName}" />
                                 <br/><i>Username can contain only letters and numbers.</i>
-                                <br/><form:errors path="userName" cssClass="myerror" />
+                                <br/>
+                                <c:forEach items="${errors}" var="error">
+								    <c:if test="${error.field == 'userName'}">
+								    	<span class="myerror"><c:out value="${error.defaultMessage}" /></span><br/>
+								    </c:if>
+								</c:forEach>                                                               
                             </td>
                         </tr>
                         <tr>
                             <th class="right_text">Password<br/>&nbsp;<br/>&nbsp;</th>
                             <td class="left_text">
-                                <form:password path="password1" size="60" />
+                                <input type="password" name="password1" size="60" />
                                 <br/><i>Password must contain at least one letter and one number,<br/>and be at least 6 characters long.</i>
-                                <br/><form:errors path="password1" cssClass="myerror" />
+                                <br/>
+                                <c:forEach items="${errors}" var="error">
+								    <c:if test="${error.field == 'password1'}">
+								    	<span class="myerror"><c:out value="${error.defaultMessage}" /></span><br/>
+								    </c:if>
+								</c:forEach>                                                               
                             </td>
                         </tr>
                         <tr>
                             <th class="right_text" nowrap="nowrap">Confirm Password</th>
                             <td class="left_text">
-                                <form:password path="password2" size="60" />
-                                <br/><form:errors path="password2" cssClass="myerror" />
+                                <input type="password" name="password2" size="60" />
+                                <br/>
+                                <c:forEach items="${errors}" var="error">
+								    <c:if test="${error.field == 'password2'}">
+								    	<span class="myerror"><c:out value="${error.defaultMessage}" /></span><br/>
+								    </c:if>
+								</c:forEach>                                                               
                             </td>
                         </tr>
                         <tr>
                             <td class="right_text">Organization</td>
                             <td class="left_text">
-                                <form:input path="organization" size="60" />
-                                <br/><form:errors path="organization" cssClass="myerror" />
+                                <input type="text" name="organization" size="60" value="${param.organization}" />
+                                <br/>
+                                <c:forEach items="${errors}" var="error">
+								    <c:if test="${error.field == 'organization'}">
+								    	<span class="myerror"><c:out value="${error.defaultMessage}" /></span><br/>
+								    </c:if>
+								</c:forEach>                                                               
                             </td>
                         </tr>
                         <tr>
                             <td class="right_text">City</td>
                             <td class="left_text">
-                                <form:input path="city" size="60" />
-                                <br/><form:errors path="city" cssClass="myerror" />
+                                <input type="text" name="city" size="60" value="${param.city}" />
+                                <br/>
+                                <c:forEach items="${errors}" var="error">
+								    <c:if test="${error.field == 'city'}">
+								    	<span class="myerror"><c:out value="${error.defaultMessage}" /></span><br/>
+								    </c:if>
+								</c:forEach>                                                               
                             </td>
                         </tr>
                         <tr>
                             <td class="right_text">State</td>
                             <td class="left_text">
-                                <form:input path="State" size="60" id="state" />
-                                <br/><form:errors path="state" cssClass="myerror" />
+                                <input type="text" name="State" size="60" id="state" value="${param.State}" />
+                                <br/>
+                                <c:forEach items="${errors}" var="error">
+								    <c:if test="${error.field == 'State'}">
+								    	<span class="myerror"><c:out value="${error.defaultMessage}" /></span><br/>
+								    </c:if>
+								</c:forEach>                                
                             </td>
                         </tr>
                         <tr>
                             <td class="right_text">Country</td>
                             <td class="left_text">
-                                <form:input path="country" size="60" id="country"/>
-                                <br/><form:errors path="country" cssClass="myerror" />
+                                <input type="text" name="country" size="60" id="country" value="${param.country}"/>
+                                <br/>
+                                <c:forEach items="${errors}" var="error">
+								    <c:if test="${error.field == 'country'}">
+								    	<span class="myerror"><c:out value="${error.defaultMessage}" /></span><br/>
+								    	<br/>
+								    </c:if>
+								</c:forEach>                                                               
                             </td>
                         </tr>
                     </table>
 
 					<!-- no-spam fields -->
-					<form:hidden path="blank"/>
+					<input type="hidden" name="blank"/>
 					<input type="hidden" name="uuid" value="<c:out value="${user.uuid}"/>" id="uuid" />
 					
                     <input type="submit" value="Submit" class="button"/>
 
-                </form:form>
+                </form>
             </div>
 
         </div>

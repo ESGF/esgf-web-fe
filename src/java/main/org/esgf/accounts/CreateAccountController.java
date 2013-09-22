@@ -1,5 +1,6 @@
 package org.esgf.accounts;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -110,21 +111,39 @@ public class CreateAccountController {
     protected ModelAndView doPost(final HttpServletRequest request, final HttpServletResponse response, final @ModelAttribute(MODEL_NAME) CreateAccountBean user, final BindingResult errors) throws Exception {
         
         // anti-spam validation
-        final String token = request.getSession().getAttribute(SESSION_ATTRIBUTE).toString();
-        if (LOG.isDebugEnabled()) LOG.debug("POST token="+user.getUuid()+" session token="+token);
-        if (   !token.equals(user.getUuid()) // value set by javascript must match value stored in session
+        final String stoken = request.getSession().getAttribute(SESSION_ATTRIBUTE).toString();
+        final String rtoken = request.getParameter("uuid");
+        if (LOG.isDebugEnabled()) LOG.debug("POST token="+rtoken+" session token="+stoken);
+        
+        if (   !rtoken.equals(stoken) // value set by javascript must match value stored in session
             || !user.getBlank().equals(""))  { // value must remain blank - not autofilled by robots
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Robots not allowed to submit this form");
             return null; // response already handled
         }
-
+                
+        // manually bind the request data to the user object
+        user.setFirstName( request.getParameter("firstName"));
+        user.setMiddleName( request.getParameter("middleName"));
+        user.setLastName( request.getParameter("lastName"));
+        user.setEmail( request.getParameter("email"));
+        user.setUserName( request.getParameter("userName"));
+        user.setPassword1( request.getParameter("password1"));
+        user.setPassword2( request.getParameter("password2"));
+        user.setOrganization( request.getParameter("organization"));
+        user.setCity( request.getParameter("city"));
+        user.setState( request.getParameter("State"));
+        user.setCountry( request.getParameter("country"));
+        
         try {
             
             // validate user input
             validate(user, errors);
             
             if (errors.hasErrors()) {
-                return new ModelAndView(FORM_VIEW).addObject(MODEL_NAME, user);
+                ModelAndView mav = new ModelAndView(FORM_VIEW);
+                mav.addObject(MODEL_NAME, user);
+                mav.addObject("errors", errors.getAllErrors());
+                return mav;
                 
             } else {
                 

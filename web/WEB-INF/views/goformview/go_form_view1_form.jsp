@@ -16,7 +16,7 @@
         <a target="_blank" href="https://www.globusonline.org/SignUp">https://www.globusonline.org/SignUp</a>. </p>
         <p>If you are not familiar with doing Globus Online transfers
         in ESG, or this is your first time, please read this
-        <a target="_blank" href="http://www.esgf.org/wiki/ESGF_GO">documentation</a>
+        <a target="_blank" href="http://devel.esgf.org/wiki/ESGF_GO">documentation</a>
         to be sure that your account is setup properly and that this transfer can work.</p>
         <p>Finally, please be sure that you know where you'd like to
         move this data.  If it is to your local machine,

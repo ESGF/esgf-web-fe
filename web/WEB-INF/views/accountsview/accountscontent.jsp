@@ -123,7 +123,7 @@
         </table>
         <input alt="" id="showMore" type="submit" value="Hide" class="button" onclick="javascript:showless()"/> 
          &nbsp; Need help registering for other groups? Check the ESGF
-         <a href="http://www.esgf.org/wiki/ESGF_Data_Download">Wiki</a>
+         <a href="http://devel.esgf.org/wiki/ESGF_Data_Download">Wiki</a>
     </fieldset>
   </div>
 

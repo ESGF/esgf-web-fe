@@ -6,7 +6,7 @@
   		<div style="color:red;font-size: 11px;margin-top:15px;">
   		<!--  
   		Welcome to the beta test site for the CMIP5 distributed archive. 
-  		This is <a href="http://esgf.org/wiki/ESGF_Transition">Phase I of IV</a> that transitions away from the ESG gateway-centric system based on gateway version 1.3.4 to the new ESGF peer-to-peer system.  
+  		This is <a href="http://devel.esgf.org/wiki/ESGF_Transition">Phase I of IV</a> that transitions away from the ESG gateway-centric system based on gateway version 1.3.4 to the new ESGF peer-to-peer system.  
   		In this phase transition, some of the data may not be accessible due to not all data nodes have upgraded to the new software stack.
   		-->
   		<!--  
@@ -26,7 +26,7 @@
  		indicate that you are using the beta P2P system.  
   		
         <br/>If you have trouble running wget scripts to download data,
-        please consult the <a href="http://www.esgf.org/wiki/ESGF_wget_FAQ">TABLE OF WORKING DATA NODES</a>.  		
+        please consult the <a href="http://devel.esgf.org/wiki/ESGF_wget_FAQ">TABLE OF WORKING DATA NODES</a>.  		
   		-->
   		<!--  
   		Welcome to the new CMIP5 distributed archive. Our new ESGF peer-to-peer

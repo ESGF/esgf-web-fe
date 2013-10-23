@@ -1,52 +1,29 @@
 <ivysettings>
-  <settings defaultResolver="default"/>
-  
-  <property name="spring.version" value="3.2.2.RELEASE" />
-  <property name="spring.security.version" value="3.1.4.RELEASE" />
-  <property name="hibernate.version" value="3.6.1.Final" />
-  <property name="ivy.esgf.devel.root.url" value="http://devel.esgf.org/artifactory/esgf-repo-devel" override="false"/>
-  <property name="ivy.esgf.shared.root.url" value="http://devel.esgf.org/artifactory/esgf-repo-share" override="false"/>
-  <property name="jboss.repo.url" value="https://repository.jboss.org/nexus/content/groups/public" override="false"/>
-  <property name="ivy.esgf-repo-local.default.root.dir" value="${user.home}/.ivy2/local" override="false"/>   
+      <property name="ivy.default.root.url" value="http://esgf.org/ivy" override="false"/>
+      <settings defaultResolver="default-chain"/>
+      
+      <!-- ESGF LOCAL repository -->
+      <include url="${ivy.default.root.url}/ivysettings-esgf-repo-local.xml"/>
 
-  	<resolvers>
-          
-          <filesystem name="esgf_repo_local">
-            <artifact pattern="${ivy.esgf-repo-local.default.root.dir}/[organisation]/[module]/[revision]/[artifact].[ext]" />
-            <artifact pattern="${ivy.esgf-repo-local.default.root.dir}/[organisation]/[module]/[revision]/[artifact].[revision].[ext]" />
-            <artifact pattern="${ivy.esgf-repo-local.default.root.dir}/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
-          </filesystem>
+      <!-- ESGF Devel repository -->
+      <include url="${ivy.default.root.url}/ivysettings-esgf-repo-devel.xml"/>
 
-          <url name="esgf_repo_devel" checksums="md5">
-            <ivy pattern="${ivy.esgf.devel.root.url}/[organisation]/[module]/[revision]/ivy-[revision].xml" />
-            <artifact pattern="${ivy.esgf.devel.root.url}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-            <artifact pattern="${ivy.esgf.devel.root.url}/[organisation]/[module]/[revision]/[artifact].[revision].[ext]" />
-            <artifact pattern="${ivy.esgf.devel.root.url}/[organisation]/[module]/[revision]/[artifact].[ext]" />
-          </url>
+      <!-- ESGF repository -->
+      <include url="${ivy.default.root.url}/ivysettings-esgf-repo.xml"/>
+      
+      <!-- Third party libraries stored on ESGF system -->
+      <include url="${ivy.default.root.url}/ivysettings-esgf-repo-shared.xml"/>
+      
+      <!-- Java.net Public Maven 2 repository -->
+      <include url="${ivy.default.root.url}/ivysettings-javanet.xml"/>
 
-          <url name="esgf_repo_share" checksums="md5">
-            <ivy pattern="${ivy.esgf.shared.root.url}/[organisation]/[module]/[revision]/ivy-[revision].xml" />
-            <artifact pattern="${ivy.esgf.shared.root.url}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-            <artifact pattern="${ivy.esgf.shared.root.url}/[organisation]/[module]/[revision]/[artifact].[revision].[ext]" />
-            <artifact pattern="${ivy.esgf.shared.root.url}/[organisation]/[module]/[revision]/[artifact].[ext]" />
-          </url>
-          
-          <ibiblio name="public" m2compatible="true"/>
-          
-          <url name="jboss_repo" m2compatible="true">
-            <artifact pattern="${jboss.repo.url}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-          </url>
-          
-        </resolvers>
-        
-        <resolvers>
-          <chain name="default" returnFirst="true">
-            <resolver ref="esgf_repo_local" />
-            <resolver ref="esgf_repo_devel" />
-            <resolver ref="esgf_repo_share" />
-            <resolver ref="public" />
-            <resolver ref="jboss_repo" />
-          </chain>
-        </resolvers>
-        
+      <!-- Public Maven 2 repository -->
+      <include url="${ivy.default.root.url}/ivysettings-public.xml"/>
+      
+      <!-- Spring repository -->
+      <include url="${ivy.default.root.url}/ivysettings-spring.xml"/>
+
+      <include url="${ivy.default.root.url}/ivysettings-default-chain.xml"/>
+      
 </ivysettings>
+

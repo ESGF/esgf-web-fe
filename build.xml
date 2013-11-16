@@ -67,6 +67,7 @@ Builds the project via ant (obviously).
   <property name="filter" value="false"/>
   <property name="sign"   value="false"/>
   <property name="seal"   value="false"/>
+  <property name="java.version.val" value="1.7"/>
 
   <!-- **static defines** -->
   <property name="version_num" value="0.0.0"/>
@@ -122,7 +123,7 @@ Builds the project via ant (obviously).
     -->
   
   <target name="-pre-init" unless="build.master">
-    <property name="build.compiler" value="javac1.5" /> 
+    <property name="build.compiler" value="javac${java.version.val}" /> 
     <property name="build.compiler.emacs" value="true" /> 
     <echo message="set build.compiler to ${build.compiler}"/>
   </target>
@@ -132,6 +133,7 @@ Builds the project via ant (obviously).
   <target name="init" depends="-pre-init" unless="build.master" 
 	  description="(View the properties defined in this file)">
     <echo message="Initializing build environment..."/>
+    <echo message="Using Java Version ${java.version.val}"/>
         
     <!-- defaults to use if local .${module}.ant.properties file does not exist --> 
     <property name="src_dir"   	          value="${basedir}/src/java/main"/>
@@ -526,7 +528,7 @@ Builds the project via ant (obviously).
 	   classpathref="test_classpath"
 	   deprecation="true"
 	   failonerror="true"
-	   target="1.5"
+	   target="${java.version.val}"
 	   debug="on"
 	   verbose="off"
            includeantruntime="false"

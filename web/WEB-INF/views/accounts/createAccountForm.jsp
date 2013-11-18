@@ -39,7 +39,7 @@
                         <tr>
                             <th class="right_text" nowrap="nowrap">First Name</th>
                             <td class="left_text">
-                                <input type="text" name="firstName" size="60" value="${param.firstName}" />
+                                <input type="text" name="firstName" size="60" value="${param.firstName}" alt="firstName" />
                                 <br/>
                                 <c:forEach items="${errors}" var="error">
 								    <c:if test="${error.field == 'firstName'}">
@@ -51,7 +51,7 @@
                         <tr>
                             <td class="right_text" nowrap="nowrap">Middle Name</td>
                             <td class="left_text">
-                                <input type="text" name="middleName" size="60" value="${param.middleName}" />
+                                <input type="text" name="middleName" size="60" value="${param.middleName}" alt="middleName" />
                                 <br/>
                                 <c:forEach items="${errors}" var="error">
 								    <c:if test="${error.field == 'middleName'}">
@@ -63,7 +63,7 @@
                         <tr>
                             <th class="right_text" nowrap="nowrap">Last Name</th>
                             <td class="left_text">
-                                <input type="text" name="lastName" size="60" value="${param.lastName}" />
+                                <input type="text" name="lastName" size="60" value="${param.lastName}" alt="lastName" />
                                 <br/>
                                 <c:forEach items="${errors}" var="error">
 								    <c:if test="${error.field == 'lastName'}">
@@ -75,7 +75,7 @@
                         <tr>
                             <th class="right_text">Email</th>
                             <td class="left_text">
-                                <input type="text" name="email" size="60" value="${param.email}" />
+                                <input type="text" name="email" size="60" value="${param.email}" alt="email" />
                                 <br/>
                                 <c:forEach items="${errors}" var="error">
 								    <c:if test="${error.field == 'email'}">
@@ -87,7 +87,7 @@
                         <tr>
                             <th class="right_text" nowrap="nowrap">User Name</th>
                             <td class="left_text">
-                                <input type="text" name="userName" size="60" value="${param.userName}" />
+                                <input type="text" name="userName" size="60" value="${param.userName}" alt="userName" />
                                 <br/><i>Username can contain only letters and numbers.</i>
                                 <br/>
                                 <c:forEach items="${errors}" var="error">
@@ -100,7 +100,7 @@
                         <tr>
                             <th class="right_text">Password<br/>&nbsp;<br/>&nbsp;</th>
                             <td class="left_text">
-                                <input type="password" name="password1" size="60" />
+                                <input type="password" name="password1" size="60" alt="password1" />
                                 <br/><i>Password must contain at least one letter and one number,<br/>and be at least 6 characters long.</i>
                                 <br/>
                                 <c:forEach items="${errors}" var="error">
@@ -113,7 +113,7 @@
                         <tr>
                             <th class="right_text" nowrap="nowrap">Confirm Password</th>
                             <td class="left_text">
-                                <input type="password" name="password2" size="60" />
+                                <input type="password" name="password2" size="60" alt="password2" />
                                 <br/>
                                 <c:forEach items="${errors}" var="error">
 								    <c:if test="${error.field == 'password2'}">
@@ -125,7 +125,7 @@
                         <tr>
                             <td class="right_text">Organization</td>
                             <td class="left_text">
-                                <input type="text" name="organization" size="60" value="${param.organization}" />
+                                <input type="text" name="organization" size="60" value="${param.organization}" alt="organization" />
                                 <br/>
                                 <c:forEach items="${errors}" var="error">
 								    <c:if test="${error.field == 'organization'}">
@@ -137,7 +137,7 @@
                         <tr>
                             <td class="right_text">City</td>
                             <td class="left_text">
-                                <input type="text" name="city" size="60" value="${param.city}" />
+                                <input type="text" name="city" size="60" value="${param.city}" alt="city" />
                                 <br/>
                                 <c:forEach items="${errors}" var="error">
 								    <c:if test="${error.field == 'city'}">
@@ -149,7 +149,7 @@
                         <tr>
                             <td class="right_text">State</td>
                             <td class="left_text">
-                                <input type="text" name="State" size="60" id="state" value="${param.State}" />
+                                <input type="text" name="State" size="60" id="state" value="${param.State}" alt="state" />
                                 <br/>
                                 <c:forEach items="${errors}" var="error">
 								    <c:if test="${error.field == 'State'}">
@@ -161,7 +161,7 @@
                         <tr>
                             <td class="right_text">Country</td>
                             <td class="left_text">
-                                <input type="text" name="country" size="60" id="country" value="${param.country}"/>
+                                <input type="text" name="country" size="60" id="country" value="${param.country}" alt="country" />
                                 <br/>
                                 <c:forEach items="${errors}" var="error">
 								    <c:if test="${error.field == 'country'}">
@@ -174,7 +174,7 @@
                     </table>
 
 					<!-- no-spam fields -->
-					<input type="hidden" name="blank"/>
+					<input type="hidden" name="blank" />
 					<input type="hidden" name="uuid" value="<c:out value="${user.uuid}"/>" id="uuid" />
 					
                     <input type="submit" value="Submit" class="button"/>

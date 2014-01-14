@@ -32,12 +32,14 @@
 		        	<a href='http://adm07.cmcc.it/'><img src="images/flags/Italy.png" class="icon" alt="Italy flag" />CMCC Node</a>
 		        	<a href='http://adm07.cmcc.it/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>
 		        </li>    
+<!--
 		        <li>
 		        	<a href='http://euclipse1.dkrz.de/'><img src="images/flags/Germany.png" class="icon" alt="Germany flag" />DKRZ Node</a>
 		        	<a href='http://euclipse1.dkrz.de/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>
 		        </li>       
+-->
 		        <li>
-		        	<a href='http://esgf-data.dkrz.de/'><img src="images/flags/Germany.png" class="icon" alt="Germany flag" />DKRZ CMIP5 Node</a>
+		        	<a href='http://esgf-data.dkrz.de/'><img src="images/flags/Germany.png" class="icon" alt="Germany flag" />DKRZ Node</a>
 		        	<a href='http://esgf-data.dkrz.de/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>
 		        </li>  
 		        <li>

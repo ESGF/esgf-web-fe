@@ -14,14 +14,14 @@
 	<div class="span-7 last" style="padding:5px;">
 		<div class="projectitembottom">
 			<ul>
-				<li><a href='http://devel.esgf.org/wiki/ESGF_User_Guide' >ESGF Full User Guide</a></li>
-				<li><a href='http://devel.esgf.org/wiki/ESGF_Web_Search_User_Guide' >Search Help</a></li>
-				<li><a href='http://devel.esgf.org/wiki/ESGF_Search_CV' >Search Controlled Vocabulary</a></li>
-				<li><a href='http://devel.esgf.org/wiki/ESGF_wget_FAQ' >Wget Scripts FAQ</a></li>                             
-				<li><a href='http://devel.esgf.org/wiki/ESGF_scripting' >Wget Scripting</a></li>
-				<li><a href="http://devel.esgf.org/wiki/ESGF_Data_Download_Strategies">Tutorial: Download Strategies</a>
-				<li><a href='http://devel.esgf.org/wiki/ESGF_GO' >Using Globus Online</a></li>
-				<li><a href='http://devel.esgf.org/wiki/ESGF_RSS' >Subscribing to RSS Notification</a></li>
+				<li><a href='https://github.com/ESGF/esgf.github.io/wiki/ESGF_User_Guide' >ESGF Full User Guide</a></li>
+				<li><a href='https://github.com/ESGF/esgf.github.io/wiki/ESGF_Web_Search_User_Guide' >Search Help</a></li>
+				<li><a href='https://github.com/ESGF/esgf.github.io/wiki/ESGF_Search_CV' >Search Controlled Vocabulary</a></li>
+				<li><a href='https://github.com/ESGF/esgf.github.io/wiki/ESGF_wget' >Wget Scripts Info</a></li>                             
+				<li><a href='https://github.com/ESGF/esgf.github.io/wiki/ESGF_scripting' >ESGF Scripting</a></li>
+				<li><a href="https://github.com/ESGF/esgf.github.io/wiki/ESGF_Data_Download_Strategies">Tutorial: Download Strategies</a>
+				<li><a href='https://github.com/ESGF/esgf.github.io/wiki/ESGF_GO' >Using Globus Online</a></li>
+				<li><a href='https://github.com/ESGF/esgf.github.io/wiki/ESGF_RSS' >Subscribing to RSS Notification</a></li>
 			</ul>
 		</div>
 	</div>

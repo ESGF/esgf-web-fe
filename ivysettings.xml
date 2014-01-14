@@ -18,7 +18,7 @@
             <artifact pattern="${ivy.esgf-repo-local.default.root.dir}/[organisation]/[module]/[revision]/[artifact].[revision].[ext]" />
             <artifact pattern="${ivy.esgf-repo-local.default.root.dir}/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
           </filesystem>
-
+          
           <url name="esgf_repo_devel" checksums="md5">
             <ivy pattern="${ivy.esgf.devel.root.url}/[organisation]/[module]/[revision]/ivy-[revision].xml" />
             <artifact pattern="${ivy.esgf.devel.root.url}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />

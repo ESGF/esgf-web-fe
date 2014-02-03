@@ -243,7 +243,7 @@ public class CreateAccountController {
     }
     
     private void NoSpecialCharacters(final CreateAccountBean user, final BindingResult errors) {
-        Pattern p = Pattern.compile("[^a-zA-Z0-9\\s]", Pattern.CASE_INSENSITIVE);
+        Pattern p = Pattern.compile("[^a-zA-Z0-9\\s\\.-_]", Pattern.CASE_INSENSITIVE);
         System.out.println("in NoSpecialCharacters...");
         Matcher firstName = p.matcher(user.getFirstName());
         if (firstName.find()) errors.rejectValue("firstName", "error.invalid", new Object[] {}, getSpecialCharactersErrorMessage("First name"));

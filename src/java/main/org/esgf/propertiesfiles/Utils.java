@@ -65,11 +65,11 @@ public class Utils {
             // Create file with defaults
             FileWriter fstream = new FileWriter(HELP_PROPERTIES_FILE);
             BufferedWriter out = new BufferedWriter(fstream);
-            out.write("user_faq=0;ESGF User FAQ;http://devel.esgf.org/wiki/ESGF_User_FAQ;User FAQ Question;Commonly asked questions from the ESGF user community.\n");
-            out.write("user_registration=1;User registration at ESGF;http://devel.esgf.org/wiki/ESGF_Data_Download;User registration at ESGF;A quick tutorial on how to register as a user and join scientific working groups.\n");
-            out.write("data_download=2;Data download from ESGF;http://devel.esgf.org/wiki/ESGF_Data_Download;Downloading data from ESGF;A descirption of how to extract data files from the ESGF portal.\n");
-            out.write("web_interface=3;ESGF Web Interface User Guide;http://devel.esgf.org/wiki/fe-user-guide;ESGF web portal question;A complete guide to using the ESGF web portal user interface.\n");
-            out.write("web_search=4;ESGF Search User Guide;http://devel.esgf.org/wiki/ESGF_Web_Search_User_Guide;ESGF Search Question;A short user guide to discovering data within ESGF.\n");
+            out.write("user_faq=0;ESGF User FAQ;https://github.com/ESGF/esgf.github.io/wiki/ESGF_User_FAQ;User FAQ Question;Commonly asked questions from the ESGF user community.\n");
+            out.write("user_registration=1;User registration at ESGF;https://github.com/ESGF/esgf.github.io/wiki/ESGF_Data_Download;User registration at ESGF;A quick tutorial on how to register as a user and join scientific working groups.\n");
+            out.write("data_download=2;Data download from ESGF;https://github.com/ESGF/esgf.github.io/wiki/ESGF_Data_Download;Downloading data from ESGF;A descirption of how to extract data files from the ESGF portal.\n");
+            out.write("web_interface=3;ESGF Web Interface User Guide;https://github.com/ESGF/esgf.github.io/wiki/fe-user-guide;ESGF web portal question;A complete guide to using the ESGF web portal user interface.\n");
+            out.write("web_search=4;ESGF Search User Guide;https://github.com/ESGF/esgf.github.io/wiki/ESGF_Web_Search_User_Guide;ESGF Search Question;A short user guide to discovering data within ESGF.\n");
             out.write("CMIP5_question=5;CMIP5 questions;http://cmip-pcmdi.llnl.gov/cmip5;CMIP5 Question;Post scientific questions related to CMIP5.\n");
             //Close the output stream
             out.close();

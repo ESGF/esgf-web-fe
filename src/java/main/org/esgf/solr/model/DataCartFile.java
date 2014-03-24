@@ -75,7 +75,7 @@ public class DataCartFile {
         }
         
         String checksum = null;
-        if(solrRecord.getArrField("checksum") != null && solrRecord.getArrField("tracking_id").size() > 0) {
+        if(solrRecord.getArrField("checksum") != null && solrRecord.getArrField("checksum").size() > 0) {
             if(solrRecord.getArrField("checksum").get(0) == null) {
                 checksum = "N/A";
             } else {
@@ -86,7 +86,7 @@ public class DataCartFile {
         }
         
         String checksum_type = null;
-        if(solrRecord.getArrField("checksum_type") != null && solrRecord.getArrField("tracking_id").size() > 0) { 
+        if(solrRecord.getArrField("checksum_type") != null && solrRecord.getArrField("checksum_type").size() > 0) { 
             if(solrRecord.getArrField("checksum_type").get(0) == null) {
                 checksum_type = "N/A";
             } else {

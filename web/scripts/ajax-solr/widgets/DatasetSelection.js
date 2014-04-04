@@ -31,7 +31,7 @@ AjaxSolr.DatasetSelectionWidget = AjaxSolr.AbstractWidget.extend({
 				for(var i=0;i<Manager.response.response.docs.length;i++) {
 					var doc = Manager.response.response.docs[i];
 					
-					var datasetInfo = {'numFiles' : doc['number_of_files'], 'peer' : doc['index_node'] , 'xlink' : doc['xlink']};
+					var datasetInfo = {'numFiles' : doc['number_of_files'], 'peer' : doc['index_node'] , 'xlink' : doc['xlink'], 'access' : doc['access']};
 	        		
 					if(canAdd) {
 						//alert(' in can add for: ' + doc.id);
@@ -69,19 +69,19 @@ AjaxSolr.DatasetSelectionWidget = AjaxSolr.AbstractWidget.extend({
 		
 		
 		$("select[name='datasetC']").live('change', function() {
-			var selectedIndex = $("select[name='datasetC']").attr("selectedIndex");
+			var selectedIndex = $("select[name='datasetC']").attr("value");
 			
-			if(selectedIndex == 0) {
+			if(selectedIndex == 5) {
 				ESGF.setting.datasetCounter = 5;
-			} else if(selectedIndex == 1) {
+			} else if(selectedIndex == 10) {
 				ESGF.setting.datasetCounter = 10;
-			} else if(selectedIndex == 2) { 
+			} else if(selectedIndex == 25) { 
 				ESGF.setting.datasetCounter = 25;
-			} else if(selectedIndex == 3) {
+			} else if(selectedIndex == 50) {
 				ESGF.setting.datasetCounter = 50;
-			} else if(selectedIndex == 4) {
+			} else if(selectedIndex == 100) {
 				ESGF.setting.datasetCounter = 100;
-			} else if(selectedIndex == 5) {
+			} else if(selectedIndex == 200) {
 				ESGF.setting.datasetCounter = 200;
 			} else {
 				ESGF.setting.datasetCounter = 500;

@@ -4,7 +4,7 @@
   <property name="spring.version" value="3.2.2.RELEASE" />
   <property name="spring.security.version" value="3.1.4.RELEASE" />
   <property name="hibernate.version" value="3.6.1.Final" />
-  <property name="ivy.esgf-repo-local.default.root.dir" value="${ivy.default.root.url}/ivysettings-esgf-repo-local.xml" override="false"/>
+  <property name="ivy.esgf-repo-local.default.root.dir" value="${user.home}/.ivy2/local/esgf-artifacts/repositories/esgf-repo-devel" override="true"/>
   <property name="ivy.esgf.devel.root.url" value="https://raw.github.com/ESGF/esgf-artifacts/master/repositories/esgf-repo-devel" override="false"/>
   <property name="ivy.esgf.shared.root.url" value="https://raw.github.com/ESGF/esgf-artifacts/master/repositories/esgf-repo-share" override="false"/>
   <property name="jboss.repo.url" value="https://repository.jboss.org/nexus/content/groups/public" override="false"/>

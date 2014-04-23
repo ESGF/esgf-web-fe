@@ -217,7 +217,7 @@ public class GOFormView2Controller {
             String error = jgte.toString();
             if (error.contains("Endpoint List failure: ClientError.AuthenticationFailed(400 Authentication Failed)"))
             {
-                error = "Your Globus Online Account \"" + goUserName + "\" is not linked to the ESGF Portal account.<br><br>Please follow steps in <a href=\"http://devel.esgf.org/wiki/ESGF_GO_AccountSetup\">http://devel.esgf.org/wiki/ESGF_GO_AccountSetup</a> to link accounts.";
+                error = "Your Globus Online Account \"" + goUserName + "\" is not linked to the ESGF Portal account.<br><br>Please follow steps in <a href=\"https://github.com/ESGF/esgf.github.io/wiki/ESGF_GO_AccountSetup\">https://github.com/ESGF/esgf.github.io/wiki/ESGF_GO_AccountSetup</a> to link accounts.";
             }
             model.put(GOFORMVIEW_ERROR, "error");
             model.put(GOFORMVIEW_ERROR_MSG, error);

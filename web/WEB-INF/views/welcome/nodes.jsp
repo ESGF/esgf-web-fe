@@ -47,7 +47,7 @@
 					<a href='http://cordexesg.dmi.dk/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>
 				</li>
 				<li>
-					<a href='http://esg2.e-inis.ie/'><img src="images/flags/ie.png" class="icon" alt="Ireland flag" />ICHEC Node</a>
+					<a href='http://esg2.e-inis.ie/'><img src="images/flags/ie.png" class="icon" alt="Ireland flag" />E_INIS-ICHEC Node</a>
 					<a href='http://esg2.e-inis.ie/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>
 				</li>
 				<li>

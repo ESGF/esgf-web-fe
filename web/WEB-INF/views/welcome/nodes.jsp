@@ -47,7 +47,7 @@
 					<a href='http://cordexesg.dmi.dk/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>
 				</li>
 				<li>
-					<a href='http://esg2.e-inis.ie/'><img src="images/flags/ie.png" class="icon" alt="Ireland flag" />EC-EARTH Node</a>
+					<a href='http://esg2.e-inis.ie/'><img src="images/flags/ie.png" class="icon" alt="Ireland flag" />E_INIS-ICHEC Node</a>
 					<a href='http://esg2.e-inis.ie/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>
 				</li>
 				<li>
@@ -102,6 +102,10 @@
 					<a href='http://esg1-gw.pnl.gov/'><img src="images/flags/USA.png" class="icon" alt="USA flag" />PNNL Node</a>
 					<a href='http://esg1-gw.pnl.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
 				</li> -->
+				 <li>
+                                        <a href='http://data.meteo.unican.es/esgf-web-fe/'><img src="images/flags/es.png" class="icon" alt="Spain flag" />UNICAN Node</a>
+                                        <a href='http://data.meteo.unican.es/esg-search/feed/node.rss'><img src='images/rss_icon.png'/ class="icon"></a>
+                                </li>
 			</ul>
 		</div>
 </div>

@@ -51,6 +51,11 @@
 					<a href='http://esg2.e-inis.ie/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>
 				</li>
 				<li>
+					<a href='http://esg-cccr.tropmet.res.in/'><img src="images/flags/in.png" class="icon" alt="India flag" />IITM Node</a>
+					<a href='http://esg-cccr.tropmet.res.in/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>
+				</li>
+				<li>
+				<li>
 					<a href='http://esgf-node.ipsl.fr/'><img src="images/flags/France.png" class="icon" alt="France flag" />IPSL Node</a>
 					<a href='http://esgf-node.ipsl.fr/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>
 				</li>

@@ -67,6 +67,10 @@
 					<a href='http://esg-datanode.jpl.nasa.gov/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>
 				</li>
 				<li>
+					<a href='http://esgf-data.ucar.edu/'><img src="images/flags/USA.png" class="icon" alt="USA flag" />NCAR Node</a>
+					<a href='http://esgf-data.ucar.edu/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>
+				</li>
+				<li>
 					<a href='http://esg2.nci.org.au/'><img src="images/flags/Australia.png" class="icon" alt="Australia flag" />NCI Node</a>
 					<a href='http://esg2.nci.org.au/esg-search/feed/node.rss'><img src='images/rss_icon.png' alt="RSS icon" class="icon"></a>
 				</li>

@@ -17,13 +17,13 @@
   <div style="margin-bottom:15px">
     Welcome to the ESGF User Help Page!  
     We have listed several resources below to improve the User experience.
-    For a more detailed description of ESGF overall, please visit our <a href="http://esgf.org" target="_blank">Wiki</a>.  
+    For a more detailed description of ESGF overall, please visit our <a href="http://esgf.llnl.gov" target="_blank">Wiki</a>.  
     For general questions or feedback, please email us at <a href="mailto:esgf-user@lists.llnl.gov?subject=ESGF General Question">esgf-user@lists.llnl.gov</a>.
   </div>
 
   <!--
   <div style='margin-bottom:15px'>
-    <a href='http://askbot.esgf.org/questions/' target="_blank" style='font-weight:bold'>Askbot</a>
+    <a href='http://askbot-esgf.llnl.gov/questions/' target="_blank" style='font-weight:bold'>Askbot</a>
     <br/>Find, tag or submit a question to our "askbot" forum.  Askbot is an open source question and answer 
     oriented Internet forum similar to Stack Overflow.  Questions are typically resolved much more quickly in this forum than through email.
   </div>

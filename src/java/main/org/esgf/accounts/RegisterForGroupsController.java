@@ -130,7 +130,7 @@ public class RegisterForGroupsController {
         
         LOG.debug("RegisterForGroupsController -->" + userName);
         
-        String startOF = "<esgf:registrationRequest xmlns:esgf=\"http://www.esgf.org/\">";
+        String startOF = "<esgf:registrationRequest xmlns:esgf=\"http://www.esgf.llnl.gov/\">";
         String userStart = "<esgf:user>";
         String userEnd = "</esgf:user>";
         String groupStart = "<esgf:group>";
@@ -150,7 +150,7 @@ public class RegisterForGroupsController {
             System.out.println("About to call: " + regURL + "\n");
             int result = httpclient.executeMethod(post);
             /* status code: 200 -> ok; 500 -> internal server error */
-            /* <esgf:registrationResponse xmlns:esgf="http://www.esgf.org/" >
+            /* <esgf:registrationResponse xmlns:esgf="http://www.esgf.llnl.gov/" >
              * <esgf:result >
              * SUCCESS</esgf:result >
              * <esgf:message >

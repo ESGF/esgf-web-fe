@@ -19,7 +19,7 @@
 		
 		<p/>
 		<p/>
-			<a href='http://uv-cdat.org/' ><b>Ultra-scale Visualization Climate Data Analysis Tools (UV-CDAT)</b></a>
+			<a href='http://uvcdat.llnl.gov/' ><b>Ultra-scale Visualization Climate Data Analysis Tools (UV-CDAT)</b></a>
 			<br/>An open source, python-based framework of client-side tools, 
 			     including a GUI front-end, for retrieval, analysis and visualization of Earth System data.
 			                              		
@@ -29,7 +29,7 @@
 			and retrieval of the data product to the user desktop.
 			
 		<p/>
-			<a href='http://cdx.jpl.nasa.gov/' ><b>CDX (Climate Data Exchange)</b></a>
+			<a href='http://climate.apache.org/' ><b>CDX (Climate Data Exchange)</b></a>
 			<br/>A python-based client-side toolkit and server-side gateway components that allow the user to interact with remote ESGF holdings
 			as if they were local to his/her machine.
 		

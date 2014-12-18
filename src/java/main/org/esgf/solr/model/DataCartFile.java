@@ -280,7 +280,7 @@ public class DataCartFile {
 
         Solr solr = new Solr();
         
-        solr.addConstraint("query", "*");
+        solr.addConstraint("query", "*:*");
         solr.addConstraint("distrib", "false");
         solr.addConstraint("limit", "8");
         solr.addConstraint("type", "File");

@@ -172,7 +172,7 @@
 						}
 						queryString += textQueryParam;
 			    	} else {
-			    		queryString += 'query=*';
+			    		queryString += 'query=*:*';
 			    	}
 			    	
 					
@@ -235,7 +235,7 @@
 					}
 					queryString += textQueryParam;
 		    	} else {
-		    		queryString += 'query=*';
+		    		queryString += 'query=*:*';
 		    	}
 
 				parentElement.find('a.wgetAllFiles_short_SRMConvert').show();
@@ -299,7 +299,7 @@
 					}
 					queryString += textQueryParam;
 		    	} else {
-		    		queryString += 'query=*';
+		    		queryString += 'query=*:*';
 		    	}
 
 				parentElement.find('a.wgetAllFiles_short').show();

@@ -89,7 +89,7 @@ public class DatacartController {
         }
 
         
-        String query = "*";
+        String query = "*:*";
         if(!isShowAll.equals("true")) {
             
             String constraints = request.getParameter("constraints");

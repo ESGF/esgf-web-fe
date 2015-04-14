@@ -130,7 +130,7 @@ public class RegisterForGroupsController {
         
         LOG.debug("RegisterForGroupsController -->" + userName);
         
-        String startOF = "<esgf:registrationRequest xmlns:esgf=\"http://www.esgf.llnl.gov/\">";
+        String startOF = "<esgf:registrationRequest xmlns:esgf=\"http://www.esgf.org/\">";
         String userStart = "<esgf:user>";
         String userEnd = "</esgf:user>";
         String groupStart = "<esgf:group>";

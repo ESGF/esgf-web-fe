@@ -15,6 +15,7 @@
 		<div class="projectitembottom">
 			<ul>
 				<li><a href='https://github.com/ESGF/esgf.github.io/wiki/ESGF_User_Guide' >ESGF Full User Guide</a></li>
+				<li><a href='http://esgf.github.io/esgf-swt' >ESGF User FAQ</a></li>
 				<li><a href='https://github.com/ESGF/esgf.github.io/wiki/ESGF_Web_Search_User_Guide' >Search Help</a></li>
 				<li><a href='https://github.com/ESGF/esgf.github.io/wiki/ESGF_Search_CV' >Search Controlled Vocabulary</a></li>
 				<li><a href='https://github.com/ESGF/esgf.github.io/wiki/ESGF_wget' >Wget Scripts Info</a></li>                             

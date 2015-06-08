@@ -18,7 +18,7 @@
 
   <dependencies>
 
-    <dependency org="org.globusonline" name="JGOClient" rev="1.0.3"/>
+    <dependency org="org.globusonline" name="JGOClient" rev="1.0.4"/>
     <dependency org="org.globusonline" name="java_nexus_client" rev="0.0.2-SNAPSHOT"/>
     <dependency org="globus" name="cog-jglobus" rev="1.8.0"/>
     <dependency org="cryptix" name="cryptix-base" rev="1.0"/>

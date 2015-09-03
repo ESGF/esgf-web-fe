@@ -90,7 +90,7 @@
     <dependency org="antlr" name="antlr" rev="2.7.7" conf="base->default" />
     <dependency org="commons-fileupload" name="commons-fileupload" rev="1.2.1" conf="base->default"/>
     <dependency org="commons-io" name="commons-io" rev="2.4" conf="base->default"/>
-    <dependency org="postgresql" name="postgresql" rev="9.4-1201.jdbc41" conf="base->default" />
+    <dependency org="postgresql" name="postgresql" rev="8.4-703.jdbc3" conf="base->default" />
     <dependency org="xerces" name="xercesImpl" rev="2.9.1" conf="base->default"/>
     <dependency org="javax.mail" name="mail" rev="1.4.3" transitive="false" conf="base->default" />
     <dependency org="org.codehaus.jackson" name="jackson-mapper-asl" rev="1.8.5" conf="base->default"/>

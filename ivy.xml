@@ -38,17 +38,17 @@
 
     <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.10" conf="base->default" />
 
-    <dependency org="org.springframework" name="spring-context" rev="3.2.2.RELEASE" transitive="true" conf="base->default" />
-    <dependency org="org.springframework" name="spring-web" rev="3.2.2.RELEASE" transitive="true" conf="base->default" />
-    <dependency org="org.springframework" name="spring-webmvc" rev="3.2.2.RELEASE" transitive="true" conf="base->default" />
-    <dependency org="org.springframework" name="spring-tx" rev="3.2.2.RELEASE" transitive="true" conf="base->default" />
-    <dependency org="org.springframework" name="spring-aspects" rev="3.2.2.RELEASE" transitive="true" conf="base->default" />
+    <dependency org="org.springframework" name="spring-context" rev="4.1.6.RELEASE" transitive="true" conf="base->default" />
+    <dependency org="org.springframework" name="spring-web" rev="4.1.6.RELEASE" transitive="true" conf="base->default" />
+    <dependency org="org.springframework" name="spring-webmvc" rev="4.1.6.RELEASE" transitive="true" conf="base->default" />
+    <dependency org="org.springframework" name="spring-tx" rev="4.1.6.RELEASE" transitive="true" conf="base->default" />
+    <dependency org="org.springframework" name="spring-aspects" rev="4.1.6.RELEASE" transitive="true" conf="base->default" />
     <dependency org="org.springframework" name="spring-mock" rev="2.0-m5" />
 
-    <dependency org="org.springframework.security" name="spring-security-core" rev="3.1.4.RELEASE" conf="base->default" />
-    <dependency org="org.springframework.security" name="spring-security-config" rev="3.1.4.RELEASE" conf="base->default" />
-    <dependency org="org.springframework.security" name="spring-security-openid" rev="3.1.4.RELEASE" conf="base->default" />
-    <dependency org="org.springframework.security" name="spring-security-taglibs" rev="3.1.4.RELEASE" conf="base->default" />
+    <dependency org="org.springframework.security" name="spring-security-core" rev="4.0.1.RELEASE" conf="base->default" />
+    <dependency org="org.springframework.security" name="spring-security-config" rev="4.0.1.RELEASE" conf="base->default" />
+    <dependency org="org.springframework.security" name="spring-security-openid" rev="4.0.1.RELEASE" conf="base->default" />
+    <dependency org="org.springframework.security" name="spring-security-taglibs" rev="4.0.1.RELEASE" conf="base->default" />
 
     <dependency org="org.apache.tomcat" name="annotations-api" rev="6.0.29" conf="base->default" />
     <dependency org="javax.servlet" name="javax.servlet-api" rev="3.0.1" transitive="false" conf="compile->default" />

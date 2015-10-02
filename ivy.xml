@@ -18,7 +18,7 @@
 
   <dependencies>
 
-    <dependency org="org.globusonline" name="JGOClient" rev="1.0.3"/>
+    <dependency org="org.globusonline" name="JGOClient" rev="1.0.4"/>
     <dependency org="org.globusonline" name="java_nexus_client" rev="0.0.2-SNAPSHOT"/>
     <dependency org="globus" name="cog-jglobus" rev="1.8.0"/>
     <dependency org="cryptix" name="cryptix-base" rev="1.0"/>
@@ -38,17 +38,17 @@
 
     <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.10" conf="base->default" />
 
-    <dependency org="org.springframework" name="spring-context" rev="3.2.2.RELEASE" transitive="true" conf="base->default" />
-    <dependency org="org.springframework" name="spring-web" rev="3.2.2.RELEASE" transitive="true" conf="base->default" />
-    <dependency org="org.springframework" name="spring-webmvc" rev="3.2.2.RELEASE" transitive="true" conf="base->default" />
-    <dependency org="org.springframework" name="spring-tx" rev="3.2.2.RELEASE" transitive="true" conf="base->default" />
-    <dependency org="org.springframework" name="spring-aspects" rev="3.2.2.RELEASE" transitive="true" conf="base->default" />
+    <dependency org="org.springframework" name="spring-context" rev="4.1.6.RELEASE" transitive="true" conf="base->default" />
+    <dependency org="org.springframework" name="spring-web" rev="4.1.6.RELEASE" transitive="true" conf="base->default" />
+    <dependency org="org.springframework" name="spring-webmvc" rev="4.1.6.RELEASE" transitive="true" conf="base->default" />
+    <dependency org="org.springframework" name="spring-tx" rev="4.1.6.RELEASE" transitive="true" conf="base->default" />
+    <dependency org="org.springframework" name="spring-aspects" rev="4.1.6.RELEASE" transitive="true" conf="base->default" />
     <dependency org="org.springframework" name="spring-mock" rev="2.0-m5" />
 
-    <dependency org="org.springframework.security" name="spring-security-core" rev="3.1.4.RELEASE" conf="base->default" />
-    <dependency org="org.springframework.security" name="spring-security-config" rev="3.1.4.RELEASE" conf="base->default" />
-    <dependency org="org.springframework.security" name="spring-security-openid" rev="3.1.4.RELEASE" conf="base->default" />
-    <dependency org="org.springframework.security" name="spring-security-taglibs" rev="3.1.4.RELEASE" conf="base->default" />
+    <dependency org="org.springframework.security" name="spring-security-core" rev="4.0.1.RELEASE" conf="base->default" />
+    <dependency org="org.springframework.security" name="spring-security-config" rev="4.0.1.RELEASE" conf="base->default" />
+    <dependency org="org.springframework.security" name="spring-security-openid" rev="4.0.1.RELEASE" conf="base->default" />
+    <dependency org="org.springframework.security" name="spring-security-taglibs" rev="4.0.1.RELEASE" conf="base->default" />
 
     <dependency org="org.apache.tomcat" name="annotations-api" rev="6.0.29" conf="base->default" />
     <dependency org="javax.servlet" name="javax.servlet-api" rev="3.0.1" transitive="false" conf="compile->default" />
@@ -90,7 +90,7 @@
     <dependency org="antlr" name="antlr" rev="2.7.7" conf="base->default" />
     <dependency org="commons-fileupload" name="commons-fileupload" rev="1.2.1" conf="base->default"/>
     <dependency org="commons-io" name="commons-io" rev="2.4" conf="base->default"/>
-    <dependency org="postgresql" name="postgresql" rev="9.0-801.jdbc4" conf="base->default" />
+    <dependency org="postgresql" name="postgresql" rev="8.4-703.jdbc3" conf="base->default" />
     <dependency org="xerces" name="xercesImpl" rev="2.9.1" conf="base->default"/>
     <dependency org="javax.mail" name="mail" rev="1.4.3" transitive="false" conf="base->default" />
     <dependency org="org.codehaus.jackson" name="jackson-mapper-asl" rev="1.8.5" conf="base->default"/>

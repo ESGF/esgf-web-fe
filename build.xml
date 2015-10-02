@@ -67,7 +67,7 @@ Builds the project via ant (obviously).
   <property name="filter" value="false"/>
   <property name="sign"   value="false"/>
   <property name="seal"   value="false"/>
-  <property name="java.version.val" value="1.7"/>
+  <property name="java.version.val" value="1.8"/>
 
   <!-- **static defines** -->
   <property name="version_num" value="0.0.0"/>

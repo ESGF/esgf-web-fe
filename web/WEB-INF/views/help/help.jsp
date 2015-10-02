@@ -30,7 +30,7 @@
   -->
 
   <div style='margin-bottom:15px'>
-    <a href='https://github.com/ESGF/esgf.github.io/wiki/ESGF_User_FAQ' style='font-weight:bold'>ESGF User FAQ</a>
+    <a href='http://esgf.github.io/esgf-swt' style='font-weight:bold'>ESGF User FAQ</a>
     <br/>Commonly asked questions from the ESGF user community.
     <br/><span id="userFAQ_question" style="cursor:pointer"><img src='<c:url value="/images/help/moin-email.png" />' style="margin-right: 5px;" alt="email icon" /><a>Have a question about the User FAQs?</a></span>
   </div>

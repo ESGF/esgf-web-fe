@@ -7,11 +7,11 @@
     
     xsi:schemaLocation="
      http://www.springframework.org/schema/beans 
-     http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+     http://www.springframework.org/schema/beans/spring-beans.xsd
      http://www.springframework.org/schema/util 
-     http://www.springframework.org/schema/util/spring-util-3.1.xsd
+     http://www.springframework.org/schema/util/spring-util.xsd
      http://www.springframework.org/schema/mvc 
-     http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+     http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
      <!-- <util:properties id="dbProperties" location="file:///esg/config/esgf-db.properties"/> -->
      <bean id="esgfProperties" class="esg.common.util.ESGFProperties" />

@@ -27,7 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -83,7 +83,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		final boolean credentialsNonExpired = true;
 		final boolean accountNonLocked = true;
 		final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		authorities.add( new GrantedAuthorityImpl(ROLE_USER) );
+		authorities.add( new SimpleGrantedAuthority(ROLE_USER) );
 		
 		// loop over database permissions (lookup by openid)
 		final UserInfo user = userInfoDAO.getUserById(userName);
@@ -94,11 +94,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         		    if (permissions.get(group)!=null) {
             		    for (final String role : permissions.get(group)) {
             		        String authority = "group_"+group+"_role_"+role;
-            		        authorities.add( new GrantedAuthorityImpl(authority) );
+            		        authorities.add( new SimpleGrantedAuthority(authority) );
             		        
             		        // translate ('wheel','super') -> 'ROLE_ADMIN'
             		        if (group.equals(ADMIN_GROUP) && role.equals(ADMIN_ROLE)) {
-            		            authorities.add( new GrantedAuthorityImpl(ROLE_ADMIN) );
+            		            authorities.add( new SimpleGrantedAuthority(ROLE_ADMIN) );
             		        }
             		    }
         		    }
